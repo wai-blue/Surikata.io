@@ -89,7 +89,6 @@ It is adviced to change these defaults.
 
 Now, when you are ready with your first & default Surikata online store, follow these guides to customize it:
 
-  * <a href='https://www.surikata.io/documentation/basic-configuration-options' target=_blank>Basic configuration options</a>
   * <a href='https://www.surikata.io/documentation/create-your-first-plugin' target=_blank>Create your first plugin</a>
   * <a href='https://www.surikata.io/documentation/customize-the-theme' target=_blank>Customize the theme</a>
   

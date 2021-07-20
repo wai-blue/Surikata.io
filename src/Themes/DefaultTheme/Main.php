@@ -2,5 +2,5 @@
 
 namespace Surikata\Themes;
 
-class AbeloTheme extends \Surikata\Core\Web\Theme {
+class DefaultTheme extends \Surikata\Core\Web\Theme {
 }

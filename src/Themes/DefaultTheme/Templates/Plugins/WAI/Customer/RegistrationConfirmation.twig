@@ -1,0 +1,14 @@
+{% if accountInfo %}
+  <div class='container'>
+    Váš účet bol úspešne vytvorený. Na Vašu emailovú adresu <b>{{ accountInfo.CUSTOMER.email }}</b> sme zaslali odkaz
+    na overenie účtu. Pred prvým prihlásením si účet najprv overte.<br/>
+    <br/>
+    Ďakujeme za prejavenú dôveru.
+  </div>
+{% else %}
+  <div class='container'>
+    <div class="notification">
+      <p class="error">Invalid link for email confirmation</p>
+    </div>
+  </div>
+{% endif %}

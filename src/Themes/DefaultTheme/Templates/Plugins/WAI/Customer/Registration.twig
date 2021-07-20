@@ -1,0 +1,70 @@
+ <!-- login area start -->
+  <div class="login-register-area mb-50px mt-40px">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-12 ml-auto mr-auto">
+          <div class="login-register-wrapper">
+            <div class="login-register-tab-list nav">
+              <a data-toggle="tab" href="#lg2">
+                <h4>register</h4>
+              </a>
+            </div>
+            <div class="tab-content">
+              <div id="lg1" class="tab-pane active">
+                <div class="login-form-container">
+                  <div class="login-register-form">
+
+                    <div id="emailIsEmptyOrInvalidErrorDiv" style="display:none;">
+                      <div class="notification mb-5">
+                        <p class="error">Email je neuvedený alebo je neplatný.</p>
+                      </div>
+                    </div>
+                    <div id="accountAlreadyExistsErrorDiv" style="display:none">
+                      <div class="notification mb-5">
+                        <p class="error">Takýto účet už existuje.</p>
+                      </div>
+                    </div>
+                    <div id="unknownErrorDiv" style="display:none;">
+                      <div class="notification mb-5">
+                        <p class="error">Nastala neočakávaná chyba pri vytváraní účtu. Skúste prosím opäť neskôr.</p>
+                      </div>
+                    </div>
+
+                    <form method="post" id="registrationForm">
+                      <input type="email" name="email" placeholder="Email *" />
+                      <input type="text" name="given_name" placeholder="First name *" />
+                      <input type="text" name="family_name" placeholder="Last name *" />
+                      <div class="button-box">
+                        <div class="login-toggle-btn">
+                          <div class="notification">
+                            <p id="privacyPolicyTermsErrorDiv">
+                              <input type="checkbox" name="checkbox" id="privacyPolicyTermsConfirmation"/>
+                              <label for="privacyPolicyTermsConfirmation">Súhlasím so spracovávaním osobných údajov.</label>  
+                            </p>
+                          </div>
+                          <p id="privacyPolicyTermsErrorText" class="mt-2" style="color:#db2f23;display:none">
+                            Musíte súhlasiť s podmienkami spracovania osobných údajov.
+                          </p>
+                          {% if showPrivacyTerms and privacyTermsUrl != "" %}
+                            <a href="{{ rootUrl }}/{{ privacyTermsUrl }}" target="_blank">
+                              Zobraziť podmienky
+                            </a>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </form>
+                    <div class="button-box">
+                      <button onclick="AbeloThemeCustomer.createAccount();">
+                        <span>Register</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- login area end -->

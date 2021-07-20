@@ -1,0 +1,83 @@
+.surikata-theme-preview-wrapper {
+  /* display: flex; */
+}
+
+.surikata-theme-preview-wrapper > div {
+  /* flex: 1; */
+  /* margin: 0.1em; */
+  padding: 0.1em;
+  cursor: pointer;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+}
+
+.surikata-theme-preview-wrapper > div:hover {
+  padding: 0.1em;
+  border-color: #AAAAAA;
+}
+
+.surikata-theme-preview-wrapper > div .col {
+  /* font-size: 6pt; */
+  padding: 0.5em 0;
+  color: white;
+  text-align: center;
+  background: #9b9595;
+  border: 1px solid white;
+}
+.surikata-theme-preview-wrapper > div .col.vertical-text {
+  width: 1px;
+  word-wrap: break-word;
+  white-space: pre-wrap; 
+}
+
+.surikata-theme-preview-wrapper > div:hover .col {
+  background: #888888;
+}
+
+/* .surikata-theme-preview-wrapper > div.selected {
+  zoom: 1.5;
+} */
+
+.surikata-theme-preview-wrapper > div.selected .col {
+  background: var(--cl-text-2);
+}
+
+.surikata-theme-preview-wrapper > div.selected *[data-panel-name] {
+  background: var(--cl-bckg-1);
+}
+
+.surikata-theme-preview-wrapper > div.selected *[data-panel-name] div:nth-child(1) {
+  font-weight: bold;
+}
+
+.surikata-theme-preview-wrapper > div.selected *[data-panel-name] div:nth-child(2) {
+  font-size: 0.5em;
+  background: rgba(255, 255, 255, 0.8);
+  color: black;
+  padding: 1em;
+  width: 66%;
+  margin: auto;
+  max-height: 20em;
+  overflow: hidden;
+  text-align: left;
+}
+
+.surikata-theme-preview-wrapper > div.selected *[data-panel-name]:hover {
+  background: var(--cl-bckg-2);
+}
+
+.surikata-theme-preview-wrapper > div *[data-panel-name].selected {
+  background: orange;
+  color: white;
+}
+
+.surikata-theme-preview-wrapper.table-cell > div {
+  max-height: 2em;
+  overflow: hidden;
+  transition: 300ms;
+}
+
+.surikata-theme-preview-wrapper.table-cell:hover > div {
+  max-height: 100em;
+}
+

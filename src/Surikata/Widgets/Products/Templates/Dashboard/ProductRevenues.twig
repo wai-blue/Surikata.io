@@ -1,0 +1,51 @@
+<div class="card shadow mb-2">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Best sold products for {{ currentYear }}</h6>
+  </div>
+  <div class="card-body">
+
+    <canvas id="myChart3"></canvas>
+
+    <script>
+      var data = {
+        labels: {{ chartLabels|raw }},
+        datasets: [
+          {
+            label: 'Best sold products for {{ currentYear }}',
+            data: {{ data|raw }},
+            backgroundColor: [
+              'rgb(255, 99, 132)',
+              'rgb(255, 159, 64)',
+              'rgb(255, 205, 86)',
+              'rgb(75, 192, 192)',
+              'rgb(54, 162, 235)',
+              'rgb(153, 102, 255)',
+              'rgb(201, 203, 207)'
+            ],
+          }
+        ]
+      };
+
+      var config = {
+        type: 'pie',
+        data: data,
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            {# title: {
+              display: true,
+              text: 'Chart.js Pie Chart'
+            } #}
+          }
+        },
+      };
+
+      new Chart(document.getElementById('myChart3').getContext('2d'), config);
+    </script>
+
+  </div>
+</div>
+

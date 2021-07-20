@@ -1,0 +1,758 @@
+<!-- Header Section Start From Here -->
+<header class="header-wrapper">
+  <!-- Header Nav Start -->
+  <div class="header-nav">
+    <div class="container">
+      <div class="header-nav-wrapper d-md-flex d-sm-flex d-xl-flex d-lg-flex justify-content-between">
+        <div class="header-static-nav">
+          {% if user.isLogged %}
+            <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/Home', 'getWebPageUrl') }}">{{ user.profile.email }}</a>
+           {% endif %}
+        </div>
+        <div class="header-menu-nav">
+          <ul class="menu-nav">
+            <li>
+              {% if user.isLogged %}
+                <div class="dropdown">
+                  <button type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Môj účet <i class="ion-ios-arrow-down"></i></button>
+                  <ul class="dropdown-menu animation slideDownIn" aria-labelledby="dropdownMenuButton">
+                    <li><a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/Home', 'getWebPageUrl') }}">Môj účet</a></li>
+                    <li><a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/Home', 'getWebPageUrl') }}">Checkout</a></li>
+                    <li><a href='?doLogout=1'>Odhlásiť sa</a></li>
+                  </ul>
+                </div>
+              {% else %}
+                <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/Login', 'getWebPageUrl') }}">Prihlásiť sa</a>
+              {% endif %}
+            </li>
+            <li class="pr-0">
+              <div class="dropdown">
+                <button type="button" id="dropdownMenuButton-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <img src="assets/images/flag/1.jpg" alt="" /> English <i class="ion-ios-arrow-down"></i>
+                </button>
+                <ul class="dropdown-menu animation slideDownIn" aria-labelledby="dropdownMenuButton-3">
+                  <li>
+                    <a href="#"><img src="assets/images/flag/1.jpg" alt="" /> English</a>
+                  </li>
+                  <li>
+                    <a href="#"><img src="assets/images/flag/2.jpg" alt="" /> Français</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Header Nav End -->
+  <div class="header-top ptb-30px d-lg-block d-none">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3 d-flex">
+          <div class="logo align-self-center">
+            <a href="{{ rootUrl }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ settings.profile.logo }}" alt="logo"/></a>
+          </div>
+        </div>
+        <div class="col-md-9 align-self-center">
+          <div class="header-right-element d-flex">
+            <div class="search-element media-body mr-20px">
+              <form class="d-flex" action="#" onsubmit="return false;">
+                <div class="search-category">
+                  <select>
+                    <option value="0">All categories</option>
+                    <option value="12">Laptop</option>
+                    <option value="13">- - Hot Categories</option>
+                    <option value="19">- - - - Dresses</option>
+                    <option value="20">- - - - Jackets &amp; Coats</option>
+                    <option value="21">- - - - Sweaters</option>
+                    <option value="22">- - - - Jeans</option>
+                    <option value="23">- - - - Blouses &amp; Shirts</option>
+                    <option value="14">- - Outerwear &amp; Jackets</option>
+                    <option value="24">- - - - Basic Jackets</option>
+                    <option value="25">- - - - Real Fur</option>
+                    <option value="26">- - - - Down Coats</option>
+                    <option value="27">- - - - Blazers</option>
+                    <option value="28">- - - - Trench Coats</option>
+                    <option value="15">- - Weddings &amp; Events</option>
+                    <option value="29">- - - - Wedding Dresses</option>
+                    <option value="30">- - - - Evening Dresses</option>
+                    <option value="31">- - - - Prom Dresses</option>
+                    <option value="32">- - - - Bridesmaid Dresses</option>
+                    <option value="33">- - - - Wedding Accessories</option>
+                    <option value="16">- - Bottoms</option>
+                    <option value="34">- - - - Skirts</option>
+                    <option value="35">- - - - Leggings</option>
+                    <option value="36">- - - - Pants &amp; Capris</option>
+                    <option value="37">- - - - Wide Leg Pants</option>
+                    <option value="38">- - - - Shorts</option>
+                    <option value="17">- - Tops &amp; Sets</option>
+                    <option value="39">- - - - Tank Tops</option>
+                    <option value="40">- - - - Suits &amp; Sets</option>
+                    <option value="41">- - - - Jumpsuits</option>
+                    <option value="42">- - - - Rompers</option>
+                    <option value="43">- - - - Sleep &amp; Lounge</option>
+                    <option value="18">- - Accessories</option>
+                    <option value="44">- - - - Eyewear &amp; Accessories</option>
+                    <option value="45">- - - - Hats &amp; Caps</option>
+                    <option value="46">- - - - Belts &amp; Cummerbunds</option>
+                    <option value="47">- - - - Scarves &amp; Wraps</option>
+                    <option value="48">- - - - Gloves &amp; Mittens</option>
+                    <option value="49">Computer</option>
+                    <option value="50">- - Bottoms</option>
+                    <option value="53">- - - - Skirts</option>
+                    <option value="54">- - - - Leggings</option>
+                    <option value="55">- - - - Jeans</option>
+                    <option value="56">- - - - Pants &amp; Capris</option>
+                    <option value="57">- - - - Shorts</option>
+                    <option value="51">- - Outerwear &amp; Jackets</option>
+                    <option value="58">- - - - Trench</option>
+                    <option value="59">- - - - Genuine Leather</option>
+                    <option value="60">- - - - Parkas</option>
+                    <option value="61">- - - - Down Jackets</option>
+                    <option value="62">- - - - Wool &amp; Blends</option>
+                    <option value="52">- - Underwear &amp; Loungewear</option>
+                    <option value="63">- - - - Boxers</option>
+                    <option value="64">- - - - Briefs</option>
+                    <option value="65">- - - - Long Johns</option>
+                    <option value="66">- - - - Men's Sleep &amp; Lounge</option>
+                    <option value="67">- - - - Pajama Sets</option>
+                    <option value="68">Smartphone</option>
+                    <option value="69">- - Accessories &amp; Parts</option>
+                    <option value="75">- - - - Cables &amp; Adapters</option>
+                    <option value="76">- - - - Batteries</option>
+                    <option value="77">- - - - Chargers</option>
+                    <option value="78">- - - - Bags &amp; Cases</option>
+                    <option value="79">- - - - Electronic Cigarettes</option>
+                    <option value="70">- - Audio &amp; Video</option>
+                    <option value="80">- - - - Televisions</option>
+                    <option value="81">- - - - TV Receivers</option>
+                    <option value="82">- - - - Projectors</option>
+                    <option value="83">- - - - Audio Amplifier Boards</option>
+                    <option value="84">- - - - TV Sticks</option>
+                    <option value="71">- - Camera &amp; Photo</option>
+                    <option value="85">- - - - Digital Cameras</option>
+                    <option value="86">- - - - Camcorders</option>
+                    <option value="87">- - - - Camera Drones</option>
+                    <option value="88">- - - - Action Cameras</option>
+                    <option value="89">- - - - Photo Studio Supplies</option>
+                    <option value="72">- - Portable Audio &amp; Video</option>
+                    <option value="90">- - - - Headphones</option>
+                    <option value="91">- - - - Speakers</option>
+                    <option value="92">- - - - MP3 Players</option>
+                    <option value="93">- - - - VR/AR Devices</option>
+                    <option value="94">- - - - Microphones</option>
+                    <option value="73">- - Smart Electronics</option>
+                    <option value="95">- - - - Wearable Devices</option>
+                    <option value="96">- - - - Smart Home Appliances</option>
+                    <option value="97">- - - - Smart Remote Controls</option>
+                    <option value="98">- - - - Smart Watches</option>
+                    <option value="99">- - - - Smart Wristbands</option>
+                    <option value="74">- - Video Games</option>
+                    <option value="100">- - - - Handheld Game Players</option>
+                    <option value="101">- - - - Game Controllers</option>
+                    <option value="102">- - - - Joysticks</option>
+                    <option value="103">- - - - Stickers</option>
+                    <option value="104">Game Consoles</option>
+                    <option value="105">Mp3 &amp; headphone</option>
+                    <option value="106">Tv &amp; Video</option>
+                    <option value="107">Watches</option>
+                    <option value="108">Washing Machine</option>
+                    <option value="109">Camera</option>
+                    <option value="110">Audio &amp; Theater</option>
+                    <option value="111">Accessories</option>
+                    <option value="112">Games &amp; Consoles</option>
+                  </select>
+                </div>
+                <input id="headerSearch" type="text" placeholder="Enter your search key ... " autocomplete="off" onkeypress="searchKeyPressCallback(event, this)" />
+                <button onclick="sendSearchData('headerSearch')" type="button">Search</button>
+              </form>
+              <script>
+                function searchKeyPressCallback(event, element) {
+                  var x = event.which || event.keyCode;
+                  if (x === 13) {
+                    element = $(element);
+                    sendSearchData(element.attr("id"));
+                    return false;
+                  }
+                  return false;
+                }
+
+                function sendSearchData(searchInput) {
+                  searchInput = $("#"+searchInput);
+                  searchValue = searchInput.val();
+                  var url = "{{ rootUrl }}";
+                  url += '/search?search='+searchValue;
+                  window.location.href = url;
+                  return false;
+                }
+
+                var customRenderMenu = function(ul, items){
+                  var self = this;
+                  var categoryArr = [];
+
+                  function contain(item, array) {
+                    var contains = false;
+                    $.each(array, function (index, value) {
+                      if (item == value) {
+                        contains = true;
+                        return false;
+                      }
+                    });
+                    return contains;
+                  }
+
+                  $.each(items, function (index, item) {
+                    if (! contain(item.category, categoryArr)) {
+                      categoryArr.push(item.category);
+                    }
+                  });
+
+                  $.each(categoryArr, function (index, category) {
+                    ul.append("<li class='ui-autocomplete-group'>" + category + "</li>");
+                    $.each(items, function (index, item) {
+                      if (item.category == category) {
+                        self._renderItemData(ul, item);
+                      }
+                    });
+                  });
+                };
+
+                $( "#headerSearch" ).autocomplete({
+                  source: function (request, response) {
+                    var requestData = {
+                      'action': 'website_find',
+                      'value': request.term,
+                      '__renderOnlyPlugin': 'WAI/Misc/WebsiteSearch',
+                      '__output': 'json',
+                    }
+                    $.getJSON('{{ rootUrl }}/WAI/Misc/WebsiteSearch',
+                            requestData
+                    ).done(function (data) {
+                      if (typeof success == 'function') {
+                        response(data)
+                      }
+                      else {
+                        response(data);
+                      }
+                      console.log(data);
+                    });
+                  },
+                  create: function () {
+                    $(this).data('uiAutocomplete')._renderMenu = customRenderMenu;
+                    $(this).data('uiAutocomplete')._renderItem = function( ul, item ) {
+                      if (item.url != null) {
+                        return $("<li class='ui-menu-item'>")
+                                .attr("data-value", item.value)
+                                .append(
+                                        $("<div id='ui-id-2' tabindex='-1' class='ui-menu-item-wrapper'>")
+                                                .append(item.label)
+                                                .attr("onclick", "window.location.href = '" + item.url + "'"))
+                                .appendTo(ul);
+                      }
+                      else {
+                        return $("<li class='ui-menu-item'>")
+                                .attr("data-value", item.value)
+                                .append(
+                                        $("<div id='ui-id-2' tabindex='-1' class='ui-menu-item-wrapper'>")
+                                                .append(item.label))
+                                .appendTo(ul);
+                      }
+                    };
+                  },
+                });
+              </script>
+            </div>
+            <!--Cart info Start -->
+            <div class="header-tools d-flex">
+              <div class="cart-info d-flex align-self-center">
+                <!--<a href="#offcanvas-wishlist" class="heart offcanvas-toggle"><i class="lnr lnr-heart"></i><span>Wishlist</span></a>-->
+                <a href="#offcanvas-cart" cart-count="{{ cartContents.items|length }}" class="bag offcanvas-toggle">
+                  <i class="lnr lnr-cart"></i>
+                  <span>My Cart</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!--Cart info End -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Header Nav End -->
+  <div class="header-menu sticky-nav d-lg-block d-none padding-0px">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="header-menu-vertical">
+            <h4 class="menu-title">Browse Categories </h4>
+            <ul class="menu-content display-none">
+              <li class="menu-item"><a href="#">Televisions</a></li>
+              <li class="menu-item">
+                <a href="#">Electronics <i class="ion-ios-arrow-right"></i></a>
+                <ul class="sub-menu flex-wrap">
+                  <li>
+                    <a href="#">
+                      <span> <strong> Accessories & Parts</strong></span>
+                    </a>
+                    <ul class="submenu-item">
+                      <li><a href="#">Cables & Adapters</a></li>
+                      <li><a href="#">Batteries</a></li>
+                      <li><a href="#">Chargers</a></li>
+                      <li><a href="#">Bags & Cases</a></li>
+                      <li><a href="#">Electronic Cigarettes</a></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <span><strong>Camera & Photo</strong></span>
+                    </a>
+                    <ul class="submenu-item">
+                      <li><a href="#">Digital Cameras</a></li>
+                      <li><a href="#">Camcorders</a></li>
+                      <li><a href="#">Camera Drones</a></li>
+                      <li><a href="#">Action Cameras</a></li>
+                      <li><a href="#">Photo Studio Supplie</a></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <span><strong>Smart Electronics</strong></span>
+                    </a>
+                    <ul class="submenu-item">
+                      <li><a href="#">Wearable Devices</a></li>
+                      <li><a href="#">Smart Home Appliances</a></li>
+                      <li><a href="#">Smart Remote Controls</a></li>
+                      <li><a href="#">Smart Watches</a></li>
+                      <li><a href="#">Smart Wristbands</a></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <span><strong>Audio & Video</strong></span>
+                    </a>
+                    <ul class="submenu-item">
+                      <li><a href="#">Televisions</a></li>
+                      <li><a href="#">TV Receivers</a></li>
+                      <li><a href="#">Projectors</a></li>
+                      <li><a href="#">Audio Amplifier Boards</a></li>
+                      <li><a href="#">TV Sticks</a></li>
+                    </ul>
+                  </li>
+                </ul>
+                <!-- sub menu -->
+              </li>
+                <li class="menu-item">
+                  <a href="#">Video Games <i class="ion-ios-arrow-right"></i></a>
+                  <ul class="sub-menu sub-menu-2">
+                    <li>
+                      <ul class="submenu-item">
+                        <li><a href="#">Handheld Game Players</a></li>
+                        <li><a href="#">Game Controllers</a></li>
+                        <li><a href="#">Joysticks</a></li>
+                        <li><a href="#">Stickers</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                    <!-- sub menu -->
+                </li>
+                <li class="menu-item"><a href="#">Digital Cameras</a></li>
+                <li class="menu-item"><a href="#">Headphones</a></li>
+                <li class="menu-item"><a href="#"> Wearable Devices</a></li>
+                <li class="menu-item"><a href="#"> Smart Watches</a></li>
+                <li class="menu-item"><a href="#"> Game Controllers</a></li>
+                <li class="menu-item"><a href="#"> Smart Home Appliances</a></li>
+            </ul>
+            <!-- menu content -->
+          </div>
+          <!-- header menu vertical -->
+        </div>
+        <div class="col-lg-9">
+          <div class="header-horizontal-menu">
+            <ul class="menu-content">
+              {% for item in navigationItems %}
+                <li class="active menu-dropdown">
+                  {% if item.children is iterable %}
+                    <a href="{{ item.url }}">{{ item.text }} <i class="ion-ios-arrow-down"></i></a>
+                    <ul class="main-sub-menu">
+                      {% for children in item.children %}
+                        <li><a href="{{ children.url }}">{{ children.text }}</a></li>
+                      {% endfor %}
+                    </ul>
+                  {% else %}
+                    <a href="{{ item.url }}">{{ item.text }}</a>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- row -->
+    </div>
+    <!-- container -->
+  </div>
+  <!-- header menu -->
+</header>
+<!-- Header Section End Here -->    
+
+<!-- Mobile Header Section Start -->
+<div class="mobile-header d-lg-none sticky-nav bg-header ptb-20px">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <!-- Header Logo Start -->
+      <div class="col">
+        <div class="header-logo">
+          <a href="index.html"><img class="img-responsive" src="assets/images/logo/logo.jpg" alt="logo.jpg" /></a>
+        </div>
+      </div>
+      <!-- Header Logo End -->
+
+      <!-- Header Tools Start -->
+      <div class="col-auto">
+        <div class="header-tools justify-content-end">
+          <div class="cart-info d-flex align-self-center">
+            <!--<a href="#offcanvas-wishlist" class="heart offcanvas-toggle"><i class="lnr lnr-heart"></i><span>Wishlist</span></a>-->
+            <a href="#offcanvas-cart" cart-count="{{ cartContents.items|length }}" class="bag offcanvas-toggle">
+              <i class="lnr lnr-cart"></i>
+              <span>My Cart</span>
+            </a>
+          </div>
+          <div class="mobile-menu-toggle">
+            <a href="#offcanvas-mobile-menu" class="offcanvas-toggle">
+              <svg viewBox="0 0 800 600">
+                <path d="M300,220 C300,220 520,220 540,220 C740,220 640,540 520,420 C440,340 300,200 300,200" id="top"></path>
+                <path d="M300,320 L540,320" id="middle"></path>
+                <path d="M300,210 C300,210 520,210 540,210 C740,210 640,530 520,410 C440,330 300,190 300,190" id="bottom" transform="translate(480, 320) scale(1, -1) translate(-480, -318) "></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Header Tools End -->
+    </div>
+  </div>
+</div>
+
+<!-- Search Category Start -->
+<div class="mobile-search-area d-lg-none mb-15px">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="search-element media-body">
+          <form class="d-flex" action="#">
+            <div class="search-category">
+              <select>
+                <option value="0">All categories</option>
+                <option value="12">Laptop</option>
+                <option value="13">- - Hot Categories</option>
+                <option value="19">- - - - Dresses</option>
+                <option value="20">- - - - Jackets &amp; Coats</option>
+                <option value="21">- - - - Sweaters</option>
+                <option value="22">- - - - Jeans</option>
+                <option value="23">- - - - Blouses &amp; Shirts</option>
+                <option value="14">- - Outerwear &amp; Jackets</option>
+                <option value="24">- - - - Basic Jackets</option>
+                <option value="25">- - - - Real Fur</option>
+                <option value="26">- - - - Down Coats</option>
+                <option value="27">- - - - Blazers</option>
+                <option value="28">- - - - Trench Coats</option>
+                <option value="15">- - Weddings &amp; Events</option>
+                <option value="29">- - - - Wedding Dresses</option>
+                <option value="30">- - - - Evening Dresses</option>
+                <option value="31">- - - - Prom Dresses</option>
+                <option value="32">- - - - Bridesmaid Dresses</option>
+                <option value="33">- - - - Wedding Accessories</option>
+                <option value="16">- - Bottoms</option>
+                <option value="34">- - - - Skirts</option>
+                <option value="35">- - - - Leggings</option>
+                <option value="36">- - - - Pants &amp; Capris</option>
+                <option value="37">- - - - Wide Leg Pants</option>
+                <option value="38">- - - - Shorts</option>
+                <option value="17">- - Tops &amp; Sets</option>
+                <option value="39">- - - - Tank Tops</option>
+                <option value="40">- - - - Suits &amp; Sets</option>
+                <option value="41">- - - - Jumpsuits</option>
+                <option value="42">- - - - Rompers</option>
+                <option value="43">- - - - Sleep &amp; Lounge</option>
+                <option value="18">- - Accessories</option>
+                <option value="44">- - - - Eyewear &amp; Accessories</option>
+                <option value="45">- - - - Hats &amp; Caps</option>
+                <option value="46">- - - - Belts &amp; Cummerbunds</option>
+                <option value="47">- - - - Scarves &amp; Wraps</option>
+                <option value="48">- - - - Gloves &amp; Mittens</option>
+                <option value="49">Computer</option>
+                <option value="50">- - Bottoms</option>
+                <option value="53">- - - - Skirts</option>
+                <option value="54">- - - - Leggings</option>
+                <option value="55">- - - - Jeans</option>
+                <option value="56">- - - - Pants &amp; Capris</option>
+                <option value="57">- - - - Shorts</option>
+                <option value="51">- - Outerwear &amp; Jackets</option>
+                <option value="58">- - - - Trench</option>
+                <option value="59">- - - - Genuine Leather</option>
+                <option value="60">- - - - Parkas</option>
+                <option value="61">- - - - Down Jackets</option>
+                <option value="62">- - - - Wool &amp; Blends</option>
+                <option value="52">- - Underwear &amp; Loungewear</option>
+                <option value="63">- - - - Boxers</option>
+                <option value="64">- - - - Briefs</option>
+                <option value="65">- - - - Long Johns</option>
+                <option value="66">- - - - Men's Sleep &amp; Lounge</option>
+                <option value="67">- - - - Pajama Sets</option>
+                <option value="68">Smartphone</option>
+                <option value="69">- - Accessories &amp; Parts</option>
+                <option value="75">- - - - Cables &amp; Adapters</option>
+                <option value="76">- - - - Batteries</option>
+                <option value="77">- - - - Chargers</option>
+                <option value="78">- - - - Bags &amp; Cases</option>
+                <option value="79">- - - - Electronic Cigarettes</option>
+                <option value="70">- - Audio &amp; Video</option>
+                <option value="80">- - - - Televisions</option>
+                <option value="81">- - - - TV Receivers</option>
+                <option value="82">- - - - Projectors</option>
+                <option value="83">- - - - Audio Amplifier Boards</option>
+                <option value="84">- - - - TV Sticks</option>
+                <option value="71">- - Camera &amp; Photo</option>
+                <option value="85">- - - - Digital Cameras</option>
+                <option value="86">- - - - Camcorders</option>
+                <option value="87">- - - - Camera Drones</option>
+                <option value="88">- - - - Action Cameras</option>
+                <option value="89">- - - - Photo Studio Supplies</option>
+                <option value="72">- - Portable Audio &amp; Video</option>
+                <option value="90">- - - - Headphones</option>
+                <option value="91">- - - - Speakers</option>
+                <option value="92">- - - - MP3 Players</option>
+                <option value="93">- - - - VR/AR Devices</option>
+                <option value="94">- - - - Microphones</option>
+                <option value="73">- - Smart Electronics</option>
+                <option value="95">- - - - Wearable Devices</option>
+                <option value="96">- - - - Smart Home Appliances</option>
+                <option value="97">- - - - Smart Remote Controls</option>
+                <option value="98">- - - - Smart Watches</option>
+                <option value="99">- - - - Smart Wristbands</option>
+                <option value="74">- - Video Games</option>
+                <option value="100">- - - - Handheld Game Players</option>
+                <option value="101">- - - - Game Controllers</option>
+                <option value="102">- - - - Joysticks</option>
+                <option value="103">- - - - Stickers</option>
+                <option value="104">Game Consoles</option>
+                <option value="105">Mp3 &amp; headphone</option>
+                <option value="106">Tv &amp; Video</option>
+                <option value="107">Watches</option>
+                <option value="108">Washing Machine</option>
+                <option value="109">Camera</option>
+                <option value="110">Audio &amp; Theater</option>
+                <option value="111">Accessories</option>
+                <option value="112">Games &amp; Consoles</option>
+              </select>
+            </div>
+            <input type="text" placeholder="Enter your search key ... " />
+            <button><i class="lnr lnr-magnifier"></i></button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Search Category End -->
+<div class="mobile-category-nav d-lg-none mb-15px">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+
+         <!--=======  category menu  =======-->
+        <div class="hero-side-category">
+          <!-- Category Toggle Wrap -->
+          <div class="category-toggle-wrap">
+            <!-- Category Toggle -->
+            <button class="category-toggle"><i class="fa fa-bars"></i> All Categories</button>
+          </div>
+
+          <!-- Category Menu -->
+          <nav class="category-menu">
+            <ul>
+              <li><a href="#">Televisions</a></li>
+              <li class="menu-item-has-children menu-item-has-children-1">
+                <a href="#">Accessories & Parts<i class="ion-ios-arrow-down"></i></a>
+                <!-- category submenu -->
+                <ul class="category-mega-menu category-mega-menu-1">
+                  <li><a href="#">Cables & Adapters</a></li>
+                  <li><a href="#">Batteries</a></li>
+                  <li><a href="#">Chargers</a></li>
+                  <li><a href="#">Bags & Cases</a></li>
+                  <li><a href="#">Electronic Cigarettes</a></li>
+                </ul>
+              </li>
+              <li class="menu-item-has-children menu-item-has-children-2">
+                <a href="#">Camera & Photo<i class="ion-ios-arrow-down"></i></a>
+                <!-- category submenu -->
+                <ul class="category-mega-menu category-mega-menu-2">
+                  <li><a href="#">Digital Cameras</a></li>
+                  <li><a href="#">Camcorders</a></li>
+                  <li><a href="#">Camera Drones</a></li>
+                  <li><a href="#">Action Cameras</a></li>
+                  <li><a href="#">Photo Studio Supplies</a></li>
+                </ul>
+              </li>
+              <li class="menu-item-has-children menu-item-has-children-3">
+                <a href="#">Smart Electronics <i class="ion-ios-arrow-down"></i></a>
+                <!-- category submenu -->
+                <ul class="category-mega-menu category-mega-menu-3">
+                  <li><a href="#">Wearable Devices</a></li>
+                  <li><a href="#">Smart Home Appliances</a></li>
+                  <li><a href="#">Smart Remote Controls</a></li>
+                  <li><a href="#">Smart Watches</a></li>
+                  <li><a href="#">Smart Wristbands</a></li>
+                </ul>
+              </li>
+              <li class="menu-item-has-children menu-item-has-children-4">
+                <a href="#">Audio & Video <i class="ion-ios-arrow-down"></i></a>
+                <!-- category submenu -->
+                <ul class="category-mega-menu category-mega-menu-4">
+                  <li><a href="#">Televisions</a></li>
+                  <li><a href="#">TV Receivers</a></li>
+                  <li><a href="#">Projectors</a></li>
+                  <li><a href="#">Audio Amplifier Boards</a></li>
+                  <li><a href="#">TV Sticks</a></li>
+                </ul>
+              </li>
+              <li class="menu-item-has-children menu-item-has-children-6">
+                <a href="#">Video Game <i class="ion-ios-arrow-down"></i></a>
+                <!-- category submenu -->
+                <ul class="category-mega-menu category-mega-menu-6">
+                  <li><a href="#">Handheld Game Players</a></li>
+                  <li><a href="#">Game Controllers</a></li>
+                  <li><a href="#">Joysticks</a></li>
+                  <li><a href="#">Stickers</a></li>
+                </ul>
+              </li>
+              <li class="menu-item"><a href="#">Digital Cameras</a></li>
+              <li class="menu-item"><a href="#">Headphones</a></li>
+              <li class="menu-item"><a href="#"> Wearable Devices</a></li>
+              <li class="menu-item"><a href="#"> Smart Watches</a></li>
+              <li class="menu-item"><a href="#"> Game Controllers</a></li>
+              <li class="menu-item"><a href="#"> Smart Home Appliances</a></li>
+              <li class="hidden"><a href="#">Projectors</a></li>
+              <li>
+                <a href="#" id="more-btn"><i class="ion-ios-plus-empty" aria-hidden="true"></i> More Categories</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+        <!--=======  End of category menu =======-->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Mobile Header Section End -->
+<!-- OffCanvas Wishlist Start -->
+<div id="offcanvas-wishlist" class="offcanvas offcanvas-wishlist">
+  <div class="inner">
+    <div class="head">
+      <span class="title">Wishlist</span>
+      <button class="offcanvas-close">×</button>
+    </div>
+    <div class="body customScroll">
+      <ul class="minicart-product-list">
+        <li>
+          <a href="single-product.html" class="image"><img src="assets/images/product-image/1.jpg" alt="Cart product Image"></a>
+          <div class="content">
+            <a href="single-product.html" class="title">Walnut Cutting Board</a>
+            <span class="quantity-price">1 x <span class="amount">$100.00</span></span>
+            <a href="#" class="remove">×</a>
+          </div>
+        </li>
+        <li>
+          <a href="single-product.html" class="image"><img src="assets/images/product-image/2.jpg" alt="Cart product Image"></a>
+          <div class="content">
+            <a href="single-product.html" class="title">Lucky Wooden Elephant</a>
+            <span class="quantity-price">1 x <span class="amount">$35.00</span></span>
+            <a href="#" class="remove">×</a>
+          </div>
+        </li>
+        <li>
+          <a href="single-product.html" class="image"><img src="assets/images/product-image/3.jpg" alt="Cart product Image"></a>
+          <div class="content">
+            <a href="single-product.html" class="title">Fish Cut Out Set</a>
+            <span class="quantity-price">1 x <span class="amount">$9.00</span></span>
+            <a href="#" class="remove">×</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="foot">
+      <div class="buttons">
+        <a href="wishlist.html" class="btn btn-dark btn-hover-primary mt-30px">view wishlist</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- OffCanvas Wishlist End -->
+
+<!-- offcanvas-cart -->
+<div id="offcanvas-cart" class="offcanvas offcanvas-cart">
+  <div class="inner">
+    <div class="head">
+      <span class="title">Cart</span>
+      <button class="offcanvas-close">×</button>
+    </div>
+    <div id="navigationCartOverview">
+      {% include 'Templates/Cart/Overview.twig' with { 'cartContents': cartContents } %}
+    </div>
+  </div>
+</div>
+<!-- offcanvas-cart -->
+
+<!-- OffCanvas Search Start -->
+<div id="offcanvas-mobile-menu" class="offcanvas offcanvas-mobile-menu">
+  <div class="inner customScroll">
+    <div class="head">
+      <span class="title">&nbsp;</span>
+      <button class="offcanvas-close">×</button>
+    </div>
+    <div class="offcanvas-menu-search-form">
+      <form action="#">
+        <input type="text" placeholder="Search...">
+        <button><i class="lnr lnr-magnifier"></i></button>
+      </form>
+    </div>
+    <div class="offcanvas-menu">
+      <ul>
+        {% if navigationItems is iterable %}
+          {% for item in navigationItems %}
+            <li><a href="{{ item.url }}"><span class="menu-text">{{ item.text }}</span></a>
+              {% if item.children is iterable %}
+                <ul class="sub-menu">
+                  {% for itemSub in item.children %}
+                    <li><a href="{{ itemSub.url }}"><span class="menu-text">{{ itemSub.text }}</span></a></li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </div>
+    <!-- OffCanvas Menu End -->
+    <div class="offcanvas-social mt-30px">
+      <ul>
+        {% if settings.profile.urlFacebook != "" %}
+          <li><a href="{{ settings.profile.urlFacebook }}"><i class="ion-social-facebook"></i></a></li>
+        {% endif %}
+        {% if settings.profile.urlTwitter != "" %}
+          <li><a href="{{ settings.profile.urlTwitter }}"><i class="ion-social-twitter"></i></a></li>
+        {% endif %}
+        {% if settings.profile.urlYouTube != "" %}
+          <li><a href="{{ settings.profile.urlYouTube }}"><i class="ion-social-youtube"></i></a></li>
+        {% endif %}
+        {% if settings.profile.urlInstagram != "" %}
+          <li><a href="{{ settings.profile.urlInstagram }}"><i class="ion-social-instagram"></i></a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- OffCanvas Search End -->

@@ -1,0 +1,25 @@
+<h1 class="h3">Úhrady</h1>
+{% for uhrada in invoice.UHRADY %}
+  <div class='row'>
+    <div class='col-lg-3'>
+      {{ uhrada.cas|date("d.m.Y H:i:s") }}
+    </div>
+    <div class='col-lg-3'>
+      {{ uhrada.suma|number_format(2, ",", " ") }} EUR
+    </div>
+    <div class='col-lg-3'>
+      {% if uhrada.forma_uhrady == constant('POKLADNA_FORMA_UHRADY_V_HOTOVOSTI') %}
+        platba v hotovosti
+      {% endif %}
+      {% if uhrada.forma_uhrady == constant('POKLADNA_FORMA_UHRADY_KARTOU') %}
+        platba kartou
+      {% endif %}
+    </div>
+    <div class='col-lg-3'>
+      <a
+        href='javascript:void(0)'
+        onclick='window_render("ui/form", {"table": "{{ gtp }}_pokladna_pohyby", "id": "{{ uhrada.id }}"});'
+      >Detail</a>
+    </div>
+  </div>
+{% endfor %}

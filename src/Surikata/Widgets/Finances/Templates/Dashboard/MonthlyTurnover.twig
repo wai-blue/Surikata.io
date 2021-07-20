@@ -1,0 +1,32 @@
+<div class="card shadow mb-2">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Monthly turnover for {{ currentYear }}</h6>
+  </div>
+  <div class="card-body">
+
+    <canvas id="myChart2"></canvas>
+
+    <script>
+      var labels = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+      var data = {
+        labels: labels,
+        datasets: [{
+          label: 'Monthly turnover for  {{ currentYear }}',
+          data: {{ data|raw }},
+          fill: false,
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1
+        }]
+      };
+
+      var config = {
+        type: 'line',
+        data: data,
+      };
+
+      new Chart(document.getElementById('myChart2').getContext('2d'), config);
+    </script>
+
+  </div>
+</div>
+

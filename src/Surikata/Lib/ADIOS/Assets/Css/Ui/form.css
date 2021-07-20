@@ -1,0 +1,94 @@
+/* ui table */
+
+/* .adios.ui.fFormorm.table { padding: 0.5em; } */
+/* .adios.ui.Form.default_table_wrapper {margin:20px;} */
+.adios.ui.Form.form_col {display:table-cell;vertical-align:top;}
+.adios.ui.Form.subtable {width:100%;display:table;}
+.adios.ui.Form.subrow { margin: 0.5em 0em;/* border-bottom: 1px solid transparent; */}
+/* .adios.ui.Form.form_title {vertical-align:middle;display:table-cell;min-width:100px;padding:0.5em;} */
+/* .adios.ui.Form .subrow:hover { border-bottom-color: #EEEEEE; } */
+.adios.ui.Form .subrow:hover .form_title { color: var(--cl-main); }
+.adios.ui.Form .subrow:hover .form_input input,
+.adios.ui.Form .subrow:hover .form_input textarea,
+.adios.ui.Form .subrow:hover .form_input select { border-color: var(--cl-main); }
+.adios.ui.Form .subrow.save_error_info {
+  color: red;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  padding: 1em;
+  background:red;
+  color:white;
+}
+.adios.ui.Form .subrow.required .form_title::after {
+  content: '*';
+  color: red;
+}
+.adios.ui.Form .subrow.save_error {
+  color: red;
+  background: rgba(255,0,0,0.05);
+  padding: 0.5em;
+  transition: all 300ms;
+}
+
+.adios.ui.Form.form_input {
+  vertical-align: top;
+}
+
+.adios.ui.Form.form_input input::placeholder {
+  color: #DDDDDD;
+  font-size: 0.75em;
+  position: relative;
+  top: 0.5em;
+}
+
+.adios.ui.Form.form_input input:focus::placeholder {
+  color: rgba(0,0,0,0);
+}
+
+.adios.ui.Form.heading {
+  margin: 35px 0px 25px 0px;
+  font-size: 16pt;
+  border-bottom: 1px solid #f0f0f0;
+  color: #656565;
+  padding-bottom:5px;
+  padding-left:40px;
+  margin-left:-30px;
+  margin-right:-20px;
+  font-weight:bold;
+}
+.adios.ui.Form.heading.heading_first {margin-top:0px;}
+
+.adios.ui.Form.form_input input[type=text],
+.adios.ui.Form.form_input input[type=password] {
+  height: auto;
+  width: 75%;
+}
+
+.adios.ui.Form.form_input textarea {
+  height: 5em;
+  width: 100%;
+}
+
+.adios.ui.Form.form_description { font-size: 0.8em; font-style: italic; color: orange; }
+
+
+/* .adios.ui.Form.subrow:hover { background: #FAFAFA; } */
+
+@media screen and (max-width: 1000px) {
+  .adios.ui.Form.table {display:block;}
+  .adios.ui.Form.form_col {display:block;}
+}
+
+@media screen and (max-width: 480px) {
+  .adios.ui.Form.subtable {display:block;}
+  .adios.ui.Form.subrow {display:block;}
+  .adios.ui.Form.subrow {display:block;}
+  .adios.ui.Form.form_title {display:block;text-align:left;}
+  .adios.ui.Form.form_input {display:block;padding-bottom:10px;}
+}
+
+@media screen and (max-width: 360px) {
+  .adios.ui.Form.form_input {min-width:220px;}
+
+}

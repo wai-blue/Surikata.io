@@ -1,0 +1,10 @@
+{
+    "require": {
+        "twig/twig": "^3.0",
+        "hoa/regex": "1.17.01.13",
+        "illuminate/database": "^8.19",
+        "twig/markdown-extra": "^3.2",
+        "erusev/parsedown": "^1.7",
+        "voku/html-compress-twig": "^4.0"
+    }
+}

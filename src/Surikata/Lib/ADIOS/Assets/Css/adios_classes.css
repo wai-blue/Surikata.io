@@ -1,0 +1,108 @@
+.xdebug-var-dump {
+  position: fixed;
+  bottom: 0px;
+  width: 100vw;
+  font-size: 0.8em;
+  z-index: 99999;
+  background: orange;
+  padding: 1em;
+  margin: 0px;
+  max-height: 50vh;
+  overflow: auto;
+  border: 1px solid brown;
+  box-sizing: border-box;
+  transition: 100ms;
+}
+.xdebug-var-dump:hover {
+  border: 1px solid brown;
+  background: white;
+  z-index: 9999999999 !important;
+  bottom: 0.5em;
+}
+
+.xdebug-var-dump:nth-child(1)  { left: 0em;  bottom: 0em; }
+.xdebug-var-dump:nth-child(2)  { left: 1em;  bottom: 1em; }
+.xdebug-var-dump:nth-child(3)  { left: 2em;  bottom: 2em; }
+.xdebug-var-dump:nth-child(4)  { left: 3em;  bottom: 3em; }
+.xdebug-var-dump:nth-child(5)  { left: 4em;  bottom: 4em; }
+.xdebug-var-dump:nth-child(6)  { left: 5em;  bottom: 5em; }
+.xdebug-var-dump:nth-child(7)  { left: 6em;  bottom: 6em; }
+.xdebug-var-dump:nth-child(8)  { left: 7em;  bottom: 7em; }
+.xdebug-var-dump:nth-child(9)  { left: 8em;  bottom: 8em; }
+.xdebug-var-dump:nth-child(10) { left: 9em;  bottom: 9em; }
+.xdebug-var-dump:nth-child(11) { left: 10em; bottom: 10em; }
+.xdebug-var-dump:nth-child(12) { left: 11em; bottom: 11em; }
+.xdebug-var-dump:nth-child(13) { left: 12em; bottom: 12em; }
+.xdebug-var-dump:nth-child(14) { left: 13em; bottom: 13em; }
+.xdebug-var-dump:nth-child(15) { left: 14em; bottom: 14em; }
+.xdebug-var-dump:nth-child(16) { left: 15em; bottom: 15em; }
+.xdebug-var-dump:nth-child(17) { left: 16em; bottom: 16em; }
+.xdebug-var-dump:nth-child(18) { left: 17em; bottom: 17em; }
+.xdebug-var-dump:nth-child(19) { left: 18em; bottom: 18em; }
+.xdebug-var-dump:nth-child(20) { left: 19em; bottom: 19em; }
+.xdebug-var-dump:nth-child(21) { left: 20em; bottom: 20em; }
+.xdebug-var-dump:nth-child(22) { left: 21em; bottom: 21em; }
+.xdebug-var-dump:nth-child(23) { left: 22em; bottom: 22em; }
+.xdebug-var-dump:nth-child(24) { left: 23em; bottom: 23em; }
+.xdebug-var-dump:nth-child(25) { left: 24em; bottom: 24em; }
+.xdebug-var-dump:nth-child(26) { left: 25em; bottom: 25em; }
+.xdebug-var-dump:nth-child(27) { left: 26em; bottom: 26em; }
+.xdebug-var-dump:nth-child(28) { left: 27em; bottom: 27em; }
+.xdebug-var-dump:nth-child(29) { left: 28em; bottom: 28em; }
+.xdebug-var-dump:nth-child(30) { left: 29em; bottom: 29em; }
+.xdebug-var-dump:nth-child(31) { left: 30em; bottom: 30em; }
+.xdebug-var-dump:nth-child(32) { left: 31em; bottom: 31em; }
+.xdebug-var-dump:nth-child(33) { left: 32em; bottom: 32em; }
+.xdebug-var-dump:nth-child(34) { left: 33em; bottom: 33em; }
+.xdebug-var-dump:nth-child(35) { left: 34em; bottom: 34em; }
+.xdebug-var-dump:nth-child(36) { left: 35em; bottom: 35em; }
+.xdebug-var-dump:nth-child(37) { left: 36em; bottom: 36em; }
+.xdebug-var-dump:nth-child(38) { left: 37em; bottom: 37em; }
+.xdebug-var-dump:nth-child(39) { left: 38em; bottom: 38em; }
+
+/* ADIOS TABLE */
+
+.adios_table {border-collapse:collapse;width:100%;}
+
+.adios_table th {font-weight:bold;margin:0px;border-bottom:1px solid #dedede;background:#EEEEEE;padding:10px;color:#555555;transition:background 0.3s;}
+
+.adios_table td {margin:0px;border-bottom:1px solid #dedede;padding:10px;color:#888888;transition:background 0.3s;}
+.adios_table tr:first-child {border-top:1px solid #dedede;}
+.adios_table tr:hover td {background:#f6f6f6;}
+
+
+/*table-middle*/
+.adios_table.middle td {vertical-align:middle;}
+
+/*table-separated*/
+.adios_table.separated td {position:relative;}
+.adios_table.separated td::after {content : '';position: absolute;left:0;top:20%;height:60%;width:1px;border-left:1px solid #eeeeee;}
+
+/*table-centered*/
+.adios_table.centered td {text-align:center;}
+
+
+/* ADIOS BADGE */
+.adios_badge {padding:4px 7px;border-radius:15px;display:inline-block;color:white;font-weight:bold;background:#757575;}
+.adios_badge.red {background:#F44336;}
+.adios_badge.pink {background:#E91E63;}
+.adios_badge.purple {background:#9C27B0;}
+.adios_badge.deep_purple {background:#673AB7;}
+.adios_badge.indigo {background:#3F51B5;}
+.adios_badge.blue {background:#2196F3;}
+.adios_badge.light_blue {background:#039BE5;}
+.adios_badge.cyan {background:#0097A7;}
+.adios_badge.teal {background:#009688;}
+.adios_badge.green {background:#43A047;}
+.adios_badge.light_green {background:#689F38;}
+.adios_badge.lime {background:#9E9D24;}
+.adios_badge.yellow {background:#FBC02D;}
+.adios_badge.amber {background:#FF8F00;}
+.adios_badge.orange {background:#EF6C00;}
+.adios_badge.deep_orange {background:#FF5722;}
+.adios_badge.brown {background:#795548;}
+.adios_badge.grey {background:#757575;}
+.adios_badge.blue_gray {background:#607D8B;}
+.adios_badge.black {background:#000000;}
+.adios_badge.white {background:#ffffff;color:#000000;}
+

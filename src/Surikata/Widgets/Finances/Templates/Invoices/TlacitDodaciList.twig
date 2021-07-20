@@ -1,0 +1,233 @@
+<html>
+<head>
+  <style>
+
+    #w_swi_invoices_template * {font-family:sans-serif; font-size:8pt;}
+
+    #w_swi_invoices_template .fbigger {font-size:11pt;}
+
+    #w_swi_invoices_template table {width:100%; border-collapse:collapse;}
+    #w_swi_invoices_template table td {vertical-align:top;}
+
+    #w_swi_invoices_template .dtop td {padding:0 2pt 8pt 2pt;}
+    #w_swi_invoices_template .dtop td, #w_swi_invoices_template .dtop td * {font-size:16pt;}
+    #w_swi_invoices_template .dmain {border:0.2mm solid #000;}
+    #w_swi_invoices_template .dcolumn {width:50%; float:left;}
+    #w_swi_invoices_template .content {padding:4pt;}
+    #w_swi_invoices_template .odberatel {border:0.5mm solid #000;}
+    #w_swi_invoices_template .dodavatel_popis {padding-top:4pt; text-align:left}
+
+    #w_swi_invoices_template .dodod_info {color: #777; text-transform:uppercase; padding-bottom:2mm; text-align:left;}
+    #w_swi_invoices_template .dodod_info span {border-bottom:0.2mm solid #777; font-size:8pt; font-style:italic;}
+
+    #w_swi_invoices_template .invoice_info {padding:16pt 2pt 6pt 2pt; text-align:left;}
+
+    #w_swi_invoices_template table.w_swi_invoices_udaje tr.sep td {width:100%; height:4pt;}
+    #w_swi_invoices_template table.w_swi_invoices_udaje td {padding:0.8pt; vertical-align:middle;}
+
+    #w_swi_invoices_template table#w_swi_invoices_template_items td {padding:0.8pt; vertical-align:middle;}
+    #w_swi_invoices_template table#w_swi_invoices_template_items tr.header td {font-weight:bold; font-style:italic;}
+    #w_swi_invoices_template table#w_swi_invoices_template_items tr.sep td {width:100%; height:4pt;}
+
+    #w_swi_invoices_template #w_swi_invoices_template_sumar {width:40%; float:right;}
+    #w_swi_invoices_template #w_swi_invoices_template_sumar table td {padding:0.8pt; vertical-align:middle; font-size:9pt;}
+    #w_swi_invoices_template #w_swi_invoices_template_sumar table tr.sep td {width:100%; height:10pt;}
+    #w_swi_invoices_template #w_swi_invoices_template_sumar table tr.suma td {border-top:0.2mm solid #777; padding-top:1mm;}
+
+    #w_swi_invoices_template .podpisy {}
+    #w_swi_invoices_template .podpisy table td {text-align:center;}
+    #w_swi_invoices_template .podpisy .podpis_info {border-top:0.2mm dotted #777;}
+
+    ._num {text-align:right;}
+
+    #w_swi_invoices_template_footer td {color:#777; font-size:6pt; }
+  </style>
+</head>
+
+<body onload='window.print();'>
+
+  <div id='w_swi_invoices_template'>
+
+    <!-- TOP -->
+    <div class='dtop'>
+      <table>
+        <tr>
+          <td>
+            Dodací list č. {{ invoice.cislo_dodacieho_listu }}
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class='dmain'>
+      <!-- DODAVATEL -->
+      <div class='dcolumn'>
+        <div class='content'>
+          <div class='dodod_info'>
+            <span>Dodávateľ</span>
+            <div></div>
+          </div>
+          <div>
+
+          <table class='w_swi_invoices_udaje' id='w_swi_invoices_udaje_odberatel'>
+            <tr>
+              <td colspan=4 style='width:100%;' class='fbigger'><b>{{ invoice.supplier_name }}</b></td>
+            </tr>
+            <tr>
+              <td colspan=4 style='width:100%;'>{{ invoice.supplier_street_1 }}</td>
+            </tr>
+            <tr>
+              <td colspan=4 style='width:100%;'>{{ invoice.supplier_zip }} {{ invoice.supplier_city }}</td>
+            </tr>
+            <tr>
+              <td colspan=4 style='width:100%;'>{{ invoice.supplier_country }}</td>
+            </tr>
+
+            <tr class='sep'><td colspan=4><div></div></td></tr>
+
+            <tr class=''>
+              <td style='width:20%;'>IČO:</td>
+              <td style='width:30%;'>{{ invoice.supplier_company_id }}</td>
+              <td style='width:20%;'>Telefón:</td>
+              <td style='width:30%;'>{{ invoice.supplier_phone }}</td>
+            </tr>
+            <tr class=''>
+              <td style='width:20%;'>DIČ:</td>
+              <td style='width:30%;'>{{ invoice.supplier_company_tax_id }}</td>
+              <td style='width:20%;'>Email:</td>
+              <td style='width:30%;'>{{ invoice.supplier_email }}</td>
+            </tr>
+            <tr class=''>
+              <td style='width:20%;'>IČDPH:</td>
+              <td style='width:30%;'>{{ invoice.supplier_company_vat_id }}</td>
+              <td style='width:20%;'>Web:</td>
+              <td style='width:30%;'>{{ invoice.supplier_www }}</td>
+            </tr>
+          </table>
+
+          </div>
+          <div class='dodavatel_popis'>
+            {{ invoice.identita_strucny_popis }}
+          </div>
+        </div>
+      </div>
+
+      <!-- CUSTOMER -->
+      <div class='dcolumn'>
+        <div class='content odberatel'>
+          <div class='dodod_info'>
+            <span>Odberateľ</span>
+            <div></div>
+          </div>
+
+          <table class='w_swi_invoices_udaje' id='w_swi_invoices_udaje_odberatel'>
+            <tr>
+              <td colspan=4 style='width:100%;' class='fbigger'><b>{{ invoice.customer_name }}</b></td>
+            </tr>
+            <tr>
+              <td colspan=4 style='width:100%;'>{{ invoice.customer_street_1 }}</td>
+            </tr>
+            <tr>
+              <td colspan=4 style='width:100%;'>{{ invoice.customer_zip }} {{ invoice.customer_city }}</td>
+            </tr>
+            <tr>
+              <td colspan=4 style='width:100%;'>{{ invoice.customer_country }}</td>
+            </tr>
+
+            <tr class='sep'><td colspan=4><div></div></td></tr>
+
+            <tr class=''>
+              <td style='width:20%;'>IČO:</td>
+              <td style='width:30%;'>{{ invoice.customer_company_id }}</td>
+              <td style='width:20%;'>Telefón:</td>
+              <td style='width:30%;'>{{ invoice.customer_phone }}</td>
+            </tr>
+            <tr class=''>
+              <td style='width:20%;'>DIČ:</td>
+              <td style='width:30%;'>{{ invoice.customer_company_tax_id }}</td>
+              <td style='width:20%;'>Email:</td>
+              <td style='width:30%;'>{{ invoice.customer_email }}</td>
+            </tr>
+            <tr class=''>
+              <td style='width:20%;'>IČDPH:</td>
+              <td style='width:30%;'>{{ invoice.customer_company_vat_id }}</td>
+              <td style='width:20%;'>Web:</td>
+              <td style='width:30%;'>{{ invoice.customer_www }}</td>
+            </tr>
+          </table>
+
+
+        </div>
+        <div class='content'>
+          <table class='w_swi_invoices_udaje' id='w_swi_invoices_udaje_ostatne'>
+            <tr>
+              <td style='width:50%;'>Číslo objednávky:</td>
+              <td style='width:50%;'>{{ invoice.order_number }}</td>
+            </tr>
+            <tr>
+              <td style='width:50%;'>Číslo dodacieho listu:</td>
+              <td style='width:50%;'>{{ invoice.cislo_dodacieho_listu }}</td>
+            </tr>
+
+            <tr class='sep'><td colspan=2><div></div></td></tr>
+
+            <tr>
+              <td style='width:50%;'>Dátum dodania:</td>
+              <td style='width:50%;'>{{ invoice.delivery_time|date(locale.dateFormat) }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div style='clear:both;'></div>
+    </div>
+
+    <!-- ITEMS -->
+    <div class='dmain'>
+      <div class='content'>
+        <table id='w_swi_invoices_template_items'>
+          <thead>
+            <tr class='header'>
+              <td style='width:26%;' class=''>Názov</td>
+              <td style='width:7%;' class='_num'>Množstvo</td>
+              <td style='width:5%; text-align:center;' class=''>MJ</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class='sep'><td colspan=10><div></div></td></tr>
+
+            {% for item in invoice.ITEMS %}
+              <tr>
+                <td style='width:26%;' class=''>
+                  {{ item.item }}
+                </td>
+                <td style='white-space:nowrap;width:7%;' class='_num'><b>{{ item.quantity|number_format(2, ',', ' ') }}</b></td>
+                <td style='white-space:nowrap;width:5%; text-align:center;' class=''>{{ item.merna_jednotka }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PECIATKA a PODPIS -->
+    <div>
+      <div class='content podpisy' style='padding-top:0; padding-bottom:0;'>
+        <div style='page-break-inside:avoid;padding-top:25mm;'>
+          <table>
+            <tr>
+              <td style='width:50%;'>
+                <span class='podpis_info'>
+                  Prevzal
+                </span>
+              </td>
+              <td style='width:50%;'>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

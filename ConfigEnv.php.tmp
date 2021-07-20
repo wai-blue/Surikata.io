@@ -1,0 +1,59 @@
+<?php
+
+define('REWRITE_BASE', '/surikata/');
+
+////////////////////////////////////////////////////////
+// Website Domains
+
+$configEnv["domainLanguages"] = [
+  1 => "English",
+];
+
+$configEnv["domains"] = [
+  "EN" => [
+    "name" => "www.my-online-store.com",
+    "description" => "My First Online Store",
+    "rootUrl" => $_SERVER['HTTP_HOST'].REWRITE_BASE,
+    "languageIndex" => 1,
+  ],
+];
+
+define('WEBSITE_DOMAIN_TO_RENDER', "EN");
+define('WEBSITE_REWRITE_BASE', REWRITE_BASE);
+
+////////////////////////////////////////////////////////
+// Locale
+
+define('LOCALE_CURRENCY_SYMBOL', "€");
+define('LOCALE_DATE_FORMAT', "d.m.Y");
+
+////////////////////////////////////////////////////////
+// Database
+
+define('DB_HOST', 'localhost');
+define('DB_PORT', 3306);
+define('DB_LOGIN', '');
+define('DB_PASSWORD', '');
+define('DB_NAME', '');
+
+////////////////////////////////////////////////////////
+// SMTP
+
+/* Uncomment these lines if you want to use SMTP for sending emails */
+/*
+define('SMTP_HOST', '');
+define('SMTP_PORT', 465);
+define('SMTP_PROTOCOL', 'tls');
+define('SMTP_LOGIN', '');
+define('SMTP_PASSWORD', '');
+define('SMTP_FROM', '');
+*/
+
+////////////////////////////////////////////////////////
+// Branding
+
+/* Uncomment these lines if you want to brand your project */
+/*
+$configEnv["brand"]["title"] = "";
+$configEnv["brand"]["login"]["splash"] = "";
+*/

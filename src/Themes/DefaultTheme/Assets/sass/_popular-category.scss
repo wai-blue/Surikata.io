@@ -1,0 +1,121 @@
+// Category product Style 
+
+.popular-categories-area{
+		  .popular-category-slider-wrapper{
+		  		margin-left:-15px;
+		  		margin-right:-15px;
+		  		.single-slider-item{
+		  		padding:0 15px;
+		  		}
+		  	.category-slider-bg{
+		  		background-color:#fff;
+		  		.category-discript{
+		  		padding:30px 25px;
+		  		}
+		  	}
+		  
+		.thumb-category{
+
+				position: relative;
+	   			 overflow: hidden;
+
+			& img{
+				width: 100%;
+			    -webkit-transition: all 300ms linear;
+			    -moz-transition: all 300ms linear;
+			    -ms-transition: all 300ms linear;
+			    -o-transition: all 300ms linear;
+			    transition: all 300ms linear;
+
+			}
+			&:hover{
+				& img{
+					-webkit-transition: all 300ms linear;
+				    -moz-transition: all 300ms linear;
+				    -ms-transition: all 300ms linear;
+				    -o-transition: all 300ms linear;
+				    transition: all 300ms linear;
+				    -webkit-transform: scale(1.035) rotate(0.05deg);
+				    transform: scale(1.035) rotate(0.05deg);
+				}
+			}
+		}
+		.category-discript{
+			padding-top: 20px;
+			padding-left:15px;
+			& h4{
+				font-size: 15px;
+			    text-transform: capitalize;
+			    color: #272727;
+			    display: block;
+			    line-height: 1;
+			    margin: 5px 0px 20px 0px;
+			}
+			& li{
+		    	display: block;
+			}
+			& a{
+			color: #9d9c9c;
+		    font-size: 13px;
+		    line-height: 24px;
+		    display: block;
+		    text-transform: capitalize;
+				&:hover{
+					color: $theme-color;
+				}
+			}
+			& a.view-all-btn{
+			    display: block;
+			    margin-top: 10px;
+			    font-size: 14px;
+			    line-height: 24px;
+			    color: $theme-color;
+			    border-radius: 5px;
+			    &:hover{
+			    	color: $theme-color;
+			    }
+			}
+		}
+	}
+	&.popular-categories-area-2{
+		.section-title {
+			& h2{
+				background-color: #f4f4f4;
+			}
+		}
+		.slider-nav-style-2{
+			 .slick-arrow{
+				background-color: #f4f4f4;
+			 }
+		}
+		.popular-category-slider-wrapper {
+				.category-discript {
+			     padding-top: 0px; 
+			     padding-left: 0px; 
+			    background: #fff;
+			    & h4{
+					 font-size: 15px;
+				    padding: 18px 0 19px 20px;
+				    color: #fff;
+				    background: #266cfb;
+				    font-weight: 700;
+				    width: 100%;
+				    margin: 0px 0px 20px 0px;
+				    display: inline-block;
+			    }
+			    & ul{
+			    	padding: 0 0 0 20px;
+			    }
+			    a{
+			    	&.view-all-btn {
+					    line-height: 24px;
+					    color: #266cfb;
+					    border-radius: 5px;
+					    padding: 0 0 20px 20px;
+					}
+			    }
+			}
+		}
+	}   
+}
+

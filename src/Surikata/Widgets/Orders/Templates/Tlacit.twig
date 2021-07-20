@@ -1,0 +1,26 @@
+<html>
+<head>
+  <style>
+    * { font-family: arial; }
+  </style>
+</head>
+
+<body onload='window.print();'>
+  <h1>Objednávka č. {{ order.cislo }}</h1>
+
+  <div style='display:flex'>
+    <div style='flex:1;box-sizing:border-box;border-right:1px solid #AAAAAA'>
+      <b>Odberateľ:</b> {{ order.KLIENT.meno }}
+    </div>
+    <div style='flex:1'>
+    </div>
+  </div>
+
+  <h2>Položky</h2>
+  {% for item in order.ITEMS %}
+    name: {{ item.name }}
+  {% endfor %}
+
+  {{ dump(order) }}
+</body>
+</html>

@@ -1,0 +1,181 @@
+<?php
+
+namespace Surikata\Core\AdminPanel;
+
+class Loader extends \ADIOS\Core\Loader {
+  const USER_ROLE_ADMINISTRATOR                              = 1;
+  const USER_ROLE_PRODUCT_MANAGER                            = 2;
+  const USER_ROLE_SALES                                      = 3;
+  const USER_ROLE_ONLINE_MARKETING                           = 4;
+  const USER_ROLE_PRODUCT_MANAGER_AND_SALES                  = 5;
+  const USER_ROLE_PRODUCT_MANAGER_AND_ONLINE_MARKETING       = 6;
+  const USER_ROLE_SALES_AND_ONLINE_MARKETING                 = 7;
+  const USER_ROLE_PRODUCT_MANAGER_SALES_AND_ONLINE_MARKETING = 8;
+
+  public $websiteRenderer;
+
+  public function __construct($config, $mode, $websiteRenderer = NULL) {
+
+    $this->websiteRenderer = $websiteRenderer;
+
+    if (is_object($this->websiteRenderer)) {
+      $this->websiteRenderer->adminPanel = $this;
+    }
+
+    $this->assetsUrlMap["surikata/assets/"] = __DIR__."/../Assets/";
+
+    // parent::__construct
+    parent::__construct($config, $mode);
+
+    // override console to log DB errors
+    $this->console = new \Surikata\Core\AdminPanel\Console($this);
+
+  }
+
+  public function checkPermissionsForAction($action, $params) {
+    if ($action != "Desktop") {
+      if ($this->userProfile['id_role'] == self::USER_ROLE_SALES) {
+        if (strpos($params['model'], "Widgets/Products/Models") !== FALSE) {
+          throw new \ADIOS\Core\NotEnoughPermissionsException("You don't have permissions to manage products.");
+        }
+      }
+    }
+  }
+
+  public function sendEmail($to, $subject, $bodyHtml, $bodyPlain) {
+    $email = new \Surikata\Lib\Email(
+      $this->config['smtp_host'],
+      $this->config['smtp_port']
+    );
+
+    $email
+      ->setLogin($this->config['smtp_login'], $this->config['smtp_password'])
+      ->setFrom($this->config['smtp_from'])
+      ->setSubject($subject)
+      ->setHtmlMessage($bodyHtml)
+      ->setTextMessage($bodyPlain)
+      ->addTo($to)
+    ;
+
+    if ($this->config['smtp_protocol'] == 'ssl') {
+      $email->setProtocol(\Surikata\Lib\Email::SSL);
+    }
+
+    if ($this->config['smtp_protocol'] == 'tls') {
+      $email->setProtocol(\Surikata\Lib\Email::TLS);
+    }
+
+  }
+
+  public function hasUserRole($role) {
+    if ($this->userProfile['id_role'] == self::USER_ROLE_ADMINISTRATOR) {
+      return TRUE;
+    } else {
+      switch ($role) {
+        case self::USER_ROLE_ADMINISTRATOR:
+          return FALSE;
+        break;
+        case self::USER_ROLE_PRODUCT_MANAGER:
+          return in_array($this->userProfile['id_role'], [
+            self::USER_ROLE_PRODUCT_MANAGER,
+            self::USER_ROLE_PRODUCT_MANAGER_AND_SALES,
+            self::USER_ROLE_PRODUCT_MANAGER_AND_ONLINE_MARKETING,
+            self::USER_ROLE_PRODUCT_MANAGER_SALES_AND_ONLINE_MARKETING
+          ]);
+        break;
+        case self::USER_ROLE_SALES:
+          return in_array($this->userProfile['id_role'], [
+            self::USER_ROLE_SALES,
+            self::USER_ROLE_PRODUCT_MANAGER_AND_SALES,
+            self::USER_ROLE_SALES_AND_ONLINE_MARKETING,
+            self::USER_ROLE_PRODUCT_MANAGER_SALES_AND_ONLINE_MARKETING
+          ]);
+        break;
+        case self::USER_ROLE_ONLINE_MARKETING:
+          return in_array($this->userProfile['id_role'], [
+            self::USER_ROLE_ONLINE_MARKETING,
+            self::USER_ROLE_PRODUCT_MANAGER_AND_ONLINE_MARKETING,
+            self::USER_ROLE_SALES_AND_ONLINE_MARKETING,
+            self::USER_ROLE_PRODUCT_MANAGER_SALES_AND_ONLINE_MARKETING,
+          ]);
+        break;
+        default:
+          return FALSE;
+        break;
+      }
+    }
+  }
+
+  public function installDefaultUsers() {
+    $adminPanelUserModel = new \ADIOS\Core\Models\User($this);
+    $adminPanelUserRoleModel = new \ADIOS\Core\Models\UserRole($this);
+
+    // dolezite: poradie musi byt rovnake, ako "const" na zaciatku
+    $adminPanelUserRoleModel->insertRow(["name" => "Administrator"]);
+    $adminPanelUserRoleModel->insertRow(["name" => "Product manager"]);
+    $adminPanelUserRoleModel->insertRow(["name" => "Sales"]);
+    $adminPanelUserRoleModel->insertRow(["name" => "Online marketing"]);
+    $adminPanelUserRoleModel->insertRow(["name" => "Product manager + Sales"]);
+    $adminPanelUserRoleModel->insertRow(["name" => "Product manager + Online marketing"]);
+    $adminPanelUserRoleModel->insertRow(["name" => "Sales + Online marketing"]);
+    $adminPanelUserRoleModel->insertRow(["name" => "Product manager + Sales + Online marketing"]);
+
+    $adminPanelUserModel->insertRow([
+      "name" => "Administrator",
+      "login" => "administrator",
+      "password" => "administrator",
+      "password_1" => "administrator",
+      "password_2" => "administrator",
+      "active" => 1,
+      "surname" => "Default",
+      "id_role" => self::USER_ROLE_ADMINISTRATOR,
+    ]);
+    $adminPanelUserModel->insertRow([
+      "name" => "Product Manager",
+      "login" => "product.manager",
+      "password" => "product.manager",
+      "password_1" => "product.manager",
+      "password_2" => "product.manager",
+      "active" => 1,
+      "surname" => "Default",
+      "id_role" => self::USER_ROLE_PRODUCT_MANAGER,
+    ]);
+    $adminPanelUserModel->insertRow([
+      "name" => "Sales",
+      "login" => "sales",
+      "password" => "sales",
+      "password_1" => "sales",
+      "password_2" => "sales",
+      "active" => 1,
+      "surname" => "Default",
+      "id_role" => self::USER_ROLE_SALES,
+    ]);
+    $adminPanelUserModel->insertRow([
+      "name" => "Online marketing",
+      "login" => "online.marketing",
+      "password" => "online.marketing",
+      "password_1" => "online.marketing",
+      "password_2" => "online.marketing",
+      "active" => 1,
+      "surname" => "Default",
+      "id_role" => self::USER_ROLE_ONLINE_MARKETING,
+    ]);
+  }
+
+  public function createMissingFolders() {
+    // Create missing folders
+    foreach (get_defined_constants(true)['user'] as $const => $value) {
+
+      if (
+        '_DIR' === substr($const, -4) 
+        && is_string($value)
+        && !empty($value)
+        && !is_dir($value)
+      ) {
+        if (!mkdir($value, 0755, TRUE)) {
+          throw new \Exception('Wrong permissions to create directory: "' . $value. '"');
+        }
+      }
+    }
+  }
+}

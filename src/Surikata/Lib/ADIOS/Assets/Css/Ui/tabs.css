@@ -1,0 +1,46 @@
+.adios.ui.Tabs .tab_titles {display:flex;border-bottom: 1px solid #E0E0E0;}
+.adios.ui.Tabs .tab_titles .tab_title {padding:10px 20px;cursor:pointer;border-right: 1px solid #ECEBEB;color:#8C8C8C;background:#F5F5F5;transition:background 0.3s;}
+
+.adios.ui.Tabs .tab_titles .tab_title.active {color:#000000;background:transparent;box-shadow: 0 1px 0 #fafafa;border-top: 1px solid #ECEBEB;}
+.adios.ui.Tabs .tab_titles .tab_title:hover {color:#000000;background:#EAEAEA;}
+.adios.ui.Tabs .tab_titles .tab_title.active:hover {background:transparent;}
+.adios.ui.Tabs .tab_titles .tab_title img {height:16px;float:left;position:relative;left:-5px;margin-right:5px;opacity:0.6;}
+.adios.ui.Tabs .tab_titles .tab_title.active img, .adios.ui.Tabs .tab_titles .tab_title:hover img {opacity: 1;}
+.adios.ui.Tabs .tab_titles .tab_title.icon img {margin-right:0px;left:0px;}
+
+.adios.ui.Tabs .tab_contents {position:relative;overflow:auto;}
+.adios.ui.Tabs.border_bottom .tab_contents {border-bottom: 1px solid #E0E0E0;margin-bottom:15px;}
+.adios.ui.Tabs .tab_contents .hidden {display:none;}
+.adios.ui.Tabs .tab_content {
+  box-sizing: border-box;
+  border-left: 1px solid transparent;
+  padding-bottom: 1em; 
+  margin: 1em 1em 2em 1em;
+}
+.adios.ui.Tabs .tab_content:hover,
+.adios.ui.Tabs .tab_content.active { border-color: var(--cl-main); }
+.adios.ui.Tabs .tab_content .h3 { font-size: 1.3em; }
+.adios.ui.Tabs .tab_content .btn { font-size: 0.75em; }
+.adios.ui.Tabs .tab_content .tab_title_tag { 
+  background: #EEEEEE;
+  color: #888888;
+  /* font-size: 0.5em; */
+  padding: 0.5em;
+  margin: 1em 0em;
+  transition: 200ms;
+}
+
+.adios.ui.Tabs .tab_content:hover .tab_title_tag,
+.adios.ui.Tabs .tab_content.active .tab_title_tag,
+.adios.ui.Tabs .tab_content .tab_title_tag.active { background-color: var(--cl-main); color: white; }
+
+.adios.ui.Tabs .tab_content.padding {padding:15px;}
+
+@media screen and (max-device-width: 900px) {
+  .adios.ui.Tabs .tab_titles .tab_title.both img {display:none;}
+}
+
+@media screen and (max-device-width: 640px) {
+  .adios.ui.Tabs.responsive_tab_wrap .tab_titles {flex-wrap:wrap;}
+  .adios.ui.Tabs.responsive_tab_wrap .tab_titles .tab_title {flex: 0 1 100%;box-sizing:border-box;}
+}

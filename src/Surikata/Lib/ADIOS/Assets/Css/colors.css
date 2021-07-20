@@ -1,0 +1,18 @@
+:root {
+  --cl-main: #2d4a8a;
+  --cl-href: #2d4a8a;
+
+  --cl-text-1: #212121;
+  --cl-text-2: #616161;
+
+  --cl-icon-1: #2d4a8a;
+  --cl-icon-2: yellow;
+
+  --cl-bckg-1: #2d4a8a;
+  --cl-bckg-2: #4b68a7;
+
+  --cl-bord-1: #DDDDDD;
+  --cl-bord-2: #FAFAFA;
+
+  --cl-green: #4CAF50;
+}

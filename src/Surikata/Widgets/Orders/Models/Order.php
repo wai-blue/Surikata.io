@@ -1,0 +1,824 @@
+<?php
+
+namespace ADIOS\Widgets\Orders\Models;
+
+class Order extends \ADIOS\Core\Model {
+  const STATE_NEW      = 1;
+  const STATE_INVOICED = 2;
+  const STATE_PAID     = 3;
+  const STATE_SHIPPED  = 4;
+  const STATE_RECEIVED = 5;
+  const STATE_CANCELED = 6;
+
+  var $sqlName = "orders";
+  var $lookupSqlValue = "{%TABLE%}.number";
+  var $urlBase = "Orders";
+  var $tableTitle = "Orders";
+  var $formTitleForInserting = "New order";
+  var $formTitleForEditing = "Order # {{ number }}";
+  var $formAddButtonText = "Create new order";
+  var $formSaveButtonText = "Update order";
+
+  var $disableNotifications = FALSE;
+
+  public function init() {
+    $this->enumOrderStates = [
+      self::STATE_NEW      => 'New',
+      self::STATE_INVOICED => 'Invoice issued',
+      self::STATE_PAID     => 'Paid',
+      self::STATE_SHIPPED  => 'Shipped',
+      self::STATE_RECEIVED => 'Received',
+      self::STATE_CANCELED => 'Canceled',
+    ];
+
+    $this->enumOrderStateColors = [
+      self::STATE_NEW      => 'blue',
+      self::STATE_INVOICED => 'orange',
+      self::STATE_PAID     => 'green',
+      self::STATE_SHIPPED  => 'purple',
+      self::STATE_RECEIVED => 'light-gray',
+      self::STATE_CANCELED => 'gray',
+    ];
+
+    $enumDeliveryServices = [
+      "" => "Nezvolený",
+    ];
+
+    foreach ($this->adios->websiteRenderer->getDeliveryPlugins() as $plugin) {
+      $enumDeliveryServices[$plugin->name] = $plugin->getDeliveryMeta()["name"];
+    }
+    $this->enumDeliveryServices = $enumDeliveryServices;
+
+  }
+
+  public function columns(array $columns = []) {
+    return parent::columns([
+      "serial_number" => [
+        "type" => "int",
+        "title" => "Serial number",
+        "readonly" => TRUE,
+        "description" => "Will be generated automaticaly",
+      ],
+
+      "number" => [
+        "type" => "varchar",
+        "title" => "Number",
+        "pattern" => '\d{10}',
+        "readonly" => TRUE,
+        "description" => "Will be generated automaticaly",
+        "show_column" => TRUE,
+      ],
+
+      "id_customer" => [
+        "type" => "lookup",
+        "title" => "Customer",
+        "model" => "Widgets/Customers/Models/Customer",
+        "show_column" => TRUE,
+      ],
+
+
+      "del_given_name" => [
+        "type" => "varchar",
+        "title" => "Delivery: Given Name",
+      ],
+
+      "del_family_name" => [
+        "type" => "varchar",
+        "title" => "Delivery: Family Name",
+        "show_column" => TRUE,
+      ],
+
+      "del_company_name" => [
+        "type" => "varchar",
+        "title" => "Delivery: Company Name",
+        "show_column" => TRUE,
+      ],
+
+      "del_street_1" => [
+        "type" => "varchar",
+        "title" => "Delivery: Street, 1st line",
+      ],
+
+      "del_street_2" => [
+        "type" => "varchar",
+        "title" => "Delivery: Street, 2nd line",
+      ],
+
+      "del_floor" => [
+        "type" => "varchar",
+        "title" => "Delivery: Floor",
+      ],
+
+      "del_city" => [
+        "type" => "varchar",
+        "title" => "Delivery: City",
+        "show_column" => TRUE,
+      ],
+
+      "del_zip" => [
+        "type" => "varchar",
+        "title" => "Delivery: ZIP",
+      ],
+
+      "del_region" => [
+        "type" => "varchar",
+        "title" => "Delivery: Region",
+      ],
+
+      "del_country" => [
+        "type" => "varchar",
+        "title" => "Delivery: Country",
+      ],
+
+
+
+      "inv_given_name" => [
+        "type" => "varchar",
+        "title" => "Invoice: Given Name",
+      ],
+
+      "inv_family_name" => [
+        "type" => "varchar",
+        "title" => "Invoice: Family Name",
+        "show_column" => TRUE,
+      ],
+
+      "inv_company_name" => [
+        "type" => "varchar",
+        "title" => "Invoice: Company Name",
+        "show_column" => TRUE,
+      ],
+
+      "inv_street_1" => [
+        "type" => "varchar",
+        "title" => "Invoice: Street, 1st line",
+      ],
+
+      "inv_street_2" => [
+        "type" => "varchar",
+        "title" => "Invoice: Street, 2nd line",
+      ],
+
+      "inv_floor" => [
+        "type" => "varchar",
+        "title" => "Invoice: Floor",
+      ],
+
+      "inv_city" => [
+        "type" => "varchar",
+        "title" => "Invoice: City",
+        "show_column" => TRUE,
+      ],
+
+      "inv_zip" => [
+        "type" => "varchar",
+        "title" => "Invoice: ZIP",
+      ],
+
+      "inv_region" => [
+        "type" => "varchar",
+        "title" => "Invoice: Region",
+      ],
+
+      "inv_country" => [
+        "type" => "varchar",
+        "title" => "Invoice: Country",
+      ],
+
+      "confirmation_time" => [
+        "type" => "datetime",
+        "title" => "Confirmed",
+        "show_column" => true
+      ],
+
+      "delivery_service" => [
+        "type" => "varchar",
+        "title" => "Delivery service",
+        "enum_values" => $this->enumDeliveryServices,
+      ],
+
+      "required_delivery_time" => [
+        "type" => "date",
+        "title" => "Required delivery time",
+        "show_column" => true
+      ],
+    
+      "delivery_price" => [
+        "type" => "float",
+        "title" => "Delivery price",
+        "unit" => $this->adios->locale->currencySymbol(),
+      ],
+
+      "number_customer" => [
+        "type" => "varchar",
+        "title" => "Customer`s order number",
+      ],
+
+      "notes" => [
+        "type" => "text",
+        "title" => "Notes",
+        "show_column" => TRUE,
+      ],
+
+      "state" => [
+        "type" => "int",
+        "enum_values" => $this->enumOrderStates,
+        "title" => "State",
+        "show_column" => true
+      ],
+
+      "id_invoice" => [
+        "type" => "lookup",
+        "title" => "Invoice",
+        "model" => "Widgets/Finances/Models/Invoice",
+        "show_column" => TRUE,
+      ],
+
+      "phone_number" => [
+        "type" => "varchar",
+        "title" => "Contact: Phone number",
+      ],
+
+      "email" => [
+        "type" => "varchar",
+        "title" => "Contact: Email",
+      ],
+    ]);
+  }
+
+  public function indexes(array $indexes = []) {
+    return parent::indexes([
+      "delivery_service" => [
+        "type" => "index",
+        "columns" => ["delivery_service"],
+      ],
+    ]);
+  }
+
+  public function routing(array $routing = []) {
+    return parent::routing([
+      '/^Orders\/([Open|Closed]+)$/' => [
+        "action" => "UI/Table",
+        "params" => [
+          "model" => "Widgets/Orders/Models/Order",
+          "filter_type" => '$1',
+        ]
+      ],
+      '/^Orders\/(\d+)\/Tlacit$/' => [
+        "action" => "Orders/Tlacit",
+        "params" => [
+          "id" => '$1',
+        ]
+      ],
+    ]);
+  }
+
+  public function tableParams($params) {
+    switch ($params['filter_type']) {
+      case "Vsetky":
+        $params["title"] = "All orders";
+      break;
+      case "Otvorene":
+        $params["title"] = "Open orders";
+        $params['where'] = "
+          {$this->table}.state in (
+            ".self::STATE_NEW.",
+            ".self::STATE_INVOICED.",
+            ".self::STATE_PAID.",
+            ".self::STATE_SHIPPED."
+          )
+        ";
+      break;
+      case "Uzavrete":
+        $params["title"] = "Closed orders";
+        $params['where'] = "
+          not {$this->table}.state in (
+            ".self::STATE_NEW.",
+            ".self::STATE_INVOICED.",
+            ".self::STATE_PAID.",
+            ".self::STATE_SHIPPED."
+          )
+        ";
+      break;
+    }
+
+    return $params;
+  }
+
+  public function onBeforeSave($data) {
+    if ($data['id'] == -1) {
+      $data['number'] = "12345";
+    }
+
+    return $data;
+  }
+
+  public function calculateOrderNumber($orderData) {
+    $tmp = (int) ($orderData['serial_number'] ?? 0);
+
+    return
+      date("ymd", strtotime($orderData['confirmation_time']))
+      .str_pad($tmp, 4, "0", STR_PAD_LEFT)
+    ;
+  }
+
+  public function placeOrder($orderData, $customerUID = NULL, $cartContents = NULL) {
+
+    $idAddress = (int) $orderData['id_address'];
+
+    $cartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($this->adios);
+    $customerUIDModel = new \ADIOS\Widgets\Customers\Models\CustomerUID($this->adios);
+    $customerAddressModel = new \ADIOS\Widgets\Customers\Models\CustomerAddress($this->adios);
+
+    if (empty($orderData['id_customer']) && !empty($customerUID)) {
+      $customerUIDlink = $customerUIDModel->getByCustomerUID($customerUID);
+      $idCustomer = $customerUIDlink['id_customer'];
+    } else {
+      $idCustomer = (int) $orderData['id_customer'];
+    }
+
+    if ($idCustomer == 0) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\UnknownCustomer($customerUID);
+    }
+
+    $requiredFieldsEmpty = [];
+
+    if ($idAddress <= 0) {
+      $requiredFieldsBilling = [
+        "inv_given_name",
+        "inv_family_name",
+        "inv_street_1",
+        "inv_city",
+        "inv_zip",
+        "phone_number",
+        "email",
+      ];
+      $requiredFieldsDelivery = [
+        "del_given_name",
+        "del_family_name",
+        "del_street_1",
+        "del_city",
+        "del_zip",
+      ];
+
+      foreach ($requiredFieldsBilling as $fieldName) {
+        if (empty($orderData[$fieldName])) {
+          $requiredFieldsEmpty[] = $fieldName;
+        }
+        if ($orderData["differentDeliveryAddress"] != "1") {
+          $replaceInvForDel = str_replace('inv', 'del', $fieldName);
+          $orderData[$replaceInvForDel] = $orderData[$fieldName];
+        }
+      }
+
+      if ($orderData["differentDeliveryAddress"] == "1") {
+        foreach ($requiredFieldsDelivery as $fieldName) {
+          if (empty($orderData[$fieldName])) {
+            $requiredFieldsEmpty[] = $fieldName;
+          }
+        }
+      }
+    }
+
+    if (count($requiredFieldsEmpty) > 0) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\EmptyRequiredFields(join(",", $requiredFieldsEmpty));
+    }
+
+    if ($idAddress <= 0) {
+      $idAddress = $customerAddressModel->saveAddress($idCustomer, $orderData);
+    }
+
+    if ($cartContents === NULL && !empty($customerUID)) {
+      $cartContents = $cartModel->getCartContents($customerUID);
+    }
+
+    if (!empty($orderData['deliveryService'])) {
+      $deliveryPlugin = $this->adios->websiteRenderer->getPlugin($orderData['deliveryService']);
+
+      if (!is_object($deliveryPlugin)) {
+        throw new \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService($orderData['deliveryService']);
+      }
+
+      $deliveryPrice = $deliveryPlugin->calculatePriceForOrder($orderData, $cartContents);
+    } else {
+      $deliveryPlugin = NULL;
+      $deliveryPrice = 0;
+    }
+
+    $idOrder = $this->insertRow([
+      "serial_number" => [
+        "sql" => "
+          ifnull(
+            (
+              select
+                max(o.serial_number)
+              from {$this->table} o
+              where year(o.confirmation_time) = year(now())
+            ),
+            0
+          )
+          + 1
+        ",
+      ],
+      "id_customer"       => $idCustomer,
+      "del_given_name"    => $orderData['del_given_name'],
+      "del_family_name"   => $orderData['del_family_name'],
+      "del_company_name"  => $orderData['del_company_name'],
+      "del_street_1"      => $orderData['del_street_1'],
+      "del_street_2"      => $orderData['del_street_2'],
+      "del_floor"         => $orderData['del_floor'],
+      "del_city"          => $orderData['del_city'],
+      "del_zip"           => $orderData['del_zip'],
+      "del_region"        => $orderData['del_region"'],
+      "del_country"       => $orderData['del_country'],
+      "inv_given_name"    => $orderData['inv_given_name'],
+      "inv_family_name"   => $orderData['inv_family_name'],
+      "inv_company_name"  => $orderData['inv_company_name'],
+      "inv_street_1"      => $orderData['inv_street_1'],
+      "inv_street_2"      => $orderData['inv_street_2'],
+      "inv_floor"         => $orderData['inv_floor'],
+      "inv_city"          => $orderData['inv_city'],
+      "inv_zip"           => $orderData['inv_zip'],
+      "inv_region"        => $orderData['inv_region'],
+      "inv_country"       => $orderData['inv_country'],
+      "phone_number"      => $orderData['phone_number'],
+      "email"             => $orderData['email'],
+      "confirmation_time" => date("Y-m-d H:i:s"),
+      "delivery_service"  => $orderData['deliveryService'],
+      "delivery_price"    => $deliveryPrice,
+      "notes"             => $orderData['notes'],
+      "state"             => self::STATE_NEW,
+    ]);
+
+    if (!is_numeric($idOrder)) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\PlaceOrderUnknownError();
+    }
+
+    $placedOrderData = $this->getById($idOrder);
+    $placedOrderNumber = $this->calculateOrderNumber($placedOrderData);
+    $this->updateRow(["number" => $placedOrderNumber], $idOrder);
+    $placedOrderData["number"] = $placedOrderNumber;
+
+    foreach ($cartContents['items'] as $item) {
+      $this->addItem($idOrder, [
+        "id_product" => $item["id_product"],
+        "quantity" => $item["quantity"],
+        "id_delivery_unit" => $item["PRODUCT"]["id_delivery_unit"],
+        "unit_price" => $item["unit_price"],
+        "vat_percent" => $item["PRODUCT"]["vat_percent"],
+      ]);
+    }
+
+    $cartModel->emptyCart($customerUID);
+
+    $this->sendNotificationForPlacedOrder($placedOrderData);
+
+    return $idOrder;
+
+  }
+
+  public function sendNotificationForPlacedOrder($orderData) {
+
+    if ($this->disableNotifications) return;
+
+    $domain = $this->adios->websiteRenderer->currentPage['domain'];
+
+    $subject = $this->adios->config["settings"]["emails"][$domain]['after_order_confirmation_SUBJECT'];
+    $body = $this->adios->config["settings"]["emails"][$domain]['after_order_confirmation_BODY'];
+    $signature = $this->adios->config["settings"]["emails"][$domain]['signature'];
+
+    // Create variables from table orders without id_cols and arrays
+    foreach ($orderData as $key => $col) {
+      if (!str_contains($key, 'id_') && !is_array($col)) {
+        $camelCaseKey = lcfirst(str_replace('_', '', ucwords($key, "_")));
+        $body = str_replace("{% $camelCaseKey %}", $col, $body);
+      }
+    }
+
+    $this->adios->sendEmail(
+      $orderData["CUSTOMER"]["email"],
+      str_replace("{% number %}", $orderData["number"], $subject),
+      "
+        <div style='font-family:Verdana;font-size:10pt;'>
+          {$body}
+        </div>
+        <div style='font-family:Verdana;font-size:10pt;padding-top:10px;margin-top:10px;border-top:1px solid #AAAAAA'>{$signature}</div>
+      ",
+      ""
+    );
+  }
+
+  public function createNewOrder($idCustomer, $orderData) {
+  }
+
+  public function addItem($idOrder, $item) {
+    $item["id_order"] = $idOrder;
+    return (new \ADIOS\Widgets\Orders\Models\OrderItem($this->adios))
+      ->insertRow($item)
+    ;
+  }
+
+  public function formParams($data, $params) {
+    if ($data['id'] <= 0) {
+      $params["template"] = [
+        "columns" => [
+          [
+            "rows" => [
+              // "number",
+              // "serial_number",
+              "id_customer",
+              // "number_customer",
+              "notes",
+            ],
+          ],
+        ],
+      ];
+    } else {
+      $btn_vystavit_vyuctovaciu_fakturu = $this->adios->ui->button([
+        "text"    => "Issue invoice",
+        "onclick" => "
+          let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
+          _ajax_read('Orders/IssueInvoice', 'id_order=".(int) $data['id']."', function(res) {
+            if (isNaN(res)) {
+              alert(res);
+            } else {
+              // refresh order window
+              window_refresh(tmp_form_id + '_form_window');
+            }
+          });
+        ",
+        "class"   => "btn-info mb-2 w-100",
+      ])->render();
+
+      $btn_zobrazit_vyuctovaciu_fakturu = $this->adios->ui->button([
+        "text" => "Show invoice nr. ".hsc($data['INVOICE']['number']),
+        "onclick" => "
+          let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
+          window_render('Invoices/".(int) $data['INVOICE']['id']."/Edit', '', function(res) {
+            // refresh order window
+            window_refresh(tmp_form_id + '_form_window');
+          });
+        ",
+        "class" => "btn-primary mb-2 w-100",
+      ])->render();
+
+      $tab_invoice_and_delivery_note = "";
+      if ($data['INVOICE']['id'] <= 0) {
+        $tab_invoice_and_delivery_note .= "
+          {$btn_vystavit_vyuctovaciu_fakturu}
+        ";
+      } else {
+        $tab_invoice_and_delivery_note .= "
+          {$btn_zobrazit_vyuctovaciu_fakturu}
+        ";
+      }
+
+      $sidebarHtml = $this->adios->dispatchEventToPlugins("onOrderDetailSidebarButtons", [
+        "model" => $this,
+        "params" => $params,
+        "data" => $data,
+      ])["html"];
+
+      $params["template"] = [
+        "columns" => [
+          [
+            "class" => "col-md-9",
+            "tabs" => [
+              "General" => [
+                "serial_number",
+                "number",
+                "id_customer",
+                "confirmation_time",
+                "number_customer",
+                "notes",
+                [
+                  "title" => "State",
+                  "input" => "
+                    <div style='text-decoration:underline wavy {$this->enumOrderStateColors[$data['state']]}'>
+                      {$this->enumOrderStates[$data['state']]}
+                    </div>
+                  "
+                ],
+              ],
+              "Delivery" => [
+                "required_delivery_time",
+                "delivery_service",
+                "delivery_price",
+              ],
+              "Items" => [
+                "action" => "UI/Table",
+                "params" => [
+                  "model"    => "Widgets/Orders/Models/OrderItem",
+                  "id_order" => (int) $data['id'],
+                ]
+              ],
+              "History" => [
+                "action" => "UI/Table",
+                "params" => [
+                  "model"    => "Widgets/Orders/Models/OrderHistory",
+                  "id_order" => (int) $data['id'],
+                ]
+              ],
+            ],
+          ],
+          [
+            "class" => "col-md-3",
+            "html" => "
+              <div style='margin-bottom:2em'>
+                {$tab_invoice_and_delivery_note}
+              </div>
+              {$sidebarHtml}
+            ",
+          ]
+        ],
+      ];
+
+    }
+
+    return $params;
+
+  }
+
+  public function tableCellCSSFormatter($data) {
+    if ($data['column'] == "id") {
+      return "border-left:10px solid {$this->enumOrderStateColors[$data['row']['state']]};";
+    }
+    if ($data['column'] == "state") {
+      return "text-decoration:underline wavy {$this->enumOrderStateColors[$data['row']['state']]};";
+    }
+  }
+
+  public function getById($id) {
+    $id = (int) $id;
+
+    $order = reset($this->adios->db->get_all_rows_query("
+      select
+        obj.*
+      from {$this->table} obj
+      where obj.id = {$id}
+    "));
+
+    return $this->getExtendedData($order);
+  }
+
+  public function getByNumber($number) {
+    $order = reset($this->adios->db->get_all_rows_query("
+      select
+        o.*
+      from {$this->table} o
+      where o.number = '".$this->adios->db->escape($number)."'
+    "));
+
+    return $this->getExtendedData($order);
+  }
+
+  public function getExtendedData($order) {
+    if ($order['id'] > 0) {
+      $orderItemModel = new \ADIOS\Widgets\Orders\Models\OrderItem($this->adios);
+      $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adios);
+      $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adios);
+      $invoiceModel = new \ADIOS\Widgets\Finances\Models\Invoice($this->adios);
+
+      $order['ITEMS'] = $this->adios->db->get_all_rows_query("
+        select
+          i.*,
+          p.number as product_number,
+          p.name_lang_1 as product_name
+        from `{$orderItemModel->table}` i
+        left join `{$productModel->table}` p on p.id = i.id_product
+        where i.id_order = ".(int) $order['id']."
+      ");
+
+      $order['CUSTOMER'] = reset($this->adios->db->get_all_rows_query("
+        select
+          k.*
+        from `{$customerModel->table}` k
+        where k.id = ".(int) $order['id_customer']."
+      "));
+
+      $order['INVOICE'] = reset($this->adios->db->get_all_rows_query("
+        select
+          f.*
+        from `{$invoiceModel->table}` f
+        where f.id = ".(int) $order['id_invoice']."
+      "));
+    }
+
+    return $order;
+
+  }
+
+  public function getCheckCode($order) {
+    return 
+      substr(md5($order['number'].$order['id_customer']), 0, 5)
+      ."-"
+      .md5($order['id_customer'].$order['number'])
+      ."-"
+      .substr(strrev(md5($order['number'].$order['id_customer'])), 0, 5)
+    ;
+  }
+
+  public function validateCheckCode($order, $checkCode) {
+    return $checkCode == $this->getCheckCode($order);
+  }
+
+  public function deleteById($idOrder) {
+    $idOrder = (int) $idOrder;
+
+    $orderItemModel = new \ADIOS\Widgets\Orders\Models\OrderItem($this->adios);
+    $orderHistoryModel = new \ADIOS\Widgets\Orders\Models\OrderHistory($this->adios);
+
+    $order = $this->getById($idOrder);
+
+    if ($order['id_invoice'] > 0) {
+      return "Unable to delete the order with inovice issued.";
+    } else {
+      $this->adios->db->query("delete from `{$orderItemModel->table}` where `id_order` = {$idOrder}");
+      $this->adios->db->query("delete from `{$orderHistoryModel->table}` where `id_order` = {$idOrder}");
+      $this->adios->db->query("delete from `{$this->table}` where `id` = {$idOrder}");
+
+      return TRUE;
+    }
+  }
+
+  public function prepareInvoiceData($idOrder) {
+    $order = $this->getById($idOrder);
+
+    $invoiceItems = [];
+    foreach ($order['ITEMS'] as $item) {
+      $invoiceItems[] = [
+        "item" => $item["product_number"]." ".$item["product_name"],
+        "quantity" => $item["quantity"],
+        "id_delivery_unit" => $item["id_delivery_unit"],
+        "unit_price" => $item["unit_price"],
+        "vat_percent" => $item["vat_percent"],
+      ];
+    }
+
+    $invoiceData = [
+      "HEADER" => [
+        "id_order" => $idOrder,
+        "konstantny_symbol" => "0308",
+        "payment_method" => \ADIOS\Widgets\Finances\Models\Invoice::PAYMENT_METHOD_WIRE_TRANSFER,
+        "order_number" => $order['number'],
+      ],
+      "CUSTOMER" => [
+        "id" => $order["id_customer"],
+        "company_id" => $order["CUSTOMER"]["company_id"],
+        "company_tax_id" => $order["CUSTOMER"]["company_tax_id"],
+        "company_vat_id" => $order["CUSTOMER"]["company_vat_id"],
+        "street_1" => $order["inv_street_1"],
+        "street_2" => $order["inv_street_2"],
+        "city" => $order["inv_city"],
+        "zip" => $order["inv_zip"],
+        "country" => $order["inv_country"],
+        "email" => $order["email"],
+        "phone_number" => $order["phone_number"],
+      ],
+      "SUPPLIER" => [
+        "name" => "GourmetFood.sk s.r.o",
+        "ulica_1" => "Trnavská 15",
+        "mesto" => "Piešťany",
+        "psc" => "921 01",
+        "stat" => "SR",
+        "company_id" => "25836137",
+        "company_tax_id" => "2023039009",
+        "company_vat_id" => "SK2023039009",
+        "email" => "info@gourmetfood.sk",
+        "phone_number" => "0904 124 998",
+        "cislo_uctu" => "2615533222/1100",
+        "cislo_uctu_iban" => "SK...",
+      ],
+      "ITEMS" => $invoiceItems,
+    ];
+
+    return $invoiceData;
+  }
+
+  public function assignToInvoice($idOrder, $idInvoice) {
+    $this->updateRow([
+      "id_invoice" => $idInvoice,
+      "state" => self::STATE_INVOICED,
+    ], $idOrder);
+
+    (new \ADIOS\Widgets\Orders\Models\OrderHistory($this->adios))
+      ->insertRow([
+        "id_order" => $idOrder,
+        "state" => self::STATE_INVOICED,
+        "cas" => "SQL:now()",
+      ])
+    ;
+  }
+
+  public function issueInvoce($idOrder) {
+    $invoiceModel = new \ADIOS\Widgets\Finances\Models\Invoice($this->adios);
+    $invoiceModel->disableNotifications = $this->disableNotifications;
+
+    $invoiceData = $this->prepareInvoiceData($idOrder);
+    $invoice = $invoiceModel->issueInvoice($invoiceData);
+    $this->assignToInvoice($idOrder, $invoice['id']);
+
+    return (int) $invoice['id'];
+  }
+
+}

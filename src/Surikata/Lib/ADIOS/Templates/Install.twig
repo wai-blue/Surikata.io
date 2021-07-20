@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel='shortcut icon' href='{% if config.brand.favicon == "" %}{{ config.url }}/adios/assets/images/favicon.png{% else %}{{ config.brand.favicon }}{% endif %}'>
+  <title>{{ config.brand.title }}</title>
+  <script src='{{ config.url }}/adios/cache.js'></script>
+  <link rel=stylesheet type='text/css' href='{{ config.url }}/adios/cache.css' rel="stylesheet">
+</head>
+
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow">
+
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+        <!-- Begin Page Content -->
+        <div id='adios_main_content' class="container-fluid">
+          <form action="" method="_GET">
+            <input type="hidden" name="do_install" value="1" />
+            <input type="submit" value="Instalovat teraz" />
+          </form>
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="copyright my-auto">
+          Administration panel based on ADIOS framework. Created by <a href='https://www.wai.sk' target='_blank'>www.wai.sk</a>.<br/>
+          Credits: Twig, Bootstrap, FontAwesome, Vue.js, Quilljs, jQuery, Chart.js, DataTables and other 3rd-party libraries.
+        </div>
+      </footer>
+      <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="{{ config.adios_url }}/assets/js/bootstrap.bundle.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="{{ config.adios_url }}/assets/js/jquery.easing.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="{{ config.adios_url }}/assets/js/sb-admin-2.js"></script>
+
+  <script>
+    var _APP_URL = '{{ config.url }}';
+
+    $(document).ready(function(){
+      $('.adios_menu').fadeIn('slow');
+
+      {% if default_action != "" %}
+        {# desktop_update('{{ default_action }}', '{{ default_action_params|raw }}'); #}
+      {% endif %}
+
+    });
+  </script>
+
+</body>
+
+</html>

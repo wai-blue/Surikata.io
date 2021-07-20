@@ -1,0 +1,85 @@
+/* pravidla aplikovane pre ostatne komponenty v okne, aby bolo mozne zobrazit verticalny scrollbar az v taboch ak
+.window_panel .window_frame > .adios.ui.Form {height:100%;}
+.window_panel .window_frame .adios.ui.Tabs {height:100%;}
+.window_panel .window_frame .adios.ui.Tabs .tab_contents {height:calc(100% - 40px);}
+*/
+
+.window_header {border-width:0px !important;}
+
+
+
+/*@media screen and (max-width: 1000px) {
+  .window_panel:not(.ui-resizable-disabled).responsive_narrow {width:80vw !important;}
+}
+
+@media screen and (max-width: 768px) {
+  .window_panel:not(.ui-resizable-disabled).responsive_narrow {width:90vw !important;}
+}
+
+@media screen and (max-width: 480px) {
+  .window_panel:not(.ui-resizable-disabled).responsive_narrow {width:85vw !important;}
+}
+*/
+
+.adios_window {
+}
+
+span.adios_window.activated:nth-of-type(1) { z-index: 100000; }
+span.adios_window.activated:nth-of-type(2) { z-index: 100001; }
+span.adios_window.activated:nth-of-type(3) { z-index: 100002; }
+span.adios_window.activated:nth-of-type(4) { z-index: 100003; }
+span.adios_window.activated:nth-of-type(5) { z-index: 100004; }
+
+.adios_window .content {
+    z-index: 1;
+    background: white;
+    margin: 0;
+    margin-left: 50%;
+    transform: scale(0.15);
+    position: absolute;
+    left: 0px;
+    top: 5em;
+    padding-top: 2em;
+    width: 0%;
+    height: calc(100vh - 5em);
+    overflow: auto;
+    box-shadow: -10px 0px 38px -17px rgba(0,0,0,0.5);
+}
+
+span.adios_window.activated:nth-of-type(1) .content { transform: scale(1); margin-left: 1em; width: calc(100% - 1em); transition: all 50ms; }
+span.adios_window.activated:nth-of-type(2) .content { transform: scale(1); margin-left: 2em; width: calc(100% - 2em); transition: all 50ms; }
+span.adios_window.activated:nth-of-type(3) .content { transform: scale(1); margin-left: 3em; width: calc(100% - 3em); transition: all 50ms; }
+span.adios_window.activated:nth-of-type(4) .content { transform: scale(1); margin-left: 4em; width: calc(100% - 4em); transition: all 50ms; }
+span.adios_window.activated:nth-of-type(5) .content { transform: scale(1); margin-left: 5em; width: calc(100% - 5em); transition: all 50ms; }
+span.adios_window.activated:nth-of-type(6) .content { transform: scale(1); margin-left: 6em; width: calc(100% - 6em); transition: all 50ms; }
+span.adios_window.activated:nth-of-type(7) .content { transform: scale(1); margin-left: 7em; width: calc(100% - 7em); transition: all 50ms; }
+span.adios_window.activated:nth-of-type(8) .content { transform: scale(1); margin-left: 8em; width: calc(100% - 8em); transition: all 50ms; }
+span.adios_window.activated:nth-of-type(9) .content { transform: scale(1); margin-left: 9em; width: calc(100% - 9em); transition: all 50ms; }
+
+.adios_window .header {
+    margin-left: 50%;
+    z-index: 1;
+    position: fixed;
+    height: 5em;
+    width: 0%;
+    background: white;
+    top: 0px;
+    left: 0px;
+    transform: scale(0.15);
+    box-shadow: -10px 0px 38px -17px rgba(0,0,0,0.5);
+    /* position: fixed;
+    width: 100%;
+    z-index: 100; */
+}
+
+span.adios_window.activated:nth-of-type(1) > .header { transform: scale(1); margin: 0px; margin-left: 1em; width: calc(100% - 1em); transition: all 50ms; }
+span.adios_window.activated:nth-of-type(2) > .header { transform: scale(1); margin: 0px; margin-left: 2em; width: calc(100% - 2em); transition: all 50ms; }
+span.adios_window.activated:nth-of-type(3) > .header { transform: scale(1); margin: 0px; margin-left: 3em; width: calc(100% - 3em); transition: all 50ms; }
+span.adios_window.activated:nth-of-type(4) > .header { transform: scale(1); margin: 0px; margin-left: 4em; width: calc(100% - 4em); transition: all 50ms; }
+span.adios_window.activated:nth-of-type(5) > .header { transform: scale(1); margin: 0px; margin-left: 5em; width: calc(100% - 5em); transition: all 50ms; }
+span.adios_window.activated:nth-of-type(6) > .header { transform: scale(1); margin: 0px; margin-left: 6em; width: calc(100% - 6em); transition: all 50ms; }
+span.adios_window.activated:nth-of-type(7) > .header { transform: scale(1); margin: 0px; margin-left: 7em; width: calc(100% - 7em); transition: all 50ms; }
+span.adios_window.activated:nth-of-type(8) > .header { transform: scale(1); margin: 0px; margin-left: 8em; width: calc(100% - 8em); transition: all 50ms; }
+span.adios_window.activated:nth-of-type(9) > .header { transform: scale(1); margin: 0px; margin-left: 9em; width: calc(100% - 9em); transition: all 50ms; }
+
+

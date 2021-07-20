@@ -1,0 +1,18 @@
+--<xmp>{{ heurekaConversionsJS|raw }}</xmp>--
+<div class="blank-page-area mtb-50px">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="page-not-found text-center">
+          <h4>Ďakujeme za objednávku. Rekapituláciu a potrvrdenie sme zaslali na email..</h4>
+          <p>
+            ID objednávky = {{ order.id }}<br/>
+            Číslo objednávky = {{ order.number }}<br/>
+            Budete presmerovaní na platobnú bránu<br/>
+          </p>
+          <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Product/Catalog', 'getWebPageUrl') }}">Pokračovať v nákupe</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+
+.breadcrumb-area{
+	.breadcrumb-content{
+		.nav{
+			background: transparent;
+		    padding: 30px 0 0 0;
+		    margin: 0;
+		    font-size: 14px;
+			& li{
+				color:#146cda;
+				&:after{
+					color: #47494a;
+				    margin: 0 10px;
+				    vertical-align: -1px;
+				    content: "\f3d3";
+				    font-family: "Ionicons";
+				}
+				& a{
+					display: inline-block;
+				    position: relative;
+				    color: #47494a;
+				    line-height: 20px;
+				    &:hover{
+						color:#146cda;
+				    }
+				}
+				&:last-child:after{
+					display:none;
+				}
+			}
+		}
+	}
+}

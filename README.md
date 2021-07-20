@@ -1,5 +1,7 @@
 # Surikata.io
-Full-featured e-commerce platform with multi-domain and multi-language support for PHP 8
+Full-featured e-commerce platform with multi-domain and multi-language support for PHP 8.
+
+Free to use for both commercial and personal projects.
 
 ## Prerequisities
 

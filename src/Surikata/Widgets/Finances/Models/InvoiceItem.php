@@ -15,7 +15,7 @@ class InvoiceItem extends \ADIOS\Core\Model {
         "type" => "lookup",
         "title" => "Invoice",
         "model" => "Widgets/Finances/Models/Invoice",
-        "show_column" => TRUE,
+        "show_column" => FALSE,
         "readonly" => TRUE,
       ],
 

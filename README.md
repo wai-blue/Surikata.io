@@ -93,4 +93,7 @@ Now, when you are ready with your first & default Surikata online store, follow 
 
   * <a href='https://www.surikata.io/documentation/create-your-first-plugin' target=_blank>Create your first plugin</a>
   * <a href='https://www.surikata.io/documentation/customize-the-theme' target=_blank>Customize the theme</a>
-  
+
+## Contribute
+
+Feel free to use and contribute.

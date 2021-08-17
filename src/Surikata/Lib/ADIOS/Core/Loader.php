@@ -157,6 +157,14 @@ class Loader {
       
       }
 
+      // inicializacia core modelov
+
+      $this->models[] = "Core/Models/Config";
+      $this->models[] = "Core/Models/Translate";
+      $this->models[] = "Core/Models/User";
+      $this->models[] = "Core/Models/UserRole";
+      $this->models[] = "Core/Models/Token";
+
       // inicializacia pluginov - aj pre FULL aj pre LITE mod
 
       $this->loadAllPlugins();
@@ -265,14 +273,6 @@ class Loader {
       $this->onConfigLoaded();
 
       if ($mode == ADIOS_MODE_FULL) {
-
-        // inicializacia modelov
-
-        $this->models[] = "Core/Models/Config";
-        $this->models[] = "Core/Models/Translate";
-        $this->models[] = "Core/Models/User";
-        $this->models[] = "Core/Models/UserRole";
-        $this->models[] = "Core/Models/Token";
 
         // inicializacia widgetov
 

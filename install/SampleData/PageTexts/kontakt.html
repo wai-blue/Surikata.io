@@ -1,0 +1,102 @@
+
+<div class="contact-area" style="width: 100%">
+    <div class="container">
+        <div class="contact-map">
+            <div id="map">
+                <script async
+                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDf7R5KF87EYvZJHlrByQ6l2tdlcfYUuv0&callback=initMap">
+                </script>
+                <script>
+                    let map;
+                    function initMap() {
+                        map = new google.maps.Map(document.getElementById('map'), {
+                            center: {lat: 48.5893312, lng: 17.8251578},
+                            zoom: 15
+                        });
+                    }
+                </script>
+            </div>
+        </div>
+        <div class="custom-row-2">
+            <div class="col-lg-12 col-md-12">
+                <div class="contact-info-wrap">
+                    <div class="row">
+                        <div class="col-12 col-md-4 col-lg-4">
+                            <div class="single-contact-info">
+                                <div class="contact-icon">
+                                    <i class="ion-android-call"></i>
+                                </div>
+                                <div class="contact-info-dec">
+                                    <p><a href="tel://+421 908 897 149">+421 908 897 149</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4 col-lg-4">
+                            <div class="single-contact-info">
+                                <div class="contact-icon">
+                                    <i class="ion-android-globe"></i>
+                                </div>
+                                <div class="contact-info-dec">
+                                    <p><a href="mailto://info@surikata.io">info@surikata.io</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4 col-lg-4">
+                            <div class="single-contact-info">
+                                <div class="contact-icon">
+                                    <i class="ion-android-pin"></i>
+                                </div>
+                                <div class="contact-info-dec">
+                                    <p>WAI s.r.o<br/>
+                                        Sládkovičova 10<br/>
+                                        921 01 Piešťany</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-social">
+                        <h3>Follow Us</h3>
+                        <div class="social-info">
+                            <ul>
+                                <li>
+                                    <a href="#"><i class="ion-social-facebook"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="ion-social-youtube"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="ion-social-instagram"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="col-lg-8 col-md-7">
+                <div class="contact-form">
+                    <div class="contact-title mb-30">
+                        <h2>Nechajte nám správu</h2>
+                    </div>
+                    <form class="contact-form-style" id="contact-form" onsubmit="return false;" method="post">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input name="name" placeholder="Name*" type="text" onblur="validateInputs(this)" />
+                            </div>
+                            <div class="col-lg-6">
+                                <input name="email" placeholder="Email*" type="email" onblur="validateInputs(this)" />
+                            </div>
+                            <div class="col-lg-12">
+                                <input name="phone_number" placeholder="Phone*" type="text" onblur="validateInputs(this)" />
+                            </div>
+                            <div class="col-lg-12">
+                                <textarea name="message" placeholder="Your Message*" onblur="validateInputs(this)"></textarea>
+                                <button class="submit" type="button" onclick="sendContactForm('#contact-form')">SEND</button>
+                            </div>
+                        </div>
+                    </form>
+                    <p class="form-messege"></p>
+                </div>
+            </div>-->
+        </div>
+    </div>
+</div>

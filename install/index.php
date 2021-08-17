@@ -66,7 +66,7 @@ require("../Init.php");
 
 session_start();
 
-$availableThemes = ["AbeloTheme", "DefaultTheme"];
+$availableThemes = ["DefaultTheme"];
 $randomProductsCount = $_GET['random_products_count'] ?? 50;
 if ($randomProductsCount > 5000) $randomProductsCount = 5000;
 
@@ -155,7 +155,6 @@ if (count($parts) == 0) {
     $supplierModel = new \ADIOS\Widgets\Products\Models\Supplier($adminPanel);
     $brandModel = new \ADIOS\Widgets\Products\Models\Brand($adminPanel);
     $serviceModel = new \ADIOS\Widgets\Products\Models\Service($adminPanel);
-    $productServiceAssigmentModel = new \ADIOS\Widgets\Products\Models\ProductServiceAssignment($adminPanel);
     $productCategoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($adminPanel);
     $productModel = new \ADIOS\Widgets\Products\Models\Product($adminPanel);
     $productGalleryModel = new \ADIOS\Widgets\Products\Models\ProductGallery($adminPanel);
@@ -210,26 +209,8 @@ if (count($parts) == 0) {
       $unitModel->insertRow(["id" => 21, "unit" => "cnt", "name" => "containers", "is_for_products" => TRUE, "is_for_features" => TRUE]);
 
       // preklady
-      $translationModel->insertRow(["id" => 1, "context" => "BlogCatalog", "original" => "Read more", "translated" => '{"SK": "Čítaj viac"}']);
-      $translationModel->insertRow(["id" => 2, "context" => "WAI/Order/CartOverview", "original" => "There are no more items in your cart", "translated" => '{"SK": "Váš nákupný košík je prázdny"}']);
-      $translationModel->insertRow(["context" => "WAI/Order/CartOverview", "original" => "Your cart items", "translated" => '{"SK": "Položky vo Vašom košíku"}']);
-      $translationModel->insertRow(["context" => "WAI/Order/CartOverview", "original" => "product", "translated" => '{"SK": "produkt"}']);
-      $translationModel->insertRow(["context" => "WAI/Order/CartOverview", "original" => "price", "translated" => '{"SK": "cena"}']);
-      $translationModel->insertRow(["context" => "WAI/Order/CartOverview", "original" => "unit", "translated" => '{"SK": "jednotka"}']);
-      $translationModel->insertRow(["context" => "WAI/Order/CartOverview", "original" => "pieces", "translated" => '{"SK": "počet kusov"}']);
-      $translationModel->insertRow(["context" => "WAI/Order/CartOverview", "original" => "Clear Shopping Cart", "translated" => '{"SK": "Vymazať všetky položky"}']);
-      $translationModel->insertRow(["context" => "WAI/Order/CartOverview", "original" => "Cart Total", "translated" => '{"SK": "Cena spolu"}']);
-      $translationModel->insertRow(["context" => "WAI/Order/CartOverview", "original" => "Grand Total", "translated" => '{"SK": "Spolu s DPH"}']);
-      $translationModel->insertRow(["context" => "WAI/Order/CartOverview", "original" => "Proceed to Checkout", "translated" => '{"SK": "Fakturačné údaje"}']);
-      $translationModel->insertRow(["context" => "WAI/Order/CartOverview", "original" => "Continue shopping", "translated" => '{"SK": "Pokračovať v nákupe"}']);
-      $translationModel->insertRow(["context" => "WAI/Order/CartOverview", "original" => "Apply Coupon", "translated" => '{"SK": "Použiť kupón"}']);
-      $translationModel->insertRow(["context" => "WAI/Order/CartOverview", "original" => "Use Coupon Code", "translated" => '{"SK": "Použiť kupón"}']);
-      $translationModel->insertRow(["context" => "WAI/Order/CartOverview", "original" => "Enter your coupon code if you have one.", "translated" => '{"SK": "Zadajte Váš kupón"}']);
-      $translationModel->insertRow(["context" => "WAI/Common/Navigation", "original" => "Cart", "translated" => '{"SK": "Košík"}']);
-      $translationModel->insertRow(["context" => "WAI/Customer/Cart", "original" => "Continue shopping", "translated" => '{"SK": "Pokračovať v nákupe"}']);
-      $translationModel->insertRow(["context" => "WAI/Customer/Cart", "original" => "view cart", "translated" => '{"SK": "zobraziť košík"}']);
-      $translationModel->insertRow(["context" => "WAI/Customer/Cart", "original" => "checkout", "translated" => '{"SK": "Objednávka"}']);
-      $translationModel->insertRow(["context" => "WAI/Customer/Cart", "original" => "Subtotal", "translated" => '{"SK": "Medzisúčet"}']);
+      $translationModel->insertRow(["id" => 1, "context" => "BlogCatalog", "original" => "Read more", "translated" => '{"en": "Čítaj viac"}']);
+      $translationModel->insertRow(["id" => 2, "context" => "CartOverview", "original" => "There are no more items in your cart", "translated" => '{"en": "Váš nákupný košík je prázdny"}']);
 
       // produkty - dodavatelia
       $supplierModel->insertRow(["name" => "Baumax"]);
@@ -284,7 +265,6 @@ if (count($parts) == 0) {
 
       $productFeaturesCount = $productFeatureModel->get()->count();
 
-      // produkty - produkty
       RandomGenerator::generateRandomProducts(
         $randomProductsCount,
         $productModel,
@@ -304,17 +284,6 @@ if (count($parts) == 0) {
             "obrazok" => "products/product_".rand(1, 10).".jpg",
           ]);
         }
-      }
-
-      foreach ($products as $product) {
-          $productServiceAssigmentModel->insertRow([
-            "id_product" => $product['id'],
-            "id_service" => rand(0, 1),
-          ]);
-          $productServiceAssigmentModel->insertRow([
-            "id_product" => $product['id'],
-            "id_service" => rand(2, 3),
-          ]);
       }
 
       $adminPanel->db->commit();
@@ -419,7 +388,7 @@ if (count($parts) == 0) {
         "title" => "FIRST NEW",
         "content" => "Very first new",
         "perex" => "Short description for First New",
-        "domain" => "sk",
+        "domain" => "en",
         "image" => "",
         "show_from" => "20.6.2021",
       ]);
@@ -428,40 +397,27 @@ if (count($parts) == 0) {
         "title" => "SECOND NEW",
         "content" => "Second and the last new",
         "perex" => "Short description for Second New",
-        "domain" => "sk",
+        "domain" => "en",
         "image" => "",
         "show_from" => "22.6.2021",
       ]);
 
       // web - menu
 
-      $websiteMenuModel->insertRow(["id" => 1, "domain" => "SK", "name" => "Header Menu (SK)"]);
-      $websiteMenuModel->insertRow(["id" => 2, "domain" => "SK", "name" => "Footer Menu (SK)"]);
-      $websiteMenuModel->insertRow(["id" => 3, "domain" => "SK", "name" => "Footer Menu Generally (SK)"]);
-      $websiteMenuModel->insertRow(["id" => 4, "domain" => "SK-biela-technika", "name" => "Header Menu (SK)"]);
+      $websiteMenuModel->insertRow(["id" => 1, "domain" => "EN", "name" => "Header Menu (EN)"]);
+      $websiteMenuModel->insertRow(["id" => 2, "domain" => "EN", "name" => "Footer Menu (EN)"]);
 
-      // web - menu items - SK
+      // web - menu items - EN
       $tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Úvod", "url" => "uvod"]);
       $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "O nás", "url" => "o-nas"]);
       $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Produkty", "url" => "produkty"]);
       $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Blogy", "url" => "blogy"]);
 
-      $websiteMenuItemModel->insertRow(["id_menu" => 3, "id_parent" => 0, "title" => "Privacy terms", "url" => "privacy-terms"]);
-      $websiteMenuItemModel->insertRow(["id_menu" => 3, "id_parent" => 0, "title" => "Login", "url" => "login"]);
-      $websiteMenuItemModel->insertRow(["id_menu" => 3, "id_parent" => 0, "title" => "Search", "url" => "search"]);
-
       // web - stranky
 
-      $websiteCommonPanels["SK"] = [
+      $websiteCommonPanels["EN"] = [
         "header" => [ "plugin" => "WAI/Common/Header" ],
-        "navigation" => [
-          "plugin" => "WAI/Common/Navigation",
-          "settings" => [
-            "menuId" => 1,
-            "slogan" => "Short slogan in Header",
-            "shortContact" => "phone: +421 901 234 567",
-          ]
-        ],
+        "navigation" => [ "plugin" => "WAI/Common/Navigation", "settings" => [ "menuId" => 1 ] ],
         "footer" => [ 
           "plugin" => "WAI/Common/Footer", 
           "settings" => [ 
@@ -484,18 +440,6 @@ if (count($parts) == 0) {
         ],
       ];
 
-      $websiteCommonPanels["SK-biela-technika"] = [
-        "header" => [ "plugin" => "WAI/Common/Header" ],
-        "navigation" => [ "plugin" => "WAI/Common/Navigation", "settings" => [ "menuId" => 3 ] ],
-        "footer" => [ "plugin" => "WAI/Common/Footer", "settings" => [ "menuId" => 2 ] ],
-      ];
-
-      $websiteCommonPanels["CZ"] = [
-        "header" => [ "plugin" => "WAI/Common/Header" ],
-        "navigation" => [ "plugin" => "WAI/Common/Navigation", "settings" => [ "menuId" => 1 ] ],
-        "footer" => [ "plugin" => "WAI/Common/Footer", "settings" => [ "menuId" => 2 ] ],
-      ];
-
       function ___webPageSimpleText($url, $title) {
         return [
           "section_1" => [
@@ -509,36 +453,7 @@ if (count($parts) == 0) {
       }
 
       $webPages = [
-        "SK-biela-technika|uvod|WithoutSidebar|Úvod" => [
-          "section_1" => [
-            "WAI/SimpleContent/OneColumn",
-            [
-              "heading" => "Vitajte",
-              "headingLevel" => 1,
-              "content" => "iba biela technika",
-            ],
-          ],
-          "section_2" => [
-            "ContactForm",
-            [
-              "heading" => "Leave a message",
-              "headingLevel" => 3,
-            ],
-          ],
-        ],
-
-        "CZ|uvod|WithoutSidebar|Úvod" => [
-          "section_1" => [
-            "WAI/SimpleContent/OneColumn",
-            [
-              "heading" => "Vítejte",
-              "headingLevel" => 1,
-              "content" => "iba cz",
-            ],
-          ],
-        ],
-
-        "SK|uvod|WithoutSidebar|Úvod" => [
+        "EN|home|WithoutSidebar|Home" => [
           "section_1" => ["WAI/Misc/Slideshow", ["speed" => 1000]],
           "section_2" => [
             "WAI/SimpleContent/OneColumn",
@@ -581,18 +496,9 @@ if (count($parts) == 0) {
               "column2Width" => 4,
               "column2CSSClasses" => "text-right",
             ],
-          ],
-          "section_7" => [
-            "ContactForm",
-            [
-              "heading" => "Leave a message",
-              "headingLevel" => 3,
-              "sendEmail" => TRUE,
-              "emailAddress" => "",
-            ],
-          ],
+          ]
         ],
-        "SK|o-nas|WithoutSidebar|O nás" => [
+        "EN|about-us|WithoutSidebar|About us" => [
           "section_1" => [
             "WAI/SimpleContent/OneColumn",
             [
@@ -608,49 +514,62 @@ if (count($parts) == 0) {
             ]
           ],
         ],
-        "SK|produkty|WithLeftSidebar|Produkt - list" => [
+
+        // Product catalog pages
+        "EN|products|WithLeftSidebar|Products - Catalog" => [
           "sidebar" => ["WAI/Product/Filter", ["showProductCategories" => 1, "layout" => "sidebar", "showProductCategories" => 1, "show_brands" => 1]],
           "section_1" => ["WAI/Product/Catalog", ["defaultItemsPerPage" => 6]],
         ],
-        "SK||WithoutSidebar|Product - detail" => [
+        "EN||WithoutSidebar|Products - Detail" => [
           "section_1" => ["WAI/Product/Detail", ["zobrazit_podobne_produkty" => 1, "show_accessories" => 1, "showAuthor" => 1]],
         ],
-        "SK|blogy|WithLeftSidebar|Blogy" => [
+
+        // Shopping cart, checkout and order confirmation
+        "EN|cart|WithoutSidebar|Shopping cart" => [
+          "section_1" => "WAI/Order/CartOverview",
+        ],
+        "EN|checkout|WithoutSidebar|Checkout" => [
+          "section_1" => "WAI/Order/Checkout",
+        ],
+        "EN||WithoutSidebar|Order - Confirmation" => [
+          "section_1" => "WAI/Order/Confirmation"
+        ],
+
+        // My account pages
+        "EN|login|WithoutSidebar|My account - Login" => [
+          "section_1" => ["WAI/Customer/Login", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]],
+        ],
+        "EN|my-account|WithoutSidebar|My account - Home" => [
+          "section_1" => "WAI/Customer/Home",
+        ],
+        "EN|my-account/orders|WithoutSidebar|My account - Orders" => [
+          "section_1" => "WAI/Customer/OrderList",
+        ],
+        "EN|reset-password|WithoutSidebar|My account - Reset password" => [
+          "section_1" => "WAI/Customer/ForgotPassword"
+        ],
+        "EN|register|WithoutSidebar|My account - Registration" => [
+          "section_1" => ["WAI/Customer/Registration", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]]
+        ],
+        "EN|register-confirm|WithoutSidebar|My account - Registration - Confirmation" => [
+          "section_1" => "WAI/Customer/RegistrationConfirmation"
+        ],
+        "EN||WithoutSidebar|My account - Registration - Validation" => [
+          "section_1" => "WAI/Customer/ValidationConfirmation"
+        ],
+
+        // Blogs
+        "EN|blogs|WithLeftSidebar|Blogs" => [
           "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
           "section_1" => ["WAI/Blog/Catalog", ['itemsPerPage' => 3, "showAuthor" => 1]],
         ],
-        "SK||WithLeftSidebar|Blog" => [
+        "EN||WithLeftSidebar|Blog" => [
           "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
           "section_1" => "WAI/Blog/Detail",
         ],
-        "SK|kosik|WithoutSidebar|Košík" => [
-          "section_1" => "WAI/Order/CartOverview",
-        ],
-        "SK|checkout|WithoutSidebar|Checkout" => [
-          "section_1" => "WAI/Order/Checkout",
-        ],
-        "SK|login|WithoutSidebar|Login" => [
-          "section_1" => ["WAI/Customer/Login", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]],
-        ],
-        "SK|my-account|WithoutSidebar|My account - Home" => [
-          "section_1" => "WAI/Customer/Home",
-        ],
-        "SK|my-account/orders|WithoutSidebar|My account - Orders" => [
-          "section_1" => "WAI/Customer/OrderList",
-        ],
-        "SK|register|WithoutSidebar|Registration" => [
-          "section_1" => ["WAI/Customer/Registration", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]]
-        ],
-        "SK|register-confirm|WithoutSidebar|Registration - Confirmation" => [
-          "section_1" => "WAI/Customer/RegistrationConfirmation"
-        ],
-        "SK||WithoutSidebar|Registration - Validation" => [
-          "section_1" => "WAI/Customer/ValidationConfirmation"
-        ],
-        "SK||WithoutSidebar|Order - Confirmation" => [
-          "section_1" => "WAI/Order/Confirmation"
-        ],
-        "SK|search|WithoutSidebar|Search" => [
+
+        // Miscelaneous pages
+        "EN|search|WithoutSidebar|Search" => [
           "section_1" => [
             "WAI/Misc/WebsiteSearch",
             [
@@ -662,7 +581,7 @@ if (count($parts) == 0) {
             ]
           ],
         ],
-        "SK|privacy-terms|WithoutSidebar|Privacy policy" => [
+        "EN|privacy-terms|WithoutSidebar|Privacy policy" => [
           "section_1" => [
             "WAI/SimpleContent/OneColumn",
             [
@@ -671,30 +590,9 @@ if (count($parts) == 0) {
             ]
           ]
         ],
-        "SK|forgotten-password|WithoutSidebar|Forgotten password" => [
-          "section_1" => "WAI/Customer/ForgotPassword"
-        ],
-        "SK|news|WithLeftSidebar|News" => [
+        "EN|news|WithLeftSidebar|News" => [
           "sidebar" => ["WAI/News", ["contentType" => "sidebar"]],
           "section_1" => ["WAI/News", ["contentType" => "listOrDetail"]],
-        ],
-        "SK|contact|WithoutSidebar|Contact" => [
-          "section_1" => [
-            "WAI/SimpleContent/OneColumn",
-            [
-              "heading" => "Contact",
-              "headingLevel" => 1,
-              "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakt.html"),
-            ]
-          ],
-          "section_2" => [
-            "ContactForm",
-            [
-              "heading" => "Leave a message",
-              "headingLevel" => 3,
-              "formClass" => "contact-message",
-            ],
-          ],
         ],
       ];
 
@@ -726,13 +624,14 @@ if (count($parts) == 0) {
         ]);
       }
 
-      $websiteWebRedirectModel->insertRow(["domain" => "SK", "from_url" => "", "to_url" => REWRITE_BASE."sk/uvod", "type" => 301]);
-      $websiteWebRedirectModel->insertRow(["domain" => "SK-biela-technika", "from_url" => "", "to_url" => REWRITE_BASE."sk-biela-technika/uvod", "type" => 301]);
-      $websiteWebRedirectModel->insertRow(["domain" => "CZ", "from_url" => "", "to_url" => REWRITE_BASE."cz/uvod", "type" => 301]);
+      $websiteWebRedirectModel->insertRow([
+        "domain" => "EN",
+        "from_url" => "",
+        "to_url" => REWRITE_BASE."home",
+        "type" => 301
+      ]);
 
-      $adminPanel->widgets["Website"]->rebuildSitemap("SK");
-      $adminPanel->widgets["Website"]->rebuildSitemap("SK-biela-technika");
-      $adminPanel->widgets["Website"]->rebuildSitemap("CZ");
+      $adminPanel->widgets["Website"]->rebuildSitemap("EN");
 
       copy(
         __DIR__."/SampleData/images/surikata.png",
@@ -744,27 +643,9 @@ if (count($parts) == 0) {
       $adminPanel->saveConfig([
         "settings" => [
           "web" => [
-            "SK-biela-technika" => [
+            "EN" => [
               "profile" => [
-                "slogan" => "Iba biela technika na SK",
-              ],
-              "design" => [
-                "theme" => $theme,
-              ],
-            ],
-
-            "CZ" => [
-              "profile" => [
-                "slogan" => "Iba biela technika na CZ",
-              ],
-              "design" => [
-                "theme" => $theme,
-              ],
-            ],
-
-            "SK" => [
-              "profile" => [
-                "slogan" => "Celý sortiment na SK",
+                "slogan" => "Celý sortiment na EN",
                 "contactPhoneNumber" => "+421 111 222 333",
                 "contactEmail" => "info@{$_SERVER['HTTP_HOST']}",
                 "logo" => "surikata.png",
@@ -802,7 +683,7 @@ if (count($parts) == 0) {
             ],
           ],
           "emails" => [
-            "SK" => [
+            "EN" => [
               "signature" => "<p>Surikata - <a href='www.wai.sk' target='_blank'>WAI.sk</a></p>",
               "after_order_confirmation_SUBJECT" => "Surikata - order n. {% number %}",
               "after_order_confirmation_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/orderBody.html"),
@@ -878,7 +759,7 @@ if (count($parts) == 0) {
             "del_zip" => $customer[5],
             "del_country" => $customer[6],
             // "email" => strtolower("{$customer[1]}.{$customer[2]}@example.com"),
-            "email" => "example@email.com",
+            "email" => "dusan.daniska@gmail.com",
             "inv_given_name" => $customer[1],
             "inv_family_name" => $customer[2],
             "inv_street_1" => $customer[3],
@@ -927,8 +808,6 @@ if (count($parts) == 0) {
           $shoppingCartModel->addProductToCart($customerUID, rand(1, $productsCount), rand(1, 10));
         }
 
-        $orderConfirmationTime = date("Y-m-d H:i:s", strtotime("-".rand(0, 365)." days"));
-
         $idOrder = $orderModel->placeOrder(
           [
             "id_customer"       => $idCustomer,
@@ -954,13 +833,13 @@ if (count($parts) == 0) {
             "inv_country"       => $address['inv_country'],
             "phone_number"      => $address['phone_number'],
             "email"             => $address['email'],
-            "confirmation_time" => $orderConfirmationTime,
+            "confirmation_time" => date("Y-m-d H:i:s", strtotime("-".rand(0, 365)." days")),
           ],
           $customerUID
         );
 
         if (rand(0, 1) == 1) {
-          $idInvoice = $orderModel->issueInvoce($idOrder, TRUE);
+          $idInvoice = $orderModel->issueInvoce($idOrder);
         }
 
       }

@@ -71,12 +71,14 @@ $adminPanelConfig["db_login"]                = DB_LOGIN;
 $adminPanelConfig["db_password"]             = DB_PASSWORD;
 $adminPanelConfig["db_name"]                 = DB_NAME;
 
-$adminPanelConfig["smtp_host"]               = SMTP_HOST;
-$adminPanelConfig["smtp_port"]               = SMTP_PORT;
-$adminPanelConfig["smtp_protocol"]           = SMTP_PROTOCOL;
-$adminPanelConfig["smtp_login"]              = SMTP_LOGIN;
-$adminPanelConfig["smtp_password"]           = SMTP_PASSWORD;
-$adminPanelConfig["smtp_from"]               = SMTP_FROM;
+if (defined('SMTP_HOST')) {
+  $adminPanelConfig["smtp_host"]               = SMTP_HOST;
+  $adminPanelConfig["smtp_port"]               = SMTP_PORT;
+  $adminPanelConfig["smtp_protocol"]           = SMTP_PROTOCOL;
+  $adminPanelConfig["smtp_login"]              = SMTP_LOGIN;
+  $adminPanelConfig["smtp_password"]           = SMTP_PASSWORD;
+  $adminPanelConfig["smtp_from"]               = SMTP_FROM;
+}
 
 $adminPanelConfig['themes_dir']              = THEMES_DIR;
 

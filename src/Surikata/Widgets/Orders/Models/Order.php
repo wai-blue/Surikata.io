@@ -53,6 +53,13 @@ class Order extends \ADIOS\Core\Model {
 
   public function columns(array $columns = []) {
     return parent::columns([
+      "accounting_year" => [
+        "type" => "int",
+        "title" => "Accounting Year",
+        "readonly" => TRUE,
+        "description" => "Will be generated automaticaly",
+      ],
+
       "serial_number" => [
         "type" => "int",
         "title" => "Serial number",
@@ -248,7 +255,15 @@ class Order extends \ADIOS\Core\Model {
 
   public function indexes(array $indexes = []) {
     return parent::indexes([
-      "delivery_service" => [
+      "order___accounting_year___serial_number" => [
+        "type" => "unique",
+        "columns" => ["accounting_year", "serial_number"],
+      ],
+      "order___number" => [
+        "type" => "unique",
+        "columns" => ["number"],
+      ],
+      "order___delivery_service" => [
         "type" => "index",
         "columns" => ["delivery_service"],
       ],
@@ -327,6 +342,7 @@ class Order extends \ADIOS\Core\Model {
     $idAddress = (int) $orderData['id_address'];
 
     $cartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($this->adios);
+    $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adios);
     $customerUIDModel = new \ADIOS\Widgets\Customers\Models\CustomerUID($this->adios);
     $customerAddressModel = new \ADIOS\Widgets\Customers\Models\CustomerAddress($this->adios);
 
@@ -339,6 +355,11 @@ class Order extends \ADIOS\Core\Model {
 
     if ($idCustomer == 0) {
       throw new \ADIOS\Widgets\Orders\Exceptions\UnknownCustomer($customerUID);
+    }
+
+    $customer = $customerModel->getById($idCustomer);
+    if ((int) $customer['id'] == 0) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\InvalidCustomerID();
     }
 
     $requiredFieldsEmpty = [];
@@ -405,21 +426,28 @@ class Order extends \ADIOS\Core\Model {
       $deliveryPrice = 0;
     }
 
+    if (empty($orderData['confirmation_time'])) {
+      $confirmationTime = date("Y-m-d H:i:s");
+    } else {
+      $confirmationTime = date("Y-m-d H:i:s", strtotime($orderData['confirmation_time']));
+    }
+
     $idOrder = $this->insertRow([
-      "serial_number" => [
-        "sql" => "
-          ifnull(
-            (
-              select
-                max(o.serial_number)
-              from {$this->table} o
-              where year(o.confirmation_time) = year(now())
-            ),
-            0
-          )
-          + 1
-        ",
-      ],
+      "accounting_year" => ["sql" => "year('{$confirmationTime}')"],
+      "serial_number" => ["sql" => "
+        @serial_number := (ifnull(
+          (
+            select
+              ifnull(max(`o`.`serial_number`), 0)
+            from `{$this->table}` o
+            where year(`o`.`confirmation_time`) = year('{$confirmationTime}')
+          ),
+          0
+        ) + 1)
+      "],
+      "number" => $orderData['number'] ?? ["sql" => "
+        @number := concat('".date("ymd", strtotime($confirmationTime))."', lpad(@serial_number, 4, '0'))
+      "],
       "id_customer"       => $idCustomer,
       "del_given_name"    => $orderData['del_given_name'],
       "del_family_name"   => $orderData['del_family_name'],
@@ -443,7 +471,7 @@ class Order extends \ADIOS\Core\Model {
       "inv_country"       => $orderData['inv_country'],
       "phone_number"      => $orderData['phone_number'],
       "email"             => $orderData['email'],
-      "confirmation_time" => date("Y-m-d H:i:s"),
+      "confirmation_time" => $confirmationTime,
       "delivery_service"  => $orderData['deliveryService'],
       "delivery_price"    => $deliveryPrice,
       "notes"             => $orderData['notes'],
@@ -455,9 +483,9 @@ class Order extends \ADIOS\Core\Model {
     }
 
     $placedOrderData = $this->getById($idOrder);
-    $placedOrderNumber = $this->calculateOrderNumber($placedOrderData);
-    $this->updateRow(["number" => $placedOrderNumber], $idOrder);
-    $placedOrderData["number"] = $placedOrderNumber;
+    // $placedOrderNumber = $this->calculateOrderNumber($placedOrderData);
+    // $this->updateRow(["number" => $placedOrderNumber], $idOrder);
+    // $placedOrderData["number"] = $placedOrderNumber;
 
     foreach ($cartContents['items'] as $item) {
       $this->addItem($idOrder, [
@@ -741,7 +769,7 @@ class Order extends \ADIOS\Core\Model {
     }
   }
 
-  public function prepareInvoiceData($idOrder) {
+  public function prepareInvoiceData($idOrder, $useDatesFromOrder = FALSE) {
     $order = $this->getById($idOrder);
 
     $invoiceItems = [];
@@ -758,7 +786,7 @@ class Order extends \ADIOS\Core\Model {
     $invoiceData = [
       "HEADER" => [
         "id_order" => $idOrder,
-        "konstantny_symbol" => "0308",
+        "constant_symbol" => "0008",
         "payment_method" => \ADIOS\Widgets\Finances\Models\Invoice::PAYMENT_METHOD_WIRE_TRANSFER,
         "order_number" => $order['number'],
       ],
@@ -790,6 +818,10 @@ class Order extends \ADIOS\Core\Model {
       "ITEMS" => $invoiceItems,
     ];
 
+    if ($useDatesFromOrder) {
+      $invoiceData["TIMESTAMPS"]["issue_time"] = $order['confirmation_time'];
+    }
+
     return $invoiceData;
   }
 
@@ -808,11 +840,11 @@ class Order extends \ADIOS\Core\Model {
     ;
   }
 
-  public function issueInvoce($idOrder) {
+  public function issueInvoce($idOrder, $useDatesFromOrder = FALSE) {
     $invoiceModel = new \ADIOS\Widgets\Finances\Models\Invoice($this->adios);
     $invoiceModel->disableNotifications = $this->disableNotifications;
 
-    $invoiceData = $this->prepareInvoiceData($idOrder);
+    $invoiceData = $this->prepareInvoiceData($idOrder, $useDatesFromOrder);
     $invoice = $invoiceModel->issueInvoice($invoiceData);
     $this->assignToInvoice($idOrder, $invoice['id']);
 

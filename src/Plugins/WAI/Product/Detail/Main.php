@@ -1,6 +1,7 @@
 <?php
 
 namespace Surikata\Plugins\WAI\Product {
+  use ADIOS\Widgets\Products\Models\Service;
   class Detail extends \Surikata\Core\Web\Plugin {
     var $productInfo = NULL;
 
@@ -46,7 +47,54 @@ namespace Surikata\Plugins\WAI\Product {
         ;
       }
 
+      $allUnits = (new \ADIOS\Widgets\Settings\Models\Unit($this->adminPanel))->getAll();
+      foreach ($allUnits as $unit) {
+        if ($this->productInfo["id_delivery_unit"] == $unit["id"]) {
+          $this->productInfo["DELIVERY_UNIT"] = $unit;
+          break;
+        }
+      }
+      foreach ($this->productInfo['FEATURES'] as $key => $feature) {
+        foreach ($allUnits as $unit) {
+          if ($feature["id_measurement_unit"] == $unit["id"]) {
+            $this->productInfo['FEATURES'][$key]["MEASUREMENT_UNIT"] = $unit;
+            break;
+          }
+        }
+      }
       return $this->productInfo;
+    }
+
+    public function getServices() {
+
+      /** @var Service $serviceModel */
+      $serviceModel = $this->adminPanel
+        ->getModel("Widgets/Products/Models/Service")
+      ;
+
+      /** @var array $services */
+      $services = $serviceModel
+        ->getAll()
+      ;
+      return $services;
+    }
+    
+    public function renderJSON() {
+      $returnArray = [];
+      $productAction = $this->websiteRenderer->urlVariables['productAction'] ?? "";
+
+      switch ($productAction) {
+        case "getQuickView":
+          $product = $this->getProductInfo();
+          $returnArray["product"] = [];
+          $returnArray["product"] = $product;
+          $returnArray["productModalContent"] = (new \Surikata\Plugins\WAI\Product\Detail\Modals\ProductModal($this->websiteRenderer))
+            ->renderDefaultModal($product)
+          ;
+          break;
+      }
+
+      return $returnArray;
     }
 
     public function getTwigParams($pluginSettings) {
@@ -62,6 +110,7 @@ namespace Surikata\Plugins\WAI\Product {
 
       $twigParams = $pluginSettings;
 
+      $twigParams["services"] = $this->getServices();
       $twigParams["productInfo"] = (new \Surikata\Plugins\WAI\Product\Detail($this->websiteRenderer))->getProductInfo();
 
       return $twigParams;

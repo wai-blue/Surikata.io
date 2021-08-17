@@ -37,6 +37,27 @@ class ProductServiceAssignment extends \ADIOS\Core\Model {
     return $params;
   }
 
+  public function assign($idProduct, $idService) {
+    $idProduct = (int) $idProduct;
+    $idService = (int) $idService;
+
+    $this->adios->db->query("
+      delete from `{$this->table}` WHERE `id_product` = {$idProduct} AND `id_service` = {$idService};
+    ");
+
+    $this->adios->db->query("
+      insert into `{$this->table}` (`id_product`, `id_service`) values ({$idProduct}, {$idService})
+    ");
+  }
+
+  public function deleteUnassigned($idProduct, $assigned) {
+    $this
+      ->where('id_product', $idProduct)
+      ->whereNotIn('id_service', $assigned)
+      ->delete()
+    ;
+  }
+
   public function formParams($data, $params) {
     $params['default_values'] = [
       'id_product' => $params['id_product'],

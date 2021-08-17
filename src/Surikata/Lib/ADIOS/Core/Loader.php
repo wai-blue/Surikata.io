@@ -13,6 +13,7 @@ namespace ADIOS\Core;
 class Exception extends \Exception { }
 class NotEnoughPermissionsException extends \Exception { }
 class DBException extends \Exception { }
+class DBDuplicateEntryException extends \Exception { }
 class ActionException extends \Exception { }
 class ModelInstallationException extends \Exception { }
 class InvalidUidException extends \Exception { }
@@ -87,7 +88,11 @@ class Loader {
     }
 
     // ak requestuje nejaky Asset (css, js, image, font), tak ho vyplujem a skoncim
-    $this->requestedURI = str_replace($this->config['rewrite_base'], "", $_SERVER['REQUEST_URI']);
+    if ($this->config['rewrite_base'] == "/") {
+      $this->requestedURI = ltrim($_SERVER['REQUEST_URI'], "/");
+    } else {
+      $this->requestedURI = str_replace($this->config['rewrite_base'], "", $_SERVER['REQUEST_URI']);
+    }
 
     $this->assetsUrlMap["adios/assets/css/"] = __DIR__."/../Assets/Css/";
     $this->assetsUrlMap["adios/assets/js/"] = __DIR__."/../Assets/Js/";
@@ -126,8 +131,8 @@ class Loader {
           "database"  => $this->config['db_name'],
           "username"  => $this->config['db_login'],
           "password"  => $this->config['db_password'],
-          "charset"   => 'utf8',
-          "collation" => 'utf8_unicode_ci',
+          "charset"   => 'utf8mb4',
+          "collation" => 'utf8mb4_unicode_ci',
         ]);
 
         // Make this Capsule instance available globally.
@@ -199,7 +204,7 @@ class Loader {
         'db_login' => $this->getConfig('db_login', ''),
         'db_password' => $this->getConfig('db_password', ''),
         'db_name' => $this->getConfig('db_name', ''),
-        'db_codepage' => $this->getConfig('db_codepage', 'utf8'),
+        'db_codepage' => $this->getConfig('db_codepage', 'utf8mb4'),
       ]);
 
       $this->loadConfigFromDB();
@@ -261,14 +266,6 @@ class Loader {
 
       if ($mode == ADIOS_MODE_FULL) {
 
-        // inicializacia widgetov
-
-        foreach ($this->config['widgets'] as $w_name => $w_config) {
-          $this->addWidget($w_name);
-        }
-
-        $this->onWidgetsLoaded();
-
         // inicializacia modelov
 
         $this->models[] = "Core/Models/Config";
@@ -276,6 +273,14 @@ class Loader {
         $this->models[] = "Core/Models/User";
         $this->models[] = "Core/Models/UserRole";
         $this->models[] = "Core/Models/Token";
+
+        // inicializacia widgetov
+
+        foreach ($this->config['widgets'] as $w_name => $w_config) {
+          $this->addWidget($w_name);
+        }
+
+        $this->onWidgetsLoaded();
 
         // vytvorim definiciu tables podla nacitanych modelov
 
@@ -395,6 +400,8 @@ class Loader {
   }
 
   public function loadAllPlugins($subdir = "") {
+    if (!defined('ADIOS_PLUGINS_DIR')) return;
+
     $dir = ADIOS_PLUGINS_DIR.(empty($subdir) ? "" : "/{$subdir}");
 
     foreach (scandir($dir) as $file) {
@@ -691,6 +698,10 @@ class Loader {
 
       $actionClassName = "ADIOS\\Actions\\".str_replace("/", "\\", $this->action);
 
+      if (!class_exists($actionClassName)) {
+        throw new \ADIOS\Core\Exception("Unknown action '{$this->action}'.");
+      }
+
       if (php_sapi_name() === 'cli') {
         if (!$actionClassName::$cliSAPIEnabled) {
           throw new \ADIOS\Core\Exception("Action is not available for CLI interface.");
@@ -753,7 +764,17 @@ class Loader {
       return $this->renderAction($this->action, $params);
 
     } catch (\ADIOS\Core\Exception $e) {
-      exit("ADIOS RUN failed: ".$e->getMessage());
+      $lines = [];
+      $lines[] = "ADIOS RUN failed: ".$e->getMessage();
+      if ($this->config['debug']) {
+        $lines[] = "Requested URI = {$this->requestedURI}";
+        $lines[] = "Rewrite base = {$this->config['rewrite_base']}";
+        $lines[] = "SERVER.REQUEST_URI = {$_SERVER['REQUEST_URI']}";
+      }
+
+      echo join(" ", $lines);
+
+      exit();
     }
   }
 
@@ -1131,7 +1152,7 @@ class Loader {
         $passwordMatch = FALSE;
 
         if (!empty($password) && $data['password'] == $password) {
-          // plain text
+          // plain text, deprecated
           $passwordMatch = TRUE;
         } else if (!empty($password) && password_verify($password, $data['password'])) {
           // plain text

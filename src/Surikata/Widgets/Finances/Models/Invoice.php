@@ -48,6 +48,13 @@ class Invoice extends \ADIOS\Core\Model {
         "model" => "Widgets/Finances/Models/InvoiceNumericSeries",
       ],
 
+      "accounting_year" => [
+        "type" => "int",
+        "title" => "Accounting Year",
+        "readonly" => TRUE,
+        "description" => "Will be generated automaticaly",
+      ],
+
       "serial_number" => [
         "type" => "int",
         "title" => "Serial number",
@@ -215,20 +222,20 @@ class Invoice extends \ADIOS\Core\Model {
       // DATUMY
 
         "issue_time" => [
-          "type" => "date",
-          "title" => "Date of Issue",
+          "type" => "datetime",
+          "title" => "Issued",
           "show_column" => TRUE,
         ],
 
         "delivery_time" => [
-          "type" => "date",
-          "title" => "Delivery Date",
+          "type" => "datetime",
+          "title" => "Delivered",
           "show_column" => TRUE,
         ],
 
         "payment_due_time" => [
-          "type" => "date",
-          "title" => "Due Date",
+          "type" => "datetime",
+          "title" => "Payment Due",
           "show_column" => TRUE,
         ],
 
@@ -240,18 +247,18 @@ class Invoice extends \ADIOS\Core\Model {
 
       // OSTATNE
 
-        "variabilny_symbol" => [
+        "variable_symbol" => [
           "type" => "varchar",
           "title" => "Variable symbol",
           "show_column" => TRUE,
         ],
 
-        "specificky_symbol" => [
+        "specific_symbol" => [
           "type" => "varchar",
           "title" => "Specific symbol",
         ],
 
-        "konstantny_symbol" => [
+        "constant_symbol" => [
           "type" => "varchar",
           "title" => "Constant symbol",
         ],
@@ -287,6 +294,19 @@ class Invoice extends \ADIOS\Core\Model {
           "title" => "State",
           "show_column" => TRUE,
         ],
+    ]);
+  }
+
+  public function indexes(array $indexes = []) {
+    return parent::indexes([
+      "invoice___accounting_year___serial_number" => [
+        "type" => "unique",
+        "columns" => ["accounting_year", "serial_number"],
+      ],
+      "invoice___number" => [
+        "type" => "unique",
+        "columns" => ["number"],
+      ],
     ]);
   }
 
@@ -414,10 +434,11 @@ class Invoice extends \ADIOS\Core\Model {
 
     $tmp = reset($this->adios->db->get_all_rows_query("
       select
-        fv.*
-      from {$this->table} fv
+        i.*
+      from {$this->table} i
       where
-        fv.serial_number > ".(int) $invoice['serial_number']."
+        i.accounting_year = ".(int) $invoice['accounting_year']."
+        and i.serial_number > ".(int) $invoice['serial_number']."
       limit 1
     "));
 
@@ -508,9 +529,9 @@ class Invoice extends \ADIOS\Core\Model {
             "tabs" => [
               "General" => [
                 "number",
-                "variabilny_symbol",
-                "konstantny_symbol",
-                "specificky_symbol",
+                "variable_symbol",
+                "constant_symbol",
+                "specific_symbol",
                 ["html" => "<hr>"],
                 "delivery_time",
                 "issue_time",
@@ -595,11 +616,11 @@ class Invoice extends \ADIOS\Core\Model {
   public function issueInvoice($data) {
     // $data = [
     //   "HEADER" => [
-    //     "variabilny_symbol", "konstantny_symbol", "specificky_symbol"
+    //     "variable_symbol", "constant_symbol", "specific_symbol"
     //     "payment_method", "order_number", "cislo_dodacieho_listu", "notes",
     //   ],
-    //   "DATUMY" => [
-    //     "vystavenie", "dodanie", "splatnost"
+    //   "TIMESTAMPS" => [
+    //     "issue_time", "delivery_time", "payment_due_time"
     //   ],
     //   "CUSTOMER" => [
     //     "id", "name", "ulica_1", "ulica_2", "mesto", "psc", "stat",
@@ -621,40 +642,48 @@ class Invoice extends \ADIOS\Core\Model {
     $invoiceItemModel = new \ADIOS\Widgets\Finances\Models\InvoiceItem($this->adios);
     $numberingPattern = "ymd";
 
+    $issueTime = (empty($data["TIMESTAMPS"]["issue_time"])
+      ? date("Y-m-d H:i:s")
+      : date("Y-m-d H:i:s", strtotime($data["TIMESTAMPS"]["issue_time"]))
+    );
+
+    $deliveryTime = (empty($data["TIMESTAMPS"]["delivery_time"])
+      ? date("Y-m-d H:i:s", strtotime($issueTime))
+      : date("Y-m-d H:i:s", strtotime($data["TIMESTAMPS"]["delivery_time"]))
+    );
+
+    $paymentDueTime = (empty($data["TIMESTAMPS"]["payment_due_time"])
+      ? date("Y-m-d H:i:s")
+      : date("Y-m-d H:i:s", strtotime($data["TIMESTAMPS"]["payment_due_time"], "+14 days"))
+    );
+
     $idInvoice = $this->insertRow([
-      "serial_number" => "SQL:
+      "accounting_year" => ["sql" => "year('{$issueTime}')"],
+      "serial_number" => ["sql" => "
         @serial_number := (ifnull(
           (
             select
-              max(fv.serial_number)
-            from {$this->table} fv
+              ifnull(max(`i`.`serial_number`), 0)
+            from `{$this->table}` `i`
+            where year(`i`.`issue_time`) = year('{$issueTime}')
           ),
           0
         ) + 1)
-      ",
-      "number" => "SQL:
-        @number := concat('".date($numberingPattern)."', lpad(@serial_number, 4, '0'))
-      ",
+      "],
+      "number" => ["sql" => "
+        @number := concat('".date($numberingPattern, strtotime($issueTime))."', lpad(@serial_number, 4, '0'))
+      "],
       "state" => self::STATE_ISSUED,
-      "variabilny_symbol" => (empty($data["HEADER"]["variabilny_symbol"])
-        ? "SQL:@number"
-        : $data["HEADER"]["variabilny_symbol"]
+      "variable_symbol" => (empty($data["HEADER"]["variable_symbol"])
+        ? ["sql" => "@number"]
+        : $data["HEADER"]["variable_symbol"]
       ),
-      "specificky_symbol" => $data["HEADER"]["specificky_symbol"],
-      "konstantny_symbol" => $data["HEADER"]["konstantny_symbol"],
+      "specific_symbol" => $data["HEADER"]["specific_symbol"],
+      "constant_symbol" => $data["HEADER"]["constant_symbol"],
 
-      "issue_time" => (empty($data["DATUMY"]["vystavenie"])
-        ? date("Y-m-d")
-        : date("Y-m-d", strtotime($data["DATUMY"]["vystavenie"]))
-      ),
-      "delivery_time" => (empty($data["DATUMY"]["dodanie"])
-        ? date("Y-m-d")
-        : date("Y-m-d", strtotime($data["DATUMY"]["dodanie"]))
-      ),
-      "payment_due_time" => (empty($data["DATUMY"]["splatnost"])
-        ? date("Y-m-d")
-        : date("Y-m-d", strtotime($data["DATUMY"]["splatnost"], "+14 days"))
-      ),
+      "issue_time" => $issueTime,
+      "delivery_time" => $deliveryTime,
+      "payment_due_time" => $paymentDueTime,
 
       "id_order" => (int) $data["HEADER"]["id_order"],
       "id_customer" => (int) $data["CUSTOMER"]["id"],

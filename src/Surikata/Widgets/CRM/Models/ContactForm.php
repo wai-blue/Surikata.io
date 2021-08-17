@@ -13,24 +13,35 @@ class ContactForm extends \ADIOS\Core\Model {
       "email" => [
         "type" => "varchar",
         "title" => $this->translate("Email"),
+        "readonly" => TRUE,
         "show_column" => TRUE,
       ],
 
       "phone_number" => [
         "type" => "varchar",
         "title" => $this->translate("Phone number"),
+        "readonly" => TRUE,
         "show_column" => TRUE,
       ],
 
       "message" => [
         "type" => "text",
         "title" => $this->translate("Message"),
+        "readonly" => TRUE,
         "show_column" => TRUE,
       ],
 
       "received" => [
         "type" => "datetime",
         "title" => $this->translate("Received"),
+        "readonly" => TRUE,
+        "show_column" => TRUE,
+      ],
+
+      "recipient" => [
+        "type" => "varchar",
+        "title" => $this->translate("Recipient"),
+        "readonly" => TRUE,
         "show_column" => TRUE,
       ],
     ]);

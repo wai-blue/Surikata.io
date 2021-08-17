@@ -219,7 +219,7 @@
   }
 
   function ui_form_get_values(uid, input_id_prefix) {
-    if (typeof input_id_prefix == 'undefined') input_id_prefix = uid+'_';
+    if (typeof input_id_prefix == 'undefined') input_id_prefix = uid + '_';
 
     var div = document.getElementById(uid);
 

@@ -108,7 +108,7 @@ class HelperFunctions {
    * @param  bool $replaceSlashes If TRUE, slashes are replaced with hyphenation
    * @return string URL-compatible string
    */
-  public static function str2url($string, $replaceSlashes = true) {
+  public static function str2url($string, $replaceSlashes = TRUE) {
     if ($replaceSlashes) {
       $string = str_replace('/', '-', $string);
     }
@@ -124,6 +124,10 @@ class HelperFunctions {
     }
 
     return $string;
+  }
+
+  public static function str2uid($string, $replaceSlashes = TRUE) {
+    return str_replace("-", "_", self::str2url($string, $replaceSlashes));
   }
   
   /**

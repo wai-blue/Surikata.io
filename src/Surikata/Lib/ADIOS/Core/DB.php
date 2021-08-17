@@ -87,7 +87,8 @@ class DB
         // unknown database
         $this->query("
           create database if not exists `{$this->db_name}`
-          character set utf8 collate utf8_general_ci
+          default charset = utf8mb4
+          default collate = utf8mb4_unicode_ci
         ");
 
         echo "Created database `{$this->db_name}`";
@@ -159,7 +160,7 @@ class DB
       $this->last_query_duration = _getmicrotime() - $ts1;
 
       if (!empty($this->connection->error)) {
-        $foreginKeyErrorCodes = [1216, 1217, 1451, 1452];
+        $foreginKeyErrorCodes = [1062, 1216, 1217, 1451, 1452];
         $errorNo = $this->get_error_no();
 
         if (in_array($errorNo, $foreginKeyErrorCodes)) {
@@ -168,7 +169,7 @@ class DB
             $message .= $initiatingModel->name;
           }
 
-          throw new \ADIOS\Core\DBException($message);
+          throw new \ADIOS\Core\DBDuplicateEntryException("{$message} ERROR: {$this->connection->error} QUERY: {$query}");
         } else {
           throw new \ADIOS\Core\DBException($this->get_error().", QUERY: {$query}");
         }
@@ -1415,7 +1416,7 @@ class DB
               ".join(", ", ["0 as dummy"] + $summaryColumns)."
             from (
               select
-                ".join(", ", [$summaryColumnsSubselect + $virtualColumns + $codeListColumns])."
+                ".join(", ", array_merge($summaryColumnsSubselect, $virtualColumns, $codeListColumns))."
               from $table_name
               ".join(" ", $leftJoins)."
               $where
@@ -1426,7 +1427,7 @@ class DB
             ) as sumtable
           ";
         } else {
-          $selectItems = ["{$table_name}.*"] + $virtualColumns + $codeListColumns;
+          $selectItems = array_merge(["{$table_name}.*"], $virtualColumns, $codeListColumns);
 
           $query = "
             select

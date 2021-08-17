@@ -151,6 +151,25 @@ class Model extends \Illuminate\Database\Eloquent\Model {
       $this->adios->addRouting($this->routing());
 
     }
+
+    if (!$this->isInstalled()) {
+      $this->adios->userNotifications->addHtml("
+        Model <b>{$this->name}</b> is not installed.
+        <a
+          href='javascript:void(0)'
+          onclick='desktop_update(\"Desktop/InstallUpgrades\");'
+        >Install model</a>
+      ");
+    } else if ($this->hasAvailableUpgrades()) {
+      $this->adios->userNotifications->addHtml("
+        Model <b>{$this->name}</b> has new upgrades available.
+        <a
+          href='javascript:void(0)'
+          onclick='desktop_update(\"Desktop/InstallUpgrades\");'
+        >Install upgrades</a>
+      ");
+    }
+
   }
     
   /**
@@ -159,6 +178,39 @@ class Model extends \Illuminate\Database\Eloquent\Model {
    * @return void
    */
   public function init() { /* to be overriden */ }
+
+  /**
+   * Retrieves value of configuration parameter.
+   *
+   * @return void
+   */
+  public function getConfig(string $configName) : string {
+    return $this->adios->config['models'][str_replace("/", "-", $this->name)][$configName] ?? "" ;
+  }
+  
+  /**
+   * Sets the value of configuration parameter.
+   *
+   * @return void
+   */
+  public function setConfig(string $configName, $value) : void {
+    $this->adios->config['models'][str_replace("/", "-", $this->name)][$configName] = $value;
+  }
+
+  /**
+   * Persistantly saves the value of configuration parameter to the database.
+   *
+   * @return void
+   */
+  public function saveConfig(string $configName, $value) : void {
+    $this->adios->saveConfig([
+      "models" => [
+        str_replace("/", "-", $this->name) => [
+          $configName => $value,
+        ],
+      ],
+    ]);
+  }
   
   /**
    * Shorthand for ADIOS core translate() function. Uses own language dictionary.
@@ -173,7 +225,36 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   }
   
   /**
-   * Installs the model into SQL database. Automaticaly creates indexes.
+   * Checks whether model is installed.
+   *
+   * @return bool TRUE if model is installed, otherwise FALSE.
+   */
+  public function isInstalled() : bool {
+    return $this->getConfig('installed-version') != "";
+  }
+
+  /**
+   * Gets the current installed version of the model. Used during installing upgrades.
+   *
+   * @return void
+   */
+  public function getCurrentInstalledVersion() : int {
+    return (int) ($this->getConfig('installed-version') ?? 0);
+  }
+
+  /**
+   * Returns list of available upgrades. This method must be overriden by each model.
+   *
+   * @return array List of available upgrades. Keys of the array are simple numbers starting from 1.
+   */
+  public function upgrades() : array {
+    return [
+      0 => [], // upgrade to version 0 is the same as installation
+    ];
+  }
+
+  /**
+   * Installs the first version of the model into SQL database. Automaticaly creates indexes.
    *
    * @return void
    */
@@ -214,9 +295,51 @@ class Model extends \Illuminate\Database\Eloquent\Model {
           break;
         }
       }
+
+      $this->saveConfig('installed-version', max(array_keys($this->upgrades())));
+
       return TRUE;
     } else {
       return FALSE;
+    }
+  }
+
+  public function hasAvailableUpgrades() : bool {
+    $currentVersion = $this->getCurrentInstalledVersion();
+    $lastVersion = max(array_keys($this->upgrades()));
+    return ($lastVersion > $currentVersion);
+  }
+
+  /**
+   * Installs all upgrades of the model. Internaly stores current version and compares it to list of available upgrades.
+   *
+   * @return void
+   */
+  public function installUpgrades() : void {
+    if ($this->hasAvailableUpgrades()) {
+      $currentVersion = $this->getCurrentInstalledVersion();
+      $lastVersion = max(array_keys($this->upgrades()));
+
+      try {
+        $this->adios->db->start_transaction();
+
+        $upgrades = $this->upgrades();
+
+        for ($v = $currentVersion + 1; $v <= $lastVersion; $v++) {
+          if (is_array($upgrades[$v])) {
+            foreach ($upgrades[$v] as $query) {
+              $this->adios->db->query($query);
+            }
+          }
+        }
+
+        $this->adios->db->commit();
+        $this->saveConfig('installed-version', $lastVersion);
+
+      } catch(\ADIOS\Core\DBException $e) {
+        $this->adios->db->rollback();
+        throw new \ADIOS\Core\DBException($e->getMessage());
+      }
     }
   }
 
@@ -436,18 +559,23 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   //////////////////////////////////////////////////////////////////
   // CRUD methods
 
-  public function getById(int $id) {
-    return reset($this->where('id', $id)->get()->toArray());
+  public function getExtendedData($item) {
+    return $item; // to be overriden
   }
 
-  public function getAll(string $keyBy = "") {
-    $all = $this->get();
-    
-    if (!empty($keyBy)) {
-      $all = $all->keyBy($keyBy);
+  public function getById(int $id) {
+    $item = reset($this->where('id', $id)->get()->toArray());
+    return $this->getExtendedData($item);
+  }
+
+  public function getAll(string $keyBy = "id") {
+    $items = $this->getWithLookups(NULL, $keyBy);
+
+    foreach ($items as $key => $item) {
+      $items[$key] = $this->getExtendedData($item);
     }
-    
-    return $all->toArray();
+
+    return $items;
   }
 
   public function getQueryWithLookups($callback = NULL) {
@@ -461,11 +589,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     return $query;
   }
 
-  public function getWithLookups($callback = NULL) {
+  public function getWithLookups($callback = NULL, $keyBy = 'id') {
     $query = $this->getQueryWithLookups($callback);
-
     return $this->processLookupsInQueryResult(
-      $this->fetchQueryAsArray($query, 'id', FALSE),
+      $this->fetchQueryAsArray($query, $keyBy, FALSE),
       TRUE
     );
   }

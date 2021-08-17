@@ -26,6 +26,7 @@ class Locale {
   public function getAll(string $keyBy = "") {
     return [
       "dateFormat" => $this->dateFormat(),
+      "currencySymbol" => $this->currencySymbol(),
     ];
   }
 

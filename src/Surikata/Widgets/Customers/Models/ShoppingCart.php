@@ -163,11 +163,17 @@ class ShoppingCart extends \ADIOS\Core\Model {
     $idCart = $this->getOrCreateCartForCustomerUID($customerUID);
     $cartItemModel = $this->adios->getModel("Widgets/Customers/Models/ShoppingCartItem");
 
-    $cartItem = $cartItemModel
-      ->where('id_shopping_cart', '=', $idCart)
-      ->where('id_product', '=', $idProduct)
-    ;
-
+    if ($idProduct == 0) {
+      $cartItem = $cartItemModel
+        ->where('id_shopping_cart', '=', $idCart)
+      ;
+    }
+    else {
+      $cartItem = $cartItemModel
+        ->where('id_shopping_cart', '=', $idCart)
+        ->where('id_product', '=', $idProduct)
+      ;
+    }
     $cartItemDelete = $cartItem->get();
     $cartItem->delete();
 

@@ -671,6 +671,19 @@ class Product extends \ADIOS\Core\Model {
       }
     }
 
+    if (!empty($data['ProductServiceAssignment'])) {
+      $services = @json_decode($data['ProductServiceAssignment'], TRUE);
+      if (is_array($services)) {
+        $model = $this->adios->getModel("Widgets/Products/Models/ProductServiceAssignment");
+
+        foreach ($services as $idService) {
+          $model->assign($data['id'], $idService);
+        }
+
+        $model->deleteUnassigned($data['id'], $services);
+      }
+    }
+
     $this->recalculatePriceForSingleProduct($data['id']);
 
     return parent::onAfterSave($data, $returnValue);
@@ -679,6 +692,7 @@ class Product extends \ADIOS\Core\Model {
   public function convertKeysForLookupData($item) {
     $conversionTable = [
       "features" => "FEATURES",
+      "services" => "SERVICES",
     ];
 
     foreach ($conversionTable as $src => $dst) {

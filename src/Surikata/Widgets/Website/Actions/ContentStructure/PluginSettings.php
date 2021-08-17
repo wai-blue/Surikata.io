@@ -32,8 +32,14 @@ class PluginSettings extends \ADIOS\Core\Action {
               <option value=''></option>
     ";
     foreach ($this->adios->getPlugins() as $pluginName => $plugin) {
+      $pluginNameUID = \ADIOS\Core\HelperFunctions::str2uid($pluginName);
+
       $pluginsSettingsHtml .= "
-        <option value='".ads($pluginName)."' ".($pluginName == $activatedPluginName ? "selected" : "").">
+        <option
+          data-plugin-name='".ads($pluginName)."'
+          data-plugin-uid='{$pluginNameUID}'
+          ".($pluginName == $activatedPluginName ? "selected" : "")."
+        >
           {$pluginName}
         </option>
       ";
@@ -46,16 +52,18 @@ class PluginSettings extends \ADIOS\Core\Action {
     ";
 
     foreach ($this->adios->getPlugins() as $pluginName => $plugin) {
+      $pluginNameUID = \ADIOS\Core\HelperFunctions::str2uid($pluginName);
+
       $pluginsSettingsHtml .= "
         <div
           class='surikata-theme-plugin'
-          id='{$this->uid}_plugin_{$pluginName}'
+          id='{$this->uid}_plugin_{$pluginNameUID}'
           style='display:".($pluginName == $activatedPluginName ? "block" : "none")."'
         >
       ";
 
       $tmpPlugin = $this->adios->getPlugin($pluginName);
-      $tmpInputUIDPrefix = "{$this->uid}_{$pluginName}";
+      $tmpInputUIDPrefix = "{$this->uid}_{$pluginNameUID}";
 
       if (is_object($tmpPlugin)) {
         if (method_exists($tmpPlugin, "getSettingsForWebsite")) {
@@ -66,7 +74,7 @@ class PluginSettings extends \ADIOS\Core\Action {
 
         $settingsItems = [];
         foreach ($availableSettings as $settingName => $inputParams) {
-          $inputParams["uid"] = "{$tmpInputUIDPrefix}_{$settingName}";
+          $inputParams["uid"] = "{$tmpInputUIDPrefix}_".\ADIOS\Core\HelperFunctions::str2uid($settingName);
           $inputParams["value"] = $pluginSettings[$settingName];
 
           if (empty($inputParams["input"])) {
@@ -85,16 +93,16 @@ class PluginSettings extends \ADIOS\Core\Action {
         if (count($settingsItems) == 0) {
           $pluginsSettingsHtml .= "
             <div>
-              Tento plugin nemá žiadne nastavenia.
+              This plugin has no settings.
             </div>
           ";
         } else {
           $pluginsSettingsHtml .=  (new \ADIOS\Core\UI\Input\SettingsPanel(
             $this->adios,
-            "{$this->uid}_{$pluginName}_",
+            "{$tmpInputUIDPrefix}_",
             [
               "settings_group" => "web/plugins/{$pluginName}",
-              "title" => "$pluginName",
+              "title" => $pluginName,
               "template" => [
                 "items" => $settingsItems,
               ],
@@ -116,13 +124,16 @@ class PluginSettings extends \ADIOS\Core\Action {
         }
 
         function {$this->uid}_save() {
-          let plugin = $('#{$this->uid}_plugin').val();
-          let data = { 'plugin': plugin, 'settings': {} };
+          let pluginSelectedOption = $('#{$this->uid}_plugin option:selected');
+          let pluginName = $(pluginSelectedOption).data('plugin-name');
+          let pluginUID = $(pluginSelectedOption).data('plugin-uid');
 
-          if ($('#{$this->uid}_plugin_' + plugin).length > 0) {
+          let data = { 'plugin': pluginName, 'settings': {} };
+
+          if ($('#{$this->uid}_plugin_' + pluginUID).length > 0) {
             data['settings'] = ui_form_get_values(
-              '{$this->uid}_plugin_' + plugin,
-              '{$this->uid}_' + plugin + '_',
+              '{$this->uid}_plugin_' + pluginUID,
+              '{$this->uid}_' + pluginUID + '_',
             );
           }
           

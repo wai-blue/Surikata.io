@@ -47,8 +47,29 @@ namespace Surikata\Plugins\WAI\Common {
       return $treeItems;
     }
 
+    public function getLanguages() {
+      $returnArray = [];
+      $languages = $this->websiteRenderer->adminPanel->config['widgets']['Website']['domainLanguages'];
+      $domains = $this->websiteRenderer->adminPanel->config['widgets']['Website']['domains'];
+
+      foreach ($languages as $languageIndex => $language) {
+        $returnArray[$languageIndex] = [];
+        $returnArray[$languageIndex]["language"] = $language;
+        foreach ($domains as $key => $domain) {
+          if ($domain["languageIndex"] == $languageIndex) {
+            $returnArray[$languageIndex]["languageCode"] = $key;
+            break;
+          }
+        }
+      }
+
+      return $returnArray;
+    }
+
     public function getTwigParams($pluginSettings) {
       $twigParams = $pluginSettings;
+
+      $twigParams["languages"] = $this->getLanguages();
 
       // navigationItems
       $twigParams["navigationItems"] = $this->convertFlatMenuItemsToTree(
@@ -78,6 +99,14 @@ namespace ADIOS\Plugins\WAI\Common {
           "enum_values" => (new \ADIOS\Widgets\Website\Models\WebMenu($this->adios))
             ->getEnumValues()
           ,
+        ],
+        "slogan" => [
+          "title" => "Short slogan",
+          "type" => "varchar",
+        ],
+        "shortContact" => [
+          "title" => "Short contact info in header",
+          "type" => "varchar",
         ],
       ];
     }

@@ -602,7 +602,7 @@ class Input extends \ADIOS\Core\UI\View {
           if ('' != $this->params['value']) {
               $img_src = "{$this->adios->config['url']}/Image?cfg=input&f=".urlencode($this->params['value']);
           } else {
-              $img_src = "{$this->adios->config['url']}/assets/images/empty.png";
+              $img_src = "{$this->adios->config['url']}/adios/assets/images/empty.png";
           }
 
           $html = "
@@ -610,54 +610,68 @@ class Input extends \ADIOS\Core\UI\View {
               src='{$img_src}'
               id='{$this->params['uid']}_image'
               class='adios ui Input image_input_img'
+              onclick='$(\"#{$this->params['uid']}_browser\").show(100);'
             />
 
-            ".$this->adios->ui->Button([
-              "fa_icon" => "fas fa-search",
+            <!-- ".$this->adios->ui->Button([
+              "fa_icon" => "fas fa-file-upload",
               "class" => "btn btn-light btn-icon-split ml-1",
-              "text" => "Select",
+              "text" => "Browse or Upload",
               "onclick" => "
-                $('#{$this->params['uid']}_browser').slideDown(100);
+                $('#{$this->params['uid']}_browser').show(100);
               ",
-            ])->render()."
+            ])->render()." -->
 
             <div
               id='{$this->params['uid']}_browser'
-              class='shadow'
               style='
                 position: fixed;
-                left: 0px;
-                top: 0px;
+                left: 0;
+                top: 0;
                 width: 100%;
-                z-index: 1;
-                background: white;
+                height: 100%;
+                background: #FFFFFF80;
                 display: none;
               '
             >
-              <div style='margin:1em'>
-                ".(new \ADIOS\Core\UI\Input\FileBrowser($this->adios, $this->params['uid'], [
-                  "mode" => "select",
-                  "value" => $this->params['value'],
-                  "subdir" => $this->params['subdir'],
-                  "onchange" => "
-                    $('#{$this->params['uid']}_image').attr(
-                      'src',
-                      '{$img_src_base}/' + file
-                    );
+              <div
+                class='shadow'
+                style='
+                  position: fixed;
+                  right: 0px;
+                  top: 0px;
+                  width: 85%;
+                  height: 100%;
+                  z-index: 1;
+                  background: white;
+                  
+                '
+              >
+                <div>
+                  ".$this->adios->ui->Button([
+                    "fa_icon" => "fas fa-times",
+                    "text" => "Close files and media browser",
+                    "class" => "btn btn-secondary btn-icon-split",
+                    "onclick" => "
+                      $('#{$this->params['uid']}_browser').hide();
+                    ",
+                  ])->render()."
+                </div>
+                <div style='margin:1em'>
+                  ".(new \ADIOS\Core\UI\Input\FileBrowser($this->adios, $this->params['uid'], [
+                    "mode" => "select",
+                    "value" => $this->params['value'],
+                    "subdir" => $this->params['subdir'],
+                    "onchange" => "
+                      $('#{$this->params['uid']}_image').attr(
+                        'src',
+                        '{$img_src_base}/' + file
+                      );
 
-                    $('#{$this->params['uid']}_browser').hide();
-                  ",
-                ]))->render()."
-              </div>
-              <div class='float-right'>
-                ".$this->adios->ui->Button([
-                  "fa_icon" => "fas fa-times",
-                  "text" => "Zavrieť",
-                  "class" => "btn btn-secondary btn-icon-split",
-                  "onclick" => "
-                    $('#{$this->params['uid']}_browser').hide();
-                  ",
-                ])->render()."
+                      $('#{$this->params['uid']}_browser').hide();
+                    ",
+                  ]))->render()."
+                </div>
               </div>
             </div>
           ";

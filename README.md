@@ -89,11 +89,8 @@ It is adviced to change these defaults.
 
 ## Go beyond
 
-Now, when you are ready with your first & default Surikata online store, follow these guides to customize it:
-
-  * <a href='https://www.surikata.io/documentation/create-your-first-plugin' target=_blank>Create your first plugin</a>
-  * <a href='https://www.surikata.io/documentation/customize-the-theme' target=_blank>Customize the theme</a>
+Now, when you are ready with your first & default Surikata online store, follow the <a href='https://www.surikata.io/documentation/programmers-guide' target=_blank>programmer's guide</a> to become a Surikata.io master.
 
 ## Contribute
 
-Feel free to use and contribute.
+We happily welcome the contributions for plugins (the src/Plugins/ folder) or themes (the src/Themes/) folder. Or you can buy us a beer.

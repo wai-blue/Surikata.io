@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\UI\FileBrowser;
 
+/**
+ * @package UI\Actions\FileBrowser
+ */
 class Upload extends \ADIOS\Core\Action {
   public static $hideDefaultDesktop = TRUE;
 

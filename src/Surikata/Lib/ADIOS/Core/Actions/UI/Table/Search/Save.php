@@ -9,6 +9,9 @@
 */
 
 namespace ADIOS\Actions\UI\Table\Search;
+/**
+ * @package UI\Actions
+ */
 class Save extends \ADIOS\Core\Action {
   public function render() {
     $search = json_encode([

@@ -11,10 +11,31 @@
 namespace ADIOS\Core\UI;
 
 class View {
+  
+  /**
+   * componentsCounter
+   *
+   * @internal
+   * @var int
+   */
   private $componentsCounter = 0;
-
+  
+  /**
+   * languageDictionary
+   *
+   * @internal
+   * @var array
+   */
   public $languageDictionary = [];
-
+  
+  /**
+   * __construct
+   *
+   * @internal
+   * @param  mixed $adios
+   * @param  mixed $params
+   * @return void
+   */
   public function __construct(&$adios, $params = null) {
     ++$this->componentsCounter;
 
@@ -49,11 +70,23 @@ class View {
       $this->add_class($params['class']);
     }
   }
-
+  
+  /**
+   * translate
+   *
+   * @internal
+   * @param  mixed $string
+   * @param  mixed $context
+   * @param  mixed $toLanguage
+   * @return void
+   */
   public function translate($string, $context = "", $toLanguage = "") {
     return $this->adios->translate($string, $context, $toLanguage, $this->languageDictionary);
   }
-
+  
+  /**
+   * @internal
+   */
   public function add($subviews, $panel = 'default') {
       if (is_array($subviews)) {
           foreach ($subviews as $subview) {
@@ -72,13 +105,29 @@ class View {
 
       return $this;
   }
-
+  
+  /**
+   * cadd
+   *
+   * @internal
+   * @param  mixed $component_name
+   * @param  mixed $params
+   * @return void
+   */
   public function cadd($component_name, $params = null) {
     $this->add($this->adios->ui->create($component_name, $params));
 
     return $this;
   }
-
+  
+  /**
+   * param
+   *
+   * @internal
+   * @param  mixed $param_name
+   * @param  mixed $param_value
+   * @return void
+   */
   public function param($param_name, $param_value = null) {
     if (null === $param_value) {
       return $this->params[$param_name];
@@ -94,8 +143,7 @@ class View {
    *
    * @version 1
    *
-   * @author Andrej Macháč
-   *
+   * @internal
    * @param array $params Pole pôvodných parametrov
    * @param array $update Pole parametrov, ktoré aktualizujú a dopĺňajú $params
    *
@@ -144,7 +192,15 @@ class View {
 
     return $params;
   }
-
+  
+  /**
+   * html
+   *
+   * @internal
+   * @param  mixed $new_html
+   * @param  mixed $panel
+   * @return void
+   */
   public function html($new_html = null, $panel = 'default') {
     if (null === $new_html) {
       return $this->html[$panel];
@@ -154,13 +210,29 @@ class View {
 
     return $this;
   }
-
+  
+  /**
+   * on
+   *
+   * @internal
+   * @param  mixed $event_name
+   * @param  mixed $event_js
+   * @return void
+   */
   public function on($event_name, $event_js) {
     $this->params['on'][$event_name] .= $event_js;
 
     return $this;
   }
-
+  
+  /**
+   * add_class
+   *
+   * @internal
+   * @param  mixed $class_name
+   * @param  mixed $target
+   * @return void
+   */
   public function add_class($class_name, $target = '') {
     if (!in_array($target, ['', 'desktop', 'mobile', 'tablet'])) {
       $target = '';
@@ -184,7 +256,14 @@ class View {
 
     return $this;
   }
-
+  
+  /**
+   * remove_class
+   *
+   * @internal
+   * @param  mixed $class_name
+   * @return void
+   */
   public function remove_class($class_name) {
     $tmp_classes = [];
     foreach ($this->classes as $tmp_class) {
@@ -196,7 +275,14 @@ class View {
 
     return $this;
   }
-
+  
+  /**
+   * render
+   *
+   * @internal
+   * @param  mixed $panel
+   * @return void
+   */
   public function render(string $panel = '') {
     $html = '';
 
@@ -221,7 +307,13 @@ class View {
 
     return $html;
   }
-
+  
+  /**
+   * main_params
+   *
+   * @internal
+   * @return void
+   */
   public function main_params() {
     // pre inputy, ktore su disabled sa nastavi tento parameter, aby sa nedostali do udajov selectovanych cez ui_form_get_values
     if ('m_ui_input' == get_class($this)) {
@@ -237,7 +329,15 @@ class View {
       {$adios_disabled_attribute}
     ";
   }
-
+  
+  /**
+   * attr
+   *
+   * @internal
+   * @param  mixed $attr
+   * @param  mixed $val
+   * @return void
+   */
   public function attr($attr, $val) {
     $this->attrs[$attr] = $val;
   }

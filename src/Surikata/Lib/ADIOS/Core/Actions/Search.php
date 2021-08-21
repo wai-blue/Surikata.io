@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions;
 
+/**
+ * @package UI\Actions
+ */
 class Search extends \ADIOS\Core\Action {
   public function preRender() {
     $items = [];

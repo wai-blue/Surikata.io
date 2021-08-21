@@ -41,7 +41,7 @@ namespace Surikata\Plugins\WAI\Customer {
       try {
         $customerTokenInfo = $customerTokenAssignmentModel->validateToken($token);
         $twigParams["accountInfo"] = $customerTokenInfo;
-      } catch (\ADIOS\Core\InvalidToken $e) {
+      } catch (\ADIOS\Core\Exceptions\InvalidToken $e) {
         $twigParams["status"] = "FAIL";
         $twigParams["error"] = "Invalid token: ".$e->getMessage();
       } catch (\Exception $e) {

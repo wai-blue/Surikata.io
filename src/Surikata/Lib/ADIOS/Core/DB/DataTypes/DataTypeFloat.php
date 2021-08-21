@@ -10,8 +10,10 @@
 
 namespace ADIOS\Core\DB\DataTypes;
 
+/**
+ * @package DataTypes
+ */
 class DataTypeFloat extends DataType {
-
     public function get_sql_create_string($table_name, $col_name, $params = []) {
       $params['sql_definitions'] = '' != trim($params['sql_definitions']) ? $params['sql_definitions'] : ' default null ';
       $float_decimals = max((int) $params['decimals'], 1);

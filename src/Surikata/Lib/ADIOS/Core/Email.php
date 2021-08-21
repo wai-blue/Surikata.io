@@ -25,7 +25,7 @@ class Email {
   }
 
   public function send() {
-    throw new \ADIOS\Core\Exception("Mailer library is not configured.");
+    throw new \ADIOS\Core\Exceptions\GeneralException("Mailer library is not configured.");
   }
 
 }

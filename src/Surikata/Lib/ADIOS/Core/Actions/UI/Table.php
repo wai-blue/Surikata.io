@@ -9,6 +9,10 @@
 */
 
 namespace ADIOS\Actions\UI;
+
+/**
+ * @package UI\Actions
+ */
 class Table extends \ADIOS\Core\Action {
   function render() {
 

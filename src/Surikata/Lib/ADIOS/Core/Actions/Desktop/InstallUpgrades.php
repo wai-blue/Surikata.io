@@ -10,6 +10,11 @@
 
 namespace ADIOS\Actions\Desktop;
 
+/**
+ * 'Desktop/InstallUpgrades' action. Installs database upgrades of models in the ADIOS application.
+ *
+ * @package UI\Actions\Desktop
+ */
 class InstallUpgrades extends \ADIOS\Core\Action {
   function render() {
     $html = "
@@ -26,7 +31,7 @@ class InstallUpgrades extends \ADIOS\Core\Action {
         try {
           $model->installUpgrades();
           $html .= "<span style='color:green'>OK</span><br/>";
-        } catch (\ADIOS\Core\DBException $e) {
+        } catch (\ADIOS\Core\Exceptions\DBException $e) {
           $html .= "<span style='color:red'>".$e->getMessage()."</span><br/>";
         }
       }

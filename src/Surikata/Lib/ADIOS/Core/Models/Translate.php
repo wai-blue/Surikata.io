@@ -10,6 +10,11 @@
 
 namespace ADIOS\Core\Models;
 
+/**
+ * Model for storing language translations. Stored in 'translate' SQL table.
+ *
+ * @package DefaultModels
+ */
 class Translate extends \ADIOS\Core\Model {
   var $sqlName = "";
   

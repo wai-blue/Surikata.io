@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\Desktop;
 
+/**
+ * @package UI\Actions
+ */
 class SimpleProfile extends \ADIOS\Core\Action {
   function render() {
     return $this->adios->renderAction("UI/Form", [

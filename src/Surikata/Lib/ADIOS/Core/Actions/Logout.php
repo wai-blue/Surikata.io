@@ -2,6 +2,9 @@
 
 namespace ADIOS\Actions;
 
+/**
+ * @package UI\Actions
+ */
 class Logout extends \ADIOS\Core\Action {
   public function preRender() {
     unset($_SESSION[_ADIOS_ID]['userProfile']);

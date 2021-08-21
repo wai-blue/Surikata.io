@@ -9,6 +9,9 @@
 */
 
 namespace ADIOS\Actions\UI\Table;
+/**
+ * @package UI\Actions\Table
+ */
 class Search extends \ADIOS\Core\Action {
   public function render() {
     $model = $this->adios->getModel($this->params['model']);

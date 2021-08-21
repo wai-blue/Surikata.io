@@ -1,15 +1,12 @@
 <?php
 
-/*
-  This file is part of ADIOS Framework.
-
-  This file is published under the terms of the license described
-  in the license.md file which is located in the root folder of
-  ADIOS Framework package.
-*/
-
 namespace ADIOS\Core\UI;
 
+/**
+ * Renders Card-based list of elements.
+ *
+ * @package UI\Elements
+ */
 class Cards extends \ADIOS\Core\UI\View {
   public function render(string $panel = "") {
     $model = $this->adios->getModel($this->params['model']);
@@ -32,7 +29,6 @@ class Cards extends \ADIOS\Core\UI\View {
       return $query;
     });
 
-    // $html = _print_r($cards, TRUE);
     $html = "
       <div class='row'>
     ";

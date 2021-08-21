@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\UI;
 
+/**
+ * @package UI\Actions
+ */
 class Tree extends \ADIOS\Core\Action {
   function render($params = []) {
     return $this->adios->ui->Tree($params)->render();

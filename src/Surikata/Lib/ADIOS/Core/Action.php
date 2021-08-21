@@ -1,13 +1,5 @@
 <?php
 
-/*
-  This file is part of ADIOS Framework.
-
-  This file is published under the terms of the license described
-  in the license.md file which is located in the root folder of
-  ADIOS Framework package.
-*/
-
 namespace ADIOS\Core;
 
 /**
@@ -114,9 +106,11 @@ class Action {
   }
   
   /**
-   * Renderer of the action's content. Can be completely overriden without use of Twig.
+   * Renders the content of requested action using Twig template.
+   * In most cases is this method overriden.
    *
    * @return string Rendered HTML content of the action.
+   * @return array Key-value pair of output values. Will be converted to JSON.
    * 
    * @throws \Twig\Error\RuntimeError
    * @throws \Twig\Error\LoaderError

@@ -10,6 +10,29 @@
 
 namespace ADIOS\Core\UI;
 
+/**
+ * Renders input element (or elements) for a specific data type.
+ *
+ * Supported data types are:
+ *   * Char, Varchar, Int or Float (renders either *input* or *select* if enumValues are not empty)
+ *   * Text (renders *textarea*)
+ *   * Password (renders *input type='password'*)
+ *   * Date or DateTime (renders *input* with date/datetime picker)
+ *   * Lookup (renders either *select* or an autocomplete)
+ *   * Image or File (renders a complex input for uploading and selecting the image or file)
+ *   * Color (renders the complex input for color selection)
+ *
+ * Example code to render the input for *char* data type:
+ *
+ * ```php
+ *   $adios->ui->Input([
+ *     "type" => "char",
+ *     "value" => "Hello World",
+ *   ]);
+ * ```
+ *
+ * @package UI\Elements
+ */
 class Input extends \ADIOS\Core\UI\View {
     /*             */
     /* __construct */

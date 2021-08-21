@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\UI\Input;
 
+/**
+ * @package UI\Actions\Input
+ */
 class Autocomplete extends \ADIOS\Core\Action {
   public function render() {
     $tmpValue = str_replace(' ', '', str_replace('.', '', str_replace(',', '', str_replace('-', '', str_replace('_', '', $this->params['value'])))));

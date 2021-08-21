@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\UI\Table;
 
+/**
+ * @package UI\Actions\Table
+ */
 class Copy extends \ADIOS\Core\Action {
   public function render($params = []) {
 

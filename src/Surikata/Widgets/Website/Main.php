@@ -218,7 +218,7 @@ class Website extends \ADIOS\Core\Widget {
       if (class_exists($themeClassName)) {
         $this->themes[$theme] = new $themeClassName($this);
       } else {
-        throw new \ADIOS\Core\Exception("Can't find theme '{$theme}'.");
+        throw new \ADIOS\Core\Exceptions\GeneralException("Can't find theme '{$theme}'.");
       }
     }
 

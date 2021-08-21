@@ -10,11 +10,16 @@
 
 namespace ADIOS\Core\Models;
 
+/**
+ * Model for storing database operations log entries. Stored in 'db_log' SQL table.
+ *
+ * @package DefaultModels
+ */
 class LogDB extends \ADIOS\Core\Model {
   var $sqlName = "";
   
   public function __construct(&$adios) {
-    $this->sqlName = "{$adios->config['system_table_prefix']}_roles";
+    $this->sqlName = "{$adios->config['system_table_prefix']}_db_log";
     parent::__construct($adios);
   }
 

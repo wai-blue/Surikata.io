@@ -311,8 +311,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   }
 
   /**
-   * Installs all upgrades of the model. Internaly stores current version and compares it to list of available upgrades.
+   * Installs all upgrades of the model. Internaly stores current version and
+   * compares it to list of available upgrades.
    *
+   * @throws \ADIOS\Core\DBException When an error occured during the upgrade.
    * @return void
    */
   public function installUpgrades() : void {
@@ -336,9 +338,9 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         $this->adios->db->commit();
         $this->saveConfig('installed-version', $lastVersion);
 
-      } catch(\ADIOS\Core\DBException $e) {
+      } catch(\ADIOS\Core\Exceptions\DBException $e) {
         $this->adios->db->rollback();
-        throw new \ADIOS\Core\DBException($e->getMessage());
+        throw new \ADIOS\Core\Exceptions\DBException($e->getMessage());
       }
     }
   }
@@ -514,20 +516,6 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         case "password":
           $columns[$colName]["byte_size"] = $columns[$colName]["byte_size"] ?? 255;
         break;
-        // case "lookup":
-        //   try {
-        //     $tmpModelClassName = $this->adios->getModelClassName($columns[$colName]["model"]);
-        //     $tmpModel = new $tmpModelClassName($this->adios);
-        //   } catch (Exception $e) {
-        //     throw new \Exception("Model {$this->name}: Failed to initialize lookup column {$colName}.");
-        //   }
-
-        //   $columns[$colName]["key"] = $columns[$colName]["key"] ?? "id";
-        //   $columns[$colName]["table"] = $columns[$colName]["table"] ?? $tmpModel->getFullTableSQLName();
-        //   $columns[$colName]["sql"] = $columns[$colName]["sql"] ?? $tmpModel->lookupSqlValue();
-
-        //   unset($tmpModel);
-        // break;
       }
     }
 
@@ -1042,7 +1030,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
       $returnValue = $this->onAfterSave($data, $returnValue);
 
       return $returnValue;
-    } catch (\ADIOS\Core\FormSaveException $e) {
+    } catch (\ADIOS\Core\Exceptions\FormSaveException $e) {
       return $this->adios->renderHtmlWarning($e->getMessage());
     }
   }

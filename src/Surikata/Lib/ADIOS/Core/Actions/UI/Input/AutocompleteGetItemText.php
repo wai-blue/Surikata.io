@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\UI\Input;
 
+/**
+ * @package UI\Actions\Input
+ */
 class AutocompleteGetItemText extends \ADIOS\Core\Action {
   public function render() {
     $value = (int) $this->params['value'];

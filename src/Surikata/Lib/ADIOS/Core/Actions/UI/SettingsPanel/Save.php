@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\UI\SettingsPanel;
 
+/**
+ * @package UI\Actions\SettingsPanel
+ */
 class Save extends \ADIOS\Core\Action {
   public function render() {
     if (empty($this->params['values'])) {

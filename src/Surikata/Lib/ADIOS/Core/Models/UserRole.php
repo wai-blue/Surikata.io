@@ -10,6 +10,11 @@
 
 namespace ADIOS\Core\Models;
 
+/**
+ * Model for storing list of user roles. Stored in 'roles' SQL table.
+ *
+ * @package DefaultModels
+ */
 class UserRole extends \ADIOS\Core\Model {
   var $sqlName = "";
   var $lookupSqlValue = "{%TABLE%}.name";

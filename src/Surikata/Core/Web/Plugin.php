@@ -13,6 +13,15 @@ class Plugin {
     $this->adminPanel = $this->websiteRenderer->adminPanel;
   }
 
+  /**
+   * Replaces placeholders for variables inside the URL string
+   * with values of the variables.
+   *
+   * @param string $url The URL containing variable placeholders in {% variableName %} format.
+   * @param array $urlVariables Variable values to be replaced.
+   *
+   * @return string URL string with replaced variable values.
+   */
   public function replaceUrlVariables($url, $urlVariables) {
 
     foreach ($urlVariables as $varName => $varValue) {
@@ -89,6 +98,14 @@ class Plugin {
     return $url;
   }
 
+  /**
+   * Returns the key - value associative array of variables and
+   * their values used in TWIG template.
+   * 
+   * @param array $pluginSettings Settings of the plugin to be rendered. Can be different for multiple usage of the plugin accros the website.
+   * 
+   * @return array Key-Value pair of variable names and their values.
+   */
   public function getTwigParams($pluginSettings) {
     // UPOZORNENIE: TATO METODA BY NEMALA PRACOVAT S DATABAZOU
     // Dovod: ak je 1 plugin pouzity vo viac paneloch, tato metoda
@@ -99,11 +116,13 @@ class Plugin {
   }
 
   /**
-   * Renders content of the plugin without using CASCADA and Twig.
+   * Renders content of the plugin directly as a HTML string.
+   * Disables TWIG rendering.
+   *
    * @return null|string Default implementation returns NULL. Custom implementation should return HTML string.
    */
   public function render() {
-
+    return NULL;
   }
 
 }

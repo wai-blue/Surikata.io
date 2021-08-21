@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\Desktop\Ajax;
 
+/**
+ * @package UI\Actions
+ */
 class ClearConsole extends \ADIOS\Core\Action {
   public function render() {
     $this->adios->console->clear();

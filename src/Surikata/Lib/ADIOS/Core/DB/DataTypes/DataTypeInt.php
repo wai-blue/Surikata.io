@@ -10,6 +10,9 @@
 
 namespace ADIOS\Core\DB\DataTypes;
 
+/**
+ * @package DataTypes
+ */
 class DataTypeInt extends DataType
 {
     public function get_sql_create_string($table_name, $col_name, $params = [])

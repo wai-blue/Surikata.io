@@ -6,19 +6,12 @@ class Plugin extends \ADIOS\Core\Plugin {
 
   var $niceName = ".";
 
-  /*
-
-   * Metoda parsuje URL pattern s pouzitymi premennymi v zapise {% nazovPremennej %}
-   * a do premennej $siteMap vklada taky zaznam, ktory ...
-   * 
-   * return:
-   *   array $settings = [
-   *     "speed" => [
-   *       "title" => "Rýchlosť prehrávania",
-   *       "type" => "varchar",
-   *     ]
-   *   ]
-
+  /**
+   * Converts $urlPattern string with variables in it to a structured
+   * definition of sitemap used in getSitemap() method.
+   * Used as a helper function in getSitemap().
+   *
+   * @return array Converted definition of sitemap (URLs) processed by the plugin.
   */
   public function convertUrlPatternToSiteMap(&$siteMap, $urlPattern, $variables) {
     // example of $variables argument:
@@ -54,24 +47,23 @@ class Plugin extends \ADIOS\Core\Plugin {
 
   }
 
+  /**
+   * Returns the structured definition of sitemap (compatible
+   * with CASCADA's sitemap definition) processed by the plugin
+   * 
+   * @return array Structured sitemap definition compatible with CASCADA.
+  */
   public function getSitemap($pluginSettings = [], $webPageUrl = "") {
     return [];
   }
 
-  /*
-
-   * Metoda vracia pole s definiciou nastaveni, ktore moze
-   * pouzivatel nastavit pri Widgets->Website->ID->Upravit.
-   * Nastavenia sa ukladaju do GTP_web_stranka.content_structure
+  /**
+   * Returns the definition of avaialable settings of the plugin
+   * for the website content management. Each usage of the plugin
+   * on each website of the e-commerce can have different settings
+   * stored.
    * 
-   * return:
-   *   array $settings = [
-   *     "speed" => [
-   *       "title" => "Rýchlosť prehrávania",
-   *       "type" => "varchar",
-   *     ]
-   *   ]
-
+   * @return array Structured definition of available settings of the plugin for the specific web page.
   */
   public function getSettingsForWebsite() {
     return [];

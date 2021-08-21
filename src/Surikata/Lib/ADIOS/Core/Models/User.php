@@ -10,6 +10,11 @@
 
 namespace ADIOS\Core\Models;
 
+/**
+ * Model for storing user profiles. Stored in 'users' SQL table.
+ *
+ * @package DefaultModels
+ */
 class User extends \ADIOS\Core\Model {
   var $sqlName = "";
   var $urlBase = "Pouzivatelia";

@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\UI\Table;
 
+/**
+ * @package UI\Actions\Table
+ */
 class Refresh extends \ADIOS\Core\Action {
   public function render($params = []) {
     $tmp['refresh'] = 1;

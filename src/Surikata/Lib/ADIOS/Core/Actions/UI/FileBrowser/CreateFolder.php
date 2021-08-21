@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\UI\FileBrowser;
 
+/**
+ * @package UI\Actions\FileBrowser
+ */
 class CreateFolder extends \ADIOS\Core\Action {
   public function render() {
     $folder = $this->params['folder'];

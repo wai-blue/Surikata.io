@@ -10,6 +10,10 @@
 
 namespace ADIOS\Core\DB\DataTypes;
 
+/**
+ * @todo Format the code properly
+ * @package DataTypes
+ */
 class DataTypeColor extends DataType
 {
     public function get_sql_create_string($table_name, $col_name, $params = [])

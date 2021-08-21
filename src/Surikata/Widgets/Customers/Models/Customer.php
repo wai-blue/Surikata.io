@@ -389,25 +389,39 @@ class Customer extends \ADIOS\Core\Model {
       "params" => $params,
     ])["params"];
   }
-
+  
+  /**
+   * Validates customer's data when modifying through UI/Form.
+   *
+   * @param  array $data Customer's data
+   * @throws \ADIOS\Core\FormSaveException When customer's data are not valid.
+   * @return void
+   */
   public function formValidate($data) {
     if (empty($data['email'])) {
-      throw new \ADIOS\Core\FormSaveException("Email is required.");
+      throw new \ADIOS\Core\Exceptions\FormSaveException("Email is required.");
     }
 
     if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-      throw new \ADIOS\Core\FormSaveException("Email is not valid.");
+      throw new \ADIOS\Core\Exceptions\FormSaveException("Email is not valid.");
     }
 
     if ($data['id'] <= 0) {
       $customer = $this->getByEmail($data['email']);
 
       if ($customer['id'] > 0) {
-        throw new \ADIOS\Core\FormSaveException("Account with email '{$data['email']}' already exists.");
+        throw new \ADIOS\Core\Exceptions\FormSaveException("Account with email '{$data['email']}' already exists.");
       }
     }
   }
-
+  
+  /**
+   * Authenticates the customer using his email and password.
+   *
+   * @param  string $loginEmail Customer's email.
+   * @param  string $loginPassword Customer's password.
+   * @return object|null Returns NULL if authentication fails, otherwise the customer's profile information.
+   */
   public function authenticate($loginEmail, $loginPassword) {
     $tmp = $this
       ->where('email', '=', $loginEmail)
@@ -422,6 +436,8 @@ class Customer extends \ADIOS\Core\Model {
       if (password_verify($loginPassword, $tmp['password'])) {
         return $tmp;
       }
+    } else {
+      return NULL;
     }
   }
 

@@ -30,13 +30,27 @@ class Loader extends \ADIOS\Core\Loader {
     // override console to log DB errors
     $this->console = new \Surikata\Core\AdminPanel\Console($this);
 
+    if (is_object($this->websiteRenderer)) {
+      $this->websiteRenderer->pages = $this->websiteRenderer->loadPublishedPages();
+    }
   }
-
+  
+  /**
+   * Surikata's implementation of ADIOS checkPermissionsForAction.
+   * Throws exception when signed user does not have permission for rendering
+   * requested action.
+   *
+   * @throws \ADIOS\Core\NotEnoughPermissionsException
+   *
+   * @param  mixed $action
+   * @param  mixed $params
+   * @return void
+   */
   public function checkPermissionsForAction($action, $params) {
     if ($action != "Desktop") {
       if ($this->userProfile['id_role'] == self::USER_ROLE_SALES) {
         if (strpos($params['model'], "Widgets/Products/Models") !== FALSE) {
-          throw new \ADIOS\Core\NotEnoughPermissionsException("You don't have permissions to manage products.");
+          throw new \ADIOS\Core\Exceptions\NotEnoughPermissionsException("You don't have permissions to manage products.");
         }
       }
     }
@@ -161,11 +175,16 @@ class Loader extends \ADIOS\Core\Loader {
       "id_role" => self::USER_ROLE_ONLINE_MARKETING,
     ]);
   }
-
+  
+  /**
+   * Creates required folders in the project if they are missing
+   *
+   * @throws \Exception When failed to create at least one folder.
+   *
+   * @return void
+   */
   public function createMissingFolders() {
-    // Create missing folders
     foreach (get_defined_constants(true)['user'] as $const => $value) {
-
       if (
         '_DIR' === substr($const, -4) 
         && is_string($value)

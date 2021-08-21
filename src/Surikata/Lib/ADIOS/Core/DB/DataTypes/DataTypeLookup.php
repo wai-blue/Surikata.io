@@ -15,6 +15,9 @@ if (
   && (empty($onkeypress_request) || $onkeypress_request != 'yes')
 ) {
 
+    /**
+    * @package DataTypes
+    */
     class DataTypeLookup extends DataType {
         public function get_sql_create_string($table_name, $col_name, $params = [])
         {

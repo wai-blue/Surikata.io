@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\UI;
 
+/**
+ * @package UI\Actions
+ */
 class Title extends \ADIOS\Core\Action {
   public function render() {
     return $this->adios->ui->Title($this->params)->render();

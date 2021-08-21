@@ -45,7 +45,7 @@ if (_count($ids)) {
             }
         }
         $adios->db->commit();
-    } catch (\ADIOS\Core\DBException $e) {
+    } catch (\ADIOS\Core\Exceptions\DBException $e) {
         $adios->db->rollback();
         $error = l('Nastala databázová chyba!');
     }

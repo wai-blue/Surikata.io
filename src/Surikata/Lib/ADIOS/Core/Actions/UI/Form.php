@@ -9,6 +9,9 @@
 */
 
 namespace ADIOS\Actions\UI;
+/**
+ * @package UI\Actions
+ */
 class Form extends \ADIOS\Core\Action {
   public function render() {
     return $this->adios->ui->form($this->params)->render();

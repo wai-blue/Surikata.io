@@ -1,16 +1,8 @@
 <?php
 
-/*
-  This file is part of ADIOS Framework.
+namespace ADIOS\Core\Lib;
 
-  This file is published under the terms of the license described
-  in the license.md file which is located in the root folder of
-  ADIOS Framework package.
-*/
-
-namespace Twig\Loader;
-
-class ADIOSTwigLoader implements \Twig\Loader\LoaderInterface {
+class TwigLoader implements \Twig\Loader\LoaderInterface {
   public function __construct(&$adios) {
     $this->adios = $adios;
   }
@@ -19,9 +11,7 @@ class ADIOSTwigLoader implements \Twig\Loader\LoaderInterface {
     * Returns the source context for a given template logical name.
     *
     * @param string $name The template logical name
-    *
     * @return \Twig\Source
-    *
     * @throws \Twig\Error\LoaderError When $name is not found
     */
   public function getSourceContext($name): \Twig\Source {

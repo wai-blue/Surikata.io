@@ -10,6 +10,11 @@
 
 namespace ADIOS\Core\Models;
 
+/**
+ * Model for storing various validation tokens. Stored in 'tokens' SQL table.
+ *
+ * @package DefaultModels
+ */
 class Token extends \ADIOS\Core\Model {
   var $sqlName = "";
   var $lookupSqlValue = "{%TABLE%}.token";
@@ -51,7 +56,7 @@ class Token extends \ADIOS\Core\Model {
     if (!in_array($type, $this->tokenTypes)) {
       $this->tokenTypes[] = $type;
     } else {
-      throw new \ADIOS\Core\Exception("Duplicate token type: {$type}");
+      throw new \ADIOS\Core\Exceptions\GeneralException("Duplicate token type: {$type}");
     }
   }
 
@@ -59,7 +64,7 @@ class Token extends \ADIOS\Core\Model {
     $token = uniqid()."-".md5($tokenSalt);
 
     if (!in_array($tokenType, $this->tokenTypes)) {
-      throw new \ADIOS\Core\Exception("Unknown token type: {$tokenType}");
+      throw new \ADIOS\Core\Exceptions\GeneralException("Unknown token type: {$tokenType}");
     }
 
     if ($validTo === NULL) {
@@ -67,7 +72,7 @@ class Token extends \ADIOS\Core\Model {
     }
 
     if (strtotime($validTo) < time()) {
-      throw new \ADIOS\Core\Exception("Token validity can not be in the past.");
+      throw new \ADIOS\Core\Exceptions\GeneralException("Token validity can not be in the past.");
     }
 
     $tokenId = $this->insertRow([
@@ -89,7 +94,7 @@ class Token extends \ADIOS\Core\Model {
     $tokenData = reset($this->fetchQueryAsArray($tokenQuery));
 
     if (!is_array($tokenData)) {
-      throw new \ADIOS\Core\InvalidToken($token);
+      throw new \ADIOS\Core\Exceptions\InvalidToken($token);
     }
 
     return $tokenData;

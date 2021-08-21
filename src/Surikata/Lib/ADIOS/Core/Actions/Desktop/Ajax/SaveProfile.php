@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\Desktop\Ajax;
 
+/**
+ * @package UI\Actions
+ */
 class SaveProfile extends \ADIOS\Core\Action {
   public function render() {
     $id = $this->adios->userProfile['id'];

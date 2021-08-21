@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\UI\Table;
 
+/**
+ * @package UI\Actions\Table
+ */
 class Delete extends \ADIOS\Core\Action {
 
   public function render() {
@@ -19,11 +22,11 @@ class Delete extends \ADIOS\Core\Action {
       if (is_numeric($this->params['id'])) {
         $tmpModel->deleteRow($this->params['id']);
       } else {
-        throw new \ADIOS\Core\ActionException("Nothing to delete.");
+        throw new \ADIOS\Core\Exceptions\GeneralException("Nothing to delete.");
       }
 
       return "1";
-    } catch (\ADIOS\Core\ActionException $e) {
+    } catch (\ADIOS\Core\Exceptions\GeneralException $e) {
       return $e->getMessage();
     }
   }

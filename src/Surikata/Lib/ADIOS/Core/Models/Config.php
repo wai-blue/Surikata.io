@@ -10,6 +10,11 @@
 
 namespace ADIOS\Core\Models;
 
+/**
+ * Model for storing application configuration. Stored in 'config' SQL table.
+ *
+ * @package DefaultModels
+ */
 class Config extends \ADIOS\Core\Model {
   var $sqlName = "";
   

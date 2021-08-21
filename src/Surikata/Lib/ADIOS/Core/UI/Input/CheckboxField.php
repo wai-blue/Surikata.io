@@ -25,7 +25,7 @@ class CheckboxField extends \ADIOS\Core\Input {
     $columns = $model->columns();
 
     if (empty($this->params['model']) || !is_array($columns)) {
-      throw new \ADIOS\Core\Exception("CheckboxField Input: Error #1");
+      throw new \ADIOS\Core\Exceptions\GeneralException("CheckboxField Input: Error #1");
     }
 
     $valuesRaw = $this->adios->db->get_all_rows_query("

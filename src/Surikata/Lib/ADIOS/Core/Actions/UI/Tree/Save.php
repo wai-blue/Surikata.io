@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\UI\Tree;
 
+/**
+ * @package UI\Actions\Tree
+ */
 class Save extends \ADIOS\Core\Action {
   public function render() {
     $params = $this->params;

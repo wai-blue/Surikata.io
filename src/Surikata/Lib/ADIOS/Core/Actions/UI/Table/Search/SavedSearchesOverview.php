@@ -9,15 +9,17 @@
 */
 
 namespace ADIOS\Actions\UI\Table\Search;
+
+/**
+ * @package UI\Actions
+ */
 class SavedSearchesOverview extends \ADIOS\Core\Action {
   public function render() {
     $searchGroup = $this->params["searchGroup"];
     $savedSearches = $this->adios->config["UI"]["Table"]["savedSearches"][$searchGroup];
     $parentUid = $this->params["parentUid"];
 
-    if (!$this->adios->checkUid($parentUid)) {
-      throw new \ADIOS\Core\InvalidUidException();
-    }
+    $this->adios->checkUid($parentUid);
     
     $savedSearchesHtml = "";
     if (_count($savedSearches)) {

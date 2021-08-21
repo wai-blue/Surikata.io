@@ -10,18 +10,7 @@
 
 namespace ADIOS\Core;
 
-class Exception extends \Exception { }
-class NotEnoughPermissionsException extends \Exception { }
-class DBException extends \Exception { }
-class DBDuplicateEntryException extends \Exception { }
-class ActionException extends \Exception { }
-class ModelInstallationException extends \Exception { }
-class InvalidUidException extends \Exception { }
-class FormSaveException extends \Exception { }
-class InvalidToken extends \Exception { }
-
 // ADIOS Loader class
-
 class Loader {
   public $gtp = "";
   public $requestedURI = "";
@@ -109,10 +98,6 @@ class Loader {
       global $gtp;
 
       $gtp = $this->config['global_table_prefix'];
-
-      // if (!ini_get('short_open_tag')) {
-      //   throw new \Exception('FATAL ERROR: short_open_tag is disabled. Enable it in php.ini.');
-      // }
 
       // nacitanie zakladnych ADIOS lib suborov
       include(dirname(__FILE__)."/Lib/basic_functions.php");
@@ -290,7 +275,7 @@ class Loader {
 
         // inicializacia twigu
 
-        $twigLoader = new \Twig\Loader\ADIOSTwigLoader($this);
+        $twigLoader = new \ADIOS\Core\Lib\TwigLoader($this);
         $this->twig = new \Twig\Environment($twigLoader, array(
           'cache' => FALSE,
           'debug' => TRUE,
@@ -365,22 +350,22 @@ class Loader {
   public function getModelClassName($modelName) {
     return "\\ADIOS\\".str_replace("/", "\\", $modelName);
   }
-
-  public function getModel($modelName) {
+  
+  /**
+   * Returns the object of the model referenced by $modelName.
+   * The returned object is cached into modelObjects property.
+   *
+   * @param  string $modelName Reference of the model. E.g. 'Core/Models/User'.
+   * @throws \ADIOS\Core\Exception If $modelName is not available.
+   * @return object Instantiated object of the model.
+   */
+  public function getModel(string $modelName) {
     if (!isset($this->modelObjects[$modelName])) {
       try {
         $modelClassName = $this->getModelClassName($modelName);
-
         $this->modelObjects[$modelName] = new $modelClassName($this);
-
-        // $this->db->addTable(
-        //   $this->modelObjects[$modelName]->getFullTableSQLName(),
-        //   $this->modelObjects[$modelName]->columns()
-        // );
-        // $this->addRouting($this->modelObjects[$modelName]->routing());
-
       } catch (\Exception $e) {
-        throw new \ADIOS\Core\Exception("Can't find model '{$modelName}'. ".$e->getMessage());
+        throw new \ADIOS\Core\Exceptions\GeneralException("Can't find model '{$modelName}'. ".$e->getMessage());
       }
     }
 
@@ -556,13 +541,13 @@ class Loader {
 
         $model->install();
         echo " [".round((microtime(true) - $start) * 1000, 2)." msec]. ";
-      } catch (\ADIOS\Core\ModelInstallationException $e) {
+      } catch (\ADIOS\Core\Exceptions\ModelInstallationException $e) {
         echo ", <span style='color:orange'>Skipped. Reason: {$e->getMessage()}</span> ";
       } catch (\Exception $e) {
         echo ", <span style='color:red'>Failed. Reason: {$e->getMessage()}.</span> ";
       } catch (\Illuminate\Database\QueryException $e) {
         //
-      } catch (\ADIOS\Core\DBException $e) {
+      } catch (\ADIOS\Core\Exceptions\DBException $e) {
         // Moze sa stat, ze vytvorenie tabulky zlyha napr. kvoli
         // "Cannot add or update a child row: a foreign key constraint fails".
         // V takom pripade budem instalaciu opakovat v dalsom kole
@@ -585,7 +570,7 @@ class Loader {
         echo ", <span style='color:red'>Failed. Reason: {$e->getMessage()}.</span> ";
       } catch (\Illuminate\Database\QueryException $e) {
         //
-      } catch (\ADIOS\Core\DBException $e) {
+      } catch (\ADIOS\Core\Exceptions\DBException $e) {
         //
       }
     }
@@ -604,7 +589,7 @@ class Loader {
         }
       } catch (\Exception $e) {
         echo ", <span style='color:red'>failed.</span> ";
-      } catch (\ADIOS\Core\DBException $e) {
+      } catch (\ADIOS\Core\Exceptions\DBException $e) {
         // Moze sa stat, ze vytvorenie tabulky zlyha napr. kvoli
         // "Cannot add or update a child row: a foreign key constraint fails".
         // V takom pripade budem instalaciu opakovat v dalsom kole
@@ -633,7 +618,18 @@ class Loader {
   //   - kontrolu requestu podla $_REQUEST['c']
   //   - vygenerovanie UID
   //   - renderovanie naroutovanej akcie
-
+  
+  /**
+   * Renders the requested content. It can be the (1) whole desktop with complete <html>
+   * content; (2) the HTML of an action requested dynamically using AJAX; or (3) a JSON
+   * string requested dynamically using AJAX and further processed in Javascript.
+   *
+   * @param  mixed $params Parameters (a.k.a. arguments) of the requested action.
+   * @throws \ADIOS\Core\Exception When no action is specified or requested action is unknown.
+   * @throws \ADIOS\Core\Exception When running in CLI and requested action is blocked for the CLI.
+   * @throws \ADIOS\Core\Exception When running in SAPI and requested action is blocked for the SAPI.
+   * @return string Rendered content.
+   */
   public function render($params = []) {
     if (preg_match('/(\w+)\/Cron\/(\w+)/', $this->requestedURI, $m)) {
       $cronClassName = str_replace("/", "\\", "/ADIOS/Widgets/{$m[0]}");
@@ -693,22 +689,22 @@ class Loader {
       $this->dispatchEventToPlugins("onADIOSBeforeActionRender", ["adios" => $this]);
 
       if (empty($this->action)) {
-        throw new \ADIOS\Core\Exception("No action specified.");
+        throw new \ADIOS\Core\Exceptions\GeneralException("No action specified.");
       }
 
       $actionClassName = "ADIOS\\Actions\\".str_replace("/", "\\", $this->action);
 
       if (!class_exists($actionClassName)) {
-        throw new \ADIOS\Core\Exception("Unknown action '{$this->action}'.");
+        throw new \ADIOS\Core\Exceptions\GeneralException("Unknown action '{$this->action}'.");
       }
 
       if (php_sapi_name() === 'cli') {
         if (!$actionClassName::$cliSAPIEnabled) {
-          throw new \ADIOS\Core\Exception("Action is not available for CLI interface.");
+          throw new \ADIOS\Core\Exceptions\GeneralException("Action is not available for CLI interface.");
         }
       } else {
         if (!$actionClassName::$webSAPIEnabled) {
-          throw new \ADIOS\Core\Exception("Action is not available for WEB interface.");
+          throw new \ADIOS\Core\Exceptions\GeneralException("Action is not available for WEB interface.");
         }
       }
 
@@ -763,7 +759,7 @@ class Loader {
 
       return $this->renderAction($this->action, $params);
 
-    } catch (\ADIOS\Core\Exception $e) {
+    } catch (\ADIOS\Core\Exceptions\GeneralException $e) {
       $lines = [];
       $lines[] = "ADIOS RUN failed: ".$e->getMessage();
       if ($this->config['debug']) {
@@ -834,7 +830,7 @@ class Loader {
 
     } catch (
       \Illuminate\Database\QueryException
-      | \ADIOS\Core\DBException
+      | \ADIOS\Core\Exceptions\DBException
       $e
     ) {
       $errorMessage = $e->getMessage();
@@ -853,7 +849,7 @@ class Loader {
           {$errorHash}
         </div>
       ");
-    } catch (\ADIOS\Core\NotEnoughPermissionsException $e) {
+    } catch (\ADIOS\Core\Exceptions\NotEnoughPermissionsException $e) {
       $actionHtml = $this->renderWarning($e->getMessage());
     } catch (\Exception $e) {
       $actionHtml = $this->renderHtmlWarning("
@@ -875,13 +871,17 @@ class Loader {
   }
 
   /**
-   * This method is used to check permissions before rendering
-   * an action. The method should be overriden.
+   * Checks user permissions before rendering requested action.
+   * Original implementation does nothing. Must be overriden
+   * the application's main class.
+   *
+   * Does not return anything, only throws exceptions.
    * 
+   * @abstract
    * @param string $action Name of the action to be rendered.
-   * @param array $params Parameters of the action.
-   * 
-   * throws \ADIOS\Core\NotEnoughPermissionsException
+   * @param array $params Parameters (a.k.a. arguments) of the action.
+   * @throws \ADIOS\Core\NotEnoughPermissionsException When the signed user does not have enough permissions.
+   * @return void
    */
   public function checkPermissionsForAction($action, $params) {
     // to be overriden
@@ -916,13 +916,23 @@ class Loader {
   public function renderHtmlWarning($warning) {
     return $this->renderWarning($warning, TRUE);
   }
-
+  
+  /**
+   * Propagates an event to all plugins of the application. Each plugin can
+   * implement hook for the event. The hook must return either modified event
+   * data of FALSE. Returning FALSE in the hook terminates the event propagation.
+   *
+   * @param  string $event Name of the event to propagate.
+   * @param  array $eventData Data of the event. Each event has its own specific structure of the data.
+   * @throws \ADIOS\Core\Exception When plugin's hook returns invalid value.
+   * @return array<string, mixed> Event data modified by plugins which implement the hook.
+   */
   public function dispatchEventToPlugins($event, $eventData = []) {
     foreach ($this->pluginObjects as $plugin) {
       if (method_exists($plugin, $event)) {
         $eventData = $plugin->$event($eventData);
         if (!is_array($eventData) && $eventData !== FALSE) {
-          throw new \ADIOS\Core\Exception("Plugin {$plugin->name}, event {$event}: No value returned. Either forward \$event or return FALSE.");
+          throw new \ADIOS\Core\Exceptions\GeneralException("Plugin {$plugin->name}, event {$event}: No value returned. Either forward \$event or return FALSE.");
         }
 
         if ($eventData === FALSE) {
@@ -1105,16 +1115,22 @@ class Loader {
 
     return $uid;
   }
-
+  
+  /**
+   * Checks the argument whether it is a valid ADIOS UID string.
+   *
+   * @param  string $uid The string to validate.
+   * @throws \ADIOS\Core\Exceptions\InvalidUidException If the provided string is not a valid ADIOS UID string.
+   * @return void
+   */
   public function checkUid($uid) {
-    return !preg_match('/[^A-Za-z0-9\-_]/', $uid);
+    if (preg_match('/[^A-Za-z0-9\-_]/', $uid)) {
+      throw new \ADIOS\Core\Exceptions\InvalidUidException();
+    }
   }
 
   public function setUid($uid) {
-    if (!$this->checkUid($uid)) {
-      exit('Invalid UID');
-    }
-
+    $this->checkUid($uid);
     $this->uid = $uid;
   }
 

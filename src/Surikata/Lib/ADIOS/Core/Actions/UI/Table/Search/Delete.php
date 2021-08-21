@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\UI\Table\Search;
 
+/**
+ * @package UI\Actions
+ */
 class Delete extends \ADIOS\Core\Action {
   public function render() {
     $this->adios->deleteConfig(

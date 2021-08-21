@@ -25,7 +25,7 @@ class ManyToMany extends \ADIOS\Core\Input {
     $columns = $model->columns();
 
     if (empty($this->params['model']) || !is_array($columns)) {
-      throw new \ADIOS\Core\Exception("ManyToMany Input: Error #1");
+      throw new \ADIOS\Core\Exceptions\GeneralException("ManyToMany Input: Error #1");
     }
 
     $srcColumn = $this->params['relation'][0];

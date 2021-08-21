@@ -9,6 +9,10 @@
 */
 
 namespace ADIOS\Actions\UI\Tree;
+
+/**
+ * @package UI\Actions\Tree
+ */
 class GetItemText extends \ADIOS\Core\Action {
   public function render() {
     $model = $this->adios->getModel($this->params['model']);

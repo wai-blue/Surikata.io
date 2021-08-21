@@ -64,11 +64,19 @@ class DB
         }
     }
 
-
+    
+    /**
+     * Connects the DB object to the database.
+     *
+     * @throws \ADIOS\Core\DBException When connection string is not configured.
+     * @throws \ADIOS\Core\DBException When connection error occured.
+     *
+     * @return void
+     */
     public function connect() {
 
       if (empty($this->db_host)) {
-        throw new \ADIOS\Core\DBException("Database connection string is not configured.");
+        throw new \ADIOS\Core\Exceptions\DBException("Database connection string is not configured.");
       }
 
       if (!empty($this->db_port) && is_numeric($this->db_port)) {
@@ -78,7 +86,7 @@ class DB
       }
 
       if (!empty($this->connection->connect_error)) {
-        throw new \ADIOS\Core\DBException($this->connection->connect_error);
+        throw new \ADIOS\Core\Exceptions\DBException($this->connection->connect_error);
       }
 
       $this->connection->select_db($this->db_name);
@@ -147,8 +155,10 @@ class DB
      *
      * @param string SQL query to run
      *
-     * @see multi_query
-     * @see fetch_array
+     * @throws \ADIOS\Core\DBDuplicateEntryException When foreign key constrain block the query execution.
+     * @throws \ADIOS\Core\DBException In case of any other error.
+     *
+     * @return object DB result object.
      */
     public function query($query, $initiatingModel = NULL) {
       $query = trim($query, " ;");
@@ -169,9 +179,9 @@ class DB
             $message .= $initiatingModel->name;
           }
 
-          throw new \ADIOS\Core\DBDuplicateEntryException("{$message} ERROR: {$this->connection->error} QUERY: {$query}");
+          throw new \ADIOS\Core\Exceptions\DBDuplicateEntryException("{$message} ERROR: {$this->connection->error} QUERY: {$query}");
         } else {
-          throw new \ADIOS\Core\DBException($this->get_error().", QUERY: {$query}");
+          throw new \ADIOS\Core\Exceptions\DBException($this->get_error().", QUERY: {$query}");
         }
       } else {
         if ($this->debug_correct_queries) {
@@ -600,7 +610,7 @@ class DB
         if (!$force_create) {
             try {
                 $cnt = $this->count_all_rows_query("select * from `{$table_name}`");
-            } catch (\ADIOS\Core\DBException $e) {
+            } catch (\ADIOS\Core\Exceptions\DBException $e) {
                 $cnt = 0;
             }
 
@@ -1931,7 +1941,7 @@ class DB
             $this->log_disabled = $log_status;
 
             return true;
-        } catch (\ADIOS\Core\DBException $e) {
+        } catch (\ADIOS\Core\Exceptions\DBException $e) {
             $this->log_disabled = $log_status;
             $this->adios->console->log('alter_sql_column ERROR', "alter_sql_column: query error for column name $table_name.$col_name: ".$e->getMessage()." ($sql)");
 

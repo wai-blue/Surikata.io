@@ -9,6 +9,9 @@
 */
 
 namespace ADIOS\Actions\UI\Input;
+/**
+ * @package UI\Actions\Input
+ */
 class LookupSearch extends \ADIOS\Core\Action {
   public function render() {
 

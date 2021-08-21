@@ -10,6 +10,11 @@
 
 namespace ADIOS\Actions;
 
+/**
+ * 'Login' action. Renders the login screen of the ADIOS application.
+ *
+ * @package UI\Actions
+ */
 class Login extends \ADIOS\Core\Action {
   public function preRender() {
     return [

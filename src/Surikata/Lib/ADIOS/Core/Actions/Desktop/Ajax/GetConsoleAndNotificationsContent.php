@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\Desktop\Ajax;
 
+/**
+ * @package UI\Actions
+ */
 class GetConsoleAndNotificationsContent extends \ADIOS\Core\Action {
   public function render() {
     if (_count($_SESSION[_ADIOS_ID]['adios_notifications'])) {

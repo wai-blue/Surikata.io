@@ -10,10 +10,27 @@
 
 namespace ADIOS\Core\DB\DataTypes;
 
+/**
+ * Boolean data type.
+ *
+ * Converted to **boolean** in the SQL. Indexed by default. Default 0. NOT NULL.
+ *
+ * *UI/Input* renders *checkbox* for this data type.
+ *
+ * Example of definition in \ADIOS\Core\Model's column() method:
+ * ```
+ *   "myColumn" => [
+ *     "type" => "boolean",
+ *     "title" => "My Boolean Column",
+ *     "show_column" => FALSE,
+ *   ]
+ * ```
+ *
+ * @package DataTypes
+ */
 class DataTypeBoolean extends DataType {
   public function get_sql_create_string($table_name, $col_name, $params = []) {
     $params['sql_definitions'] = '' != trim($params['sql_definitions']) ? $params['sql_definitions'] : ' NOT NULL default 0 ';
-
     return "`$col_name` boolean {$params['sql_definitions']}";
   }
 
@@ -33,7 +50,10 @@ class DataTypeBoolean extends DataType {
     return "$col_name = {$value}";
   }
 
-  public function get_html_or_csv($value, $params = []) {
+  /**
+   * @internal
+   */
+  private function get_html_or_csv($value, $params = []) {
     if ((int) $value !== 0) {
       $html = "<i class='fas fa-check-circle' style='color:#4caf50'></i>";
     } else {

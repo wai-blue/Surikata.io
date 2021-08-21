@@ -10,6 +10,19 @@
 
 namespace ADIOS\Actions;
 
+/**
+ * 'Desktop' action. Renders the ADIOS application's desktop.
+ *
+ * This is the default action rendered when the ADIOS application is open via a URL.
+ * The desktop is divided into following visual parts:
+ *   * Left sidebar
+ *   * Notification and profile information area on the top of the screen
+ *   * The main content area
+ *
+ * Action can be configured to render another action in the main content area.
+ *
+ * @package UI\Actions
+ */
 class Desktop extends \ADIOS\Core\Action {
   public function preRender() {
     $settingsMenuItems = [];

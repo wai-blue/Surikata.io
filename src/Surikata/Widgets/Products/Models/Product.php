@@ -236,6 +236,17 @@ class Product extends \ADIOS\Core\Model {
           "title" => $this->translate("Time of end of sale"),
         ],
 
+        "order_index" => [
+          "type" => "int",
+          "title" => $this->translate("Order index"),
+        ],
+
+        "is_hidden" => [
+          "type" => "boolean",
+          "title" => $this->translate("Hide from list"),
+          "show_column" => TRUE,
+        ],
+
       ]
     ));
   }
@@ -247,6 +258,18 @@ class Product extends \ADIOS\Core\Model {
         "columns" => ["number"],
       ],
     ]);
+  }
+
+  public function upgrades() : array {
+    return [
+      0 => [], // upgrade to version 0 is the same as installation
+      1 => [
+        "alter table `{$this->gtp}_products` add column `order_index` int(8) default 0 after `end_of_sale`",
+      ],
+      2 => [
+        "alter table `{$this->gtp}_products` add column `is_hidden` boolean after `order_index`",
+      ],
+    ];
   }
 
   public function unit() {
@@ -421,7 +444,7 @@ class Product extends \ADIOS\Core\Model {
       $params['subtitle'] = $this->translate("Product");
     }
 
-    $params['show_delete_button'] = FALSE;
+    // $params['show_delete_button'] = FALSE;
 
     // $params["columns"]["sale_price"]["readonly"] = (
     //   $data['sale_price_calculation_method'] != self::SALE_PRICE_CALCULATION_METHOD_BASE
@@ -506,6 +529,8 @@ class Product extends \ADIOS\Core\Model {
           ))->render(),
         ],
         "end_of_sale",
+        "order_index",
+        "is_hidden",
       ],
       $this->translate("Translations") => $tabTranslations,
       "Categories" => [
@@ -618,7 +643,7 @@ class Product extends \ADIOS\Core\Model {
       ],
     ];
 
-    return $params;
+    return parent::formParams($data, $params);
   }
 
   public function recalculatePriceForSingleProduct($productOrIdProduct) {

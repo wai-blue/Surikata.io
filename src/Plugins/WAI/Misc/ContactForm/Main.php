@@ -1,25 +1,60 @@
 <?php
 
-namespace Surikata\Plugins {
-
-  use Surikata\Plugins\ContactForm\ContactFormMail;
+namespace Surikata\Plugins\WAI\Misc {
 
   class ContactForm extends \Surikata\Core\Web\Plugin {
+
+    public function getMailContent($fields) {
+      $content = "
+        <style>
+          table td {
+            padding: 5px;
+          }
+        </style>
+        <h1 style='font-size=16px'>
+          Contact Form message
+        </h1>
+        <table>
+          <tr>
+            <td style='width: 150px'>Name</td>
+            <td>
+              {$fields["name"]}
+            </td>
+          </tr>
+          <tr>
+            <td style='width: 150px'>E-Mail</td>
+            <td>{$fields["email"]}</td>
+          </tr>
+          <tr>
+            <td style='width: 150px'>Phone</td>
+            <td>{$fields["phone"]}</td>
+          </tr>
+          <tr>
+            <td style='width: 150px'>Message</td>
+            <td>{$fields["message"]}</td>
+          </tr>
+        </table>
+      ";
+
+      return $content;
+    }
+
     public function renderJSON() {
       $returnArray = array();
 
       $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
-      // action tag for later use
-      $action = $this->websiteRenderer->urlVariables['action'] ?? "";
+
       $name = htmlspecialchars($this->websiteRenderer->urlVariables['name'] ?? "");
       $email = htmlspecialchars($this->websiteRenderer->urlVariables['email'] ?? "");
       $phone_number = htmlspecialchars($this->websiteRenderer->urlVariables['phone_number'] ?? "");
       $message = htmlspecialchars($this->websiteRenderer->urlVariables['contact_message'] ?? "");
 
-      if (!$this->validateFields($name, "name") ||
-            !$this->validateFields($email, "email") ||
-              !$this->validateFields($phone_number, "phone_number") ||
-                !$this->validateFields($message, "message")) {
+      if (
+        !$this->validateFields($name, "name") ||
+        !$this->validateFields($email, "email") ||
+        !$this->validateFields($phone_number, "phone_number") ||
+        !$this->validateFields($message, "message")
+      ) {
         $returnArray['status'] = "error";
         $returnArray['message'] = "Wrong field";
         return $returnArray;
@@ -47,7 +82,7 @@ namespace Surikata\Plugins {
           "email" => $email,
           "phone" => $phone_number,
         ];
-        $content = ContactFormMail::getMailContent($fields);
+        $content = $this->getMailContent($fields);
 
         // sending mail
         $config = $this->websiteRenderer->adminPanel->config;
@@ -55,6 +90,7 @@ namespace Surikata\Plugins {
           $config['smtp_host'],
           $config['smtp_port']
         );
+
         if ($config['smtp_protocol'] == 'ssl') {
           $emailController->setProtocol(\Surikata\Lib\Email::SSL);
         }
@@ -62,6 +98,7 @@ namespace Surikata\Plugins {
         if ($config['smtp_protocol'] == 'tls') {
           $emailController->setProtocol(\Surikata\Lib\Email::TLS);
         }
+
         $receive_email = strlen($settings["emailAddress"]) > 0 ? $settings["emailAddress"] : "";
         $emailController->setLogin($config['smtp_login'], $config['smtp_password']);
         $emailController->setSubject("Contact Form | Surikata Eshop");
@@ -102,7 +139,7 @@ namespace Surikata\Plugins {
   }
 }
 
-namespace ADIOS\Plugins {
+namespace ADIOS\Plugins\WAI\Misc {
   class ContactForm extends \Surikata\Core\AdminPanel\Plugin {
 
     public function getAvailableSettings() {
@@ -130,6 +167,6 @@ namespace ADIOS\Plugins {
         ],
       ];
     }
-    
+
   }
 }

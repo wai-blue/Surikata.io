@@ -10,6 +10,9 @@
 
 namespace ADIOS\Actions\UI\Table\Search;
 
+/**
+ * @package UI\Actions
+ */
 class Load extends \ADIOS\Core\Action {
   public function render() {
     return json_decode(base64_decode($this->adios->config

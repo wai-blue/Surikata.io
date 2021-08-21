@@ -94,3 +94,7 @@ Now, when you are ready with your first & default Surikata online store, follow 
 ## Contribute
 
 We happily welcome the contributions for plugins (the src/Plugins/ folder) or themes (the src/Themes/) folder. Or you can buy us a beer.
+
+## Give us a feedback
+
+We welcome and appreciate any constructive feedback. Follow us on <a href='https://www.linkedin.com/company/1415801/admin/products/wai-s-r-o-surikataio/' target=_blank>LinkedIn</a> and send us a message.

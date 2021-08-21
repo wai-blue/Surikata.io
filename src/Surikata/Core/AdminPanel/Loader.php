@@ -31,7 +31,11 @@ class Loader extends \ADIOS\Core\Loader {
     $this->console = new \Surikata\Core\AdminPanel\Console($this);
 
     if (is_object($this->websiteRenderer)) {
-      $this->websiteRenderer->pages = $this->websiteRenderer->loadPublishedPages();
+      try {
+        $this->websiteRenderer->pages = $this->websiteRenderer->loadPublishedPages();
+      } catch (\Illuminate\Database\QueryException $e) {
+        // during the installation the SQL table with pages may not exist
+      }
     }
   }
   

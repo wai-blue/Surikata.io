@@ -1,6 +1,6 @@
 <?php
 
-define('REWRITE_BASE', '/surikata/');
+define('REWRITE_BASE', '/mysurikata/');
 
 ////////////////////////////////////////////////////////
 // Website Domains

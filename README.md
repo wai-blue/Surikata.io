@@ -3,6 +3,8 @@ Full-featured e-commerce platform with multi-domain and multi-language support f
 
 Free to use for both commercial and personal projects.
 
+Documentation is avaiable at https://www.surikata.io/documentation</a>.
+
 ## Prerequisities
 
 For a successfull installation, you'll need:

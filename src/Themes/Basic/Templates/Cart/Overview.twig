@@ -1,0 +1,73 @@
+<div class="head">
+  <span class="title">
+    Cart
+  </span>
+  <button class="offcanvas-close" onclick="BasicThemeCart.showMiniCart()">×</button>
+</div>
+
+{% if cartContents.items is iterable and cartContents.items|length > 0 %}
+  <ul class="minicart-product-list">
+    {% for item in cartContents.items %}
+      <li id="cartProduct_{{ item.PRODUCT.id }}">
+        <a href="{{ item.PRODUCT.url }}" class="image">
+          <img src="{{ uploadedFileUrl }}/{{ item.PRODUCT.image }}" alt="{{ item.PRODUCT.name_lang_1 }}">
+        </a>
+        <div class="content">
+          <a href="{{ item.PRODUCT.url }}" class="title">{{ item.PRODUCT.name_lang_1 }}</a>
+          <span class="quantity-price">{{ item.quantity|number_format(2, ",", " ") }} x
+          <span class="amount">{{ item.unit_price|number_format(2, ",", " ") }} €</span></span>
+          <a
+            href="javascript:void(0)"
+            onclick="BasicThemeCart.removeProduct({{ item.PRODUCT.id }});"
+            class="remove"
+          >
+            <i class="fas fa-trash-alt"></i>
+          </a>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+  <div class="foot">
+    <div class="sub-total">
+      <strong>Subtotal :</strong>
+        <div id="cartTotal">
+          <p>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</p>
+        </div>
+    </div>
+    <div class="buttons">
+      <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Order/CartOverview', 'getWebPageUrl') }}" class="btn btn-view">view cart</a>
+      <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Order/Checkout', 'getWebPageUrl') }}" class="btn btn-checkout">checkout</a>
+    </div>
+    <!--<p class="minicart-message">Free Shipping on All Orders Over $100!</p>-->
+  </div>
+  <div class="empty-cart-area" style="display:none">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="empty-text-contant text-center">
+            <i class="fa fa-shopping-cart"></i>
+            <p class="text-large">{{ settings.customTexts.emptyCart|raw }}</p>
+            <a 
+              class="empty-cart-btn" 
+              href="{{ rootUrl }}/{{ callPluginMethod('WAI/Product/Catalog', 'getWebPageUrl') }}"
+            ><i class="fa fa-chevron-left"> </i> Continue shopping</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% else %}
+  <div class="empty-cart-area">
+    <div class="empty-text-contant text-center">
+      <i class="fa fa-shopping-cart"></i>
+      <p class="text-large">
+        {{ translate("There are no more items in your cart") }}
+      </p>
+      <a
+        class="empty-cart-btn"
+        href="{{ rootUrl }}/{{ callPluginMethod('WAI/Product/Catalog', 'getWebPageUrl') }}">
+        <i class="fa fa-chevron-left"> </i> Continue shopping
+      </a>
+    </div>
+  </div>
+{% endif %}

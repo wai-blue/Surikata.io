@@ -1,0 +1,103 @@
+<div class="container">
+  <div class="left-ads-display col-md-12">
+    <div class="wrapper_top_shop">
+      <div class="section-title">
+        <h2>
+          {% if filterType == 'discounted' %}
+            {{ translate("Discounted products") }}
+          {% elseif filterType == 'news' %}
+            {{ translate("New products") }}
+          {% elseif filterType == 'top' %}
+            {{ translate("Top products") }}
+          {% elseif filterType == 'recommended' %}
+            {{ translate("Recommended products") }}
+          {% endif %}
+        </h2>
+      </div>
+      <div class="clearfix"></div>
+      <div class="product-sec1 row">
+        {% for product in products %}
+          {% if
+            (filterType == 'discounted' and product.is_on_sale == 1)
+            or
+            (filterType == 'news' and product.is_new == 1)
+            or
+            (filterType == 'top' and product.is_top == 1)
+            or
+            (filterType == 'recommended' and product.is_recommended == 1)
+          %}
+            <div class="col-12 col-md-4 product-men">
+              <div class="product-shoe-info shoe">
+                <div class="men-pro-item">
+                  <div class="men-thumb-item">
+                    <a href="{{ rootUrl }}/{{ product.url }}" class="thumbnail">
+                      <img class="first-img" src="{{ uploadedFileUrl }}/{{ product.image }}" alt="{{ product["name_lang_"~languageIndex] }}" />
+                    </a>
+                    <div class="men-cart-pro">
+                      <div class="inner-men-cart-pro">
+                        <a href="{{ rootUrl }}/{{ product.url }}" class="link-product-add-cart">{{ translate("Quick View") }}</a>
+                      </div>
+                    </div>
+                    {% if product.is_new == 1 %}
+                      <span class="product-new-top">{{ translate("new") }}</span>
+                    {% endif %}
+                    {% if product.is_sale_out == 1 or product.is_on_sale == 1 %}
+                      <span class="product-new-top product-sale">{{ translate("sale") }}</span>
+                    {% endif %}
+                    {% if product.is_recommended == 1 or product.is_top == 1 %}
+                      <span class="product-new-top product-recommended">{{ product.is_top == 1 ? translate("top") : translate("recommended") }}</span>
+                    {% endif %}
+                  </div>
+                  <div class="item-info-product">
+                    <h4>
+                      <a href="{{ rootUrl }}/{{ product.url }}">{{ product["name_lang_"~languageIndex] }}</a>
+                    </h4>
+                    <div class="info-product-price">
+                      <div class="grid_meta">
+                        <div class="product_price">
+                          <div class="grid-price ">
+                            {% if product.PRICE.fullPrice != product.PRICE.salePrice %}
+                              <span
+                                class="money old-price">{{ product.PRICE.fullPrice|number_format(2, ",", " ") }} €</span>
+                              <br/>
+                              <span class="money">{{ product.PRICE.salePrice|number_format(2, ",", " ") }} €</span>
+                            {% else %}
+                              <span class="money">{{ product.PRICE.fullPrice|number_format(2, ",", " ") }} €</span>
+                            {% endif %}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="shoe single-item hvr-outline-out">
+                        <button
+                          type="submit"
+                          class="shoe-cart pshoe-cart"
+                          onclick="BasicThemeCart.addProduct({{ product.id }}, 1,
+                            function(data) {
+                              Swal.fire({
+                                width: '40rem',
+                                title: '<strong>{{ translate("Item was added to cart") }}</strong>',
+                                text: '{{ product["name_lang_"~languageIndex] }}',
+                                icon: 'success',
+                                confirmButtonText: '{{ translate("Continue shoping") }}',
+                                customClass: {
+                                  confirmButton: 'swal-confirm-button',
+                                },
+                                timer: 10000,
+                              })
+                            });"
+                        >
+                          <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>

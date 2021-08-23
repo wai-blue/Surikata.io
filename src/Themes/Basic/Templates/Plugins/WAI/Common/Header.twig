@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Surikata</title>
+  <meta name="robots" content="noindex, follow" />
+  <meta name="description" content="{{ header.metaDescription }}">
+  <meta name="keywords" content="{{ header.metaKeywords }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/x-icon" href="../src/assets/images/favicon.png" />
+
+  <!-- Vendor CSS (Bootstrap & Icon Font) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!--<link rel="stylesheet" href="{{ rootUrl }}/theme/assets/css/ionicons.min.css">
+  <link rel="stylesheet" href="{{ rootUrl }}/theme/assets/css/linearicon.css">-->
+  <link rel="stylesheet" href="{{ rootUrl }}/theme/assets/css/sofiaPro.css">
+  <!--<link rel="stylesheet" href="{{ rootUrl }}/theme/assets/css/font-awesome.min.css">-->
+  <script src="https://kit.fontawesome.com/32166feafe.js" crossorigin="anonymous"></script>
+
+  <!-- Plugins CSS (All Plugins Files) -->
+  <link rel="stylesheet" href="{{ rootUrl }}/theme/assets/css/plugins/animate.css">
+  <link rel="stylesheet" href="{{ rootUrl }}/theme/assets/css/plugins/jquery-ui.min.css">
+  <link rel="stylesheet" href="{{ rootUrl }}/theme/assets/css/plugins/slick.css">
+
+  <!-- Main Style CSS -->
+  <link rel="stylesheet" href="{{ rootUrl }}/theme/assets/css/shop.css" type="text/css" media="screen" property="" />
+  <link href="{{ rootUrl }}/theme/assets/css/style7.css" rel="stylesheet" type="text/css" media="all" />
+  <link href="{{ rootUrl }}/theme/assets/css/style.css" rel="stylesheet" type="text/css" media="all" />
+  <link href="{{ rootUrl }}/theme/assets/css/flexslider.css" rel="stylesheet" type="text/css" media="all" />
+  <link href="{{ rootUrl }}/theme/assets/css/easy-responsive-tabs.css" rel="stylesheet" type="text/css" media="all" />
+  <link href="{{ rootUrl }}/theme/assets/css/checkout.css" rel="stylesheet" type="text/css" media="all" />
+  <link href="{{ rootUrl }}/theme/assets/css/contact.css" rel="stylesheet" type="text/css" media="all" />
+  <link rel="stylesheet" href="{{ rootUrl }}/theme/assets/css/wai.css">
+
+  <link href="//fonts.googleapis.com/css?family=Montserrat:100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800"
+        rel="stylesheet">
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800" rel="stylesheet">
+
+  <!-- jQuery and jQuery UI JS -->
+  <script src="{{ rootUrl }}/theme/assets/js/jquery-3.5.1.min.js"></script>
+  <script src="{{ rootUrl }}/theme/assets/js/plugins/jquery-ui.min.js"></script>
+  <script type="application/x-javascript">
+    addEventListener("load", function () {
+      setTimeout(hideURLbar, 0);
+    }, false);
+
+    function hideURLbar() {
+      window.scrollTo(0, 1);
+    }
+  </script>
+</head>
+<style>
+  :root {
+    --theme-main-color: {{ settings.design.themeMainColor }};
+    --theme-second-color: {{ settings.design.themeSecondColor }};
+    --theme-third-color: {{ settings.design.themeThirdColor }};
+    --theme-grey-color: {{ settings.design.themeGreyColor }};
+    --theme-lightgrey-color: {{ settings.design.themeLightGreyColor }};
+
+    --body-bg-color: {{ settings.design.bodyBgColor }};
+    --body-text-color: {{ settings.design.bodyTextColor }};
+    --body-link-color: {{ settings.design.bodyLinkColor }};
+    --body-heading-color: {{ settings.design.bodyHeadingColor }};
+
+    --header-bg-color: {{ settings.design.headerBgColor }};
+    --header-text-color: {{ settings.design.headerTextColor }};
+    --header-link-color: {{ settings.design.headerLinkColor }};
+    --header-heading-color: {{ settings.design.headerHeadingColor }};
+
+    --footer-bg-color: {{ settings.design.footerBgColor }};
+    --footer-text-color: {{ settings.design.footerTextColor }};
+    --footer-link-color: {{ settings.design.footerLinkColor }};
+    --footer-heading-color: {{ settings.design.footerHeadingColor }};
+  }
+  {{ settings.design.custom_css }}
+</style>
+<body>

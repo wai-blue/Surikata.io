@@ -66,7 +66,17 @@ require("../Init.php");
 
 session_start();
 
-$availableThemes = ["DefaultTheme"];
+$availableThemes = [];
+foreach (@scandir(__DIR__."/../src/Themes") as $dir) {
+  if (
+    !in_array($dir, [".", ".."])
+    && is_file(__DIR__."/../src/Themes/{$dir}/Main.php")
+  ) {
+    $availableThemes[] = $dir;
+  }
+}
+
+
 $randomProductsCount = $_GET['random_products_count'] ?? 50;
 if ($randomProductsCount > 5000) $randomProductsCount = 5000;
 
@@ -155,6 +165,7 @@ if (count($parts) == 0) {
     $supplierModel = new \ADIOS\Widgets\Products\Models\Supplier($adminPanel);
     $brandModel = new \ADIOS\Widgets\Products\Models\Brand($adminPanel);
     $serviceModel = new \ADIOS\Widgets\Products\Models\Service($adminPanel);
+    $productServiceAssigmentModel = new \ADIOS\Widgets\Products\Models\ProductServiceAssignment($adminPanel);
     $productCategoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($adminPanel);
     $productModel = new \ADIOS\Widgets\Products\Models\Product($adminPanel);
     $productGalleryModel = new \ADIOS\Widgets\Products\Models\ProductGallery($adminPanel);
@@ -208,16 +219,12 @@ if (count($parts) == 0) {
       $unitModel->insertRow(["id" => 20, "unit" => "pkg", "name" => "packages", "is_for_products" => TRUE, "is_for_features" => TRUE]);
       $unitModel->insertRow(["id" => 21, "unit" => "cnt", "name" => "containers", "is_for_products" => TRUE, "is_for_features" => TRUE]);
 
-      // preklady
-      $translationModel->insertRow(["id" => 1, "context" => "BlogCatalog", "original" => "Read more", "translated" => '{"en": "Čítaj viac"}']);
-      $translationModel->insertRow(["id" => 2, "context" => "CartOverview", "original" => "There are no more items in your cart", "translated" => '{"en": "Váš nákupný košík je prázdny"}']);
-
       // produkty - dodavatelia
       $supplierModel->insertRow(["name" => "Baumax"]);
-      $supplierModel->insertRow(["name" => "Prvá distribučná"]);
-      $supplierModel->insertRow(["name" => "Plantex"]);
-      $supplierModel->insertRow(["name" => "DOMOSS"]);
-      $supplierModel->insertRow(["name" => "Nay Elektrodom"]);
+      $supplierModel->insertRow(["name" => "Amazon"]);
+      $supplierModel->insertRow(["name" => "Adidas"]);
+      $supplierModel->insertRow(["name" => "Bosch"]);
+      $supplierModel->insertRow(["name" => "SpaceX"]);
 
       $suppliersCount = $supplierModel->get()->count();
 
@@ -265,6 +272,7 @@ if (count($parts) == 0) {
 
       $productFeaturesCount = $productFeatureModel->get()->count();
 
+      // produkty - produkty
       RandomGenerator::generateRandomProducts(
         $randomProductsCount,
         $productModel,
@@ -281,9 +289,20 @@ if (count($parts) == 0) {
         for ($i = 1; $i <= 8; $i++) {
           $productGalleryModel->insertRow([
             "id_product" => $product['id'],
-            "obrazok" => "products/product_".rand(1, 10).".jpg",
+            "image" => "products/product_" . rand(1, 10) . ".jpg",
           ]);
         }
+      }
+
+      foreach ($products as $product) {
+        $productServiceAssigmentModel->insertRow([
+          "id_product" => $product['id'],
+          "id_service" => rand(0, 1),
+        ]);
+        $productServiceAssigmentModel->insertRow([
+          "id_product" => $product['id'],
+          "id_service" => rand(2, 3),
+        ]);
       }
 
       $adminPanel->db->commit();
@@ -356,6 +375,18 @@ if (count($parts) == 0) {
           "{$adminPanel->config['files_dir']}/products/product_{$i}.jpg",
         );
       }
+      for ($i = 1; $i <= 3;$i++) {
+        copy(
+          __DIR__."/SampleData/images/books_{$i}.jpg",
+          "{$adminPanel->config['files_dir']}/books_{$i}.jpg",
+        );
+      }
+      for ($i = 1; $i <= 4;$i++) {
+        copy(
+          __DIR__."/SampleData/images/product_{$i}.png",
+          "{$adminPanel->config['files_dir']}/products/product_{$i}.png",
+        );
+      }
 
       // Blogs
       $blogCatalogModel->insertRow(["name" => "Where does it come from?", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex1.html"), "image" => "blogs/category_7.png", "created_at" => date("Y-m-d"), "id_user" => 1]);
@@ -378,9 +409,9 @@ if (count($parts) == 0) {
       $blogTagAssignmentModel->insertRow(["id_tag" => 2, "id_blog" => 4]);
 
       // Slideshow
-      $slideshowModel->insertRow(["heading" => "Woman Fashion", "description" => "Get up to 50% off Today Only!", "image" => "blogs/category_4.png",]);
-      $slideshowModel->insertRow(["heading" => "Man Fashion", "description" => "50% off in all products", "image" => "blogs/category_5.png"]);
-      $slideshowModel->insertRow(["heading" => "Summer Sale", "description" => "Taking your Viewing Experience to Next Level", "image" => "blogs/category_1.png"]);
+      $slideshowModel->insertRow(["heading" => "Welcome", "description" => "Get up to 50% off Today Only!", "image" => "slideshow/books_1.jpg",]);
+      $slideshowModel->insertRow(["heading" => "Sales", "description" => "50% off in all products", "image" => "slideshow/books_2.jpg"]);
+      $slideshowModel->insertRow(["heading" => "Black Friday", "description" => "Taking your Viewing Experience to Next Level", "image" => "slideshow/books_3.jpg"]);
 
       // novinky
 
@@ -388,7 +419,7 @@ if (count($parts) == 0) {
         "title" => "FIRST NEW",
         "content" => "Very first new",
         "perex" => "Short description for First New",
-        "domain" => "en",
+        "domain" => "sk",
         "image" => "",
         "show_from" => "20.6.2021",
       ]);
@@ -397,7 +428,7 @@ if (count($parts) == 0) {
         "title" => "SECOND NEW",
         "content" => "Second and the last new",
         "perex" => "Short description for Second New",
-        "domain" => "en",
+        "domain" => "sk",
         "image" => "",
         "show_from" => "22.6.2021",
       ]);
@@ -408,10 +439,10 @@ if (count($parts) == 0) {
       $websiteMenuModel->insertRow(["id" => 2, "domain" => "EN", "name" => "Footer Menu (EN)"]);
 
       // web - menu items - EN
-      $tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Úvod", "url" => "uvod"]);
-      $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "O nás", "url" => "o-nas"]);
-      $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Produkty", "url" => "produkty"]);
-      $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Blogy", "url" => "blogy"]);
+      $tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Home", "url" => "home"]);
+      $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "About us", "url" => "about-us"]);
+      $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Products", "url" => "products"]);
+      $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Blogs", "url" => "blogs"]);
 
       // web - stranky
 
@@ -458,7 +489,7 @@ if (count($parts) == 0) {
           "section_2" => [
             "WAI/SimpleContent/OneColumn",
             [
-              "heading" => "Vitajte",
+              "heading" => "Welcome",
               "headingLevel" => 1,
               "content" => file_get_contents(__DIR__."/SampleData/PageTexts/lorem-ipsum-1.html"),
             ],
@@ -503,14 +534,14 @@ if (count($parts) == 0) {
             "WAI/SimpleContent/OneColumn",
             [
               "heading" => "Vitajte",
-              "content" => file_get_contents(__DIR__."/SampleData/PageTexts/o-nas.html"),
+              "content" => file_get_contents(__DIR__."/SampleData/PageTexts/about-us.html"),
             ]
           ],
           "section_2" => [
             "WAI/SimpleContent/OneColumn",
             [
               "heading" => "Hello",
-              "content" => file_get_contents(__DIR__."/SampleData/PageTexts/o-nas.html"),
+              "content" => file_get_contents(__DIR__."/SampleData/PageTexts/about-us.html"),
             ]
           ],
         ],
@@ -586,7 +617,7 @@ if (count($parts) == 0) {
             "WAI/SimpleContent/OneColumn",
             [
               "heading" => "Hello",
-              "content" => file_get_contents(__DIR__."/SampleData/PageTexts/o-nas.html"),
+              "content" => file_get_contents(__DIR__."/SampleData/PageTexts/about-us.html"),
             ]
           ]
         ],
@@ -713,6 +744,7 @@ if (count($parts) == 0) {
       );
     }
 
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // PART: customers
     
@@ -759,7 +791,7 @@ if (count($parts) == 0) {
             "del_zip" => $customer[5],
             "del_country" => $customer[6],
             // "email" => strtolower("{$customer[1]}.{$customer[2]}@example.com"),
-            "email" => "dusan.daniska@gmail.com",
+            "email" => "example@email.com",
             "inv_given_name" => $customer[1],
             "inv_family_name" => $customer[2],
             "inv_street_1" => $customer[3],
@@ -808,6 +840,8 @@ if (count($parts) == 0) {
           $shoppingCartModel->addProductToCart($customerUID, rand(1, $productsCount), rand(1, 10));
         }
 
+        $orderConfirmationTime = date("Y-m-d H:i:s", strtotime("-".rand(0, 365)." days"));
+
         $idOrder = $orderModel->placeOrder(
           [
             "id_customer"       => $idCustomer,
@@ -833,13 +867,13 @@ if (count($parts) == 0) {
             "inv_country"       => $address['inv_country'],
             "phone_number"      => $address['phone_number'],
             "email"             => $address['email'],
-            "confirmation_time" => date("Y-m-d H:i:s", strtotime("-".rand(0, 365)." days")),
+            "confirmation_time" => $orderConfirmationTime,
           ],
           $customerUID
         );
 
         if (rand(0, 1) == 1) {
-          $idInvoice = $orderModel->issueInvoce($idOrder);
+          $idInvoice = $orderModel->issueInvoce($idOrder, TRUE);
         }
 
       }

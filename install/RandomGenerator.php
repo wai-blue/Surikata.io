@@ -26,6 +26,7 @@ class RandomGenerator {
   ) {
     $productsData = [];
     for ($i = 0; $i < $numOfProducts; $i++) {
+      $productImgNum = rand(1, 7);
       $idCategory = rand(1, 7);
       $idBrand = rand(1, 7);
       $name = "RND Product ".$i;
@@ -35,7 +36,7 @@ class RandomGenerator {
       $features = [rand(1000,1200), rand(1200,1250), rand(250,300), rand(1,3), rand(75,120)*10, rand(50,100)*10, "155 R13"];
       $number = "RND.".rand(10, 99).".".rand(1000, 9999).".".$i;
       $ean = self::generateEAN($number);
-
+      $image = "products/product_{$productImgNum}.jpg";
       $productsData[$i] = [
         /* 0 */ $idCategory,
         /* 1 */ $idBrand,
@@ -49,17 +50,16 @@ class RandomGenerator {
         /* 9 */ rand(0, 1),
         /* 10 */ rand(0, 1),
         /* 11 */ $number,
-        /* 12 */ $ean
+        /* 12 */ $ean,
+        /* 13 */ $image
       ];
     }
 
     $i = 0;
     foreach ($productsData as $tmpProduct) {
-      $productImgNum = rand(1, 7);
       $idProduct = $productModel->insertRow([
         "id_category" => $tmpProduct[0],
         "id_brand" => $tmpProduct[1],
-        "number" => $tmpProduct[2],
         "name_lang_1" => $tmpProduct[3],
         "brief_lang_1" => $tmpProduct[4],
         "description_lang_1" => $tmpProduct[5],
@@ -69,11 +69,11 @@ class RandomGenerator {
         "is_new" => $tmpProduct[9],
         "is_top" => $tmpProduct[10],
         "is_recommended" => rand(0,1) == 1,
-        "image" => "products/product_{$productImgNum}.jpg",
         "extended_warranty" => rand(0, 36),
         "stock_quantity" => rand(0, 100) / 10,
         "number" => $tmpProduct[11],
         "ean" => $tmpProduct[12],
+        "image" => $tmpProduct[13],
       ]);
 
       $tmpFeatureId = 1;

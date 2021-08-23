@@ -1,0 +1,330 @@
+<!-- footer -->
+<div class="footer_agileinfo_w3">
+  <div class="footer_inner_info_w3ls_agileits row">
+    <div class="col-md-3 footer-left">
+      <a href="{{ rootUrl }}"><img class="img-responsive" src="{{ rootUrl }}./upload/{{ settings.profile.logo }}" alt="logo.jpg" /></a>
+      <h2>
+          <p class="mt-3">{{ settings.profile.storeName }}</p>
+          <p class="text-infor">{{ settings.profile.slogan }}</p>
+      </h2>
+      <p>Lorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora.</p>
+      <ul class="social-nav model-3d-0 footer-social social two">
+        {% if settings.profile.urlFacebook != "" %}
+          <li>
+            <a  href="{{ settings.profile.urlFacebook }}" class="facebook">
+              <div class="front" style="background: var(--theme-main-color);"><i class="fa fa-facebook" aria-hidden="true"></i></div>
+              <div class="back"><i class="fa fa-facebook" aria-hidden="true"></i></div>
+            </a>
+          </li>
+        {% endif %}
+        {% if settings.profile.urlTwitter != "" %}
+          <li>
+            <a href="{{ settings.profile.urlTwitter }}" class="twitter">
+              <div class="front" style="background: var(--theme-second-color);"><i class="fa fa-twitter" aria-hidden="true"></i></div>
+              <div class="back"><i class="fa fa-twitter" aria-hidden="true"></i></div>
+            </a>
+          </li>
+        {% endif %}
+        {% if settings.profile.urlYouTube != "" %}
+          <li>
+            <a href="{{ settings.profile.urlYouTube }}" class="pinterest">
+              <div class="front" style="background: var(--theme-lightgrey-color);"><i class="fa fa-youtube" style="color: var(--theme-second-color);" aria-hidden="true"></i></div>
+              <div class="back"><i class="fa fa-youtube" aria-hidden="true"></i></div>
+            </a>
+          </li>
+        {% endif %}
+        {% if settings.profile.urlInstagram != "" %}
+          <li>
+            <a href="{{ settings.profile.urlInstagram }}" class="instagram">
+              <div class="front" style="background: var(--theme-third-color);"><i class="fa fa-instagram" aria-hidden="true"></i></div>
+              <div class="back"><i class="fa fa-instagram" aria-hidden="true"></i></div>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+    <div class="col-md-9 footer-right">
+      <div class="sign-grds row">
+        <div class="col-md-4 sign-gd">
+          <h4>Our <span>Information</span> </h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="404.html">Services</a></li>
+            <li><a href="404.html">Short Codes</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-5 sign-gd-two">
+          <h4>Store <span>Information</span></h4>
+          <div class="address">
+            <div class="address-grid">
+              <div class="address-left">
+                <i class="fa fa-phone" aria-hidden="true"></i>
+              </div>
+              <div class="address-right">
+                {% if showContactPhoneNumber %}
+                  <h6>Phone Number</h6>
+                  <p><a href="">{{ settings.profile.contactPhoneNumber }}</a></p>
+                {% endif %}
+              </div>
+              <div class="clearfix"> </div>
+            </div>
+            <div class="address-grid">
+              <div class="address-left">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+              </div>
+              <div class="address-right">
+                {% if showContactEmail %}
+                  <h6>Email Address</h6>
+                  <p><a href="mailto:{{ settings.profile.contactEmail }}">{{ settings.profile.contactEmail }}</a></p>
+                {% endif %}
+              </div>
+              <div class="clearfix"> </div>
+            </div>
+            <div class="address-grid">
+              <div class="address-left">
+                <i class="fa fa-map-marker" aria-hidden="true"></i>
+              </div>
+              <div class="address-right">
+                {% if showContactAddress %}
+                  <h6>Location</h6>
+                  <p>
+                    {{ settings.profile.sidlo_ulica_1 }} {{ settings.profile.sidlo_ulica_2 }}
+                    {{ settings.profile.sidlo_psc }} {{ settings.profile.sidlo_mesto }}
+                  </p>
+                {% endif %}
+              </div>
+              <div class="clearfix"> </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 sign-gd flickr-post">
+          <h4>Links <span></span></h4>
+          <ul>
+            {% if showMainMenu %}
+              {% for menuItem in mainMenuItems %}
+                <li><a href="{{ rootUrl }}/{{ menuItem.url }}">{{ menuItem.text }}</a></li>
+              {% endfor %}
+            {% endif %}
+          </ul>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <p class="copy-right-w3ls-agileits">&copy 2021 WAI s.r.o., All rights reserved | Design by <a href="http://w3layouts.com/">W3layouts</a></p>
+  </div>
+</div>
+</div>
+<!-- //footer -->
+<a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+
+
+<!-- js -->
+
+<!-- Surikata js -->
+<script src="{{ rootUrl }}/core/assets/js/surikata.js"></script>
+
+<!-- Surikata Plugins js -->
+<script src="{{ rootUrl }}/plugins/assets/WAI/Product/Catalog/main.js"></script>
+<script src="{{ rootUrl }}/plugins/assets/WAI/Customer/Home/main.js"></script>
+<script src="{{ rootUrl }}/plugins/assets/WAI/Customer/Cart/main.js"></script>
+<script src="{{ rootUrl }}/plugins/assets/WAI/Blog/Catalog/main.js"></script>
+
+<!-- Main Activation JS -->
+<!--<script src="{{ rootUrl }}/theme/assets/js/main.js"></script>-->
+
+<!-- Downy Theme JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<script src="{{ rootUrl }}/theme/assets/js/modernizr-2.6.2.min.js"></script>
+<script src="{{ rootUrl }}/theme/assets/js/classie.js"></script>
+<script src="{{ rootUrl }}/theme/assets/js/creditly.js"></script>
+<script src="{{ rootUrl }}/theme/assets/js/basic.js"></script>
+<script src="{{ rootUrl }}/theme/assets/js/easing.js"></script>
+<!-- js for portfolio lightbox -->
+<!-- start-smoth-scrolling -->
+<script type="text/javascript">
+  jQuery(document).ready(function ($) {
+    $(".scroll").click(function (event) {
+      event.preventDefault();
+      $('html,body').animate({
+        scrollTop: $(this.hash).offset().top
+      }, 1000);
+    });
+  });
+</script>
+<!-- //end-smoth-scrolling -->
+<script src="{{ rootUrl }}/theme/assets/js/easy-responsive-tabs.js"></script>
+<!--<script src="{{ rootUrl }}/theme/assets/js/imagezoom.js"></script>-->
+<script src="{{ rootUrl }}/theme/assets/js/jquery.flexslider.js"></script>
+<!--<script src="{{ rootUrl }}/theme/assets/js/main.js"></script>-->
+<script src="{{ rootUrl }}/theme/assets/js/move-top.js"></script>
+<script src="{{ rootUrl }}/theme/assets/js/responsiveslides.min.js"></script>
+<script src="{{ rootUrl }}/theme/assets/js/minicart.js"></script>
+<script>
+  $(function () {
+    $("#slider4").responsiveSlides({
+      auto: true,
+      pager: true,
+      nav: true,
+      speed: 1000,
+      namespace: "callbacks",
+      before: function () {
+        $('.events').append("<li>before event fired.</li>");
+      },
+      after: function () {
+        $('.events').append("<li>after event fired.</li>");
+      }
+    });
+  });
+</script>
+
+<script src="{{ rootUrl }}/theme/assets/js/search.js"></script>
+
+<script>
+  shoe.render();
+
+  shoe.cart.on('shoe_checkout', function (evt) {
+    var items, len, i;
+
+    if (this.subtotal() > 0) {
+      items = this.items();
+
+      for (i = 0, len = items.length; i < len; i++) {}
+    }
+  });
+</script>
+<!-- //cart-js -->
+<!--<script src="{{ rootUrl }}/theme/assets/js/main.js"></script>-->
+<script src="{{ rootUrl }}/theme/assets/js/basic-theme.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6 col-sm-12 col-xs-12 mb-lm-100px mb-sm-30px">
+            <div class="quickview-wrapper">
+              <!-- slider -->
+              <div class="gallery-top">
+                <div class="single-slide">
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/8.jpg" alt="">
+                </div>
+                <div class="single-slide">
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/14.jpg" alt="">
+                </div>
+                <div class="single-slide">
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/15.jpg" alt="">
+                </div>
+                <div class="single-slide">
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/11.jpg" alt="">
+                </div>
+                <div class="single-slide">
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/19.jpg" alt="">
+                </div>
+              </div>
+              <div class=" gallery-thumbs">
+                <div class="single-slide">
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/8.jpg" alt="">
+                </div>
+                <div class="single-slide">
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/14.jpg" alt="">
+                </div>
+                <div class="single-slide">
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/15.jpg" alt="">
+                </div>
+                <div class="single-slide">
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/11.jpg" alt="">
+                </div>
+                <div class="single-slide">
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/19.jpg" alt="">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12 col-xs-12">
+            <div class="product-details-content quickview-content">
+              <h2>Originals Kaval Windbr</h2>
+              <p class="reference">Reference:<span> demo_17</span></p>
+              <div class="pro-details-rating-wrap">
+                <div class="rating-product">
+                  <i class="ion-android-star"></i>
+                  <i class="ion-android-star"></i>
+                  <i class="ion-android-star"></i>
+                  <i class="ion-android-star"></i>
+                  <i class="ion-android-star"></i>
+                </div>
+                <span class="read-review"><a class="reviews" href="#">Read reviews (1)</a></span>
+              </div>
+              <div class="pricing-meta">
+                <ul>
+                  <li class="old-price not-cut">€18.90</li>
+                </ul>
+              </div>
+              <p class="quickview-para">Lorem ipsum dolor sit amet, consectetur adipisic elit eiusm tempor incidid ut labore et dolore magna aliqua. Ut enim ad minim venialo quis nostrud exercitation ullamco</p>
+              <div class="pro-details-size-color">
+                <div class="pro-details-color-wrap">
+                  <span>Color</span>
+                  <div class="pro-details-color-content">
+                    <ul>
+                      <li class="blue"></li>
+                      <li class="maroon active"></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="pro-details-quality">
+                <div class="cart-plus-minus">
+                  <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
+                </div>
+                <div class="pro-details-cart btn-hover">
+                  <a href="#"> + Add To Cart</a>
+                </div>
+              </div>
+              <div class="pro-details-wish-com">
+                <div class="pro-details-wishlist">
+                  <a href="wishlist.html"><i class="ion-android-favorite-outline"></i>Add to wishlist</a>
+                </div>
+                <div class="pro-details-compare">
+                  <a href="compare.html"><i class="ion-ios-shuffle-strong"></i>Add to compare</a>
+                </div>
+              </div>
+              <div class="pro-details-social-info">
+                <span>Share</span>
+                <div class="social-info">
+                  <ul>
+                    <li>
+                      <a href="#"><i class="ion-social-facebook"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="ion-social-twitter"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="ion-social-google"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="ion-social-instagram"></i></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal end -->
+
+</body>
+
+</html>

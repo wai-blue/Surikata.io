@@ -1,0 +1,144 @@
+<div class="search-hotel">
+  <h3 class="agileits-sear-head">Search Here..</h3>
+  <form action="" onsubmit="return false;" method="post">
+    <input type="search" id="filter-search" placeholder="{{ translate("Product name") }}..." name="filter-search" required="" onkeypress="searchKeyPressCallback(event, this)">
+    <button type="button" onclick="sendSearchData('filter-search')"><i class="fa fa-search"></i></button>
+  </form>
+</div>
+<!--preference -->
+{% if showProductCategories %}
+  <div class="left-side">
+    <h3 class="agileits-sear-head">Categories</h3>
+    <ul>
+      {% for category in filterInfo.allCategoriesAndSubCategories %}
+        {% if category.subCategory is not empty %}
+          {% set activeCategory = "" %}
+          {% for subCategory in category.subCategory %}
+            {% if subCategory.id == filterInfo.idCategory %}
+              {% set activeCategory = subCategory.id %}
+            {% endif %}
+          {% endfor %}
+          <li>
+            <a href="{{ rewriteBase }}{{ category.url }}">{{ category.name }}</a>
+          </li>
+
+          <div class="card">
+            <div
+              id="collapse_{{ category.id }}"
+              {% if filterInfo.idCategory == category.id or filterInfo.idCategory == activeCategory %}
+                class="collapse show"
+              {% else %}
+                class="collapse"
+              {% endif %}
+              aria-labelledby="heading_{{ category.id }}"
+              data-parent="#accordionExample"
+            >
+              <div class="card-body">
+                <ul class="category-list">
+                  {% for subCategory in category.subCategory %}
+                    <li>
+                      <a
+                        href="javascript:void(0)"
+                        {% if filterInfo.idCategory == subCategory.id %}
+                          class="sidebar-active"
+                        {% endif %}
+                        onclick="
+                          BasicThemeProductCatalog.setFilter('idProductCategory', {{ subCategory.id }});
+                          BasicThemeProductCatalog.update(
+                          $('#productCatalogDefaultContainerDiv'),
+                          '{{ rewriteBase }}{{ subCategory.url }}'
+                          );
+                          $(this).addClass('sidebar-active');
+                          ">{{ subCategory.TRANSLATIONS.name }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </div> <!-- card -->
+        {% else %}
+          <li id="heading_{{ category.id }}"
+            {% if filterInfo.idCategory == category.id %}
+              class="sidebar-active"
+            {% endif %}
+          >
+            <a href="{{ rewriteBase }}{{ category.url }}">{{ category.name }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+  <!-- // preference -->
+{% endif %}
+<!-- discounts -->
+{% if zobrazit_filter %}
+  <h3 class="sidebar-title m-0"><span>Filter By</span></h3>
+  <!-- Sidebar single item -->
+  <div class="left-side">
+    <h3 class="agileits-sear-head">Discount</h3>
+    <ul>
+      <li>
+        <input type="checkbox" class="checked">
+        <span class="span">5% or More</span>
+      </li>
+      <li>
+        <input type="checkbox" class="checked">
+        <span class="span">10% or More</span>
+      </li>
+      <li>
+        <input type="checkbox" class="checked">
+        <span class="span">20% or More</span>
+      </li>
+      <li>
+        <input type="checkbox" class="checked">
+        <span class="span">30% or More</span>
+      </li>
+      <li>
+        <input type="checkbox" class="checked">
+        <span class="span">50% or More</span>
+      </li>
+      <li>
+        <input type="checkbox" class="checked">
+        <span class="span">60% or More</span>
+      </li>
+    </ul>
+  </div>
+{% endif %}
+<!-- //discounts -->
+<!-- reviews -->
+{% if show_brands %}
+  <div class="customer-rev left-side">
+    <h3 class="agileits-sear-head">Brands</h3>
+    <ul>
+      {% for brand in filterInfo.allBrands %}
+        <li>
+          <div class="sidebar-widget-list-left">
+            <input
+              type="checkbox"
+              name="ProductFilter_brand_{{ loop.index }}"
+              id="ProductFilter_brand_{{ loop.index }}"
+              value=""
+              onchange="
+                let div = $('#productCatalogDefaultContainerDiv');
+                if ($(this).is(':checked')) {
+                BasicThemeProductCatalog.addValueToFilter('brands', {{ brand.id }}).update(div);
+                } else {
+                BasicThemeProductCatalog.removeValueFromFilter('brands', {{ brand.id }}).update(div);
+                }
+                "
+              data-id-brand="{{ brand.id }}"
+              {% if brand.id in filterInfo.filteredBrands %} checked {% endif %}
+            />
+            <label for="ProductFilter_brand_{{ loop.index }}" class="filter-label">
+              {{ brand.name }}
+            </label>
+            <span class="checkmark"></span>
+          </div>
+        </li>
+      {% endfor %}
+
+    </ul>
+  </div>
+{% endif %}
+<!-- //reviews -->

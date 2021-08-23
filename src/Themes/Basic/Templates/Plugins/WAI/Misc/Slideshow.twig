@@ -1,0 +1,64 @@
+<!-- /slider -->
+<div class="slider">
+  <div class="callbacks_container">
+    <ul class="rslides callbacks callbacks1" id="slider4">
+
+      {% for key,slide in slideShowSlides %}
+        <li class="slideshow-basic">
+          <div class="banner-top banner-{{ key }}">
+            <div class="banner-info-wthree">
+              <h3>{{ slide.heading|raw }}</h3>
+
+              <p>
+                {{ slide.description|raw }}
+                <a href="{{ rootUrl }}/{{ slide.url }}" class="shop-btn animated">{{ translate("SHOP NOW") }}</a>
+              </p>
+
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+
+    </ul>
+    {% for key,slide in slideShowSlides %}
+      <style>
+        .banner-{{ key }} {
+          position: relative;
+          z-index: 1;
+        }
+
+        .banner-{{ key }}::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          opacity: .3;
+          z-index: -1;
+          background-image: url('{{ rootUrl }}/theme/assets/images/{{ slide.image }}');
+        }
+      </style>
+    {% endfor %}
+
+  </div>
+  <div class="clearfix"></div>
+</div>
+<!-- //slider -->
+<ul class="top_icons">
+  {% if settings.profile.urlFacebook != "" %}
+    <li><a href="{{ settings.profile.urlFacebook }}"><span class="fa fa-facebook" aria-hidden="true"></span></a></li>
+  {% endif %}
+  {% if settings.profile.urlTwitter != "" %}
+    <li><a href="{{ settings.profile.urlTwitter }}"><span class="fa fa-twitter" aria-hidden="true"></span></a></li>
+  {% endif %}
+  {% if settings.profile.urlYouTube != "" %}
+    <li><a href="{{ settings.profile.urlYouTube }}"><span class="fa fa-youtube" aria-hidden="true"></span></a></li>
+  {% endif %}
+  {% if settings.profile.urlInstagram != "" %}
+    <li><a href="{{ settings.profile.urlInstagram }}"><span class="fa fa-instagram" aria-hidden="true"></span></a></li>
+  {% endif %}
+</ul>
+</div>
+</div>
+<!-- //banner -->

@@ -1,0 +1,163 @@
+<div class="ads-grid_shop cart-main-area">
+  <div class="shop_inner_inf">
+    {% if cartContents.items|length > 0 %}
+    <div class="privacy about">
+      <h3>{{ translate("Your cart items") }}</h3>
+
+      <div class="checkout-right">
+        <h4>Your shopping cart contains: <span>{{ cartContents.items|length }} Product{{ cartContents.items|length > 1 ? "s" : " " }}</span></h4>
+        <table class="timetable_sub">
+          <thead>
+          <tr>
+            <th>SL No.</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Product Name</th>
+
+            <th>Price</th>
+            <th>Remove</th>
+          </tr>
+          </thead>
+          <tbody>
+            {% for key,item in cartContents.items %}
+              <tr class="rem{{ key + 1 }}">
+                <td class="invert">{{ key + 1 }}</td>
+                <td class="invert-image" style="max-width: 250px;">
+                  <a  href="{{ item.PRODUCT.url }}">
+                    <img class="img-responsive" src="{{ uploadedFileUrl }}/{{ item.PRODUCT.image }}" alt="{{ item.PRODUCT["name_lang_"~languageIndex] }}" />
+                  </a>
+                </td>
+                <td class="invert">
+                  <div class="quantity">
+                    <div class="quantity-select">
+                      <div class="cart-plus-minus">
+                        <input
+                          onchange="BasicThemeCart.updateProductQty(
+                          {{ item.PRODUCT.id }},
+                            this.value,
+                            function(data) {
+                            console.log(data);
+                            BasicThemeCart.updatePrice(data);
+                            }
+                            )"
+                          class="cart-plus-minus-box"
+                          type="text"
+                          name="qtybutton"
+                          value="{{ item.quantity }}"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="invert"><a href="{{ item.PRODUCT.url }}">{{ item.PRODUCT["name_lang_"~languageIndex]}}</a></td>
+
+                <td class="invert product-subtotal_{{ item.PRODUCT.id }}" id="product-subtotal_{{ item.PRODUCT.id }}">{{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} €</td>
+                <td class="invert">
+                  <div class="rem">
+                    <a
+                      href="javascript:void(0)"
+                      onclick="
+                        BasicThemeCart.removeProduct(
+                      {{ item.PRODUCT.id }},
+                        function(data) {
+                        BasicThemeCart.updateDetailedOverview();
+                        }
+                        );
+                        "
+                    ><i class="fa fa-times"></i></a>
+                    <div class="close1"> </div>
+                  </div>
+
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="checkout-left">
+        <div class="col-md-4 checkout-left-basket">
+          <div class="cart-shiping-update-wrapper">
+            <div class="cart-clear">
+              <!--<button>Update Shopping Cart</button>-->
+              <a href="javascript:void(0)" onclick="
+                BasicThemeCart.removeProduct(
+                  0,
+                  function(data) {
+                    BasicThemeCart.updateDetailedOverview();
+                  }
+                )
+                ;
+              ">Clear Shopping Cart</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8 address_form">
+        <div class="row">
+          {% if couponCard %}
+            <div class="col-lg-4 col-md-6 mb-lm-30px">
+              <div class="discount-code-wrapper">
+                <div class="title-wrap">
+                  <h4 class="cart-bottom-title section-bg-gray">{{ translate("Use Coupon Code") }}</h4>
+                </div>
+                <div class="discount-code">
+                  <p>{{ translate("Enter your coupon code if you have one") }}.</p>
+                  <form>
+                    <input type="text" required="" name="name" />
+                    <button class="cart-btn-2" type="submit">{{ translate("Apply Coupon") }}</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          <div class="col-lg-12 col-md-12" style="min-height: 135px;">
+            <div class="grand-totall">
+              <div class="title-wrap">
+                <h4 class="cart-bottom-title section-bg-gary-cart">{{ translate("Cart Total") }}</h4>
+              </div>
+              <h4 class="grand-totall-title mt-3">{{ translate("Grand Total") }} <span id="priceTotal">{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }}</span> €</h4>
+
+            </div>
+            <a class="btn btn-checkout btn-grand-totall" href="{{ rootUrl }}/{{ callPluginMethod('WAI/Order/Checkout', 'getWebPageUrl') }}">Proceed to Checkout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% else %}
+      <div class="col-md-12">
+        <div class="empty-text-contant text-center">
+          <i class="fa fa-shopping-cart"></i>
+          <h1>{{ translate("There are no more items in your cart") }}</h1>
+          <a class="empty-cart-btn" href="{{ rootUrl }}/">
+            <i class="fa fa-chevron-left"> </i> {{ translate("Continue shopping") }}
+          </a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  /*----------------------------
+    Cart Plus Minus Button
+------------------------------ */
+  var CartPlusMinus = $(".cart-plus-minus");
+  CartPlusMinus.prepend('<div class="dec qtybutton">-</div>');
+  CartPlusMinus.append('<div class="inc qtybutton">+</div>');
+  $(".qtybutton").on("click", function() {
+    var $button = $(this);
+    var oldValue = $button.parent().find("input").val();
+    if ($button.text() === "+") {
+      var newVal = parseFloat(oldValue) + 1;
+    } else {
+      // Don't allow decrementing below zero
+      if (oldValue > 1) {
+        var newVal = parseFloat(oldValue) - 1;
+      } else {
+        newVal = 1;
+      }
+    }
+    $button.parent().find("input").val(newVal);
+    $button.parent().find("input").trigger("change");
+  });
+</script>

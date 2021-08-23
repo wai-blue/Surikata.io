@@ -1,0 +1,225 @@
+<!-- Shop details Area start -->
+<section class="blank-page-area mtb-50px">
+  <div class="container">
+    <div class="row">
+
+      {% for key, result in results %}
+        {% set data = result.data %}
+        {% if result.model == "Product" %}
+          {% set product = data %}
+          <div id="grid_product_{{ product.id }}" class="col-md-4 product">
+            <div class="product-info shoe">
+              <div class="men-pro-item">
+                <div class="men-thumb-item">
+                  <a href="{{ rootUrl }}/{{ product.url }}" class="thumbnail">
+                    <img class="first-img" src="{{ uploadedFileUrl }}/{{ product.image }}"
+                         alt="{{ product.image }}"/>
+                  </a>
+                  <div class="men-cart-pro">
+                    <div class="inner-men-cart-pro">
+                      <a href="{{ rootUrl }}/{{ product.url }}" class="link-product-add-cart">Quick View</a>
+                    </div>
+                  </div>
+                  {% if product.is_new == 1 %}
+                    <span class="product-new-top">{{ translate("new") }}</span>
+                  {% endif %}
+                  {% if product.is_sale_out == 1 or product.is_on_sale == 1 %}
+                    <span class="product-new-top product-sale">{{ translate("sale") }}</span>
+                  {% endif %}
+                  {% if product.is_recommended == 1 or product.is_top == 1 %}
+                    <span
+                      class="product-new-top product-recommended">{{ product.is_top == 1 ? translate("top") : translate("recommended") }}</span>
+                  {% endif %}
+                </div>
+                <div class="item-info-product">
+                  <h4>
+                    <a href="{{ rootUrl }}/{{ product.url }}">{{ product["name_lang_"~languageIndex] }}</a>
+                  </h4>
+                  <div class="info-product-price">
+                    <div class="grid_meta">
+                      <div class="product_price">
+                        <div class="grid-price ">
+                          {% if product.price.fullPrice != product.price.salePrice %}
+                            <span
+                              class="money old-price">{{ product.price.fullPrice|number_format(2, ",", " ") }} €</span>
+                            <br/>
+                            <span class="money">{{ product.price.salePrice|number_format(2, ",", " ") }} €</span>
+                          {% else %}
+                            <span class="money">{{ product.price.fullPrice|number_format(2, ",", " ") }} €</span>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="shoe single-item hvr-outline-out">
+                      <button
+                        type="submit"
+                        class="shoe-cart pshoe-cart"
+                        onclick="BasicThemeCart.addProduct({{ product.id }}, 1,
+                          function(data) {
+                          Swal.fire({
+                          width: '40rem',
+                          title: '<strong>{{ translate("Item was added to cart") }}</strong>',
+                          text: '{{ product["name_lang_"~languageIndex] }}',
+                          icon: 'success',
+                          confirmButtonText: '{{ translate("Continue shopping") }}',
+                          timer: 10000,
+                          customClass: {
+                          confirmButton: 'swal-confirm-button',
+                          }
+                          })
+                          });"
+                      >
+                        <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        {% endif %}
+        {% if result.model == "ProductCategory" %}
+          {% set category = data %}
+          {% set url = category.additional_info.category.url %}
+          <div class="shop-list-wrap mb-30px scroll-zoom">
+            <div class="slider-single-item">
+              <div class="row list-product m-0px">
+                <div class="col-12 product-inner">
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-2 p-0">
+                      <div class="left-img">
+                        <div class="img-block pl-lg-3 pr-lg-3">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-5 p-0">
+                      <div class="product-desc-wrap">
+                        <div class="product-decs" style="min-height: auto;">
+                          <h2><a href="{{ rootUrl }}/{{ url }}" class="product-link">{{ category.name_lang_1 }}</a></h2>
+                          <a class="inner-link" href="shop-4-column.html"><span>{{ category.ProductCategory.name_lang_1}}</span></a>
+                          <div class="product-intro-info">
+                            <p>Number of products in category: {{ category.additional_info.productCount }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-5 p-0">
+                      {% if category.additional_info.products|length > 0 %}
+                        <div class="row">
+                        {% for product in category.additional_info.products|slice(0, 3) %}
+                            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3 p-0">
+                              <div class="left-img">
+                                <div class="img-block pl-lg-3 pr-lg-3">
+                                  <a href="{{ rootUrl }}/{{ url }}" class="thumbnail">
+                                    <img class="first-img" src="{{ uploadedFileUrl }}/{{ product.image }}" alt="{{ product.name_lang_1 }}" />
+                                  </a>
+                                </div>
+                              </div>
+                              <div class="search-item-category-product">
+                                {{ product.name_lang_1 }}
+                              </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        {% endif %}
+        {% if result.model == "Blog" %}
+          {% set blog = data %}
+          <div class="row mb-50px blog-catalog-post">
+            <div class="col-lg-4 col-md-6">
+              <div class="single-blog-post blog-list-post">
+                <div class="blog-post-media">
+                  <div class="blog-image">
+                    <a href="{{ rootUrl }}/{{ blog.url }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ blog.image }}" alt="{{ blog.image }}"/></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-8 col-md-6 align-self-center align-items-center">
+              <div class="blog-post-content-inner mt-lm-30px">
+                <h1 class="blog-title"><a href="{{ rootUrl }}/{{ blog.url }}">{{ blog.name }}</a></h1>
+                <ul class="blog-page-meta">
+                  {% if showAuthor %}
+                    <li>
+                      <a href="javascript:void(0)">
+                        <i class="fa fa-person-booth"></i> {{ blog.USER.name }} {{ blog.USER.surname }}
+                      </a>
+                    </li>
+                  {% endif %}
+                  <li>
+                    <i class="fa fa-calendar"></i> {{ blog.created_at|date("d.m.Y") }}
+                    {# date(locale.dateFormat) #}
+                  </li>
+                </ul>
+                <div class="blog-content">
+                  {{ blog.perex|raw }}
+                </div>
+
+                <a class="read-more-btn" href="{{ rootUrl }}/{{ blog.url }}">
+                  {{ translate("Read more") }} <i class="fa fa-chevron-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if result.model == "WebPage" %}
+          {% set page = data %}
+          <div class="shop-list-wrap mb-30px scroll-zoom">
+            <div class="slider-single-item">
+              <div class="row list-product m-0px">
+                <div class="col-md-12 padding-0px product-inner">
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-2 p-0">
+                      <div class="left-img">
+                        <div class="img-block pl-lg-3 pr-lg-3">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-5 p-0">
+                      <div class="product-desc-wrap">
+                        <div class="product-decs" style="min-height: auto;">
+                          <h2><a href="{{ rootUrl }}/{{ url }}" class="product-link">{{ page.name_lang_1 }}</a></h2>
+                          <a class="inner-link" href="shop-4-column.html"><span>{{ page.ProductCategory.name_lang_1}}</span></a>
+                          <div class="product-intro-info">
+                            <p>Number of products in category: {{ page.additional_info.productCount }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-5 p-0">
+                      {% if page.additional_info.products|length > 0 %}
+                        <div class="row">
+
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        {% endif %}
+
+        {% if result.model == "Divider" %}
+          <div class="col-12">
+            <div class="section-title">
+              <h2> {{ result.data }} <span style="font-size: 12px;color: #999;vertical-align: middle;display: inline-block;padding-bottom: 2px;padding-left: 15px;">({{ result.count }})</span> </h2>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+
+    </div>
+  </div>
+</section>

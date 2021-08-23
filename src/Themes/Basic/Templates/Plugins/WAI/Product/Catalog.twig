@@ -1,0 +1,219 @@
+{% if _GET.renderOnly == "" %}
+  <script>
+    $(document).ready(function () {
+      BasicThemeProductCatalog.page = {{ catalogInfo.page }};
+      BasicThemeProductCatalog.catalogListType = '{{ catalogInfo.catalogListType }}';
+      BasicThemeProductCatalog.getScrollId();
+    });
+
+  </script>
+
+  <div id="productCatalogDefaultContainerDiv">
+    <div class="wrapper_top_shop">
+      <div class="col-md-6 shop_left">
+        <img src="images/banner3.jpg" alt="">
+        <h6>40% off</h6>
+      </div>
+      <div class="col-md-6 shop_right">
+        <img src="images/banner2.jpg" alt="">
+        <h6>50% off</h6>
+      </div>
+      <div class="select-shoing-wrap d-flex">
+        <div class="shop-select-text">
+          Sort By:
+        </div>
+        <div class="shop-select">
+          <select name="sort" onchange="changeProductSorting(this)">
+            <option value="date" {% if sorting == "date" %} selected {% endif %}>Newness</option>
+            <option value="title" {% if sorting == "title" %} selected {% endif %}>A to Z</option>
+            <option value="title_desc" {% if sorting == "title_desc" %} selected {% endif %}>Z to A</option>
+            <option value="price" {% if sorting == "price" %} selected {% endif %}>Price ascending</option>
+            <option value="price_desc" {% if sorting == "price_desc" %} selected {% endif %}>Price descending</option>
+            <!--<option value="storage" {% if sorting == "storage" %} selected {% endif %}>In stock</option>-->
+          </select>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    <!-- product-sec1 -->
+{% endif %}
+    <div class="product-sec1 tab-content row">
+      {% if _GET.renderOnly == "" or _GET.renderOnly == "productsList" %}
+        {% if catalogInfo.products|length > 0 %}
+          {% for product in catalogInfo.products %}
+            <div id="grid_product_{{ product.id }}" class="col-md-4 product">
+              <div class="product-info shoe">
+                <div class="men-pro-item">
+                  <div class="men-thumb-item">
+                    <a href="{{ rootUrl }}/{{ product.url }}" class="thumbnail">
+                      <img class="first-img" src="{{ uploadedFileUrl }}/{{ product.image }}"
+                           alt="{{ product.image }}"/>
+                    </a>
+                    <div class="men-cart-pro">
+                      <div class="inner-men-cart-pro">
+                        <a href="{{ rootUrl }}/{{ product.url }}" class="link-product-add-cart">Quick View</a>
+                      </div>
+                    </div>
+                    {% if product.is_new == 1 %}
+                      <span class="product-new-top">{{ translate("new") }}</span>
+                    {% endif %}
+                    {% if product.is_sale_out == 1 or product.is_on_sale == 1 %}
+                      <span class="product-new-top product-sale">{{ translate("sale") }}</span>
+                    {% endif %}
+                    {% if product.is_recommended == 1 or product.is_top == 1 %}
+                      <span
+                        class="product-new-top product-recommended">{{ product.is_top == 1 ? translate("top") : translate("recommended") }}</span>
+                    {% endif %}
+                  </div>
+                  <div class="item-info-product">
+                    <h4>
+                      <a href="{{ rootUrl }}/{{ product.url }}">{{ product["name_lang_"~languageIndex] }}</a>
+                    </h4>
+                    <div class="info-product-price">
+                      <div class="grid_meta">
+                        <div class="product_price">
+                          <div class="grid-price ">
+                            {% if product.price.fullPrice != product.price.salePrice %}
+                              <span
+                                class="money old-price">{{ product.price.fullPrice|number_format(2, ",", " ") }} €</span>
+                              <br/>
+                              <span class="money">{{ product.price.salePrice|number_format(2, ",", " ") }} €</span>
+                            {% else %}
+                              <span class="money">{{ product.price.fullPrice|number_format(2, ",", " ") }} €</span>
+                            {% endif %}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="shoe single-item hvr-outline-out">
+                        <button
+                          type="submit"
+                          class="shoe-cart pshoe-cart"
+                          onclick="BasicThemeCart.addProduct({{ product.id }}, 1,
+                            function(data) {
+                              Swal.fire({
+                                width: '40rem',
+                                title: '<strong>{{ translate("Item was added to cart") }}</strong>',
+                                text: '{{ product["name_lang_"~languageIndex] }}',
+                                icon: 'success',
+                                confirmButtonText: '{{ translate("Continue shopping") }}',
+                                timer: 10000,
+                                customClass: {
+                                  confirmButton: 'swal-confirm-button',
+                                }
+                              })
+                            });"
+                        >
+                          <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endif %}
+      <div class="clearfix"></div>
+
+    </div>
+    <!-- //product-sec1 -->
+    {# <div class="col-md-6 shop_left shp">
+      <img src="images/banner4.jpg" alt="">
+      <h6>21% off</h6>
+    </div>
+    <div class="col-md-6 shop_right shp">
+      <img src="images/banner1.jpg" alt="">
+      <h6>31% off</h6>
+    </div>
+    <div class="clearfix"></div> <!-- Môže sa zísť --> #}
+  </div>
+
+  {# --- Pagination --- #}
+  {% if _GET.renderOnly == "" or _GET.renderOnly == "productPagination" %}
+    <div id="productPagination">
+      <div class="row mt-3 mb-5">
+        {% if not showPaging %}
+          <div class="col-lg-4"></div>
+          <div class="col-12 text-center col-lg-4 mb-2 mb-lg-0">
+            <div class='load-more'>
+              <button
+                type="button"
+                class='load-btn'
+                onclick="BasicThemeProductCatalog.loadNextPage().updatePagination();"
+                {% if catalogInfo.lastPage <= catalogInfo.page %} disabled {% endif %}
+              >
+                More products
+              </button>
+            </div>
+          </div>
+        {% endif %}
+        <div class="
+          col-12 text-center col-lg-{% if showPaging %}12 {% else %}4 text-lg-right {% endif %}
+        ">
+          <div class="pro-pagination-style">
+            <ul class="pagination-small" id="pagination">
+              {% if catalogInfo.page != 1 %}
+                <li>
+                  <a
+                    class="prev"
+                    href="javascript:void(0)"
+                    onclick="BasicThemeProductCatalog.loadPage('-').updatePagination();"
+                  ><i class="fa fa-chevron-left"></i></a>
+                </li>
+              {% endif %}
+              <li id="page_1">
+                <a
+                  {% if catalogInfo.page == 1 %} class="active" {% endif %}
+                  href="javascript:void(0)"
+                  onclick="BasicThemeProductCatalog.loadPage(1).updatePagination();"
+                >1</a>
+              </li>
+              {% if catalogInfo.page > 4 %}
+                <li class="dots"></li>
+              {% endif %}
+              {% if catalogInfo.lastPage > 2 %}
+                {% for page in 2..catalogInfo.lastPage - 1 %}
+                  {% if page >= catalogInfo.page - 2 and page <= catalogInfo.page + 1 %}
+                    <li id="page_{{ page }}">
+                      <a
+                        {% if page == catalogInfo.page %} class="active" {% endif %}
+                        href="javascript:void(0)"
+                        onclick="BasicThemeProductCatalog.loadPage({{ page }}).updatePagination();"
+                      >{{ page }}</a>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+              {% if catalogInfo.lastPage > catalogInfo.page + 2 %}
+                <li class="dots"></li>
+              {% endif %}
+              {% if catalogInfo.lastPage > 1 %}
+                <li id="page_{{ catalogInfo.lastPage }}">
+                  <a
+                    {% if catalogInfo.lastPage == catalogInfo.page %} class="active" {% endif %}
+                    href="javascript:void(0)"
+                    onclick="BasicThemeProductCatalog.loadPage({{ catalogInfo.lastPage }}).updatePagination();"
+                  >{{ catalogInfo.lastPage }}</a>
+                </li>
+              {% endif %}
+              {% if catalogInfo.lastPage != catalogInfo.page %}
+                <li>
+                  <a
+                    class="next"
+                    href="javascript:void(0)"
+                    onclick="BasicThemeProductCatalog.loadPage('+').updatePagination();"
+                  >
+                    <i class="fa fa-chevron-right"></i>
+                  </a>
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% if _GET.renderOnly == "" %}
+  </div>
+{% endif %}

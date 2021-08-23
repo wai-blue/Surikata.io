@@ -676,7 +676,7 @@ if (count($parts) == 0) {
           "web" => [
             "EN" => [
               "profile" => [
-                "slogan" => "Celý sortiment na EN",
+                "slogan" => "My online store",
                 "contactPhoneNumber" => "+421 111 222 333",
                 "contactEmail" => "info@{$_SERVER['HTTP_HOST']}",
                 "logo" => "surikata.png",

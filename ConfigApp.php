@@ -26,6 +26,7 @@ define('THEMES_DIR', __DIR__."/src/Themes");
 define('PLUGINS_DIR', __DIR__."/src/Plugins");
 define('CONTROLLERS_DIR', __DIR__."/src/Controllers");
 define('LOG_DIR', __DIR__."/log");
+define('DATA_DIR', __DIR__."/data");
 
 define('TWIG_CACHE_DIR', FALSE); // disable cache
 

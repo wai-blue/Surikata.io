@@ -406,7 +406,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     $tmp = $this
       ->selectRaw("{$this->table}.id")
       ->selectRaw("(".str_replace("{%TABLE%}", $this->table, $this->lookupSqlValue()).") as ___lookupSqlValue")
-      ->orderByRaw("(".str_replace("{%TABLE%}", $this->table, $this->lookupSqlValue()).")", "asc")
+      ->orderBy("___lookupSqlValue", "asc")
       ->get()
       ->toArray()
     ;

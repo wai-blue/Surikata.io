@@ -48,6 +48,7 @@ class Design extends \ADIOS\Core\Action {
                   "uid" => "{$this->uid}_themeMainColor",
                   "value" => $settings['themeMainColor'],
                 ]),
+                "description" => "Some themes may not support coloring.",
               ],
               [
                 "title" => "Second color",
@@ -88,13 +89,12 @@ class Design extends \ADIOS\Core\Action {
             "title" => "Colors: Main body background",
             "items" => [
               [
-                "title" => "Telo stránky - Farba pozadia",
+                "title" => "Colors: Main body background",
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_bodyBgColor",
                   "value" => $settings['bodyBgColor'],
                 ]),
-                "description" => "Niektoré šablóny nemusia podporovať voliteľnosť farieb.",
               ],
               [
                 "title" => "Colors: Main body regular text",

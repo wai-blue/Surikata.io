@@ -39,6 +39,52 @@ class Design extends \ADIOS\Core\Action {
           ],
 
           [
+            "title" => "Colors: Main theme colors",
+            "items" => [
+              [
+                "title" => "Main color",
+                "input" => $this->adios->ui->Input([
+                  "type" => "color",
+                  "uid" => "{$this->uid}_themeMainColor",
+                  "value" => $settings['themeMainColor'],
+                ]),
+              ],
+              [
+                "title" => "Second color",
+                "input" => $this->adios->ui->Input([
+                  "type" => "color",
+                  "uid" => "{$this->uid}_themeSecondColor",
+                  "value" => $settings['themeSecondColor'],
+                ]),
+              ],
+              [
+                "title" => "Third color",
+                "input" => $this->adios->ui->Input([
+                  "type" => "color",
+                  "uid" => "{$this->uid}_themeThirdColor",
+                  "value" => $settings['themeThirdColor'],
+                ]),
+              ],
+              [
+                "title" => "Grey color",
+                "input" => $this->adios->ui->Input([
+                  "type" => "color",
+                  "uid" => "{$this->uid}_themeGreyColor",
+                  "value" => $settings['themeGreyColor'],
+                ]),
+              ],
+              [
+                "title" => "Light grey color",
+                "input" => $this->adios->ui->Input([
+                  "type" => "color",
+                  "uid" => "{$this->uid}_themeLightGreyColor",
+                  "value" => $settings['themeLightGreyColor'],
+                ]),
+              ],
+            ],
+          ],
+
+          [
             "title" => "Colors: Main body background",
             "items" => [
               [

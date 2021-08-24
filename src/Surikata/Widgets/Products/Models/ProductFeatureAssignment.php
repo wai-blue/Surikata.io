@@ -59,6 +59,74 @@ class ProductFeatureAssignment extends \ADIOS\Core\Model {
 
   public function formParams($data, $params) {
     $params['default_values'] = ['id_product' => $params['id_product']];
+    $featuresModel = new ProductFeature();
+    if (isset($data['id_feature'])) {
+      $params['columns']['id_feature']['disabled'] = TRUE;
+      $feature = $featuresModel->getById($data["id_feature"]);
+      $params['onload'] = "
+        var featureType = Number({$feature["value_type"]}) - 1;
+        let featureInputs = [
+          uid + '_value_number',
+          uid + '_value_text',
+          uid + '_value_boolean'
+        ];
+        for (let i = 0; i < featureInputs.length; i++) {
+          if (featureType !== i) {
+            if (i == 0) {
+              $('#'+featureInputs[i]).parent().parent().parent().css('display', 'none');
+            }
+            else {
+              $('#'+featureInputs[i]).parent().parent().css('display', 'none');
+            }
+          }
+        }  
+      ";
+    }
+
+    $featuresAll = $featuresModel->all();
+    $featuresVar = "var features = [";
+    foreach ($featuresAll as $feature) {
+      $featuresVar .= "[". $feature->attributes["id"]. ",". $feature->attributes["value_type"]. ",". $feature->attributes["entry_method"]."],";
+    }
+    $featuresVar .= "];";
+    $params['columns']['id_feature']['onchange'] = "
+      {$featuresVar}
+      var id = $(this).attr('id');
+      var uid = id.substring(0, id.indexOf('_id_feature'));
+      var featureId = $(this).val();
+      var valueType = 0;
+      var entryMethod = 0;
+      features.forEach(function(item, index) {
+        if (item[0] == featureId) {
+          valueType = item[1];    // Show value type
+          entryMethod = item[2];
+        }
+      });
+      let featureInputs = [
+        uid + '_value_number',
+        uid + '_value_text',
+        uid + '_value_boolean'
+      ];
+      for (let i = 0; i < featureInputs.length; i++) {
+        // Show all
+        if (i == 0) {
+          $('#'+featureInputs[i]).parent().parent().parent().css('display', 'block');
+        }
+        else {
+          $('#'+featureInputs[i]).parent().parent().css('display', 'block');
+        }
+        // Hide all except the selected one
+        if ((valueType - 1) != i) {
+          console.log(i, valueType);
+          if (i == 0) {
+            $('#'+featureInputs[i]).parent().parent().parent().css('display', 'none');
+          }
+          else {
+            $('#'+featureInputs[i]).parent().parent().css('display', 'none');
+          }
+        }
+      }
+    ";
     return $params;
   }
 

@@ -184,6 +184,38 @@ class ProductFeature extends \ADIOS\Core\Model {
       ],
     ];
 
+    $params['onload'] = "
+    if ($('#WidgetsProductsModelsProductFeature_1_value_type').val() == 1) {
+      $('#WidgetsProductsModelsProductFeature_1_min').removeAttr('disabled');
+      $('#WidgetsProductsModelsProductFeature_1_max').removeAttr('disabled');
+    }
+    else {
+      $('#WidgetsProductsModelsProductFeature_1_min').attr('disabled','disabled');
+      $('#WidgetsProductsModelsProductFeature_1_max').attr('disabled','disabled');
+    }
+    ";
+
+    $params['columns']['min']['disabled'] = true;
+    $params['columns']['max']['disabled'] = true;
+    $params['columns']['value_type']['onchange'] = "
+        if ($(this).val() == 1) {
+          $('#WidgetsProductsModelsProductFeature_1_min').removeAttr('disabled');
+          $('#WidgetsProductsModelsProductFeature_1_max').removeAttr('disabled');
+          $('#WidgetsProductsModelsProductFeature_1_entry_method').val('5');
+        }
+        else {
+          $('#WidgetsProductsModelsProductFeature_1_min').attr('disabled','disabled');
+          $('#WidgetsProductsModelsProductFeature_1_max').attr('disabled','disabled');
+        }
+        if ($(this).val() == 2) {
+          $('#WidgetsProductsModelsProductFeature_1_entry_method').val('5');
+        }
+        if ($(this).val() == 3) {
+          $('#WidgetsProductsModelsProductFeature_1_entry_method').val('4');
+        }
+    ";
+    return $params;
+
     return $params;
   }
 

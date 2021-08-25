@@ -143,20 +143,19 @@ namespace ADIOS\Plugins\WAI\Product {
       ];
     }
 
-    public function onModelAfterFormParams($event) {
-      $data = $event["data"];
-
-      if ($event["model"]->name == "Widgets/Products/Models/Product") {
-        $productUrl = $this->adios->websiteRenderer->getPlugin("WAI/Product/Detail")->getWebpageUrl($event["data"]);
-        $event["params"]["template"]["columns"][1]["html"] .= "
-          <a class='btn btn-icon-split btn-light' target='_blank' href='../../../{$this->adios->config["language"]}/{$productUrl}'>
-            <span class='icon'><i class='fa fa-link'></i></span>
-            <span class='text'>Open product page</span>
-          </a>"
-        ;
-      }
-
+    public function onProductDetailSidebarButtons($event) {
+      $productUrl = $this->adios->websiteRenderer->getPlugin("WAI/Product/Detail")->getWebpageUrl($event["data"]);
+      $event["html"] = "
+        <a 
+          class='btn btn-icon-split btn-light mt-4'
+          target='_blank'
+          href='../../../{$this->adios->config["language"]}/{$productUrl}'
+        >
+          <span class='icon'><i class='fa fa-link'></i></span>
+          <span class='text'>Open product page</span>
+        </a>"
+      ;
       return $event;
-    }
+   }
   }
 }

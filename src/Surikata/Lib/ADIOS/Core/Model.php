@@ -1013,6 +1013,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
       if ($id <= 0) {
         $returnValue = $this->insertRow($data);
+        $data['id'] = (int) $returnValue;
       } else {
         $returnValue = $this->updateRow($data, $id);
       }

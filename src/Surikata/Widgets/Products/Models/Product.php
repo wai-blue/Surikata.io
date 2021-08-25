@@ -495,7 +495,6 @@ class Product extends \ADIOS\Core\Model {
         "weight",
         "id_supplier",
         "id_brand",
-        "image",
         "product_info",
         "extended_warranty",
       ],
@@ -632,13 +631,10 @@ class Product extends \ADIOS\Core\Model {
         ],
         [
           "class" => "col-md-3 pr-0",
-          "html" => "
-            <img
-              src='{$this->adios->config['upload_url']}/{$data['image']}'
-              style='width:100%;margin-bottom:2em'
-            />
-            {$sidebarHtml}
-          ",
+          "rows" => [
+            "image",
+            ["html" => $sidebarHtml],
+          ],
         ],
       ],
     ];

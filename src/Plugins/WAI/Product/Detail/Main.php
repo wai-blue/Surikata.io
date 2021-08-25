@@ -144,13 +144,6 @@ namespace ADIOS\Plugins\WAI\Product {
     }
 
     public function onModelAfterFormParams($event) {
-      $data = $event["data"];
-
-      if ($event["model"]->name == "Widgets/Products/Models/Product") {
-        var_dump($this->adios->websiteRenderer->getPlugin("WAI/Product/Detail")->getWebpageUrl($event["data"]));
-        $event["params"]["template"]["columns"][1]["html"] .= "<a href='#'>Ahoj</a>";
-      }
-
       return $event;
     }
   }

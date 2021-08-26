@@ -3,9 +3,49 @@
 namespace Surikata\Plugins\WAI\Product {
   class Catalog extends \Surikata\Core\Web\Plugin {
     var $catalogInfo = NULL;
+    var $currentCategory = NULL;
 
     // must be the same as in ADIOS\Plugins namespace
-    var $defaultUrl = "{% urlizedCategoryName %}.cid.{% idProductCategory %}{% page %}{% itemsPerPage %}";
+    var $defaultUrl = "{% urlizedCategoryName %}.cid.{% idProductCategory %}";
+
+    public function getBreadCrumbs($urlVariables = []) {
+      $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
+
+      $breadCrumbs = [];
+
+      $categoryModel = $this->adminPanel
+        ->getModel("Widgets/Products/Models/ProductCategory")
+      ;
+
+      if ($this->currentCategory === NULL) {
+        $this->currentCategory = 
+          $urlVariables['idProductCategory'] 
+            ? $categoryModel->getById($urlVariables['idProductCategory'])
+            : NUll
+        ;
+      }
+
+      if ($this->currentCategory) {
+        $allCategories = $categoryModel->getAllCached();
+
+        $parentCategories = array_reverse(
+          $categoryModel->extractParentCategories(
+            $this->currentCategory['id'], 
+            $allCategories
+          )
+        );
+    
+        foreach ($parentCategories as $category) {
+          $url = $this->getWebPageUrl(
+            $this->convertCategoryToUrlVariables($category)
+          );
+  
+          $breadCrumbs[$url] = $category["name_lang_{$languageIndex}"];
+        }
+      }
+
+      return $breadCrumbs;
+    }
 
     /**
      * Returns formatted final URL for a specific category defined in $urlVariables.
@@ -128,7 +168,7 @@ namespace ADIOS\Plugins\WAI\Product {
     var $niceName = "Product Catalog";
     
     // must be the same as in Surikata\Plugins namespace
-    var $defaultUrl = "{% urlizedCategoryName %}.cid.{% idProductCategory %}{% page %}{% itemsPerPage %}";
+    var $defaultUrl = "{% urlizedCategoryName %}.cid.{% idProductCategory %}";
 
     public function getSiteMap($pluginSettings = [], $webPageUrl = "") {
 
@@ -142,9 +182,7 @@ namespace ADIOS\Plugins\WAI\Product {
         $urlPattern,
         [
           "urlizedCategoryName" => '(.+)',
-          "idProductCategory" => '(\d+)',
-          "page" => '/?(\d+)?',
-          "itemsPerPage" => '/?(\d+)?',
+          "idProductCategory" => '(\d+)'
         ]
       );
 

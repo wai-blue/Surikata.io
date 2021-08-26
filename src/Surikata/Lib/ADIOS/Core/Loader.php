@@ -96,6 +96,15 @@ class Loader {
 
       return ADIOS_WIDGETS_DIR."/{$widget}/Assets/{$asset}";
     };
+    $this->assetsUrlMap["adios/assets/plugins/"] = function($adios, $url) { 
+      $url = str_replace("adios/assets/plugins/", "", $url);
+      preg_match('/(.+?)\/~\/(.+)/', $url, $m);
+
+      $plugin = $m[1];
+      $asset = $m[2];
+
+      return ADIOS_PLUGINS_DIR."/{$plugin}/Assets/{$asset}";
+    };
 
     $this->renderAssets();
 

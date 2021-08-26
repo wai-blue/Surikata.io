@@ -4,5 +4,5 @@ log
 data
 vendor
 ConfigEnv.php
-src/Plugins/WAI.plugins
+src/Plugins/Proprietary
 composer.lock

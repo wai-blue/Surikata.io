@@ -55,6 +55,10 @@ class UI {
     return $this->create('SettingsPanel', $params);
   }
 
+  public function Cards($params) {
+    return $this->create('Cards', $params);
+  }
+
   public function Window($params) {
     return $this->create('Window', $params);
   }

@@ -87,6 +87,15 @@ class Loader {
     $this->assetsUrlMap["adios/assets/js/"] = __DIR__."/../Assets/Js/";
     $this->assetsUrlMap["adios/assets/images/"] = __DIR__."/../Assets/Images/";
     $this->assetsUrlMap["adios/assets/webfonts/"] = __DIR__."/../Assets/Webfonts/";
+    $this->assetsUrlMap["adios/assets/widgets/"] = function($adios, $url) { 
+      $url = str_replace("adios/assets/widgets/", "", $url);
+      preg_match('/(.*?)\/(.+)/', $url, $m);
+
+      $widget = $m[1];
+      $asset = $m[2];
+
+      return ADIOS_WIDGETS_DIR."/{$widget}/Assets/{$asset}";
+    };
 
     $this->renderAssets();
 
@@ -471,52 +480,55 @@ class Loader {
     } else {
       foreach ($this->assetsUrlMap as $urlPart => $mapping) {
         if (preg_match('/^'.str_replace("/", "\\/", $urlPart).'/', $this->requestedURI, $m)) {
+          
           if ($mapping instanceof \Closure) {
-            $mapping($this, $this->requestedURI);
+            $sourceFile = $mapping($this, $this->requestedURI);
           } else {
-            $ext = strtolower(pathinfo($this->requestedURI, PATHINFO_EXTENSION));
-
-            switch ($ext) {
-              case "css":
-              case "js":
-                header("Content-type: text/{$ext}");
-                header($headerExpires);
-                header("Pragma: cache");
-                header($headerCacheControl);
-                echo file_get_contents($mapping.str_replace($urlPart, "", $this->requestedURI));
-              break;
-              case "eot":
-              case "ttf":
-              case "woff":
-              case "woff2":
-                header("Content-type: application/x-font-{$ext}");
-                header($headerExpires);
-                header("Pragma: cache");
-                header($headerCacheControl);
-                echo file_get_contents($mapping.str_replace($urlPart, "", $this->requestedURI));
-              break;
-              case "bmp":
-              case "gif":
-              case "jpg":
-              case "jpeg":
-              case "png":
-              case "tiff":
-              case "webp":
-              case "svg":
-              case "eot":
-              case "ttf":
-              case "woff":
-              case "woff2":
-                header("Content-type: image/{$ext}");
-                header($headerExpires);
-                header("Pragma: cache");
-                header($headerCacheControl);
-                echo file_get_contents($mapping.str_replace($urlPart, "", $this->requestedURI));
-              break;
-            }
-
-            exit();
+            $sourceFile = $mapping.str_replace($urlPart, "", $this->requestedURI);
           }
+
+          $ext = strtolower(pathinfo($this->requestedURI, PATHINFO_EXTENSION));
+
+          switch ($ext) {
+            case "css":
+            case "js":
+              header("Content-type: text/{$ext}");
+              header($headerExpires);
+              header("Pragma: cache");
+              header($headerCacheControl);
+              echo file_get_contents($sourceFile);
+            break;
+            case "eot":
+            case "ttf":
+            case "woff":
+            case "woff2":
+              header("Content-type: application/x-font-{$ext}");
+              header($headerExpires);
+              header("Pragma: cache");
+              header($headerCacheControl);
+              echo file_get_contents($sourceFile);
+            break;
+            case "bmp":
+            case "gif":
+            case "jpg":
+            case "jpeg":
+            case "png":
+            case "tiff":
+            case "webp":
+            case "svg":
+            case "eot":
+            case "ttf":
+            case "woff":
+            case "woff2":
+              header("Content-type: image/{$ext}");
+              header($headerExpires);
+              header("Pragma: cache");
+              header($headerCacheControl);
+              echo file_get_contents($sourceFile);
+            break;
+          }
+
+          exit();
         }
       }
     }

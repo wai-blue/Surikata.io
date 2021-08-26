@@ -60,6 +60,14 @@ namespace ADIOS\Plugins\WAI\Blog {
 
     var $niceName = "Blogs";
 
+    public function manifest() {
+      return [
+        "title" => "Blogs",
+        "faIcon" => "fas fa-blog",
+        "description" => "Express yourself with blogs.",
+      ];
+    }
+
     public function getSiteMap($pluginSettings = [], $webPageUrl = "") {
 
       return [

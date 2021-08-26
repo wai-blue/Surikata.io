@@ -66,6 +66,14 @@ namespace ADIOS\Plugins\WAI {
 
     var $niceName = "News";
 
+    public function manifest() {
+      return [
+        "title" => "News",
+        "faIcon" => "fas fa-rss",
+        "description" => "Short news for your homepage.",
+      ];
+    }
+
     public function getSiteMap($pluginSettings = [], $webPageUrl = "") {
       return [
         $webPageUrl . '(/\d+)?/?(.*?)' => [

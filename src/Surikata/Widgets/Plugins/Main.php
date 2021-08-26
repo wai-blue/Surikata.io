@@ -17,6 +17,7 @@ class Plugins extends \ADIOS\Core\Widget {
       $this->adios->config['desktop']['sidebarItems']['Plugins'] = [
         "fa_icon" => "fas fa-puzzle-piece",
         "title" => "Plugins",
+        "onclick" => "desktop_render('Plugins/Overview');",
         "sub" => $pluginSettingsMenu,
       ];
     }

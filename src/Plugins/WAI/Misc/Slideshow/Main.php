@@ -23,6 +23,14 @@ namespace ADIOS\Plugins\WAI\Misc {
 
     var $niceName = "Slideshow";
 
+    public function manifest() {
+      return [
+        "title" => "Slideshow",
+        "faIcon" => "fas fa-images",
+        "description" => "Slideshow for your homepage",
+      ];
+    }
+
     public function getSettingsForWebsite() {
       return [
         "speed" => [

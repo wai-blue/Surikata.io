@@ -53,6 +53,14 @@ class Plugin {
     // desktop shortcuts, routing, ...
   }
 
+  public function manifest() {
+    return [
+      "faIcon" => "fas fa-puzzle-piece",
+      "title" => $this->niceName ?? $this->name,
+      "description" => "",
+    ];
+  }
+
   public function install() {
     return TRUE;
   }

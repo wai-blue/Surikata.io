@@ -579,10 +579,10 @@ if (count($parts) == 0) {
         "EN|reset-password|WithoutSidebar|My account - Reset password" => [
           "section_1" => "WAI/Customer/ForgotPassword"
         ],
-        "EN|register|WithoutSidebar|My account - Registration" => [
+        "EN|registration|WithoutSidebar|My account - Registration" => [
           "section_1" => ["WAI/Customer/Registration", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]]
         ],
-        "EN|register-confirm|WithoutSidebar|My account - Registration - Confirmation" => [
+        "EN|registration-confirm|WithoutSidebar|My account - Registration - Confirmation" => [
           "section_1" => "WAI/Customer/RegistrationConfirmation"
         ],
         "EN||WithoutSidebar|My account - Registration - Validation" => [

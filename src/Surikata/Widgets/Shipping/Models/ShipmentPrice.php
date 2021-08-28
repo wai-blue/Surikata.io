@@ -74,10 +74,6 @@ class ShipmentPrice extends \ADIOS\Core\Model {
 
   public function indexes($columns = []) {
     return parent::indexes([
-      "shipment_index" => [
-        "type" => "index",
-        "columns" => ["id_shipment"],
-      ],
       "unique_name" => [
         "type" => "unique",
         "columns" => ["name"],

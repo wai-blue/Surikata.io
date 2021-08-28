@@ -69,21 +69,4 @@ class Shipment extends \ADIOS\Core\Model {
     ]);
   }
 
-  public function indexes($columns = []) {
-    return parent::indexes([
-      "country_index" => [
-        "type" => "index",
-        "columns" => ["id_country"],
-      ],
-      "delivery_service_index" => [
-        "type" => "index",
-        "columns" => ["id_delivery_service"],
-      ],
-      "payment_service_index" => [
-        "type" => "index",
-        "columns" => ["id_payment_service"],
-      ]
-    ]);
-  }
-
 }

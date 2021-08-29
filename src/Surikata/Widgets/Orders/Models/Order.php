@@ -32,12 +32,12 @@ class Order extends \ADIOS\Core\Model {
     ];
 
     $this->enumOrderStateColors = [
-      self::STATE_NEW      => 'blue',
-      self::STATE_INVOICED => 'orange',
-      self::STATE_PAID     => 'green',
-      self::STATE_SHIPPED  => 'purple',
-      self::STATE_RECEIVED => 'light-gray',
-      self::STATE_CANCELED => 'gray',
+      self::STATE_NEW      => '#0000FF',     //blue
+      self::STATE_INVOICED => '#FFA500',     //orange
+      self::STATE_PAID     => '#008000',     //green
+      self::STATE_SHIPPED  => '#800080',     //purple
+      self::STATE_RECEIVED => '#D3D3D3',     //light-gray
+      self::STATE_CANCELED => '#808080',     //gray
     ];
 
     $enumDeliveryServices = [
@@ -316,15 +316,15 @@ class Order extends \ADIOS\Core\Model {
         ";
       break;
     }
+    $params['order_by'] = "number DESC";
 
     return $params;
   }
 
   public function onBeforeSave($data) {
     if ($data['id'] == -1) {
-      $data['number'] = "12345";
+      //$data['number'] = "12345";
     }
-
     return $data;
   }
 
@@ -364,7 +364,7 @@ class Order extends \ADIOS\Core\Model {
 
     $requiredFieldsEmpty = [];
 
-    if ($idAddress <= 0) {
+    if ($idAddress <= 0 && !$orderData["from_admin"]) {
       $requiredFieldsBilling = [
         "inv_given_name",
         "inv_family_name",
@@ -482,6 +482,14 @@ class Order extends \ADIOS\Core\Model {
       throw new \ADIOS\Widgets\Orders\Exceptions\PlaceOrderUnknownError();
     }
 
+    (new \ADIOS\Widgets\Orders\Models\OrderHistory($this->adios))
+      ->insertRow([
+        "id_order" => $idOrder,
+        "state" => self::STATE_NEW,
+        "event_time" => "SQL:now()",
+      ])
+    ;
+
     $placedOrderData = $this->getById($idOrder);
     // $placedOrderNumber = $this->calculateOrderNumber($placedOrderData);
     // $this->updateRow(["number" => $placedOrderNumber], $idOrder);
@@ -536,7 +544,65 @@ class Order extends \ADIOS\Core\Model {
     );
   }
 
-  public function createNewOrder($idCustomer, $orderData) {
+  /**
+   * Function create new order mainly from admin
+   * For Frontend checkout use placeOrder function
+   * @param $idCustomer
+   * @param null $orderData
+   * @throws \ADIOS\Widgets\Orders\Exceptions\EmptyRequiredFields
+   * @throws \ADIOS\Widgets\Orders\Exceptions\InvalidCustomerID
+   * @throws \ADIOS\Widgets\Orders\Exceptions\PlaceOrderUnknownError
+   * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownCustomer
+   * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService
+   */
+  public function createNewOrder($idCustomer, $orderData = null) {
+
+    $orderData["id_customer"] = $idCustomer;
+    $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adios);
+    if ($idCustomer > 0) {
+      $customer = $customerModel->getById($idCustomer);
+      if (count($customer["ADDRESSES"]) > 0) {
+        $orderData["id_address"] = $customer["ADDRESSES"][0]["id"];
+        $addressFields = [
+          "inv_given_name",
+          "inv_family_name",
+          "inv_street_1",
+          "inv_city",
+          "inv_zip",
+          "phone_number",
+          "email",
+          "del_given_name",
+          "del_family_name",
+          "del_street_1",
+          "del_city",
+          "del_zip",
+        ];
+        foreach ($addressFields as $field) {
+          $orderData[$field] = $customer["ADDRESSES"][0][$field];
+          // if delivery address is empty - use inv address
+          if (strpos($field, "del_") !== false) {
+            $inv_field = str_ireplace("del_", "inv_", $field);
+            if (strlen($customer["ADDRESSES"][0][$field]) == 0 && strlen($customer["ADDRESSES"][0][$inv_field]) > 0) {
+              $orderData[$field] = $customer["ADDRESSES"][0][$inv_field];
+            }
+          }
+        }
+      }
+    }
+    $this->placeOrder($orderData);
+  }
+
+  public function changeOrderState($idOrder, $data) {
+    $this->updateRow(["state" => $data["state"]], $idOrder);
+
+    (new \ADIOS\Widgets\Orders\Models\OrderHistory($this->adios))
+      ->insertRow([
+        "id_order" => $idOrder,
+        "state" => $data["state"],
+        "event_time" => "SQL:now()",
+      ])
+    ;
+
   }
 
   public function addItem($idOrder, $item) {
@@ -552,15 +618,15 @@ class Order extends \ADIOS\Core\Model {
         "columns" => [
           [
             "rows" => [
-              // "number",
-              // "serial_number",
               "id_customer",
               // "number_customer",
               "notes",
             ],
           ],
+
         ],
       ];
+      $params['save_action'] = "Orders/PlaceOrder";
     } else {
       $btn_vystavit_vyuctovaciu_fakturu = $this->adios->ui->button([
         "text"    => "Issue invoice",
@@ -590,6 +656,38 @@ class Order extends \ADIOS\Core\Model {
         "class" => "btn-primary mb-2 w-100",
       ])->render();
 
+      $btn_paid_order = $this->adios->ui->button([
+        "text" => "Set as paid",
+        "onclick" => "
+          let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
+          _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_PAID."', function(res) {
+            if (isNaN(res)) {
+              alert(res);
+            } else {
+              // refresh order window
+              window_refresh(tmp_form_id + '_form_window');
+            }
+          });
+        ",
+        "class" => "btn-primary mb-2 w-100",
+      ])->render();
+
+      $btn_cancel_order = $this->adios->ui->button([
+        "text" => "Cancel order",
+        "onclick" => "
+          let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
+          _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_CANCELED."', function(res) {
+            if (isNaN(res)) {
+              alert(res);
+            } else {
+              // refresh order window
+              window_refresh(tmp_form_id + '_form_window');
+            }
+          });
+        ",
+        "class" => "btn-primary mb-2 w-100",
+      ])->render();
+
       $tab_invoice_and_delivery_note = "";
       if ($data['INVOICE']['id'] <= 0) {
         $tab_invoice_and_delivery_note .= "
@@ -606,6 +704,8 @@ class Order extends \ADIOS\Core\Model {
         "params" => $params,
         "data" => $data,
       ])["html"];
+      $sidebarHtml .= $btn_paid_order;
+      $sidebarHtml .= $btn_cancel_order;
 
       $params["template"] = [
         "columns" => [
@@ -670,6 +770,9 @@ class Order extends \ADIOS\Core\Model {
   public function tableCellCSSFormatter($data) {
     if ($data['column'] == "id") {
       return "border-left:10px solid {$this->enumOrderStateColors[$data['row']['state']]};";
+    }
+    if ($data['column'] == "number") {
+      return "background-color: {$this->enumOrderStateColors[$data['row']['state']]}66;";
     }
     if ($data['column'] == "state") {
       return "text-decoration:underline wavy {$this->enumOrderStateColors[$data['row']['state']]};";
@@ -835,7 +938,7 @@ class Order extends \ADIOS\Core\Model {
       ->insertRow([
         "id_order" => $idOrder,
         "state" => self::STATE_INVOICED,
-        "cas" => "SQL:now()",
+        "event_time" => "SQL:now()",
       ])
     ;
   }

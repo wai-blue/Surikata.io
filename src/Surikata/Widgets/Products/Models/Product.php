@@ -642,6 +642,15 @@ class Product extends \ADIOS\Core\Model {
     return parent::formParams($data, $params);
   }
 
+  public function addProductToOrder($productId) {
+    $product = $this->getById($productId);
+    if ($product["id_delivery_unit"] > 0) {
+      $delivery_unit = (new \ADIOS\Widgets\Settings\Models\Unit($this->adios))->getById($product["id_delivery_unit"]);
+      $product["DELIVERY_UNIT"] = $delivery_unit;
+    }
+    return $product;
+  }
+
   public function recalculatePriceForSingleProduct($productOrIdProduct) {
     if (is_numeric($productOrIdProduct)) {
       $idProduct = $productOrIdProduct;

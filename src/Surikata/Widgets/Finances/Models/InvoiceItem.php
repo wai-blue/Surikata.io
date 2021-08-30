@@ -26,7 +26,7 @@ class InvoiceItem extends \ADIOS\Core\Model {
 
       "quantity" => [
         "type" => "float",
-        "title" => "Množstvo",
+        "title" => "Quantity",
         "show_column" => TRUE,
       ],
 
@@ -38,7 +38,7 @@ class InvoiceItem extends \ADIOS\Core\Model {
 
       "unit_price" => [
         "type" => "float",
-        "title" => "Cena",
+        "title" => "Unit price",
         "unit" => $this->adios->locale->currencySymbol(),
         "show_column" => TRUE,
       ],

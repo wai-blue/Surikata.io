@@ -516,7 +516,6 @@ function ui_input_lookup_detail(id, uid) {
 
 function ui_input_lookup_search(inputUid) {
   let form_data = ui_form_get_values($('#' + inputUid).attr('data-form-uid'));
-  console.log(form_data);
 
   window_render(
     'UI/Input/LookupSearch',

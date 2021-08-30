@@ -10,29 +10,6 @@
 
 namespace ADIOS\Core\UI;
 
-/**
- * Renders input element (or elements) for a specific data type.
- *
- * Supported data types are:
- *   * Char, Varchar, Int or Float (renders either *input* or *select* if enumValues are not empty)
- *   * Text (renders *textarea*)
- *   * Password (renders *input type='password'*)
- *   * Date or DateTime (renders *input* with date/datetime picker)
- *   * Lookup (renders either *select* or an autocomplete)
- *   * Image or File (renders a complex input for uploading and selecting the image or file)
- *   * Color (renders the complex input for color selection)
- *
- * Example code to render the input for *char* data type:
- *
- * ```php
- *   $adios->ui->Input([
- *     "type" => "char",
- *     "value" => "Hello World",
- *   ]);
- * ```
- *
- * @package UI\Elements
- */
 class Input extends \ADIOS\Core\UI\View {
     /*             */
     /* __construct */
@@ -93,11 +70,8 @@ class Input extends \ADIOS\Core\UI\View {
             'lookup_auto_limit' => 100,
             'input_style' => '',
             'lookup_detail_enabled' => true,
-            'lookup_detail_onclick' => '',
             'lookup_search_enabled' => true,
-            'lookup_search_onclick' => '',
             'lookup_add_enabled' => false,
-            'lookup_add_onclick' => '',
             'gc_function' => '',
             'table_checkboxes_cols' => '',
             'text_onchange' => '',
@@ -926,20 +900,13 @@ class Input extends \ADIOS\Core\UI\View {
               $this->params['onchange'] = $this->params['onchange_text'];
 
               $this->params['onkeydown'] = " ui_input_lookup_onkeydown(event, '{$this->params['uid']}'); ".$this->params['onkeydown'];
-              $this->params['onchange'] = " ui_input_lookup_set_value('{$this->params['uid']}', $('#{$this->params['uid']}').val(), '', function(){ ".$this->params['onchange'].' }); ';
-
-              if (!$this->adios->db_perms($this->params['table'].'/select')) {
-                if ('' == $this->params['lookup_detail_onclick']) {
-                  $this->params['lookup_detail_enabled'] = false;
-                }
-                if ('' == $this->params['lookup_search_onclick']) {
-                  $this->params['lookup_search_enabled'] = false;
-                }
-              }
-
-              $detail_onclick = ('' != $this->params['lookup_detail_onclick'] ? $this->params['lookup_detail_onclick'] : 'ui_input_lookup_detail');
-              $search_onclick = ('' != $this->params['lookup_search_onclick'] ? $this->params['lookup_search_onclick'] : 'ui_input_lookup_search');
-              $add_onclick = ('' != $this->params['lookup_add_onclick'] ? $this->params['lookup_add_onclick'] : 'ui_input_lookup_add');
+              $this->params['onchange'] = "
+                ui_input_lookup_set_value(
+                  '{$this->params['uid']}',
+                  $('#{$this->params['uid']}').val(),
+                  '',
+                "
+              ;
 
               $html .= "
                 <span style='white-space:nowrap;'>
@@ -987,34 +954,44 @@ class Input extends \ADIOS\Core\UI\View {
                   </div>
                   <div class='adios ui Input lookup_controls'>
                     ".($this->params['lookup_search_enabled'] && !$this->params['readonly'] ? "
-                      <span class='btn btn-light btn-sm' onclick=\"{$search_onclick}('{$this->params['uid']}')\">
+                      <span
+                        class='btn btn-light btn-sm'
+                        onclick=\"ui_input_lookup_search('{$this->params['uid']}')\"
+                      >
                         <i
                           class='icon fas fa-search'
                           title='".$this->translate('Search in list')."'
                         ></i>
                       </span>
                     " : "")."
-                    ".($this->params['lookup_detail_enabled'] ? "
-                      <span class='btn btn-light btn-sm' onclick=\"{$detail_onclick}($('#{$this->params['uid']}').val(), '{$this->params['uid']}');\">
-                        <i
-                          id='{$this->params['uid']}_detail_button'
-                          style='".($this->params['value'] > 0 && is_array($row) ? '' : 'display:none;')."'
-                          class='icon fas fa-id-card'
-                          title='".l('Zobraziť detail záznamu')."' 
-                        ></i>
-                      </span>
+                    ".($this->params['value'] > 0 ? "
+                      ".($this->params['lookup_detail_enabled'] ? "
+                        <span
+                          class='btn btn-light btn-sm'
+                          onclick=\"ui_input_lookup_detail($('#{$this->params['uid']}').val(), '{$this->params['uid']}');\"
+                        >
+                          <i
+                            id='{$this->params['uid']}_detail_button'
+                            style='".($this->params['value'] > 0 && is_array($row) ? '' : 'display:none;')."'
+                            class='icon fas fa-id-card'
+                            title='".l('Zobraziť detail záznamu')."' 
+                          ></i>
+                        </span>
+                      " : "")."
+                      ".(!$this->params['readonly'] ? "
+                        <span
+                          class='btn btn-light btn-sm'
+                          onclick=\"ui_input_lookup_set_value('{$this->params['uid']}', 0);\"
+                        >
+                          <i
+                            id='{$this->params['uid']}_clear_button'
+                            style='".($this->params['value'] > 0 && is_array($row) ? '' : 'display:none;').";'
+                            class='icon fas fa-times'
+                            title='".l('Zrušiť výber')."' 
+                          ></i>
+                        </span>
+                      " : "")."
                     " : "")."
-                    ".($this->params['lookup_add_enabled'] && !$this->params['readonly'] ? "<img id='{$this->params['uid']}_add_button' style='".($this->params['value'] > 0 ? 'display:none;' : '')."' src='{$this->adios->config['adios_images_url']}/black/app/plus.png' onclick=\" {$add_onclick}('{$this->params['uid']}'); \" title='".l('Pridať')."' />" : '').'
-                    '.(!$this->params['readonly'] ? "
-                      <span class='btn btn-light btn-sm' onclick=\"ui_input_lookup_set_value('{$this->params['uid']}', 0);\">
-                        <i
-                          id='{$this->params['uid']}_clear_button'
-                          style='".($this->params['value'] > 0 && is_array($row) ? '' : 'display:none;').";'
-                          class='icon fas fa-times'
-                          title='".l('Zrušiť výber')."' 
-                        ></i>
-                      </span>
-                    " : '')."
                   </div>
                 </span>
               ";

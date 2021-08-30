@@ -1,7 +1,5 @@
 
-  function ui_form_save(uid, params, btn) {
-    if (typeof params === 'undefined') { params = {}; }
-
+  function ui_form_save(uid, btn, onaftersave) {
     var data = {};
     data.id = $('#'+uid).attr('data-id');
     data.table = $('#'+uid).attr('data-table');
@@ -9,14 +7,6 @@
     data.values = ui_form_get_values(uid);
 
     var allowed = true;
-
-    let tmpBtnText = $(btn).find('.text').text();
-    $(btn).find('.text').text('Saving...');
-    setTimeout(function() {
-      $(btn).find('.text').text(tmpBtnText);
-    }, 300);
-
-    $('.' + uid + '_button').attr('disabled', 'disabled');
 
     if (typeof window[uid + '_onbeforesave'] == 'function') {
       var c_res = window[uid + '_onbeforesave'](uid, data, {});
@@ -61,43 +51,36 @@
     });
 
     if (allowed) {
-      var action = $('#'+uid).attr('data-save-action');
+      if (btn) {
+        let tmpBtnText = $(btn).find('.text').text();
+        $(btn).find('.text').text('Saving...');
+        setTimeout(function() {
+          $(btn).find('.text').text(tmpBtnText);
+        }, 300);
+      }
 
-      _ajax_read(action, data, function(_saved_id) {
-        $('.'+uid+'_button').removeAttr('disabled');
-        if (isNaN(_saved_id)) _alert(_saved_id); else {
+      _ajax_read(
+        $('#' + uid).attr('data-save-action'),
+        data,
+        function(_saved_id) {
+          if (isNaN(_saved_id)) {
+            _alert(_saved_id);
+          } else {
+            // if (data.id < 0) data.inserted_id = _saved_id;
+            // else data.inserted_id = 0;
 
-          if (data.id < 0) data.inserted_id = _saved_id;
-          else data.inserted_id = 0;
+            if (data.id < 0) {
+              $('#' + uid).attr('data-id', _saved_id);
+              ui_form_close(uid);
 
-          if (typeof window[uid + '_onaftersave'] == 'function') {
-            window[uid + '_onaftersave'](uid, data, {});
-          }
-
-          var close_form = (data.id < 0);
-          // if (typeof params.do_not_close === 'undefined'){
-          //   if (!($('#'+uid).attr('data-do-not-close'))){
-          //     close_form = true;
-          //   }
-          // }else if(!params.do_not_close){
-          //   close_form = true;
-          // }
-
-          if (close_form) {
-            $('#' + uid).attr('data-id', _saved_id);
-            ui_form_close(uid);
-          }
-
-          if (typeof params.aftersave_callback === 'function') {
-            params.aftersave_callback(uid, data);
-          }else if(typeof window[params.aftersave_callback] === 'function'){
-            window[params.aftersave_callback](uid, data);
-          }
-        };
-      });
-    }else{
-      $('.'+uid+'_button').removeAttr('disabled');
-    };
+              if (typeof onaftersave == 'function') {
+                onaftersave(_saved_id);
+              }
+            }
+          };
+        }
+      );
+    }
 
   };
 

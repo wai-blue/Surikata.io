@@ -10,14 +10,12 @@
 
 namespace ADIOS\Core\UI;
 
-class Form extends \ADIOS\Core\UI\View
-{
-  public function __construct(&$adios, $params = null)
-  {
+class Form extends \ADIOS\Core\UI\View {
+
+  public function __construct(&$adios, $params = null) {
 
     $this->adios = &$adios;
-    $gtp = $this->gtp;
-
+  
     // defaultne parametre
 
     $params = parent::params_merge([
@@ -116,10 +114,6 @@ class Form extends \ADIOS\Core\UI\View
       }
     }
 
-    // $this->params['show_save_button'] = ('UI/Form/Save' != $this->params['save_action'] || '' != $this->params['save_button_params']['onclick'] ? $this->params['show_save_button'] : false);
-    // $this->params['show_delete_button'] = ('UI/Table/Delete' != $this->params['delete_action'] || '' != $this->params['delete_button_params']['onclick'] ? $this->params['show_delete_button'] : false);
-    // $this->params['show_copy_button'] = ('UI/Table/Copy' != $this->params['copy_action'] || '' != $this->params['copy_button_params']['onclick'] ? $this->params['show_copy_button'] : false);
-
     if (!($this->params['id'] > 0)) {
       $this->params['show_delete_button'] = false;
     }
@@ -140,7 +134,15 @@ class Form extends \ADIOS\Core\UI\View
         }
       }
       if ('' == $this->params['save_button_params']['onclick']) {
-        $this->params['save_button_params']['onclick'] = "ui_form_save('{$this->params['uid']}', {}, this);";
+        $this->params['save_button_params']['onclick'] = "
+          ui_form_save(
+            '{$this->params['uid']}',
+            this,
+            function(_saved_id) {
+              window_render('{$this->model->urlBase}/' + _saved_id + '/Edit');
+            }
+          );
+        ";
       }
       $this->params['save_button_params']['class'] = "btn-save";
       $this->params['save_button_params']['id'] = "{$this->params['uid']}_save_btn";

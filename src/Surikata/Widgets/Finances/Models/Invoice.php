@@ -52,14 +52,12 @@ class Invoice extends \ADIOS\Core\Model {
         "type" => "int",
         "title" => "Accounting Year",
         "readonly" => TRUE,
-        "description" => "Will be generated automaticaly",
       ],
 
       "serial_number" => [
         "type" => "int",
         "title" => "Serial number",
         "readonly" => TRUE,
-        "description" => "Will be generated automaticaly",
         "show_column" => TRUE,
       ],
 
@@ -71,7 +69,7 @@ class Invoice extends \ADIOS\Core\Model {
 
       "id_customer" => [
         "type" => "lookup",
-        "title" => $this->translate("Client"),
+        "title" => $this->translate("Customer"),
         "model" => "Widgets/Customers/Models/Customer",
         "show_column" => TRUE,
       ],
@@ -466,13 +464,59 @@ class Invoice extends \ADIOS\Core\Model {
         "columns" => [
           [
             "tabs" => [
-              "Header" => [
+              "Customer" => [
+                ["html" => "<h4>Choose customer from addressbook</h4>"],
                 "id_customer",
+                ["html" => "<h4>or enter the details manually.</h4>"],
+                "customer_name",
+                "customer_street_1",
+                "customer_street_2",
+                "customer_city",
+                "customer_zip",
+                "customer_country",
+                "customer_company_id",
+                "customer_company_tax_id",
+                "customer_company_vat_id",
+                "customer_email",
+                "customer_phone",
+                "customer_www",
+                "customer_iban",
               ],
             ],
           ],
         ],
       ];
+
+      $params["columns"]["id_customer"]["onchange"] = "
+        _ajax_read(
+          'Customers/Ajax/GetCustomerData',
+          {id: $('#{$params['uid']}_id_customer').val()},
+          function(res) {
+
+            let customer_names = [];
+            if (res.given_name != '') customer_names.push(res.given_name);
+            if (res.family_name != '') customer_names.push(res.family_name);
+            if (res.company_name != '') customer_names.push(res.company_name);
+
+            $('#{$params['uid']}_customer_name').val(customer_names.join(' '));
+
+            if (res.ADDRESSES && res.ADDRESSES[0]) {
+              let a = res.ADDRESSES[0];
+              $('#{$params['uid']}_customer_street_1').val(a.inv_street_1);
+              $('#{$params['uid']}_customer_street_2').val(a.inv_street_2);
+              $('#{$params['uid']}_customer_city').val(a.inv_city);
+              $('#{$params['uid']}_customer_zip').val(a.inv_zip);
+              $('#{$params['uid']}_customer_country').val(a.inv_country);
+              $('#{$params['uid']}_customer_email').val(a.email);
+              $('#{$params['uid']}_customer_phone').val(a.phone_number);
+            }
+
+            $('#{$params['uid']}_customer_company_id').val(res.company_id);
+            $('#{$params['uid']}_customer_company_tax_id').val(res.company_tax_id);
+            $('#{$params['uid']}_customer_company_vat_id').val(res.company_vat_id);
+          }
+        );
+      ";
 
     } else {
       $params['title'] = "Invoice nr. ".hsc($data['number']);
@@ -483,51 +527,14 @@ class Invoice extends \ADIOS\Core\Model {
         "class"   => "btn-primary mb-2 w-100",
       ])->render();
 
-      // $btn_vytlacit_dodaci_list_html = $this->adios->ui->button([
-      //   "text"    => "Vytlačiť dodací list",
-      //   "onclick" => "window.open(_APP_URL + '/Invoices/".(int) $data['id']."/TlacitDodaciList');",
-      //   "class"   => "btn-primary mb-2 w-100",
-      // ])->render();
-
-      $btn_prijat_hotovost_html = $this->adios->ui->button([
-        "text"    => "Prijať hotovosť",
-        "onclick" => "
-          let prijataHotovost = prompt('Prijatá hotovosť v EUR:');
-
-          if (prijataHotovost !== null) {
-            prijataHotovost = prijataHotovost.replace(' ', '').replace(',', '.');
-
-            if (isNaN(prijataHotovost)) {
-              alert('Nezadali ste sumu prijatej hotovosti.');
-            } else {
-              _ajax_read(
-                'Invoices/PrijatHotovost',
-                'id=".(int) $data['id']."&prijataHotovost='+encodeURIComponent(prijataHotovost),
-                function(res) {
-                  if (res != 'undefined' && typeof res != 'undefined') {
-                    if (isNaN(res)) {
-                      alert(res);
-                    } else {
-                      window_render(
-                        'ui/form',
-                        {'table': '{$this->gtp}_pokladna_pohyby', 'id': res}
-                      );
-                    }
-                  }
-                }
-              );
-            }
-          }
-        ",
-        "class"   => "btn-info mb-2 w-100",
-      ])->render();
-
       $params["template"] = [
         "columns" => [
           [
             "class" => "col-md-9 pl-0",
             "tabs" => [
               "General" => [
+                "accounting_year",
+                "serial_number",
                 "number",
                 "variable_symbol",
                 "constant_symbol",
@@ -611,7 +618,40 @@ class Invoice extends \ADIOS\Core\Model {
     return $params;
   }
 
+  public function getDefaultValuesForNewInvoice($issueTime = "now") {
+    $numberingPattern = "ymd";
+    $issueTime = date("Y-m-d H:i:s", strtotime($issueTime));
 
+    return [
+      "accounting_year" => ["sql" => "year('{$issueTime}')"],
+      "serial_number" => ["sql" => "
+        @serial_number := (ifnull(
+          (
+            select
+              ifnull(max(`i`.`serial_number`), 0)
+            from `{$this->table}` `i`
+            where year(`i`.`issue_time`) = year('{$issueTime}')
+          ),
+          0
+        ) + 1)
+      "],
+      "number" => ["sql" => "
+        @number := concat(
+          '".date($numberingPattern, strtotime($issueTime))."',
+          lpad(@serial_number, 4, '0')
+        )
+      "],
+      "issue_time" => $issueTime,
+    ];
+  }
+
+  public function onBeforeSave($data) {
+    return array_merge(
+      $this->getDefaultValuesForNewInvoice(),
+      ["variable_symbol" => ["sql" => "@number"]],
+      $data
+    );
+  }
 
   public function issueInvoice($data) {
     // $data = [
@@ -640,7 +680,6 @@ class Invoice extends \ADIOS\Core\Model {
     // ];
 
     $invoiceItemModel = new \ADIOS\Widgets\Finances\Models\InvoiceItem($this->adios);
-    $numberingPattern = "ymd";
 
     $issueTime = (empty($data["TIMESTAMPS"]["issue_time"])
       ? date("Y-m-d H:i:s")
@@ -657,71 +696,58 @@ class Invoice extends \ADIOS\Core\Model {
       : date("Y-m-d H:i:s", strtotime($data["TIMESTAMPS"]["payment_due_time"], "+14 days"))
     );
 
-    $idInvoice = $this->insertRow([
-      "accounting_year" => ["sql" => "year('{$issueTime}')"],
-      "serial_number" => ["sql" => "
-        @serial_number := (ifnull(
-          (
-            select
-              ifnull(max(`i`.`serial_number`), 0)
-            from `{$this->table}` `i`
-            where year(`i`.`issue_time`) = year('{$issueTime}')
-          ),
-          0
-        ) + 1)
-      "],
-      "number" => ["sql" => "
-        @number := concat('".date($numberingPattern, strtotime($issueTime))."', lpad(@serial_number, 4, '0'))
-      "],
-      "state" => self::STATE_ISSUED,
-      "variable_symbol" => (empty($data["HEADER"]["variable_symbol"])
-        ? ["sql" => "@number"]
-        : $data["HEADER"]["variable_symbol"]
-      ),
-      "specific_symbol" => $data["HEADER"]["specific_symbol"],
-      "constant_symbol" => $data["HEADER"]["constant_symbol"],
+    $idInvoice = $this->insertRow(array_merge(
+      $this->getDefaultValuesForNewInvoice($issueTime),
+      [
+        "state" => self::STATE_ISSUED,
+        "variable_symbol" => (empty($data["HEADER"]["variable_symbol"])
+          ? ["sql" => "@number"]
+          : $data["HEADER"]["variable_symbol"]
+        ),
+        "specific_symbol" => $data["HEADER"]["specific_symbol"],
+        "constant_symbol" => $data["HEADER"]["constant_symbol"],
 
-      "issue_time" => $issueTime,
-      "delivery_time" => $deliveryTime,
-      "payment_due_time" => $paymentDueTime,
+        "delivery_time" => $deliveryTime,
+        "payment_due_time" => $paymentDueTime,
 
-      "id_order" => (int) $data["HEADER"]["id_order"],
-      "id_customer" => (int) $data["CUSTOMER"]["id"],
+        "id_order" => (int) $data["HEADER"]["id_order"],
+        "id_customer" => (int) $data["CUSTOMER"]["id"],
 
-      "customer_name" => $data["CUSTOMER"]["name"],
-      "customer_street_1" => $data["CUSTOMER"]["street_1"],
-      "customer_street_2" => $data["CUSTOMER"]["street_2"],
-      "customer_city" => $data["CUSTOMER"]["city"],
-      "customer_zip" => $data["CUSTOMER"]["zip"],
-      "customer_country" => $data["CUSTOMER"]["country"],
-      "customer_company_id" => $data["CUSTOMER"]["company_id"],
-      "customer_company_tax_id" => $data["CUSTOMER"]["company_tax_id"],
-      "customer_company_vat_id" => $data["CUSTOMER"]["company_vat_id"],
-      "customer_email" => $data["CUSTOMER"]["email"],
-      "customer_phone" => $data["CUSTOMER"]["phone_number"],
-      "customer_iban" => $data["CUSTOMER"]["iban"],
+        "customer_name" => $data["CUSTOMER"]["name"],
+        "customer_street_1" => $data["CUSTOMER"]["street_1"],
+        "customer_street_2" => $data["CUSTOMER"]["street_2"],
+        "customer_city" => $data["CUSTOMER"]["city"],
+        "customer_zip" => $data["CUSTOMER"]["zip"],
+        "customer_country" => $data["CUSTOMER"]["country"],
+        "customer_company_id" => $data["CUSTOMER"]["company_id"],
+        "customer_company_tax_id" => $data["CUSTOMER"]["company_tax_id"],
+        "customer_company_vat_id" => $data["CUSTOMER"]["company_vat_id"],
+        "customer_email" => $data["CUSTOMER"]["email"],
+        "customer_phone" => $data["CUSTOMER"]["phone_number"],
+        "customer_iban" => $data["CUSTOMER"]["iban"],
 
-      "supplier_name" => $data["SUPPLIER"]["name"],
-      "supplier_street_1" => $data["SUPPLIER"]["ulica_1"],
-      "supplier_street_2" => $data["SUPPLIER"]["ulica_2"],
-      "supplier_city" => $data["SUPPLIER"]["mesto"],
-      "supplier_zip" => $data["SUPPLIER"]["psc"],
-      "supplier_country" => $data["SUPPLIER"]["stat"],
-      "supplier_company_id" => $data["SUPPLIER"]["company_id"],
-      "supplier_company_tax_id" => $data["SUPPLIER"]["company_tax_id"],
-      "supplier_company_vat_id" => $data["SUPPLIER"]["company_vat_id"],
-      "supplier_email" => $data["SUPPLIER"]["email"],
-      "supplier_phone" => $data["SUPPLIER"]["phone_number"],
-      "supplier_iban" => $data["SUPPLIER"]["cislo_uctu"],
+        "supplier_name" => $data["SUPPLIER"]["name"],
+        "supplier_street_1" => $data["SUPPLIER"]["ulica_1"],
+        "supplier_street_2" => $data["SUPPLIER"]["ulica_2"],
+        "supplier_city" => $data["SUPPLIER"]["mesto"],
+        "supplier_zip" => $data["SUPPLIER"]["psc"],
+        "supplier_country" => $data["SUPPLIER"]["stat"],
+        "supplier_company_id" => $data["SUPPLIER"]["company_id"],
+        "supplier_company_tax_id" => $data["SUPPLIER"]["company_tax_id"],
+        "supplier_company_vat_id" => $data["SUPPLIER"]["company_vat_id"],
+        "supplier_email" => $data["SUPPLIER"]["email"],
+        "supplier_phone" => $data["SUPPLIER"]["phone_number"],
+        "supplier_iban" => $data["SUPPLIER"]["cislo_uctu"],
 
-      "payment_method" => $data["HEADER"]["payment_method"],
-      "order_number" => $data["HEADER"]["order_number"],
-      "cislo_dodacieho_listu" => (empty($data["HEADER"]["cislo_dodacieho_listu"])
-        ? "SQL:@number"
-        : $data["HEADER"]["cislo_dodacieho_listu"]
-      ),
-      "notes" => $data["HEADER"]["notes"],
-    ]);
+        "payment_method" => $data["HEADER"]["payment_method"],
+        "order_number" => $data["HEADER"]["order_number"],
+        "cislo_dodacieho_listu" => (empty($data["HEADER"]["cislo_dodacieho_listu"])
+          ? "SQL:@number"
+          : $data["HEADER"]["cislo_dodacieho_listu"]
+        ),
+        "notes" => $data["HEADER"]["notes"],
+      ]
+    ));
 
     if (is_array($data["ITEMS"])) {
       foreach ($data["ITEMS"] as $item) {

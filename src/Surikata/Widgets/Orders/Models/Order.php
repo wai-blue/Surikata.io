@@ -592,14 +592,16 @@ class Order extends \ADIOS\Core\Model {
     $this->placeOrder($orderData);
   }
 
-  public function changeOrderState($idOrder, $data) {
+  public function changeOrderState($idOrder, $data, $isCron = false) {
     $this->updateRow(["state" => $data["state"]], $idOrder);
 
+    $idUser = $isCron ? 0 : $this->adios->userProfile['id'];
     (new \ADIOS\Widgets\Orders\Models\OrderHistory($this->adios))
       ->insertRow([
         "id_order" => $idOrder,
         "state" => $data["state"],
         "event_time" => "SQL:now()",
+        "user" => $idUser,
       ])
     ;
 
@@ -934,13 +936,8 @@ class Order extends \ADIOS\Core\Model {
       "state" => self::STATE_INVOICED,
     ], $idOrder);
 
-    (new \ADIOS\Widgets\Orders\Models\OrderHistory($this->adios))
-      ->insertRow([
-        "id_order" => $idOrder,
-        "state" => self::STATE_INVOICED,
-        "event_time" => "SQL:now()",
-      ])
-    ;
+    $this->changeOrderState($idOrder, ["state" => self::STATE_INVOICED]);
+    
   }
 
   public function issueInvoce($idOrder, $useDatesFromOrder = FALSE) {

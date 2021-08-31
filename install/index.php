@@ -102,7 +102,7 @@ if (count($parts) == 0) {
   echo "
     <form action='' method='GET'>
       <p>
-        Select whitch parts do you want to install:
+        Select which parts do you want to install:
       </p>
       <table>
         <tr>
@@ -740,6 +740,18 @@ if (count($parts) == 0) {
             "WAI/Export/MoneyS3" => [
               "outputFileProducts" => "tmp/money_s3_products.xml",
               "outputFileOrders" => "tmp/money_s3_orders.xml",
+            ],
+            "WAIplugins/Export/Heureka" => [
+              "outputFileProducts" => "tmp/heureka_products.xml",
+              "outputFileOrders" => "tmp/heureka_orders.xml",
+            ],
+            "WAIplugins/Export/Glami" => [
+              "outputFileProducts" => "tmp/glami_products.xml",
+              "outputFileOrders" => "tmp/glami_orders.xml",
+            ],
+            "WAIplugins/Export/Pricemania" => [
+              "outputFileProducts" => "tmp/pricemania_products.xml",
+              "outputFileOrders" => "tmp/pricemania_orders.xml",
             ],
           ],
         ]

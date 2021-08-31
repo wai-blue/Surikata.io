@@ -2,6 +2,8 @@
 
 namespace ADIOS\Widgets\Orders\Models;
 
+use ADIOS\Core\Models\User;
+
 class OrderHistory extends \ADIOS\Core\Model {
   var $sqlName = "orders_history";
 
@@ -33,6 +35,14 @@ class OrderHistory extends \ADIOS\Core\Model {
         "title" => $this->translate("Notes"),
         "show_column" => TRUE,
       ],
+
+      "user" => [
+        "type" => "lookup",
+        "title" => $this->translate("User"),
+        "model" => "Core/Models/User",
+        "show_column" => TRUE,
+        "readonly" => TRUE,
+      ],
     ]);
   }
 
@@ -63,6 +73,14 @@ class OrderHistory extends \ADIOS\Core\Model {
 
     if ($data['column'] == "state") {
       return $orderModel->enumOrderStates[(int)$data['row']['state']];
+    }
+    if ($data['column'] == "user") {
+      if ($data['row']['user'] == 0) {
+        return "Automatic change";
+      }
+      else {
+        return (new User($this->adios))->getById($data['row']['user'])["name"];
+      }
     }
   }
 

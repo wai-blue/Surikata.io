@@ -994,3 +994,12 @@ ul.blog-page-meta {
   color: var(--theme-third-color) !important;
   border-radius: 0 !important;
 }
+
+.required-empty {
+  border-color: #e0736c !important;
+}
+
+.orderAgreement input[type='checkbox'] {
+  width: 20px !important;
+  margin-right: 5px;
+}

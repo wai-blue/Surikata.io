@@ -29,193 +29,122 @@
             </div>
           </div>
         {% elseif userLogged.ADDRESSES|length > 0 %}
-          <h3>List of your adresses</h3>
-          {% for address in userLogged.ADDRESSES %}
-            <input
-              type="radio" name="id_adresa" id="id_adresa_{{ address.id }}"
-              value="{{ address.id }}"
-              onclick="
-                $('#savedAddressValues_{{ address.id }} span').each(function() {
-                  let varName = $(this).data('variable');
-                  let varValue = $(this).text();
-                  $('#orderDataForm *[name=' + varName + ']').val(varValue);
-                });
-              "
-            >
-            <label class="form-check-label" for="id_adresa_{{ address.id }}">
-              {{ address.inv_given_name }} {{ address.inv_family_name }},
-              {{ address.inv_street_1 }}, {{ address.inv_city }},
-              {{ address.phone_number }}
-            </label>
-            <br/>
-            <div style='display:none' id="savedAddressValues_{{ address.id }}">
-              <span data-variable="inv_given_name">{{ address.inv_given_name }}</span>
-              <span data-variable="inv_family_name">{{ address.inv_family_name }}</span>
-              <span data-variable="inv_company_name">{{ address.inv_company_name }}</span>
-              <span data-variable="inv_street_1">{{ address.inv_street_1 }}</span>
-              <span data-variable="inv_street_2">{{ address.inv_street_2 }}</span>
-              <span data-variable="inv_zip">{{ address.inv_zip }}</span>
-              <span data-variable="inv_city">{{ address.inv_city }}</span>
-              <span data-variable="del_given_name">{{ address.del_given_name }}</span>
-              <span data-variable="del_family_name">{{ address.del_family_name }}</span>
-              <span data-variable="del_company_name">{{ address.del_company_name }}</span>
-              <span data-variable="del_street_1">{{ address.del_street_1 }}</span>
-              <span data-variable="del_street_2">{{ address.del_street_2 }}</span>
-              <span data-variable="del_zip">{{ address.del_zip }}</span>
-              <span data-variable="del_city">{{ address.del_city }}</span>
-              <span data-variable="phone_number">{{ address.phone_number }}</span>
-              <span data-variable="email">{{ address.email }}</span>
+          <div class="your-order-area">
+            <div class="gray-bg-4 your-order-wrap m-2">
+              <h4>List of your adresses</h4>
+              {% for address in userLogged.ADDRESSES %}
+                <input
+                  type="radio" name="id_adresa" id="id_adresa_{{ address.id }}"
+                  value="{{ address.id }}"
+                  onclick="
+                    $('#savedAddressValues_{{ address.id }} span').each(function() {
+                      let varName = $(this).data('variable');
+                      let varValue = $(this).text();
+                      $('#orderDataForm *[name=' + varName + ']').val(varValue);
+                    });
+                  "
+                >
+                <label class="form-check-label" for="id_adresa_{{ address.id }}">
+                  {{ address.inv_given_name }} {{ address.inv_family_name }},
+                  {{ address.inv_street_1 }}, {{ address.inv_city }},
+                  {{ address.phone_number }}
+                </label>
+                <br/>
+                <div style='display:none' id="savedAddressValues_{{ address.id }}">
+                  <span data-variable="inv_given_name">{{ address.inv_given_name }}</span>
+                  <span data-variable="inv_family_name">{{ address.inv_family_name }}</span>
+                  <span data-variable="inv_company_name">{{ address.inv_company_name }}</span>
+                  <span data-variable="inv_street_1">{{ address.inv_street_1 }}</span>
+                  <span data-variable="inv_street_2">{{ address.inv_street_2 }}</span>
+                  <span data-variable="inv_zip">{{ address.inv_zip }}</span>
+                  <span data-variable="inv_city">{{ address.inv_city }}</span>
+                  <span data-variable="del_given_name">{{ address.del_given_name }}</span>
+                  <span data-variable="del_family_name">{{ address.del_family_name }}</span>
+                  <span data-variable="del_company_name">{{ address.del_company_name }}</span>
+                  <span data-variable="del_street_1">{{ address.del_street_1 }}</span>
+                  <span data-variable="del_street_2">{{ address.del_street_2 }}</span>
+                  <span data-variable="del_zip">{{ address.del_zip }}</span>
+                  <span data-variable="del_city">{{ address.del_city }}</span>
+                  <span data-variable="phone_number">{{ address.phone_number }}</span>
+                  <span data-variable="email">{{ address.email }}</span>
+                </div>
+              {% endfor %}
             </div>
-          {% endfor %}
+          </div>
         {% endif %}
       </div>
       <form class="creditly-card-form agileinfo_form" method="post" id="orderDataForm">
 
         <div class="checkout-left row">
           <div class="col-12 col-md-7 address_form" style="float: left;">
-            <h4>Customer Info</h4>
-            <section class="creditly-wrapper wrapper">
-              <div class="information-wrapper">
-                <div class="first-row form-group">
-                  <div class="controls">
-                    <label class="control-label">{{ translate("First name") }}: </label>
-                    <input
-                      class="billing-address-name form-control"
-                      type="text"
-                      name="given_name"
-                      value="{{ user.profile.given_name }}"
-                      placeholder="{{ translate("First name") }}"
-                    />
-                  </div>
-                  <div class="controls">
-                    <label class="control-label">{{ translate("Last name") }}: </label>
-                    <input
-                      class="billing-address-name form-control"
-                      type="text"
-                      name="family_name"
-                      value="{{ user.profile.last_name }}"
-                      placeholder="{{ translate("Last name") }}"
-                    />
-                  </div>
-                  <div class="controls">
-                    <label class="control-label">{{ translate("Company name") }}: </label>
-                    <input
-                      class="billing-address-name form-control"
-                      type="text"
-                      name="company_name"
-                      value="{{ user.profile.company_name }}"
-                      placeholder="{{ translate("Company name") }}"
-                    />
-                  </div>
-
-                  <div class="controls">
-                    <label class="control-label">{{ translate("Tax ID") }}: </label>
-                    <input
-                      class="billing-address-name form-control"
-                      type="text"
-                      name="company_tax_id"
-                      value="{{ user.profile.company_tax_id }}"
-                      placeholder="{{ translate("Tax ID") }}"
-                    />
-                  </div>
-                  <div class="controls">
-                    <label class="control-label">{{ translate("VAT reg.") }}: </label>
-                    <input
-                      class="billing-address-name form-control"
-                      type="text"
-                      name="company_vat_id"
-                      value="{{ user.profile.company_vat_id }}"
-                      placeholder="{{ translate("VAT reg.") }}"
-                    />
-                  </div>
-                </div>
-              </div>
-            </section>
-
             <h4>Billing Details</h4>
             <section class="creditly-wrapper wrapper">
               <div class="information-wrapper">
                 <div class="first-row form-group">
-
-                  <div class="card_number_grids">
-                    <div class="card_number_grid_left">
-                      <div class="controls">
-                        <label class="control-label">{{ translate("First name") }}</label>
-                        <input
-                          class="form-control"
-                          type="text"
-                          name="inv_given_name"
-                          required
-                        />
-                      </div>
+                  <div class="row">
+                    <div class="col-lg-6 col-md-6 controls">
+                      <label class="control-label">{{ translate("First name") }}: </label>
+                      <input
+                        class="billing-address-name form-control"
+                        type="text"
+                        name="inv_given_name"
+                        value="{{ user.profile.given_name }}"
+                        placeholder="{{ translate("First name") }}"
+                      />
                     </div>
-                    <div class="card_number_grid_right">
-                      <div class="controls">
-                        <label class="control-label">{{ translate("Last name") }}</label>
-                        <input
-                          class="form-control"
-                          type="text"
-                          name="inv_last_name"
-                          required
-                        />
-                      </div>
+                    <div class="col-lg-6 col-md-6 controls">
+                      <label class="control-label">{{ translate("Last name") }}: </label>
+                      <input
+                        class="billing-address-name form-control"
+                        type="text"
+                        name="inv_family_name"
+                        value="{{ user.profile.last_name }}"
+                        placeholder="{{ translate("Last name") }}"
+                      />
                     </div>
-                    <div class="clear"> </div>
                   </div>
-
-                  <div class="controls">
-                    <label class="control-label">{{ translate("Company Name") }}</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      name="inv_company_name"
-                      placeholder="{{ translate("Company Name") }}">
-                  </div>
-                  <div class="controls">
-                    <label class="control-label">{{ translate("Street Address") }}</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      name="inv_street_1"
-                      placeholder="{{ translate("House number and street name") }}"
-                    >
-                    <input
-                      class="form-control"
-                      placeholder="{{ translate("Apartment, suite, unit etc.") }}"
-                      type="text"
-                      name="inv_street_2"
-                      required
-                    />
-                  </div>
-
-                  <div class="card_number_grids">
-                    <div class="card_number_grid_left">
-                      <div class="controls">
-                        <label class="control-label">{{ translate("Town / City") }}</label>
-                        <input
-                          class="form-control"
-                          type="text"
-                          name="inv_city"
-                          placeholder="{{ translate("Town / City") }}"
-                          required
-                        />
-                      </div>
+                  <div class="row">
+                    <div class="col-lg-6 col-md-6 controls">
+                      <label class="control-label">{{ translate("Town / City") }}</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="inv_city"
+                        placeholder="{{ translate("Town / City") }}"
+                        required
+                      />
                     </div>
-                    <div class="card_number_grid_right">
-                      <div class="controls">
-                        <label class="control-label">{{ translate("Postcode / ZIP") }}</label>
-                        <input
-                          class="form-control"
-                          type="text"
-                          name="inv_zip"
-                          placeholder="{{ translate("Postcode / ZIP") }}"
-                          required
-                        />
-                      </div>
+                    <div class="col-lg-6 col-md-6 controls">
+                      <label class="control-label">{{ translate("Postcode / ZIP") }}</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="inv_zip"
+                        placeholder="{{ translate("Postcode / ZIP") }}"
+                        required
+                      />
                     </div>
-                    <div class="clear"> </div>
                   </div>
-
+                  <div class="row">
+                    <div class="controls">
+                      <label class="control-label">{{ translate("Street Address") }}</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="inv_street_1"
+                        placeholder="{{ translate("House number and street name") }}"
+                      >
+                      <input
+                        class="form-control"
+                        placeholder="{{ translate("Apartment, suite, unit etc.") }}"
+                        type="text"
+                        name="inv_street_2"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="first-row form-group">
                   <div class="card_number_grids">
                     <div class="card_number_grid_left">
                       <div class="controls">
@@ -236,6 +165,7 @@
                           class="form-control"
                           type="text"
                           name="email"
+                          value="{{ user.profile.email }}"
                           placeholder="{{ translate("Email Address") }}"
                           required
                         />
@@ -243,15 +173,43 @@
                     </div>
                     <div class="clear"> </div>
                   </div>
+                </div>
+                <button class="submit check_out" type="button" onclick="$('#buyAsCompany').toggle();">Buy as company</button>
+                <div id='buyAsCompany' style="display:none">
+                  <div class="row mt-3">
+                    <div class="controls">
+                      <label class="control-label">{{ translate("Company name") }}: </label>
+                      <input
+                        class="billing-address-name form-control"
+                        type="text"
+                        name="company_name"
+                        value="{{ user.profile.company_name }}"
+                        placeholder="{{ translate("Company name") }}"
+                      />
+                    </div>
 
-                  <div class="controls">
-                    <label class="control-label">Address type: </label>
-                    <select class="form-control option-w3ls">
-                      <option>Office</option>
-                      <option>Home</option>
-                      <option>Commercial</option>
-
-                    </select>
+                    <div class="row">
+                      <div class="col-lg-6 col-md-6 controls">
+                        <label class="control-label">{{ translate("Tax ID") }}: </label>
+                        <input
+                          class="billing-address-name form-control"
+                          type="text"
+                          name="company_tax_id"
+                          value="{{ user.profile.company_tax_id }}"
+                          placeholder="{{ translate("Tax ID") }}"
+                        />
+                      </div>
+                      <div class="col-lg-6 col-md-6 controls">
+                        <label class="control-label">{{ translate("VAT reg.") }}: </label>
+                        <input
+                          class="billing-address-name form-control"
+                          type="text"
+                          name="company_vat_id"
+                          value="{{ user.profile.company_vat_id }}"
+                          placeholder="{{ translate("VAT reg.") }}"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -294,23 +252,6 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-12">
-                      <div class="controls">
-                        <div class="billing-info mb-20px">
-                          <label>{{ translate("Company Name") }}</label>
-                          <input class="form-control" type="text" name="del_company_name"/>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-12">
-                      <div class="controls">
-                        <div class="billing-info mb-20px">
-                          <label>{{ translate("Street Address") }}</label>
-                          <input class="form-control" class="billing-address" placeholder="House number and street name" type="text" name="del_street_1" required/>
-                          <input class="form-control" placeholder="Apartment, suite, unit etc." type="text" name="del_street_2" required/>
-                        </div>
-                      </div>
-                    </div>
                     <div class="col-lg-6 col-md-6">
                       <div class="controls">
                         <div class="billing-info mb-20px">
@@ -327,11 +268,52 @@
                         </div>
                       </div>
                     </div>
+                    <div class="col-lg-12">
+                      <div class="controls">
+                        <div class="billing-info mb-20px">
+                          <label>{{ translate("Street Address") }}</label>
+                          <input class="form-control" class="billing-address" placeholder="House number and street name" type="text" name="del_street_1" required/>
+                          <input class="form-control" placeholder="Apartment, suite, unit etc." type="text" name="del_street_2" required/>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                 </div>
               </div>
             </section>
+            <div class="orderAgreement mt-4 mb-4">
+              <label class="form-check-label" for="businessConditions">
+                <input
+                  type="checkbox"  
+                  name="businessConditions" 
+                  id="businessConditions"
+                  onclick="
+                    alert();
+                  "
+                >{{ translate("I have read the terms and conditions") }}
+              </label>
+              <label class="form-check-label" for="gdprAgreement">
+                <input
+                type="checkbox" 
+                name="gdprAgreement" 
+                id="gdprAgreement"
+                onclick="
+                  alert();
+                "
+              >{{ translate("I agree to the processing of personal data for the processing of the order") }}
+              </label>
+              <label class="form-check-label" for="marketingAgreement">
+                <input
+                  type="checkbox"  
+                  name="marketingAgreement" 
+                  id="marketingAgreement"
+                  onclick="
+                    alert();
+                  "
+                >{{ translate("I agree to the processing of personal data for the purpose of sending marketing information") }}
+              </label>
+            </div>
           </div>
 
             <div class="col-12 col-md-5 checkout-right-basket">
@@ -401,7 +383,7 @@
                   <a
                     class="btn-hover"
                     href="javascript:void(0)"
-                    onclick="AbeloThemeCart.placeOrder()"
+                    onclick="BasicThemeCart.placeOrder()"
                   >Place Order</a>
                 </div>
               </div>

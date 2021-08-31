@@ -3,27 +3,27 @@
 namespace Surikata\Plugins\WAI\Blog {
 
   class Catalog extends \Surikata\Core\Web\Plugin {
-    var $blogCatalogInfo = NULL;
+    public static $blogCatalogInfo = NULL;
 
     public function getBlogCatalogInfo($year = NULL, $month = NULL, $filter = NULL, $limit = NULL) {
 
       if (
-        $this->blogCatalogInfo === NULL
+        self::$blogCatalogInfo === NULL
         || $filter !== NULL
       ) {
 
         $blogDetailPlugin = new \Surikata\Plugins\WAI\Blog\Detail($this->websiteRenderer);
 
-        $this->blogCatalogInfo = (new \ADIOS\Plugins\WAI\Blog\Catalog\Models\Blog($this->adminPanel))
+        self::$blogCatalogInfo = (new \ADIOS\Plugins\WAI\Blog\Catalog\Models\Blog($this->adminPanel))
           ->getByDate($year, $month, $filter["filteredTags"], $limit)
         ;
 
-        foreach ($this->blogCatalogInfo as $key => $blog) {
-          $this->blogCatalogInfo[$key]["url"] = $blogDetailPlugin->getWebPageUrl($blog);
+        foreach (self::$blogCatalogInfo as $key => $blog) {
+          self::$blogCatalogInfo[$key]["url"] = $blogDetailPlugin->getWebPageUrl($blog);
         }
       }
 
-      return $this->blogCatalogInfo;
+      return self::$blogCatalogInfo;
     }
 
     public function getTwigParams($pluginSettings) {

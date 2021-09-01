@@ -245,10 +245,15 @@ class Order extends \ADIOS\Core\Model {
         "type" => "varchar",
         "title" => "Contact: Phone number",
       ],
-
       "email" => [
         "type" => "varchar",
         "title" => "Contact: Email",
+      ],
+      "domain" => [
+        "type" => "varchar",
+        "title" => "Domain",
+        "required" => TRUE,
+        "show_column" => TRUE,
       ],
     ]);
   }
@@ -340,7 +345,6 @@ class Order extends \ADIOS\Core\Model {
   public function placeOrder($orderData, $customerUID = NULL, $cartContents = NULL) {
 
     $idAddress = (int) $orderData['id_address'];
-
     $cartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($this->adios);
     $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adios);
     $customerUIDModel = new \ADIOS\Widgets\Customers\Models\CustomerUID($this->adios);
@@ -475,6 +479,7 @@ class Order extends \ADIOS\Core\Model {
       "delivery_service"  => $orderData['deliveryService'],
       "delivery_price"    => $deliveryPrice,
       "notes"             => $orderData['notes'],
+      "domain"            => $orderData['domain'],
       "state"             => self::STATE_NEW,
     ]);
 
@@ -558,6 +563,11 @@ class Order extends \ADIOS\Core\Model {
   public function createNewOrder($idCustomer, $orderData = null) {
 
     $orderData["id_customer"] = $idCustomer;
+    $values = json_decode($orderData["values"], true);
+    foreach ($values as $key => $value) {
+      $orderData[$key] = $value;
+    }
+
     $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adios);
     if ($idCustomer > 0) {
       $customer = $customerModel->getById($idCustomer);
@@ -613,6 +623,21 @@ class Order extends \ADIOS\Core\Model {
   }
 
   public function formParams($data, $params) {
+
+    $domains = [];
+    foreach ($this->adios->config["widgets"]["Website"]["domains"] as $key => $domain) {
+      $domains[$key] = $key;
+    }
+    $domain = $data === false ? array_keys($this->adios->config["settings"]["web"])[0] : $data["domain"];
+    $select_domain = $this->adios->ui->input([
+      "type" => "varchar",
+      "enum_values" => $domains,
+      "value" => $domain,
+      "text" => "Domain",
+      "uid" => $params["uid"]."_domain",
+      "class" => "mb-2 w-100",
+    ])->render();
+
     if ($data['id'] <= 0) {
       $params["template"] = [
         "columns" => [
@@ -620,6 +645,7 @@ class Order extends \ADIOS\Core\Model {
             "rows" => [
               "id_customer",
               // "number_customer",
+              ["html" => $select_domain],
               "notes",
             ],
           ],
@@ -719,6 +745,7 @@ class Order extends \ADIOS\Core\Model {
                 "confirmation_time",
                 "number_customer",
                 "notes",
+                ["html" => $select_domain],
                 [
                   "title" => "State",
                   "input" => "
@@ -768,6 +795,7 @@ class Order extends \ADIOS\Core\Model {
   }
 
   public function tableCellCSSFormatter($data) {
+
     if ($data['column'] == "id") {
       return "border-left:10px solid {$this->enumOrderStateColors[$data['row']['state']]};";
     }
@@ -776,6 +804,17 @@ class Order extends \ADIOS\Core\Model {
     }
     if ($data['column'] == "state") {
       return "text-decoration:underline wavy {$this->enumOrderStateColors[$data['row']['state']]};";
+    }
+    if ($data['column'] == "domain") {
+
+      $color = "#FFFFFF";
+      foreach ($this->adios->config["widgets"]["Website"]["domains"] as $key => $domain) {
+        if ($key == $data['row']['domain']) {
+          $color = $domain["color"];
+        }
+      }
+
+      return "font-size: 11px; color: {$color};";
     }
   }
 

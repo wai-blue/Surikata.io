@@ -879,6 +879,7 @@ if (count($parts) == 0) {
             "inv_country"       => $address['inv_country'],
             "phone_number"      => $address['phone_number'],
             "email"             => $address['email'],
+            "domain"            => "EN",
             "confirmation_time" => $orderConfirmationTime,
           ],
           $customerUID

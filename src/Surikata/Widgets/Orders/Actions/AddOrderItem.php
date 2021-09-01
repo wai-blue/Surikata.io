@@ -10,6 +10,9 @@ class AddOrderItem extends \ADIOS\Core\Action {
     ;
     $result["result"] = "SUCCESS";
     $result["content"] = $product;
+
+    // REVIEW: ???!!??? Return v strede? Naco je potom dalsi kod?
+    // Dokaze toto voberc fungovat?
     return json_encode($result);
 
     $orderModel = $this->adios->getModel("Widgets/Orders/Models/Order");

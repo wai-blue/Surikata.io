@@ -645,6 +645,7 @@ class Product extends \ADIOS\Core\Model {
   public function addProductToOrder($productId) {
     $product = $this->getById($productId);
     if ($product["id_delivery_unit"] > 0) {
+      // REVIEW: odstran spaghetti kod
       $delivery_unit = (new \ADIOS\Widgets\Settings\Models\Unit($this->adios))->getById($product["id_delivery_unit"]);
       $product["DELIVERY_UNIT"] = $delivery_unit;
     }

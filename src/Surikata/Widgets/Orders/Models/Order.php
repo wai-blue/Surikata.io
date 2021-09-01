@@ -92,13 +92,11 @@ class Order extends \ADIOS\Core\Model {
       "del_family_name" => [
         "type" => "varchar",
         "title" => "Delivery: Family Name",
-        "show_column" => TRUE,
       ],
 
       "del_company_name" => [
         "type" => "varchar",
         "title" => "Delivery: Company Name",
-        "show_column" => TRUE,
       ],
 
       "del_street_1" => [
@@ -142,6 +140,7 @@ class Order extends \ADIOS\Core\Model {
       "inv_given_name" => [
         "type" => "varchar",
         "title" => "Invoice: Given Name",
+        "show_column" => TRUE,
       ],
 
       "inv_family_name" => [
@@ -224,7 +223,6 @@ class Order extends \ADIOS\Core\Model {
       "notes" => [
         "type" => "text",
         "title" => "Notes",
-        "show_column" => TRUE,
       ],
 
       "state" => [
@@ -322,9 +320,7 @@ class Order extends \ADIOS\Core\Model {
   }
 
   public function onBeforeSave($data) {
-    if ($data['id'] == -1) {
-      //$data['number'] = "12345";
-    }
+
     return $data;
   }
 
@@ -672,6 +668,22 @@ class Order extends \ADIOS\Core\Model {
         "class" => "btn-primary mb-2 w-100",
       ])->render();
 
+      $btn_ship_order = $this->adios->ui->button([
+        "text" => "Set as shipped",
+        "onclick" => "
+          let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
+          _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_SHIPPED."', function(res) {
+            if (isNaN(res)) {
+              alert(res);
+            } else {
+              // refresh order window
+              window_refresh(tmp_form_id + '_form_window');
+            }
+          });
+        ",
+        "class" => "btn-success mb-2 w-100",
+      ])->render();
+
       $btn_cancel_order = $this->adios->ui->button([
         "text" => "Cancel order",
         "onclick" => "
@@ -685,7 +697,7 @@ class Order extends \ADIOS\Core\Model {
             }
           });
         ",
-        "class" => "btn-primary mb-2 w-100",
+        "class" => "btn-danger mb-2 w-100",
       ])->render();
 
       $tab_invoice_and_delivery_note = "";
@@ -699,14 +711,25 @@ class Order extends \ADIOS\Core\Model {
         ";
       }
 
+      $formTitle = "Order&nbsp;#&nbsp;".$data["number"];
+      $formTitle .= "&nbsp;<span
+        style='
+          background-color: {$this->enumOrderStateColors[$data['state']]};
+        '
+        class='badge badge-adios'>
+          {$this->enumOrderStates[$data['state']]}
+      </span>";
+
       $sidebarHtml = $this->adios->dispatchEventToPlugins("onOrderDetailSidebarButtons", [
         "model" => $this,
         "params" => $params,
         "data" => $data,
       ])["html"];
       $sidebarHtml .= $btn_paid_order;
+      $sidebarHtml .= $btn_ship_order;
       $sidebarHtml .= $btn_cancel_order;
 
+      $params["titleRaw"] = $formTitle;
       $params["template"] = [
         "columns" => [
           [

@@ -89,4 +89,33 @@ class WebMenuItem extends \ADIOS\Core\Model {
     ;
   }
 
+  public function extractParentMenuItems($urlMenuItem, $allMenuItems) {
+    $parentMenuItems = [];
+
+    foreach ($allMenuItems as $menuItem) {
+      if ($menuItem['url'] == $urlMenuItem) {
+        $tmpCategory = $menuItem;
+        break;
+      }
+    }
+
+    if ($tmpCategory) {
+      foreach ($allMenuItems as $menuItem) {
+        if ($tmpCategory['id_parent'] == $menuItem['id']) {
+          $parentMenuItems[$menuItem['url']] = $menuItem['title'];
+
+          $anotherParent = $this->extractParentMenuItems($menuItem['url'], $allMenuItems);
+
+          if ($anotherParent) {
+            foreach ($anotherParent as $url => $item) {
+              $parentMenuItems[$url] = $item;
+            }
+          }
+        }
+      }
+    }
+
+    return array_reverse($parentMenuItems);
+  }
+
 }

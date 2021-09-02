@@ -6,10 +6,9 @@ class Delivery extends \Surikata\Core\Web\Plugin {
   public static $isDeliveryPlugin = TRUE;
 
   public function getDeliveryMeta() {
-    return [
-      "name" => "DeliveryServiceName",
-      "description" => "DeliveryServiceDescription",
-    ];
+    $deliveryServiceModel = new \ADIOS\Widgets\Shipping\Models\DeliveryService($this->adios);
+
+    return $deliveryServiceModel->getByPluginName($this->name);
   }
 
   public function calculatePriceForProduct($product) {

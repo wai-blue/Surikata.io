@@ -18,7 +18,7 @@ namespace Surikata\Plugins\WAI\Payment {
 
 }
 
-namespace ADIOS\Plugins {
+namespace ADIOS\Plugins\WAI\Payment {
 
   class Card extends \Surikata\Core\AdminPanel\Plugin {
     // sem pojdu nastavovacky ako napr. merchandId a podobne

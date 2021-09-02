@@ -994,3 +994,25 @@ ul.blog-page-meta {
   color: var(--theme-third-color) !important;
   border-radius: 0 !important;
 }
+
+ul.breadcrumb {
+  padding: 15px;
+  list-style: none;
+  background-color: #f5f5f5;
+}
+ul.breadcrumb li {
+  display: inline;
+}
+ul.breadcrumb li+li:before {
+  padding: 10px;
+  color: black;
+  content: "\203A";
+}
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}

@@ -642,10 +642,16 @@ class Product extends \ADIOS\Core\Model {
     return parent::formParams($data, $params);
   }
 
+  /**
+   * Add product to Order, return product or false
+   * @param $productId
+   * @return array|boolean
+   */
   public function addProductToOrder($productId) {
     $product = $this->getById($productId);
     if ($product["id_delivery_unit"] > 0) {
-      $delivery_unit = (new \ADIOS\Widgets\Settings\Models\Unit($this->adios))->getById($product["id_delivery_unit"]);
+      $delivery_unit = (new \ADIOS\Widgets\Settings\Models\Unit($this->adios))
+        ->getById($product["id_delivery_unit"]);
       $product["DELIVERY_UNIT"] = $delivery_unit;
     }
     return $product;

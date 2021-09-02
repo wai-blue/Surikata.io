@@ -45,7 +45,10 @@ class Order extends \ADIOS\Core\Model {
     ];
 
     foreach ($this->adios->websiteRenderer->getDeliveryPlugins() as $plugin) {
-      $enumDeliveryServices[$plugin->name] = $plugin->getDeliveryMeta()["name"];
+      $tmpMeta = $plugin->getDeliveryMeta();
+      if ($tmpMeta !== FALSE) {
+        $enumDeliveryServices[$plugin->name] = $tmpMeta["name"];
+      }
     }
     $this->enumDeliveryServices = $enumDeliveryServices;
 

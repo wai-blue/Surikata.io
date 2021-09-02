@@ -5,6 +5,22 @@ namespace Surikata\Plugins\WAI\Blog {
   class Catalog extends \Surikata\Core\Web\Plugin {
     public static $blogCatalogInfo = NULL;
 
+    public function getBreadCrumbs($urlVariables = []) {
+      $webPageUrl = $this->websiteRenderer->currentPage['url'];
+
+      foreach ($urlVariables as $key => $url) {
+        if (
+            !is_numeric($key)
+            && ($key == "year" || $key == "month")
+          ) { 
+          $webPageUrl = $webPageUrl . "/" . $url;
+          $breadCrumbs[$webPageUrl] = $url;
+        }
+      }
+
+      return $breadCrumbs;
+    }
+
     public function getBlogCatalogInfo($year = NULL, $month = NULL, $filter = NULL, $limit = NULL) {
 
       if (
@@ -36,8 +52,8 @@ namespace Surikata\Plugins\WAI\Blog {
       ;
 
       $twigParams['blogs'] = $this->getBlogCatalogInfo(
-        substr($this->websiteRenderer->urlVariables["year"], 1),
-        substr($this->websiteRenderer->urlVariables["month"], 1),
+        $this->websiteRenderer->urlVariables["year"],
+        $this->websiteRenderer->urlVariables["month"],
         $filter
       );
 
@@ -60,18 +76,10 @@ namespace ADIOS\Plugins\WAI\Blog {
 
     var $niceName = "Blogs";
 
-    public function manifest() {
-      return [
-        "title" => "Blogs",
-        "faIcon" => "fas fa-blog",
-        "description" => "Express yourself with blogs.",
-      ];
-    }
-
     public function getSiteMap($pluginSettings = [], $webPageUrl = "") {
 
       return [
-        $webPageUrl . '(/\d+)?(/\d+)?' => [
+        $webPageUrl . '/?(\d+)/?(\d+)?' => [
           1 => "year",
           2 => "month",
         ],

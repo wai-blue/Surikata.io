@@ -549,10 +549,12 @@ if (count($parts) == 0) {
         // Product catalog pages
         "EN|products|WithLeftSidebar|Products - Catalog" => [
           "sidebar" => ["WAI/Product/Filter", ["showProductCategories" => 1, "layout" => "sidebar", "showProductCategories" => 1, "show_brands" => 1]],
-          "section_1" => ["WAI/Product/Catalog", ["defaultItemsPerPage" => 6]],
+          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+          "section_2" => ["WAI/Product/Catalog", ["defaultItemsPerPage" => 6]],
         ],
         "EN||WithoutSidebar|Products - Detail" => [
-          "section_1" => ["WAI/Product/Detail", ["zobrazit_podobne_produkty" => 1, "show_accessories" => 1, "showAuthor" => 1]],
+          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+          "section_2" => ["WAI/Product/Detail", ["zobrazit_podobne_produkty" => 1, "show_accessories" => 1, "showAuthor" => 1]],
         ],
 
         // Shopping cart, checkout and order confirmation
@@ -579,10 +581,10 @@ if (count($parts) == 0) {
         "EN|reset-password|WithoutSidebar|My account - Reset password" => [
           "section_1" => "WAI/Customer/ForgotPassword"
         ],
-        "EN|register|WithoutSidebar|My account - Registration" => [
+        "EN|registration|WithoutSidebar|My account - Registration" => [
           "section_1" => ["WAI/Customer/Registration", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]]
         ],
-        "EN|register-confirm|WithoutSidebar|My account - Registration - Confirmation" => [
+        "EN|registration-confirm|WithoutSidebar|My account - Registration - Confirmation" => [
           "section_1" => "WAI/Customer/RegistrationConfirmation"
         ],
         "EN||WithoutSidebar|My account - Registration - Validation" => [
@@ -592,11 +594,13 @@ if (count($parts) == 0) {
         // Blogs
         "EN|blogs|WithLeftSidebar|Blogs" => [
           "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
-          "section_1" => ["WAI/Blog/Catalog", ['itemsPerPage' => 3, "showAuthor" => 1]],
+          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+          "section_2" => ["WAI/Blog/Catalog", ['itemsPerPage' => 3, "showAuthor" => 1]],
         ],
         "EN||WithLeftSidebar|Blog" => [
           "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
-          "section_1" => "WAI/Blog/Detail",
+          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+          "section_2" => "WAI/Blog/Detail",
         ],
 
         // Miscelaneous pages

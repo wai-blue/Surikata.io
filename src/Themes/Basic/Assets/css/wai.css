@@ -384,7 +384,7 @@ ul.blog-page-meta {
   display: none;
   position: fixed;
   left: 68%;
-  top: 16.9%;
+  top: 90px;
   width: 420px;
 
   padding: 1em;
@@ -400,6 +400,23 @@ ul.blog-page-meta {
   -o-box-shadow: 0px 0px 5px 2px #9a9a9a;
   -ms-box-shadow: 0px 0px 5px 2px #9a9a9a;
   box-shadow: 0px 0px 5px 2px #9a9a9a;
+}
+
+@media (max-width: 1368px) {
+  #minicart {
+    left: auto;
+    right: 20px;
+  }
+}
+
+@media (max-width: 991px) {
+  #minicart {
+    position: fixed;
+    left: 0;
+    right: auto;
+    top: 85px;
+    width: 100%;
+  }
 }
 
 #minicart ul {
@@ -893,7 +910,7 @@ ul.blog-page-meta {
 
 .your-order-area .Place-order a {
   background-color: var(--theme-main-color);
-  color: var(--theme-second-color);
+  color: var(--theme-lightgrey-color);
   display: block;
   font-weight: 700;
   letter-spacing: 1px;

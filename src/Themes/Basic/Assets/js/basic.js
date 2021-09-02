@@ -135,3 +135,7 @@ $( "#headerSearch" ).autocomplete({
 		};
 	},
 });
+
+function toggleCollapsed(id) {
+	$("#"+id).toggle();
+}

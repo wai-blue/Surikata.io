@@ -1998,7 +1998,7 @@ button.btn1 {
 
   .logo {
     left: 3%;
-    top: 4.5%;
+    top: 20px;
   }
 
   .mobile-nav-button {
@@ -2302,6 +2302,10 @@ button.btn1 {
   .error_page h4 {
     font-size: 6em;
   }
+
+  .shop_inner_inf {
+    width: 100%;
+  }
 }
 
 @media (max-width: 384px) {
@@ -2421,7 +2425,7 @@ button.btn1 {
   }
 
   .shop_inner_inf {
-    width: 95%;
+    width: 100%;
   }
 
   .newsleft h3 {

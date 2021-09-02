@@ -10,15 +10,15 @@ class PaymentService extends \ADIOS\Core\Model {
   var $formTitleForInserting = "New payment service";
   var $formTitleForEditing = "Payment service";
 
-  var $deliveryPluginsEnumValues = [];
+  var $paymentPluginsEnumValues = [];
 
   public function init() {
-    $this->deliveryPluginsEnumValues = [
-      "" => "-- Select a delivery plugin --",
+    $this->paymentPluginsEnumValues = [
+      "" => "-- Select a payment plugin --",
     ];
 
-    foreach ($this->adios->websiteRenderer->getDeliveryPlugins() as $deliveryPlugin) {
-      $this->deliveryPluginsEnumValues[$deliveryPlugin->name] = $deliveryPlugin->name;
+    foreach ($this->adios->websiteRenderer->getPaymentPlugins() as $paymentPlugin) {
+      $this->paymentPluginsEnumValues[$paymentPlugin->name] = $paymentPlugin->name;
     }
   }
 
@@ -52,8 +52,8 @@ class PaymentService extends \ADIOS\Core\Model {
 
       "connected_plugin" => [
         'type' => 'varchar',
-        'title' => $this->translate("Connected delivery plugin"),
-        "enum_values" => $this->deliveryPluginsEnumValues,
+        'title' => $this->translate("Connected payment plugin"),
+        "enum_values" => $this->paymentPluginsEnumValues,
         'show_column' => TRUE,
       ],
     ]);

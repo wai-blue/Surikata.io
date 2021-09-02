@@ -360,7 +360,6 @@ class Order extends \ADIOS\Core\Model {
 
     $requiredFieldsEmpty = [];
 
-    // REVIEW: vysvetli mi prosim logiku (zmysel, dovod) parametra from_admin
     if ($idAddress <= 0 && !$orderData["from_admin"]) {
       $requiredFieldsBilling = [
         "inv_given_name",
@@ -541,7 +540,6 @@ class Order extends \ADIOS\Core\Model {
     );
   }
 
-  // REVIEW: ocenujem, ze si pridal docblock. Pokracuj v tom, dakujem.
   /**
    * Function create new order mainly from admin
    * For Frontend checkout use placeOrder function
@@ -579,15 +577,12 @@ class Order extends \ADIOS\Core\Model {
           $orderData[$field] = $customer["ADDRESSES"][0][$field];
           // if delivery address is empty - use inv address
           if (strpos($field, "del_") !== false) {
-            // REVIEW: $camelCase
-            $inv_field = str_ireplace("del_", "inv_", $field);
-            // REVIEW: odstran spaghetti kod, takto:
-            // if (
-            //   strlen($customer["ADDRESSES"][0][$field]) == 0
-            //   && strlen($customer["ADDRESSES"][0][$inv_field]) > 0
-            // ) {
-            if (strlen($customer["ADDRESSES"][0][$field]) == 0 && strlen($customer["ADDRESSES"][0][$inv_field]) > 0) {
-              $orderData[$field] = $customer["ADDRESSES"][0][$inv_field];
+            $invField = str_ireplace("del_", "inv_", $field);
+            if (
+              strlen($customer["ADDRESSES"][0][$field]) == 0
+              && strlen($customer["ADDRESSES"][0][$invField]) > 0
+            ) {
+              $orderData[$field] = $customer["ADDRESSES"][0][$invField];
             }
           }
         }
@@ -625,6 +620,14 @@ class Order extends \ADIOS\Core\Model {
               "id_customer",
               // "number_customer",
               "notes",
+              ["html" => "
+                <input
+                  type='hidden'
+                  name='{$params["uid"]}_from_admin'
+                  id='{$params["uid"]}_from_admin'
+                  value='1'
+                >
+              "],
             ],
           ],
 
@@ -633,11 +636,7 @@ class Order extends \ADIOS\Core\Model {
       $params['save_action'] = "Orders/PlaceOrder";
     } else {
 
-      // REVIEW: prosim vsetky $btn_XXX premenne premenovat na camelCase,
-      // cize napr. $btnVystavitVyuctovaciuFakturu.
-      // Ak si trufas, tak ich aj preloz do anglictiny.
-
-      $btn_vystavit_vyuctovaciu_fakturu = $this->adios->ui->button([
+      $btnPlaceIssueInvoice = $this->adios->ui->button([
         "text"    => "Issue invoice",
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
@@ -653,7 +652,7 @@ class Order extends \ADIOS\Core\Model {
         "class"   => "btn-info mb-2 w-100",
       ])->render();
 
-      $btn_zobrazit_vyuctovaciu_fakturu = $this->adios->ui->button([
+      $btnShowIssueInvoice = $this->adios->ui->button([
         "text" => "Show invoice nr. ".hsc($data['INVOICE']['number']),
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
@@ -665,8 +664,7 @@ class Order extends \ADIOS\Core\Model {
         "class" => "btn-primary mb-2 w-100",
       ])->render();
 
-      // REVIEW: nie je lepsi nazov $btnOrderPaid?
-      $btn_paid_order = $this->adios->ui->button([
+      $btnOrderStatePaid = $this->adios->ui->button([
         "text" => "Set as paid",
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
@@ -682,8 +680,7 @@ class Order extends \ADIOS\Core\Model {
         "class" => "btn-primary mb-2 w-100",
       ])->render();
 
-      // REVIEW: nie je lepsi nazov $btnOrderShipped?
-      $btn_ship_order = $this->adios->ui->button([
+      $btnOrderStateShipped = $this->adios->ui->button([
         "text" => "Set as shipped",
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
@@ -699,12 +696,9 @@ class Order extends \ADIOS\Core\Model {
         "class" => "btn-success mb-2 w-100",
       ])->render();
 
-      // REVIEW: nie je lepsi nazov $btnOrderCancelled?
-      // Resp. je tu zmatok v gramatike, v dvoch nazvoch mas obycajny tvar slovesa (ship, cancel) a v jednom trpny (paid)
-      // Prosim zjednotit.
 
-      $btn_cancel_order = $this->adios->ui->button([
-        "text" => "Cancel order",
+      $btnOrderStateCanceled = $this->adios->ui->button([
+        "text" => "Set as canceled",
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
           _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_CANCELED."', function(res) {
@@ -722,49 +716,36 @@ class Order extends \ADIOS\Core\Model {
       $tab_invoice_and_delivery_note = "";
       if ($data['INVOICE']['id'] <= 0) {
         $tab_invoice_and_delivery_note .= "
-          {$btn_vystavit_vyuctovaciu_fakturu}
+          {$btnPlaceIssueInvoice}
         ";
       } else {
         $tab_invoice_and_delivery_note .= "
-          {$btn_zobrazit_vyuctovaciu_fakturu}
+          {$btnShowIssueInvoice}
         ";
       }
 
-      // REVIEW: $data["number"] nie je osetrene, musi prejst cez hsc()  (to je nasa skratka pre htmlspecialchars)
-      $formTitle = "Order&nbsp;#&nbsp;".$data["number"];
+      $formTitle = "Order&nbsp;#&nbsp;".hsc($data["number"]);
 
-      // REVIEW: nepaci sa mi odsadenie, podla mna je to lepsie takto:
-      // $formTitle .= "
-      //   &nbsp;
-      //   <span
-      //     style='
-      //       background-color: {$this->enumOrderStateColors[$data['state']]};
-      //     '
-      //     class='badge badge-adios'
-      //   >
-      //     {$this->enumOrderStates[$data['state']]}
-      //   </span>
-      // ";
-      // Preco? Lebo ukoncovaci znak (hocijaka zatvorka, alebo napr. uvodzovky/apostrof,
-      // su odsadene presne rovnako, ako jeho naprotivok.
-      // U teba to nesedi pre > ani ".
-
-      $formTitle .= "&nbsp;<span
-        style='
-          background-color: {$this->enumOrderStateColors[$data['state']]};
-        '
-        class='badge badge-adios'>
+      $formTitle .= "
+        &nbsp;
+        <span
+          style='
+            background-color: {$this->enumOrderStateColors[$data['state']]};
+          '
+          class='badge badge-adios'
+        >
           {$this->enumOrderStates[$data['state']]}
-      </span>";
+        </span>
+      ";
 
       $sidebarHtml = $this->adios->dispatchEventToPlugins("onOrderDetailSidebarButtons", [
         "model" => $this,
         "params" => $params,
         "data" => $data,
       ])["html"];
-      $sidebarHtml .= $btn_paid_order;
-      $sidebarHtml .= $btn_ship_order;
-      $sidebarHtml .= $btn_cancel_order;
+      $sidebarHtml .= $btnOrderStatePaid;
+      $sidebarHtml .= $btnOrderStateShipped;
+      $sidebarHtml .= $btnOrderStateCanceled;
 
       $params["titleRaw"] = $formTitle;
       $params["template"] = [

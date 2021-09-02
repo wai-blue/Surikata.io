@@ -92,13 +92,11 @@ class Order extends \ADIOS\Core\Model {
       "del_family_name" => [
         "type" => "varchar",
         "title" => "Delivery: Family Name",
-        "show_column" => TRUE,
       ],
 
       "del_company_name" => [
         "type" => "varchar",
         "title" => "Delivery: Company Name",
-        "show_column" => TRUE,
       ],
 
       "del_street_1" => [
@@ -142,6 +140,7 @@ class Order extends \ADIOS\Core\Model {
       "inv_given_name" => [
         "type" => "varchar",
         "title" => "Invoice: Given Name",
+        "show_column" => TRUE,
       ],
 
       "inv_family_name" => [
@@ -224,7 +223,6 @@ class Order extends \ADIOS\Core\Model {
       "notes" => [
         "type" => "text",
         "title" => "Notes",
-        "show_column" => TRUE,
       ],
 
       "state" => [
@@ -327,9 +325,7 @@ class Order extends \ADIOS\Core\Model {
   }
 
   public function onBeforeSave($data) {
-    if ($data['id'] == -1) {
-      //$data['number'] = "12345";
-    }
+
     return $data;
   }
 
@@ -591,9 +587,12 @@ class Order extends \ADIOS\Core\Model {
           $orderData[$field] = $customer["ADDRESSES"][0][$field];
           // if delivery address is empty - use inv address
           if (strpos($field, "del_") !== false) {
-            $inv_field = str_ireplace("del_", "inv_", $field);
-            if (strlen($customer["ADDRESSES"][0][$field]) == 0 && strlen($customer["ADDRESSES"][0][$inv_field]) > 0) {
-              $orderData[$field] = $customer["ADDRESSES"][0][$inv_field];
+            $invField = str_ireplace("del_", "inv_", $field);
+            if (
+              strlen($customer["ADDRESSES"][0][$field]) == 0
+              && strlen($customer["ADDRESSES"][0][$invField]) > 0
+            ) {
+              $orderData[$field] = $customer["ADDRESSES"][0][$invField];
             }
           }
         }
@@ -647,6 +646,14 @@ class Order extends \ADIOS\Core\Model {
               // "number_customer",
               ["html" => $select_domain],
               "notes",
+              ["html" => "
+                <input
+                  type='hidden'
+                  name='{$params["uid"]}_from_admin'
+                  id='{$params["uid"]}_from_admin'
+                  value='1'
+                >
+              "],
             ],
           ],
 
@@ -654,7 +661,8 @@ class Order extends \ADIOS\Core\Model {
       ];
       $params['save_action'] = "Orders/PlaceOrder";
     } else {
-      $btn_vystavit_vyuctovaciu_fakturu = $this->adios->ui->button([
+
+      $btnPlaceIssueInvoice = $this->adios->ui->button([
         "text"    => "Issue invoice",
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
@@ -670,7 +678,7 @@ class Order extends \ADIOS\Core\Model {
         "class"   => "btn-info mb-2 w-100",
       ])->render();
 
-      $btn_zobrazit_vyuctovaciu_fakturu = $this->adios->ui->button([
+      $btnShowIssueInvoice = $this->adios->ui->button([
         "text" => "Show invoice nr. ".hsc($data['INVOICE']['number']),
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
@@ -682,7 +690,7 @@ class Order extends \ADIOS\Core\Model {
         "class" => "btn-primary mb-2 w-100",
       ])->render();
 
-      $btn_paid_order = $this->adios->ui->button([
+      $btnOrderStatePaid = $this->adios->ui->button([
         "text" => "Set as paid",
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
@@ -698,8 +706,25 @@ class Order extends \ADIOS\Core\Model {
         "class" => "btn-primary mb-2 w-100",
       ])->render();
 
-      $btn_cancel_order = $this->adios->ui->button([
-        "text" => "Cancel order",
+      $btnOrderStateShipped = $this->adios->ui->button([
+        "text" => "Set as shipped",
+        "onclick" => "
+          let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
+          _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_SHIPPED."', function(res) {
+            if (isNaN(res)) {
+              alert(res);
+            } else {
+              // refresh order window
+              window_refresh(tmp_form_id + '_form_window');
+            }
+          });
+        ",
+        "class" => "btn-success mb-2 w-100",
+      ])->render();
+
+
+      $btnOrderStateCanceled = $this->adios->ui->button([
+        "text" => "Set as canceled",
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
           _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_CANCELED."', function(res) {
@@ -711,28 +736,44 @@ class Order extends \ADIOS\Core\Model {
             }
           });
         ",
-        "class" => "btn-primary mb-2 w-100",
+        "class" => "btn-danger mb-2 w-100",
       ])->render();
 
       $tab_invoice_and_delivery_note = "";
       if ($data['INVOICE']['id'] <= 0) {
         $tab_invoice_and_delivery_note .= "
-          {$btn_vystavit_vyuctovaciu_fakturu}
+          {$btnPlaceIssueInvoice}
         ";
       } else {
         $tab_invoice_and_delivery_note .= "
-          {$btn_zobrazit_vyuctovaciu_fakturu}
+          {$btnShowIssueInvoice}
         ";
       }
+
+      $formTitle = "Order&nbsp;#&nbsp;".hsc($data["number"]);
+
+      $formTitle .= "
+        &nbsp;
+        <span
+          style='
+            background-color: {$this->enumOrderStateColors[$data['state']]};
+          '
+          class='badge badge-adios'
+        >
+          {$this->enumOrderStates[$data['state']]}
+        </span>
+      ";
 
       $sidebarHtml = $this->adios->dispatchEventToPlugins("onOrderDetailSidebarButtons", [
         "model" => $this,
         "params" => $params,
         "data" => $data,
       ])["html"];
-      $sidebarHtml .= $btn_paid_order;
-      $sidebarHtml .= $btn_cancel_order;
+      $sidebarHtml .= $btnOrderStatePaid;
+      $sidebarHtml .= $btnOrderStateShipped;
+      $sidebarHtml .= $btnOrderStateCanceled;
 
+      $params["titleRaw"] = $formTitle;
       $params["template"] = [
         "columns" => [
           [

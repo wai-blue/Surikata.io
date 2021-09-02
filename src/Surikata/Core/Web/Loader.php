@@ -383,7 +383,7 @@ class Loader extends \Cascada\Loader {
   }
 
   public function registerPaymentPlugin($pluginName) {
-    $pluginClassName = "\\Surikata\\Plugins\\{$pluginName}";
+    $pluginClassName = "\\Surikata\\Plugins\\".str_replace("/", "\\", $pluginName);
     if (
       !in_array($pluginName, $this->paymentPlugins)
       && property_exists($pluginClassName, 'isPaymentPlugin')
@@ -397,12 +397,12 @@ class Loader extends \Cascada\Loader {
   }
 
   public function getPaymentPlugins() {
-    $plugins = scandir($this->pluginsDir);
-    foreach ($plugins as $pluginName) {
+    foreach ($this->adminPanel->plugins as $pluginName) {
       if (!in_array($pluginName, [".", ".."])) {
         $this->registerPaymentPlugin($pluginName);
       }
     }
+
     return $this->paymentPlugins;
   }
 

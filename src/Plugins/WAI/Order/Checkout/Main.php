@@ -22,8 +22,11 @@ namespace Surikata\Plugins\WAI\Order {
 
       $twigParams["deliveryServices"] = [];
       foreach ($this->websiteRenderer->getDeliveryPlugins() as $deliveryPlugin) {
-        $twigParams["deliveryServices"][$deliveryPlugin->name] = $deliveryPlugin->getDeliveryMeta();
-        $twigParams["deliveryServices"][$deliveryPlugin->name]["PRICE"] = $deliveryPlugin->calculatePriceForOrder(NULL, $twigParams["cartContents"]);
+        $tmpMeta = $deliveryPlugin->getDeliveryMeta();
+        if ($tmpMeta !== FALSE) {
+          $twigParams["deliveryServices"][$deliveryPlugin->name] = $tmpMeta;
+          $twigParams["deliveryServices"][$deliveryPlugin->name]["PRICE"] = $deliveryPlugin->calculatePriceForOrder(NULL, $twigParams["cartContents"]);
+        }
       }
 
       if (isset($this->websiteRenderer->urlVariables['orderData'])) {

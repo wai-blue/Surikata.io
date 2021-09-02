@@ -83,7 +83,10 @@
                 <div class="first-row form-group">
                   <div class="row">
                     <div class="col-lg-6 col-md-6 controls">
-                      <label class="control-label">{{ translate("First name") }}: </label>
+                      <label class="control-label">
+                        {{ translate("First name") }} 
+                        <span class="input-required">*</span>
+                      </label>
                       <input
                         class="billing-address-name form-control"
                         type="text"
@@ -93,7 +96,10 @@
                       />
                     </div>
                     <div class="col-lg-6 col-md-6 controls">
-                      <label class="control-label">{{ translate("Last name") }}: </label>
+                      <label class="control-label">
+                        {{ translate("Last name") }}
+                        <span class="input-required">*</span>
+                      </label>
                       <input
                         class="billing-address-name form-control"
                         type="text"
@@ -105,7 +111,10 @@
                   </div>
                   <div class="row">
                     <div class="col-lg-6 col-md-6 controls">
-                      <label class="control-label">{{ translate("Town / City") }}</label>
+                      <label class="control-label">
+                        {{ translate("Town / City") }}
+                        <span class="input-required">*</span>
+                      </label>
                       <input
                         class="form-control"
                         type="text"
@@ -115,7 +124,10 @@
                       />
                     </div>
                     <div class="col-lg-6 col-md-6 controls">
-                      <label class="control-label">{{ translate("Postcode / ZIP") }}</label>
+                      <label class="control-label">
+                        {{ translate("Postcode / ZIP") }}
+                        <span class="input-required">*</span>
+                      </label>
                       <input
                         class="form-control"
                         type="text"
@@ -127,7 +139,10 @@
                   </div>
                   <div class="row">
                     <div class="controls">
-                      <label class="control-label">{{ translate("Street Address") }}</label>
+                      <label class="control-label">
+                        {{ translate("Street Address") }}
+                        <span class="input-required">*</span>
+                      </label>
                       <input
                         class="form-control"
                         type="text"
@@ -148,7 +163,10 @@
                   <div class="card_number_grids">
                     <div class="card_number_grid_left">
                       <div class="controls">
-                        <label class="control-label">{{ translate("Phone") }}</label>
+                        <label class="control-label">
+                          {{ translate("Phone") }}
+                          <span class="input-required">*</span>
+                        </label>
                         <input
                           class="form-control"
                           type="text"
@@ -160,7 +178,10 @@
                     </div>
                     <div class="card_number_grid_right">
                       <div class="controls">
-                        <label class="control-label">{{ translate("Email Address") }}</label>
+                        <label class="control-label">
+                          {{ translate("Email Address") }}
+                          <span class="input-required">*</span>
+                        </label>
                         <input
                           class="form-control"
                           type="text"
@@ -239,7 +260,10 @@
                     <div class="col-lg-6 col-md-6">
                       <div class="controls">
                         <div class="billing-info mb-20px">
-                          <label>{{ translate("First Name") }}</label>
+                          <label>
+                            {{ translate("First Name") }}
+                            <span class="input-required">*</span>
+                          </label>
                           <input class="form-control" type="text" name="del_given_name" required/>
                         </div>
                       </div>
@@ -247,7 +271,10 @@
                     <div class="col-lg-6 col-md-6">
                       <div class="controls">
                         <div class="billing-info mb-20px">
-                          <label>{{ translate("Last Name") }}</label>
+                          <label>
+                            {{ translate("Last Name") }}
+                            <span class="input-required">*</span>
+                          </label>
                           <input class="form-control" type="text" name="del_family_name" required/>
                         </div>
                       </div>
@@ -255,7 +282,10 @@
                     <div class="col-lg-6 col-md-6">
                       <div class="controls">
                         <div class="billing-info mb-20px">
-                          <label>{{ translate("Town / City") }}</label>
+                          <label>
+                            {{ translate("Town / City") }}
+                            <span class="input-required">*</span>
+                          </label>
                           <input class="form-control" type="text" name="del_city" required/>
                         </div>
                       </div>
@@ -263,7 +293,10 @@
                     <div class="col-lg-6 col-md-6">
                       <div class="controls">
                         <div class="billing-info mb-20px">
-                          <label>{{ translate("Postcode / ZIP") }}</label>
+                          <label>
+                            {{ translate("Postcode / ZIP") }}
+                            <span class="input-required">*</span>
+                          </label>
                           <input class="form-control" type="text" name="del_zip" required/>
                         </div>
                       </div>
@@ -271,7 +304,10 @@
                     <div class="col-lg-12">
                       <div class="controls">
                         <div class="billing-info mb-20px">
-                          <label>{{ translate("Street Address") }}</label>
+                          <label>
+                            {{ translate("Street Address") }}
+                            <span class="input-required">*</span>
+                          </label>
                           <input class="form-control" class="billing-address" placeholder="House number and street name" type="text" name="del_street_1" required/>
                           <input class="form-control" placeholder="Apartment, suite, unit etc." type="text" name="del_street_2" required/>
                         </div>
@@ -285,32 +321,28 @@
             <div class="orderAgreement mt-4 mb-4">
               <label class="form-check-label" for="businessConditions">
                 <input
-                  type="checkbox"  
+                  type="checkbox"
+                  class="required-empty"  
                   name="businessConditions" 
                   id="businessConditions"
-                  onclick="
-                    alert();
-                  "
                 >{{ translate("I have read the terms and conditions") }}
+                <span class="input-required">*</span>
               </label>
+              
               <label class="form-check-label" for="gdprAgreement">
                 <input
                 type="checkbox" 
                 name="gdprAgreement" 
                 id="gdprAgreement"
-                onclick="
-                  alert();
-                "
-              >{{ translate("I agree to the processing of personal data for the processing of the order") }}
+                >{{ translate("I agree to the processing of personal data for the processing of the order") }}
+                <span class="input-required">*</span>
               </label>
+
               <label class="form-check-label" for="marketingAgreement">
                 <input
                   type="checkbox"  
                   name="marketingAgreement" 
                   id="marketingAgreement"
-                  onclick="
-                    alert();
-                  "
                 >{{ translate("I agree to the processing of personal data for the purpose of sending marketing information") }}
               </label>
             </div>
@@ -330,7 +362,10 @@
                     <div class="your-order-middle">
                       <ul>
                         {% for item in cartContents.items %}
-                          <li><span class="order-middle-left">{{ item.PRODUCT.name_lang_1 }} X {{ item.quantity }}</span> <span class="order-price">{{ (item.jednotkova_cena * item.mnozstvo)|number_format(2, ",", " ") }} €</span></li>
+                          <li>
+                            <span class="order-middle-left">{{ item.PRODUCT.name_lang_1 }} X {{ item.quantity }}</span> 
+                            <span class="order-price">{{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} €</span>
+                          </li>
                         {% endfor %}
                       </ul>
                     </div>

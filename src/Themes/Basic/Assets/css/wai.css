@@ -857,10 +857,6 @@ ul.blog-page-meta {
   }
 }
 
-.your-order-area .payment-method {
-  background-color: var(--theme-third-color);
-}
-
 .your-order-area .payment-accordion {
   margin: 0 0 16px;
 }
@@ -1024,4 +1020,7 @@ ul.breadcrumb li a {
 ul.breadcrumb li a:hover {
   color: #01447e;
   text-decoration: underline;
+}
+.input-required {
+  color: #db190b;
 }

@@ -319,21 +319,20 @@
               </div>
             </section>
             <div class="orderAgreement mt-4 mb-4">
-              <label class="form-check-label" for="businessConditions">
+              <label id="business_conditions_label" class="form-check-label" for="business_conditions">
                 <input
-                  type="checkbox"
-                  class="required-empty"  
-                  name="businessConditions" 
-                  id="businessConditions"
+                  type="checkbox"  
+                  name="business_conditions"
+                  id="business_conditions"
                 >{{ translate("I have read the terms and conditions") }}
                 <span class="input-required">*</span>
               </label>
               
-              <label class="form-check-label" for="gdprAgreement">
+              <label id="gdpr_agreement_label" class="form-check-label" for="gdpr_agreement">
                 <input
                 type="checkbox" 
-                name="gdprAgreement" 
-                id="gdprAgreement"
+                name="gdpr_agreement" 
+                id="gdpr_agreement"
                 >{{ translate("I agree to the processing of personal data for the processing of the order") }}
                 <span class="input-required">*</span>
               </label>

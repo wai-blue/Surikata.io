@@ -170,7 +170,8 @@ window.onpopstate = function (e) {
   
   BasicThemeCart.prototype.placeOrder = function() {
     $('#orderDataForm input').removeClass('required-empty');
-  
+    $('#orderDataForm label').removeClass('required-empty');
+
     SurikataCart.prototype.placeOrder(
       function (dataSuccess) {
         if (dataSuccess.status == 'OK') {
@@ -182,8 +183,16 @@ window.onpopstate = function (e) {
 
           let emptyFields = dataFail.error.split(',');
 
+          $('html, body').animate({
+            scrollTop: $('#orderDataForm input[name=' + emptyFields[0] + ']').offset().top
+          }, 500);
+
           for (var i in emptyFields) {
-            $('#orderDataForm input[name=' + emptyFields[i] + ']').addClass('required-empty');
+            if (emptyFields[i] == "gdpr_agreement" || emptyFields[i] == "business_conditions") {
+              $('#' + emptyFields[i] + '_label').addClass('required-empty')
+            } else {
+              $('#orderDataForm input[name=' + emptyFields[i] + ']').addClass('required-empty');
+            }
           }
         } else if (dataFail.exception != '') {
           console.log(dataFail);

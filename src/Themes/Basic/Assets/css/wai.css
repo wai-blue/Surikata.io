@@ -992,7 +992,8 @@ ul.blog-page-meta {
 }
 
 .required-empty {
-  border-color: #e0736c !important;
+  border-color: #db190b !important;
+  color: #db190b;
 }
 
 .orderAgreement input[type='checkbox'] {

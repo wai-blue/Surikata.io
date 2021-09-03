@@ -1011,3 +1011,39 @@ ul.blog-page-meta {
   color: var(--theme-third-color) !important;
   border-radius: 0 !important;
 }
+
+.login_register {
+  margin-bottom: 20px;
+  text-align: center;
+}
+.login_register h3 {
+  display: inline-block;
+  padding: 2px 30px;
+}
+.login_register a {
+  text-decoration: none;
+  color: var(--theme-main-color);
+}
+.login_register a.active {
+  color: var(--theme-second-color) !important;
+}
+.login_register h3:first-of-type {
+  border-right: 1px solid var(--theme-third-color);
+}
+
+.register-toggle-btn button {
+  background-color: var(--theme-main-color);
+  color: var(--theme-second-color);
+  display: block;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1;
+  padding: 18px 20px;
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: 0;
+  z-index: 9;
+  border: 0;
+  width: 100%;
+  margin-top: 15px;
+}

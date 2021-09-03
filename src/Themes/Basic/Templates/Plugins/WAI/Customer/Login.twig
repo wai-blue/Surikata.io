@@ -1,99 +1,105 @@
- <!-- login area start -->
-  <div class="login-register-area mb-50px mt-40px">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-9 col-md-12 ml-auto mr-auto">
-          <div class="login-register-wrapper">
-            <div class="login-register-tab-list nav">
-              <a class="active" data-toggle="tab" href="#lg1">
-                <h4>login</h4>
-              </a>
-              <a data-toggle="tab" href="#lg2">
-                <h4>register</h4>
-              </a>
-            </div>
-            <div class="tab-content">
-              <div id="lg1" class="tab-pane active">
-                <div class="login-form-container">
-                  <div class="login-register-form">
-                    {% if user.loginFailed %}
-                      <div class="notification mb-5">
-                        <p class="error">Nepodarilo sa prihlásiť.</p>
-                      </div>
-                    {% endif %}
-                    <form method="post" id="loginForm">
-                      <input type="hidden" name="doLogin" value="1" />
-                      <input type="text" name="loginEmail" placeholder="Email" required />
-                      <input type="password" name="loginPassword" placeholder="Password" required />
-                      <div class="button-box">
-                        <div class="login-toggle-btn">
-                          <input type="checkbox" name="rememberLogin" id="rememberLogin"/>
-                          <label for="rememberLogin">Remember me</label>
-                        </div>
-                        <div class="login-toggle-btn">
-                          <button 
+<!-- login area start -->
+
+<div class="ads-grid_shop cart-main-area">
+  <div class="shop_inner_inf">
+    <div class="login_register">
+      <h3>
+        <a class="active" href="javascript:void(0);" onclick="toggleLoginRegister('login', this)">
+          {{ translate("Login") }}
+        </a>
+      </h3>
+      <h3>
+        <a href="javascript:void(0);" onclick="toggleLoginRegister('register', this)">
+          {{ translate("Register") }}
+        </a>
+      </h3>
+    </div>
+
+    <div class="tab-content">
+      <div id="login" class="tab-pane active">
+        <div class="login-form-container">
+          <div class="login-register-form">
+            {% if user.loginFailed %}
+              <div class="notification mb-5">
+                <p class="error">{{ translate("Login fail") }}</p>
+              </div>
+            {% endif %}
+            <div class="row justify-content-center user-account-box">
+              <div class="col-12 col-xs-12 col-md-6 col-lg-3">
+                <div class="checkout-account-toggle open-toggle2 mb-5" id="loginUser">
+                  <form method="post" id="loginForm">
+                    <input type="hidden" name="doLogin" value="1" />
+                    <input class="form-control" placeholder="Email address" name="loginEmail" type="email"/>
+                    <input class="form-control" placeholder="Password" name="loginPassword" type="password"/>
+                    <button
+                            class="btn-hover checkout-btn"
                             type="submit"
                             onclick="$('#loginForm').submit();"
-                          ><span>Login</span></button>
-                          <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/ForgotPassword', 'getWebPageUrl') }}">
-                            Forgot Password?
-                          </a>
-                        </div>
-                      </div>
-                    </form>
+                    >Login</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="register" class="tab-pane">
+        <div class="login-form-container">
+          <div class="login-register-form">
+
+            <div class="row justify-content-center">
+              <div class="col-12 col-xs-12 col-md-6 col-lg-3">
+                <div id="emailIsEmptyOrInvalidErrorDiv" style="display:none;">
+                  <div class="notification mb-5">
+                    <p class="error">Email je neuvedený alebo je neplatný.</p>
+                  </div>
+                </div>
+                <div id="accountAlreadyExistsErrorDiv" style="display:none">
+                  <div class="notification mb-5">
+                    <p class="error">Takýto účet už existuje.</p>
+                  </div>
+                </div>
+                <div id="unknownErrorDiv" style="display:none;">
+                  <div class="notification mb-5">
+                    <p class="error">Nastala neočakávaná chyba pri vytváraní účtu. Skúste prosím opäť neskôr.</p>
                   </div>
                 </div>
               </div>
-              <div id="lg2" class="tab-pane">
-                <div class="login-form-container">
-                  <div class="login-register-form">
+            </div>
 
-                    <div id="emailIsEmptyOrInvalidErrorDiv" style="display:none;">
-                      <div class="notification mb-5">
-                        <p class="error">Email je neuvedený alebo je neplatný.</p>
-                      </div>
-                    </div>
-                    <div id="accountAlreadyExistsErrorDiv" style="display:none">
-                      <div class="notification mb-5">
-                        <p class="error">Takýto účet už existuje.</p>
-                      </div>
-                    </div>
-                    <div id="unknownErrorDiv" style="display:none;">
-                      <div class="notification mb-5">
-                        <p class="error">Nastala neočakávaná chyba pri vytváraní účtu. Skúste prosím opäť neskôr.</p>
-                      </div>
-                    </div>
-
-                    <form method="post" id="registrationForm">
-                      <input type="email" name="email" placeholder="Email *" />
-                      <input type="text" name="given_name" placeholder="First name *" />
-                      <input type="text" name="family_name" placeholder="Last name *" />
-                      <div class="button-box">
-                        <div class="login-toggle-btn">
-                         <div class="notification">
-                            <p id="privacyPolicyTermsErrorDiv">
-                              <input type="checkbox" name="checkbox" id="privacyPolicyTermsConfirmation"/>
-                              <label for="privacyPolicyTermsConfirmation">Súhlasím so spracovávaním osobných údajov.</label> 
-                            </p>
-                          </div>
-                          <p id="privacyPolicyTermsErrorText" class="mt-2" style="color:#db2f23;display:none">
-                            Musíte súhlasiť s podmienkami spracovania osobných údajov.
+            <div class="row justify-content-center user-account-box">
+              <div class="col-12 col-xs-12 col-md-6 col-lg-3">
+                <div class="checkout-account-toggle open-toggle2 mb-5" id="loginUser">
+                  <form method="post" id="registrationForm">
+                    <input class="form-control" type="email" name="email" placeholder="Email *" />
+                    <input class="form-control" type="text" name="given_name" placeholder="First name *" />
+                    <input class="form-control" type="text" name="family_name" placeholder="Last name *" />
+                    <div class="button-box">
+                      <div class="login-toggle-btn">
+                        <div class="notification">
+                          <p id="privacyPolicyTermsErrorDiv">
+                            <input type="checkbox" name="checkbox" id="privacyPolicyTermsConfirmation"/>
+                            <label for="privacyPolicyTermsConfirmation">{{ translate("Súhlasím so spracovávaním osobných údajov.") }}</label>
                           </p>
                         </div>
+                        <p id="privacyPolicyTermsErrorText" class="mt-2" style="color:#db2f23;display:none">
+                          Musíte súhlasiť s podmienkami spracovania osobných údajov.
+                        </p>
                       </div>
-                    </form>
-                      <div class="button-box">
-                        <div class="login-toggle-btn">
-                          <button onclick="AbeloThemeCustomer.createAccount();">
-                            <span>Register</span>
-                          </button>
-                          {% if showPrivacyTerms and privacyTermsUrl != "" %}
-                            <a href="{{ rootUrl }}/{{ privacyTermsUrl }}" target="_blank">
-                              Zobraziť podmienky
-                            </a>
-                          {% endif %}
-                        </div>
-                      </div>
+                    </div>
+                  </form>
+
+                  <div class="button-box">
+                    <div class="register-toggle-btn">
+                      <button onclick="BasicThemeCustomer.createAccount();">
+                        <span>{{ translate("Register") }}</span>
+                      </button>
+                      {% if showPrivacyTerms and privacyTermsUrl != "" %}
+                        <a href="{{ rootUrl }}/{{ privacyTermsUrl }}" target="_blank">
+                          {{ translate("Show conditions") }}
+                        </a>
+                      {% endif %}
                     </div>
                   </div>
                 </div>
@@ -102,6 +108,10 @@
           </div>
         </div>
       </div>
+
     </div>
+
   </div>
+
+</div>
 <!-- login area end -->

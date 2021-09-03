@@ -499,6 +499,7 @@ if (count($parts) == 0) {
             [
               "filterType" => "recommended",
               "layout" => "tiles",
+              "product_count" => 6,
             ],
           ],
           "section_4" => [
@@ -516,6 +517,7 @@ if (count($parts) == 0) {
             [
               "filterType" => "discounted",
               "layout" => "tiles",
+              "product_count" => 6,
             ],
           ],
           "section_6" => [

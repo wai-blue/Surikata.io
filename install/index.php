@@ -190,6 +190,12 @@ if (count($parts) == 0) {
     $blogTagModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\BlogTag($adminPanel);
     $blogTagAssignmentModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\BlogTagAssignment($adminPanel);
 
+    $deliveryServiceModel = new \ADIOS\Widgets\Shipping\Models\DeliveryService($adminPanel);
+    $shippingCountryModel = new \ADIOS\Widgets\Shipping\Models\Country($adminPanel);
+    $paymentServiceModel = new \ADIOS\Widgets\Shipping\Models\PaymentService($adminPanel);
+    $shipmentModel = new \ADIOS\Widgets\Shipping\Models\Shipment($tadminPanel);
+    $shipmentModel = new \ADIOS\Widgets\Shipping\Models\ShipmentPrice($adminPanel);
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // PART: product-catalog
     

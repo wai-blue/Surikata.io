@@ -12,7 +12,7 @@ class ShipmentPrice extends \ADIOS\Core\Model {
 
   var $shipmentPriceCalculationMethodEnumValues = [
     1 => "Calculate by offer value",
-    2 => "Calculate by offer height"
+    2 => "Calculate by offer weight"
   ];
 
   public function columns(array $columns = []) {

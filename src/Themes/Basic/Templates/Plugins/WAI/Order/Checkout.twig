@@ -2,7 +2,7 @@
   <div class="container">
     {% if cartContents.items|length > 0 %}
       <div class="billing-info-wrap">
-        {% if not user.isLogged %}
+        <!--{% if not user.isLogged %}
           {% if user.loginFailed %}
             <p style="color:red">
               Nepodarilo sa prihlásiť.
@@ -27,7 +27,7 @@
                 </form>
               </div>
             </div>
-          </div>
+          </div>-->
         {% elseif userLogged.ADDRESSES|length > 0 %}
           <div class="your-order-area">
             <div class="gray-bg-4 your-order-wrap m-2">
@@ -381,35 +381,35 @@
                         {% endfor %}
                       </ul>
                     </div>
+                    <div class="payment-method mt-5">
+                      <div class="payment-accordion element-mrg">
+                        <div class="panel-group" id="accordion">
+                          <div class="panel payment-accordion">
+                            <div class="panel-heading mb-2" id="method-one">
+                              <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#method1">
+                                  Payments
+                                </a>
+                              </h4>
+                            </div>
+                            {% for paymentPluginName, paymentMethod in paymentMethods %}
+                              <div id="method1" class="panel-collapse collapse show">
+                                <div class="panel-body">
+                                  <input required type="radio" name="paymentMethod" id="paymentMethod-{{ loop.index }}" value="{{ paymentPluginName }}" checked>
+                                  <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
+                                  <p data-method="{{ paymentPluginName }}" class="payment-text">{{ paymentMethod.description }}</p>
+                                </div>
+                              </div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <div class="your-order-total">
                       <ul>
                         <li class="order-total">Total</li>
                         <li>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
                       </ul>
-                    </div>
-                  </div>
-                  <div class="payment-method">
-                    <div class="payment-accordion element-mrg">
-                      <div class="panel-group" id="accordion">
-                        <div class="panel payment-accordion">
-                          <div class="panel-heading mb-2" id="method-one">
-                            <h4 class="panel-title">
-                              <a data-toggle="collapse" data-parent="#accordion" href="#method1">
-                                Payments
-                              </a>
-                            </h4>
-                          </div>
-                          {% for paymentPluginName, paymentMethod in paymentMethods %}
-                            <div id="method1" class="panel-collapse collapse show">
-                              <div class="panel-body">
-                                <input required type="radio" name="paymentMethod" id="paymentMethod-{{ loop.index }}" value="{{ paymentPluginName }}" checked>
-                                <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
-                                <p data-method="{{ paymentPluginName }}" class="payment-text">{{ paymentMethod.description }}</p>
-                              </div>
-                            </div>
-                          {% endfor %}
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>

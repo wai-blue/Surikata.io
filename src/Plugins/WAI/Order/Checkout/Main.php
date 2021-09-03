@@ -16,18 +16,32 @@ namespace Surikata\Plugins\WAI\Order {
       $twigParams["cartContents"] = (new \Surikata\Plugins\WAI\Customer\Cart($this->websiteRenderer))->getCartContents();
 
       $twigParams["paymentMethods"] = [];
-      foreach ($this->websiteRenderer->getPaymentPlugins() as $paymentPlugin) {
-        $twigParams["paymentMethods"][$paymentPlugin->name] = $paymentPlugin->getPaymentMeta();
+      $paymentServiceModel = new \ADIOS\Widgets\Shipping\Models\PaymentService($this->adminPanel);
+
+      foreach ($paymentServiceModel->getAll() as $payment) {
+        $twigParams["paymentMethods"][$payment['name']] = $payment;
       }
 
+      /*foreach ($this->websiteRenderer->getPaymentPlugins() as $paymentPlugin) {
+        $twigParams["paymentMethods"][$paymentPlugin->name] = $paymentPlugin->getPaymentMeta();
+      }*/
+
+
       $twigParams["deliveryServices"] = [];
-      foreach ($this->websiteRenderer->getDeliveryPlugins() as $deliveryPlugin) {
+      $shipmentModel = new \ADIOS\Widgets\Shipping\Models\Shipment($this->adminPanel);
+
+      foreach ($shipmentModel->getAll() as $shipment) {
+        $twigParams["deliveryServices"][$shipment['name']] = $shipment;
+        $twigParams["deliveryServices"][$shipment['name']]['PRICE'] = 7;
+      }
+
+      /*foreach ($this->websiteRenderer->getDeliveryPlugins() as $deliveryPlugin) {
         $tmpMeta = $deliveryPlugin->getDeliveryMeta();
         if ($tmpMeta !== FALSE) {
           $twigParams["deliveryServices"][$deliveryPlugin->name] = $tmpMeta;
           $twigParams["deliveryServices"][$deliveryPlugin->name]["PRICE"] = $deliveryPlugin->calculatePriceForOrder(NULL, $twigParams["cartContents"]);
         }
-      }
+      }*/
 
       if (isset($this->websiteRenderer->urlVariables['orderData'])) {
         $orderData = $this->websiteRenderer->urlVariables['orderData'];

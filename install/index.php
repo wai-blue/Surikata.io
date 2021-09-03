@@ -443,7 +443,8 @@ if (count($parts) == 0) {
       $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "About us", "url" => "about-us"]);
       $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Products", "url" => "products"]);
       $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Blogs", "url" => "blogs"]);
-      $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Register", "url" => "login"]);
+      $tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Login", "url" => "login"]);
+      $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "Register", "url" => "register"]);
 
       // web - stranky
 

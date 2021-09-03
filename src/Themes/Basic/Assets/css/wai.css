@@ -1047,3 +1047,7 @@ ul.blog-page-meta {
   width: 100%;
   margin-top: 15px;
 }
+
+.login-register-form .form-control {
+  margin-bottom: 10px;
+}

@@ -351,6 +351,12 @@ window.onpopstate = function (e) {
 
   var BasicThemeBlogCatalog = new BasicThemeBlogCatalog();
 
+   // BasicTheme Blog
+   function BasicThemeBreadcrumb() { SurikataBreadcrumb.call(this); }
+   BasicThemeBreadcrumb.prototype = Object.create(SurikataBreadcrumb.prototype);
+ 
+   var BasicThemeBreadcrumb = new BasicThemeBreadcrumb();
+
 /*----------------------------
         Cart Plus Minus Button
     ------------------------------ */

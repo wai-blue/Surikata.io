@@ -1,6 +1,6 @@
-function Breadcrumb() {}
+function SurikataBreadcrumb() {}
 
-Breadcrumb.prototype.update = function (updateDiv) {
+SurikataBreadcrumb.prototype.update = function (updateDiv) {
 
   Surikata.renderPlugin(
     "WAI/Common/Breadcrumb",

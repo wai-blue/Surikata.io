@@ -333,7 +333,19 @@ class Order extends \ADIOS\Core\Model {
     ;
   }
 
-  public function placeOrder($orderData, $customerUID = NULL, $cartContents = NULL) {
+  /**
+   * @param array $orderData
+   * @param null $customerUID
+   * @param null $cartContents
+   * @param bool $checkRequiredFields
+   * @return int|string
+   * @throws \ADIOS\Widgets\Orders\Exceptions\EmptyRequiredFields
+   * @throws \ADIOS\Widgets\Orders\Exceptions\InvalidCustomerID
+   * @throws \ADIOS\Widgets\Orders\Exceptions\PlaceOrderUnknownError
+   * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownCustomer
+   * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService
+   */
+  public function placeOrder($orderData, $customerUID = NULL, $cartContents = NULL, $checkRequiredFields = TRUE) {
 
     $idAddress = (int) $orderData['id_address'];
 
@@ -360,7 +372,7 @@ class Order extends \ADIOS\Core\Model {
 
     $requiredFieldsEmpty = [];
 
-    if ($idAddress <= 0 && !$orderData["from_admin"]) {
+    if ($idAddress <= 0 && $checkRequiredFields) {
       $requiredFieldsBilling = [
         "inv_given_name",
         "inv_family_name",
@@ -551,12 +563,16 @@ class Order extends \ADIOS\Core\Model {
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownCustomer
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService
    */
-  public function createNewOrder($idCustomer, $orderData = null) {
-
-    $orderData["id_customer"] = $idCustomer;
+  public function addCustomerInfoToOrderData($orderData) {
+    if (!is_array($orderData)) {
+      return false;
+    }
+    foreach (json_decode($orderData["values"]) as $key => $value) {
+      $orderData[$key] = hsc($value);
+    }
     $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adios);
-    if ($idCustomer > 0) {
-      $customer = $customerModel->getById($idCustomer);
+    if ($orderData["id_customer"] > 0) {
+      $customer = $customerModel->getById($orderData["id_customer"]);
       if (count($customer["ADDRESSES"]) > 0) {
         $orderData["id_address"] = $customer["ADDRESSES"][0]["id"];
         $addressFields = [
@@ -588,7 +604,7 @@ class Order extends \ADIOS\Core\Model {
         }
       }
     }
-    $this->placeOrder($orderData);
+    return $orderData;
   }
 
   public function changeOrderState($idOrder, $data, $isCron = false) {
@@ -622,14 +638,6 @@ class Order extends \ADIOS\Core\Model {
               "id_customer",
               // "number_customer",
               "notes",
-              ["html" => "
-                <input
-                  type='hidden'
-                  name='{$params["uid"]}_from_admin'
-                  id='{$params["uid"]}_from_admin'
-                  value='1'
-                >
-              "],
             ],
           ],
 

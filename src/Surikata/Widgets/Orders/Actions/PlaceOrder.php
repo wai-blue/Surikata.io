@@ -12,7 +12,7 @@ class PlaceOrder extends \ADIOS\Core\Action {
       throw new \ADIOS\Widgets\Orders\Exceptions\EmptyRequestParams();
     }
 
-    $values = json_decode($this->params["values"]);
+    $values = json_decode($this->params["values"], true);
 
     if (!is_array($values)) {
       throw new \ADIOS\Widgets\Orders\Exceptions\InvalidOrderDataFormat();

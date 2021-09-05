@@ -193,9 +193,39 @@ if (count($parts) == 0) {
     $deliveryServiceModel = new \ADIOS\Widgets\Shipping\Models\DeliveryService($adminPanel);
     $shippingCountryModel = new \ADIOS\Widgets\Shipping\Models\Country($adminPanel);
     $paymentServiceModel = new \ADIOS\Widgets\Shipping\Models\PaymentService($adminPanel);
-    $shipmentModel = new \ADIOS\Widgets\Shipping\Models\Shipment($tadminPanel);
-    $shipmentModel = new \ADIOS\Widgets\Shipping\Models\ShipmentPrice($adminPanel);
+    $shipmentModel = new \ADIOS\Widgets\Shipping\Models\Shipment($adminPanel);
+    $shipmentPriceModel = new \ADIOS\Widgets\Shipping\Models\ShipmentPrice($adminPanel);
 
+    $shippingCountryModel->insertRow(["id" => 1, "name" => "Slovakia", "flag" => NULL, "is_enabled" => TRUE]);
+
+    $deliveryServiceModel->insertRow(["id" => 1, "name" => "UPS", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => "WAI/Delivery/UPS"]);
+    $deliveryServiceModel->insertRow(["id" => 2, "name" => "DPD", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => "WAI/Delivery/DPD"]);
+    $deliveryServiceModel->insertRow(["id" => 3, "name" => "Slovenská pošta", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => ""]);
+    $deliveryServiceModel->insertRow(["id" => 4, "name" => "Packeta", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => ""]);
+
+    $paymentServiceModel->insertRow(["id" => 1, "name" => "TatraBanka", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => "WAI/Payment/TatraBanka"]);
+    $paymentServiceModel->insertRow(["id" => 2, "name" => "CardPay", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => "WAI/Payment/Card"]);
+    $paymentServiceModel->insertRow(["id" => 3, "name" => "Payment on delivery", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => ""]);
+
+    $shipmentModel->insertRow(["id" => 1, "name" => "UPS", "description" => "", "id_country" => 1, "id_delivery_service" => 1, "id_payment_service" => 1, "is_enabled" => TRUE, "order_index" => ""]);
+    $shipmentModel->insertRow(["id" => 2, "name" => "DPD", "description" => "", "id_country" => 1, "id_delivery_service" => 2, "id_payment_service" => 1, "is_enabled" => TRUE, "order_index" => ""]);
+    $shipmentModel->insertRow(["id" => 3, "name" => "Slovenská pošta", "description" => "", "id_country" => 1, "id_delivery_service" => 3, "id_payment_service" => 1, "is_enabled" => TRUE, "order_index" => ""]);
+    $shipmentModel->insertRow(["id" => 4, "name" => "Packeta", "description" => "", "id_country" => 1, "id_delivery_service" => 4, "id_payment_service" => 1, "is_enabled" => TRUE, "order_index" => ""]);
+
+    $shipmentModel->insertRow(["id" => 5, "name" => "UPS", "description" => "", "id_country" => 1, "id_delivery_service" => 1, "id_payment_service" => 2, "is_enabled" => TRUE, "order_index" => ""]);
+    $shipmentModel->insertRow(["id" => 6, "name" => "DPD", "description" => "", "id_country" => 1, "id_delivery_service" => 2, "id_payment_service" => 2, "is_enabled" => TRUE, "order_index" => ""]);
+    $shipmentModel->insertRow(["id" => 7, "name" => "Slovenská pošta", "description" => "", "id_country" => 1, "id_delivery_service" => 3, "id_payment_service" => 2, "is_enabled" => TRUE, "order_index" => ""]);
+    $shipmentModel->insertRow(["id" => 8, "name" => "Packeta", "description" => "", "id_country" => 1, "id_delivery_service" => 4, "id_payment_service" => 2, "is_enabled" => TRUE, "order_index" => ""]);
+
+    $shipmentModel->insertRow(["id" => 9, "name" => "UPS", "description" => "", "id_country" => 1, "id_delivery_service" => 1, "id_payment_service" => 3, "is_enabled" => TRUE, "order_index" => ""]);
+  
+    $shipmentPriceModel->insertRow(["id" => 1, "id_shipment" => 1, "name" => "a1", "weight_from" => 0, "weight_to" => 15, "price_from" => 0, "price_to" => 50, "shipment_price_calculation_method" => 1, "shipment_price" => 4]);
+    $shipmentPriceModel->insertRow(["id" => 2, "id_shipment" => 1, "name" => "a2", "weight_from" => 15, "weight_to" => 100, "price_from" => 0, "price_to" => 0, "shipment_price_calculation_method" => 2, "shipment_price" => 4]);
+
+    $shipmentPriceModel->insertRow(["id" => 3, "id_shipment" => 2, "name" => "b1", "weight_from" => 0, "weight_to" => 15, "price_from" => 0, "price_to" => 50, "shipment_price_calculation_method" => 1, "shipment_price" => 4]);
+    $shipmentPriceModel->insertRow(["id" => 4, "id_shipment" => 2, "name" => "b2", "weight_from" => 0, "weight_to" => 15, "price_from" => 0, "price_to" => 50, "shipment_price_calculation_method" => 1, "shipment_price" => 4]);
+    $shipmentPriceModel->insertRow(["id" => 5, "id_shipment" => 3, "name" => "c1", "weight_from" => 0, "weight_to" => 15, "price_from" => 0, "price_to" => 50, "shipment_price_calculation_method" => 1, "shipment_price" => 4]);
+    $shipmentPriceModel->insertRow(["id" => 6, "id_shipment" => 4, "name" => "d1", "weight_from" => 0, "weight_to" => 15, "price_from" => 0, "price_to" => 50, "shipment_price_calculation_method" => 1, "shipment_price" => 4]);
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // PART: product-catalog
     

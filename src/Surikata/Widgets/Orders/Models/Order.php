@@ -435,7 +435,11 @@ class Order extends \ADIOS\Core\Model {
     }
 
     if (empty($orderData['confirmation_time'])) {
-      $confirmationTime = date("Y-m-d H:i:s");
+      $timeZone = 'Europe/Paris';
+      $timeStamp = time();
+      $dateTime = new \DateTime("now", new \DateTimeZone($timeZone));
+      $dateTime->setTimestamp($timeStamp);
+      $confirmationTime = $dateTime->format('Y-m-d H:i:s');
     } else {
       $confirmationTime = date("Y-m-d H:i:s", strtotime($orderData['confirmation_time']));
     }
@@ -565,45 +569,46 @@ class Order extends \ADIOS\Core\Model {
    */
   public function addCustomerInfoToOrderData($orderData) {
     if (!is_array($orderData)) {
-      return false;
-    }
-    foreach (json_decode($orderData["values"]) as $key => $value) {
-      $orderData[$key] = hsc($value);
+      throw new \ADIOS\Widgets\Orders\Exceptions\InvalidOrderDataFormat();
     }
     $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adios);
-    if ($orderData["id_customer"] > 0) {
-      $customer = $customerModel->getById($orderData["id_customer"]);
-      if (count($customer["ADDRESSES"]) > 0) {
-        $orderData["id_address"] = $customer["ADDRESSES"][0]["id"];
-        $addressFields = [
-          "inv_given_name",
-          "inv_family_name",
-          "inv_street_1",
-          "inv_city",
-          "inv_zip",
-          "phone_number",
-          "email",
-          "del_given_name",
-          "del_family_name",
-          "del_street_1",
-          "del_city",
-          "del_zip",
-        ];
-        foreach ($addressFields as $field) {
-          $orderData[$field] = $customer["ADDRESSES"][0][$field];
-          // if delivery address is empty - use inv address
-          if (strpos($field, "del_") !== false) {
-            $invField = str_ireplace("del_", "inv_", $field);
-            if (
-              strlen($customer["ADDRESSES"][0][$field]) == 0
-              && strlen($customer["ADDRESSES"][0][$invField]) > 0
-            ) {
-              $orderData[$field] = $customer["ADDRESSES"][0][$invField];
-            }
+
+    if ($orderData["id_customer"] <= 0) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\InvalidCustomerID();
+    }
+
+    $customer = $customerModel->getById($orderData["id_customer"]);
+    if (count($customer["ADDRESSES"]) > 0) {
+      $orderData["id_address"] = $customer["ADDRESSES"][0]["id"];
+      $addressFields = [
+        "inv_given_name",
+        "inv_family_name",
+        "inv_street_1",
+        "inv_city",
+        "inv_zip",
+        "phone_number",
+        "email",
+        "del_given_name",
+        "del_family_name",
+        "del_street_1",
+        "del_city",
+        "del_zip",
+      ];
+      foreach ($addressFields as $field) {
+        $orderData[$field] = $customer["ADDRESSES"][0][$field];
+        // if delivery address is empty - use inv address
+        if (strpos($field, "del_") !== false) {
+          $invField = str_ireplace("del_", "inv_", $field);
+          if (
+            strlen($customer["ADDRESSES"][0][$field]) == 0
+            && strlen($customer["ADDRESSES"][0][$invField]) > 0
+          ) {
+            $orderData[$field] = $customer["ADDRESSES"][0][$invField];
           }
         }
       }
     }
+
     return $orderData;
   }
 

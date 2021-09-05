@@ -8,15 +8,13 @@ class PlaceOrder extends \ADIOS\Core\Action {
   public function render() {
 
     $orderData = [];
-    if (!array_key_exists("values", $this->params)) {
-      throw new \ADIOS\Widgets\Orders\Exceptions\EmptyRequestParams();
-    }
 
-    $values = json_decode($this->params["values"], true);
+    $values = json_decode($this->params["values"] ?? "", true);
 
     if (!is_array($values)) {
       throw new \ADIOS\Widgets\Orders\Exceptions\InvalidOrderDataFormat();
     }
+
     foreach ($values as $key => $value) {
       $orderData[$key] = $value;
     }

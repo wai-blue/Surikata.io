@@ -69,16 +69,4 @@ class Shipment extends \ADIOS\Core\Model {
     ]);
   }
 
-  public function prices() {
-    return $this->hasMany(\ADIOS\Widgets\Shipping\Models\ShipmentPrice::class, 'id_shipment');
-  }
-
-  public function getAll(string $keyBy = "id") {
-    return self::with('prices')->get()->toArray();
-  }
-
-  public function getAllByProductSummary($productSummary) {
-    return self::with('prices')->where('prices.price_from', '>', $productSummary)->get()->toArray();
-  }
-
 }

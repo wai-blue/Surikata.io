@@ -5,7 +5,6 @@ namespace Surikata\Plugins\WAI\Order {
     var $cartContents = NULL;
 
     public function getTwigParams($pluginSettings) {
-
       $twigParams = $pluginSettings;
 
       $userProfileController = new \Surikata\Core\Web\Controllers\UserProfile($this->websiteRenderer);
@@ -29,10 +28,12 @@ namespace Surikata\Plugins\WAI\Order {
 
       $twigParams["deliveryServices"] = [];
       $shipmentModel = new \ADIOS\Widgets\Shipping\Models\Shipment($this->adminPanel);
+      $shipmentPriceModel = new \ADIOS\Widgets\Shipping\Models\ShipmentPrice($this->adminPanel);
 
-      foreach ($shipmentModel->getAll() as $shipment) {
+      $allShipmentsBySummary = $shipmentPriceModel->getAllBySummary($twigParams["cartContents"]["summary"]);
+      foreach ($allShipmentsBySummary as $shipment) {
         $twigParams["deliveryServices"][$shipment['name']] = $shipment;
-        $twigParams["deliveryServices"][$shipment['name']]['PRICE'] = 7;
+        $twigParams["deliveryServices"][$shipment['name']]['PRICE'] = $shipment['shipment_price'];
       }
 
       /*foreach ($this->websiteRenderer->getDeliveryPlugins() as $deliveryPlugin) {
@@ -48,6 +49,12 @@ namespace Surikata\Plugins\WAI\Order {
 
         $twigParams["selectedPaymentMethod"] = $twigParams["paymentMethods"][$orderData["paymentMethod"]];
         $twigParams["selectedDeliveryService"] = $twigParams["deliveryServices"][$orderData["deliveryService"]];
+
+        $twigParams["cartContents"]["summary"]["priceTotal"] = 
+          $twigParams["cartContents"]["summary"]["priceTotal"] 
+            + 
+          $twigParams["deliveryServices"][$orderData["deliveryService"]]["PRICE"]
+        ;
 
         $customerUID = $this->websiteRenderer->getCustomerUID();
         $cartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($this->adminPanel);

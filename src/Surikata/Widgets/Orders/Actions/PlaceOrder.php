@@ -8,10 +8,15 @@ class PlaceOrder extends \ADIOS\Core\Action {
   public function render() {
 
     $orderData = [];
-    // REVIEW: $this->params["values"] moze byt prazdne a nemusi byt pole.
-    // Nemas to osetrene.
+    if (!array_key_exists("values", $this->params)) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\EmptyRequestParams();
+    }
+
     $values = json_decode($this->params["values"]);
 
+    if (!is_array($values)) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\InvalidOrderDataFormat();
+    }
     foreach ($values as $key => $value) {
       $orderData[$key] = $value;
     }

@@ -435,11 +435,7 @@ class Order extends \ADIOS\Core\Model {
     }
 
     if (empty($orderData['confirmation_time'])) {
-      $timeZone = 'Europe/Paris';
-      $timeStamp = time();
-      $dateTime = new \DateTime("now", new \DateTimeZone($timeZone));
-      $dateTime->setTimestamp($timeStamp);
-      $confirmationTime = $dateTime->format('Y-m-d H:i:s');
+      $confirmationTime = date("Y-m-d H:i:s");
     } else {
       $confirmationTime = date("Y-m-d H:i:s", strtotime($orderData['confirmation_time']));
     }

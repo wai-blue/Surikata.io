@@ -571,13 +571,14 @@ class Order extends \ADIOS\Core\Model {
     if (!is_array($orderData)) {
       throw new \ADIOS\Widgets\Orders\Exceptions\InvalidOrderDataFormat();
     }
-    $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adios);
 
     if ($orderData["id_customer"] <= 0) {
       throw new \ADIOS\Widgets\Orders\Exceptions\InvalidCustomerID();
     }
 
+    $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adios);
     $customer = $customerModel->getById($orderData["id_customer"]);
+
     if (count($customer["ADDRESSES"]) > 0) {
       $orderData["id_address"] = $customer["ADDRESSES"][0]["id"];
       $addressFields = [

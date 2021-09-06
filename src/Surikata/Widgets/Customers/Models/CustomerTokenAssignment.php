@@ -15,8 +15,9 @@ class CustomerTokenAssignment extends \ADIOS\Core\Model {
 
   public function init() {
     parent::init();
-    /** @var Token $tokenModel */
+
     $tokenModel = $this->adios->getModel("Core/Models/Token");
+
     if (!in_array(self::TOKEN_TYPE_ACCOUNT_VALIDATION, $tokenModel->tokenTypes)) {
       $tokenModel->registerTokenType(self::TOKEN_TYPE_ACCOUNT_VALIDATION);
     }

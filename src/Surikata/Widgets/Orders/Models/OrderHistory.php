@@ -16,7 +16,7 @@ class OrderHistory extends \ADIOS\Core\Model {
       ],
 
       "event_time" => [
-        "type" => "date",
+        "type" => "datetime",
         "title" => $this->translate("Event time"),
         "show_column" => true
       ],
@@ -53,7 +53,27 @@ class OrderHistory extends \ADIOS\Core\Model {
     $params["where"] = "`{$this->table}`.`id_order` = ".(int) $params['id_order'];
     $params["show_title"] = FALSE;
     $params["show_controls"] = FALSE;
+
     return $params;
+  }
+
+  public function tableCellHTMLFormatter($data) {
+    $orderModel = new \ADIOS\Widgets\Orders\Models\Order($this->adios);
+    $orderModel->init();
+
+    if ($data['column'] == "state") {
+      return $orderModel->enumOrderStates[(int)$data['row']['state']];
+    }
+  }
+
+  public function tableCellCSSFormatter($data) {
+
+    $orderModel = new \ADIOS\Widgets\Orders\Models\Order($this->adios);
+    $orderModel->init();
+
+    if ($data['column'] == "state") {
+      return "background-color: {$orderModel->enumOrderStateColors[(int)$data['row']['state']]}99;";
+    }
   }
 
 }

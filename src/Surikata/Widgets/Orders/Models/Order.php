@@ -45,7 +45,10 @@ class Order extends \ADIOS\Core\Model {
     ];
 
     foreach ($this->adios->websiteRenderer->getDeliveryPlugins() as $plugin) {
-      $enumDeliveryServices[$plugin->name] = $plugin->getDeliveryMeta()["name"];
+      $tmpMeta = $plugin->getDeliveryMeta();
+      if ($tmpMeta !== FALSE) {
+        $enumDeliveryServices[$plugin->name] = $tmpMeta["name"];
+      }
     }
     $this->enumDeliveryServices = $enumDeliveryServices;
 
@@ -83,6 +86,12 @@ class Order extends \ADIOS\Core\Model {
         "show_column" => TRUE,
       ],
 
+      "id_customer_uid" => [
+        "type" => "lookup",
+        "title" => "Customer",
+        "model" => "Widgets/Customers/Models/CustomerUID",
+        "show_column" => TRUE,
+      ],
 
       "del_given_name" => [
         "type" => "varchar",
@@ -346,7 +355,7 @@ class Order extends \ADIOS\Core\Model {
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService
    */
   public function placeOrder($orderData, $customerUID = NULL, $cartContents = NULL, $checkRequiredFields = TRUE) {
-
+    $idCustomer = 0;
     $idAddress = (int) $orderData['id_address'];
 
     $cartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($this->adios);
@@ -354,20 +363,22 @@ class Order extends \ADIOS\Core\Model {
     $customerUIDModel = new \ADIOS\Widgets\Customers\Models\CustomerUID($this->adios);
     $customerAddressModel = new \ADIOS\Widgets\Customers\Models\CustomerAddress($this->adios);
 
-    if (empty($orderData['id_customer']) && !empty($customerUID)) {
+    if (!empty($customerUID)) {
       $customerUIDlink = $customerUIDModel->getByCustomerUID($customerUID);
-      $idCustomer = $customerUIDlink['id_customer'];
-    } else {
+      $idCustomerUID = $customerUIDlink['id'];
+    }
+
+    if (!empty($orderData['id_customer'])) {
       $idCustomer = (int) $orderData['id_customer'];
+
+      $customer = $customerModel->getById($idCustomer);
+      if ((int) $customer['id'] == 0) {
+        throw new \ADIOS\Widgets\Orders\Exceptions\InvalidCustomerID();
+      }
     }
 
-    if ($idCustomer == 0) {
+    if ($idCustomer == 0 && $idCustomerUID == 0) {
       throw new \ADIOS\Widgets\Orders\Exceptions\UnknownCustomer($customerUID);
-    }
-
-    $customer = $customerModel->getById($idCustomer);
-    if ((int) $customer['id'] == 0) {
-      throw new \ADIOS\Widgets\Orders\Exceptions\InvalidCustomerID();
     }
 
     $requiredFieldsEmpty = [];
@@ -413,7 +424,7 @@ class Order extends \ADIOS\Core\Model {
       throw new \ADIOS\Widgets\Orders\Exceptions\EmptyRequiredFields(join(",", $requiredFieldsEmpty));
     }
 
-    if ($idAddress <= 0) {
+    if ($idAddress <= 0 && $idCustomer != 0) {
       $idAddress = $customerAddressModel->saveAddress($idCustomer, $orderData);
     }
 
@@ -456,7 +467,8 @@ class Order extends \ADIOS\Core\Model {
       "number" => $orderData['number'] ?? ["sql" => "
         @number := concat('".date("ymd", strtotime($confirmationTime))."', lpad(@serial_number, 4, '0'))
       "],
-      "id_customer"       => $idCustomer,
+      "id_customer"       => $idCustomer ?? 0,
+      "id_customer_uid"   => $idCustomerUID ?? 0,
       "del_given_name"    => $orderData['del_given_name'],
       "del_family_name"   => $orderData['del_family_name'],
       "del_company_name"  => $orderData['del_company_name'],
@@ -540,7 +552,7 @@ class Order extends \ADIOS\Core\Model {
     }
 
     $this->adios->sendEmail(
-      $orderData["CUSTOMER"]["email"],
+      $orderData["email"],
       str_replace("{% number %}", $orderData["number"], $subject),
       "
         <div style='font-family:Verdana;font-size:10pt;'>

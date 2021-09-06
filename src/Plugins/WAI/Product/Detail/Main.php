@@ -4,6 +4,46 @@ namespace Surikata\Plugins\WAI\Product {
   use ADIOS\Widgets\Products\Models\Service;
   class Detail extends \Surikata\Core\Web\Plugin {
     var $productInfo = NULL;
+    var $deleteCurrentPageBreadCrumb = true;
+
+    public function getBreadCrumbs($urlVariables = []) {
+      $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
+
+      $productInfo = $this->getProductInfo();
+      $productInfo['idProductCategory'] = $productInfo['id_category'];
+
+      $productCatalog = 
+        new \Surikata\Plugins\WAI\Product\Catalog(
+          $this->websiteRenderer
+        )
+      ;
+
+      $productCatalogUrl = $productCatalog->getWebPageUrl();
+
+      $breadCrumb = 
+        new \Surikata\Plugins\WAI\Common\Breadcrumb(
+          $this->websiteRenderer
+        )
+      ;
+
+      $breadCrumbs = 
+        $breadCrumb->getMenuBreadCrumbs(
+          $productCatalogUrl, 
+          true
+        )
+      ;
+
+      $breadCrumbs = array_merge(
+        $breadCrumbs, 
+        $productCatalog->getBreadCrumbs($productInfo)
+      );
+
+      $breadCrumbs[
+        $this->getWebPageUrlFormatted($productInfo)
+      ] = $productInfo["name_lang_{$languageIndex}"];
+
+      return $breadCrumbs;
+    }
 
     public function getWebPageUrlFormatted($urlVariables, $pluginSettings = []) {
       $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
@@ -143,19 +183,15 @@ namespace ADIOS\Plugins\WAI\Product {
       ];
     }
 
-    public function onProductDetailSidebarButtons($event) {
-      $productUrl = $this->adios->websiteRenderer->getPlugin("WAI/Product/Detail")->getWebpageUrl($event["data"]);
-      $event["html"] = "
-        <a 
-          class='btn btn-icon-split btn-light mt-4'
-          target='_blank'
-          href='../../../{$this->adios->config["language"]}/{$productUrl}'
-        >
-          <span class='icon'><i class='fa fa-link'></i></span>
-          <span class='text'>Open product page</span>
-        </a>"
-      ;
+    public function onModelAfterFormParams($event) {
+      $data = $event["data"];
+
+      if ($event["model"]->name == "Widgets/Products/Models/Product") {
+        var_dump($this->adios->websiteRenderer->getPlugin("WAI/Product/Detail")->getWebpageUrl($event["data"]));
+        $event["params"]["template"]["columns"][1]["html"] .= "<a href='#'>Ahoj</a>";
+      }
+
       return $event;
-   }
+    }
   }
 }

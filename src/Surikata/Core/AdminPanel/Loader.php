@@ -83,6 +83,8 @@ class Loader extends \ADIOS\Core\Loader {
       $email->setProtocol(\Surikata\Lib\Email::TLS);
     }
 
+    $email->send();
+
   }
 
   public function hasUserRole($role) {

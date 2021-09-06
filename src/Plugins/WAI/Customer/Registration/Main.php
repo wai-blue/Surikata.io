@@ -9,6 +9,10 @@ namespace Surikata\Plugins\WAI\Customer {
 
         try {
           $customerUID = $this->websiteRenderer->getCustomerUID();
+
+          //.REVIEW: Toto urcite nie. Uz som to pisal inde, hsc() ma byt pouzite iba pri priprave pre echo.
+          // Twig si to robi sam a ADIOS pri zapisovani do DB tiez. Takze by z toho bolo dvojite hsc()
+          // Treba vyhodit.
           foreach ($this->websiteRenderer->urlVariables as $key => $field) {
             $this->websiteRenderer->urlVariables[$key] = hsc($field);
           }

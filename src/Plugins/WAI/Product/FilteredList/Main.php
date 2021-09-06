@@ -66,6 +66,7 @@ namespace ADIOS\Plugins\WAI\Product {
           ],
         ],
         "product_count" => [
+          // REVIEW: Cudny nazov parametra. Co je tym myslene?
           "title" => "Count of products",
           "type" => "int",
         ],

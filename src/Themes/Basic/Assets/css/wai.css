@@ -1096,3 +1096,18 @@ ul.blog-page-meta {
   font-size: 11px;
   color: var(--theme-grey-color);
 }
+
+.page-404 {
+  background-color: var(--theme-third-color);
+  color: #eee;
+  font-size: 18px;
+  padding: 3em;
+  text-align: center;
+}
+.page-404 h2 a {
+  color: var(--theme-second-color);
+  text-decoration: none;
+}
+.page-404 h2 a:hover {
+  color: var(--theme-main-color);
+}

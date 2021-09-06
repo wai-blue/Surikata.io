@@ -376,8 +376,8 @@ class Order extends \ADIOS\Core\Model {
     $requiredFieldsEmpty = [];
 
     $requiredAgreementsFields = [
-      "business_conditions",
-      "gdpr_agreement"
+      "general_terms_and_conditions",
+      "gdpr_consent"
     ];
 
     if ($idAddress <= 0) {

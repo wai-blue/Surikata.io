@@ -186,7 +186,7 @@ window.onpopstate = function (e) {
           }, 500);
 
           for (var i in emptyFields) {
-            if (emptyFields[i] == "gdpr_agreement" || emptyFields[i] == "business_conditions") {
+            if (emptyFields[i] == "gdpr_consent" || emptyFields[i] == "general_terms_and_conditions") {
               $('#' + emptyFields[i] + '_label').addClass('required-empty')
             } else {
               $('#orderDataForm input[name=' + emptyFields[i] + ']').addClass('required-empty');

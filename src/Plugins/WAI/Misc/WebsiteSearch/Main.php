@@ -63,7 +63,7 @@ namespace Surikata\Plugins\WAI\Misc {
           "category" => "products",
           "label" => $product["name_lang_".$languageIndex],
           "value" => $product["name_lang_".$languageIndex],
-          "url" => $this->websiteRenderer->rootUrl."/".$productDetailPlugin->getWebPageUrl($product)
+          "url" => "./".$productDetailPlugin->getWebPageUrl($product)
         ];
       }
 
@@ -79,7 +79,7 @@ namespace Surikata\Plugins\WAI\Misc {
           "category" => "product categories",
           "label" => $category["name_lang_".$languageIndex],
           "value" => $category["code"],
-          "url" => $this->websiteRenderer->rootUrl."/".$productCatalogPlugin->getWebPageUrl($productCatalogPlugin->convertCategoryToUrlVariables($category))
+          "url" => "./".$productCatalogPlugin->getWebPageUrl($productCatalogPlugin->convertCategoryToUrlVariables($category))
         ];
       }
 
@@ -97,7 +97,7 @@ namespace Surikata\Plugins\WAI\Misc {
           "category" => "blogs",
           "label" => $blog["name"],
           "value" => $blog["name"],
-          "url" => $this->websiteRenderer->rootUrl."/".$blogDetailPlugin->getWebPageUrl($blog)
+          "url" => "./".$blogDetailPlugin->getWebPageUrl($blog)
         ];
       }
 

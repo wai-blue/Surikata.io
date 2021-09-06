@@ -37,6 +37,7 @@ class RandomGenerator {
       $number = "RND.".rand(10, 99).".".rand(1000, 9999).".".$i;
       $ean = self::generateEAN($number);
       $image = "products/product_{$productImgNum}.jpg";
+      $vat = 20;
       $productsData[$i] = [
         /* 0 */ $idCategory,
         /* 1 */ $idBrand,
@@ -51,7 +52,8 @@ class RandomGenerator {
         /* 10 */ rand(0, 1),
         /* 11 */ $number,
         /* 12 */ $ean,
-        /* 13 */ $image
+        /* 13 */ $image,
+        /* 14 */ $vat
       ];
     }
 
@@ -74,6 +76,7 @@ class RandomGenerator {
         "number" => $tmpProduct[11],
         "ean" => $tmpProduct[12],
         "image" => $tmpProduct[13],
+        "vat_percent" => $tmpProduct[14],
       ]);
 
       $tmpFeatureId = 1;

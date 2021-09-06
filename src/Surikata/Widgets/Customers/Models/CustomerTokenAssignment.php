@@ -13,18 +13,16 @@ class CustomerTokenAssignment extends \ADIOS\Core\Model {
   var $urlBase = "Customer/{{ id_customer }}/Tokens";
   var $tableTitle = "Tokens";
 
+  public static $init = TRUE;
+
   public function init() {
-    parent::init();
+    if (self::$init === TRUE) {
+      self::$init = FALSE;
+      parent::init();
+      $tokenModel = $this->adios->getModel("Core/Models/Token");
 
-    $tokenModel = $this->adios->getModel("Core/Models/Token");
-
-    if (!in_array(self::TOKEN_TYPE_ACCOUNT_VALIDATION, $tokenModel->tokenTypes)) {
       $tokenModel->registerTokenType(self::TOKEN_TYPE_ACCOUNT_VALIDATION);
-    }
-    if (!in_array(self::TOKEN_TYPE_ACCOUNT_CONFIRMATION, $tokenModel->tokenTypes)) {
       $tokenModel->registerTokenType(self::TOKEN_TYPE_ACCOUNT_CONFIRMATION);
-    }
-    if (!in_array(self::TOKEN_TYPE_FORGOT_PASSWORD, $tokenModel->tokenTypes)) {
       $tokenModel->registerTokenType(self::TOKEN_TYPE_FORGOT_PASSWORD);
     }
   }

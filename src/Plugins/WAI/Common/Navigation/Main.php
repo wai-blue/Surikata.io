@@ -4,6 +4,8 @@ namespace Surikata\Plugins\WAI\Common {
 
   class Navigation extends \Surikata\Core\Web\Plugin {
 
+    var $navigationItems = NULL;
+
     private function convertFlatMenuItemsToTree(&$flatMenuItems, $idParent = 0) {
       $treeItems = [];
       foreach ($flatMenuItems as $item) {
@@ -71,11 +73,15 @@ namespace Surikata\Plugins\WAI\Common {
 
       $twigParams["languages"] = $this->getLanguages();
 
+      if ($this->navigationItems === NULL) {
+        $this->navigationItems = $this->convertFlatMenuItemsToTree(
+          (new \ADIOS\Widgets\Website\Models\WebMenuItem($this->adminPanel))
+            ->getByIdMenu((int) $pluginSettings['menuId'] ?? 0)
+        );
+      }
+
       // navigationItems
-      $twigParams["navigationItems"] = $this->convertFlatMenuItemsToTree(
-        (new \ADIOS\Widgets\Website\Models\WebMenuItem($this->adminPanel))
-          ->getByIdMenu((int) $pluginSettings['menuId'] ?? 0)
-      );
+      $twigParams["navigationItems"] = $this->navigationItems;
 
       // cartContents
       $twigParams["cartContents"] = (new \Surikata\Plugins\WAI\Customer\Cart($this->websiteRenderer))->getCartContents();
@@ -106,6 +112,10 @@ namespace ADIOS\Plugins\WAI\Common {
         ],
         "shortContact" => [
           "title" => "Short contact info in header",
+          "type" => "varchar",
+        ],
+        "homepageUrl" => [
+          "title" => "Homepage URL",
           "type" => "varchar",
         ],
       ];

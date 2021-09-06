@@ -190,10 +190,47 @@ if (count($parts) == 0) {
     $blogTagModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\BlogTag($adminPanel);
     $blogTagAssignmentModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\BlogTagAssignment($adminPanel);
 
+    $deliveryServiceModel = new \ADIOS\Widgets\Shipping\Models\DeliveryService($adminPanel);
+    $shippingCountryModel = new \ADIOS\Widgets\Shipping\Models\Country($adminPanel);
+    $paymentServiceModel = new \ADIOS\Widgets\Shipping\Models\PaymentService($adminPanel);
+    $shipmentModel = new \ADIOS\Widgets\Shipping\Models\Shipment($adminPanel);
+    $shipmentPriceModel = new \ADIOS\Widgets\Shipping\Models\ShipmentPrice($adminPanel);
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // PART: product-catalog
     
     if (in_array("product-catalog", $parts)) {
+
+      $shippingCountryModel->insertRow(["id" => 1, "name" => "Slovakia", "flag" => NULL, "is_enabled" => TRUE]);
+
+      $deliveryServiceModel->insertRow(["id" => 1, "name" => "UPS", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => "WAI/Delivery/UPS"]);
+      $deliveryServiceModel->insertRow(["id" => 2, "name" => "DPD", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => "WAI/Delivery/DPD"]);
+      $deliveryServiceModel->insertRow(["id" => 3, "name" => "Slovenská pošta", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => ""]);
+      $deliveryServiceModel->insertRow(["id" => 4, "name" => "Packeta", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => ""]);
+
+      $paymentServiceModel->insertRow(["id" => 1, "name" => "Tatra banka", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => "WAI/Payment/Tatrabanka"]);
+      $paymentServiceModel->insertRow(["id" => 2, "name" => "CardPay", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => "WAI/Payment/Card"]);
+      $paymentServiceModel->insertRow(["id" => 3, "name" => "Payment on delivery", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => ""]);
+
+      $shipmentModel->insertRow(["id" => 1, "name" => "UPS", "description" => "", "id_country" => 1, "id_delivery_service" => 1, "id_payment_service" => 1, "is_enabled" => TRUE, "order_index" => ""]);
+      $shipmentModel->insertRow(["id" => 2, "name" => "DPD", "description" => "", "id_country" => 1, "id_delivery_service" => 2, "id_payment_service" => 1, "is_enabled" => TRUE, "order_index" => ""]);
+      $shipmentModel->insertRow(["id" => 3, "name" => "Slovenská pošta", "description" => "", "id_country" => 1, "id_delivery_service" => 3, "id_payment_service" => 1, "is_enabled" => TRUE, "order_index" => ""]);
+      $shipmentModel->insertRow(["id" => 4, "name" => "Packeta", "description" => "", "id_country" => 1, "id_delivery_service" => 4, "id_payment_service" => 1, "is_enabled" => TRUE, "order_index" => ""]);
+
+      $shipmentModel->insertRow(["id" => 5, "name" => "UPS", "description" => "", "id_country" => 1, "id_delivery_service" => 1, "id_payment_service" => 2, "is_enabled" => TRUE, "order_index" => ""]);
+      $shipmentModel->insertRow(["id" => 6, "name" => "DPD", "description" => "", "id_country" => 1, "id_delivery_service" => 2, "id_payment_service" => 2, "is_enabled" => TRUE, "order_index" => ""]);
+      $shipmentModel->insertRow(["id" => 7, "name" => "Slovenská pošta", "description" => "", "id_country" => 1, "id_delivery_service" => 3, "id_payment_service" => 2, "is_enabled" => TRUE, "order_index" => ""]);
+      $shipmentModel->insertRow(["id" => 8, "name" => "Packeta", "description" => "", "id_country" => 1, "id_delivery_service" => 4, "id_payment_service" => 2, "is_enabled" => TRUE, "order_index" => ""]);
+
+      $shipmentModel->insertRow(["id" => 9, "name" => "UPS", "description" => "", "id_country" => 1, "id_delivery_service" => 1, "id_payment_service" => 3, "is_enabled" => TRUE, "order_index" => ""]);
+    
+      $shipmentPriceModel->insertRow(["id" => 1, "id_shipment" => 1, "name" => "a1", "weight_from" => 0, "weight_to" => 15, "price_from" => 0, "price_to" => 0, "shipment_price_calculation_method" => 2, "shipment_price" => 4]);
+      $shipmentPriceModel->insertRow(["id" => 2, "id_shipment" => 1, "name" => "a2", "weight_from" => 15, "weight_to" => 100, "price_from" => 0, "price_to" => 0, "shipment_price_calculation_method" => 2, "shipment_price" => 15]);
+      $shipmentPriceModel->insertRow(["id" => 3, "id_shipment" => 1, "name" => "a3", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 50, "shipment_price_calculation_method" => 1, "shipment_price" => 4]);
+      
+      $shipmentPriceModel->insertRow(["id" => 5, "id_shipment" => 2, "name" => "b1", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 100, "shipment_price_calculation_method" => 1, "shipment_price" => 4.8]);
+      $shipmentPriceModel->insertRow(["id" => 6, "id_shipment" => 3, "name" => "c1", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 50, "shipment_price_calculation_method" => 1, "shipment_price" => 6]);
+      $shipmentPriceModel->insertRow(["id" => 7, "id_shipment" => 4, "name" => "d1", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 60, "shipment_price_calculation_method" => 1, "shipment_price" => 6]);
 
       // merne jednotky
       $unitModel->insertRow(["id" => 1, "unit" => "N/A", "name" => "no unit", "is_for_products" => TRUE, "is_for_features" => TRUE]);
@@ -553,10 +590,12 @@ if (count($parts) == 0) {
         // Product catalog pages
         "EN|products|WithLeftSidebar|Products - Catalog" => [
           "sidebar" => ["WAI/Product/Filter", ["showProductCategories" => 1, "layout" => "sidebar", "showProductCategories" => 1, "show_brands" => 1]],
-          "section_1" => ["WAI/Product/Catalog", ["defaultItemsPerPage" => 6]],
+          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+          "section_2" => ["WAI/Product/Catalog", ["defaultItemsPerPage" => 6]],
         ],
         "EN||WithoutSidebar|Products - Detail" => [
-          "section_1" => ["WAI/Product/Detail", ["zobrazit_podobne_produkty" => 1, "show_accessories" => 1, "showAuthor" => 1]],
+          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+          "section_2" => ["WAI/Product/Detail", ["zobrazit_podobne_produkty" => 1, "show_accessories" => 1, "showAuthor" => 1]],
         ],
 
         // Shopping cart, checkout and order confirmation
@@ -583,10 +622,10 @@ if (count($parts) == 0) {
         "EN|reset-password|WithoutSidebar|My account - Reset password" => [
           "section_1" => "WAI/Customer/ForgotPassword"
         ],
-        "EN|register|WithoutSidebar|My account - Registration" => [
+        "EN|registration|WithoutSidebar|My account - Registration" => [
           "section_1" => ["WAI/Customer/Registration", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]]
         ],
-        "EN|register-confirm|WithoutSidebar|My account - Registration - Confirmation" => [
+        "EN|registration-confirm|WithoutSidebar|My account - Registration - Confirmation" => [
           "section_1" => "WAI/Customer/RegistrationConfirmation"
         ],
         "EN||WithoutSidebar|My account - Registration - Validation" => [
@@ -596,11 +635,13 @@ if (count($parts) == 0) {
         // Blogs
         "EN|blogs|WithLeftSidebar|Blogs" => [
           "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
-          "section_1" => ["WAI/Blog/Catalog", ['itemsPerPage' => 3, "showAuthor" => 1]],
+          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+          "section_2" => ["WAI/Blog/Catalog", ['itemsPerPage' => 3, "showAuthor" => 1]],
         ],
         "EN||WithLeftSidebar|Blog" => [
           "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
-          "section_1" => "WAI/Blog/Detail",
+          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+          "section_2" => "WAI/Blog/Detail",
         ],
 
         // Miscelaneous pages

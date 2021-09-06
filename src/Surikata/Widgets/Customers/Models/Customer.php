@@ -231,12 +231,10 @@ class Customer extends \ADIOS\Core\Model {
   }
 
   public function validateAccountByEmail($email) {
-    $customer = reset($this->adios->db->get_all_rows_query("
+    $this->adios->db->query("
       update {$this->table} set `is_validated` = TRUE
       where `email` = '".$this->adios->db->escape($email)."'
-    "));
-
-    return TRUE;
+    ");
   }
 
   public function tableParams($params) {
@@ -613,22 +611,21 @@ class Customer extends \ADIOS\Core\Model {
     $body = str_replace("{% password %}", $this->lastCreatedAccountPassword, $body);
     $body = str_replace(
       "{% validationUrl %}",
-      "https://{$this->adios->config["settings"]["web"][$domain]["profile"]["rootUrl"]}/{$accountValidationURL}",
+      "{$this->adios->websiteRenderer->domain['rootUrl']}{$accountValidationURL}",
       $body
     );
 
-    /*$this->adios->email
-      ->setSubject(str_replace("{% email %}", $accountInfo['email'], $subject))
-      ->setHtmlMessage("
+    $this->adios->sendEmail(
+      $accountInfo['email'],
+      str_replace("{% email %}", $accountInfo['email'], $subject),
+      "
         <div style='font-family:Verdana;font-size:10pt'>
           {$body}
         </div>
         <div style='font-family:Verdana;font-size:10pt;padding-top:10px;margin-top:10px;border-top:1px solid #AAAAAA'>{$signature}</div>
-      ")
-      ->addTo($accountInfo['email'])
-    ;
-
-    $this->adios->email->send();*/
+      ",
+      ""
+    );
   }
 
   public function sendNotificationForForgotPassword($accountInfo) {
@@ -646,22 +643,21 @@ class Customer extends \ADIOS\Core\Model {
     $body = str_replace("{% familyName %}", $accountInfo["family_name"], $body);
     $body = str_replace(
       "{% passwordRecoveryUrl %}",
-      "https://{$this->adios->config["settings"]["web"][$domain]["profile"]["rootUrl"]}/{$passwordRecoveryUrl}",
+      "{$this->adios->config["settings"]["web"][$domain]["profile"]["rootUrl"]}/{$passwordRecoveryUrl}",
       $body
     );
 
-    $this->adios->email
-      ->setSubject(str_replace("{% email %}", $accountInfo['email'], $subject))
-      ->setHtmlMessage("
+    $this->adios->sendEmail(
+      $accountInfo['email'],
+      str_replace("{% email %}", $accountInfo['email'], $subject),
+      "
         <div style='font-family:Verdana;font-size:10pt'>
           {$body}
         </div>
         <div style='font-family:Verdana;font-size:10pt;padding-top:10px;margin-top:10px;border-top:1px solid #AAAAAA'>{$signature}</div>
-      ")
-      ->addTo($accountInfo['email'])
-    ;
-
-    $this->adios->email->send();
+      ",
+      ""
+    );
   }
 
 }

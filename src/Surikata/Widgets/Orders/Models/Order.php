@@ -32,12 +32,12 @@ class Order extends \ADIOS\Core\Model {
     ];
 
     $this->enumOrderStateColors = [
-      self::STATE_NEW      => 'blue',
-      self::STATE_INVOICED => 'orange',
-      self::STATE_PAID     => 'green',
-      self::STATE_SHIPPED  => 'purple',
-      self::STATE_RECEIVED => 'light-gray',
-      self::STATE_CANCELED => 'gray',
+      self::STATE_NEW      => '#0000FF',     //blue
+      self::STATE_INVOICED => '#FFA500',     //orange
+      self::STATE_PAID     => '#008000',     //green
+      self::STATE_SHIPPED  => '#800080',     //purple
+      self::STATE_RECEIVED => '#D3D3D3',     //light-gray
+      self::STATE_CANCELED => '#808080',     //gray
     ];
 
     $enumDeliveryServices = [
@@ -45,7 +45,10 @@ class Order extends \ADIOS\Core\Model {
     ];
 
     foreach ($this->adios->websiteRenderer->getDeliveryPlugins() as $plugin) {
-      $enumDeliveryServices[$plugin->name] = $plugin->getDeliveryMeta()["name"];
+      $tmpMeta = $plugin->getDeliveryMeta();
+      if ($tmpMeta !== FALSE) {
+        $enumDeliveryServices[$plugin->name] = $tmpMeta["name"];
+      }
     }
     $this->enumDeliveryServices = $enumDeliveryServices;
 
@@ -83,6 +86,12 @@ class Order extends \ADIOS\Core\Model {
         "show_column" => TRUE,
       ],
 
+      "id_customer_uid" => [
+        "type" => "lookup",
+        "title" => "Customer",
+        "model" => "Widgets/Customers/Models/CustomerUID",
+        "show_column" => TRUE,
+      ],
 
       "del_given_name" => [
         "type" => "varchar",
@@ -92,13 +101,11 @@ class Order extends \ADIOS\Core\Model {
       "del_family_name" => [
         "type" => "varchar",
         "title" => "Delivery: Family Name",
-        "show_column" => TRUE,
       ],
 
       "del_company_name" => [
         "type" => "varchar",
         "title" => "Delivery: Company Name",
-        "show_column" => TRUE,
       ],
 
       "del_street_1" => [
@@ -142,6 +149,7 @@ class Order extends \ADIOS\Core\Model {
       "inv_given_name" => [
         "type" => "varchar",
         "title" => "Invoice: Given Name",
+        "show_column" => TRUE,
       ],
 
       "inv_family_name" => [
@@ -224,7 +232,6 @@ class Order extends \ADIOS\Core\Model {
       "notes" => [
         "type" => "text",
         "title" => "Notes",
-        "show_column" => TRUE,
       ],
 
       "state" => [
@@ -316,14 +323,12 @@ class Order extends \ADIOS\Core\Model {
         ";
       break;
     }
+    $params['order_by'] = "number DESC";
 
     return $params;
   }
 
   public function onBeforeSave($data) {
-    if ($data['id'] == -1) {
-      $data['number'] = "12345";
-    }
 
     return $data;
   }
@@ -337,8 +342,20 @@ class Order extends \ADIOS\Core\Model {
     ;
   }
 
-  public function placeOrder($orderData, $customerUID = NULL, $cartContents = NULL) {
-
+  /**
+   * @param array $orderData
+   * @param null $customerUID
+   * @param null $cartContents
+   * @param bool $checkRequiredFields
+   * @return int|string
+   * @throws \ADIOS\Widgets\Orders\Exceptions\EmptyRequiredFields
+   * @throws \ADIOS\Widgets\Orders\Exceptions\InvalidCustomerID
+   * @throws \ADIOS\Widgets\Orders\Exceptions\PlaceOrderUnknownError
+   * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownCustomer
+   * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService
+   */
+  public function placeOrder($orderData, $customerUID = NULL, $cartContents = NULL, $checkRequiredFields = TRUE) {
+    $idCustomer = 0;
     $idAddress = (int) $orderData['id_address'];
 
     $cartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($this->adios);
@@ -346,25 +363,32 @@ class Order extends \ADIOS\Core\Model {
     $customerUIDModel = new \ADIOS\Widgets\Customers\Models\CustomerUID($this->adios);
     $customerAddressModel = new \ADIOS\Widgets\Customers\Models\CustomerAddress($this->adios);
 
-    if (empty($orderData['id_customer']) && !empty($customerUID)) {
+    if (!empty($customerUID)) {
       $customerUIDlink = $customerUIDModel->getByCustomerUID($customerUID);
-      $idCustomer = $customerUIDlink['id_customer'];
-    } else {
+      $idCustomerUID = $customerUIDlink['id'];
+    }
+
+    if (!empty($orderData['id_customer'])) {
       $idCustomer = (int) $orderData['id_customer'];
+
+      $customer = $customerModel->getById($idCustomer);
+      if ((int) $customer['id'] == 0) {
+        throw new \ADIOS\Widgets\Orders\Exceptions\InvalidCustomerID();
+      }
     }
 
-    if ($idCustomer == 0) {
+    if ($idCustomer == 0 && $idCustomerUID == 0) {
       throw new \ADIOS\Widgets\Orders\Exceptions\UnknownCustomer($customerUID);
-    }
-
-    $customer = $customerModel->getById($idCustomer);
-    if ((int) $customer['id'] == 0) {
-      throw new \ADIOS\Widgets\Orders\Exceptions\InvalidCustomerID();
     }
 
     $requiredFieldsEmpty = [];
 
-    if ($idAddress <= 0) {
+    $requiredAgreementsFields = [
+      "general_terms_and_conditions",
+      "gdpr_consent"
+    ];
+
+    if ($idAddress <= 0 && $checkRequiredFields) {
       $requiredFieldsBilling = [
         "inv_given_name",
         "inv_family_name",
@@ -401,11 +425,17 @@ class Order extends \ADIOS\Core\Model {
       }
     }
 
+    foreach ($requiredAgreementsFields as $fieldName) {
+      if (empty($orderData[$fieldName])) {
+        $requiredFieldsEmpty[] = $fieldName;
+      }
+    }
+
     if (count($requiredFieldsEmpty) > 0) {
       throw new \ADIOS\Widgets\Orders\Exceptions\EmptyRequiredFields(join(",", $requiredFieldsEmpty));
     }
 
-    if ($idAddress <= 0) {
+    if ($idAddress <= 0 && $idCustomer != 0) {
       $idAddress = $customerAddressModel->saveAddress($idCustomer, $orderData);
     }
 
@@ -448,7 +478,8 @@ class Order extends \ADIOS\Core\Model {
       "number" => $orderData['number'] ?? ["sql" => "
         @number := concat('".date("ymd", strtotime($confirmationTime))."', lpad(@serial_number, 4, '0'))
       "],
-      "id_customer"       => $idCustomer,
+      "id_customer"       => $idCustomer ?? 0,
+      "id_customer_uid"   => $idCustomerUID ?? 0,
       "del_given_name"    => $orderData['del_given_name'],
       "del_family_name"   => $orderData['del_family_name'],
       "del_company_name"  => $orderData['del_company_name'],
@@ -481,6 +512,14 @@ class Order extends \ADIOS\Core\Model {
     if (!is_numeric($idOrder)) {
       throw new \ADIOS\Widgets\Orders\Exceptions\PlaceOrderUnknownError();
     }
+
+    (new \ADIOS\Widgets\Orders\Models\OrderHistory($this->adios))
+      ->insertRow([
+        "id_order" => $idOrder,
+        "state" => self::STATE_NEW,
+        "event_time" => "SQL:now()",
+      ])
+    ;
 
     $placedOrderData = $this->getById($idOrder);
     // $placedOrderNumber = $this->calculateOrderNumber($placedOrderData);
@@ -524,7 +563,7 @@ class Order extends \ADIOS\Core\Model {
     }
 
     $this->adios->sendEmail(
-      $orderData["CUSTOMER"]["email"],
+      $orderData["email"],
       str_replace("{% number %}", $orderData["number"], $subject),
       "
         <div style='font-family:Verdana;font-size:10pt;'>
@@ -536,7 +575,74 @@ class Order extends \ADIOS\Core\Model {
     );
   }
 
-  public function createNewOrder($idCustomer, $orderData) {
+  /**
+   * Function create new order mainly from admin
+   * For Frontend checkout use placeOrder function
+   * @param $idCustomer
+   * @param null $orderData
+   * @throws \ADIOS\Widgets\Orders\Exceptions\EmptyRequiredFields
+   * @throws \ADIOS\Widgets\Orders\Exceptions\InvalidCustomerID
+   * @throws \ADIOS\Widgets\Orders\Exceptions\PlaceOrderUnknownError
+   * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownCustomer
+   * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService
+   */
+  public function addCustomerInfoToOrderData($orderData) {
+    if (!is_array($orderData)) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\InvalidOrderDataFormat();
+    }
+
+    if ($orderData["id_customer"] <= 0) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\InvalidCustomerID();
+    }
+
+    $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adios);
+    $customer = $customerModel->getById($orderData["id_customer"]);
+
+    if (count($customer["ADDRESSES"]) > 0) {
+      $orderData["id_address"] = $customer["ADDRESSES"][0]["id"];
+      $addressFields = [
+        "inv_given_name",
+        "inv_family_name",
+        "inv_street_1",
+        "inv_city",
+        "inv_zip",
+        "phone_number",
+        "email",
+        "del_given_name",
+        "del_family_name",
+        "del_street_1",
+        "del_city",
+        "del_zip",
+      ];
+      foreach ($addressFields as $field) {
+        $orderData[$field] = $customer["ADDRESSES"][0][$field];
+        // if delivery address is empty - use inv address
+        if (strpos($field, "del_") !== false) {
+          $invField = str_ireplace("del_", "inv_", $field);
+          if (
+            strlen($customer["ADDRESSES"][0][$field]) == 0
+            && strlen($customer["ADDRESSES"][0][$invField]) > 0
+          ) {
+            $orderData[$field] = $customer["ADDRESSES"][0][$invField];
+          }
+        }
+      }
+    }
+
+    return $orderData;
+  }
+
+  public function changeOrderState($idOrder, $data) {
+    $this->updateRow(["state" => $data["state"]], $idOrder);
+
+    (new \ADIOS\Widgets\Orders\Models\OrderHistory($this->adios))
+      ->insertRow([
+        "id_order" => $idOrder,
+        "state" => $data["state"],
+        "event_time" => "SQL:now()",
+      ])
+    ;
+
   }
 
   public function addItem($idOrder, $item) {
@@ -552,17 +658,18 @@ class Order extends \ADIOS\Core\Model {
         "columns" => [
           [
             "rows" => [
-              // "number",
-              // "serial_number",
               "id_customer",
               // "number_customer",
               "notes",
             ],
           ],
+
         ],
       ];
+      $params['save_action'] = "Orders/PlaceOrder";
     } else {
-      $btn_vystavit_vyuctovaciu_fakturu = $this->adios->ui->button([
+
+      $btnPlaceIssueInvoice = $this->adios->ui->button([
         "text"    => "Issue invoice",
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
@@ -578,7 +685,7 @@ class Order extends \ADIOS\Core\Model {
         "class"   => "btn-info mb-2 w-100",
       ])->render();
 
-      $btn_zobrazit_vyuctovaciu_fakturu = $this->adios->ui->button([
+      $btnShowIssueInvoice = $this->adios->ui->button([
         "text" => "Show invoice nr. ".hsc($data['INVOICE']['number']),
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
@@ -590,23 +697,90 @@ class Order extends \ADIOS\Core\Model {
         "class" => "btn-primary mb-2 w-100",
       ])->render();
 
+      $btnOrderStatePaid = $this->adios->ui->button([
+        "text" => "Set as paid",
+        "onclick" => "
+          let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
+          _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_PAID."', function(res) {
+            if (isNaN(res)) {
+              alert(res);
+            } else {
+              // refresh order window
+              window_refresh(tmp_form_id + '_form_window');
+            }
+          });
+        ",
+        "class" => "btn-primary mb-2 w-100",
+      ])->render();
+
+      $btnOrderStateShipped = $this->adios->ui->button([
+        "text" => "Set as shipped",
+        "onclick" => "
+          let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
+          _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_SHIPPED."', function(res) {
+            if (isNaN(res)) {
+              alert(res);
+            } else {
+              // refresh order window
+              window_refresh(tmp_form_id + '_form_window');
+            }
+          });
+        ",
+        "class" => "btn-success mb-2 w-100",
+      ])->render();
+
+
+      $btnOrderStateCanceled = $this->adios->ui->button([
+        "text" => "Set as canceled",
+        "onclick" => "
+          let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
+          _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_CANCELED."', function(res) {
+            if (isNaN(res)) {
+              alert(res);
+            } else {
+              // refresh order window
+              window_refresh(tmp_form_id + '_form_window');
+            }
+          });
+        ",
+        "class" => "btn-danger mb-2 w-100",
+      ])->render();
+
       $tab_invoice_and_delivery_note = "";
       if ($data['INVOICE']['id'] <= 0) {
         $tab_invoice_and_delivery_note .= "
-          {$btn_vystavit_vyuctovaciu_fakturu}
+          {$btnPlaceIssueInvoice}
         ";
       } else {
         $tab_invoice_and_delivery_note .= "
-          {$btn_zobrazit_vyuctovaciu_fakturu}
+          {$btnShowIssueInvoice}
         ";
       }
+
+      $formTitle = "Order&nbsp;#&nbsp;".hsc($data["number"]);
+
+      $formTitle .= "
+        &nbsp;
+        <span
+          style='
+            background-color: {$this->enumOrderStateColors[$data['state']]};
+          '
+          class='badge badge-adios'
+        >
+          {$this->enumOrderStates[$data['state']]}
+        </span>
+      ";
 
       $sidebarHtml = $this->adios->dispatchEventToPlugins("onOrderDetailSidebarButtons", [
         "model" => $this,
         "params" => $params,
         "data" => $data,
       ])["html"];
+      $sidebarHtml .= $btnOrderStatePaid;
+      $sidebarHtml .= $btnOrderStateShipped;
+      $sidebarHtml .= $btnOrderStateCanceled;
 
+      $params["titleRaw"] = $formTitle;
       $params["template"] = [
         "columns" => [
           [
@@ -670,6 +844,9 @@ class Order extends \ADIOS\Core\Model {
   public function tableCellCSSFormatter($data) {
     if ($data['column'] == "id") {
       return "border-left:10px solid {$this->enumOrderStateColors[$data['row']['state']]};";
+    }
+    if ($data['column'] == "number") {
+      return "background-color: {$this->enumOrderStateColors[$data['row']['state']]}66;";
     }
     if ($data['column'] == "state") {
       return "text-decoration:underline wavy {$this->enumOrderStateColors[$data['row']['state']]};";
@@ -835,7 +1012,7 @@ class Order extends \ADIOS\Core\Model {
       ->insertRow([
         "id_order" => $idOrder,
         "state" => self::STATE_INVOICED,
-        "cas" => "SQL:now()",
+        "event_time" => "SQL:now()",
       ])
     ;
   }

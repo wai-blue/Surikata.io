@@ -89,17 +89,14 @@ class ShipmentPrice extends \ADIOS\Core\Model {
     return self::with('shipment')->get()->toArray();
   }
 
-  /*public function getAllBySummary($summary) {
-
-    return 
-      self::with('shipment')
-      ->where([
-        ['price_from', '<=', $summary['priceTotal']],
-        ['price_to', '>=', $summary['priceTotal']]
-      ])
-      ->get()->toArray()
-    ;
-  }*/
+  public function getById(int $idShipment) {
+    return reset(
+      $this
+      ->where('id_shipment', $idShipment)
+      ->get()
+      ->toArray()
+    );
+  }
   
   public function getAllBySummary($summary) {
     $shipmentModel = new \ADIOS\Widgets\Shipping\Models\Shipment($this->adminPanel);
@@ -109,7 +106,7 @@ class ShipmentPrice extends \ADIOS\Core\Model {
       SELECT 
         {$deliveryServiceModel->table}.name as name,
         {$this->table}.shipment_price as shipment_price,
-        {$deliveryServiceModel->table}.id as id_delivery_service
+        {$deliveryServiceModel->table}.id as id
       FROM {$this->table}
       LEFT JOIN 
         {$shipmentModel->table}

@@ -69,4 +69,29 @@ class Shipment extends \ADIOS\Core\Model {
     ]);
   }
 
+  public function payment() {
+    return $this->hasOne(\ADIOS\Widgets\Shipping\Models\PaymentService::class, "id", "id_payment_service");
+  }
+
+  public function getByIdDeliveryService($idDelivery) {
+    return $this
+      ->with('payment')
+      ->where('id_delivery_service', $idDelivery)
+      ->get()
+      ->toArray()
+    ;
+  }
+
+  public function getShipment($idDelivery, $idPayment) {
+    return reset(
+      $this->
+      where([
+        ['id_delivery_service', $idDelivery],
+        ['id_payment_service', $idPayment]
+      ])
+      ->get()
+      ->toArray()
+    );
+  }
+
 }

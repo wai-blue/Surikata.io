@@ -444,15 +444,35 @@ class Order extends \ADIOS\Core\Model {
     }
 
     if (!empty($orderData['deliveryService'])) {
-      $deliveryPlugin = $this->adios->websiteRenderer->getPlugin($orderData['deliveryService']);
-
+      /*$deliveryPlugin = $this->adios->websiteRenderer->getPlugin($orderData['deliveryService']);
       if (!is_object($deliveryPlugin)) {
         throw new \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService($orderData['deliveryService']);
       }
-
       $deliveryPrice = $deliveryPlugin->calculatePriceForOrder($orderData, $cartContents);
+      */
+
+      $shipmentModel = 
+        new \ADIOS\Widgets\Shipping\Models\Shipment(
+          $this->adminPanel
+        )
+      ;
+
+      $shipmentPriceModel = 
+        new \ADIOS\Widgets\Shipping\Models\ShipmentPrice(
+          $this->adminPanel
+        )
+      ;
+
+      $shipment = 
+        $shipmentModel->getShipment(
+          $orderData['deliveryService'],
+          $orderData['paymentMethod']
+        )
+      ; 
+
+      $deliveryPrice = ($shipmentPriceModel->getById($shipment['id']))['shipment_price'];
     } else {
-      $deliveryPlugin = NULL;
+      //$deliveryPlugin = NULL;
       $deliveryPrice = 0;
     }
 

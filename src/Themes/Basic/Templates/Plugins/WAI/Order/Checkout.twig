@@ -3,13 +3,13 @@
     <div class="container">
       {% if cartContents.items|length > 0 %}
         <div class="billing-info-wrap">
-          <!--{% if not user.isLogged %}
+          {% if not user.isLogged %}
             {% if user.loginFailed %}
               <p style="color:red">
                 Nepodarilo sa prihlásiť.
               </p>
             {% endif %}
-            <div class="row user-account-box">
+            <!--<div class="row user-account-box">
               <div class="col-12 col-xs-12 col-md-6 col-lg-3">
                 <div class="checkout-account">
                   <label>Have you already account?</label>
@@ -85,7 +85,7 @@
                     <div class="row">
                       <div class="col-lg-6 col-md-6 controls">
                         <label class="control-label">
-                          {{ translate("First name") }} 
+                          {{ translate("First name") }}
                           <span class="input-required">*</span>
                         </label>
                         <input
@@ -322,16 +322,16 @@
               <div class="orderAgreement mt-4 mb-4">
                 <label id="general_terms_and_conditions_label" class="form-check-label" for="general_terms_and_conditions">
                   <input
-                    type="checkbox"  
+                    type="checkbox"
                     name="general_terms_and_conditions"
                     id="general_terms_and_conditions"
                   >{{ translate("I have read the terms and conditions") }}
                   <span class="input-required">*</span>
                 </label>
-                
+
                 <label id="gdpr_consent_label" class="form-check-label" for="gdpr_consent">
                   <input
-                  type="checkbox" 
+                  type="checkbox"
                   name="gdpr_consent"
                   id="gdpr_consent"
                   >{{ translate("I agree to the processing of personal data for the processing of the order") }}
@@ -340,13 +340,13 @@
 
                 <label class="form-check-label" for="marketingAgreement">
                   <input
-                    type="checkbox"  
-                    name="marketingAgreement" 
+                    type="checkbox"
+                    name="marketingAgreement"
                     id="marketingAgreement"
                   >{{ translate("I agree to the processing of personal data for the purpose of sending marketing information") }}
                 </label>
               </div>
-            </div> 
+            </div>
 
             <div class="col-12 col-md-5 checkout-right-basket">
               <div id="order-area">
@@ -364,7 +364,7 @@
                         <ul>
                           {% for item in cartContents.items %}
                             <li>
-                              <span class="order-middle-left">{{ item.PRODUCT.name_lang_1 }} X {{ item.quantity }}</span> 
+                              <span class="order-middle-left">{{ item.PRODUCT.name_lang_1 }} X {{ item.quantity }}</span>
                               <span class="order-price">{{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} €</span>
                             </li>
                           {% endfor %}
@@ -442,7 +442,6 @@
             </div>
             <div class="clearfix"> </div>
 
-
             <div class="clearfix"></div>
           </div>
 
@@ -477,7 +476,7 @@
           <ul>
             {% for item in cartContents.items %}
               <li>
-                <span class="order-middle-left">{{ item.PRODUCT.name_lang_1 }} X {{ item.quantity }}</span> 
+                <span class="order-middle-left">{{ item.PRODUCT.name_lang_1 }} X {{ item.quantity }}</span>
                 <span class="order-price">{{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} €</span>
               </li>
             {% endfor %}

@@ -459,7 +459,8 @@ class Customer extends \ADIOS\Core\Model {
     $requiredFieldsRegistration = [
       "email",
       "family_name",
-      "given_name"
+      "given_name",
+      "password"
     ];
 
     foreach ($requiredFieldsRegistration as $fieldName) {
@@ -472,10 +473,14 @@ class Customer extends \ADIOS\Core\Model {
       throw new \ADIOS\Widgets\Customers\Exceptions\EmptyRequiredFields(join(",", $requiredFieldsEmpty));
     }
 
+    if ($accountInfo["password"] !== $accountInfo["password_2"]) {
+      throw new \ADIOS\Widgets\Customers\Exceptions\NewPasswordsDoNotMatch();
+    }
+
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) throw new \ADIOS\Widgets\Customers\Exceptions\EmailIsInvalid();
     if ($this->where('email', '=', $email)->count() > 0) throw new \ADIOS\Widgets\Customers\Exceptions\AccountAlreadyExists();
   
-    $password = \ADIOS\Core\HelperFunctions::randomPassword();
+    $password = $accountInfo["password"];
 
     foreach ($this->columnNames() as $colName) {
       if (isset($accountInfo[$colName])) {
@@ -487,7 +492,7 @@ class Customer extends \ADIOS\Core\Model {
     $data["password"] = $password;
     $data["password_1"] = $password;
     $data["password_2"] = $password;
-    $data["is_validated"] = FALSE;
+    $data["is_validated"] = TRUE;
     $data["is_blocked"] = FALSE;
 
     $idCustomer = $this->insertRow($data);
@@ -611,7 +616,7 @@ class Customer extends \ADIOS\Core\Model {
     );
 
     $this->adios->sendEmail(
-      $accountInfo['email'], 
+      $accountInfo['email'],
       str_replace("{% email %}", $accountInfo['email'], $subject),
       "
         <div style='font-family:Verdana;font-size:10pt'>

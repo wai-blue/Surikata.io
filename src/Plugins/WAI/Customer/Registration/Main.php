@@ -9,6 +9,7 @@ namespace Surikata\Plugins\WAI\Customer {
 
         try {
           $customerUID = $this->websiteRenderer->getCustomerUID();
+
           $email = $this->websiteRenderer->urlVariables['email'] ?? "";
 
           $idCustomer = $this->adminPanel

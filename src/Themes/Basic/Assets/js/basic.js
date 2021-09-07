@@ -135,3 +135,20 @@ $( "#headerSearch" ).autocomplete({
 		};
 	},
 });
+
+function toggleCollapsed(id) {
+	$("#"+id).toggle();
+}
+
+function toggleLoginRegister(id, link) {
+	$("#login").removeClass("active");
+	$("#register").removeClass("active");
+	$("#"+id).addClass("active");
+
+	var siblings = $(link).parent().siblings();
+	siblings = ($(siblings[0]));
+	var childs = siblings.children();
+	$(childs[0]).removeClass("active");
+
+	$(link).addClass("active");
+}

@@ -188,6 +188,9 @@ namespace ADIOS\Plugins\WAI\Product {
 
       if ($event["model"]->name == "Widgets/Products/Models/Product") {
         $productUrl = $this->adios->websiteRenderer->getPlugin("WAI/Product/Detail")->getWebpageUrl($event["data"]);
+        // REVIEW: Zle som ta naviedol. Neuvedomil som si, ze toto ma odkazovat na web.
+        // Pouzi websiteRenderer->rootUrl prosim.
+        // Priklad, co som mal na mysli je v Surikata\Plugins\WAI\Common\Navigation.
         $url = substr($this->adios->config["url"], 0, strrpos($this->adios->config["url"], "/"));
         $event["params"]["template"]["columns"][1]["rows"][2]["html"] .= "
           <a class='btn btn-icon-split btn-light' target='_blank' href='{$url}/{$this->adios->config["language"]}/{$productUrl}'>

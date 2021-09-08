@@ -90,6 +90,7 @@ class DeliveryService extends \ADIOS\Core\Model {
   }
 
   public function getEnumValues() {
+    // REVIEW: Translate please...
     $enumDeliveryServices = [
       "" => "Nezvolený",
     ];

@@ -1,6 +1,7 @@
 <?php
 
 namespace ADIOS\Widgets\Orders\Models;
+use ADIOS\Widgets\Shipping\Models\DeliveryService;
 
 class Order extends \ADIOS\Core\Model {
   const STATE_NEW      = 1;
@@ -40,20 +41,7 @@ class Order extends \ADIOS\Core\Model {
       self::STATE_CANCELED => '#808080',     //gray
     ];
 
-    $enumDeliveryServices = [
-      "" => "Nezvolený",
-    ];
-
-    // REVIEW: spravit metodu getEnumValues do modelu DeliveryService
-    // a potom $this->enumDeliveryServices = $deliveryServiceModel->getEnumValues
-    // Priklad je v modeli \ADIOS\Widgets\Website\Models\WebMenu
-    $deliveryServiceModel = new \ADIOS\Widgets\Shipping\Models\DeliveryService($this->adios);
-    foreach ($deliveryServiceModel->getAll() as $deliveryService) {
-      if ($deliveryService["is_enabled"] == 1) {
-        $enumDeliveryServices[$deliveryService["id"]] = $deliveryService["name"];
-      }
-    }
-    $this->enumDeliveryServices = $enumDeliveryServices;
+    $this->enumDeliveryServices = (new DeliveryService($this->adios))->getEnumValues();
 
   }
 
@@ -316,8 +304,6 @@ class Order extends \ADIOS\Core\Model {
       break;
       case "Closed":
         $params["title"] = "Closed orders";
-        // REVIEW: toto aj funguje? Nie je spravna syntax takato?
-        // not {$this->table}.state in (...)
         $params['where'] = "
           {$this->table}.state not in (
             ".self::STATE_NEW.",
@@ -697,7 +683,7 @@ class Order extends \ADIOS\Core\Model {
       $btnPlaceIssueInvoice = $this->adios->ui->button([
         "text"    => "Issue invoice",
         "onclick" => "
-          let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
+          let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
           _ajax_read('Orders/IssueInvoice', 'id_order=".(int) $data['id']."', function(res) {
             if (isNaN(res)) {
               alert(res);
@@ -713,7 +699,7 @@ class Order extends \ADIOS\Core\Model {
       $btnShowIssueInvoice = $this->adios->ui->button([
         "text" => "Show invoice nr. ".hsc($data['INVOICE']['number']),
         "onclick" => "
-          let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
+          let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
           window_render('Invoices/".(int) $data['INVOICE']['id']."/Edit', '', function(res) {
             // refresh order window
             window_refresh(tmp_form_id + '_form_window');
@@ -725,16 +711,14 @@ class Order extends \ADIOS\Core\Model {
       $btnOrderStatePaid = $this->adios->ui->button([
         "text" => "Set as paid",
         "onclick" => "
-          let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
+          let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
           _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_PAID."', function(res) {
             if (isNaN(res)) {
               alert(res);
             }
             else {
               // refresh order window
-              // REVIEW: toto nie je dobre, ak je objednavka otvorena napr. cez Karta Klienta -> Zoznam objednavok,
-              // tak location.reload zavrie okna karty klienta a zoznamu objednavok
-              location.reload();
+              window_refresh(tmp_form_id + '_form_window');
             }
           });
         ",
@@ -744,16 +728,14 @@ class Order extends \ADIOS\Core\Model {
       $btnOrderStateShipped = $this->adios->ui->button([
         "text" => "Set as shipped",
         "onclick" => "
-          let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
+          let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
           _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_SHIPPED."', function(res) {
             if (isNaN(res)) {
               alert(res);
             }
             else {
               // refresh order window
-              // REVIEW: toto nie je dobre, ak je objednavka otvorena napr. cez Karta Klienta -> Zoznam objednavok,
-              // tak location.reload zavrie okna karty klienta a zoznamu objednavok
-              location.reload();
+              window_refresh(tmp_form_id + '_form_window');
             }
           });
         ",
@@ -771,7 +753,7 @@ class Order extends \ADIOS\Core\Model {
             }
             else {
               // refresh order window
-              location.reload();
+              window_refresh(tmp_form_id + '_form_window');
             }
           });
         ",

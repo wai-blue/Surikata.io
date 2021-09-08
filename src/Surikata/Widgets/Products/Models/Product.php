@@ -617,15 +617,6 @@ class Product extends \ADIOS\Core\Model {
       ];
     }
 
-    // REVIEW: Preco boli tuto robene zmeny? Tento kod podla mna nefunguje.
-    // Resp. toto volanie je teraz uplne zbytocne. Vyhodit ho ale nechcem.
-    // A preco je to potom volane druhykrat o kusok neskor?
-    $this->adios->dispatchEventToPlugins("onProductDetailSidebarButtons", [
-      "model" => $this,
-      "params" => $params,
-      "data" => $data,
-    ]);
-
     $params["template"] = [
       "columns" => [
         [

@@ -89,4 +89,16 @@ class DeliveryService extends \ADIOS\Core\Model {
     return (is_array($item) ? $item : FALSE);
   }
 
+  public function getEnumValues() {
+    $enumDeliveryServices = [
+      "" => "Nezvolený",
+    ];
+    foreach ($this->getAll() as $deliveryService) {
+      if ($deliveryService["is_enabled"] == 1) {
+        $enumDeliveryServices[$deliveryService["id"]] = $deliveryService["name"];
+      }
+    }
+    return $enumDeliveryServices;
+  }
+
 }

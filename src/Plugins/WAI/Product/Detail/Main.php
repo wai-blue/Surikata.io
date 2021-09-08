@@ -69,8 +69,8 @@ namespace Surikata\Plugins\WAI\Product {
           ;
         }
 
-        foreach ($this->productInfo['podobne'] as $key => $value) {
-          $this->productInfo['podobne'][$key]['url'] =
+        foreach ($this->productInfo['related'] as $key => $value) {
+          $this->productInfo['related'][$key]['url'] =
             \ADIOS\Core\HelperFunctions::str2url($value['name_lang_1'])
             .".pid.{$value['id']}"
           ;
@@ -176,7 +176,7 @@ namespace ADIOS\Plugins\WAI\Product {
           "title" => "Show accessories for products",
           "type" => "boolean",
         ],
-        "zobrazit_podobne_produkty" => [
+        "show_similar_products" => [
           "title" => "Zobraziť podobné produkty",
           "type" => "boolean",
         ],

@@ -20,9 +20,7 @@
         <div class="login-form-container">
           <div class="login-register-form">
             {% if user.loginFailed %}
-              <div class="notification mb-5">
-                <p class="error">{{ translate("Login fail") }}</p>
-              </div>
+              <p class="error">{{ translate("Login fail") }}</p>
             {% endif %}
             <div class="row justify-content-center user-account-box">
               <div class="col-12 col-xs-12 col-md-6 col-lg-3">
@@ -32,10 +30,12 @@
                     <input class="form-control" placeholder="Email address" name="loginEmail" type="email"/>
                     <input class="form-control" placeholder="Password" name="loginPassword" type="password"/>
                     <button
-                            class="btn-hover checkout-btn"
-                            type="submit"
-                            onclick="$('#loginForm').submit();"
-                    >Login</button>
+                      class="btn-hover checkout-btn"
+                      type="submit"
+                      onclick="sendLoginForm('loginForm')"
+                    >
+                      Login
+                    </button>
                   </form>
                 </div>
               </div>

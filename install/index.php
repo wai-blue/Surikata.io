@@ -595,7 +595,7 @@ if (count($parts) == 0) {
         ],
         "EN||WithoutSidebar|Products - Detail" => [
           "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
-          "section_2" => ["WAI/Product/Detail", ["zobrazit_podobne_produkty" => 1, "show_accessories" => 1, "showAuthor" => 1]],
+          "section_2" => ["WAI/Product/Detail", ["show_similar_products" => 1, "show_accessories" => 1, "showAuthor" => 1]],
         ],
 
         // Shopping cart, checkout and order confirmation
@@ -924,6 +924,8 @@ if (count($parts) == 0) {
             "inv_country"       => $address['inv_country'],
             "phone_number"      => $address['phone_number'],
             "email"             => $address['email'],
+            "general_terms_and_conditions"  => 1,
+            "gdpr_consent"                  => 1,
             "confirmation_time" => $orderConfirmationTime,
           ],
           $customerUID

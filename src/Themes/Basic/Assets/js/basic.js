@@ -124,14 +124,14 @@ $( "#headerSearch" ).autocomplete({
 							.attr("onclick", "window.location.href = '" + item.url + "'"))
 					.appendTo(ul);
 			}
-			else {
+			/*else {
 				return $("<li class='ui-menu-item'>")
 					.attr("data-value", item.value)
 					.append(
 						$("<div id='ui-id-2' tabindex='-1' class='ui-menu-item-wrapper'>")
 							.append(item.label))
 					.appendTo(ul);
-			}
+			}*/
 		};
 	},
 });
@@ -151,4 +151,9 @@ function toggleLoginRegister(id, link) {
 	$(childs[0]).removeClass("active");
 
 	$(link).addClass("active");
+}
+
+function sendLoginForm(formId) {
+	var form = document.getElementById(formId);
+	return form.reportValidity();
 }

@@ -36,11 +36,13 @@
           </ul>
         </nav>
       </div>
+      {% if navigationItems is iterable %}
       <div class="mobile-nav-button">
         <button id="trigger-overlay" type="button">
           <i class="fa fa-bars" aria-hidden="true"></i>
         </button>
       </div>
+      {% endif %}
       <!-- cart details -->
       <div class="top_nav_right">
         <div class="shoecart shoecart2 cart cart box_1">

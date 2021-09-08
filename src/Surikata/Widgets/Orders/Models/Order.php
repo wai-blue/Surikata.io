@@ -44,10 +44,10 @@ class Order extends \ADIOS\Core\Model {
       "" => "Nezvolený",
     ];
 
-    foreach ($this->adios->websiteRenderer->getDeliveryPlugins() as $plugin) {
-      $tmpMeta = $plugin->getDeliveryMeta();
-      if ($tmpMeta !== FALSE) {
-        $enumDeliveryServices[$plugin->name] = $tmpMeta["name"];
+    $deliveryServiceModel = new \ADIOS\Widgets\Shipping\Models\DeliveryService($this->adios);
+    foreach ($deliveryServiceModel->getAll() as $deliveryService) {
+      if ($deliveryService["is_enabled"] == 1) {
+        $enumDeliveryServices[$deliveryService["id"]] = $deliveryService["name"];
       }
     }
     $this->enumDeliveryServices = $enumDeliveryServices;
@@ -90,7 +90,7 @@ class Order extends \ADIOS\Core\Model {
         "type" => "lookup",
         "title" => "Customer",
         "model" => "Widgets/Customers/Models/CustomerUID",
-        "show_column" => TRUE,
+        "show_column" => FALSE,
       ],
 
       "del_given_name" => [
@@ -300,7 +300,7 @@ class Order extends \ADIOS\Core\Model {
       case "Vsetky":
         $params["title"] = "All orders";
       break;
-      case "Otvorene":
+      case "Open":
         $params["title"] = "Open orders";
         $params['where'] = "
           {$this->table}.state in (
@@ -311,10 +311,10 @@ class Order extends \ADIOS\Core\Model {
           )
         ";
       break;
-      case "Uzavrete":
+      case "Closed":
         $params["title"] = "Closed orders";
         $params['where'] = "
-          not {$this->table}.state in (
+          {$this->table}.state not in (
             ".self::STATE_NEW.",
             ".self::STATE_INVOICED.",
             ".self::STATE_PAID.",
@@ -724,9 +724,10 @@ class Order extends \ADIOS\Core\Model {
           _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_PAID."', function(res) {
             if (isNaN(res)) {
               alert(res);
-            } else {
+            }
+            else {
               // refresh order window
-              window_refresh(tmp_form_id + '_form_window');
+              location.reload();
             }
           });
         ",
@@ -740,9 +741,10 @@ class Order extends \ADIOS\Core\Model {
           _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_SHIPPED."', function(res) {
             if (isNaN(res)) {
               alert(res);
-            } else {
+            }
+            else {
               // refresh order window
-              window_refresh(tmp_form_id + '_form_window');
+              location.reload();
             }
           });
         ",
@@ -757,9 +759,10 @@ class Order extends \ADIOS\Core\Model {
           _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_CANCELED."', function(res) {
             if (isNaN(res)) {
               alert(res);
-            } else {
+            }
+            else {
               // refresh order window
-              window_refresh(tmp_form_id + '_form_window');
+              location.reload();
             }
           });
         ",

@@ -617,11 +617,11 @@ class Product extends \ADIOS\Core\Model {
       ];
     }
 
-    $sidebarHtml = $this->adios->dispatchEventToPlugins("onProductDetailSidebarButtons", [
+    $this->adios->dispatchEventToPlugins("onProductDetailSidebarButtons", [
       "model" => $this,
       "params" => $params,
       "data" => $data,
-    ])["html"];
+    ]);
 
     $params["template"] = [
       "columns" => [
@@ -633,11 +633,16 @@ class Product extends \ADIOS\Core\Model {
           "class" => "col-md-3 pr-0",
           "rows" => [
             "image",
-            ["html" => $sidebarHtml],
           ],
         ],
       ],
     ];
+
+    $pluginEvents = $this->adios->dispatchEventToPlugins("onProductDetailSidebarButtons", [
+      "model" => $this,
+      "params" => $params,
+      "data" => $data,
+    ]);
 
     return parent::formParams($data, $params);
   }

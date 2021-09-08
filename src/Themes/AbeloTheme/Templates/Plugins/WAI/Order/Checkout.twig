@@ -1,0 +1,449 @@
+{% if _GET.renderOnly == "" %}
+  <div class="checkout-area">
+    <div class="container">
+      {% if cartContents.items|length > 0 %}
+        <div class="billing-info-wrap">
+          {% if not user.isLogged %}
+            {% if user.loginFailed %}
+              <p style="color:red">
+                Nepodarilo sa prihlásiť.
+              </p>
+            {% endif %}
+            <div class="checkout-account">
+              <label>Have you already account?</label>
+              <span class="checkout-toggle2">Login</span>
+            </div>
+            <div class="checkout-account-toggle open-toggle2 mb-5">
+              <form method="post" id="loginForm">
+                <input type="hidden" name="doLogin" value="1" />
+                <input placeholder="Email address" name="loginEmail" type="email"/>
+                <input placeholder="Password" name="loginPassword" type="password"/>
+                <button 
+                  class="btn-hover checkout-btn" 
+                  type="submit"
+                  onclick="$('#loginForm').submit();"
+                >Login</button>
+              </form>
+            </div>
+          {% elseif userLogged.ADDRESSES|length > 0 %}
+            <h3>List of your adresses</h3>
+            {% for address in userLogged.ADDRESSES %}
+              <input
+                type="radio" name="id_adresa" id="id_adresa_{{ address.id }}"
+                value="{{ address.id }}"
+                onclick="
+                  $('#savedAddressValues_{{ address.id }} span').each(function() {
+                    let varName = $(this).data('variable');
+                    let varValue = $(this).text();
+                    $('#orderDataForm *[name=' + varName + ']').val(varValue);
+                  });
+                "
+              >
+              <label class="form-check-label" for="id_adresa_{{ address.id }}">
+                {{ address.inv_given_name }} {{ address.inv_family_name }},
+                {{ address.inv_street_1 }}, {{ address.inv_city }},
+                {{ address.phone_number }}
+              </label>
+              <br/>
+              <div style='display:none' id="savedAddressValues_{{ address.id }}">
+                <span data-variable="inv_given_name">{{ address.inv_given_name }}</span>
+                <span data-variable="inv_family_name">{{ address.inv_family_name }}</span>
+                <span data-variable="inv_company_name">{{ address.inv_company_name }}</span>
+                <span data-variable="inv_street_1">{{ address.inv_street_1 }}</span>
+                <span data-variable="inv_street_2">{{ address.inv_street_2 }}</span>
+                <span data-variable="inv_zip">{{ address.inv_zip }}</span>
+                <span data-variable="inv_city">{{ address.inv_city }}</span>
+                <span data-variable="del_given_name">{{ address.del_given_name }}</span>
+                <span data-variable="del_family_name">{{ address.del_family_name }}</span>
+                <span data-variable="del_company_name">{{ address.del_company_name }}</span>
+                <span data-variable="del_street_1">{{ address.del_street_1 }}</span>
+                <span data-variable="del_street_2">{{ address.del_street_2 }}</span>
+                <span data-variable="del_zip">{{ address.del_zip }}</span>
+                <span data-variable="del_city">{{ address.del_city }}</span>
+                <span data-variable="phone_number">{{ address.phone_number }}</span>
+                <span data-variable="email">{{ address.email }}</span>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <form method="post" id="orderDataForm">
+          <div class="row mt-5">
+            <div class="col-lg-7">
+              <div class="billing-info-wrap">
+                <h3>Billing Details</h3>
+                  <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                      <div class="billing-info mb-20px">
+                        <label>First Name<span class="input-required"> *</span>
+                        </label>
+                        <input type="text" 
+                          name="inv_given_name"
+                          value="{{ user.profile.given_name }}"
+                          required 
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                      <div class="billing-info mb-20px">
+                        <label>Last Name<span class="input-required"> *</span></label>
+                        <input 
+                          type="text" 
+                          name="inv_family_name"
+                          value="{{ user.profile.family_name }}"
+                          required 
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                      <div class="billing-info mb-20px">
+                        <label>Town / City<span class="input-required"> *</span></label>
+                        <input 
+                          type="text" 
+                          name="inv_city"
+                          required 
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                      <div class="billing-info mb-20px">
+                        <label>Postcode / ZIP<span class="input-required"> *</span></label>
+                        <input 
+                          type="text"
+                          name="inv_zip"
+                          required 
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-12">
+                      <div class="billing-info mb-20px">
+                        <label>Street Address<span class="input-required"> *</span></label>
+                        <input 
+                          class="billing-address" 
+                          placeholder="House number and street name" 
+                          type="text" 
+                          name="inv_street_1"
+                          required 
+                        />
+                        <input 
+                          placeholder="Apartment, suite, unit etc." 
+                          type="text"
+                          name="inv_street_2"
+                          required 
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                      <div class="billing-info mb-20px">
+                        <label>Phone<span class="input-required"> *</span></label>
+                        <input 
+                          type="text" 
+                          name="phone_number"
+                          required 
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                      <div class="billing-info mb-20px">
+                        <label>Email Address<span class="input-required"> *</span></label>
+                        <input 
+                          type="email"
+                          name="email"
+                          value="{{ user.profile.email }}"
+                          required 
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="additional-info-wrap">
+                    <h4>Additional information</h4>
+                    <div class="additional-info">
+                      <label>Order notes</label>
+                      <textarea name="notes" placeholder="Notes about your order, e.g. special notes for delivery. " name="notes"></textarea>
+                    </div>
+                  </div>
+                  <div class="checkout-account mt-25">
+                    <input class="checkout-toggle" type="checkbox" name="differentDeliveryAddress" id="differentDeliveryAddressCheckbox" value="1"/>
+                    <label for="differentDeliveryAddressCheckbox">Ship to a different address?</label>
+                  </div>
+                  <div class="different-address open-toggle mt-30px">
+                    <div class="row">
+                      <div class="col-lg-6 col-md-6">
+                        <div class="billing-info mb-20px">
+                          <label>First Name<span class="input-required"> *</span></label>
+                          <input type="text" name="del_given_name" required/>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="billing-info mb-20px">
+                          <label>Last Name<span class="input-required"> *</span></label>
+                          <input type="text" name="del_family_name" required/>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="billing-info mb-20px">
+                          <label>Town / City<span class="input-required"> *</span></label>
+                          <input type="text" name="del_city" required/>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="billing-info mb-20px">
+                          <label>Postcode / ZIP<span class="input-required"> *</span></label>
+                          <input type="text" name="del_zip" required/>
+                        </div>
+                      </div>
+                      <div class="col-lg-12">
+                        <div class="billing-info mb-20px">
+                          <label>Street Address</label>
+                          <input class="billing-address" placeholder="House number and street name" type="text" name="del_street_1" required/>
+                          <input placeholder="Apartment, suite, unit etc." type="text" name="del_street_2" required/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="orderAgreement mt-4">
+                    <label id="general_terms_and_conditions_label" class="form-check-label" for="general_terms_and_conditions">
+                      <input
+                        type="checkbox"
+                        name="general_terms_and_conditions"
+                        id="general_terms_and_conditions"
+                      >{{ translate("I have read the terms and conditions") }}
+                      <span class="input-required"> *</span>
+                    </label>
+
+                    <label id="gdpr_consent_label" class="form-check-label" for="gdpr_consent">
+                      <input
+                      type="checkbox"
+                      name="gdpr_consent"
+                      id="gdpr_consent"
+                      >{{ translate("I agree to the processing of personal data for the processing of the order") }}
+                      <span class="input-required"> *</span>
+                    </label>
+
+                    <label class="form-check-label" for="marketingAgreement">
+                      <input
+                        type="checkbox"
+                        name="marketingAgreement"
+                        id="marketingAgreement"
+                      >{{ translate("I agree to the processing of personal data for the purpose of sending marketing information") }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-5 mt-md-30px mt-lm-30px ">
+                <div id="order-area">
+                  <div class="your-order-area">
+                    <h3>Your order</h3>
+                    <div class="your-order-wrap gray-bg-4">
+                      <div class="your-order-product-info">
+                        <div class="your-order-top">
+                          <ul>
+                            <li>Product</li>
+                            <li>Total</li>
+                          </ul>
+                        </div>
+                        <div class="your-order-middle">
+                          <ul>
+                          {% for item in cartContents.items %}
+                            <li><span class="order-middle-left">{{ item.PRODUCT.name_lang_1 }} X {{ item.quantity }}</span> <span class="order-price">{{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} €</span></li>
+                          {% endfor %}
+                          </ul>
+                        </div>
+                        <div class="payment-method mt-2">
+                          <div class="payment-accordion element-mrg">
+                            <div class="panel-group" id="accordion">
+                              <div class="panel payment-accordion">
+                                <div class="panel-heading mb-2" id="method-one">
+                                  <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#method2">
+                                      Shipping
+                                    </a>
+                                  </h4>
+                                </div>
+                                {% for deliveryService in deliveryServices %}
+                                  <div id="method2" class="panel-collapse collapse show">
+                                    <div class="panel-body">
+                                      <input 
+                                        type="radio" 
+                                        name="deliveryService" 
+                                        id="deliveryService-{{ loop.index }}" 
+                                        value="{{ deliveryService.id }}"
+                                        {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
+                                        onchange="AbeloThemeCart.updateCheckoutOverview()"
+                                      >
+                                      <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
+                                      <p data-method="{{ deliveryService.id }}" class="delivery-text">{{ deliveryService.description }}</p>
+                                    </div>
+                                  </div>
+                                {% endfor %}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="payment-method mt-2">
+                          <div class="payment-accordion element-mrg">
+                            <div class="panel-group" id="accordion">
+                              <div class="panel payment-accordion">
+                                <div class="panel-heading mb-2" id="method-one">
+                                  <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#method1">
+                                      Payments
+                                    </a>
+                                  </h4>
+                                </div>
+                                {% for paymentMethod in paymentMethods %}
+                                  <div id="method1" class="panel-collapse collapse show">
+                                    <div class="panel-body">
+                                      <input 
+                                        required type="radio" 
+                                        name="paymentMethod" 
+                                        id="paymentMethod-{{ loop.index }}" 
+                                        value="{{ paymentMethod.id }}" 
+                                        {% if selectedPaymentMethod.id == paymentMethod.id %} checked="checked" {% endif %}
+                                        onchange="AbeloThemeCart.updateCheckoutOverview()"
+                                      >
+                                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
+                                      <p data-method="{{ paymentMethod.id }}" class="payment-text">{{ paymentMethod.description }}</p>
+                                    </div>
+                                  </div>
+                                {% endfor %}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="your-order-total">
+                          <ul>
+                            <li class="order-total">Shipping</li>
+                            <li>{{ deliveryPrice|number_format(2, ",", " ") }} €</li>
+                            <li class="order-total">Total</li>
+                            <li>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="Place-order mt-25">
+                      <a 
+                        class="btn-hover" 
+                        href="javascript:void(0)"
+                        onclick="AbeloThemeCart.placeOrder()"
+                      >Place Order</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      {% else %}
+        <div class="col-md-12">
+          <div class="empty-text-contant text-center">
+            <i class="lnr lnr-cart"></i>
+            <h1>There are no more items in your cart</h1>
+            <a class="empty-cart-btn" href="javascript:void(0);">
+              <i class="ion-ios-arrow-left"> </i> Continue shopping
+            </a>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+{% if _GET.renderOnly == "orderOverview" %}
+   <div class="your-order-area">
+    <h3>Your order</h3>
+    <div class="your-order-wrap gray-bg-4">
+      <div class="your-order-product-info">
+        <div class="your-order-top">
+          <ul>
+            <li>Product</li>
+            <li>Total</li>
+          </ul>
+        </div>
+        <div class="your-order-middle">
+          <ul>
+          {% for item in cartContents.items %}
+            <li><span class="order-middle-left">{{ item.PRODUCT.name_lang_1 }} X {{ item.quantity }}</span> <span class="order-price">{{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} €</span></li>
+          {% endfor %}
+          </ul>
+        </div>
+        <div class="payment-method mt-2">
+          <div class="payment-accordion element-mrg">
+            <div class="panel-group" id="accordion">
+              <div class="panel payment-accordion">
+                <div class="panel-heading mb-2" id="method-one">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#method1">
+                      Shipping
+                    </a>
+                  </h4>
+                </div>
+                {% for deliveryService in deliveryServices %}
+                  <div id="method1" class="panel-collapse collapse show">
+                    <div class="panel-body">
+                      <input 
+                        type="radio" 
+                        name="deliveryService" 
+                        id="deliveryService-{{ loop.index }}" 
+                        value="{{ deliveryService.id }}"
+                        {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
+                        onchange="AbeloThemeCart.updateCheckoutOverview()"
+                      >
+                      <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
+                      <p data-method="{{ deliveryService.id }}" class="delivery-text">{{ deliveryService.description }}</p>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="payment-method mt-2">
+          <div class="payment-accordion element-mrg">
+            <div class="panel-group" id="accordion">
+              <div class="panel payment-accordion">
+                <div class="panel-heading mb-2" id="method-one">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#method1">
+                      Payments
+                    </a>
+                  </h4>
+                </div>
+                {% for paymentMethod in paymentMethods %}
+                  <div id="method1" class="panel-collapse collapse show">
+                    <div class="panel-body">
+                      <input 
+                        required type="radio" 
+                        name="paymentMethod" 
+                        id="paymentMethod-{{ loop.index }}" 
+                          value="{{ paymentMethod.id }}" 
+                        {% if selectedPaymentMethod.id == paymentMethod.id %} checked="checked" {% endif %}
+                        onchange="AbeloThemeCart.updateCheckoutOverview()"
+                      >
+                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
+                      <p data-method="{{ paymentMethod.id }}" class="payment-text">{{ paymentMethod.description }}</p>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="your-order-total">
+          <ul>
+            <li class="order-total">Shipping</li>
+            <li>{{ deliveryPrice|number_format(2, ",", " ") }} €</li>
+            <li class="order-total">Total</li>
+            <li>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="Place-order mt-25">
+      <a 
+        class="btn-hover" 
+        href="javascript:void(0)"
+        onclick="AbeloThemeCart.placeOrder()"
+      >Place Order</a>
+    </div>
+  </div>
+{% endif %}

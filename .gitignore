@@ -2,7 +2,7 @@ upload
 tmp
 log
 data
-vendor
+/vendor
 ConfigEnv.php
 src/Plugins/Proprietary
 composer.lock

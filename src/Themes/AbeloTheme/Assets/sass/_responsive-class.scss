@@ -1,0 +1,60 @@
+//Responsive classes 
+
+ @media #{$desktop-device}{
+ 	.mt-lg-30px{
+ 		margin-top: 30px;
+ 	}
+ 	.mt-lg-50px{
+ 		margin-top: 50px;
+ 	}
+ }
+
+ @media #{$tablet-device}{
+	.mb-md-30px{
+		margin-bottom:30px
+	}
+	.mb-md-60px{
+		margin-bottom:60px
+	}
+	.mt-md-50px{
+		margin-top:50px
+	}
+	.mt-md-30px{
+		margin-top:30px;
+	}
+	.mt-md-15px{
+		margin-top: 15px;
+	}
+}
+ @media #{$large-mobile}{
+	.mb-lm-30px{
+		margin-bottom:30px
+	}
+	.mt-lm-55px{
+		margin-top:55px
+	}
+	.mt-lm-50px{
+		margin-top:50px
+	}
+	.mt-lm-30px{
+		margin-top:30px
+	}
+	.mb-lm-60px{
+		margin-bottom:60px
+	}
+	.mb-lm-100px{
+		margin-bottom:100px
+	}
+
+	.mt-lm-15px{
+		margin-top: 15px;
+	}
+}
+ @media #{$small-mobile}{
+	.mb-sm-30px{
+		margin-bottom:30px
+	}
+	.pb-sm-40px{
+		padding-bottom: 40px;
+	}
+}

@@ -1,0 +1,147 @@
+<div class="container">
+  <div class="row">
+    {% if heading %}
+      <h{{ headingLevel }}>{{ heading }}</h{{ headingLevel }}><br/>
+    {% endif %}
+      <div class="contact-area {{ formClass }}">
+          <div class="custom-row-2">
+              <div class="contact-form">
+                  <div class="contact-title mb-30">
+                      <h{{ headingLevel_2 }}>{{ messageHeading }}</h{{ headingLevel_2 }}>
+                  </div>
+                  <form class="contact-form-style" id="contact-form-{{ random_form_id }}" action="assets/php/mail.php" method="post">
+                      <div class="row">
+                          <div class="col-lg-6">
+                              <input name="name" placeholder="Name*" type="text" onblur="validateInputs(this)"  />
+                          </div>
+                          <div class="col-lg-6">
+                              <input name="email" placeholder="Email*" type="email" onblur="validateInputs(this)" />
+                          </div>
+                          <div class="col-lg-12">
+                              <input name="phone_number" placeholder="Phone*" type="text" onblur="validateInputs(this)" />
+                          </div>
+                          <div class="col-lg-12">
+                              <textarea name="contact_message" placeholder="Your Message*" onblur="validateInputs(this)"></textarea>
+                              <button class="submit" type="button" onclick="sendContactForm('#contact-form-{{ random_form_id }}')">SEND</button>
+                          </div>
+                      </div>
+                  </form>
+                  <p class="form-messege"></p>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<style>
+    .error-input {
+        border-color: #ec1b1b !important;
+        background-color: rgb(236 27 27 / 20%) !important;
+    }
+</style>
+    <!--<script src="{{ rootUrl }}/theme/assets/js/sweetalert2.all.min.js"></script>-->
+    <script>
+        if (typeof "sendContactForm" !== "function") {
+            function sendContactForm(formId) {
+                var form = $(formId);
+                data = {};
+
+                form.find('input, select, textarea').each(function () {
+                    var element = $(this);
+                    if (!validateInputs(this)) {
+                        return false;
+                    }
+                    if (element.prop('disabled') !== true && element.attr("name") !== undefined && element.attr("name") !== null) {
+                        if (element.val() !== undefined && element.val() instanceof Array && element.val().length > 0) {
+                            element.val().forEach(function (value, index) {
+                                data[element.attr("name")] = value;
+                            })
+                        } else {
+                            data[element.attr("name")] = element.val();
+                        }
+                    }
+                });
+                data['__renderOnlyPlugin'] = 'ContactForm';
+                data['__output'] = 'json';
+                let urlToSend = window.location.href;
+
+                $.getJSON(urlToSend,
+                    data
+                ).done(function (response) {
+                    try {
+                        //response = $.parseJSON(response);
+                        if (response["status"] === "success") {
+                            Swal.fire({
+                                title: 'Success',
+                                text: 'Message was send',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                            clearInputs(formId);
+                        }
+                        else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Input fields were filled out incorrectly',
+                                icon: 'error',
+                                confirmButtonText: 'Try again'
+                            });
+                        }
+                        console.log(response);
+                    } catch (e) {
+                        console.log(response);
+                        return;
+                    }
+                    console.log(response);
+                });
+
+                return false;
+            }
+        }
+
+        if (typeof "validateInputs" !== "function") {
+            function validateInputs(element) {
+                element = $(element);
+                var value = element.val();
+                var test = false;
+                switch (element.attr('name')) {
+                    case "email":
+                        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                        test = regex.test(value);
+                        break;
+                    case "name":
+                    case "contact_message":
+                        test = value.length > 2;
+                        break;
+                    case "phone_number":
+                        test = value.length > 9;
+                        break;
+                }
+                if (!test) {
+                    element.addClass("error-input");
+                } else {
+                    element.removeClass("error-input");
+                }
+                return test;
+            }
+        }
+
+        if (typeof "clearInputs" !== "function") {
+            function clearInputs(formId) {
+                var form = $(formId);
+                form.find('input, select, textarea').each(function () {
+                    var element = $(this);
+
+                    if (element.prop('disabled') !== true && element.attr("name") !== undefined && element.attr("name") !== null) {
+                        if (element.val() !== undefined && element.val() instanceof Array && element.val().length > 0) {
+                            element.val().forEach(function (value, index) {
+                                element.val("");
+                            })
+                        } else {
+                            element.val("");
+                        }
+                    }
+                });
+            }
+        }
+    </script>

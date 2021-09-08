@@ -32,4 +32,8 @@ class Theme {
       return NULL;
     }
   }
+
+  public function getDefaultColorsAndStyles() {
+    return [];
+  }
 }

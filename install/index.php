@@ -85,9 +85,9 @@ if (($_GET['product-catalog'] ?? "") == "yes") $parts[] = "product-catalog";
 if (($_GET['customers'] ?? "") == "yes") $parts[] = "customers";
 if (($_GET['orders'] ?? "") == "yes") $parts[] = "orders";
 
-$theme = $_GET['theme'] ?? "";
-if (!in_array($theme, $availableThemes)) {
-  $theme = reset($availableThemes);
+$themeName = $_GET['theme'] ?? "";
+if (!in_array($themeName, $availableThemes)) {
+  $themeName = reset($availableThemes);
 }
 
 if (count($parts) == 0) {
@@ -732,6 +732,8 @@ if (count($parts) == 0) {
 
       // nastavenia webu
 
+      $themeObject = $adminPanel->widgets['Website']->themes[$themeName];
+
       $adminPanel->saveConfig([
         "settings" => [
           "web" => [
@@ -746,39 +748,14 @@ if (count($parts) == 0) {
                 "urlYouTube" => "www.google.com",
                 "urlInstagram" => "www.google.com"
               ],
-              "design" => [
-                "theme" => $theme,
-                "themeMainColor" => "#17C3B2",
-                "themeSecondColor" => "#222222",
-                "themeThirdColor" => "#FE6D73",
-                "themeGreyColor" => "#888888",
-                "themeLightGreyColor" => "#f5f5f5",
-
-                "bodyBgColor" => "#ffffff",
-                "bodyTextColor" => "#333333",
-                "bodyLinkColor" => "#17C3B2",
-                "bodyHeadingColor" => "#333333",
-
-                "headerBgColor" => "#000000",
-                "headerTextColor" => "#333333",
-                "headerLinkColor" => "#17C3B2",
-                "headerHeadingColor" => "#ffffff",
-
-                "footerBgColor" => "#222222",
-                "footerTextColor" => "#f8f1e4",
-                "footerLinkColor" => "#17C3B2",
-                "footerHeadingColor" => "#ffffff",
-
-                "custom_css" => "li.slideshow-basic {
-                  background: rgb(29,6,7);
-                  background: linear-gradient(180deg, rgba(29,6,7,1) 0%, rgba(29,6,7,0.75) 15%, rgba(73,18,18,0.6) 35%, rgba(156,36,38,0) 100%);
-                  }
-                  .rslides {
-                  background: #000;
-                  }",
-                "headerMenuID" => 1,
-                "footerMenuID" => 2,
-              ],
+              "design" => array_merge(
+                $themeObject->getDefaultColorsAndStyles(),
+                [
+                  "theme" => $themeName,
+                  "headerMenuID" => 1,
+                  "footerMenuID" => 2,
+                ]
+              ),
               "legalDisclaimers" => [
                 "generalTerms" => "Bienvenue. VOP!",
                 "privacyPolicy" => "Bienvenue. OOU!",

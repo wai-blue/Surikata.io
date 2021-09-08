@@ -222,11 +222,7 @@ class Loader {
 
       if ($mode == ADIOS_MODE_FULL) {
 
-        // timezone
-        date_default_timezone_set($this->config['timezone']);
-
         // set language
-
         if (!empty($_SESSION[_ADIOS_ID]['language'])) {
           $this->config['language'] = $_SESSION[_ADIOS_ID]['language'];
         }
@@ -271,6 +267,9 @@ class Loader {
 
       // finalizacia konfiguracie - aj pre FULL aj pre LITE mode
       $this->finalizeConfig();
+
+      // timezone
+      date_default_timezone_set($this->config['timezone']);
 
       // callback na konci konfiguracneho procesu - aj pre FULL aj pre LITE mode
       $this->onConfigLoaded();

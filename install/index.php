@@ -482,6 +482,7 @@ if (count($parts) == 0) {
       $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Blogs", "url" => "blogs"]);
       $tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Login", "url" => "login"]);
       $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "Register", "url" => "register"]);
+      $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Contact", "url" => "contact"]);
 
       // web - stranky
 
@@ -521,6 +522,9 @@ if (count($parts) == 0) {
           ],
         ];
       }
+      $contact_text = $theme == "Basic"
+        ? (__DIR__."/SampleData/PageTexts/contact.html")
+        : (__DIR__."/SampleData/PageTexts/kontakt.html");
 
       $webPages = [
         "EN|home|WithoutSidebar|Home" => [
@@ -583,6 +587,16 @@ if (count($parts) == 0) {
             [
               "heading" => "Hello",
               "content" => file_get_contents(__DIR__."/SampleData/PageTexts/about-us.html"),
+            ]
+          ],
+        ],
+        "EN|contact|WithoutSidebar|Contact" => [
+          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+          "section_2" => [
+            "WAI/SimpleContent/OneColumn",
+            [
+              "heading" => "",
+              "content" => file_get_contents($contact_text),
             ]
           ],
         ],

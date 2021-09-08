@@ -3,13 +3,10 @@
 namespace Surikata\Plugins\WAI\Order {
   class Checkout extends \Surikata\Core\Web\Plugin {
     var $cartContents = NULL;
+    var $shipping = NULL;
 
-    /**
-     * Get products price with delivery price
-     * @return void
-     */
-    public function getPriceTotal($deliveryServicePrice) {
-      $this->cartContents["summary"]["priceTotal"] = 
+    public function getTotalPriceWithDelivery($deliveryServicePrice) {
+      return
         $this->cartContents["summary"]["priceTotal"] 
           + 
         $deliveryServicePrice
@@ -51,31 +48,35 @@ namespace Surikata\Plugins\WAI\Order {
 
       $deliveryServices = [];
 
-      $allShipmentsByCartSummary = 
-        $shipmentPriceModel->getAllBySummary(
-          $this->cartContents["summary"]
-        )
-      ;
+      if ($this->shipping === NULL) {
+        $this->shipping = 
+          $shipmentPriceModel->getAllBySummary(
+            $this->cartContents["summary"]
+          )
+        ;
+      }
 
-      foreach ($allShipmentsByCartSummary as $shipment) {
+      foreach ($this->shipping as $shipment) {
         $deliveryServices[$shipment['id']] = $shipment;
         $deliveryServices[$shipment['id']]['PRICE'] = $shipment['shipment_price'];
       }
 
-      $selectedDeliveryService = reset($deliveryServices);
+      $selectedDeliveryService = reset($this->shipping);
 
-      $shipmentPayments = 
+      /*$shipmentPayments = 
         $shipmentModel->getByIdDeliveryService(
           $selectedDeliveryService["id"]
         )
-      ;
+      ;*/
 
       $paymentMethods = [];
-      foreach ($shipmentPayments as $shipmentPayment) {
-        $paymentMethods[$shipmentPayment['payment']['id']] = $shipmentPayment['payment'];
+      foreach ($this->shipping as $shipment) {
+        if ($shipment['id'] == $selectedDeliveryService['id']) {
+          $paymentMethods[$shipment['id_payment_service']] = $shipment;
+        }
       }
 
-      $selectedPaymentMethod = (reset($shipmentPayments))['payment'];
+      $selectedPaymentMethod = reset($paymentMethods);
 
       /*foreach ($this->websiteRenderer->getDeliveryPlugins() as $deliveryPlugin) {
         $tmpMeta = $deliveryPlugin->getDeliveryMeta();
@@ -94,13 +95,13 @@ namespace Surikata\Plugins\WAI\Order {
         $shipment = 
           $shipmentModel->getShipment(
             $selectedDeliveryService["id"],
-            $selectedPaymentMethod["id"]
+            $selectedPaymentMethod["id_payment_service"]
           )
         ; 
 
         $shipmentPrice = $shipmentPriceModel->getById($shipment['id']);
 
-        $this->getPriceTotal(
+        $twigParams['totalPriceWithDelivery'] = $this->getTotalPriceWithDelivery(
           $shipmentPrice['shipment_price']
         );
 
@@ -140,11 +141,13 @@ namespace Surikata\Plugins\WAI\Order {
         }
       } else {
 
-        $this->getPriceTotal(
-          $deliveryServices[$selectedDeliveryService["id"]]["PRICE"]
-        );
+        $twigParams['totalPriceWithDelivery'] = 
+          $this->getTotalPriceWithDelivery(
+            $selectedDeliveryService["shipment_price"]
+          )
+        ;
 
-        $twigParams['deliveryPrice'] = $deliveryServices[$selectedDeliveryService["id"]]["PRICE"];
+        $twigParams['deliveryPrice'] = $selectedDeliveryService["shipment_price"];
 
       }
 

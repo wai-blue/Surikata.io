@@ -76,7 +76,10 @@ class Shipment extends \ADIOS\Core\Model {
   public function getByIdDeliveryService($idDelivery) {
     return $this
       ->with('payment')
-      ->where('id_delivery_service', $idDelivery)
+      ->where([
+        ['id_delivery_service', $idDelivery],
+        ['is_enabled', 1]
+      ])
       ->get()
       ->toArray()
     ;

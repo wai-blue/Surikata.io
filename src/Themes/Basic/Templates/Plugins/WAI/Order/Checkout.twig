@@ -373,7 +373,7 @@
                       <div class="your-order-bottom">
                         <ul>
                           {% if deliveryServices|length > 0 %}
-                            {% for deliveryPluginName, deliveryService in deliveryServices %}
+                            {% for deliveryService in deliveryServices %}
                               <li class="pl-3">
                                 <input 
                                   class="form-check-input" 
@@ -384,8 +384,8 @@
                                   {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
                                   onchange="BasicThemeCart.updateCheckoutOverview()"
                                 >
-                                <label class="form-check-label" for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
-                                <p data-method="{{ deliveryPluginName }}" class="delivery-text">{{ deliveryService.description }}</p>
+                                <label class="form-check-label" for="deliveryService-{{ loop.index }}">{{ deliveryService.delivery_name }}</label>
+                                <p data-method="{{ deliveryService.id_delivery }}" class="delivery-text">{{ deliveryService.description }}</p>
                                 <!--<p><b>{{ deliveryService.PRICE }} €</b></p>-->
                               </li>
                             {% endfor %}
@@ -398,19 +398,19 @@
                         <div class="payment-accordion element-mrg">
                           <div class="panel-group" id="accordion">
                             <div class="panel payment-accordion">
-                              {% for paymentPluginName, paymentMethod in paymentMethods %}
+                              {% for paymentMethod in paymentMethods %}
                                 <div id="method1" class="panel-collapse collapse show">
                                   <div class="panel-body">
                                     <input 
                                       required type="radio" 
                                       name="paymentMethod" 
                                       id="paymentMethod-{{ loop.index }}" 
-                                      value="{{ paymentMethod.id }}" 
-                                      {% if selectedPaymentMethod.id == paymentMethod.id %} checked="checked" {% endif %}
+                                      value="{{ paymentMethod.id_payment_service }}" 
+                                      {% if selectedPaymentMethod.id_payment_service == paymentMethod.id_payment_service %} checked="checked" {% endif %}
                                       onchange="BasicThemeCart.updateCheckoutOverview()"
                                     >
-                                    <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
-                                    <p data-method="{{ paymentPluginName }}" class="payment-text">{{ paymentMethod.description }}</p>
+                                    <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.payment_service_name }}</label>
+                                    <p data-method="{{ paymentMethod.id_payment_service }}" class="payment-text">{{ paymentMethod.payment_description }}</p>
                                   </div>
                                 </div>
                               {% endfor %}
@@ -419,14 +419,18 @@
                         </div>
                       </div>
                       <div class="your-order-total">
-                        <ul>
-                          <li class="order-total">Delivery price</li>
-                          <li>{{ deliveryPrice |number_format(2, ",", " ") }} €</li>
-                        </ul>
-                        <ul>
-                          <li class="order-total">Total</li>
-                          <li>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
-                        </ul>
+                       <ul>
+                        <li class="order-total">Subtotal</li>
+                        <li>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+                      </ul>
+                      <ul>
+                        <li class="order-total">Delivery price</li>
+                        <li>{{ deliveryPrice |number_format(2, ",", " ") }} €</li>
+                      </ul>
+                      <ul>
+                        <li class="order-total">Total</li>
+                        <li>{{ totalPriceWithDelivery|number_format(2, ",", " ") }} €</li>
+                      </ul>
                       </div>
                     </div>
                   </div>
@@ -484,7 +488,7 @@
         </div>
         <div class="your-order-bottom">
           <ul>
-            {% for deliveryPluginName, deliveryService in deliveryServices %}
+            {% for deliveryService in deliveryServices %}
               <li class="pl-3">
                 <input 
                   class="form-check-input" 
@@ -495,8 +499,8 @@
                   {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
                   onchange="BasicThemeCart.updateCheckoutOverview()"
                 >
-                <label class="form-check-label" for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
-                <p data-method="{{ deliveryPluginName }}" class="delivery-text">{{ deliveryService.description }}</p>
+                <label class="form-check-label" for="deliveryService-{{ loop.index }}">{{ deliveryService.delivery_name }}</label>
+                <p data-method="{{ deliveryService.id_delivery }}" class="delivery-text">{{ deliveryService.description }}</p>
                 <!--<p><b>{{ deliveryService.PRICE }} €</b></p>-->
               </li>
             {% endfor %}
@@ -506,19 +510,19 @@
           <div class="payment-accordion element-mrg">
             <div class="panel-group" id="accordion">
               <div class="panel payment-accordion">
-                {% for paymentPluginName, paymentMethod in paymentMethods %}
+                {% for paymentMethod in paymentMethods %}
                   <div id="method1" class="panel-collapse collapse show">
                     <div class="panel-body">
                       <input 
                         required type="radio" 
                         name="paymentMethod" 
                         id="paymentMethod-{{ loop.index }}" 
-                        value="{{ paymentMethod.id }}" 
-                        {% if selectedPaymentMethod.id == paymentMethod.id %} checked="checked" {% endif %}
+                        value="{{ paymentMethod.id_payment_service }}" 
+                        {% if selectedPaymentMethod.id_payment_service == paymentMethod.id_payment_service %} checked="checked" {% endif %}
                         onchange="BasicThemeCart.updateCheckoutOverview()"
                       >
-                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
-                      <p data-method="{{ paymentPluginName }}" class="payment-text">{{ paymentMethod.description }}</p>
+                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.payment_service_name }}</label>
+                      <p data-method="{{ paymentMethod.id_payment_service }}" class="payment-text">{{ paymentMethod.payment_description }}</p>
                     </div>
                   </div>
                 {% endfor %}
@@ -528,12 +532,16 @@
         </div>
         <div class="your-order-total">
           <ul>
+            <li class="order-total">Subtotal</li>
+            <li>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+          </ul>
+          <ul>
             <li class="order-total">Delivery price</li>
             <li>{{ deliveryPrice |number_format(2, ",", " ") }} €</li>
           </ul>
           <ul>
             <li class="order-total">Total</li>
-            <li>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+            <li>{{ totalPriceWithDelivery|number_format(2, ",", " ") }} €</li>
           </ul>
         </div>
       </div>

@@ -101,12 +101,18 @@ class ShipmentPrice extends \ADIOS\Core\Model {
   public function getAllBySummary($summary) {
     $shipmentModel = new \ADIOS\Widgets\Shipping\Models\Shipment($this->adminPanel);
     $deliveryServiceModel = new \ADIOS\Widgets\Shipping\Models\DeliveryService($this->adminPanel);
+    $paymentServiceModel = new \ADIOS\Widgets\Shipping\Models\PaymentService($this->adminPanel);
 
     return $this->adios->db->get_all_rows_query("
       SELECT 
-        {$deliveryServiceModel->table}.name as name,
+        {$deliveryServiceModel->table}.name as delivery_name,
+        {$deliveryServiceModel->table}.id as id,
+        {$deliveryServiceModel->table}.description as delivery_desc,
         {$this->table}.shipment_price as shipment_price,
-        {$deliveryServiceModel->table}.id as id
+        {$this->table}.id_shipment as id_shipment,
+        {$shipmentModel->table}.description as shipment_desc,
+        {$paymentServiceModel->table}.id as id_payment_service,
+        {$paymentServiceModel->table}.name as payment_service_name
       FROM {$this->table}
       LEFT JOIN 
         {$shipmentModel->table}
@@ -116,6 +122,10 @@ class ShipmentPrice extends \ADIOS\Core\Model {
         {$deliveryServiceModel->table}
       ON
         {$deliveryServiceModel->table}.id = {$shipmentModel->table}.id_delivery_service
+      LEFT JOIN
+        {$paymentServiceModel->table}
+      ON
+        {$shipmentModel->table}.id_payment_service = {$paymentServiceModel->table}.id
       WHERE 
       (
         {$this->table}.shipment_price_calculation_method = 1	

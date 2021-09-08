@@ -20,11 +20,7 @@
   color: #266cfb;
 }
 .required-empty {
-  border-color: #db190b !important;
-  color: #db190b;
-}
-.input-required {
-  color: #db190b;
+  background-color: #ffe2e0 !important;
 }
 .delivery-text {
   color: #888!important;
@@ -447,6 +443,10 @@ ul .dots::before {
   float: right;
 }
 
+.breadcrumb-area {
+  padding: 15px;
+}
+
 @media only screen and (max-width: 576px) {
   .header-nav-slogan {
     text-align: center;
@@ -479,7 +479,4 @@ ul .dots::before {
 .popup-text p {
   font-size: 20px;
   margin-bottom: 3rem;
-}
-.orderAgreement input[type='checkbox'] {
-  margin-right: 5px;
 }

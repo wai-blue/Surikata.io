@@ -632,10 +632,7 @@ class Product extends \ADIOS\Core\Model {
       ],
     ];
 
-    // REVIEW: vyhodil si povodne volanie dispatchEvent a nahradil si ho inym, ktore
-    // naplna $pluginEvents a ta sa nikde nepouziva...
-    // Aky je zmysel tejto upravy?
-    $pluginEvents = $this->adios->dispatchEventToPlugins("onProductDetailSidebarButtons", [
+    $this->adios->dispatchEventToPlugins("onProductDetailSidebarButtons", [
       "model" => $this,
       "params" => $params,
       "data" => $data,

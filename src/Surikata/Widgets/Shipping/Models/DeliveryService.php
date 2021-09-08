@@ -90,9 +90,8 @@ class DeliveryService extends \ADIOS\Core\Model {
   }
 
   public function getEnumValues() {
-    // REVIEW: Translate please...
     $enumDeliveryServices = [
-      "" => "Nezvolený",
+      "" => "Unselected",
     ];
     foreach ($this->getAll() as $deliveryService) {
       if ($deliveryService["is_enabled"] == 1) {

@@ -522,6 +522,8 @@ if (count($parts) == 0) {
           ],
         ];
       }
+
+      // REVIEW: Toto bude treba spravit lepsie.
       $contact_text = $theme == "Basic"
         ? (__DIR__."/SampleData/PageTexts/contact.html")
         : (__DIR__."/SampleData/PageTexts/kontakt.html");

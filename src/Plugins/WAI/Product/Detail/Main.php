@@ -188,6 +188,7 @@ namespace ADIOS\Plugins\WAI\Product {
 
       if ($event["model"]->name == "Widgets/Products/Models/Product") {
         $productUrl = $this->adios->websiteRenderer->getPlugin("WAI/Product/Detail")->getWebpageUrl($event["data"]);
+        // REVIEW: href vyskladat s pouzitim $this->adios->config['ur']
         $event["params"]["template"]["columns"][1]["rows"][2]["html"] .= "
           <a class='btn btn-icon-split btn-light' target='_blank' href='../../../{$this->adios->config["language"]}/{$productUrl}'>
             <span class='icon'><i class='fa fa-link'></i></span>

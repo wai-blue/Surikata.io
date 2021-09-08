@@ -44,6 +44,9 @@ class Order extends \ADIOS\Core\Model {
       "" => "Nezvolený",
     ];
 
+    // REVIEW: spravit metodu getEnumValues do modelu DeliveryService
+    // a potom $this->enumDeliveryServices = $deliveryServiceModel->getEnumValues
+    // Priklad je v modeli \ADIOS\Widgets\Website\Models\WebMenu
     $deliveryServiceModel = new \ADIOS\Widgets\Shipping\Models\DeliveryService($this->adios);
     foreach ($deliveryServiceModel->getAll() as $deliveryService) {
       if ($deliveryService["is_enabled"] == 1) {
@@ -313,6 +316,8 @@ class Order extends \ADIOS\Core\Model {
       break;
       case "Closed":
         $params["title"] = "Closed orders";
+        // REVIEW: toto aj funguje? Nie je spravna syntax takato?
+        // not {$this->table}.state in (...)
         $params['where'] = "
           {$this->table}.state not in (
             ".self::STATE_NEW.",
@@ -727,6 +732,8 @@ class Order extends \ADIOS\Core\Model {
             }
             else {
               // refresh order window
+              // REVIEW: toto nie je dobre, ak je objednavka otvorena napr. cez Karta Klienta -> Zoznam objednavok,
+              // tak location.reload zavrie okna karty klienta a zoznamu objednavok
               location.reload();
             }
           });
@@ -744,6 +751,8 @@ class Order extends \ADIOS\Core\Model {
             }
             else {
               // refresh order window
+              // REVIEW: toto nie je dobre, ak je objednavka otvorena napr. cez Karta Klienta -> Zoznam objednavok,
+              // tak location.reload zavrie okna karty klienta a zoznamu objednavok
               location.reload();
             }
           });

@@ -1,0 +1,9 @@
+<div class="container">
+  <div class="row">
+    {% if heading %}
+      <h{{ headingLevel }}>{{ heading }}</h{{ headingLevel }}>
+    {% endif %}
+    <p>
+      {{ content|raw }}
+    </p>
+</div>

@@ -1,0 +1,169 @@
+<div class="checkout-area mtb-50px">
+  <div class="container">
+    <div class="row">
+      <div class="ml-auto mr-auto col-lg-9">
+        <div class="checkout-wrapper">
+          {% if user.changePasswordError %}
+            <div class="notification mb-5">
+              <p class="error"><strong>Oops something went wrong:</strong> {{ user.changePasswordError }}</p>
+            </div>
+          {% endif %}
+          {% if user.changePasswordError is same as("") %}
+           <div class="notification mb-5">
+              <p class="success">Your password has been changed successfully!</p>
+            </div>
+          {% endif %}
+          <div id="faq" class="panel-group">
+            <div class="panel panel-default single-my-account">
+              <div class="panel-heading my-account-title">
+                <h3 class="panel-title"><span>1 .</span> <a data-toggle="collapse" data-parent="#faq" href="#my-account-1">Edit your account information </a></h3>
+              </div>
+              <div id="my-account-1" class="panel-collapse collapse show">
+                <div class="panel-body">
+                  <div class="myaccount-info-wrapper">
+                    <div class="account-info-wrapper">
+                      <h4>My Account Information</h4>
+                      <h5>Your Personal Details</h5>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-6 col-md-6">
+                        <div class="billing-info">
+                          <label>First Name</label>
+                          <input type="text" value="{{ user.profile.given_name }}"/>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="billing-info">
+                          <label>Last Name</label>
+                          <input type="text" value="{{ user.profile.family_name  }}"/>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="billing-info">
+                          <label>Email Address</label>
+                          <input type="email" value="{{ user.profile.email}}"/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel panel-default single-my-account">
+              <div class="panel-heading my-account-title">
+                <h3 class="panel-title"><span>2 .</span> <a data-toggle="collapse" data-parent="#faq" href="#my-account-2">Change your password </a></h3>
+              </div>
+              <div id="my-account-2" class="panel-collapse collapse {% if user.changePasswordError %} show {% endif %}">
+                <div class="panel-body">
+                  <div class="myaccount-info-wrapper">
+                    <form method="post" id="customerChangePassword">
+                      <div class="row mt-2">
+                        <div class="col-lg-12 col-md-12">
+                          <div class="billing-info">
+                            <label>Current password <strong>*</strong></label>
+                            <input 
+                              type="password" 
+                              name="current_password"
+                              {% if user.changePasswordError %} class="required-empty" {% endif %}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <hr class='pb-3'>
+                      <div class="row">
+                        <input type="hidden" name="changePassword" value="1" />
+                          <div class="col-lg-12 col-md-12">
+                            <div class="billing-info">
+                              <label>New Password</label>
+                              <input 
+                                type="password" 
+                                name="password_1"
+                                {% if user.changePasswordError %} class="required-empty" {% endif %}
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-12 col-md-12">
+                            <div class="billing-info">
+                              <label>Confirm New Password</label>
+                              <input 
+                                type="password"
+                                name="password_2"
+                                {% if user.changePasswordError %} class="required-empty" {% endif %} 
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="billing-back-btn">
+                        <div class="billing-btn">
+                          <button 
+                            type="submit" 
+                            onclick="$('#customerChangePassword').submit();"
+                          >Change password</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel panel-default single-my-account">
+              <div class="panel-heading my-account-title">
+                <h3 class="panel-title"><span>3 .</span> <a data-toggle="collapse" data-parent="#faq" href="#my-account-3">Modify your address book entries </a></h3>
+              </div>
+              <div id="my-account-3" class="panel-collapse collapse">
+                <div class="panel-body">
+                  <div class="myaccount-info-wrapper">
+                    <div class="account-info-wrapper">
+                      <h4>Address Book Entries</h4>
+                    </div>
+                    {% for address in user.profile.ADDRESSES %}
+                      <div class="entries-wrapper">
+                        <div class="row">
+                          <div class="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
+                            <div class="entries-info text-center">
+                              <p>
+                                <span data-variable="inv_given_name">{{ address.inv_given_name }}</span>
+                                <span data-variable="inv_family_name">{{ address.inv_family_name }}</span>
+                              </p>
+                              <p>
+                                <span data-variable="inv_company_name">{{ address.inv_company_name }}</span>
+                              </p>
+                              <p>
+                                <span data-variable="inv_street_1">{{ address.inv_street_1 }}</span>
+                                <span data-variable="inv_street_2">{{ address.inv_street_2 }}</span>
+                                <span data-variable="inv_zip">{{ address.inv_zip }}</span>
+                                <span data-variable="inv_city">{{ address.inv_city }}</span>
+                              </p>
+                              <p>
+                                <span data-variable="del_given_name">{{ address.del_given_name }}</span>
+                                <span data-variable="del_family_name">{{ address.del_family_name }}</span>
+                                <span data-variable="del_company_name">{{ address.del_company_name }}</span>
+                                <span data-variable="del_street_1">{{ address.del_street_1 }}</span>
+                                <span data-variable="del_street_2">{{ address.del_street_2 }}</span>
+                                <span data-variable="del_zip">{{ address.del_zip }}</span>
+                                <span data-variable="del_city">{{ address.del_city }}</span>
+                              </p>
+                              <p>
+                                <span data-variable="phone_number">{{ address.phone_number }}</span>
+                                <span data-variable="email">{{ address.email }}</span>
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
+                            <div class="entries-edit-delete text-center">
+                              <a href="javascript:void(0);" onclick="AbeloThemeCustomer.removeAddress({{ address.id }})">Delete</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

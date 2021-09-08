@@ -1,0 +1,51 @@
+<div id="blogCatalogDefaultContainerDiv">
+  {% for blog in blogs|slice((page - 1) * itemsPerPage, itemsPerPage) %}
+    <div class="row mb-50px">
+      <div class="col-lg-5 col-md-6">
+        <div class="single-blog-post blog-list-post">
+          <div class="blog-post-media">
+            <div class="blog-image">
+              <a href="{{ rootUrl }}/{{ blog.url }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ blog.image }}" alt="{{ blog.image }}"/></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7 col-md-6 align-self-center align-items-center">
+        <div class="blog-post-content-inner mt-lm-30px">
+          <h1 class="blog-title"><a href="{{ rootUrl }}/{{ blog.url }}">{{ blog.name }}</a></h1>
+          <ul class="blog-page-meta">
+            {% if showAuthor %}
+              <li><a href="javascript:void()"><i class="ion-person"></i> {{ blog.USER.name }} {{ blog.USER.surname }}</a></li>
+            {% endif %}
+            <li><a href="{{ rootUrl }}/{{ blogCatalogUrl }}/{{ blog.created_at|date('Y/m') }}"><i class="ion-calendar"></i> {{ blog.created_at|date(locale.dateFormat) }}</a></li>
+          </ul>
+          <div class="blog-content">
+            {{ blog.perex|raw }}
+          </div>
+          <br/><br/>
+          <a class="read-more-btn" href="{{ rootUrl }}/{{ blog.url }}">{{ translate("Read more", "BlogCatalog") }} <i class="ion-android-arrow-dropright-circle"></i></a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  <div class="pro-pagination-style text-center">
+    <ul>
+      {% if page != 1 %}
+        <li><a href="{{ rootUrl }}/{{ blogCatalogUrl }}{{ fullDateUrl }}?page={{ page - 1 }}"><i class="ion-ios-arrow-left"></i></a></li>
+      {% else %}
+      {% endif %}
+      {% for i in 1..pages %}
+        {% if i == page %}
+          <li><a class="active" href="{{ rootUrl }}/{{ blogCatalogUrl }}{{ fullDateUrl }}?page={{ i }}">{{ i }}</a></li>
+        {% else %}
+          <li><a href="{{ rootUrl }}/{{ blogCatalogUrl }}{{ fullDateUrl }}?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if page != pages|last %}
+        <li><a class="page-link" href="{{ rootUrl }}/{{ blogCatalogUrl }}{{ fullDateUrl }}?page={{ page + 1 }}"><i class="ion-ios-arrow-right"></i></a></li>
+      {% else %}
+      {% endif %}
+    </ul>
+  </div>
+</div>
+

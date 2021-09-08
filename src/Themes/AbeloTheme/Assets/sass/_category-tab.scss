@@ -1,0 +1,84 @@
+// Category Tab Style
+
+.arrival-area{
+		.nav-tabs {
+	    border-bottom: 0px solid #dee2e6;
+	    line-height: 1;
+	    float: right;
+	    position: relative;
+	    z-index: 1;
+	    background: #fff;
+	    padding-left: 15px;
+	    padding-right: 40px;
+	    @media #{$large-mobile}{
+		    padding-left: 10px;
+		    padding-right: 50px;
+	    }
+	    @media #{$small-mobile}{
+		    padding-left: 0px;
+		    padding-right: 40px;
+	    	float: none;
+	    }
+	    .nav-item {
+		    margin-bottom: 0px;
+		    & a{
+		    	&.nav-link{
+					border:0;
+					color:#777;
+					padding:5px 15px;
+					@media #{$large-mobile}{
+						padding:5px 5px;
+					 }
+					@media #{$small-mobile}{
+						padding:20px 10px 0px 10px;
+					 }
+					 @media #{$extra-mini-mobile}{
+						 padding: 20px 7px 0px 7px;
+						 font-size: 14px;
+					 }
+					&:hover{
+					    color: #2b2d2f;
+					}
+				    &.active {
+					    color: #2b2d2f;
+					    background-color: #fff;
+					    border:0px;
+					}
+					&:hover{
+						border:0;
+					}
+					&:focus{
+						border:0;
+					}
+					&:first-child{
+						@media #{$small-mobile}{
+							padding-left:0px;
+					 	}
+					}
+		    	}
+		    }
+		}
+	}
+	.slider-nav-style-1 .slick-arrow{
+		@media #{$small-mobile}{
+			top:-79px;
+		}
+		@media #{$extra-mini-mobile}{
+			top:-79px;
+		}
+	}
+	.section-title{
+		&:before{
+			@media #{$small-mobile}{
+				top:23%; 
+			}
+			@media #{$extra-mini-mobile}{
+				top:23%; 
+			}
+		}
+	}
+
+	@media #{$large-mobile}{
+
+	}
+}

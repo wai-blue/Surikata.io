@@ -480,8 +480,8 @@ if (count($parts) == 0) {
       $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "About us", "url" => "about-us"]);
       $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Products", "url" => "products"]);
       $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Blogs", "url" => "blogs"]);
-      $tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Login", "url" => "login"]);
-      $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "Register", "url" => "register"]);
+      //$tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Login", "url" => "login"]);
+      //$websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "Register", "url" => "register"]);
 
       // web - stranky
 
@@ -743,14 +743,14 @@ if (count($parts) == 0) {
                 "bodyLinkColor" => "#17C3B2",
                 "bodyHeadingColor" => "#333333",
 
-                "headerBgColor" => "#000000",
+                "headerBgColor" => "#fff",
                 "headerTextColor" => "#333333",
                 "headerLinkColor" => "#17C3B2",
                 "headerHeadingColor" => "#ffffff",
 
-                "footerBgColor" => "#222222",
-                "footerTextColor" => "#f8f1e4",
-                "footerLinkColor" => "#17C3B2",
+                "footerBgColor" => "#fff",
+                "footerTextColor" => "#272727",
+                "footerLinkColor" => "#272727",
                 "footerHeadingColor" => "#ffffff",
 
                 "custom_css" => "li.slideshow-basic {

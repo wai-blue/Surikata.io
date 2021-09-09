@@ -54,6 +54,10 @@ class Website extends \ADIOS\Core\Widget {
               "title" => "Emails",
               "onclick" => "window_render('Website/{$domain}/Emails');",
             ],
+            [
+              "title" => "Translations",
+              "onclick" => "desktop_update('Website/{$domain}/Translations');",
+            ],
           ],
         ];
       }

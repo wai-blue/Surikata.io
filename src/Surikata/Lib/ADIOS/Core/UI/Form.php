@@ -316,7 +316,7 @@ class Form extends \ADIOS\Core\UI\View
   public function render($render_panel = '') {
     
     if (!_count($this->params['columns'])) {
-      $this->adios->console->log('UI/Form', "No columns provided: {$this->params['model']}");
+      $this->adios->console->error("No columns provided: {$this->params['model']}");
     }
 
     $html = "";

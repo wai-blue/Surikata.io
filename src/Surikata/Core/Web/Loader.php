@@ -154,11 +154,15 @@ class Loader extends \Cascada\Loader {
 
       $this->twig->addFunction(new \Twig\TwigFunction(
         'translate',
-        function ($str, $context = NULL) {
+        function ($original, $context = NULL) {
           global $___CASCADAObject;
 
-          $domain = $___CASCADAObject->config['domainToRender'];
-          $translationModel = new \ADIOS\Widgets\Settings\Models\Translation($this->adminPanel);
+          $domains = $___CASCADAObject->adminPanel->config['widgets']['Website']['domains'];
+          $domainToRender = $___CASCADAObject->config['domainToRender'];
+          $domain = $domains[$domainToRender];
+          $languageIndex = $domain["languageIndex"];
+
+          $translationModel = new \ADIOS\Widgets\Website\Models\Translation($this->adminPanel);
 
           if (
             $context === NULL
@@ -170,27 +174,21 @@ class Loader extends \Cascada\Loader {
           $context = (string) $context;
 
           if ($___CASCADAObject->translationCache === NULL) {
-
-            $allTranslations = $translationModel->get()->toArray();
-
-            foreach ($allTranslations as $translation) {
-              $___CASCADAObject->translationCache
-                [$translation["original"]]
-                [$translation["context"]] = json_decode($translation["translated"], true);
-            }
-
+            $___CASCADAObject->translationCache = $translationModel->loadCache();
           }
 
-          if (empty($___CASCADAObject->translationCache[$str][$context])) {
+          if (!isset($___CASCADAObject->translationCache[$domainToRender][$context][$original][$languageIndex])) {
             $translationModel->insertRow([
+              "domain" => $domainToRender,
               "context" => $context,
-              "original" => $str,
+              "original" => $original,
+              "language_index" => $languageIndex,
               "translated" => "",
             ]);
 
-            $translatedText = $str;
+            $translatedText = $original;
           } else {
-            $translatedText = $___CASCADAObject->translationCache[$str][$context][$domain];
+            $translatedText = $___CASCADAObject->translationCache[$str][$context][$domainToRender][$languageIndex];
           }
 
           return $translatedText;
@@ -221,7 +219,7 @@ class Loader extends \Cascada\Loader {
       $e
     ) {
       $errorHash = md5(date("YmdHis").$e->getMessage());
-      $this->adminPanel->console->log($errorHash, $e->getMessage());
+      $this->adminPanel->console->error("{$errorHash} ".$e->getMessage());
       return json_encode([
         "status" => "FAIL",
         "exception" => "SurikataCore",

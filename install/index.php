@@ -14,8 +14,10 @@
     label { display: block; padding: 2px; }
     label:hover { background: #224abe; color: white; cursor: pointer; }
 
-    .btn { color: #224abe; background: white; cursor: pointer; border: 1px solid #224abe; padding: 1em; width: 100%; }
+    .btn { color: #224abe; background: white; cursor: pointer; border: 1px solid #224abe; padding: 1em; margin: 1em 0; }
     .btn:hover { color: white; background: #224abe; }
+
+    a.btn { display: inline-block; text-decoration: none; }
 
     .content { width: 600px; margin: auto; background: white; padding: 1em; }
     .logo { width: 100px; margin: auto; }
@@ -182,7 +184,7 @@ if (count($parts) == 0) {
     $websiteWebPageModel = new \ADIOS\Widgets\Website\Models\WebPage($adminPanel);
     $websiteWebRedirectModel = new \ADIOS\Widgets\Website\Models\WebRedirect($adminPanel);
     $unitModel = new \ADIOS\Widgets\Settings\Models\Unit($adminPanel);
-    $translationModel = new \ADIOS\Widgets\Settings\Models\Translation($adminPanel);
+    $translationModel = new \ADIOS\Widgets\Website\Models\Translation($adminPanel);
     $newsModel = new \ADIOS\Plugins\WAI\News\Models\News($adminPanel);
 
     $slideshowModel = new \ADIOS\Plugins\WAI\Misc\Slideshow\Models\UvodnaSlideshow($adminPanel);
@@ -523,11 +525,6 @@ if (count($parts) == 0) {
         ];
       }
 
-      // REVIEW: Toto bude treba spravit lepsie.
-      $contact_text = $theme == "Basic"
-        ? (__DIR__."/SampleData/PageTexts/contact.html")
-        : (__DIR__."/SampleData/PageTexts/kontakt.html");
-
       $webPages = [
         "EN|home|WithoutSidebar|Home" => [
           "section_1" => ["WAI/Misc/Slideshow", ["speed" => 1000]],
@@ -560,7 +557,7 @@ if (count($parts) == 0) {
           "section_5" => [
             "WAI/Product/FilteredList",
             [
-              "filterType" => "discounted",
+              "filterType" => "on_sale",
               "layout" => "tiles",
               "product_count" => 6,
             ],
@@ -580,7 +577,7 @@ if (count($parts) == 0) {
           "section_1" => [
             "WAI/SimpleContent/OneColumn",
             [
-              "heading" => "Vitajte",
+              "heading" => "About us",
               "content" => file_get_contents(__DIR__."/SampleData/PageTexts/about-us.html"),
             ]
           ],
@@ -598,7 +595,7 @@ if (count($parts) == 0) {
             "WAI/SimpleContent/OneColumn",
             [
               "heading" => "",
-              "content" => file_get_contents($contact_text),
+              "content" => file_get_contents(__DIR__."/SampleData/PageTexts/contact.html"),
             ]
           ],
         ],
@@ -941,6 +938,31 @@ if (count($parts) == 0) {
     var_dump($e->getTrace());
   }
 
+  $infos = $adminPanel->console->getInfos();
+  echo "
+    <h2>Installation log</h2>
+    <a
+      href='javascript:void(0)'
+      onclick='document.getElementById(\"log\").style.display = \"block\";'
+    >Show log</a>
+    <div id='log' style='display:none'>".$adminPanel->console->convertLogsToHtml($infos)."</div>
+    <h2>Done</h2>
+    <a href='../admin' class='btn' target=_blank>Open administration panel</a><br/>
+    <a href='..' class='btn' target=_blank>Go to your e-shop</a><br/>
+    <br/>
+  ";
+
+  $warnings = $adminPanel->console->getWarnings();
+  if (count($warnings) > 0) {
+    echo "<h2>Warnings</h2>";
+    echo "<div style='color:orange'>".$adminPanel->console->convertLogsToHtml($warnings)."</div>";
+  }
+
+  $errors = $adminPanel->console->getErrors();
+  if (count($errors) > 0) {
+    echo "<h2>Errors</h2>";
+    echo "<div style='color:red'>".$adminPanel->console->convertLogsToHtml($errors)."</div>";
+  }
 }
 
 ?>

@@ -3,14 +3,14 @@
 namespace Surikata\Core\Web;
 
 class Theme {
-  var $surikataWidgetWebsite;
+  var $adminPanelWidgetWebsite = null;
   var $params = [];
   var $name = "";
 
-  public function __construct($surikataWidgetWebsite, $params = []) {
+  public function __construct($adminPanelWidgetWebsite, $params = []) {
     $this->name = str_replace("\\", "/", str_replace("Surikata\\Themes\\", "", get_class($this)));
     $this->params = $params;
-    $this->adminPanelWidgetWebsite = &$surikataWidgetWebsite;
+    $this->adminPanelWidgetWebsite = &$adminPanelWidgetWebsite;
   }
 
   public function getLayouts() {
@@ -35,5 +35,8 @@ class Theme {
 
   public function getDefaultColorsAndStyles() {
     return [];
+  }
+
+  public function onAfterInstall() {
   }
 }

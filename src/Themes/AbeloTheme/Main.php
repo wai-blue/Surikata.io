@@ -39,4 +39,8 @@ class AbeloTheme extends \Surikata\Core\Web\Theme {
     ];
   }
 
+  public function onAfterInstall() {
+    $this->adminPanelWidgetWebsite->adios->db->query(file_get_contents(__DIR__."/srkt_web_translations.sql"));
+  }
+
 }

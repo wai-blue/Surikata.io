@@ -22,10 +22,6 @@ class Settings extends \ADIOS\Core\Widget {
             "onclick" => "window_render('Settings/Units');",
           ],
           [
-            "title" => "Translations",
-            "onclick" => "window_render('Settings/Translations');",
-          ],
-          [
             "title" => "Users",
             "onclick" => "desktop_update('Pouzivatelia');",
           ],

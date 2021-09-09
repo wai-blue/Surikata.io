@@ -47,7 +47,7 @@
           <div class="col">
             <div class="single-wedge">
               <div class="footer-logo text-medium">
-                <a href="{{ rootUrl }}"><img class="img-responsive" src="{{ rootUrl }}./upload/{{ settings.profile.logo }}" alt="logo.jpg" /></a>
+                <a href="{{ rootUrl }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ settings.profile.logo }}" alt="Logo" /></a>
                 <p class="mt-3">{{ settings.profile.storeName }}</p>
                 <p class="text-infor">{{ settings.profile.slogan }}</p>
               </div>
@@ -67,10 +67,20 @@
                   {% endif %}
                 </p>
                 {% if showContactEmail %}
-                  <p class="mail"><span class="email">{{ translate("E-mail", "Common") }}:</span> <a href="">{{ settings.profile.contactEmail }}</a></p>
+                  <p class="mail">
+                    <span class="email">{{ translate("E-mail", "Common") }}:</span>
+                    <a href="mailto:{{ settings.profile.contactEmail }}">
+                      {{ settings.profile.contactEmail }}
+                    </a>
+                  </p>
                 {% endif %}
                 {% if showContactPhoneNumber %}
-                  <p class="phone"><span class="call us">{{ translate("Phone", "Common") }}:</span> <a href="">{{ settings.profile.contactPhoneNumber }}</a></p>
+                  <p class="phone">
+                    <span class="call us">{{ translate("Phone", "Common") }}:</span>
+                    <a href="tel:{{ settings.profile.contactPhoneNumber }}">
+                      {{ settings.profile.contactPhoneNumber }}
+                    </a>
+                  </p>
                 {% endif %}
               </div>
             </div>

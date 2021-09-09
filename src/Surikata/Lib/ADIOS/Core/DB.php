@@ -185,7 +185,7 @@ class DB
         }
       } else {
         if ($this->debug_correct_queries) {
-          $this->adios->console->log('DB', "Query OK:\n{$query}");
+          $this->adios->console->info("Query OK:\n{$query}");
         }
       }
 
@@ -1876,31 +1876,31 @@ class DB
         ");
 
         if (!isset($this->tables[$table_name])) {
-            $this->adios->console->log('alter_sql_column ERROR', "alter_sql_column: table $table_name was not found in INI file!");
+            $this->adios->console->error("alter_sql_column: table $table_name was not found in INI file!");
             $this->log_disabled = $log_status;
 
             return false;
         }
         if (!isset($this->tables[$table_name][$col_name])) {
-            $this->adios->console->log('alter_sql_column ERROR', "alter_sql_column: column name $table_name.$col_name was not found in INI file!");
+            $this->adios->console->error("alter_sql_column: column name $table_name.$col_name was not found in INI file!");
             $this->log_disabled = $log_status;
 
             return false;
         }
         if ($this->tables[$table_name][$col_name]['virtual']) {
-            $this->adios->console->log('alter_sql_column ERROR', "alter_sql_column: column name $table_name.$col_name is virtual!");
+            $this->adios->console->error("alter_sql_column: column name $table_name.$col_name is virtual!");
             $this->log_disabled = $log_status;
 
             return false;
         }
         if (!isset($this->registered_columns[$col_type])) {
-            $this->adios->console->log('alter_sql_column ERROR', "alter_sql_column: unknown column type column name $table_name.$col_name");
+            $this->adios->console->error("alter_sql_column: unknown column type column name $table_name.$col_name");
             $this->log_disabled = $log_status;
 
             return false;
         }
         if (!_count($table_exists)) {
-            $this->adios->console->log('alter_sql_column ERROR', "alter_sql_column: table $table_name was not found in database!");
+            $this->adios->console->error("alter_sql_column: table $table_name was not found in database!");
             $this->log_disabled = $log_status;
 
             return false;
@@ -1943,7 +1943,7 @@ class DB
             return true;
         } catch (\ADIOS\Core\Exceptions\DBException $e) {
             $this->log_disabled = $log_status;
-            $this->adios->console->log('alter_sql_column ERROR', "alter_sql_column: query error for column name $table_name.$col_name: ".$e->getMessage()." ($sql)");
+            $this->adios->console->error("alter_sql_column: query error for column name $table_name.$col_name: ".$e->getMessage()." ($sql)");
 
             return false;
         }

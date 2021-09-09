@@ -549,7 +549,7 @@ class Loader {
 
     $this->db->start_transaction();
 
-    echo "<h2>Installing models</h2>";
+    $this->console->info("Installing models");
 
     foreach ($this->models as $modelName) {
       try {
@@ -557,14 +557,13 @@ class Loader {
 
         $start = microtime(TRUE);
 
-        echo "<b>{$modelName}</b>";
-
         $model->install();
-        echo " [".round((microtime(true) - $start) * 1000, 2)." msec]. ";
+        $this->console->info("Model {$modelName} installed.", ["duration" => round((microtime(true) - $start) * 1000, 2)." msec"]);
+
       } catch (\ADIOS\Core\Exceptions\ModelInstallationException $e) {
-        echo ", <span style='color:orange'>Skipped. Reason: {$e->getMessage()}</span> ";
+        $this->console->warning("Model {$modelName} installation skipped.", ["exception" => $e->getMessage()]);
       } catch (\Exception $e) {
-        echo ", <span style='color:red'>Failed. Reason: {$e->getMessage()}.</span> ";
+        $this->console->error("Model {$modelName} installation failed.", ["exception" => $e->getMessage()]);
       } catch (\Illuminate\Database\QueryException $e) {
         //
       } catch (\ADIOS\Core\Exceptions\DBException $e) {
@@ -574,7 +573,7 @@ class Loader {
       }
     }
 
-    echo "<h2>Creating indexes</h2>";
+    $this->console->info("Installing indexes");
 
     foreach ($this->models as $modelName) {
       try {
@@ -582,12 +581,11 @@ class Loader {
 
         $start = microtime(TRUE);
 
-        echo "<b>{$modelName}</b>";
-
         $model->installForeignKeys();
-        echo " [".round((microtime(true) - $start) * 1000, 2)." msec]. ";
+        $this->console->info("Indexes for model {$modelName} installed.", ["duration" => round((microtime(true) - $start) * 1000, 2)." msec"]);
+
       } catch (\Exception $e) {
-        echo ", <span style='color:red'>Failed. Reason: {$e->getMessage()}.</span> ";
+        $this->console->error("Indexes installation for model {$modelName} failed.", ["exception" => $e->getMessage()]);
       } catch (\Illuminate\Database\QueryException $e) {
         //
       } catch (\ADIOS\Core\Exceptions\DBException $e) {
@@ -595,20 +593,20 @@ class Loader {
       }
     }
 
-    echo "<h2>Installing widgets</h2>";
+    $this->console->info("Installing widgets");
 
     foreach ($this->widgets as $widget) {
       try {
-        echo "<b>{$widget->name}</b>";
+        $this->console->info("Installing widget: {$widget->name}");
 
         if ($widget->install()) {
           $this->widgetsInstalled[$widget->name] = TRUE;
-          echo ". ";
+          $this->console->info("Widget {$widget->name} installed.", ["duration" => round((microtime(true) - $start) * 1000, 2)." msec"]);
         } else {
-          echo ", <span style='color:orange'>skipped.</span> ";
+          $this->console->warning("Model {$modelName} installation skipped.");
         }
       } catch (\Exception $e) {
-        echo ", <span style='color:red'>failed.</span> ";
+        $this->console->error("Model {$modelName} installation failed.");
       } catch (\ADIOS\Core\Exceptions\DBException $e) {
         // Moze sa stat, ze vytvorenie tabulky zlyha napr. kvoli
         // "Cannot add or update a child row: a foreign key constraint fails".
@@ -622,13 +620,8 @@ class Loader {
 
     $this->db->commit();
 
-    echo "<h2>Done</h2>";
-    echo "Installation time: ".round((microtime(true) - $installationStart), 2)." s";
+    $this->console->info("Installation done. Duration: ".round((microtime(true) - $installationStart), 2)." s");
 
-    if (count($this->console->getLogs()) > 0) {
-      echo "<h2>Errors</h2>";
-      echo "<div style='color:red'>".nl2br($this->console->getContents())."</div>";
-    }
   }
 
 
@@ -855,7 +848,7 @@ class Loader {
     ) {
       $errorMessage = $e->getMessage();
       $errorHash = md5(date("YmdHis").$errorMessage);
-      $this->console->log($errorHash, "{$errorMessage}\t{$this->db->last_query}\t{$this->db->db_error}");
+      $this->console->error("{$errorHash}\t{$errorMessage}\t{$this->db->last_query}\t{$this->db->db_error}");
       $actionHtml = $this->renderHtmlWarning("
         <div style='text-align:center;font-size:5em;color:red'>
           🥴

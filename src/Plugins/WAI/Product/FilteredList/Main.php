@@ -14,7 +14,7 @@ namespace Surikata\Plugins\WAI\Product {
             ->where("is_recommended", TRUE)
             ->skip(0)->take((int)$pluginSettings["product_count"]);
           break;
-        case "discounted":
+        case "on_sale":
           $productIds = $productModel
             ->where("is_on_sale", TRUE)
             ->skip(0)->take((int)$pluginSettings["product_count"]);
@@ -50,7 +50,7 @@ namespace ADIOS\Plugins\WAI\Product {
           "title" => "Products for display",
           "type" => "varchar",
           "enum_values" => [
-            "discounted" => "Discounted products",
+            "on_sale" => "Discounted products",
             "news" => "New products",
             "recommended" => "Recommended products",
             "top" => "Top products",

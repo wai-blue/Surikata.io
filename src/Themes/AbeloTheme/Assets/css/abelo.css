@@ -20,8 +20,64 @@
   color: #266cfb;
 }
 .required-empty {
-  border-color: #bf2919 !important;
-  color: #bf2919;
+  border-color: #e6230e !important;
+  color: #e6230e;
+}
+.input-required {
+  color: #e6230e;
+}
+.list-product .tag:nth-child(2) {  
+  left: 65px;
+}
+.list-product .tag:nth-child(3) {  
+  left: 113px;
+}
+.orderAgreement .form-check-label {
+  margin-bottom: 5px;
+}
+.orderAgreement input[type="checkbox"] {
+  margin-right: 5px;
+}
+.list-product .new {
+  position: absolute;
+  top: 10px !important;
+  left: 15px;
+  display: inline-block;
+  color: #272727;
+  background: #f7d807;
+  padding: 0;
+  width: 45px;
+  text-align: center;
+  line-height: 20px;
+  height: 22px;
+  font-size: 11px;
+  text-transform: capitalize;
+  text-align: center;
+  z-index: 4;
+  border-radius: 5px;
+  font-weight: 600;
+}
+.list-product .recommended {
+  position: absolute;
+  top: 10px !important;
+  left: 15px;
+  display: inline-block;
+  color: #272727;
+  background: #f7d807;
+  padding: 0;
+  width: 100px;
+  text-align: center;
+  line-height: 20px;
+  height: 22px;
+  font-size: 11px;
+  text-transform: capitalize;
+  text-align: center;
+  z-index: 4;
+  border-radius: 5px;
+  font-weight: 600;
+}
+.tag .new {
+  font-size: 45px !important;
 }
 .delivery-text {
   color: #888!important;

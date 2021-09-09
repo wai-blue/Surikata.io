@@ -164,7 +164,18 @@
                             <img class="first-img" src="{{ uploadedFileUrl }}/{{ product.image }}" alt="{{ product.image }}" />
                           </a>
                           <ul class="product-flag">
-                            <li class="new">-{{ product.price.discountTotal|number_format(2, ",", " ") }}%</li>
+                            {% if product.is_new == 1 %}
+                              <li class="new">{{ translate("New", "Product") }}</li>
+                            {% endif %}
+                            {% if product.is_sale_out == 1 %}
+                              <li class="new">{{ translate("Sale", "Product") }}</li>
+                            {% endif %}
+                            {% if product.is_on_sale == 1 %}
+                              <li class="new">{{ translate("Action", "Product") }}</li>
+                            {% endif %}
+                            {% if product.is_top == 1 %}
+                              <li class="new">{{ translate("Top", "Product") }}</li>
+                            {% endif %}
                           </ul>
                         </div>
                       </div>

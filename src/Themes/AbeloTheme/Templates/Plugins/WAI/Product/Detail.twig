@@ -131,7 +131,7 @@
                       <i class="fa fa-{{ service.pictogram }}"></i>
                     </div>
                     <div class="col-10">
-                      <span>{{ service.TRANSLATIONS.name }}</span>
+                      <span>{{ service["name_lang_"~languageIndex] }}</span>
                     </div>
                   </div>
                 </li>
@@ -291,7 +291,7 @@
         <div id="tab-1" class="tab-pane active fade">
           <!-- Arrivel slider start -->
           <div class="arrival-slider-wrapper slider-nav-style-1">
-            {% for product in productInfo.prislusenstvo %}
+            {% for product in productInfo.accessories %}
               <div class="slider-single-item">
                 <article class="list-product text-center">
                   <div class="product-inner">
@@ -358,7 +358,7 @@
   </div>
 {% endif %}
 
-{% if zobrazit_podobne_produkty %}
+{% if show_similar_products %}
   <div class="arrival-area mt-5">
     <div class="container">
       <div class="row">
@@ -374,7 +374,7 @@
         <div id="tab-1" class="tab-pane active fade">
           <!-- Arrivel slider start -->
           <div class="arrival-slider-wrapper slider-nav-style-1">
-            {% for product in productInfo.podobne %}
+            {% for product in productInfo.related %}
               <div class="slider-single-item">
                 <article class="list-product text-center">
                   <div class="product-inner">

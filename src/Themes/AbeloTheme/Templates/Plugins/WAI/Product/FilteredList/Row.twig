@@ -91,8 +91,8 @@
 														<div data-countdown="2021/06/12"></div>
 													</div>
 												{% endif %}
-												<a class="inner-link" href="shop-4-column.html"><span>{{ product.ProductCategory.name_lang_1 }}</span></a>
-												<h2><a href="{{ rootUrl }}/{{ product.url }}" class="product-link">{{ product.name_lang_1 }}</a></h2>
+												<a class="inner-link" href="shop-4-column.html"><span>{{ product.ProductCategory.TRANSLATIONS.name }}</span></a>
+												<h2><a href="{{ rootUrl }}/{{ product.url }}" class="product-link">{{ product.TRANSLATIONS.name }}</a></h2>
 												<div class="pricing-meta">
 													<ul>
 														<li class="old-price">{{ product.price.fullPrice|number_format(2, ",", " ") }} €</li>

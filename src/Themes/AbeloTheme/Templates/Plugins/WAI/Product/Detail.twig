@@ -6,21 +6,21 @@
         <div class="product-details-img product-details-tab">
           <div class="zoompro-wrap zoompro-2">
             <div class="zoompro-border zoompro-span">
-              <img class="zoompro" src="{{ uploadedFileUrl }}/{{ productInfo["image"] }}" data-zoom-image="{{ uploadedFileUrl }}/{{ productInfo["image"] }}" alt="{{ productInfo.name_lang_1 }}" />
+              <img class="zoompro" src="{{ uploadedFileUrl }}/{{ productInfo["image"] }}" data-zoom-image="{{ uploadedFileUrl }}/{{ productInfo["image"] }}" alt="{{ productInfo.TRANSLATIONS.name }}" />
             </div>
             {% for imgKey, image in productInfo["gallery"] %}
               <div class="zoompro-border zoompro-span">
-                <img class="zoompro" src="{{ uploadedFileUrl }}/{{ image["image"] }}" data-zoom-image="{{ uploadedFileUrl }}/{{ image["image"] }}" alt="{{ productInfo.name_lang_1 }}" />
+                <img class="zoompro" src="{{ uploadedFileUrl }}/{{ image["image"] }}" data-zoom-image="{{ uploadedFileUrl }}/{{ image["image"] }}" alt="{{ productInfo.TRANSLATIONS.name }}" />
               </div>
             {% endfor %}
           </div>
           <div id="gallery" class="product-dec-slider-2">
             <div class="single-slide-item">
-              <img class="img-responsive" data-image="{{ uploadedFileUrl }}/{{ productInfo["image"] }}" data-zoom-image="{{ uploadedFileUrl }}/{{ productInfo["image"] }}" src="{{ uploadedFileUrl }}/{{ productInfo["image"] }}" alt="{{ productInfo.name_lang_1 }}" />
+              <img class="img-responsive" data-image="{{ uploadedFileUrl }}/{{ productInfo["image"] }}" data-zoom-image="{{ uploadedFileUrl }}/{{ productInfo["image"] }}" src="{{ uploadedFileUrl }}/{{ productInfo["image"] }}" alt="{{ productInfo.TRANSLATIONS.name }}" />
             </div>
             {% for imgKey, image in productInfo["gallery"] %}
               <div class="single-slide-item">
-                <img class="img-responsive" data-image="{{ uploadedFileUrl }}/{{ image["image"] }}" data-zoom-image="{{ uploadedFileUrl }}/{{ image["image"] }}" src="{{ uploadedFileUrl }}/{{ image["image"] }}" alt="{{ productInfo.name_lang_1 }}" />
+                <img class="img-responsive" data-image="{{ uploadedFileUrl }}/{{ image["image"] }}" data-zoom-image="{{ uploadedFileUrl }}/{{ image["image"] }}" src="{{ uploadedFileUrl }}/{{ image["image"] }}" alt="{{ productInfo.TRANSLATIONS.name }}" />
               </div>
             {% endfor %}
           </div>
@@ -44,7 +44,7 @@
             {% endif %}
           </div>
 
-          <h2>{{ productInfo.name_lang_1 }}</h2>
+          <h2>{{ productInfo.TRANSLATIONS.name }}</h2>
           <div class="pro-details-rating-wrap">
             {# Rating of the product (number of stars) #}
             {# Využije sa pre brand #}
@@ -62,7 +62,7 @@
             </ul>
           </div>
           <div class="pro-details-list">
-            <p>{{ productInfo.brief_lang_1|raw }}</p>
+            <p>{{ productInfo.TRANSLATIONS.brief|raw }}</p>
           </div>
           <div class="pro-details-quality mt-0px">
             <div class="cart-plus-minus">
@@ -131,7 +131,7 @@
                       <i class="fa fa-{{ service.pictogram }}"></i>
                     </div>
                     <div class="col-10">
-                      <span>{{ service.name_lang_1 }}</span>
+                      <span>{{ service.TRANSLATIONS.name }}</span>
                     </div>
                   </div>
                 </li>
@@ -160,7 +160,7 @@
             <ul>
               {% for feature in productInfo.FEATURES %}
                 <li>
-                  <span>{{ feature["name_lang_"~languageIndex] }}</span>
+                  <span>{{ feature.TRANSLATIONS.name }}</span>
                   {% if feature.pivot.value_text|length > 0 %}
                     {{ feature.pivot.value_text }} {# feature.jednotka #}
                   {% else %}
@@ -173,7 +173,7 @@
         </div>
         <div id="des-details1" class="tab-pane">
           <div class="product-description-wrapper">
-           <p>{{ productInfo.description_lang_1|raw }}</p>
+           <p>{{ productInfo.TRANSLATIONS.description|raw }}</p>
           </div>
         </div>
         <div id="des-details3" class="tab-pane">
@@ -297,7 +297,7 @@
                   <div class="product-inner">
                     <div class="img-block">
                       <a href="{{ rootUrl}}/{{ product.url }}" class="thumbnail">
-                        <img class="first-img" src="{{ uploadedFileUrl }}/{{ product["image"] }}" alt="{{ product.name_lang_1 }}" />
+                        <img class="first-img" src="{{ uploadedFileUrl }}/{{ product["image"] }}" alt="{{ product.TRANSLATIONS.name }}" />
                       </a>
                       <div class="add-to-link">
                         <ul>
@@ -328,7 +328,7 @@
                     </ul>
                     <div class="product-decs">
                       <a class="inner-link" href="shop-4-column.html"><span>{{ translate("STUDIO DESIGN", "Product") }}</span></a>
-                      <h2><a href="single-product.html" class="product-link">{{ product.name_lang_1 }}</a></h2>
+                      <h2><a href="single-product.html" class="product-link">{{ product.TRANSLATIONS.name }}</a></h2>
                       <div class="pricing-meta">
                         <ul>
                           <li class="old-price">{{ product.sale_price|number_format(2, ",", " ") }} €</li>
@@ -380,7 +380,7 @@
                   <div class="product-inner">
                     <div class="img-block">
                       <a href="{{ rootUrl}}/{{ product.url }}" class="thumbnail">
-                        <img class="first-img" src="{{ uploadedFileUrl }}/{{ product["image"] }}" alt="{{ product.name_lang_1 }}" />
+                        <img class="first-img" src="{{ uploadedFileUrl }}/{{ product["image"] }}" alt="{{ product.TRANSLATIONS.name }}" />
                       </a>
                       <div class="add-to-link">
                         <ul>
@@ -410,7 +410,7 @@
                       {% endif %}
                     </ul>
                     <div class="product-decs">
-                      <h2><a href="single-product.html" class="product-link">{{ product.name_lang_1 }}</a></h2>
+                      <h2><a href="single-product.html" class="product-link">{{ product.TRANSLATIONS.name }}</a></h2>
                       <div class="pricing-meta">
                         <ul>
                           <li class="old-price">{{ product.sale_price|number_format(2, ",", " ") }} €</li>

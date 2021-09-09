@@ -39,14 +39,14 @@
               {% for item in cartContents.items %}
                 <div class="row cart-item align-items-center">
                   <div class="col-4 col-sm-4 col-lg-2 product-thumbnail">
-                    <a href="{{ item.PRODUCT.url }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ item.PRODUCT.image }}" alt="{{ item.PRODUCT.name_lang_1 }}" /></a>
+                    <a href="{{ item.PRODUCT.url }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ item.PRODUCT.image }}" alt="{{ item.PRODUCT.TRANSLATIONS.name }}" /></a>
                   </div>
                   <div class="col-8 col-lg-10">
                     <div class="row">
                       <div class="col-12 col-sm-12 col-lg-6">
                         <div class="row">
                           <div class="col-12 col-lg-8 product-name">
-                            <a href="{{ item.PRODUCT.url }}">{{ item.PRODUCT["name_lang_"~languageIndex] }}</a>
+                            <a href="{{ item.PRODUCT.url }}">{{ item.PRODUCT.TRANSLATIONS.name }}</a>
                           </div>
                           <div class="col-12 col-lg-4 product-price-cart">
                             <div class="cart-text-mobile">price / {{ item.PRODUCT.unit.unit }}:&nbsp;</div><span class="amount">{{ item.unit_price|number_format(2, ",", " ") }} {{ locale.currencySymbol }}</span>

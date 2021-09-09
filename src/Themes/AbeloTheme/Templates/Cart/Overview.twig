@@ -5,10 +5,10 @@
       {% for item in cartContents.items %}
         <li id="cartProduct_{{ item.PRODUCT.id }}">
           <a href="{{ item.PRODUCT.url }}" class="image">
-            <img src="{{ uploadedFileUrl }}/{{ item.PRODUCT.image }}" alt="{{ item.PRODUCT.name_lang_1 }}">
+            <img src="{{ uploadedFileUrl }}/{{ item.PRODUCT.image }}" alt="{{ item.PRODUCT.TRANSLATIONS.name }}">
           </a>
           <div class="content">
-            <a href="{{ item.PRODUCT.url }}" class="title">{{ item.PRODUCT.name_lang_1 }}</a>
+            <a href="{{ item.PRODUCT.url }}" class="title">{{ item.PRODUCT.TRANSLATIONS.name }}</a>
             <span class="quantity-price">{{ item.quantity|number_format(2, ",", " ") }} x 
             <span class="amount">{{ item.unit_price|number_format(2, ",", " ") }} {{ locale.currencySymbol }}</span></span>
             <a 

@@ -28,7 +28,7 @@
     </div>
     <div class="blog-single-tags-share d-sm-flex justify-content-between">
       <div class="blog-single-tags d-flex">
-        <span class="title">Tags: </span>
+        <span class="title">{{ translate("Tags", "Blog") }}: </span>
         <ul class="tag-list">
         {% for blog_tag in blog.blog_tags %}
           <li><a href="{{ rootUrl }}/{{ blog.blogCatalogUrl }}?tags={{ blog_tag.url }}">{{ blog_tag.name }}</a></li>
@@ -36,7 +36,7 @@
         </ul>
       </div>
       <div class="blog-single-share d-flex">
-        <span class="title">Share:</span>
+        <span class="title">{{ translate("Share", "Blog") }}:</span>
         <ul class="social">
           <li>
             <a href="#"><i class="ion-social-facebook"></i></a>
@@ -200,31 +200,31 @@
         <div class="row">
           <div class="col-md-12">
             <div class="single-form">
-              <label>Your Review:</label>
-              <textarea placeholder="Write a review"></textarea>
+              <label>{{ translate("Your Review, "Blog") }}:</label>
+              <textarea placeholder="{{ translate("Write a review", "Blog") }}"></textarea>
             </div>
           </div>
           <div class="col-md-4">
             <div class="single-form">
-              <label>Name:</label>
-              <input type="text" placeholder="Name" />
+              <label>{{ translate("Name, "Blog") }}:</label>
+              <input type="text" placeholder="{{ translate("Name", "Blog") }}" />
             </div>
           </div>
           <div class="col-md-4">
             <div class="single-form">
-              <label>Email:</label>
-              <input type="email" placeholder="Email" />
+              <label>{{ translate("Email, "Blog") }}:</label>
+              <input type="email" placeholder="{{ translate("Email", "Blog") }}" />
             </div>
           </div>
           <div class="col-md-4">
             <div class="single-form">
-              <label>Website:</label>
-              <input type="email" placeholder="Website" />
+              <label>{{ translate("Website, "Blog") }}:</label>
+              <input type="email" placeholder="{{ translate("Website", "Blog") }}" />
             </div>
           </div>
           <div class="col-md-12">
             <div class="single-form">
-              <input class="submit" type="submit" value="Submit" />
+              <input class="submit" type="submit" value="{{ translate("Submit", "Blog") }}" />
             </div>
           </div>
         </div>

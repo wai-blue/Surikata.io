@@ -5,13 +5,13 @@
 				<div class="section-title">
 					<h2>	
 						{% if filterType == 'discounted' %}
-							Discounted products
+							{{ translate("Discounted products", "Product") }}
 						{% elseif filterType == 'news' %}
-							New products
+							{{ translate("New products", "Product") }}
 						{% elseif filterType == 'top' %}
-							Top products
+							{{ translate("Top products", "Product") }}
 						{% elseif filterType == 'recommended' %}
-							Recommended products
+							{{ translate("Recommended products", "Product") }}
 						{% endif %}
 					</h2>
 					<!-- Nav tabs -->
@@ -66,10 +66,10 @@
 															</a>
 														</li>
 														<li>
-															<a href="wishlist.html" title="Add to Wishlist"><i class="lnr lnr-heart"></i></a>
+															<a href="wishlist.html" title="{{ translate("Add to Wishlist", "Product") }}"><i class="lnr lnr-heart"></i></a>
 														</li>
 														<li>
-															<a href="compare.html" title="Add to compare"><i class="lnr lnr-sync"></i></a>
+															<a href="compare.html" title="{{ translate("Add to compare", "Product") }}"><i class="lnr lnr-sync"></i></a>
 														</li>
 													</ul>
 												</div>
@@ -79,9 +79,9 @@
 													{% if filterType == 'discounted' %}
 														<span>- {{ product.price.discountTotal|number_format(2, ",", " ") }}%</span>
 													{% elseif filterType == 'news' %}
-														<span>NEW</span>
+														<span>{{ translate("New", "Product") }}</span>
 													{% elseif filterType == 'top' %}
-														<span style="color: red">TOP</span>
+														<span style="color: red">{{ translate("Top", "Product") }}</span>
 													{% endif %}
 												</li>
 											</ul>
@@ -105,8 +105,8 @@
 													href="javascript:void(0)"
 													onclick="AbeloThemeCart.addProduct({{ product.id }}, 1);" 
 													class="add-to-curt" 
-													title="Add to cart">
-												Add to cart</a>
+													title="{{ translate("Add to cart", "Product") }}">
+												{{ translate("Add to cart", "Product") }}</a>
 											</div>
 									</div>
 								</article>

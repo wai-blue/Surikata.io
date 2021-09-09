@@ -8,7 +8,7 @@
 <div class="shop-sidebar-wrap">
   {% if showProductCategories %}
     <div class="sidebar-widget mb-30px">
-      <h3 class="sidebar-title"><span>Categories</span></h3>
+      <h3 class="sidebar-title"><span>{{ translate("Categories", "Product") }}</span></h3>
       <div class="accordion" id="accordionExample">
         {% for category in filterInfo.allCategoriesAndSubCategories %}
           {% if category.subCategory is not empty %}
@@ -108,7 +108,7 @@
   <!-- Sidebar single item -->
   <div class="sidebar-widget-group mt-20">
     {% if zobrazit_filter %}
-      <h3 class="sidebar-title m-0"><span>Filter By</span></h3>
+      <h3 class="sidebar-title m-0"><span>{{ translate("Filter By", "Product") }}</span></h3>
       <!-- Sidebar single item -->
       <div class="sidebar-widget no-cba mt-20">
         <h4 class="pro-sidebar-title">Colour</h4>
@@ -144,7 +144,7 @@
     {% endif %}
     {% if show_brands %}
       <div class="sidebar-widget mt-30">
-        <h4 class="pro-sidebar-title">Brand</h4>
+        <h4 class="pro-sidebar-title">{{ translate("Brand", "Product") }}</h4>
         <div class="sidebar-widget-list">
           <ul>
             {% for brand in filterInfo.allBrands %}

@@ -46,7 +46,7 @@
                                   href="javascript:void(0)"
                                   onclick="AbeloThemeCart.addProduct({{ product.id }}, 1);"
                                   class="add-to-curt"
-                                  title="Add to cart">Add to cart
+                                  title="Add to cart">{{ translate("Add to cart", "Misc") }}
                               </a>
                             </div>
                             <!--<div class="add-to-link">
@@ -95,7 +95,7 @@
                           <h2><a href="{{ rootUrl }}/{{ url }}" class="product-link">{{ category.name_lang_1 }}</a></h2>
                           <a class="inner-link" href="shop-4-column.html"><span>{{ category.ProductCategory.name_lang_1}}</span></a>
                           <div class="product-intro-info">
-                            <p>Number of products in category: {{ category.additional_info.productCount }}</p>
+                            <p>{{ translate("Number of products in category", "Misc") }}: {{ category.additional_info.productCount }}</p>
                           </div>
                         </div>
                       </div>
@@ -190,7 +190,7 @@
                           <h2><a href="{{ rootUrl }}/{{ url }}" class="product-link">{{ page.name_lang_1 }}</a></h2>
                           <a class="inner-link" href="shop-4-column.html"><span>{{ page.ProductCategory.name_lang_1}}</span></a>
                           <div class="product-intro-info">
-                            <p>Number of products in category: {{ page.additional_info.productCount }}</p>
+                            <p>{{ translate("Number of products in category", "Misc") }}: {{ page.additional_info.productCount }}</p>
                           </div>
                         </div>
                       </div>

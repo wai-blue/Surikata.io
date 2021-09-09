@@ -6,7 +6,7 @@
           <div class="login-register-wrapper">
             <div class="login-register-tab-list nav">
               <a data-toggle="tab" href="#lg2">
-                <h4>register</h4>
+                <h4>{{ translate("Register", "Customer") }}</h4>
               </a>
             </div>
             <div class="tab-content">
@@ -16,46 +16,44 @@
 
                     <div id="emailIsEmptyOrInvalidErrorDiv" style="display:none;">
                       <div class="notification mb-5">
-                        <p class="error">Email je neuvedený alebo je neplatný.</p>
+                        <p class="error">{{ translate("Email is incomplete or invalid.", "Customer") }}</p>
                       </div>
                     </div>
                     <div id="accountAlreadyExistsErrorDiv" style="display:none">
                       <div class="notification mb-5">
-                        <p class="error">Takýto účet už existuje.</p>
+                        <p class="error">{{ translate("Such an account already exists.", "Customer") }}</p>
                       </div>
                     </div>
                     <div id="unknownErrorDiv" style="display:none;">
                       <div class="notification mb-5">
-                        <p class="error">Nastala neočakávaná chyba pri vytváraní účtu. Skúste prosím opäť neskôr.</p>
+                        <p class="error">{{ translate("An unexpected error occurred while creating the account. Please try again later.", "Customer") }}</p>
                       </div>
                     </div>
 
                     <form method="post" id="registrationForm">
-                      <input type="email" name="email" placeholder="Email *" />
-                      <input type="text" name="given_name" placeholder="First name *" />
-                      <input type="text" name="family_name" placeholder="Last name *" />
+                      <input type="email" name="email" placeholder="{{ translate("Email", "Customer") }} *" />
+                      <input type="text" name="given_name" placeholder="{{ translate("First name", "Customer") }} *" />
+                      <input type="text" name="family_name" placeholder="{{ translate("Last name", "Customer") }}*" />
                       <div class="button-box">
                         <div class="login-toggle-btn">
                           <div class="notification">
                             <p id="privacyPolicyTermsErrorDiv">
                               <input type="checkbox" name="checkbox" id="privacyPolicyTermsConfirmation"/>
-                              <label for="privacyPolicyTermsConfirmation">Súhlasím so spracovávaním osobných údajov.</label>  
+                              <label for="privacyPolicyTermsConfirmation">{{ translate("I agree with the processing of personal data.", "Customer") }}</label>  
                             </p>
                           </div>
                           <p id="privacyPolicyTermsErrorText" class="mt-2" style="color:#db2f23;display:none">
-                            Musíte súhlasiť s podmienkami spracovania osobných údajov.
+                            {{ translate("You must agree to the terms of processing of personal data.") }}
                           </p>
                           {% if showPrivacyTerms and privacyTermsUrl != "" %}
-                            <a href="{{ rootUrl }}/{{ privacyTermsUrl }}" target="_blank">
-                              Zobraziť podmienky
-                            </a>
+                            <a href="{{ rootUrl }}/{{ privacyTermsUrl }}" target="_blank">{{ translate("Show conditions", "Customer") }}</a>
                           {% endif %}
                         </div>
                       </div>
                     </form>
                     <div class="button-box">
                       <button onclick="AbeloThemeCustomer.createAccount();">
-                        <span>Register</span>
+                        <span>{{ translate("Register", "Customer") }}</span>
                       </button>
                     </div>
                   </div>

@@ -10,7 +10,7 @@
     <h3 class="sidebar-title"><span>Search</span></h3>
     <div class="search-widget">
       <form action="#">
-        <input placeholder="Search entire store here ..." type="text" />
+        <input placeholder="{{ translate("Search entire store here ...", "Blog") }}" type="text" />
         <button type="submit"><i class="ion-ios-search-strong"></i></button>
       </form>
     </div>
@@ -19,7 +19,7 @@
   <!-- Sidebar single item -->
   {% if showArchive %}
     <div class="sidebar-widget">
-      <h3 class="sidebar-title"><span>Archive</span></h3>
+      <h3 class="sidebar-title"><span>{{ translate("Archive", "Blog") }}</span></h3>
       <div class="category-post">
         <ul>
           {% for date, item in archive %}
@@ -32,7 +32,7 @@
   <!-- Sidebar single item -->
   {% if showRecent %}
   <div class="sidebar-widget mt-40px">
-    <h3 class="sidebar-title"><span>Recent Post</span></h3>
+    <h3 class="sidebar-title"><span>{{ translate("Recent Posts", "Blog") }}</span></h3>
 
     <div class="recent-post-widget">
     {% for blog in blogs|slice(0,5) %}
@@ -51,7 +51,7 @@
   {% endif %}
   <!-- Sidebar single item -->
   <div class="sidebar-widget mt-40px">
-    <h3 class="sidebar-title"><span>Tags</span></h3>
+    <h3 class="sidebar-title"><span>{{ translate("Tags", "Blog") }}</span></h3>
     <div class="sidebar-widget-tag">
       <ul>
         {% for singleTag in filterInfo.allTags %}

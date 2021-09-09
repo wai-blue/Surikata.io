@@ -5,8 +5,8 @@
       <div class="row">
         <div class="col-md-12 col-lg-4 mb-md-30px mb-lm-30px">
           <div class="title-newsletter">
-            <h2>Sign Up For Newsletters</h2>
-            <p class="des">Be the First to Know. Sign up for newsletter today !</p>
+            <h2>{{ translate("Sign Up For Newsletters", "Common") }}</h2>
+            <p class="des">{{ translate("Be the First to Know. Sign up for newsletter today !", "Common") }}</p>
           </div>
         </div>
         <div class="col-md-12 col-lg-8">
@@ -21,12 +21,12 @@
                 action=""
             >
               <div id="mc_embed_signup_scroll" class="mc-form">
-                <input class="email" type="email" required="" placeholder="Enter your email here.." name="EMAIL" value="" />
+                <input class="email" type="email" required="" placeholder="{{ translate("Enter your email here", "Common") }}" name="EMAIL" value="" />
                 <div class="mc-news" aria-hidden="true">
                     <input type="text" value="" tabindex="-1" name="b_6bbb9b6f5827bd842d9640c82_05d85f18ef" />
                 </div>
                 <div class="clear">
-                  <input id="mc-embedded-subscribe" class="button" type="submit" name="subscribe" value="Sign Up" />
+                  <input id="mc-embedded-subscribe" class="button" type="submit" name="subscribe" value="{{ translate("Sign Up", "Common") }}" />
                 </div>
               </div>
             </form>
@@ -67,10 +67,10 @@
                   {% endif %}
                 </p>
                 {% if showContactEmail %}
-                  <p class="mail"><span class="email">Email:</span> <a href="">{{ settings.profile.contactEmail }}</a></p>
+                  <p class="mail"><span class="email">{{ translate("E-mail", "Common") }}:</span> <a href="">{{ settings.profile.contactEmail }}</a></p>
                 {% endif %}
                 {% if showContactPhoneNumber %}
-                  <p class="phone"><span class="call us">Phone:</span> <a href="">{{ settings.profile.contactPhoneNumber }}</a></p>
+                  <p class="phone"><span class="call us">{{ translate("Phone", "Common") }}:</span> <a href="">{{ settings.profile.contactPhoneNumber }}</a></p>
                 {% endif %}
               </div>
             </div>
@@ -125,7 +125,7 @@
                         <div class="footer-blog-content">
                           <p class="text-medium-2"><a href="{{ blog.url }}">{{ blog.name }}</a></p>
                           <div class="footer-blog-meta">
-                            <span class="autor">Posted by {{ blog.USER.name }}</span>
+                            <span class="autor">{{ translate("Posted by", "Common") }} {{ blog.USER.name }}</span>
                             <span class="date">{{ blog.created_at|date(locale.dateFormat) }}</span>
                           </div>
                         </div>
@@ -184,7 +184,7 @@
       <div class="container">
         <div class="row"> 
           <div class="col-md-12 text-center">
-            <p class="copy-text">Copyright © <a href=""> {{ currentYear }} {{ settings.profile.storeName }}</a>. All Rights Reserved</p>
+            <p class="copy-text">{{ translate("Copyright ©") }} <a href=""> {{ currentYear }} {{ settings.profile.storeName }}</a>. {{ translate("All Rights Reserved", "Common") }}</p>
           </div>
         </div>
       </div>
@@ -197,7 +197,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="{{ translate("Close", "Common") }}"><span aria-hidden="true">x</span></button>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -242,8 +242,8 @@
           </div>
           <div class="col-md-6 col-sm-12 col-xs-12">
             <div class="product-details-content quickview-content">
-              <h2>Originals Kaval Windbr</h2>
-              <p class="reference">Reference:<span> demo_17</span></p>
+              <h2>{{ translate("Originals Kaval Windbr", "Common") }}</h2>
+              <p class="reference">{{ translate("Reference", "Common") }}:<span> demo_17</span></p>
               <div class="pro-details-rating-wrap">
                 <div class="rating-product">
                   <i class="ion-android-star"></i>
@@ -252,14 +252,14 @@
                   <i class="ion-android-star"></i>
                   <i class="ion-android-star"></i>
                 </div>
-                <span class="read-review"><a class="reviews" href="#">Read reviews (1)</a></span>
+                <span class="read-review"><a class="reviews" href="#">{{ translate("Read reviews", "Common") }} (1)</a></span>
               </div>
               <div class="pricing-meta">
                 <ul>
                   <li class="old-price not-cut">€18.90</li>
                 </ul>
               </div>
-              <p class="quickview-para">Lorem ipsum dolor sit amet, consectetur adipisic elit eiusm tempor incidid ut labore et dolore magna aliqua. Ut enim ad minim venialo quis nostrud exercitation ullamco</p>
+              <p class="quickview-para">{{ translate("Lorem ipsum dolor sit amet, consectetur adipisic elit eiusm tempor incidid ut labore et dolore magna aliqua. Ut enim ad minim venialo quis nostrud exercitation ullamco", "Common") }}</p>
               <div class="pro-details-size-color">
                 <div class="pro-details-color-wrap">
                   <span>Color</span>
@@ -276,19 +276,19 @@
                   <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
                 </div>
                 <div class="pro-details-cart btn-hover">
-                  <a href="#"> + Add To Cart</a>
+                  <a href="#"> + {{ translate("Add To Cart", "Common") }}</a>
                 </div>
               </div>
               <div class="pro-details-wish-com">
                 <div class="pro-details-wishlist">
-                  <a href="wishlist.html"><i class="ion-android-favorite-outline"></i>Add to wishlist</a>
+                  <a href="wishlist.html"><i class="ion-android-favorite-outline"></i>{{ translate("Add to wishlist", "Common") }}</a>
                 </div>
                 <div class="pro-details-compare">
-                  <a href="compare.html"><i class="ion-ios-shuffle-strong"></i>Add to compare</a>
+                  <a href="compare.html"><i class="ion-ios-shuffle-strong"></i>{{ translate("Add to compare", "Common") }}</a>
                 </div>
               </div>
               <div class="pro-details-social-info">
-                <span>Share</span>
+                <span>{{ translate("Share", "Common") }}</span>
                 <div class="social-info">
                   <ul>
                     <li>
@@ -333,7 +333,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-body" style="padding: 2rem;">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="{{ translate("Close", "Common") }}">
           <span aria-hidden="true"><i class="ion-ios-close-empty"></i></span>
         </button>
         <div class="row no-gutters">
@@ -344,20 +344,20 @@
             <div class="popup_content">
               <div class="popup-text">
                 <div class="heading_s1">
-                  <h4>Subscribe</h4>
+                  <h4>{{ translate("Subscribe", "Common") }}</h4>
                 </div>
-                <p>Subscribe to the newsletter</p>
+                <p>{{ translate("Subscribe to the newsletter", "Common") }}</p>
               </div>
               <form method="post">
                 <div class="form-group">
                   <div class="row">
                     <div class="col-6 btn-config">
-                      <button type="button" class="btn btn-fill-out btn-block rounded-0 btn-confirm AbeloModalButton" title="">Confirm</button>
+                      <button type="button" class="btn btn-fill-out btn-block rounded-0 btn-confirm AbeloModalButton" title="">{{ translate("Confirm", "Common") }}</button>
                     </div>
                     <div class="col-6">
                       <button type="button" class="btn btn-fill-line btn-block rounded-0 btn-cancel AbeloModalButton" title=""
                               onclick="AbeloThemeCart.closeModals(['#onload-popup', '#quickViewModal']);">
-                        Cancel
+                        {{ translate("Cancel", "Common") }}
                       </button>
                     </div>
                   </div>
@@ -366,7 +366,7 @@
               <!-- <div class="check-form">
                 <div class="custom-checkbox">
                   <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox3" value="">
-                  <label class="form-check-label" for="exampleCheckbox3"><span>Don't show this popup again!</span></label>
+                  <label class="form-check-label" for="exampleCheckbox3"><span>{{ translate("Don't show this popup again!", "Common") }}</span></label>
                 </div>
               </div> -->
             </div>

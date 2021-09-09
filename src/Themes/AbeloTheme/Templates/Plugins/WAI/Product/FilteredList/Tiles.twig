@@ -3,13 +3,13 @@
     <div class="section-title">
       <h2>
         {% if filterType == 'discounted' %}
-          Discounted products
+          {{ translate("Discounted products", "Product") }}
         {% elseif filterType == 'news' %}
-          New products
+          {{ translate("New products", "Product") }}
         {% elseif filterType == 'top' %}
-          Top products
+          {{ translate("Top products", "Product") }}
         {% elseif filterType == 'recommended' %}
-          Recommended products
+          {{ translate("Recommended products", "Product") }}
         {% endif %}
       </h2>
     </div>
@@ -55,9 +55,9 @@
                     {% if filterType == 'discounted' %}
                       <span>- {{ product.price.discountTotal|number_format(2, ",", " ") }}%</span>
                     {% elseif filterType == 'news' %}
-                      <span>NEW</span>
+                      <span>{{ translate("New", "Product") }}</span>
                     {% elseif filterType == 'top' %}
-                      <span style="color: red">TOP</span>
+                      <span style="color: red">{{ translate("Top", "Product") }}</span>
                     {% endif %}
                   </li>
                 </ul>

@@ -30,10 +30,10 @@
       </div>
       <div class="buttons">
         <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Order/CartOverview', 'getWebPageUrl') }}" class="btn btn-dark btn-hover-primary mb-30px">
-          {{ translate("view cart") }}
+          {{ translate("View cart") }}
         </a>
         <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Order/Checkout', 'getWebPageUrl') }}" class="btn btn-outline-dark current-btn">
-          {{ translate("checkout") }}
+          {{ translate("Checkout") }}
         </a>
       </div>
       <!--<p class="minicart-message">Free Shipping on All Orders Over $100!</p>-->
@@ -68,7 +68,7 @@
             <a 
               class="empty-cart-btn" 
               href="{{ rootUrl }}/{{ callPluginMethod('WAI/Product/Catalog', 'getWebPageUrl') }}">
-              <i class="ion-ios-arrow-left"> </i> Continue shopping
+              <i class="ion-ios-arrow-left"> </i> {{ translate("Continue shopping") }}
             </a>
           </div>
         </div>

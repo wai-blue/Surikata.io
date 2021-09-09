@@ -28,22 +28,22 @@
         >
           <i class="fa fa-list"></i>
         </a>
-          <p>There Are {{ catalogInfo.productCount }} Products.</p>
+          <p>{{ translate("There Are", "Product") }} {{ catalogInfo.productCount }} {{ translate("Products", "Product") }}.</p>
       </div>
       <!-- Left Side End -->
       <!-- Right Side Start -->
       <div class="select-shoing-wrap d-flex">
         <div class="shot-product">
-          <p>Sort By:</p>
+          <p>{{ translate("Sort by", "Product") }}:</p>
         </div>
         <div class="shop-select">
           <select name="sort" onchange="changeProductSorting(this)">
-            <option value="date" {% if sorting == "date" %} selected {% endif %}>Sort by newness</option>
-            <option value="title" {% if sorting == "title" %} selected {% endif %}>A to Z</option>
-            <option value="title_desc" {% if sorting == "title_desc" %} selected {% endif %}>Z to A</option>
-            <option value="price" {% if sorting == "price" %} selected {% endif %}>Price ascending</option>
-            <option value="price_desc" {% if sorting == "price_desc" %} selected {% endif %}>Price descending</option>
-            <!--<option value="storage" {% if sorting == "storage" %} selected {% endif %}>In stock</option>-->
+            <option value="date" {% if sorting == "date" %} selected {% endif %}>{{ translate("Sort by newness", "Product") }}</option>
+            <option value="title" {% if sorting == "title" %} selected {% endif %}>{{ translate("A to Z", "Product") }}</option>
+            <option value="title_desc" {% if sorting == "title_desc" %} selected {% endif %}>{{ translate("Z to A", "Product") }}</option>
+            <option value="price" {% if sorting == "price" %} selected {% endif %}>{{ translate("Price ascending", "Product") }}</option>
+            <option value="price_desc" {% if sorting == "price_desc" %} selected {% endif %}>{{ translate("Price descending", "Product") }}</option>
+            <!--<option value="storage" {% if sorting == "storage" %} selected {% endif %}>{{ translate("In stock", "Product") }}</option>-->
           </select>
         </div>
       </div>
@@ -89,10 +89,10 @@
                           </a>
                         </li>
                         <li>
-                          <a href="wishlist.html" title="Add to Wishlist"><i class="lnr lnr-heart"></i></a>
+                          <a href="wishlist.html" title="{{ translate("Add to Wishlist", "Product") }}"><i class="lnr lnr-heart"></i></a>
                         </li>
                         <li>
-                          <a href="compare.html" title="Add to compare"><i class="lnr lnr-sync"></i></a>
+                          <a href="compare.html" title="{{ translate("Add to compare", "Product") }}"><i class="lnr lnr-sync"></i></a>
                         </li>
                       </ul>
                     </div>
@@ -126,7 +126,8 @@
                       href="javascript:void(0)"
                       onclick="AbeloThemeCart.addProduct({{ product.id }}, 1);" 
                       class="add-to-curt" 
-                      title="Add to cart">Add to cart
+                      title="{{ translate("Add to cart", "Product") }}">
+                      {{ translate("Add to cart", "Product") }}
                     </a>
                   </div>
                 </div>
@@ -201,7 +202,8 @@
                                 href="javascript:void(0)"
                                 onclick="AbeloThemeCart.addProduct({{ product.id }}, 1);" 
                                 class="add-to-curt" 
-                                title="Add to cart">Add to cart
+                                title="{{ translate("Add to cart", "Product") }}">
+                                {{ translate("Add to cart", "Product") }}
                               </a>
                             </div>
                             <!--<div class="add-to-link">
@@ -253,7 +255,7 @@
               class='load-btn' 
               onclick="AbeloThemeProductCatalog.loadNextPage().updatePagination();" 
               {% if catalogInfo.lastPage <= catalogInfo.page %} disabled {% endif %}
-            >More products</button>
+            >{{ translate("More products", "Product") }}</button>
           </div>
         </div>
       {% endif %}

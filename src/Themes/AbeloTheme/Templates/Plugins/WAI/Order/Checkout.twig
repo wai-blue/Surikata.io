@@ -6,18 +6,18 @@
           {% if not user.isLogged %}
             {% if user.loginFailed %}
               <p style="color:red">
-                Nepodarilo sa prihlásiť.
+                {{ translate("Failed to log in.", "Order") }}
               </p>
             {% endif %}
             <div class="checkout-account">
-              <label>Have you already account?</label>
-              <span class="checkout-toggle2">Login</span>
+              <label>{{ translate("Have you already account?", "Order") }}</label>
+              <span class="checkout-toggle2">{{ translate("Login", "Order") }}</span>
             </div>
             <div class="checkout-account-toggle open-toggle2 mb-5">
               <form method="post" id="loginForm">
                 <input type="hidden" name="doLogin" value="1" />
-                <input placeholder="Email address" name="loginEmail" type="email"/>
-                <input placeholder="Password" name="loginPassword" type="password"/>
+                <input placeholder="{{ translate("Email address", "Order") }}" name="loginEmail" type="email"/>
+                <input placeholder="{{ translate("Password", "Order") }}" name="loginPassword" type="password"/>
                 <button 
                   class="btn-hover checkout-btn" 
                   type="submit"
@@ -26,7 +26,7 @@
               </form>
             </div>
           {% elseif userLogged.ADDRESSES|length > 0 %}
-            <h3>List of your adresses</h3>
+            <h3>{{ translate("List of your adresses", "Order") }}</h3>
             {% for address in userLogged.ADDRESSES %}
               <input
                 type="radio" name="id_adresa" id="id_adresa_{{ address.id }}"
@@ -70,11 +70,11 @@
           <div class="row mt-5">
             <div class="col-lg-7">
               <div class="billing-info-wrap">
-                <h3>Billing Details</h3>
+                <h3>{{ translate("Billing Details", "Order") }}</h3>
                   <div class="row">
                     <div class="col-lg-6 col-md-6">
                       <div class="billing-info mb-20px">
-                        <label>First Name<span class="input-required"> *</span>
+                        <label>{{ translate("First Name", "Order") }}<span class="input-required"> *</span>
                         </label>
                         <input type="text" 
                           name="inv_given_name"
@@ -85,7 +85,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6">
                       <div class="billing-info mb-20px">
-                        <label>Last Name<span class="input-required"> *</span></label>
+                        <label>{{ translate("Last Name", "Order") }}<span class="input-required"> *</span></label>
                         <input 
                           type="text" 
                           name="inv_family_name"
@@ -96,7 +96,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6">
                       <div class="billing-info mb-20px">
-                        <label>Town / City<span class="input-required"> *</span></label>
+                        <label>{{ translate("Town / City", "Order") }}<span class="input-required"> *</span></label>
                         <input 
                           type="text" 
                           name="inv_city"
@@ -106,7 +106,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6">
                       <div class="billing-info mb-20px">
-                        <label>Postcode / ZIP<span class="input-required"> *</span></label>
+                        <label>{{ translate("Postcode / ZIP", "Order") }}<span class="input-required"> *</span></label>
                         <input 
                           type="text"
                           name="inv_zip"
@@ -116,16 +116,16 @@
                     </div>
                     <div class="col-lg-12">
                       <div class="billing-info mb-20px">
-                        <label>Street Address<span class="input-required"> *</span></label>
+                        <label>{{ translate("Street Address", "Order") }}<span class="input-required"> *</span></label>
                         <input 
                           class="billing-address" 
-                          placeholder="House number and street name" 
+                          placeholder="{{ translate("House number and street name", "Order") }}" 
                           type="text" 
                           name="inv_street_1"
                           required 
                         />
                         <input 
-                          placeholder="Apartment, suite, unit etc." 
+                          placeholder="{{ translate("Apartment, suite, unit etc.", "Order") }}" 
                           type="text"
                           name="inv_street_2"
                           required 
@@ -134,7 +134,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6">
                       <div class="billing-info mb-20px">
-                        <label>Phone<span class="input-required"> *</span></label>
+                        <label>{{ translate("Phone", "Order") }}<span class="input-required"> *</span></label>
                         <input 
                           type="text" 
                           name="phone_number"
@@ -144,7 +144,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6">
                       <div class="billing-info mb-20px">
-                        <label>Email Address<span class="input-required"> *</span></label>
+                        <label>{{ translate("Email Address", "Order") }}<span class="input-required"> *</span></label>
                         <input 
                           type="email"
                           name="email"
@@ -155,47 +155,47 @@
                     </div>
                   </div>
                   <div class="additional-info-wrap">
-                    <h4>Additional information</h4>
+                    <h4>{{ translate("Additional information", "Order") }}</h4>
                     <div class="additional-info">
-                      <label>Order notes</label>
-                      <textarea name="notes" placeholder="Notes about your order, e.g. special notes for delivery. " name="notes"></textarea>
+                      <label>{{ translate("Order notes", "Order") }}</label>
+                      <textarea name="notes" placeholder="{{ translate("Notes about your order, e.g. special notes for delivery.", "Order") }}" name="notes"></textarea>
                     </div>
                   </div>
                   <div class="checkout-account mt-25">
                     <input class="checkout-toggle" type="checkbox" name="differentDeliveryAddress" id="differentDeliveryAddressCheckbox" value="1"/>
-                    <label for="differentDeliveryAddressCheckbox">Ship to a different address?</label>
+                    <label for="differentDeliveryAddressCheckbox">{{ translate("Ship to a different address?", "Order") }}</label>
                   </div>
                   <div class="different-address open-toggle mt-30px">
                     <div class="row">
                       <div class="col-lg-6 col-md-6">
                         <div class="billing-info mb-20px">
-                          <label>First Name<span class="input-required"> *</span></label>
+                          <label>{{ translate("First Name", "Order") }}<span class="input-required"> *</span></label>
                           <input type="text" name="del_given_name" required/>
                         </div>
                       </div>
                       <div class="col-lg-6 col-md-6">
                         <div class="billing-info mb-20px">
-                          <label>Last Name<span class="input-required"> *</span></label>
+                          <label>{{ translate("Last Name", "Order") }}<span class="input-required"> *</span></label>
                           <input type="text" name="del_family_name" required/>
                         </div>
                       </div>
                       <div class="col-lg-6 col-md-6">
                         <div class="billing-info mb-20px">
-                          <label>Town / City<span class="input-required"> *</span></label>
+                          <label>{{ translate("Town / City", "Order") }}<span class="input-required"> *</span></label>
                           <input type="text" name="del_city" required/>
                         </div>
                       </div>
                       <div class="col-lg-6 col-md-6">
                         <div class="billing-info mb-20px">
-                          <label>Postcode / ZIP<span class="input-required"> *</span></label>
+                          <label>{{ translate("Postcode / ZIP", "Order") }}<span class="input-required"> *</span></label>
                           <input type="text" name="del_zip" required/>
                         </div>
                       </div>
                       <div class="col-lg-12">
                         <div class="billing-info mb-20px">
-                          <label>Street Address</label>
-                          <input class="billing-address" placeholder="House number and street name" type="text" name="del_street_1" required/>
-                          <input placeholder="Apartment, suite, unit etc." type="text" name="del_street_2" required/>
+                          <label>{{ translate("Street Address", "Order") }}</label>
+                          <input class="billing-address" placeholder="{{ translate("House number and street name", "Order") }}" type="text" name="del_street_1" required/>
+                          <input placeholder="{{ translate("Apartment, suite, unit etc.", "Order") }}" type="text" name="del_street_2" required/>
                         </div>
                       </div>
                     </div>
@@ -206,7 +206,7 @@
                         type="checkbox"
                         name="general_terms_and_conditions"
                         id="general_terms_and_conditions"
-                      >{{ translate("I have read the terms and conditions") }}
+                      >{{ translate("I have read the terms and conditions", "Order") }}
                       <span class="input-required"> *</span>
                     </label>
 
@@ -215,7 +215,7 @@
                       type="checkbox"
                       name="gdpr_consent"
                       id="gdpr_consent"
-                      >{{ translate("I agree to the processing of personal data for the processing of the order") }}
+                      >{{ translate("I agree to the processing of personal data for the processing of the order", "Order") }}
                       <span class="input-required"> *</span>
                     </label>
 
@@ -224,7 +224,7 @@
                         type="checkbox"
                         name="marketingAgreement"
                         id="marketingAgreement"
-                      >{{ translate("I agree to the processing of personal data for the purpose of sending marketing information") }}
+                      >{{ translate("I agree to the processing of personal data for the purpose of sending marketing information", "Order") }}
                     </label>
                   </div>
                 </div>
@@ -232,13 +232,13 @@
               <div class="col-lg-5 mt-md-30px mt-lm-30px ">
                 <div id="order-area">
                   <div class="your-order-area">
-                    <h3>Your order</h3>
+                    <h3>{{ translate("Your order", "Order") }}</h3>
                     <div class="your-order-wrap gray-bg-4">
                       <div class="your-order-product-info">
                         <div class="your-order-top">
                           <ul>
-                            <li>Product</li>
-                            <li>Total</li>
+                            <li>{{ translate("Product", "Order") }}</li>
+                            <li>{{ translate("Total", "Order") }}</li>
                           </ul>
                         </div>
                         <div class="your-order-middle">
@@ -254,9 +254,7 @@
                               <div class="panel payment-accordion">
                                 <div class="panel-heading mb-2" id="method-one">
                                   <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#method2">
-                                      Shipping
-                                    </a>
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#method2">{{ translate("Shipping", "Order") }}</a>
                                   </h4>
                                 </div>
                                 {% for deliveryService in deliveryServices %}
@@ -285,9 +283,7 @@
                               <div class="panel payment-accordion">
                                 <div class="panel-heading mb-2" id="method-one">
                                   <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#method1">
-                                      Payments
-                                    </a>
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#method1">{{ translate("Payments", "Order") }}</a>
                                   </h4>
                                 </div>
                                 {% for paymentMethod in paymentMethods %}
@@ -312,9 +308,9 @@
                         </div>
                         <div class="your-order-total">
                           <ul>
-                            <li class="order-total">Shipping</li>
+                            <li class="order-total">{{ translate("Shipping", "Order") }}</li>
                             <li>{{ deliveryPrice|number_format(2, ",", " ") }} €</li>
-                            <li class="order-total">Total</li>
+                            <li class="order-total">{{ translate("Total", "Order") }}</li>
                             <li>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
                           </ul>
                         </div>
@@ -325,7 +321,7 @@
                         class="btn-hover" 
                         href="javascript:void(0)"
                         onclick="AbeloThemeCart.placeOrder()"
-                      >Place Order</a>
+                      >{{ translate("Place Order", "Order") }}</a>
                     </div>
                   </div>
                 </div>
@@ -337,9 +333,9 @@
         <div class="col-md-12">
           <div class="empty-text-contant text-center">
             <i class="lnr lnr-cart"></i>
-            <h1>There are no more items in your cart</h1>
+            <h1>{{ translate("There are no more items in your cart", "Order") }}</h1>
             <a class="empty-cart-btn" href="javascript:void(0);">
-              <i class="ion-ios-arrow-left"> </i> Continue shopping
+              <i class="ion-ios-arrow-left"> </i> {{ translate("Continue shopping", "Order") }}
             </a>
           </div>
         </div>
@@ -350,13 +346,13 @@
 
 {% if _GET.renderOnly == "orderOverview" %}
    <div class="your-order-area">
-    <h3>Your order</h3>
+    <h3>{{ translate("Your order", "Order") }}</h3>
     <div class="your-order-wrap gray-bg-4">
       <div class="your-order-product-info">
         <div class="your-order-top">
           <ul>
-            <li>Product</li>
-            <li>Total</li>
+            <li>{{ translate("Product", "Order") }}</li>
+            <li>{{ translate("Total", "Order") }}</li>
           </ul>
         </div>
         <div class="your-order-middle">
@@ -372,9 +368,7 @@
               <div class="panel payment-accordion">
                 <div class="panel-heading mb-2" id="method-one">
                   <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#method1">
-                      Shipping
-                    </a>
+                    <a data-toggle="collapse" data-parent="#accordion" href="#method1">{{ translate("Shipping", "Order") }}</a>
                   </h4>
                 </div>
                 {% for deliveryService in deliveryServices %}
@@ -403,9 +397,7 @@
               <div class="panel payment-accordion">
                 <div class="panel-heading mb-2" id="method-one">
                   <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#method1">
-                      Payments
-                    </a>
+                    <a data-toggle="collapse" data-parent="#accordion" href="#method1">{{ translate("Payments", "Order") }}</a>
                   </h4>
                 </div>
                 {% for paymentMethod in paymentMethods %}
@@ -430,9 +422,9 @@
         </div>
         <div class="your-order-total">
           <ul>
-            <li class="order-total">Shipping</li>
+            <li class="order-total">{{ translate("Shipping", "Order") }}</li>
             <li>{{ deliveryPrice|number_format(2, ",", " ") }} €</li>
-            <li class="order-total">Total</li>
+            <li class="order-total">{{ translate("Total", "Order") }}</li>
             <li>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
           </ul>
         </div>
@@ -443,7 +435,7 @@
         class="btn-hover" 
         href="javascript:void(0)"
         onclick="AbeloThemeCart.placeOrder()"
-      >Place Order</a>
+      >{{ translate("Place Order", "Order") }}</a>
     </div>
   </div>
 {% endif %}

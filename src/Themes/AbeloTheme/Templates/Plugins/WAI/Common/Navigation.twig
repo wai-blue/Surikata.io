@@ -28,15 +28,15 @@
             <li>
               {% if user.isLogged %}
                 <div class="dropdown">
-                  <button type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Môj účet <i class="ion-ios-arrow-down"></i></button>
+                  <button type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ translate("My account", "Common") }} <i class="ion-ios-arrow-down"></i></button>
                   <ul class="dropdown-menu animation slideDownIn" aria-labelledby="dropdownMenuButton">
-                    <li><a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/Home', 'getWebPageUrl') }}">Môj účet</a></li>
-                    <li><a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/Home', 'getWebPageUrl') }}">Checkout</a></li>
-                    <li><a href='?doLogout=1'>Odhlásiť sa</a></li>
+                    <li><a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/Home', 'getWebPageUrl') }}">{{ translate("My account", "Common") }}</a></li>
+                    <li><a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/Home', 'getWebPageUrl') }}">{{ translate("Checkout", "Common") }}</a></li>
+                    <li><a href='?doLogout=1'>{{ translate("Logout", "Common") }}</a></li>
                   </ul>
                 </div>
               {% else %}
-                <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/Login', 'getWebPageUrl') }}">Prihlásiť sa</a>
+                <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/Login', 'getWebPageUrl') }}">{{ translate("Login") }}</a>
               {% endif %}
             </li>
             {% if languages|length > 1 %}
@@ -80,7 +80,7 @@
               <form class="d-flex" action="#" onsubmit="return false;">
                 <div class="search-category">
                   <select>
-                    <option value="0">All categories</option>
+                    <option value="0">{{ translate("All categories", "Common") }}</option>
                     <option value="12">Laptop</option>
                     <option value="13">- - Hot Categories</option>
                     <option value="19">- - - - Dresses</option>
@@ -184,8 +184,8 @@
                     <option value="112">Games &amp; Consoles</option>
                   </select>
                 </div>
-                <input id="headerSearch" type="text" placeholder="Enter your search key ... " autocomplete="off" onkeypress="searchKeyPressCallback(event, this)" />
-                <button onclick="sendSearchData('headerSearch')" type="button">Search</button>
+                <input id="headerSearch" type="text" placeholder="{{ translate("Enter your search key ...", "Common") }}" autocomplete="off" onkeypress="searchKeyPressCallback(event, this)" />
+                <button onclick="sendSearchData('headerSearch')" type="button">{{ translate("Search", "Common") }}</button>
               </form>
             </div>
             <!--Cart info Start -->
@@ -194,7 +194,7 @@
                 <!--<a href="#offcanvas-wishlist" class="heart offcanvas-toggle"><i class="lnr lnr-heart"></i><span>Wishlist</span></a>-->
                 <a href="#offcanvas-cart" cart-count="{{ cartContents.items|length }}" class="bag offcanvas-toggle">
                   <i class="lnr lnr-cart"></i>
-                  <span>My Cart</span>
+                  <span>{{ translate("My Cart", "Common") }}</span>
                 </a>
               </div>
             </div>
@@ -210,7 +210,7 @@
       <div class="row">
         <div class="col-lg-3">
           <div class="header-menu-vertical">
-            <h4 class="menu-title">Browse Categories </h4>
+            <h4 class="menu-title">{{ translate("Browse Categories", "Common") }}</h4>
             <ul class="menu-content display-none">
               <li class="menu-item"><a href="#">Televisions</a></li>
               <li class="menu-item">
@@ -312,8 +312,8 @@
                 <div class="col-8 col-xl-9">
                   <div class="fixed-menu-search-form">
                     <form class="d-flex" action="#" onsubmit="return false;">
-                      <input id="headerSearch_2" type="text" placeholder="Enter your search key ... " autocomplete="off" onkeypress="searchKeyPressCallback(event, this)" />
-                      <button onclick="sendSearchData('headerSearch_2')" type="button">Search</button>
+                      <input id="headerSearch_2" type="text" placeholder="{{ translate("Enter your search key ...", "Common") }}" autocomplete="off" onkeypress="searchKeyPressCallback(event, this)" />
+                      <button onclick="sendSearchData('headerSearch_2')" type="button">{{ translate("Search", "Common") }}</button>
                     </form>
                   </div>
                 </div>
@@ -324,7 +324,7 @@
                       <!--<a href="#offcanvas-wishlist" class="heart offcanvas-toggle"><i class="lnr lnr-heart"></i><span>Wishlist</span></a>-->
                       <a href="#offcanvas-cart" cart-count="{{ cartContents.items|length }}" class="bag offcanvas-toggle">
                         <i class="lnr lnr-cart"></i>
-                        <span>My Cart</span>
+                        <span>{{ translate("My Cart", "Common") }}</span>
                       </a>
                     </div>
                   </div>
@@ -530,7 +530,7 @@
           <form class="d-flex" action="#">
             <div class="search-category">
               <select>
-                <option value="0">All categories</option>
+                <option value="0">{{ translate("All categories", "Common") }}</option>
                 <option value="12">Laptop</option>
                 <option value="13">- - Hot Categories</option>
                 <option value="19">- - - - Dresses</option>
@@ -634,7 +634,7 @@
                 <option value="112">Games &amp; Consoles</option>
               </select>
             </div>
-            <input type="text" placeholder="Enter your search key ... " />
+            <input type="text" placeholder="{{ translate("Enter your search key", "Common") }}" />
             <button><i class="lnr lnr-magnifier"></i></button>
           </form>
         </div>
@@ -653,7 +653,7 @@
           <!-- Category Toggle Wrap -->
           <div class="category-toggle-wrap">
             <!-- Category Toggle -->
-            <button class="category-toggle"><i class="fa fa-bars"></i> All Categories</button>
+            <button class="category-toggle"><i class="fa fa-bars"></i> {{ translate("All Categories", "Common") }}</button>
           </div>
 
           <!-- Category Menu -->
@@ -722,7 +722,7 @@
               <li class="menu-item"><a href="#"> Smart Home Appliances</a></li>
               <li class="hidden"><a href="#">Projectors</a></li>
               <li>
-                <a href="#" id="more-btn"><i class="ion-ios-plus-empty" aria-hidden="true"></i> More Categories</a>
+                <a href="#" id="more-btn"><i class="ion-ios-plus-empty" aria-hidden="true"></i> {{ translate("More Categories", "Common") }}</a>
               </li>
             </ul>
           </nav>
@@ -738,7 +738,7 @@
 <div id="offcanvas-wishlist" class="offcanvas offcanvas-wishlist">
   <div class="inner">
     <div class="head">
-      <span class="title">Wishlist</span>
+      <span class="title">{{ translate("Wishlist", "Common") }}</span>
       <button class="offcanvas-close">×</button>
     </div>
     <div class="body customScroll">
@@ -771,7 +771,7 @@
     </div>
     <div class="foot">
       <div class="buttons">
-        <a href="wishlist.html" class="btn btn-dark btn-hover-primary mt-30px">view wishlist</a>
+        <a href="wishlist.html" class="btn btn-dark btn-hover-primary mt-30px">{{ translate("View wishlist") }}</a>
       </div>
     </div>
   </div>
@@ -782,7 +782,7 @@
 <div id="offcanvas-cart" class="offcanvas offcanvas-cart">
   <div class="inner">
     <div class="head">
-      <span class="title">{{ translate("Cart") }}</span>
+      <span class="title">{{ translate("Cart", "Common") }}</span>
       <button class="offcanvas-close">×</button>
     </div>
     <div id="navigationCartOverview">
@@ -801,7 +801,7 @@
     </div>
     <div class="offcanvas-menu-search-form">
       <form action="#">
-        <input type="text" placeholder="Search...">
+        <input type="text" placeholder="{{ translate("Search...", "Common") }}">
         <button><i class="lnr lnr-magnifier"></i></button>
       </form>
     </div>

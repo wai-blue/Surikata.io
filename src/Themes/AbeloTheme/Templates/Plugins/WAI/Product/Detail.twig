@@ -31,16 +31,16 @@
 
           <div class="product-label-group" style="flex-direction: row;">
             {% if productInfo.is_new == 1 %}
-              <label class="product-label label-new" style="margin-right: 5px;">new</label>
+              <label class="product-label label-new" style="margin-right: 5px;">{{ translate("New", "Product") }}</label>
             {% endif %}
             {% if productInfo.is_sale_out == 1 %}
-              <label class="product-label label-sale" style="margin-right: 5px;">sale</label>
+              <label class="product-label label-sale" style="margin-right: 5px;">{{ translate("Sale", "Product") }}</label>
             {% endif %}
             {% if productInfo.is_on_sale == 1 %}
-              <label class="product-label label-stock" style="margin-right: 5px;">action</label>
+              <label class="product-label label-stock" style="margin-right: 5px;">{{ translate("Action", "Product") }}</label>
             {% endif %}
             {% if productInfo.is_recommended == 1 or productInfo.is_top == 1 %}
-              <label class="product-label label-top" style="margin-right: 5px;">{{ productInfo.is_top == 1 ? "top" : "recommended" }}</label>
+              <label class="product-label label-top" style="margin-right: 5px;">{{ productInfo.is_top == 1 ? "{{ translate("Top", "Product") }}" : "{{ translate("Recommended", "Product") }}" }}</label>
             {% endif %}
           </div>
 
@@ -80,19 +80,19 @@
                       AbeloThemePopup
                         .setImage('{{ uploadedFileUrl }}/{{ productInfo.image }}')
                         .setTitle($('.pr_detail .product_title a').text())
-                        .setSubTitle('Produkt bol pridaný do košíka.')
-                        .setConfirmButtonText('Prejsť na objednávku')
+                        .setSubTitle('{{ translate("The product has been added to the cart.", "Product") }}')
+                        .setConfirmButtonText('{{ translate("Go to order", "Product") }}')
                         .setConfirmButtonOnclick(function() {
                           window.location.href = '{{ rootUrl }}/{{ callPluginMethod('WAI/Order/CartOverview', 'getWebPageUrl') }}';
                           return false;
                         })
-                        .setCancelButtonText('Pokračovať v nákupe')
+                        .setCancelButtonText('{{ translate("Continue shopping", "Product") }}')
                         .show()
                       ;
                     }
                   );
                 "
-              >  Add To Cart</a>
+              >  {{ translate("Add To Cart", "Product") }}</a>
             </div>
           </div>
           <!--<div class="pro-details-wish-com">
@@ -150,8 +150,8 @@
   <div class="container">
     <div class="description-review-wrapper">
       <div class="description-review-topbar nav">
-        <a data-toggle="tab" href="#des-details1">Description</a>
-        <a class="active" data-toggle="tab" href="#des-details2">Product Details</a>
+        <a data-toggle="tab" href="#des-details1">{{ translate("Description", "Product") }}</a>
+        <a class="active" data-toggle="tab" href="#des-details2">{{ translate("Product Details", "Product") }}</a>
         <!--<a data-toggle="tab" href="#des-details3">Reviews (2)</a>-->
       </div>
       <div class="tab-content description-review-bottom">
@@ -188,16 +188,16 @@
                     <div class="review-top-wrap">
                       <div class="review-left">
                         <div class="review-name">
-                          <h4>White Lewis</h4>
+                          <h4>{{ translate("White Lewis", "Product") }}</h4>
                         </div>
                       </div>
                       <div class="review-left">
-                        <a href="#">Reply</a>
+                        <a href="#">{{ translate("Reply", "Product") }}</a>
                       </div>
                     </div>
                     <div class="review-bottom">
                       <p>
-                        Vestibulum ante ipsum primis aucibus orci luctustrices posuere cubilia Curae Suspendisse viverra ed viverra. Mauris ullarper euismod vehicula. Phasellus quam nisi, congue id nulla.
+                        {{ translate("Vestibulum ante ipsum primis aucibus orci luctustrices posuere cubilia Curae Suspendisse viverra ed viverra. Mauris ullarper euismod vehicula. Phasellus quam nisi, congue id nulla.", "Product") }}
                       </p>
                     </div>
                   </div>
@@ -210,7 +210,7 @@
                     <div class="review-top-wrap">
                       <div class="review-left">
                         <div class="review-name">
-                          <h4>White Lewis</h4>
+                          <h4>{{ translate("White Lewis", "Product") }}</h4>
                         </div>
                         <div class="rating-product">
                           <i class="ion-android-star"></i>
@@ -221,11 +221,11 @@
                         </div>
                       </div>
                       <div class="review-left">
-                        <a href="#">Reply</a>
+                        <a href="#">{{ translate("Reply", "Product") }}</a>
                       </div>
                     </div>
                     <div class="review-bottom">
-                      <p>Vestibulum ante ipsum primis aucibus orci luctustrices posuere cubilia Curae Sus pen disse viverra ed viverra. Mauris ullarper euismod vehicula.</p>
+                      <p>{{ translate("Vestibulum ante ipsum primis aucibus orci luctustrices posuere cubilia Curae Sus pen disse viverra ed viverra. Mauris ullarper euismod vehicula.", "Product") }}</p>
                     </div>
                   </div>
                 </div>
@@ -233,11 +233,11 @@
             </div>
             <div class="col-lg-5">
               <div class="ratting-form-wrapper pl-50">
-                <h3>Add a Review</h3>
+                <h3>{{ translate("Add a Review", "Product") }}</h3>
                 <div class="ratting-form">
                   <form action="#">
                     <div class="star-box">
-                      <span>Your rating:</span>
+                      <span>{{ translate("Your rating", "Product") }}:</span>
                       <div class="rating-product">
                         <i class="ion-android-star"></i>
                         <i class="ion-android-star"></i>
@@ -249,18 +249,18 @@
                     <div class="row">
                       <div class="col-md-6">
                         <div class="rating-form-style mb-10">
-                          <input placeholder="Name" type="text" />
+                          <input placeholder="{{ translate("Name", "Product") }}" type="text" />
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="rating-form-style mb-10">
-                          <input placeholder="Email" type="email" />
+                          <input placeholder="{{ translate("Email", "Product") }}" type="email" />
                         </div>
                       </div>
                       <div class="col-md-12">
                         <div class="rating-form-style form-submit">
-                          <textarea name="Your Review" placeholder="Message"></textarea>
-                          <input type="submit" value="Submit" />
+                          <textarea name="Your Review" placeholder="{{ translate("Message", "Product") }}"></textarea>
+                          <input type="submit" value="{{ translate("Submit", "Product") }}" />
                         </div>
                       </div>
                     </div>
@@ -281,7 +281,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="section-title">
-            <h2>Accessories</h2>
+            <h2>{{ translate("Accessories", "Product") }}</h2>
           </div>
         </div>
       </div>
@@ -314,20 +314,20 @@
                         <li class="tag new">-{{ product.priceInfo.discountTotal|number_format(2, ",", " ") }} %</li>
                       {% endif %}
                       {% if product.is_new == 1 %}
-                        <li class="tag new">new</li>
+                        <li class="tag new">{{ translate("New", "Product") }}</li>
                       {% endif %}
                       {% if product.is_sale_out == 1 %}
-                        <li class="tag sale">sale</li>
+                        <li class="tag sale">{{ translate("Sale", "Product") }}</li>
                       {% endif %}
                       {% if product.is_on_sale == 1 %}
-                        <li class="tag action">action</li>
+                        <li class="tag action">{{ translate("Action", "Product") }}</li>
                       {% endif %}
                       {% if product.is_recommended == 1 or product.is_top == 1 %}
-                        <li class="tag sale">{{ product.is_top == 1 ? "top" : "recommended" }}</li>
+                        <li class="tag sale">{{ product.is_top == 1 ? "{{ translate("Top", "Product") }}" : "{{ translate("Recommended", "Product") }}" }}</li>
                       {% endif %}
                     </ul>
                     <div class="product-decs">
-                      <a class="inner-link" href="shop-4-column.html"><span>STUDIO DESIGN</span></a>
+                      <a class="inner-link" href="shop-4-column.html"><span>{{ translate("STUDIO DESIGN", "Product") }}</span></a>
                       <h2><a href="single-product.html" class="product-link">{{ product.name_lang_1 }}</a></h2>
                       <div class="pricing-meta">
                         <ul>
@@ -341,8 +341,8 @@
                         href="javascript:void(0)"
                         onclick="AbeloThemeCart.addProduct({{ product.id }}, 1);" 
                         class="add-to-curt" 
-                        title="Add to cart">
-                      Add to cart</a>
+                        title="{{ translate("Add to cart", "Product") }}">
+                      {{ translate("Add to cart", "Product") }}</a>
                     </div>
                   </div>
                 </article>
@@ -364,7 +364,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="section-title">
-            <h2>Similarly products</h2>
+            <h2>{{ translate("Similarly products", "Product") }}</h2>
           </div>
         </div>
       </div>
@@ -385,7 +385,7 @@
                       <div class="add-to-link">
                         <ul>
                           <li>
-                            <a class="quick_view" href="{{ rootUrl}}/{{ product.url }}" data-link-action="quickview" title="Quick view" data-toggle="modal" data-target="#exampleModal">
+                            <a class="quick_view" href="{{ rootUrl}}/{{ product.url }}" data-link-action="quickview" title="{{ translate("Quick view", "Product") }}" data-toggle="modal" data-target="#exampleModal">
                               <i class="lnr lnr-magnifier"></i>
                             </a>
                           </li>
@@ -397,16 +397,16 @@
                         <li class="tag new">-{{ product.priceInfo.discountTotal|number_format(2, ",", " ") }} %</li>
                       {% endif %}
                       {% if product.is_new == 1 %}
-                        <li class="tag new">new</li>
+                        <li class="tag new">{{ translate("New", "Product") }}</li>
                       {% endif %}
                       {% if product.is_sale_out == 1 %}
-                        <li class="tag sale">sale</li>
+                        <li class="tag sale">{{ translate("Sale", "Product") }}</li>
                       {% endif %}
                       {% if product.is_on_sale == 1 %}
-                        <li class="tag action">action</li>
+                        <li class="tag action">{{ translate("Action", "Product") }}</li>
                       {% endif %}
                       {% if product.is_recommended == 1 or product.is_top == 1 %}
-                        <li class="tag sale">{{ product.is_top == 1 ? "top" : "recommended" }}</li>
+                        <li class="tag sale">{{ product.is_top == 1 ? "{{ translate("Top", "Product") }}" : "{{ translate("Recommended", "Product") }}" }}</li>
                       {% endif %}
                     </ul>
                     <div class="product-decs">
@@ -423,8 +423,8 @@
                         href="javascript:void(0)"
                         onclick="AbeloThemeCart.addProduct({{ product.id }}, 1);" 
                         class="add-to-curt" 
-                        title="Add to cart">
-                      Add to cart</a>
+                        title="{{ translate("Add to cart", "Product") }}">
+                      {{ translate("Add to cart", "Product") }}</a>
                     </div>
                   </div>
                 </article>

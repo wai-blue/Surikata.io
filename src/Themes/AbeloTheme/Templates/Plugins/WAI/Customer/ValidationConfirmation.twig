@@ -2,14 +2,14 @@
   {% if status == "OK" %}
     <div class="notification mb-5">
       <p class="success">
-        Your account has been successfully verified.
+        {{ translate("Your account has been successfully verified.", "Customer") }}
       </p>
     </div>
     <p>
       Now you can sing in here
       <a
         href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/Login', 'getWebPageUrl') }}"
-        >Login</a>
+        >{{ translate("Login", "Customer") }}</a>
     </p>
   {% else %}
     <div class="notification mb-5">

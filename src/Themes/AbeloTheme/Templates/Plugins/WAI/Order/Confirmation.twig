@@ -3,13 +3,13 @@
     <div class="row">
       <div class="col-md-12">
         <div class="page-not-found text-center">
-          <h4>Ďakujeme za objednávku. Rekapituláciu a potrvrdenie sme zaslali na email.</h4>
+          <h4>{{ translate("Thank you for your order. We sent the recapitulation and confirmation to the email.", "Order") }}</h4>
           <p>
-            ID objednávky = {{ order.id }}<br/>
-            Číslo objednávky = {{ order.number }}<br/>
-            Budete presmerovaní na platobnú bránu<br/>
+            {{ translate("Order ID", "Order") }} = {{ order.id }}<br/>
+            {{ translate("Order number", "Order") }} = {{ order.number }}<br/>
+            {{ translate("You will be redirected to the payment gateway", "Order") }}<br/>
           </p>
-          <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Product/Catalog', 'getWebPageUrl') }}">Pokračovať v nákupe</a>
+          <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Product/Catalog', 'getWebPageUrl') }}">{{ translate("Continue shopping", "Order") }}</a>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    {% if heading %}
+    {% if !heading %}
       <h{{ headingLevel }}>{{ heading }}</h{{ headingLevel }}><br/>
     {% endif %}
       <div class="contact-area {{ formClass }}">
@@ -12,17 +12,17 @@
                   <form class="contact-form-style" id="contact-form-{{ random_form_id }}" action="assets/php/mail.php" method="post">
                       <div class="row">
                           <div class="col-lg-6">
-                              <input name="name" placeholder="Name*" type="text" onblur="validateInputs(this)"  />
+                              <input name="name" placeholder="{{ translate("Name") }}*" type="text" onblur="validateInputs(this)"  />
                           </div>
                           <div class="col-lg-6">
-                              <input name="email" placeholder="Email*" type="email" onblur="validateInputs(this)" />
+                              <input name="email" placeholder="{{ translate("E-mail") }}*" type="email" onblur="validateInputs(this)" />
                           </div>
                           <div class="col-lg-12">
-                              <input name="phone_number" placeholder="Phone*" type="text" onblur="validateInputs(this)" />
+                              <input name="phone_number" placeholder="{{ translate("Phone") }}*" type="text" onblur="validateInputs(this)" />
                           </div>
                           <div class="col-lg-12">
-                              <textarea name="contact_message" placeholder="Your Message*" onblur="validateInputs(this)"></textarea>
-                              <button class="submit" type="button" onclick="sendContactForm('#contact-form-{{ random_form_id }}')">SEND</button>
+                              <textarea name="contact_message" placeholder="{{ translate("Your Message") }}*" onblur="validateInputs(this)"></textarea>
+                              <button class="submit" type="button" onclick="sendContactForm('#contact-form-{{ random_form_id }}')">{{ translate("Send") }}</button>
                           </div>
                       </div>
                   </form>
@@ -75,7 +75,7 @@
                                 title: 'Success',
                                 text: 'Message was send',
                                 icon: 'success',
-                                confirmButtonText: 'OK'
+                                confirmButtonText: '{{ translate("OK") }}'
                             });
                             clearInputs(formId);
                         }
@@ -84,7 +84,7 @@
                                 title: 'Error!',
                                 text: 'Input fields were filled out incorrectly',
                                 icon: 'error',
-                                confirmButtonText: 'Try again'
+                                confirmButtonText: '{{ translate("Try again") }}'
                             });
                         }
                         console.log(response);

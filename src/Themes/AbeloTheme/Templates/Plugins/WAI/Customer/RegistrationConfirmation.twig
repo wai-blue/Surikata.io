@@ -1,14 +1,13 @@
 {% if accountInfo %}
   <div class='container'>
-    Váš účet bol úspešne vytvorený. Na Vašu emailovú adresu <b>{{ accountInfo.CUSTOMER.email }}</b> sme zaslali odkaz
-    na overenie účtu. Pred prvým prihlásením si účet najprv overte.<br/>
+    {{ translate("Your account has been successfully created. To your email address", "Customer") }} <b>{{ accountInfo.CUSTOMER.email }}</b> {{ translate("we've sent a link to verify your account. Please verify your account before logging in for the first time.", "Customer") }}<br/>
     <br/>
-    Ďakujeme za prejavenú dôveru.
+    {{ translate("Thank you for your trust.", "Customer") }}
   </div>
 {% else %}
   <div class='container'>
     <div class="notification">
-      <p class="error">Invalid link for email confirmation</p>
+      <p class="error">{{ translate("Invalid link for email confirmation", "Customer") }}</p>
     </div>
   </div>
 {% endif %}

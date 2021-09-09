@@ -5,42 +5,42 @@
         <div class="checkout-wrapper">
           {% if user.changePasswordError %}
             <div class="notification mb-5">
-              <p class="error"><strong>Oops something went wrong:</strong> {{ user.changePasswordError }}</p>
+              <p class="error"><strong>{{ translate("Oops something went wrong", "Customer") }}:</strong> {{ user.changePasswordError }}</p>
             </div>
           {% endif %}
           {% if user.changePasswordError is same as("") %}
            <div class="notification mb-5">
-              <p class="success">Your password has been changed successfully!</p>
+              <p class="success">{{ translate("Your password has been changed successfully!", "Customer") }}</p>
             </div>
           {% endif %}
           <div id="faq" class="panel-group">
             <div class="panel panel-default single-my-account">
               <div class="panel-heading my-account-title">
-                <h3 class="panel-title"><span>1 .</span> <a data-toggle="collapse" data-parent="#faq" href="#my-account-1">Edit your account information </a></h3>
+                <h3 class="panel-title"><span>1 .</span> <a data-toggle="collapse" data-parent="#faq" href="#my-account-1">{{ translate("Edit your account information", "Customer") }} </a></h3>
               </div>
               <div id="my-account-1" class="panel-collapse collapse show">
                 <div class="panel-body">
                   <div class="myaccount-info-wrapper">
                     <div class="account-info-wrapper">
-                      <h4>My Account Information</h4>
-                      <h5>Your Personal Details</h5>
+                      <h4>{{ translate("My Account Information", "Customer") }}</h4>
+                      <h5>{{ translate("Your Personal Details", "Customer") }}</h5>
                     </div>
                     <div class="row">
                       <div class="col-lg-6 col-md-6">
                         <div class="billing-info">
-                          <label>First Name</label>
+                          <label>{{ translate("First Name"), "Customer" }}</label>
                           <input type="text" value="{{ user.profile.given_name }}"/>
                         </div>
                       </div>
                       <div class="col-lg-6 col-md-6">
                         <div class="billing-info">
-                          <label>Last Name</label>
+                          <label>{{ translate("Last Name", "Customer") }}</label>
                           <input type="text" value="{{ user.profile.family_name  }}"/>
                         </div>
                       </div>
                       <div class="col-lg-6 col-md-6">
                         <div class="billing-info">
-                          <label>Email Address</label>
+                          <label>{{ translate("Email Address", "Customer") }}</label>
                           <input type="email" value="{{ user.profile.email}}"/>
                         </div>
                       </div>
@@ -51,7 +51,7 @@
             </div>
             <div class="panel panel-default single-my-account">
               <div class="panel-heading my-account-title">
-                <h3 class="panel-title"><span>2 .</span> <a data-toggle="collapse" data-parent="#faq" href="#my-account-2">Change your password </a></h3>
+                <h3 class="panel-title"><span>2 .</span> <a data-toggle="collapse" data-parent="#faq" href="#my-account-2">{{ translate("Change your password", "Customer") }} </a></h3>
               </div>
               <div id="my-account-2" class="panel-collapse collapse {% if user.changePasswordError %} show {% endif %}">
                 <div class="panel-body">
@@ -60,7 +60,7 @@
                       <div class="row mt-2">
                         <div class="col-lg-12 col-md-12">
                           <div class="billing-info">
-                            <label>Current password <strong>*</strong></label>
+                            <label>{{ translate("Current password", "Customer") }} <strong>*</strong></label>
                             <input 
                               type="password" 
                               name="current_password"
@@ -74,7 +74,7 @@
                         <input type="hidden" name="changePassword" value="1" />
                           <div class="col-lg-12 col-md-12">
                             <div class="billing-info">
-                              <label>New Password</label>
+                              <label>{{ translate("New Password", "Customer") }}</label>
                               <input 
                                 type="password" 
                                 name="password_1"
@@ -84,7 +84,7 @@
                           </div>
                           <div class="col-lg-12 col-md-12">
                             <div class="billing-info">
-                              <label>Confirm New Password</label>
+                              <label>{{ translate("Confirm New Password", "Customer") }}</label>
                               <input 
                                 type="password"
                                 name="password_2"
@@ -98,7 +98,7 @@
                           <button 
                             type="submit" 
                             onclick="$('#customerChangePassword').submit();"
-                          >Change password</button>
+                          >{{ translate("Change password", "Customer") }}</button>
                         </div>
                       </div>
                     </form>
@@ -108,13 +108,13 @@
             </div>
             <div class="panel panel-default single-my-account">
               <div class="panel-heading my-account-title">
-                <h3 class="panel-title"><span>3 .</span> <a data-toggle="collapse" data-parent="#faq" href="#my-account-3">Modify your address book entries </a></h3>
+                <h3 class="panel-title"><span>3 .</span> <a data-toggle="collapse" data-parent="#faq" href="#my-account-3">{{ translate("Modify your address book entries", "Customer") }} </a></h3>
               </div>
               <div id="my-account-3" class="panel-collapse collapse">
                 <div class="panel-body">
                   <div class="myaccount-info-wrapper">
                     <div class="account-info-wrapper">
-                      <h4>Address Book Entries</h4>
+                      <h4>{{ translate("Address Book Entries", "Customer") }}</h4>
                     </div>
                     {% for address in user.profile.ADDRESSES %}
                       <div class="entries-wrapper">
@@ -151,7 +151,7 @@
                           </div>
                           <div class="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
                             <div class="entries-edit-delete text-center">
-                              <a href="javascript:void(0);" onclick="AbeloThemeCustomer.removeAddress({{ address.id }})">Delete</a>
+                              <a href="javascript:void(0);" onclick="AbeloThemeCustomer.removeAddress({{ address.id }})">{{ translate("Delete", "Customer") }}</a>
                             </div>
                           </div>
                         </div>

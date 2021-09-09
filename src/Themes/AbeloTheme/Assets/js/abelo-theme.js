@@ -362,7 +362,7 @@ window.onpopstate = function (e) {
   var AbeloThemeBlogCatalog = new AbeloThemeBlogCatalog();
 
   // AbeloTheme Breadcrumb
-  function AbeloThemeBreadcrumb() { Breadcrumb.call(this); }
-  AbeloThemeBreadcrumb.prototype = Object.create(Breadcrumb.prototype);
+  function AbeloThemeBreadcrumb() { SurikataBreadcrumb.call(this); }
+  AbeloThemeBreadcrumb.prototype = Object.create(SurikataBreadcrumb.prototype);
 
   var AbeloThemeBreadcrumb = new AbeloThemeBreadcrumb();

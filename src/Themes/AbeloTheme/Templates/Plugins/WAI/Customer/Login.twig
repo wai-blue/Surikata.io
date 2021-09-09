@@ -23,7 +23,7 @@
                     {% endif %}
                     <form method="post" id="loginForm">
                       <input type="hidden" name="doLogin" value="1" />
-                      <input type="text" name="loginEmail" placeholder="{{ translate("E-mail", "Customer") }}" required />
+                      <input type="email" name="loginEmail" placeholder="{{ translate("E-mail", "Customer") }}" required />
                       <input type="password" name="loginPassword" placeholder="{{ translate("Password", "Customer") }}" required />
                       <div class="button-box">
                         <div class="login-toggle-btn">
@@ -33,7 +33,7 @@
                         <div class="login-toggle-btn">
                           <button 
                             type="submit"
-                            onclick="$('#loginForm').submit();"
+                            onclick="sendLoginForm('loginForm');"
                           ><span>Login</span></button>
                           <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/ForgotPassword', 'getWebPageUrl') }}">
                             {{ translate("Forgot password?", "Customer") }}

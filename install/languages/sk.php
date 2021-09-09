@@ -92,11 +92,15 @@
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => $title,
-          "content" => file_get_contents(__DIR__."/SampleData/PageTexts/{$url}.html"),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/{$url}.html"),
         ]
       ],
     ];
   }
+
+  $contact_text_html = $theme == "Basic"
+    ? (__DIR__."/../SampleData/PageTexts/contact.html")
+    : (__DIR__."/../SampleData/PageTexts/kontakt.html");
 
   $webPages = [
     "SK|home|WithoutSidebar|Home" => [
@@ -106,7 +110,7 @@
         [
           "heading" => "Welcome",
           "headingLevel" => 1,
-          "content" => file_get_contents(__DIR__."/SampleData/PageTexts/lorem-ipsum-1.html"),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
         ],
       ],
       "section_3" => [
@@ -120,9 +124,9 @@
       "section_4" => [
         "WAI/SimpleContent/TwoColumns",
         [
-          "column1Content" => file_get_contents(__DIR__."/SampleData/PageTexts/lorem-ipsum-1.html"),
+          "column1Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
           "column1Width" => 4,
-          "column2Content" => file_get_contents(__DIR__."/SampleData/PageTexts/lorem-ipsum-2.html"),
+          "column2Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-2.html"),
           "column2Width" => 8,
           "column2CSSClasses" => "text-right",
         ],
@@ -138,9 +142,9 @@
       "section_6" => [
         "WAI/SimpleContent/TwoColumns",
         [
-          "column1Content" => file_get_contents(__DIR__."/SampleData/PageTexts/lorem-ipsum-2.html"),
+          "column1Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-2.html"),
           "column1Width" => 8,
-          "column2Content" => file_get_contents(__DIR__."/SampleData/PageTexts/lorem-ipsum-1.html"),
+          "column2Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
           "column2Width" => 4,
           "column2CSSClasses" => "text-right",
         ],
@@ -151,14 +155,14 @@
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "O nás",
-          "content" => file_get_contents(__DIR__."/SampleData/PageTexts/about-us.html"),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/about-us.html"),
         ]
       ],
       "section_2" => [
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "Vitajte",
-          "content" => file_get_contents(__DIR__."/SampleData/PageTexts/about-us.html"),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/about-us.html"),
         ]
       ],
     ],
@@ -168,7 +172,7 @@
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "",
-          "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakt.html"),
+          "content" => file_get_contents($contact_text_html),
         ]
       ],
     ],

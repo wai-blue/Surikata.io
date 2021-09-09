@@ -6980,7 +6980,8 @@ offcanvas-menu > ul > li .menu-expand {
 }
 
 .contact-area .contact-map {
-  margin-bottom: 60px;
+  margin-bottom: 30px;
+  margin-top: 3rem;
 }
 .contact-area .contact-map #map {
   height: 560px;

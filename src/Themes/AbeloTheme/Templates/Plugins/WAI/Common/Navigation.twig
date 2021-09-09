@@ -31,7 +31,7 @@
                   <button type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ translate("My account", "Common") }} <i class="ion-ios-arrow-down"></i></button>
                   <ul class="dropdown-menu animation slideDownIn" aria-labelledby="dropdownMenuButton">
                     <li><a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/Home', 'getWebPageUrl') }}">{{ translate("My account", "Common") }}</a></li>
-                    <li><a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/Home', 'getWebPageUrl') }}">{{ translate("Checkout", "Common") }}</a></li>
+                    <li><a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Order/Checkout', 'getWebPageUrl') }}">{{ translate("Checkout", "Common") }}</a></li>
                     <li><a href='?doLogout=1'>{{ translate("Logout", "Common") }}</a></li>
                   </ul>
                 </div>

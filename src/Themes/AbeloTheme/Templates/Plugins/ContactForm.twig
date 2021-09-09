@@ -72,7 +72,7 @@
                         //response = $.parseJSON(response);
                         if (response["status"] === "success") {
                             Swal.fire({
-                                title: 'Success',
+                                title: '{{ translate("Success") }}',
                                 text: 'Message was send',
                                 icon: 'success',
                                 confirmButtonText: '{{ translate("OK") }}'
@@ -81,7 +81,7 @@
                         }
                         else {
                             Swal.fire({
-                                title: 'Error!',
+                                title: '{{ translate("Error!") }}',
                                 text: 'Input fields were filled out incorrectly',
                                 icon: 'error',
                                 confirmButtonText: '{{ translate("Try again") }}'

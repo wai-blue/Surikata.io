@@ -188,7 +188,7 @@ class Loader extends \Cascada\Loader {
 
             $translatedText = $original;
           } else {
-            $translatedText = $___CASCADAObject->translationCache[$str][$context][$domainToRender][$languageIndex];
+            $translatedText = $___CASCADAObject->translationCache[$original][$context][$domainToRender][$languageIndex];
           }
 
           return $translatedText;
@@ -200,6 +200,33 @@ class Loader extends \Cascada\Loader {
     }
 
   }
+  
+
+  public function validateOutputHtml() {
+    // https://www.vzhurudolu.cz/prirucka/checklist
+    // TODO: automaticka kontrola vystupneho HMTL na SEO parametre
+    
+    $regexpMustNotMatch = TRUE; // ak sa retazec v HTML nachaza, je problem
+    $regexpMustMatch = FALSE; // ak sa retazec v HTML nenachaza, je problem
+
+    $validationRegexps = [
+      [
+        "/<script>/i",
+        "SCRIPT tag is found in HTML.",
+        $regexpMustNotMatch
+      ]
+    ];
+
+    foreach ($validationRegexps as $regexp) {
+      $match = preg_match($regexp[0], $this->outputHtml);
+      if (
+        ($match && $regexp[2])
+        || (!$match && !$regexp[2])
+      ) {
+        $this->adminPanel->console->warning($regexp[1], ["//{$_SERVER['HTTP_HOST']}/{$_SERVER['REQUEST_URI']}"]);
+      }
+    }
+  }
 
   public function render() {
     try {
@@ -209,9 +236,7 @@ class Loader extends \Cascada\Loader {
 
       if ($outputFormat != "json" && $this->config['minifyOutputHtml'] ?? FALSE) {
         $htmlMinifier = new HtmlMin();
-        return $htmlMinifier->minify($this->outputHtml);
-      } else {
-        return $this->outputHtml;
+        $this->outputHtml = $htmlMinifier->minify($this->outputHtml);
       }
     } catch (
       \Illuminate\Database\QueryException
@@ -226,6 +251,12 @@ class Loader extends \Cascada\Loader {
         "error" => "Oops! Something went wrong with the database. See logs for more information. Error hash: {$errorHash}",
       ]);
     }
+
+    if ($this->config['validateOutputHtml'] ?? FALSE) {
+      $this->validateOutputHtml();
+    }
+
+    return $this->outputHtml;
   }
 
   /**

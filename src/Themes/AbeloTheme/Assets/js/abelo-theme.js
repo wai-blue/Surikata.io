@@ -162,14 +162,12 @@ window.onpopstate = function (e) {
   AbeloThemeCart.prototype.updateCheckoutOverview = function() {
     let data = this.serializeOrderData();
     data['renderOnly'] = 'orderOverview';
-    console.log(data);
-    $('.checkout-area').css('opacity', 0.5);
   
     Surikata.renderPlugin(
       'WAI/Order/Checkout',
       data,
       function (data) {
-        $('.checkout-area')
+        $('#order-area')
           .html(data)
           .css('opacity', 1)
         ;

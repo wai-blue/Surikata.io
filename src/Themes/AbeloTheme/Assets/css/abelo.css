@@ -20,7 +20,8 @@
   color: #266cfb;
 }
 .required-empty {
-  background-color: #ffe2e0 !important;
+  border-color: #bf2919 !important;
+  color: #bf2919;
 }
 .delivery-text {
   color: #888!important;
@@ -479,4 +480,15 @@ ul .dots::before {
 .popup-text p {
   font-size: 20px;
   margin-bottom: 3rem;
+}
+
+.search-element input {
+  padding-left: 25px !important;
+  width: 50%;
+  border-end-end-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+.search-element button {
+  position: relative;
 }

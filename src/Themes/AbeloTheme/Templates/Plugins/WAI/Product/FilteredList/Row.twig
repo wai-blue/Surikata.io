@@ -4,7 +4,7 @@
 			<div class="col-md-12">
 				<div class="section-title">
 					<h2>	
-						{% if filterType == 'discounted' %}
+						{% if filterType == 'on_sale' %}
 							Discounted products
 						{% elseif filterType == 'news' %}
 							New products
@@ -42,7 +42,7 @@
 				{% endif %}
 					{% for product in products %}
 						{% if 
-							(filterType == 'discounted' and product.is_on_sale == 1) 
+							(filterType == 'on_sale' and product.is_on_sale == 1) 
 							or
 							(filterType == 'news' and product.is_new == 1) 
 							or
@@ -76,7 +76,7 @@
 											</div>
 											<ul class="product-flag">
 												<li class="new">
-													{% if filterType == 'discounted' %}
+													{% if filterType == 'on_sale' %}
 														<span>- {{ product.price.discountTotal|number_format(2, ",", " ") }}%</span>
 													{% elseif filterType == 'news' %}
 														<span>NEW</span>
@@ -86,7 +86,7 @@
 												</li>
 											</ul>
 											<div class="product-decs">
-												{% if filterType == 'discounted' and product.is_on_sale == 1 %}
+												{% if filterType == 'on_sale' and product.is_on_sale == 1 %}
 													<div class="clockdiv">
 														<div data-countdown="2021/06/12"></div>
 													</div>

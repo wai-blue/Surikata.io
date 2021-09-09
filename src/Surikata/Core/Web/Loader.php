@@ -186,9 +186,11 @@ class Loader extends \Cascada\Loader {
               "translated" => "",
             ]);
 
+             $___CASCADAObject->translationCache[$domainToRender][$context][$original][$languageIndex] = $original;
+
             $translatedText = $original;
           } else {
-            $translatedText = $___CASCADAObject->translationCache[$original][$context][$domainToRender][$languageIndex];
+            $translatedText = $___CASCADAObject->translationCache[$domainToRender][$context][$original][$languageIndex];
           }
 
           return $translatedText;

@@ -47,10 +47,10 @@
 
   // web - menu
 
-  $websiteMenuModel->insertRow(["id" => 1, "domain" => "EN", "name" => "Header Menu (EN)"]);
-  $websiteMenuModel->insertRow(["id" => 2, "domain" => "EN", "name" => "Footer Menu (EN)"]);
+  $websiteMenuModel->insertRow(["id" => 1, "domain" => "SK", "name" => "Header Menu (SK)"]);
+  $websiteMenuModel->insertRow(["id" => 2, "domain" => "SK", "name" => "Footer Menu (SK)"]);
 
-  // web - menu items - EN
+  // web - menu items - SK
   $tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Úvod", "url" => "home"]);
   $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "O nás", "url" => "about-us"]);
   $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Produkty", "url" => "products"]);
@@ -61,7 +61,7 @@
 
   // web - stranky
 
-  $websiteCommonPanels["EN"] = [
+  $websiteCommonPanels["SK"] = [
     "header" => [ "plugin" => "WAI/Common/Header" ],
     "navigation" => [ "plugin" => "WAI/Common/Navigation", "settings" => [ "menuId" => 1, "homepageUrl" => "home", ] ],
     "footer" => [ 
@@ -99,7 +99,7 @@
   }
 
   $webPages = [
-    "EN|home|WithoutSidebar|Home" => [
+    "SK|home|WithoutSidebar|Home" => [
       "section_1" => ["WAI/Misc/Slideshow", ["speed" => 1000]],
       "section_2" => [
         "WAI/SimpleContent/OneColumn",
@@ -146,7 +146,7 @@
         ],
       ]
     ],
-    "EN|about-us|WithoutSidebar|About us" => [
+    "SK|about-us|WithoutSidebar|About us" => [
       "section_1" => [
         "WAI/SimpleContent/OneColumn",
         [
@@ -162,7 +162,7 @@
         ]
       ],
     ],
-    "EN|contact|WithoutSidebar|Contact" => [
+    "SK|contact|WithoutSidebar|Contact" => [
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
       "section_2" => [
         "WAI/SimpleContent/OneColumn",
@@ -174,64 +174,64 @@
     ],
 
     // Product catalog pages
-    "EN|products|WithLeftSidebar|Products - Catalog" => [
+    "SK|products|WithLeftSidebar|Products - Catalog" => [
       "sidebar" => ["WAI/Product/Filter", ["showProductCategories" => 1, "layout" => "sidebar", "showProductCategories" => 1, "show_brands" => 1]],
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
       "section_2" => ["WAI/Product/Catalog", ["defaultItemsPerPage" => 6]],
     ],
-    "EN||WithoutSidebar|Products - Detail" => [
+    "SK||WithoutSidebar|Products - Detail" => [
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
       "section_2" => ["WAI/Product/Detail", ["show_similar_products" => 1, "show_accessories" => 1, "showAuthor" => 1]],
     ],
 
     // Shopping cart, checkout and order confirmation
-    "EN|cart|WithoutSidebar|Shopping cart" => [
+    "SK|cart|WithoutSidebar|Shopping cart" => [
       "section_1" => "WAI/Order/CartOverview",
     ],
-    "EN|checkout|WithoutSidebar|Checkout" => [
+    "SK|checkout|WithoutSidebar|Checkout" => [
       "section_1" => "WAI/Order/Checkout",
     ],
-    "EN||WithoutSidebar|Order - Confirmation" => [
+    "SK||WithoutSidebar|Order - Confirmation" => [
       "section_1" => "WAI/Order/Confirmation"
     ],
 
     // My account pages
-    "EN|login|WithoutSidebar|My account - Login" => [
+    "SK|login|WithoutSidebar|My account - Login" => [
       "section_1" => ["WAI/Customer/Login", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]],
     ],
-    "EN|my-account|WithoutSidebar|My account - Home" => [
+    "SK|my-account|WithoutSidebar|My account - Home" => [
       "section_1" => "WAI/Customer/Home",
     ],
-    "EN|my-account/orders|WithoutSidebar|My account - Orders" => [
+    "SK|my-account/orders|WithoutSidebar|My account - Orders" => [
       "section_1" => "WAI/Customer/OrderList",
     ],
-    "EN|reset-password|WithoutSidebar|My account - Reset password" => [
+    "SK|reset-password|WithoutSidebar|My account - Reset password" => [
       "section_1" => "WAI/Customer/ForgotPassword"
     ],
-    "EN|registration|WithoutSidebar|My account - Registration" => [
+    "SK|registration|WithoutSidebar|My account - Registration" => [
       "section_1" => ["WAI/Customer/Registration", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]]
     ],
-    "EN|registration-confirm|WithoutSidebar|My account - Registration - Confirmation" => [
+    "SK|registration-confirm|WithoutSidebar|My account - Registration - Confirmation" => [
       "section_1" => "WAI/Customer/RegistrationConfirmation"
     ],
-    "EN||WithoutSidebar|My account - Registration - Validation" => [
+    "SK||WithoutSidebar|My account - Registration - Validation" => [
       "section_1" => "WAI/Customer/ValidationConfirmation"
     ],
 
     // Blogs
-    "EN|blogs|WithLeftSidebar|Blogs" => [
+    "SK|blogs|WithLeftSidebar|Blogs" => [
       "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
       "section_2" => ["WAI/Blog/Catalog", ['itemsPerPage' => 3, "showAuthor" => 1]],
     ],
-    "EN||WithLeftSidebar|Blog" => [
+    "SK||WithLeftSidebar|Blog" => [
       "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
       "section_2" => "WAI/Blog/Detail",
     ],
 
     // Miscelaneous pages
-    "EN|search|WithoutSidebar|Search" => [
+    "SK|search|WithoutSidebar|Search" => [
       "section_1" => [
         "WAI/Misc/WebsiteSearch",
         [
@@ -243,7 +243,7 @@
         ]
       ],
     ],
-    "EN|privacy-terms|WithoutSidebar|Privacy policy" => [
+    "SK|privacy-terms|WithoutSidebar|Privacy policy" => [
       "section_1" => [
         "WAI/SimpleContent/OneColumn",
         [
@@ -252,7 +252,7 @@
         ]
       ]
     ],
-    "EN|news|WithLeftSidebar|News" => [
+    "SK|news|WithLeftSidebar|News" => [
       "sidebar" => ["WAI/News", ["contentType" => "sidebar"]],
       "section_1" => ["WAI/News", ["contentType" => "listOrDetail"]],
     ],
@@ -287,13 +287,13 @@
   }
 
   $websiteWebRedirectModel->insertRow([
-    "domain" => "EN",
+    "domain" => "SK",
     "from_url" => "",
     "to_url" => REWRITE_BASE."home",
     "type" => 301
   ]);
 
-  $adminPanel->widgets["Website"]->rebuildSitemap("EN");
+  $adminPanel->widgets["Website"]->rebuildSitemap("SK");
 
 
 
@@ -305,7 +305,7 @@
   $adminPanel->saveConfig([
     "settings" => [
       "web" => [
-        "EN" => [
+        "SK" => [
           "profile" => [
             "slogan" => "My online store",
             "contactPhoneNumber" => "+421 111 222 333",
@@ -332,7 +332,7 @@
         ],
       ],
       "emails" => [
-        "EN" => [
+        "SK" => [
           "signature" => "<p>Surikata - <a href='www.wai.sk' target='_blank'>WAI.sk</a></p>",
           "after_order_confirmation_SUBJECT" => "Surikata - order n. {% number %}",
           "after_order_confirmation_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/orderBody.html"),

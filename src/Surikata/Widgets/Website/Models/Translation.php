@@ -10,17 +10,6 @@ class Translation extends \ADIOS\Core\Model {
   var $formTitleForEditing = "Translation";
 
   public function columns($columns = []) {
-    // $schemaForColumnTranslated = ["properties" => []];
-
-    // $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
-
-    // foreach ($this->adios->config['widgets']['Website']['domains'] as $domain => $domainInfo) {
-    //   $schemaForColumnTranslated["properties"][$domain] = [
-    //     "type" => "string",
-    //     "title" => $domainLanguages[$domainInfo["languageIndex"]],
-    //   ];
-    // }
-
     return parent::columns([
       "domain" => [
         "type" => "varchar",
@@ -42,19 +31,17 @@ class Translation extends \ADIOS\Core\Model {
         "required" => TRUE,
       ],
 
-      "language_index" => [
-        "type" => "int",
-        "title" => "Language",
-        "enum_values" => $this->adios->config['widgets']['Website']['domainLanguages'],
-        "show_column" => TRUE,
-        "required" => TRUE,
-      ],
+      // "language_index" => [
+      //   "type" => "int",
+      //   "title" => "Language",
+      //   "enum_values" => $this->adios->config['widgets']['Website']['domainLanguages'],
+      //   "show_column" => TRUE,
+      //   "required" => TRUE,
+      // ],
 
       "translated" => [
         "type" => "text",
         "title" => "Translated string",
-        // "interface" => "json_editor",
-        // "schema" => $schemaForColumnTranslated,
         "show_column" => TRUE,
         "required" => TRUE,
       ],
@@ -63,9 +50,9 @@ class Translation extends \ADIOS\Core\Model {
 
   public function indexes($indexes = []) {
     return parent::indexes([
-      "domain___context___original___language_index" => [
+      "domain___context___original" => [
         "type" => "index",
-        "columns" => ["domain", "context", "original", "language_index"],
+        "columns" => ["domain", "context", "original"],
       ],
     ]);
   }
@@ -99,7 +86,7 @@ class Translation extends \ADIOS\Core\Model {
     $all = $this->get()->toArray();
 
     foreach ($all as $t) {
-      $cache[$t["domain"]][$t["context"]][$t["original"]][$t["language_index"]] = $t["translated"];
+      $cache[$t["domain"]][$t["context"]][$t["original"]] = $t["translated"];
     }
 
     return $cache;

@@ -159,8 +159,6 @@ class Loader extends \Cascada\Loader {
 
           $domains = $___CASCADAObject->adminPanel->config['widgets']['Website']['domains'];
           $domainToRender = $___CASCADAObject->config['domainToRender'];
-          $domain = $domains[$domainToRender];
-          $languageIndex = $domain["languageIndex"];
 
           $translationModel = new \ADIOS\Widgets\Website\Models\Translation($this->adminPanel);
 
@@ -177,18 +175,17 @@ class Loader extends \Cascada\Loader {
             $___CASCADAObject->translationCache = $translationModel->loadCache();
           }
 
-          if (!isset($___CASCADAObject->translationCache[$domainToRender][$context][$original][$languageIndex])) {
+          if (!isset($___CASCADAObject->translationCache[$domainToRender][$context][$original])) {
             $translationModel->insertRow([
               "domain" => $domainToRender,
               "context" => $context,
               "original" => $original,
-              "language_index" => $languageIndex,
               "translated" => "",
             ]);
 
-             $___CASCADAObject->translationCache[$domainToRender][$context][$original][$languageIndex] = $original;
+             $___CASCADAObject->translationCache[$domainToRender][$context][$original] = $original;
           } else {
-            $translatedText = $___CASCADAObject->translationCache[$domainToRender][$context][$original][$languageIndex];
+            $translatedText = $___CASCADAObject->translationCache[$domainToRender][$context][$original];
           }
 
           return empty($translatedText) ? $original : $translatedText;

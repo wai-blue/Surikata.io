@@ -2,6 +2,11 @@
 
 namespace MyEcommerceProject;
 
+/**
+ * This class will be instantiated by the main ROOT/index.php file.
+ * This is where your customizations of the frontend rendering engine
+ * start.
+ */
 class Web extends \Surikata\Core\Web\Loader {
   public function __construct($config, $adminPanel = NULL) {
     $this->registerPluginFolder(__DIR__."/Plugins");
@@ -30,6 +35,11 @@ class Web extends \Surikata\Core\Web\Loader {
   */
 }
 
+/**
+ * This class will be instantiated by the main ROOT/admin/index.php file.
+ * This is where your customizations of the backend rendering engine
+ * start.
+ */
 class AdminPanel extends \Surikata\Core\AdminPanel\Loader {
   public function onBeforePluginsLoaded() {
     parent::onBeforePluginsLoaded();

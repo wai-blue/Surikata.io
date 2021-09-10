@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * DO NOT CHANGE THIS FILE UNLESS YOU WANT TO CONTRIBUTE TO
+ * Surikata.io's CORE.
+ *
+ * IF YOU WANT TO BUILD YOUR ECOMMERCE PROJECT, START IN
+ * THE prop/ FOLDER.
+ *
+ * Author: https://www.wai.blue
+ */
+
 ini_set("display_errors", 1);
 ini_set("error_reporting", E_ALL ^ E_NOTICE ^ E_WARNING);
 

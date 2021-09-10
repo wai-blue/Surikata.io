@@ -311,30 +311,30 @@ if (count($partsToInstall) == 0) {
 
       // produkty - sluzby
 
-      $serviceModel->insertRow(["name_lang_1" => "Vrátenie do 30 dní"]);
-      $serviceModel->insertRow(["name_lang_1" => "Garancia spokojnosti"]);
-      $serviceModel->insertRow(["name_lang_1" => "Doprava zdarma"]);
-      $serviceModel->insertRow(["name_lang_1" => "Možná výmena"]);
+      $serviceModel->insertRow(["name_lang_1" => "Return within 30 days", "name_lang_2" => "Vrátenie do 30 dní"]);
+      $serviceModel->insertRow(["name_lang_1" => "Satisfaction guaranteed", "name_lang_2" => "Garancia spokojnosti"]);
+      $serviceModel->insertRow(["name_lang_1" => "Free shipping", "name_lang_2" => "Doprava zdarma"]);
+      $serviceModel->insertRow(["name_lang_1" => "Possible exchange", "name_lang_2" => "Možná výmena"]);
 
       // products - categories
 
-      $productCategoryModel->insertRow([ "id" => 1, "id_parent" => 0, "code" => "Category_A", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A"]);
-      $productCategoryModel->insertRow([ "id" => 2, "id_parent" => 0, "code" => "Category_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_B"]);
-      $productCategoryModel->insertRow([ "id" => 3, "id_parent" => 0, "code" => "Category_C", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_C"]);
+      $productCategoryModel->insertRow([ "id" => 1, "id_parent" => 0, "code" => "Category_A", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A", "name_lang_2" => "Kategória_A"]);
+      $productCategoryModel->insertRow([ "id" => 2, "id_parent" => 0, "code" => "Category_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_B", "name_lang_2" => "Kategória_B"]);
+      $productCategoryModel->insertRow([ "id" => 3, "id_parent" => 0, "code" => "Category_C", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_C", "name_lang_2" => "Kategória_C"]);
 
-      $productCategoryModel->insertRow([ "id" => 4, "id_parent" => 1, "code" => "Category_A_A", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_A"]);
-      $productCategoryModel->insertRow([ "id" => 5, "id_parent" => 1, "code" => "Category_A_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_B"]);
-      $productCategoryModel->insertRow([ "id" => 6, "id_parent" => 1, "code" => "Category_A_C", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_C"]);
-      $productCategoryModel->insertRow([ "id" => 7, "id_parent" => 2, "code" => "Category_B_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_B_B"]);
+      $productCategoryModel->insertRow([ "id" => 4, "id_parent" => 1, "code" => "Category_A_A", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_A", "name_lang_2" => "Kategória_A_A"]);
+      $productCategoryModel->insertRow([ "id" => 5, "id_parent" => 1, "code" => "Category_A_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_B", "name_lang_2" => "Kategória_A_B"]);
+      $productCategoryModel->insertRow([ "id" => 6, "id_parent" => 1, "code" => "Category_A_C", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_C", "name_lang_2" => "Kategória_A_C"]);
+      $productCategoryModel->insertRow([ "id" => 7, "id_parent" => 2, "code" => "Category_B_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_B_B", "name_lang_2" => "Kategória_B_B"]);
       
       // produkty - vlastnosti produktov, ciselnik
-      $productFeatureModel->insertRow(["id" => 1, "order_index" => 1, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Lange", "id_measurement_unit" => 1]);
-      $productFeatureModel->insertRow(["id" => 2, "order_index" => 2, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Breite", "id_measurement_unit" => 1]);
-      $productFeatureModel->insertRow(["id" => 3, "order_index" => 3, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Hohe", "id_measurement_unit" => 1]);
-      $productFeatureModel->insertRow(["id" => 4, "order_index" => 4, "value_type" => 1, "entry_method" => 5, "min" => 2, "min" => 5,     "name_lang_1" => "Achsen", "id_measurement_unit" => 1]);
-      $productFeatureModel->insertRow(["id" => 5, "order_index" => 5, "value_type" => 1, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Gesamtgewicht", "id_measurement_unit" => 9]);
-      $productFeatureModel->insertRow(["id" => 6, "order_index" => 6, "value_type" => 1, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Nutzlast ca.", "id_measurement_unit" => 9]);
-      $productFeatureModel->insertRow(["id" => 7, "order_index" => 7, "value_type" => 2, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Rader", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 1, "order_index" => 1, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Lange", "name_lang_2" => "Dĺžka", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 2, "order_index" => 2, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Breite", "name_lang_2" => "Šírka", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 3, "order_index" => 3, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Hohe", "name_lang_2" => "Výška", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 4, "order_index" => 4, "value_type" => 1, "entry_method" => 5, "min" => 2, "min" => 5,     "name_lang_1" => "Achsen", "name_lang_2" => "Nápravy", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 5, "order_index" => 5, "value_type" => 1, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Gesamtgewicht", "name_lang_2" => "Celková hmotnosť", "id_measurement_unit" => 9]);
+      $productFeatureModel->insertRow(["id" => 6, "order_index" => 6, "value_type" => 1, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Nutzlast ca.", "name_lang_2" => "Užitočné zaťaženie", "id_measurement_unit" => 9]);
+      $productFeatureModel->insertRow(["id" => 7, "order_index" => 7, "value_type" => 2, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Rader", "name_lang_2" => "Kolesá", "id_measurement_unit" => 1]);
 
       $productFeaturesCount = $productFeatureModel->get()->count();
 

@@ -267,7 +267,7 @@ INSERT INTO `srkt_web_translations` (`domain`, `context`, `original`, `translate
 ('SK', 'Product', 'There Are', 'Existujú'),
 ('SK', 'Product', 'Products', 'Produkty'),
 ('SK', 'Product', 'Sort by', 'Zoradiť'),
-('SK', 'Product', 'Sort by newness', 'Podľa dátumu pridania'),
+('SK', 'Product', 'Sort by newness', 'Od najnovšieho'),
 ('SK', 'Product', 'A to Z', 'od A do Z'),
 ('SK', 'Product', 'Z to A', 'od Z do A'),
 ('SK', 'Product', 'Price ascending', 'Ceny vzostupne'),

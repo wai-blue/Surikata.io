@@ -67,7 +67,27 @@ class OrderItem extends \ADIOS\Core\Model {
   }
 
   public function formParams($data, $params) {
-    $params["default_values"] = ["id_order" => $params["id_order"]];
+    $params["default_values"] = ["id_order" => $params["id_order"], "quantity" => 1];
+    $params["columns"]["id_product"]["onchange"] = "
+      let productId = $(this).val();
+      let inputName = $(this).attr('name');
+      _ajax_read('Orders/AddOrderItem', 'id_product='+productId, function(res) {
+        let price = res.sale_price;
+        let vat_percent = res.vat_percent;
+        let delivery_unit = res.DELIVERY_UNIT;
+        
+        let indexOfFirst = inputName.indexOf('_');
+        let indexOfSecond = inputName.indexOf('_', indexOfFirst + 1);
+        let prefix = inputName.substr(0, indexOfFirst);
+        let uid = inputName.substring(indexOfFirst + 1, indexOfSecond);
+        
+        $('#'+prefix+'_'+uid+'_id_delivery_unit').val(delivery_unit.id);
+        $('#'+prefix+'_'+uid+'_id_delivery_unit_autocomplete_input').val(delivery_unit.name);
+        $('#'+prefix+'_'+uid+'_unit_price').val(price);
+        $('#'+prefix+'_'+uid+'_vat_percent').val(vat_percent);
+        console.log(price, vat_percent, delivery_unit);
+      });
+    ";
     return $params;
   }
 

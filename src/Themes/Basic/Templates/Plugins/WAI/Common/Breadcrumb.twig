@@ -1,0 +1,18 @@
+<div id="breadCrumbDiv">
+  <ul class="breadcrumb">
+    {% if showHomePage %}
+      <li>
+        <a href="{{ rootUrl }}">
+          <i class="fas fa-home"></i>
+        </a>
+      </li>
+    {% endif %}
+    {% for url, breadCrumb in breadCrumbs %}
+      {% if loop.last %}
+        <li>{{ breadCrumb | title }}</li>
+      {% else %}
+        <li><a href="{{ rootUrl }}/{{ url }}">{{ breadCrumb | title }}</a></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>

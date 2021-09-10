@@ -10,11 +10,15 @@ namespace Surikata\Plugins\WAI\Product {
 
       switch ($pluginSettings["filterType"]) {
         case "recommended":
-          $productIds = $productModel->where("is_recommended", TRUE);
-        break;
-        case "discounted":
-          $productIds = $productModel->where("is_on_sale", TRUE);
-        break;
+          $productIds = $productModel
+            ->where("is_recommended", TRUE)
+            ->skip(0)->take((int)$pluginSettings["product_count"]);
+          break;
+        case "on_sale":
+          $productIds = $productModel
+            ->where("is_on_sale", TRUE)
+            ->skip(0)->take((int)$pluginSettings["product_count"]);
+          break;
       }
 
       $productIds = $productIds
@@ -46,7 +50,7 @@ namespace ADIOS\Plugins\WAI\Product {
           "title" => "Products for display",
           "type" => "varchar",
           "enum_values" => [
-            "discounted" => "Discounted products",
+            "on_sale" => "Discounted products",
             "news" => "New products",
             "recommended" => "Recommended products",
             "top" => "Top products",
@@ -61,8 +65,12 @@ namespace ADIOS\Plugins\WAI\Product {
             "row-large" => "Row large"
           ],
         ],
+        "product_count" => [
+          "title" => "Number of products",
+          "type" => "int",
+        ],
       ];
     }
-    
+
   }
 }

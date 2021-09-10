@@ -1,0 +1,28 @@
+{{ panels.header.html|raw }}
+{{ panels.navigation.html|raw }}
+
+<div class="main_content">
+  <div class="shop-category-area">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          {% if panels.section_1.html != "" %} <div class="mt-5">{{ panels.section_1.html|raw }}</div> {% endif %}
+        </div>
+      </div>
+      <div class="row mt-5">
+        <div class='col-lg-3 order-lg-last col-md-12 order-md-last mb-md-60px mb-lm-60px mt-5'>{{ panels.sidebar.html|raw }}</div>
+        <div class="col-lg-9 order-lg-first col-md-12 order-md-first" style="position:relative;">
+          {% if panels.section_2.html != "" %} <div class="mt-5">{{ panels.section_2.html|raw }}</div>{% endif %}
+          {% if panels.section_3.html != "" %} <div class="mt-5">{{ panels.section_3.html|raw }}</div>{% endif %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          {% if panels.section_4.html != "" %} <div class="mt-5">{{ panels.section_4.html|raw }}</div> {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ panels.footer.html|raw }}

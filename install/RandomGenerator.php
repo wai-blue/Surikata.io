@@ -37,6 +37,7 @@ class RandomGenerator {
       $number = "RND.".rand(10, 99).".".rand(1000, 9999).".".$i;
       $ean = self::generateEAN($number);
       $image = "products/product_{$productImgNum}.jpg";
+      $vat = 20;
       $productsData[$i] = [
         /* 0 */ $idCategory,
         /* 1 */ $idBrand,
@@ -51,7 +52,8 @@ class RandomGenerator {
         /* 10 */ rand(0, 1),
         /* 11 */ $number,
         /* 12 */ $ean,
-        /* 13 */ $image
+        /* 13 */ $image,
+        /* 14 */ $vat
       ];
     }
 
@@ -60,20 +62,29 @@ class RandomGenerator {
       $idProduct = $productModel->insertRow([
         "id_category" => $tmpProduct[0],
         "id_brand" => $tmpProduct[1],
-        "name_lang_1" => $tmpProduct[3],
-        "brief_lang_1" => $tmpProduct[4],
-        "description_lang_1" => $tmpProduct[5],
         "sale_price" => $tmpProduct[6],
         "id_delivery_unit" => rand(2, 21),
         "is_on_sale" => $tmpProduct[8],
         "is_new" => $tmpProduct[9],
         "is_top" => $tmpProduct[10],
-        "is_recommended" => rand(0,1) == 1,
+        "is_recommended" => rand(0, 1) == 1,
+        "is_on_sale" => rand(0, 1) == 1,
         "extended_warranty" => rand(0, 36),
         "stock_quantity" => rand(0, 100) / 10,
         "number" => $tmpProduct[11],
         "ean" => $tmpProduct[12],
         "image" => $tmpProduct[13],
+        "vat_percent" => $tmpProduct[14],
+
+        "name_lang_1"        => $tmpProduct[3]." (lng-1)",
+        "brief_lang_1"       => $tmpProduct[4]." (lng-1)",
+        "description_lang_1" => $tmpProduct[5]." (lng-1)",
+        "name_lang_2"        => $tmpProduct[3]." (lng-2)",
+        "brief_lang_2"       => $tmpProduct[4]." (lng-2)",
+        "description_lang_2" => $tmpProduct[5]." (lng-2)",
+        "name_lang_3"        => $tmpProduct[3]." (lng-3)",
+        "brief_lang_3"       => $tmpProduct[4]." (lng-3)",
+        "description_lang_3" => $tmpProduct[5]." (lng-3)",
       ]);
 
       $tmpFeatureId = 1;

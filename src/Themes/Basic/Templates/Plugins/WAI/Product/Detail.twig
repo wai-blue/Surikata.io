@@ -92,7 +92,7 @@
                      showCancelButton: true,
                      cancelButtonText: '<span style=\'color: #eee;\'>{{ translate("Continue shopping") }}</span>',
                      cancelButtonColor: '#eeeeee',
-                     confirmButtonText: '{{ translate("Checkout") }}',
+                     confirmButtonText: '{{ translate("Go to cart") }}',
                      confirmButtonColor: '#fb383b',
                      customClass: {
                        confirmButton: 'swal-confirm-button',
@@ -196,7 +196,7 @@
     </div>
     <!--//tabs-->
     <!-- /new_arrivals -->
-    {% if zobrazit_podobne_produkty %}
+    {% if show_similar_products %}
       <div class="new_arrivals">
         <h3>Similarly products</h3>
         <div class="row">

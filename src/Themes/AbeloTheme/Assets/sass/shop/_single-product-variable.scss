@@ -1,0 +1,42 @@
+.pro-details-size-color{ 
+	margin:0 0 10px;
+	.pro-details-color-wrap {
+	    font-size: 14px;
+	    font-weight: 700;
+	    color: #1d1d1d;
+		   & span {
+		    display: block;
+		    margin: 0 0 10px;
+		}
+		.pro-details-color-content {
+				& li {
+			    width: 1.25rem;
+			    height: 1.25rem;
+			    display: inline-block;
+			    margin-right: 15px;
+			    box-shadow: 2px 2px 4px 0 rgba(0,0,0,.2);
+			    border: 1px solid rgba(0,0,0,.05);
+			    cursor: pointer;
+			    background-size: contain;
+			    background: #fff;
+			    &.active {
+				    background-color: #434A54;
+				}
+				&:hover {
+				    border: 2px solid#434A54;
+				}
+			}
+		}
+		
+	}
+	.product-size {
+		    margin-left: 20px;
+		    span {
+			    display: block;
+			    color: #1d1d1d;
+			    font-size: 14px;
+			    font-weight: 700;
+			    margin-bottom: 7px;
+			}
+		}
+}

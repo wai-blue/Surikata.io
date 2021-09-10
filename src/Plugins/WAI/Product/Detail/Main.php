@@ -4,6 +4,46 @@ namespace Surikata\Plugins\WAI\Product {
   use ADIOS\Widgets\Products\Models\Service;
   class Detail extends \Surikata\Core\Web\Plugin {
     var $productInfo = NULL;
+    var $deleteCurrentPageBreadCrumb = true;
+
+    public function getBreadCrumbs($urlVariables = []) {
+      $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
+
+      $productInfo = $this->getProductInfo();
+      $productInfo['idProductCategory'] = $productInfo['id_category'];
+
+      $productCatalog = 
+        new \Surikata\Plugins\WAI\Product\Catalog(
+          $this->websiteRenderer
+        )
+      ;
+
+      $productCatalogUrl = $productCatalog->getWebPageUrl();
+
+      $breadCrumb = 
+        new \Surikata\Plugins\WAI\Common\Breadcrumb(
+          $this->websiteRenderer
+        )
+      ;
+
+      $breadCrumbs = 
+        $breadCrumb->getMenuBreadCrumbs(
+          $productCatalogUrl, 
+          true
+        )
+      ;
+
+      $breadCrumbs = array_merge(
+        $breadCrumbs, 
+        $productCatalog->getBreadCrumbs($productInfo)
+      );
+
+      $breadCrumbs[
+        $this->getWebPageUrlFormatted($productInfo)
+      ] = $productInfo["name_lang_{$languageIndex}"];
+
+      return $breadCrumbs;
+    }
 
     public function getWebPageUrlFormatted($urlVariables, $pluginSettings = []) {
       $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
@@ -29,8 +69,8 @@ namespace Surikata\Plugins\WAI\Product {
           ;
         }
 
-        foreach ($this->productInfo['podobne'] as $key => $value) {
-          $this->productInfo['podobne'][$key]['url'] =
+        foreach ($this->productInfo['related'] as $key => $value) {
+          $this->productInfo['related'][$key]['url'] =
             \ADIOS\Core\HelperFunctions::str2url($value['name_lang_1'])
             .".pid.{$value['id']}"
           ;
@@ -136,26 +176,30 @@ namespace ADIOS\Plugins\WAI\Product {
           "title" => "Show accessories for products",
           "type" => "boolean",
         ],
-        "zobrazit_podobne_produkty" => [
+        "show_similar_products" => [
           "title" => "Zobraziť podobné produkty",
           "type" => "boolean",
         ],
       ];
     }
 
-    public function onProductDetailSidebarButtons($event) {
-      $productUrl = $this->adios->websiteRenderer->getPlugin("WAI/Product/Detail")->getWebpageUrl($event["data"]);
-      $event["html"] = "
-        <a 
-          class='btn btn-icon-split btn-light mt-4'
-          target='_blank'
-          href='../../../{$this->adios->config["language"]}/{$productUrl}'
-        >
-          <span class='icon'><i class='fa fa-link'></i></span>
-          <span class='text'>Open product page</span>
-        </a>"
-      ;
+    public function onModelAfterFormParams($event) {
+      $data = $event["data"];
+
+      if ($event["model"]->name == "Widgets/Products/Models/Product") {
+        $productUrl = $this->adios->websiteRenderer->getPlugin("WAI/Product/Detail")->getWebpageUrl($event["data"]);
+        // REVIEW: Este jednu vec som si uvedomil.
+        // $adios->config["language"] nie je to iste, ako jazyky v "domains".
+        // To bude treba opravit, zatial ponechame tento komentar ako pripomienku.
+        $event["params"]["template"]["columns"][1]["rows"][2]["html"] .= "
+          <a class='btn btn-icon-split btn-light' target='_blank' href='{$this->adios->websiteRenderer->rootUrl}/{$this->adios->config["language"]}/{$productUrl}'>
+            <span class='icon'><i class='fa fa-link'></i></span>
+            <span class='text'>Open product page</span>
+          </a>"
+        ;
+      }
+
       return $event;
-   }
+    }
   }
 }

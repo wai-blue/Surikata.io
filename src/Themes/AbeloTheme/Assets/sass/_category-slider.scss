@@ -1,0 +1,34 @@
+// category slider Style
+
+.category-slider-area{
+	.list-product{
+		&:before{
+		display:none;
+		}
+		padding:0;    
+		display: inline-block;
+		margin-bottom:30px;
+		@media #{$tablet-device}{
+			display:block;
+		}
+		.product-inner{
+		.img-block {
+		    float: left;
+		    width: 100px;
+		    position: relative;
+    		overflow: hidden;
+			}
+		}
+		&:hover{
+			.product-inner{
+				box-shadow:none;
+			}
+		}
+		.product-decs {
+		    overflow: hidden;
+		    padding: 10px;
+		    text-align: left;
+		    padding-bottom: 0;
+		}
+	}
+}

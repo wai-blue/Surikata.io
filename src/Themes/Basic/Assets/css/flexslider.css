@@ -192,6 +192,7 @@ html[xmlns] .flexslider .slides {
 }
 .flex-control-thumbs li {
   width: 32.2%;
+  min-height: 150px;
   float: left;
   margin: 0 1% 0 0;
 }

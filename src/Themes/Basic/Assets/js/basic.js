@@ -124,14 +124,141 @@ $( "#headerSearch" ).autocomplete({
 							.attr("onclick", "window.location.href = '" + item.url + "'"))
 					.appendTo(ul);
 			}
-			else {
+			/*else {
 				return $("<li class='ui-menu-item'>")
 					.attr("data-value", item.value)
 					.append(
 						$("<div id='ui-id-2' tabindex='-1' class='ui-menu-item-wrapper'>")
 							.append(item.label))
 					.appendTo(ul);
-			}
+			}*/
 		};
 	},
 });
+
+function toggleCollapsed(id) {
+	$("#"+id).toggle();
+}
+
+function toggleLoginRegister(id, link) {
+	$("#login").removeClass("active");
+	$("#register").removeClass("active");
+	$("#"+id).addClass("active");
+
+	var siblings = $(link).parent().siblings();
+	siblings = ($(siblings[0]));
+	var childs = siblings.children();
+	$(childs[0]).removeClass("active");
+
+	$(link).addClass("active");
+}
+
+function sendLoginForm(formId) {
+	var form = document.getElementById(formId);
+	return form.reportValidity();
+}
+
+function sendContactForm(formId) {
+	var form = $(formId);
+	data = {};
+
+	form.find('input, select, textarea').each(function () {
+		var element = $(this);
+		if (!validateInputs(this)) {
+			return false;
+		}
+		if (element.prop('disabled') !== true && element.attr("name") !== undefined && element.attr("name") !== null) {
+			if (element.val() !== undefined && element.val() instanceof Array && element.val().length > 0) {
+				element.val().forEach(function (value, index) {
+					data[element.attr("name")] = value;
+				})
+			} else {
+				data[element.attr("name")] = element.val();
+			}
+		}
+	});
+	data['__renderOnlyPlugin'] = 'WAI/Misc/ContactForm';
+	data['__output'] = 'json';
+	let urlToSend = window.location.href;
+
+	$.getJSON(urlToSend,
+		data
+	).done(function (response) {
+		try {
+			if (response["status"] === "success") {
+				Swal.fire({
+					width: '40rem',
+					title: '<strong>Message was send</strong>',
+					text: '',
+					icon: 'success',
+					confirmButtonText: 'OK',
+					customClass: {
+						confirmButton: 'swal-confirm-button',
+					},
+					timer: 10000,
+				});
+				clearInputs(formId);
+			}
+			else {
+				Swal.fire({
+					title: 'Error!',
+					text: 'Input fields were filled out incorrectly',
+					icon: 'error',
+					confirmButtonText: 'Try again'
+				});
+			}
+			console.log(response);
+		} catch (e) {
+			console.log(response);
+			return;
+		}
+		console.log(response);
+	});
+
+	return false;
+}
+
+function validateInputs(element) {
+	element = $(element);
+	var value = element.val();
+	var test = false;
+	switch (element.attr('name')) {
+		case "email":
+			var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+			test = regex.test(value);
+			break;
+		case "name":
+		case "contact_message":
+			test = value.length > 2;
+			break;
+		case "phone_number":
+			test = value.length > 9;
+			break;
+		default:
+			test = true;
+			break;
+	}
+	if (!test) {
+		element.addClass("error-input");
+	} else {
+		element.removeClass("error-input");
+	}
+	return test;
+}
+
+function clearInputs(formId) {
+	var form = $(formId);
+	form.find('input, select, textarea').each(function () {
+		var element = $(this);
+
+		if (element.prop('disabled') !== true && element.attr("name") !== undefined && element.attr("name") !== null) {
+			if (element.val() !== undefined && element.val() instanceof Array && element.val().length > 0) {
+				element.val().forEach(function (value, index) {
+					element.val("");
+				})
+			} else {
+				element.val("");
+			}
+		}
+	});
+}

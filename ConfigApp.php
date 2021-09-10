@@ -97,6 +97,7 @@ $adminPanelConfig['widgets']['Orders']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Finances']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Products']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Prices']['enabled'] = TRUE;
+$adminPanelConfig['widgets']['Shipping']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Stock']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Website']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Plugins']['enabled'] = TRUE;
@@ -112,7 +113,8 @@ $adminPanelConfig['widgets']['Website']['domainLanguages'] = $configEnv["domainL
 
 $websiteRendererConfig = [
   "domainToRender" => WEBSITE_DOMAIN_TO_RENDER,
-  "minifyOutputHtml" => TRUE,
+  "minifyOutputHtml" => $configEnv['minifyOutputHtml'] ?? FALSE,
+  "validateOutputHtml" => $configEnv['validateOutputHtml'] ?? FALSE,
 
   "pluginsDir" => PLUGINS_DIR,
   "themesDir" => THEMES_DIR,

@@ -1,197 +1,121 @@
-<div class="checkout-area">
-  <div class="container">
-    {% if cartContents.items|length > 0 %}
-      <div class="billing-info-wrap">
-        {% if not user.isLogged %}
-          {% if user.loginFailed %}
-            <p style="color:red">
-              Nepodarilo sa prihlásiť.
-            </p>
-          {% endif %}
-          <div class="row user-account-box">
-            <div class="col-12 col-xs-12 col-md-6 col-lg-3">
-              <div class="checkout-account">
-                <label>Have you already account?</label>
-                <span class="checkout-toggle2" data-toggle="collapse" href="#loginUser">Login</span>
-              </div>
-              <div class="checkout-account-toggle open-toggle2 mb-5 collapse" id="loginUser">
-                <form method="post" id="loginForm">
-                  <input type="hidden" name="doLogin" value="1" />
-                  <input class="form-control" placeholder="Email address" name="loginEmail" type="email"/>
-                  <input class="form-control" placeholder="Password" name="loginPassword" type="password"/>
-                  <button
-                    class="btn-hover checkout-btn"
-                    type="submit"
-                    onclick="$('#loginForm').submit();"
-                  >Login</button>
-                </form>
-              </div>
-            </div>
-          </div>
-        {% elseif userLogged.ADDRESSES|length > 0 %}
-          <h3>List of your adresses</h3>
-          {% for address in userLogged.ADDRESSES %}
-            <input
-              type="radio" name="id_adresa" id="id_adresa_{{ address.id }}"
-              value="{{ address.id }}"
-              onclick="
-                $('#savedAddressValues_{{ address.id }} span').each(function() {
-                  let varName = $(this).data('variable');
-                  let varValue = $(this).text();
-                  $('#orderDataForm *[name=' + varName + ']').val(varValue);
-                });
-              "
-            >
-            <label class="form-check-label" for="id_adresa_{{ address.id }}">
-              {{ address.inv_given_name }} {{ address.inv_family_name }},
-              {{ address.inv_street_1 }}, {{ address.inv_city }},
-              {{ address.phone_number }}
-            </label>
-            <br/>
-            <div style='display:none' id="savedAddressValues_{{ address.id }}">
-              <span data-variable="inv_given_name">{{ address.inv_given_name }}</span>
-              <span data-variable="inv_family_name">{{ address.inv_family_name }}</span>
-              <span data-variable="inv_company_name">{{ address.inv_company_name }}</span>
-              <span data-variable="inv_street_1">{{ address.inv_street_1 }}</span>
-              <span data-variable="inv_street_2">{{ address.inv_street_2 }}</span>
-              <span data-variable="inv_zip">{{ address.inv_zip }}</span>
-              <span data-variable="inv_city">{{ address.inv_city }}</span>
-              <span data-variable="del_given_name">{{ address.del_given_name }}</span>
-              <span data-variable="del_family_name">{{ address.del_family_name }}</span>
-              <span data-variable="del_company_name">{{ address.del_company_name }}</span>
-              <span data-variable="del_street_1">{{ address.del_street_1 }}</span>
-              <span data-variable="del_street_2">{{ address.del_street_2 }}</span>
-              <span data-variable="del_zip">{{ address.del_zip }}</span>
-              <span data-variable="del_city">{{ address.del_city }}</span>
-              <span data-variable="phone_number">{{ address.phone_number }}</span>
-              <span data-variable="email">{{ address.email }}</span>
-            </div>
-          {% endfor %}
-        {% endif %}
-      </div>
-      <form class="creditly-card-form agileinfo_form" method="post" id="orderDataForm">
-
-        <div class="checkout-left row">
-          <div class="col-12 col-md-7 address_form" style="float: left;">
-            <h4>Customer Info</h4>
-            <section class="creditly-wrapper wrapper">
-              <div class="information-wrapper">
-                <div class="first-row form-group">
-                  <div class="controls">
-                    <label class="control-label">{{ translate("First name") }}: </label>
-                    <input
-                      class="billing-address-name form-control"
-                      type="text"
-                      name="given_name"
-                      value="{{ user.profile.given_name }}"
-                      placeholder="{{ translate("First name") }}"
-                    />
-                  </div>
-                  <div class="controls">
-                    <label class="control-label">{{ translate("Last name") }}: </label>
-                    <input
-                      class="billing-address-name form-control"
-                      type="text"
-                      name="family_name"
-                      value="{{ user.profile.last_name }}"
-                      placeholder="{{ translate("Last name") }}"
-                    />
-                  </div>
-                  <div class="controls">
-                    <label class="control-label">{{ translate("Company name") }}: </label>
-                    <input
-                      class="billing-address-name form-control"
-                      type="text"
-                      name="company_name"
-                      value="{{ user.profile.company_name }}"
-                      placeholder="{{ translate("Company name") }}"
-                    />
-                  </div>
-
-                  <div class="controls">
-                    <label class="control-label">{{ translate("Tax ID") }}: </label>
-                    <input
-                      class="billing-address-name form-control"
-                      type="text"
-                      name="company_tax_id"
-                      value="{{ user.profile.company_tax_id }}"
-                      placeholder="{{ translate("Tax ID") }}"
-                    />
-                  </div>
-                  <div class="controls">
-                    <label class="control-label">{{ translate("VAT reg.") }}: </label>
-                    <input
-                      class="billing-address-name form-control"
-                      type="text"
-                      name="company_vat_id"
-                      value="{{ user.profile.company_vat_id }}"
-                      placeholder="{{ translate("VAT reg.") }}"
-                    />
-                  </div>
+{% if _GET.renderOnly == "" %}
+  <div class="checkout-area">
+    <div class="container">
+      {% if cartContents.items|length > 0 %}
+        <div class="billing-info-wrap">
+          {% if not user.isLogged %}
+            {% if user.loginFailed %}
+              <p style="color:red">
+                Nepodarilo sa prihlásiť.
+              </p>
+            {% endif %}
+            <!--<div class="row user-account-box">
+              <div class="col-12 col-xs-12 col-md-6 col-lg-3">
+                <div class="checkout-account">
+                  <label>Have you already account?</label>
+                  <span class="checkout-toggle2" data-toggle="collapse" href="#loginUser">Login</span>
+                </div>
+                <div class="checkout-account-toggle open-toggle2 mb-5 collapse" id="loginUser">
+                  <form method="post" id="loginForm">
+                    <input type="hidden" name="doLogin" value="1" />
+                    <input class="form-control" placeholder="Email address" name="loginEmail" type="email"/>
+                    <input class="form-control" placeholder="Password" name="loginPassword" type="password"/>
+                    <button
+                      class="btn-hover checkout-btn"
+                      type="submit"
+                      onclick="$('#loginForm').submit();"
+                    >Login</button>
+                  </form>
                 </div>
               </div>
-            </section>
+            </div>-->
+          {% elseif userLogged.ADDRESSES|length > 0 %}
+            <div class="your-order-area">
+              <div class="gray-bg-4 your-order-wrap m-2">
+                <h4>List of your adresses</h4>
+                {% for address in userLogged.ADDRESSES %}
+                  <input
+                    type="radio" name="id_adresa" id="id_adresa_{{ address.id }}"
+                    value="{{ address.id }}"
+                    onclick="
+                      $('#savedAddressValues_{{ address.id }} span').each(function() {
+                        let varName = $(this).data('variable');
+                        let varValue = $(this).text();
+                        $('#orderDataForm *[name=' + varName + ']').val(varValue);
+                      });
+                    "
+                  >
+                  <label class="form-check-label" for="id_adresa_{{ address.id }}">
+                    {{ address.inv_given_name }} {{ address.inv_family_name }},
+                    {{ address.inv_street_1 }}, {{ address.inv_city }},
+                    {{ address.phone_number }}
+                  </label>
+                  <br/>
+                  <div style='display:none' id="savedAddressValues_{{ address.id }}">
+                    <span data-variable="inv_given_name">{{ address.inv_given_name }}</span>
+                    <span data-variable="inv_family_name">{{ address.inv_family_name }}</span>
+                    <span data-variable="inv_company_name">{{ address.inv_company_name }}</span>
+                    <span data-variable="inv_street_1">{{ address.inv_street_1 }}</span>
+                    <span data-variable="inv_street_2">{{ address.inv_street_2 }}</span>
+                    <span data-variable="inv_zip">{{ address.inv_zip }}</span>
+                    <span data-variable="inv_city">{{ address.inv_city }}</span>
+                    <span data-variable="del_given_name">{{ address.del_given_name }}</span>
+                    <span data-variable="del_family_name">{{ address.del_family_name }}</span>
+                    <span data-variable="del_company_name">{{ address.del_company_name }}</span>
+                    <span data-variable="del_street_1">{{ address.del_street_1 }}</span>
+                    <span data-variable="del_street_2">{{ address.del_street_2 }}</span>
+                    <span data-variable="del_zip">{{ address.del_zip }}</span>
+                    <span data-variable="del_city">{{ address.del_city }}</span>
+                    <span data-variable="phone_number">{{ address.phone_number }}</span>
+                    <span data-variable="email">{{ address.email }}</span>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+        <form class="creditly-card-form agileinfo_form" method="post" id="orderDataForm">
 
-            <h4>Billing Details</h4>
-            <section class="creditly-wrapper wrapper">
-              <div class="information-wrapper">
-                <div class="first-row form-group">
-
-                  <div class="card_number_grids">
-                    <div class="card_number_grid_left">
-                      <div class="controls">
-                        <label class="control-label">{{ translate("First name") }}</label>
+          <div class="checkout-left row">
+            <div class="col-12 col-md-7 address_form" style="float: left;">
+              <h4>Billing Details</h4>
+              <section class="creditly-wrapper wrapper">
+                <div class="information-wrapper">
+                  <div class="first-row form-group">
+                    <div class="row">
+                      <div class="col-lg-6 col-md-6 controls">
+                        <label class="control-label">
+                          {{ translate("First name") }}
+                          <span class="input-required">*</span>
+                        </label>
                         <input
-                          class="form-control"
+                          class="billing-address-name form-control"
                           type="text"
                           name="inv_given_name"
-                          required
+                          value="{{ user.profile.given_name }}"
+                          placeholder="{{ translate("First name") }}"
                         />
                       </div>
-                    </div>
-                    <div class="card_number_grid_right">
-                      <div class="controls">
-                        <label class="control-label">{{ translate("Last name") }}</label>
+                      <div class="col-lg-6 col-md-6 controls">
+                        <label class="control-label">
+                          {{ translate("Last name") }}
+                          <span class="input-required">*</span>
+                        </label>
                         <input
-                          class="form-control"
+                          class="billing-address-name form-control"
                           type="text"
-                          name="inv_last_name"
-                          required
+                          name="inv_family_name"
+                          value="{{ user.profile.last_name }}"
+                          placeholder="{{ translate("Last name") }}"
                         />
                       </div>
                     </div>
-                    <div class="clear"> </div>
-                  </div>
-
-                  <div class="controls">
-                    <label class="control-label">{{ translate("Company Name") }}</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      name="inv_company_name"
-                      placeholder="{{ translate("Company Name") }}">
-                  </div>
-                  <div class="controls">
-                    <label class="control-label">{{ translate("Street Address") }}</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      name="inv_street_1"
-                      placeholder="{{ translate("House number and street name") }}"
-                    >
-                    <input
-                      class="form-control"
-                      placeholder="{{ translate("Apartment, suite, unit etc.") }}"
-                      type="text"
-                      name="inv_street_2"
-                      required
-                    />
-                  </div>
-
-                  <div class="card_number_grids">
-                    <div class="card_number_grid_left">
-                      <div class="controls">
-                        <label class="control-label">{{ translate("Town / City") }}</label>
+                    <div class="row">
+                      <div class="col-lg-6 col-md-6 controls">
+                        <label class="control-label">
+                          {{ translate("Town / City") }}
+                          <span class="input-required">*</span>
+                        </label>
                         <input
                           class="form-control"
                           type="text"
@@ -200,10 +124,11 @@
                           required
                         />
                       </div>
-                    </div>
-                    <div class="card_number_grid_right">
-                      <div class="controls">
-                        <label class="control-label">{{ translate("Postcode / ZIP") }}</label>
+                      <div class="col-lg-6 col-md-6 controls">
+                        <label class="control-label">
+                          {{ translate("Postcode / ZIP") }}
+                          <span class="input-required">*</span>
+                        </label>
                         <input
                           class="form-control"
                           type="text"
@@ -213,216 +138,413 @@
                         />
                       </div>
                     </div>
-                    <div class="clear"> </div>
-                  </div>
-
-                  <div class="card_number_grids">
-                    <div class="card_number_grid_left">
+                    <div class="row">
                       <div class="controls">
-                        <label class="control-label">{{ translate("Phone") }}</label>
+                        <label class="control-label">
+                          {{ translate("Street Address") }}
+                          <span class="input-required">*</span>
+                        </label>
                         <input
                           class="form-control"
                           type="text"
-                          name="phone_number"
-                          placeholder="{{ translate("Phone") }}"
+                          name="inv_street_1"
+                          placeholder="{{ translate("House number and street name") }}"
+                        >
+                        <input
+                          class="form-control"
+                          placeholder="{{ translate("Apartment, suite, unit etc.") }}"
+                          type="text"
+                          name="inv_street_2"
                           required
                         />
                       </div>
                     </div>
-                    <div class="card_number_grid_right">
+                  </div>
+                  <div class="first-row form-group">
+                    <div class="card_number_grids">
+                      <div class="card_number_grid_left">
+                        <div class="controls">
+                          <label class="control-label">
+                            {{ translate("Phone") }}
+                            <span class="input-required">*</span>
+                          </label>
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="phone_number"
+                            placeholder="{{ translate("Phone") }}"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div class="card_number_grid_right">
+                        <div class="controls">
+                          <label class="control-label">
+                            {{ translate("Email Address") }}
+                            <span class="input-required">*</span>
+                          </label>
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="email"
+                            value="{{ user.profile.email }}"
+                            placeholder="{{ translate("Email Address") }}"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div class="clear"> </div>
+                    </div>
+                  </div>
+                  <button class="submit check_out" type="button" onclick="$('#buyAsCompany').toggle();">Buy as company</button>
+                  <div id='buyAsCompany' style="display:none">
+                    <div class="row mt-3">
                       <div class="controls">
-                        <label class="control-label">{{ translate("Email Address") }}</label>
+                        <label class="control-label">{{ translate("Company name") }}: </label>
                         <input
-                          class="form-control"
+                          class="billing-address-name form-control"
                           type="text"
-                          name="email"
-                          placeholder="{{ translate("Email Address") }}"
-                          required
+                          name="company_name"
+                          value="{{ user.profile.company_name }}"
+                          placeholder="{{ translate("Company name") }}"
                         />
                       </div>
+
+                      <div class="row">
+                        <div class="col-lg-6 col-md-6 controls">
+                          <label class="control-label">{{ translate("Tax ID") }}: </label>
+                          <input
+                            class="billing-address-name form-control"
+                            type="text"
+                            name="company_tax_id"
+                            value="{{ user.profile.company_tax_id }}"
+                            placeholder="{{ translate("Tax ID") }}"
+                          />
+                        </div>
+                        <div class="col-lg-6 col-md-6 controls">
+                          <label class="control-label">{{ translate("VAT reg.") }}: </label>
+                          <input
+                            class="billing-address-name form-control"
+                            type="text"
+                            name="company_vat_id"
+                            value="{{ user.profile.company_vat_id }}"
+                            placeholder="{{ translate("VAT reg.") }}"
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div class="clear"> </div>
-                  </div>
-
-                  <div class="controls">
-                    <label class="control-label">Address type: </label>
-                    <select class="form-control option-w3ls">
-                      <option>Office</option>
-                      <option>Home</option>
-                      <option>Commercial</option>
-
-                    </select>
                   </div>
                 </div>
-              </div>
-            </section>
+              </section>
 
-            <h4>Additional information</h4>
-            <section class="creditly-wrapper wrapper">
-              <div class="information-wrapper">
-                <div class="first-row form-group">
+              <h4>Additional information</h4>
+              <section class="creditly-wrapper wrapper">
+                <div class="information-wrapper">
+                  <div class="first-row form-group">
 
-                  <div class="controls">
-                    <label>Order notes</label>
-                    <textarea class="form-control" name="notes" placeholder="Notes about your order, e.g. special notes for delivery. "></textarea>
+                    <div class="controls">
+                      <label>Order notes</label>
+                      <textarea class="form-control" name="notes" placeholder="Notes about your order, e.g. special notes for delivery. "></textarea>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </section>
+              </section>
 
-            <button class="submit check_out" type="button" onclick="BasicThemeCart.showShippingAddress()">Ship to a different address?</button>
-            <section class="creditly-wrapper wrapper collapse" id="diffShippingAddress">
-              <h4>Ship to a different address</h4>
-              <input class="checkout-toggle" type="hidden" name="differentDeliveryAddress" id="differentDeliveryAddressCheckbox" value="0"/>
-              <div class="information-wrapper">
-                <div class="first-row form-group open-toggle">
+              <button class="submit check_out" type="button" onclick="BasicThemeCart.showShippingAddress()">Ship to a different address?</button>
+              <section class="creditly-wrapper wrapper collapse" id="diffShippingAddress">
+                <h4>Ship to a different address</h4>
+                <input class="checkout-toggle" type="hidden" name="differentDeliveryAddress" id="differentDeliveryAddressCheckbox" value="0"/>
+                <div class="information-wrapper">
+                  <div class="first-row form-group open-toggle">
 
-                  <div class="row">
-                    <div class="col-lg-6 col-md-6">
-                      <div class="controls">
-                        <div class="billing-info mb-20px">
-                          <label>{{ translate("First Name") }}</label>
-                          <input class="form-control" type="text" name="del_given_name" required/>
+                    <div class="row">
+                      <div class="col-lg-6 col-md-6">
+                        <div class="controls">
+                          <div class="billing-info mb-20px">
+                            <label>
+                              {{ translate("First Name") }}
+                              <span class="input-required">*</span>
+                            </label>
+                            <input class="form-control" type="text" name="del_given_name" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="controls">
+                          <div class="billing-info mb-20px">
+                            <label>
+                              {{ translate("Last Name") }}
+                              <span class="input-required">*</span>
+                            </label>
+                            <input class="form-control" type="text" name="del_family_name" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="controls">
+                          <div class="billing-info mb-20px">
+                            <label>
+                              {{ translate("Town / City") }}
+                              <span class="input-required">*</span>
+                            </label>
+                            <input class="form-control" type="text" name="del_city" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="controls">
+                          <div class="billing-info mb-20px">
+                            <label>
+                              {{ translate("Postcode / ZIP") }}
+                              <span class="input-required">*</span>
+                            </label>
+                            <input class="form-control" type="text" name="del_zip" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-12">
+                        <div class="controls">
+                          <div class="billing-info mb-20px">
+                            <label>
+                              {{ translate("Street Address") }}
+                              <span class="input-required">*</span>
+                            </label>
+                            <input class="form-control" class="billing-address" placeholder="House number and street name" type="text" name="del_street_1" required/>
+                            <input class="form-control" placeholder="Apartment, suite, unit etc." type="text" name="del_street_2" required/>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-6 col-md-6">
-                      <div class="controls">
-                        <div class="billing-info mb-20px">
-                          <label>{{ translate("Last Name") }}</label>
-                          <input class="form-control" type="text" name="del_family_name" required/>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-12">
-                      <div class="controls">
-                        <div class="billing-info mb-20px">
-                          <label>{{ translate("Company Name") }}</label>
-                          <input class="form-control" type="text" name="del_company_name"/>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-12">
-                      <div class="controls">
-                        <div class="billing-info mb-20px">
-                          <label>{{ translate("Street Address") }}</label>
-                          <input class="form-control" class="billing-address" placeholder="House number and street name" type="text" name="del_street_1" required/>
-                          <input class="form-control" placeholder="Apartment, suite, unit etc." type="text" name="del_street_2" required/>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                      <div class="controls">
-                        <div class="billing-info mb-20px">
-                          <label>{{ translate("Town / City") }}</label>
-                          <input class="form-control" type="text" name="del_city" required/>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                      <div class="controls">
-                        <div class="billing-info mb-20px">
-                          <label>{{ translate("Postcode / ZIP") }}</label>
-                          <input class="form-control" type="text" name="del_zip" required/>
-                        </div>
-                      </div>
-                    </div>
+
                   </div>
-
                 </div>
+              </section>
+              <div class="orderAgreement mt-4 mb-4">
+                <label id="general_terms_and_conditions_label" class="form-check-label" for="general_terms_and_conditions">
+                  <input
+                    type="checkbox"
+                    name="general_terms_and_conditions"
+                    id="general_terms_and_conditions"
+                  >{{ translate("I have read the terms and conditions") }}
+                  <span class="input-required">*</span>
+                </label>
+
+                <label id="gdpr_consent_label" class="form-check-label" for="gdpr_consent">
+                  <input
+                  type="checkbox"
+                  name="gdpr_consent"
+                  id="gdpr_consent"
+                  >{{ translate("I agree to the processing of personal data for the processing of the order") }}
+                  <span class="input-required">*</span>
+                </label>
+
+                <label class="form-check-label" for="marketingAgreement">
+                  <input
+                    type="checkbox"
+                    name="marketingAgreement"
+                    id="marketingAgreement"
+                  >{{ translate("I agree to the processing of personal data for the purpose of sending marketing information") }}
+                </label>
               </div>
-            </section>
-          </div>
+            </div>
 
             <div class="col-12 col-md-5 checkout-right-basket">
-              <div class="your-order-area">
-                <h3>Your order</h3>
-                <div class="your-order-wrap gray-bg-4">
-                  <div class="your-order-product-info">
-                    <div class="your-order-top">
-                      <ul>
-                        <li>Product</li>
-                        <li>Total</li>
-                      </ul>
-                    </div>
-                    <div class="your-order-middle">
-                      <ul>
-                        {% for item in cartContents.items %}
-                          <li><span class="order-middle-left">{{ item.PRODUCT.name_lang_1 }} X {{ item.quantity }}</span> <span class="order-price">{{ (item.jednotkova_cena * item.mnozstvo)|number_format(2, ",", " ") }} €</span></li>
-                        {% endfor %}
-                      </ul>
-                    </div>
-                    <div class="your-order-bottom">
-                      <ul>
-                        <li class="your-order-shipping">Shipping</li>
-                        {% for deliveryPluginName, deliveryService in deliveryServices %}
-                          <li class="pl-3">
-                            <input class="form-check-input" type="radio" name="deliveryService" id="deliveryService-{{ loop.index }}" value="{{ deliveryPluginName }}" checked updateCheckoutOverview>
-                            <label class="form-check-label" for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
-                            <p data-method="{{ deliveryPluginName }}" class="delivery-text">{{ deliveryService.description }}</p>
-                            <p>{{ deliveryService.PRICE }} EUR</p>
-                          </li>
-                        {% endfor %}
-                      </ul>
-                    </div>
-                    <div class="your-order-total">
-                      <ul>
-                        <li class="order-total">Total</li>
-                        <li>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="payment-method">
-                    <div class="payment-accordion element-mrg">
-                      <div class="panel-group" id="accordion">
-                        <div class="panel payment-accordion">
-                          <div class="panel-heading mb-2" id="method-one">
-                            <h4 class="panel-title">
-                              <a data-toggle="collapse" data-parent="#accordion" href="#method1">
-                                Payments
-                              </a>
-                            </h4>
-                          </div>
-                          {% for paymentPluginName, paymentMethod in paymentMethods %}
-                            <div id="method1" class="panel-collapse collapse show">
-                              <div class="panel-body">
-                                <input required type="radio" name="paymentMethod" id="paymentMethod-{{ loop.index }}" value="{{ paymentPluginName }}" checked>
-                                <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
-                                <p data-method="{{ paymentPluginName }}" class="payment-text">{{ paymentMethod.description }}</p>
-                              </div>
-                            </div>
+              <div id="order-area">
+                <div class="your-order-area">
+                  <h3>Your order</h3>
+                  <div class="your-order-wrap gray-bg-4">
+                    <div class="your-order-product-info">
+                      <div class="your-order-top">
+                        <ul>
+                          <li>Product</li>
+                          <li>Total</li>
+                        </ul>
+                      </div>
+                      <div class="your-order-middle">
+                        <ul>
+                          {% for item in cartContents.items %}
+                            <li>
+                              <span class="order-middle-left">{{ item.PRODUCT.name_lang_1 }} X {{ item.quantity }}</span>
+                              <span class="order-price">{{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} €</span>
+                            </li>
                           {% endfor %}
+                        </ul>
+                      </div>
+                      <div class="your-order-bottom">
+                        <ul>
+                          {% if deliveryServices|length > 0 %}
+                            {% for deliveryPluginName, deliveryService in deliveryServices %}
+                              <li class="pl-3">
+                                <input 
+                                  class="form-check-input" 
+                                  type="radio" 
+                                  name="deliveryService" 
+                                  id="deliveryService-{{ loop.index }}" 
+                                  value="{{ deliveryService.id }}" 
+                                  {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
+                                  onchange="BasicThemeCart.updateCheckoutOverview()"
+                                >
+                                <label class="form-check-label" for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
+                                <p data-method="{{ deliveryPluginName }}" class="delivery-text">{{ deliveryService.description }}</p>
+                                <!--<p><b>{{ deliveryService.PRICE }} €</b></p>-->
+                              </li>
+                            {% endfor %}
+                          {% else %}
+                            <p class="info-warning">Delivery services are unavailable</p>
+                          {% endif %}
+                        </ul>
+                      </div>
+                      <div class="payment-method mt-5">
+                        <div class="payment-accordion element-mrg">
+                          <div class="panel-group" id="accordion">
+                            <div class="panel payment-accordion">
+                              {% for paymentPluginName, paymentMethod in paymentMethods %}
+                                <div id="method1" class="panel-collapse collapse show">
+                                  <div class="panel-body">
+                                    <input 
+                                      required type="radio" 
+                                      name="paymentMethod" 
+                                      id="paymentMethod-{{ loop.index }}" 
+                                      value="{{ paymentMethod.id }}" 
+                                      {% if selectedPaymentMethod.id == paymentMethod.id %} checked="checked" {% endif %}
+                                      onchange="BasicThemeCart.updateCheckoutOverview()"
+                                    >
+                                    <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
+                                    <p data-method="{{ paymentPluginName }}" class="payment-text">{{ paymentMethod.description }}</p>
+                                  </div>
+                                </div>
+                              {% endfor %}
+                            </div>
+                          </div>
                         </div>
+                      </div>
+                      <div class="your-order-total">
+                        <ul>
+                          <li class="order-total">Delivery price</li>
+                          <li>{{ deliveryPrice |number_format(2, ",", " ") }} €</li>
+                        </ul>
+                        <ul>
+                          <li class="order-total">Total</li>
+                          <li>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+                        </ul>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="Place-order mt-25">
-                  <a
-                    class="btn-hover"
-                    href="javascript:void(0)"
-                    onclick="AbeloThemeCart.placeOrder()"
-                  >Place Order</a>
+                  <div class="Place-order mt-25">
+                    <a
+                      class="btn-hover"
+                      href="javascript:void(0)"
+                      onclick="BasicThemeCart.placeOrder()"
+                    >Place Order</a>
+                  </div>
                 </div>
               </div>
+            </div>
+            <div class="clearfix"> </div>
 
-          <div class="clearfix"> </div>
+            <div class="clearfix"></div>
+          </div>
 
-
-          <div class="clearfix"></div>
+        </form>
+      {% else %}
+        <div class="col-md-12">
+          <div class="empty-text-contant text-center">
+            <i class="lnr lnr-cart"></i>
+            <h1>There are no more items in your cart</h1>
+            <a class="empty-cart-btn" href="javascript:void(0);">
+              <i class="ion-ios-arrow-left"> </i> Continue shopping
+            </a>
+          </div>
         </div>
-
-      </form>
-    {% else %}
-			<div class="col-md-12">
-				<div class="empty-text-contant text-center">
-					<i class="lnr lnr-cart"></i>
-					<h1>There are no more items in your cart</h1>
-					<a class="empty-cart-btn" href="javascript:void(0);">
-						<i class="ion-ios-arrow-left"> </i> Continue shopping
-					</a>
-				</div>
-			</div>
-		{% endif %}
+      {% endif %}
+    </div>
   </div>
-</div>
+{% endif %}
+
+{% if _GET.renderOnly == "orderOverview" %}
+  <div class="your-order-area">
+    <h3>Your order</h3>
+    <div class="your-order-wrap gray-bg-4">
+      <div class="your-order-product-info">
+        <div class="your-order-top">
+          <ul>
+            <li>Product</li>
+            <li>Total</li>
+          </ul>
+        </div>
+        <div class="your-order-middle">
+          <ul>
+            {% for item in cartContents.items %}
+              <li>
+                <span class="order-middle-left">{{ item.PRODUCT.name_lang_1 }} X {{ item.quantity }}</span>
+                <span class="order-price">{{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} €</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="your-order-bottom">
+          <ul>
+            {% for deliveryPluginName, deliveryService in deliveryServices %}
+              <li class="pl-3">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="deliveryService" 
+                  id="deliveryService-{{ loop.index }}" 
+                  value="{{ deliveryService.id }}" 
+                  {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
+                  onchange="BasicThemeCart.updateCheckoutOverview()"
+                >
+                <label class="form-check-label" for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
+                <p data-method="{{ deliveryPluginName }}" class="delivery-text">{{ deliveryService.description }}</p>
+                <!--<p><b>{{ deliveryService.PRICE }} €</b></p>-->
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="payment-method mt-5">
+          <div class="payment-accordion element-mrg">
+            <div class="panel-group" id="accordion">
+              <div class="panel payment-accordion">
+                {% for paymentPluginName, paymentMethod in paymentMethods %}
+                  <div id="method1" class="panel-collapse collapse show">
+                    <div class="panel-body">
+                      <input 
+                        required type="radio" 
+                        name="paymentMethod" 
+                        id="paymentMethod-{{ loop.index }}" 
+                        value="{{ paymentMethod.id }}" 
+                        {% if selectedPaymentMethod.id == paymentMethod.id %} checked="checked" {% endif %}
+                        onchange="BasicThemeCart.updateCheckoutOverview()"
+                      >
+                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
+                      <p data-method="{{ paymentPluginName }}" class="payment-text">{{ paymentMethod.description }}</p>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="your-order-total">
+          <ul>
+            <li class="order-total">Delivery price</li>
+            <li>{{ deliveryPrice |number_format(2, ",", " ") }} €</li>
+          </ul>
+          <ul>
+            <li class="order-total">Total</li>
+            <li>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="Place-order mt-25">
+      <a
+        class="btn-hover"
+        href="javascript:void(0)"
+        onclick="BasicThemeCart.placeOrder()"
+      >Place Order</a>
+    </div>
+  </div>
+{% endif %}
+

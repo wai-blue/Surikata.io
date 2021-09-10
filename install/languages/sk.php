@@ -2,14 +2,14 @@
 
   // Blogs
   $blogCatalogModel->insertRow(["name" => "Ako vznikol vesmír?", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex1.html"), "image" => "blogs/category_7.png", "created_at" => date("Y-m-d"), "id_user" => 1]);
-  $blogCatalogModel->insertRow(["name" => "Where can I get some?", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex2.html"), "image" => "blogs/category_3.png", "created_at" => date("Y-m-d", strtotime("19.5.2000")),  "id_user" => 2]);
+  $blogCatalogModel->insertRow(["name" => "Blog?", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex2.html"), "image" => "blogs/category_3.png", "created_at" => date("Y-m-d", strtotime("19.5.2000")),  "id_user" => 2]);
   $blogCatalogModel->insertRow(["name" => "Lorem Ipsum", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex2.html"), "image" => "blogs/category_6.png", "created_at" => date("Y-m-d", strtotime("19.5.2000")), "id_user" => 1]);
-  $blogCatalogModel->insertRow(["name" => "Hello Blog", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex1.html"), "image" => "blogs/category_1.png", "created_at" => date("Y-m-d", strtotime("8.8.2000")), "id_user" => 3]);
+  $blogCatalogModel->insertRow(["name" => "Ahoj Blog", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex1.html"), "image" => "blogs/category_1.png", "created_at" => date("Y-m-d", strtotime("8.8.2000")), "id_user" => 3]);
 
   // Blogs tags
-  $blogTagModel->insertRow(["name" => "Yellow", "description" => "Yellow color"]);
-  $blogTagModel->insertRow(["name" => "Blue", "description" => "Blue color"]);
-  $blogTagModel->insertRow(["name" => "Boat", "description" => "Boat"]);
+  $blogTagModel->insertRow(["name" => "Žltý", "description" => "Žltá farba"]);
+  $blogTagModel->insertRow(["name" => "Modrý", "description" => "Modrá farba"]);
+  $blogTagModel->insertRow(["name" => "Červený", "description" => "Červená farba"]);
 
   // Blogs tags assignment
   $blogTagAssignmentModel->insertRow(["id_tag" => 1, "id_blog" => 1]);
@@ -21,25 +21,25 @@
   $blogTagAssignmentModel->insertRow(["id_tag" => 2, "id_blog" => 4]);
 
   // Slideshow
-  $slideshowModel->insertRow(["heading" => "Welcome", "description" => "Get up to 50% off Today Only!", "image" => "slideshow/books_1.jpg",]);
-  $slideshowModel->insertRow(["heading" => "Sales", "description" => "50% off in all products", "image" => "slideshow/books_2.jpg"]);
-  $slideshowModel->insertRow(["heading" => "Black Friday", "description" => "Taking your Viewing Experience to Next Level", "image" => "slideshow/books_3.jpg"]);
+  $slideshowModel->insertRow(["heading" => "Vitajte", "description" => "Získajte zľavu až 50% už iba dnes!", "image" => "slideshow/books_1.jpg",]);
+  $slideshowModel->insertRow(["heading" => "Výpredaj", "description" => "50% zľava na produkty", "image" => "slideshow/books_2.jpg"]);
+  $slideshowModel->insertRow(["heading" => "Čierny piatok", "description" => "Posuňte váš zážitok zo sledovania na novú úroveň", "image" => "slideshow/books_3.jpg"]);
 
   // novinky
 
   $newsModel->insertRow([
-    "title" => "FIRST NEW",
-    "content" => "Very first new",
-    "perex" => "Short description for First New",
+    "title" => "Prvá novinka",
+    "content" => "Skutočne prvá novinka na Surikate Online Store",
+    "perex" => "Krátky popis stručnej novinky",
     "domain" => "sk",
     "image" => "",
     "show_from" => "20.6.2021",
   ]);
 
   $newsModel->insertRow([
-    "title" => "SECOND NEW",
-    "content" => "Second and the last new",
-    "perex" => "Short description for Second New",
+    "title" => "Druhá novinka",
+    "content" => "Surikata rastie - druhá novinka",
+    "perex" => "Popis druhej novinky pre rastúcu Surikatu",
     "domain" => "sk",
     "image" => "",
     "show_from" => "22.6.2021",
@@ -47,8 +47,8 @@
 
   // web - menu
 
-  $websiteMenuModel->insertRow(["id" => 1, "domain" => "SK", "name" => "Header Menu (SK)"]);
-  $websiteMenuModel->insertRow(["id" => 2, "domain" => "SK", "name" => "Footer Menu (SK)"]);
+  $websiteMenuModel->insertRow(["id" => 1, "domain" => "SK", "name" => "Menu v hlavičke (SK)"]);
+  $websiteMenuModel->insertRow(["id" => 2, "domain" => "SK", "name" => "Menu v päte stránky (SK)"]);
 
   // web - menu items - SK
   $tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Úvod", "url" => "home"]);

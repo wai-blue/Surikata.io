@@ -16,11 +16,22 @@
           </div>
           <div id="gallery" class="product-dec-slider-2">
             <div class="single-slide-item">
-              <img class="img-responsive" data-image="{{ uploadedFileUrl }}/{{ productInfo["image"] }}" data-zoom-image="{{ uploadedFileUrl }}/{{ productInfo["image"] }}" src="{{ uploadedFileUrl }}/{{ productInfo["image"] }}" alt="{{ productInfo.TRANSLATIONS.name }}" />
+              <img
+                class="img-responsive"
+                data-image="{{ uploadedFileUrl }}/{{ productInfo["image"] }}"
+                data-zoom-image="{{ uploadedFileUrl }}/{{ productInfo["image"] }}"
+                src="{{ uploadedFileUrl }}/{{ productInfo["image"] }}"
+                alt="{{ productInfo.TRANSLATIONS.name }}"
+              />
             </div>
             {% for imgKey, image in productInfo["gallery"] %}
               <div class="single-slide-item">
-                <img class="img-responsive" data-image="{{ uploadedFileUrl }}/{{ image["image"] }}" data-zoom-image="{{ uploadedFileUrl }}/{{ image["image"] }}" src="{{ uploadedFileUrl }}/{{ image["image"] }}" alt="{{ productInfo.TRANSLATIONS.name }}" />
+                <img class="img-responsive"
+                  data-image="{{ uploadedFileUrl }}/{{ image["image"] }}"
+                  data-zoom-image="{{ uploadedFileUrl }}/{{ image["image"] }}"
+                  src="{{ uploadedFileUrl }}/{{ image["image"] }}"
+                  alt="{{ productInfo.TRANSLATIONS.name }}"
+                />
               </div>
             {% endfor %}
           </div>
@@ -66,7 +77,7 @@
           </div>
           <div class="pro-details-quality mt-0px">
             <div class="cart-plus-minus">
-              <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
+              <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" onchange="validateProductQty(this)" />
             </div>
             <div class="quantity-unit">{{ productInfo.DELIVERY_UNIT.unit }}</div>
             <div class="pro-details-cart btn-hover">

@@ -480,3 +480,7 @@ ul .dots::before {
   font-size: 20px;
   margin-bottom: 3rem;
 }
+
+.contact-area h1 {
+  padding-bottom: 15px;
+}

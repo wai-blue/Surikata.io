@@ -27,6 +27,8 @@ class Loader {
 
   function __construct($config) {
 
+    $this->setGlobal();
+
     $this->config = $config;
     $this->rootDir = $config["rootDir"];
     $this->rewriteBase = $config["rewriteBase"];
@@ -201,45 +203,48 @@ class Loader {
     foreach ($this->assetsUrlMap as $urlPart => $mapping) {
       if (preg_match('/^'.str_replace("/", "\\/", $urlPart).'/', $this->template, $m)) {
         if ($mapping instanceof \Closure) {
-          $mapping($this, $this->template);
+          $sourceFile = $mapping($this, $this->template);
         } else {
-          $ext = strtolower(pathinfo($this->template, PATHINFO_EXTENSION));
-
-          $cachingTime = 3600;
-          $headerExpires = "Expires: ".gmdate("D, d M Y H:i:s", time() + $cachingTime) . " GMT";
-          $headerCacheControl = "Cache-Control: max-age={$cachingTime}";
-
-          switch ($ext) {
-            case "css":
-            case "js":
-              header("Content-type: text/{$ext}");
-              header($headerExpires);
-              header("Pragma: cache");
-              header($headerCacheControl);
-              echo file_get_contents($mapping.str_replace($urlPart, "", $this->template));
-            break;
-            case "bmp":
-            case "gif":
-            case "jpg":
-            case "jpeg":
-            case "png":
-            case "tiff":
-            case "webp":
-            case "svg":
-            case "eot":
-            case "ttf":
-            case "woff":
-            case "woff2":
-              header("Content-type: image/{$ext}");
-              header($headerExpires);
-              header("Pragma: cache");
-              header($headerCacheControl);
-              echo file_get_contents($mapping.str_replace($urlPart, "", $this->template));
-            break;
-          }
-
-          exit();
+          $sourceFile = $mapping.str_replace($urlPart, "", $this->template);
         }
+
+        $ext = strtolower(pathinfo($this->template, PATHINFO_EXTENSION));
+
+        $cachingTime = 3600;
+        $headerExpires = "Expires: ".gmdate("D, d M Y H:i:s", time() + $cachingTime) . " GMT";
+        $headerCacheControl = "Cache-Control: max-age={$cachingTime}";
+
+        switch ($ext) {
+          case "css":
+          case "js":
+            header("Content-type: text/{$ext}");
+            header($headerExpires);
+            header("Pragma: cache");
+            header($headerCacheControl);
+            echo file_get_contents($sourceFile);
+          break;
+          case "bmp":
+          case "gif":
+          case "jpg":
+          case "jpeg":
+          case "png":
+          case "tiff":
+          case "webp":
+          case "svg":
+          case "eot":
+          case "ttf":
+          case "woff":
+          case "woff2":
+            header("Content-type: image/{$ext}");
+            header($headerExpires);
+            header("Pragma: cache");
+            header($headerCacheControl);
+            echo file_get_contents($sourceFile);
+          break;
+        }
+
+        exit();
+
       }
     }
 

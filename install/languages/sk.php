@@ -98,6 +98,10 @@
     ];
   }
 
+  $contact_text_html = $theme == "Basic"
+    ? (__DIR__."/../SampleData/PageTexts/contact.html")
+    : (__DIR__."/../SampleData/PageTexts/kontakt.html");
+
   $webPages = [
     "SK|home|WithoutSidebar|Home" => [
       "section_1" => ["WAI/Misc/Slideshow", ["speed" => 1000]],
@@ -168,7 +172,7 @@
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "",
-          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/contact.html"),
+          "content" => file_get_contents($contact_text_html),
         ]
       ],
     ],
@@ -311,10 +315,10 @@
             "contactPhoneNumber" => "+421 111 222 333",
             "contactEmail" => "info@{$_SERVER['HTTP_HOST']}",
             "logo" => "surikata.png",
-            "urlFacebook" => "www.google.com",
-            "urlTwitter" => "www.google.com",
-            "urlYouTube" => "www.google.com",
-            "urlInstagram" => "www.google.com"
+            "urlFacebook" => "https://surikata.io",
+            "urlTwitter" => "https://surikata.io",
+            "urlYouTube" => "https://surikata.io",
+            "urlInstagram" => "https://surikata.io"
           ],
           "design" => array_merge(
             $themeObject->getDefaultColorsAndStyles(),

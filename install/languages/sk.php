@@ -92,7 +92,7 @@
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => $title,
-          "content" => file_get_contents(__DIR__."/SampleData/PageTexts/{$url}.html"),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/{$url}.html"),
         ]
       ],
     ];
@@ -106,7 +106,7 @@
         [
           "heading" => "Welcome",
           "headingLevel" => 1,
-          "content" => file_get_contents(__DIR__."/SampleData/PageTexts/lorem-ipsum-1.html"),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
         ],
       ],
       "section_3" => [
@@ -120,9 +120,9 @@
       "section_4" => [
         "WAI/SimpleContent/TwoColumns",
         [
-          "column1Content" => file_get_contents(__DIR__."/SampleData/PageTexts/lorem-ipsum-1.html"),
+          "column1Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
           "column1Width" => 4,
-          "column2Content" => file_get_contents(__DIR__."/SampleData/PageTexts/lorem-ipsum-2.html"),
+          "column2Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-2.html"),
           "column2Width" => 8,
           "column2CSSClasses" => "text-right",
         ],
@@ -138,9 +138,9 @@
       "section_6" => [
         "WAI/SimpleContent/TwoColumns",
         [
-          "column1Content" => file_get_contents(__DIR__."/SampleData/PageTexts/lorem-ipsum-2.html"),
+          "column1Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-2.html"),
           "column1Width" => 8,
-          "column2Content" => file_get_contents(__DIR__."/SampleData/PageTexts/lorem-ipsum-1.html"),
+          "column2Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
           "column2Width" => 4,
           "column2CSSClasses" => "text-right",
         ],
@@ -151,14 +151,14 @@
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "O nás",
-          "content" => file_get_contents(__DIR__."/SampleData/PageTexts/about-us.html"),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/about-us.html"),
         ]
       ],
       "section_2" => [
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "Vitajte",
-          "content" => file_get_contents(__DIR__."/SampleData/PageTexts/about-us.html"),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/about-us.html"),
         ]
       ],
     ],
@@ -168,58 +168,58 @@
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "",
-          "content" => file_get_contents(__DIR__."/SampleData/PageTexts/contact.html"),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/contact.html"),
         ]
       ],
     ],
 
     // Product catalog pages
-    "SK|products|WithLeftSidebar|Products - Catalog" => [
+    "SK|products|WithLeftSidebar|Katalóg produktov" => [
       "sidebar" => ["WAI/Product/Filter", ["showProductCategories" => 1, "layout" => "sidebar", "showProductCategories" => 1, "show_brands" => 1]],
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
       "section_2" => ["WAI/Product/Catalog", ["defaultItemsPerPage" => 6]],
     ],
-    "SK||WithoutSidebar|Products - Detail" => [
+    "SK||WithoutSidebar|Detail produktu" => [
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
       "section_2" => ["WAI/Product/Detail", ["show_similar_products" => 1, "show_accessories" => 1, "showAuthor" => 1]],
     ],
 
     // Shopping cart, checkout and order confirmation
-    "SK|cart|WithoutSidebar|Shopping cart" => [
+    "SK|cart|WithoutSidebar|Nákupný košík" => [
       "section_1" => "WAI/Order/CartOverview",
     ],
-    "SK|checkout|WithoutSidebar|Checkout" => [
+    "SK|checkout|WithoutSidebar|Vytvorenie objednávky" => [
       "section_1" => "WAI/Order/Checkout",
     ],
-    "SK||WithoutSidebar|Order - Confirmation" => [
+    "SK||WithoutSidebar|Potvrdenie objednávky" => [
       "section_1" => "WAI/Order/Confirmation"
     ],
 
     // My account pages
-    "SK|login|WithoutSidebar|My account - Login" => [
+    "SK|login|WithoutSidebar|Môj účet - prihlásenie" => [
       "section_1" => ["WAI/Customer/Login", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]],
     ],
-    "SK|my-account|WithoutSidebar|My account - Home" => [
+    "SK|my-account|WithoutSidebar|Môj účet" => [
       "section_1" => "WAI/Customer/Home",
     ],
-    "SK|my-account/orders|WithoutSidebar|My account - Orders" => [
+    "SK|my-account/orders|WithoutSidebar|Môj účet - objednávky" => [
       "section_1" => "WAI/Customer/OrderList",
     ],
-    "SK|reset-password|WithoutSidebar|My account - Reset password" => [
+    "SK|reset-password|WithoutSidebar|Môj účet - resetovanie hesla" => [
       "section_1" => "WAI/Customer/ForgotPassword"
     ],
-    "SK|registration|WithoutSidebar|My account - Registration" => [
+    "SK|registration|WithoutSidebar|Môj účet - registrácia" => [
       "section_1" => ["WAI/Customer/Registration", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]]
     ],
-    "SK|registration-confirm|WithoutSidebar|My account - Registration - Confirmation" => [
+    "SK|registration-confirm|WithoutSidebar|Môj účet - potvrdenie registrácie" => [
       "section_1" => "WAI/Customer/RegistrationConfirmation"
     ],
-    "SK||WithoutSidebar|My account - Registration - Validation" => [
+    "SK||WithoutSidebar|Môj účet - validácia registrácie" => [
       "section_1" => "WAI/Customer/ValidationConfirmation"
     ],
 
     // Blogs
-    "SK|blogs|WithLeftSidebar|Blogs" => [
+    "SK|blogs|WithLeftSidebar|Blogy" => [
       "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
       "section_2" => ["WAI/Blog/Catalog", ['itemsPerPage' => 3, "showAuthor" => 1]],
@@ -231,7 +231,7 @@
     ],
 
     // Miscelaneous pages
-    "SK|search|WithoutSidebar|Search" => [
+    "SK|search|WithoutSidebar|Hľadať" => [
       "section_1" => [
         "WAI/Misc/WebsiteSearch",
         [
@@ -243,7 +243,7 @@
         ]
       ],
     ],
-    "SK|privacy-terms|WithoutSidebar|Privacy policy" => [
+    "SK|privacy-terms|WithoutSidebar|Zásady ochrany osobných údajov" => [
       "section_1" => [
         "WAI/SimpleContent/OneColumn",
         [
@@ -252,7 +252,7 @@
         ]
       ]
     ],
-    "SK|news|WithLeftSidebar|News" => [
+    "SK|news|WithLeftSidebar|Novinky" => [
       "sidebar" => ["WAI/News", ["contentType" => "sidebar"]],
       "section_1" => ["WAI/News", ["contentType" => "listOrDetail"]],
     ],
@@ -307,7 +307,7 @@
       "web" => [
         "SK" => [
           "profile" => [
-            "slogan" => "My online store",
+            "slogan" => "Môj nový eshop",
             "contactPhoneNumber" => "+421 111 222 333",
             "contactEmail" => "info@{$_SERVER['HTTP_HOST']}",
             "logo" => "surikata.png",
@@ -334,11 +334,11 @@
       "emails" => [
         "SK" => [
           "signature" => "<p>Surikata - <a href='www.wai.sk' target='_blank'>WAI.sk</a></p>",
-          "after_order_confirmation_SUBJECT" => "Surikata - order n. {% number %}",
+          "after_order_confirmation_SUBJECT" => "Surikata - objednávka č. {% number %}",
           "after_order_confirmation_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/orderBody.html"),
-          "after_registration_SUBJECT" => "Surikata - Verify Email Address",
+          "after_registration_SUBJECT" => "Surikata - Overte Vašu emailovú adresu",
           "after_registration_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/registrationBody.html"),
-          "forgot_password_SUBJECT" => "Surikata - Password recovery",
+          "forgot_password_SUBJECT" => "Surikata - Obnovenie hesla",
           "forgot_password_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/forgotPasswordBody.html")
         ]
       ],

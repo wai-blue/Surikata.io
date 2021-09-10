@@ -244,7 +244,7 @@
                         <div class="your-order-middle">
                           <ul>
                           {% for item in cartContents.items %}
-                            <li><span class="order-middle-left">{{ item.PRODUCT.name_lang_1 }} X {{ item.quantity }}</span> <span class="order-price">{{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} €</span></li>
+                            <li><span class="order-middle-left">{{ item.PRODUCT.TRANSLATIONS.name }} X {{ item.quantity }}</span> <span class="order-price">{{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} €</span></li>
                           {% endfor %}
                           </ul>
                         </div>
@@ -358,7 +358,7 @@
         <div class="your-order-middle">
           <ul>
           {% for item in cartContents.items %}
-            <li><span class="order-middle-left">{{ item.PRODUCT.name_lang_1 }} X {{ item.quantity }}</span> <span class="order-price">{{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} €</span></li>
+            <li><span class="order-middle-left">{{ item.PRODUCT.TRANSLATIONS.name }} X {{ item.quantity }}</span> <span class="order-price">{{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} €</span></li>
           {% endfor %}
           </ul>
         </div>

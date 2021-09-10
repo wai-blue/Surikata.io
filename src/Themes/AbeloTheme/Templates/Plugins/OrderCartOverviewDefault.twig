@@ -22,9 +22,9 @@
 									{% for item in cartContents.items %}
 										<tr>
 											<td class="product-thumbnail">
-												<a  href="{{ item.product.url }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ item.product.image }}" alt="{{ item.product.name_lang_1 }}" /></a>
+												<a  href="{{ item.product.url }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ item.product.image }}" alt="{{ item.product.TRANSLATIONS.name }}" /></a>
 											</td>
-											<td class="product-name"><a href="{{ item.product.url }}">{{ item.product.name_lang_1 }}</a></td>
+											<td class="product-name"><a href="{{ item.product.url }}">{{ item.product.TRANSLATIONS.name }}</a></td>
 											<td class="product-price-cart"><span class="amount">{{ item.unit_price|number_format(2, ",", " ") }} €</span></td>
 											<td class="product-quantity">
 												<div class="cart-plus-minus">

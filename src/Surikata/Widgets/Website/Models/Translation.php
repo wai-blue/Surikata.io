@@ -15,7 +15,7 @@ class Translation extends \ADIOS\Core\Model {
         "type" => "varchar",
         "title" => "Domain",
         "required" => TRUE,
-        "show_column" => TRUE,
+        "show_column" => FALSE,
       ],
 
       "context" => [

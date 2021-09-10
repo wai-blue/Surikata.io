@@ -1,6 +1,10 @@
 <?php
 
 namespace Surikata\Plugins\WAI\Misc {
+
+  use ADIOS\Widgets\Customers\Models\CustomerUID;
+  use ADIOS\Widgets\Customers\Models\SearchQuery;
+
   class WebsiteSearch extends \Surikata\Core\Web\Plugin {
 
     private $searchableFields;
@@ -38,11 +42,25 @@ namespace Surikata\Plugins\WAI\Misc {
     }
 
     public function renderJSON() {
+      $action = $this->websiteRenderer->urlVariables['action'] ?? "";
       $returnArray = array();
 
+      switch ($action) {
+        case "website_find":
+          $returnArray = $this->searchResults();
+          break;
+        case "log-query":
+          $returnArray = $this->logSearchQuery();
+          break;
+      }
+
+      return $returnArray;
+    }
+
+    public function searchResults() {
+
+      $returnArray = [];
       $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
-      // action tag for later use
-      $action = $this->websiteRenderer->urlVariables['action'] ?? "";
       $searchValue = $this->websiteRenderer->urlVariables['value'] ?? "";
       $searchValue = htmlspecialchars($searchValue);
 
@@ -57,13 +75,15 @@ namespace Surikata\Plugins\WAI\Misc {
       $productsQuery = $productModel->getQuery();
       $productsQuery->select("*");
       $productsQuery->where('name_lang_'.$languageIndex, 'like', '%' . $searchValue . '%');
+      $productsQuery->skip(0)->take(20);
       $products = $productModel->fetchQueryAsArray($productsQuery); // TODO: UPPERCASE LOOKUP
       foreach ($products as $product) {
         $returnArray[] = [
           "category" => "products",
           "label" => $product["name_lang_".$languageIndex],
           "value" => $product["name_lang_".$languageIndex],
-          "url" => "./".$productDetailPlugin->getWebPageUrl($product)
+          "url" => "./".$productDetailPlugin->getWebPageUrl($product),
+          "term" => $searchValue,
         ];
       }
 
@@ -79,7 +99,8 @@ namespace Surikata\Plugins\WAI\Misc {
           "category" => "product categories",
           "label" => $category["name_lang_".$languageIndex],
           "value" => $category["code"],
-          "url" => "./".$productCatalogPlugin->getWebPageUrl($productCatalogPlugin->convertCategoryToUrlVariables($category))
+          "url" => "./".$productCatalogPlugin->getWebPageUrl($productCatalogPlugin->convertCategoryToUrlVariables($category)),
+          "term" => $searchValue,
         ];
       }
 
@@ -97,19 +118,36 @@ namespace Surikata\Plugins\WAI\Misc {
           "category" => "blogs",
           "label" => $blog["name"],
           "value" => $blog["name"],
-          "url" => "./".$blogDetailPlugin->getWebPageUrl($blog)
+          "url" => "./".$blogDetailPlugin->getWebPageUrl($blog),
+          "term" => $searchValue
         ];
       }
 
       if (count($returnArray) == 0) {
         $returnArray[] = ["category" => "we did not find",
-          "label" => "",
-          "value" => ""
+          "label" => $searchValue,
+          "value" => $searchValue,
+          "term" => $searchValue
         ];
       }
 
       return $returnArray;
+    }
 
+    public function logSearchQuery() {
+      $customerUID = $this->websiteRenderer->getCustomerUID();
+
+      $customerID = (new CustomerUID)->getByCustomerUID($customerUID);
+      $searchValue = $this->websiteRenderer->urlVariables['value'] ?? "";
+      $searchValue = htmlspecialchars($searchValue);
+      $target_url = htmlspecialchars($this->websiteRenderer->urlVariables['urlOpened'] ?? "");
+      $searchQueryModel = new SearchQuery($this->adminPanel);
+      $searchQueryModel->insertRow([
+        "id_customer_uid" => $customerID["id"],
+        "query" => $searchValue,
+        "target_url" => $target_url,
+        "search_datetime" => ["sql" => "now()"],
+      ]);
     }
 
     public function websiteSearch() {

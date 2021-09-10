@@ -24,6 +24,7 @@ class Loader {
   public $routing = [];
   public $widgets = [];
 
+  public $pluginFolders = [];
   public $pluginObjects = [];
   public $plugins = [];
 
@@ -45,7 +46,6 @@ class Loader {
 
   public $actionNestingLevel = 0;
   public $actionStack = [];
-
 
   public function __construct($config = NULL, $mode = NULL) {
 
@@ -103,10 +103,13 @@ class Loader {
       $plugin = $m[1];
       $asset = $m[2];
 
-      return ADIOS_PLUGINS_DIR."/{$plugin}/Assets/{$asset}";
+      foreach ($adios->pluginFolders as $pluginFolder) {
+        $file = "{$pluginFolder}/{$plugin}/Assets/{$asset}";
+        if (is_file($file)) {
+          return $file;
+        }
+      }
     };
-
-    $this->renderAssets();
 
     //////////////////////////////////////////////////
     // inicializacia
@@ -170,10 +173,15 @@ class Loader {
 
       // inicializacia pluginov - aj pre FULL aj pre LITE mod
 
+      $this->onBeforePluginsLoaded();
+    
       $this->loadAllPlugins();
 
-      $this->onPluginsLoaded();
-    
+      $this->onAfterPluginsLoaded();
+
+      $this->renderAssets();
+
+
       if ($mode == ADIOS_MODE_FULL) {
 
         // start session
@@ -217,6 +225,8 @@ class Loader {
         'db_name' => $this->getConfig('db_name', ''),
         'db_codepage' => $this->getConfig('db_codepage', 'utf8mb4'),
       ]);
+
+      $this->onBeforeConfigLoaded();
 
       $this->loadConfigFromDB();
 
@@ -268,21 +278,22 @@ class Loader {
       // finalizacia konfiguracie - aj pre FULL aj pre LITE mode
       $this->finalizeConfig();
 
+      $this->onAfterConfigLoaded();
+
       // timezone
       date_default_timezone_set($this->config['timezone']);
-
-      // callback na konci konfiguracneho procesu - aj pre FULL aj pre LITE mode
-      $this->onConfigLoaded();
 
       if ($mode == ADIOS_MODE_FULL) {
 
         // inicializacia widgetov
 
+        $this->onBeforeWidgetsLoaded();
+
         foreach ($this->config['widgets'] as $w_name => $w_config) {
           $this->addWidget($w_name);
         }
 
-        $this->onWidgetsLoaded();
+        $this->onAfterWidgetsLoaded();
 
         // vytvorim definiciu tables podla nacitanych modelov
 
@@ -341,6 +352,9 @@ class Loader {
     return isset($_REQUEST['__IS_WINDOW__']) && $_REQUEST['__IS_WINDOW__'] == "1";
   }
 
+  //////////////////////////////////////////////////////////////////////////////
+  // ROUTING
+
   public function setRouting($routing) {
     if (is_array($routing)) {
       $this->routing = $routing;
@@ -353,6 +367,9 @@ class Loader {
     }
   }
 
+  //////////////////////////////////////////////////////////////////////////////
+  // WIDGETS
+
   public function addWidget($widgetName) {
     if (!isset($this->widgets[$widgetName])) {
       try {
@@ -363,6 +380,9 @@ class Loader {
       }
     }
   }
+
+  //////////////////////////////////////////////////////////////////////////////
+  // MODELS
 
   public function getModelClassName($modelName) {
     return "\\ADIOS\\".str_replace("/", "\\", $modelName);
@@ -389,6 +409,15 @@ class Loader {
     return $this->modelObjects[$modelName];
   }
 
+  //////////////////////////////////////////////////////////////////////////////
+  // PLUGINS
+
+  public function registerPluginFolder($folder) {
+    if (is_dir($folder) && !in_array($folder, $this->pluginFolders)) {
+      $this->pluginFolders[] = $folder;
+    }
+  }
+
   public function getPluginClassName($pluginName) {
     return "\\ADIOS\\Plugins\\".str_replace("/", "\\", $pluginName);
   }
@@ -401,35 +430,39 @@ class Loader {
     return $this->pluginObjects;
   }
 
-  public function loadAllPlugins($subdir = "") {
-    if (!defined('ADIOS_PLUGINS_DIR')) return;
+  public function loadAllPlugins($subFolder = "") {
+    foreach ($this->pluginFolders as $pluginFolder) {
+      $folder = $pluginFolder.(empty($subFolder) ? "" : "/{$subFolder}");
 
-    $dir = ADIOS_PLUGINS_DIR.(empty($subdir) ? "" : "/{$subdir}");
+      foreach (scandir($folder) as $file) {
+        // if (in_array($file, [".", ".."])) continue;
+        if (strpos($file, ".") !== FALSE) continue;
 
-    foreach (scandir($dir) as $file) {
-      if (in_array($file, [".", ".."])) continue;
+        $fullPath = (empty($subFolder) ? "" : "{$subFolder}/").$file;
 
-      $fullPath = (empty($subdir) ? "" : "{$subdir}/").$file;
+        if (
+          is_dir("{$folder}/{$file}")
+          && !is_file("{$folder}/{$file}/Main.php")
+        ) {
+          $this->loadAllPlugins($fullPath);
+        } else if (is_file("{$folder}/{$file}/Main.php")) {
+          try {
+            $tmpPluginClassName = $this->getPluginClassName($fullPath);
 
-      if (
-        is_dir("{$dir}/{$file}")
-        && !is_file("{$dir}/{$file}/Main.php")
-      ) {
-        $this->loadAllPlugins($fullPath);
-      } else {
-        try {
-          $tmpPluginClassName = $this->getPluginClassName($fullPath);
-
-          if (class_exists($tmpPluginClassName)) {
-            $this->plugins[] = $fullPath;
-            $this->pluginObjects[$fullPath] = new $tmpPluginClassName($this);
+            if (class_exists($tmpPluginClassName)) {
+              $this->plugins[] = $fullPath;
+              $this->pluginObjects[$fullPath] = new $tmpPluginClassName($this);
+            }
+          } catch (\Exception $e) {
+            exit("Failed to load plugin {$fullPath}: ".$e->getMessage());
           }
-        } catch (\Exception $e) {
-          exit("Failed to load plugin {$fullPath}: ".$e->getMessage());
         }
       }
     }
   }
+
+  //////////////////////////////////////////////////////////////////////////////
+  // MISCELANEOUS
 
   public function translate($string, $context = "", $toLanguage = "", $dictionary = []) {
     if ($toLanguage == "") {
@@ -1086,15 +1119,27 @@ class Loader {
 
   }
 
-  public function onConfigLoaded() {
+  public function onBeforeConfigLoaded() {
     // to be overriden
   }
 
-  public function onWidgetsLoaded() {
+  public function onAfterConfigLoaded() {
     // to be overriden
   }
 
-  public function onPluginsLoaded() {
+  public function onBeforeWidgetsLoaded() {
+    // to be overriden
+  }
+
+  public function onAfterWidgetsLoaded() {
+    // to be overriden
+  }
+
+  public function onBeforePluginsLoaded() {
+    // to be overriden
+  }
+
+  public function onAfterPluginsLoaded() {
     // to be overriden
   }
 

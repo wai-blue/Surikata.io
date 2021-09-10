@@ -15,18 +15,28 @@ class SearchQuery extends \ADIOS\Core\Model {
         "type" => "lookup",
         "title" => "Customer UID",
         "model" => "Widgets/Customers/Models/CustomerUID",
+        "readonly" => TRUE,
         "show_column" => TRUE,
       ],
 
       "query" => [
         "type" => "varchar",
         "title" => "Searched query",
+        "readonly" => TRUE,
+        "show_column" => TRUE,
+      ],
+
+      "target_url" => [
+        "type" => "varchar",
+        "title" => "Target URL",
+        "readonly" => TRUE,
         "show_column" => TRUE,
       ],
 
       "search_datetime" => [
         "type" => "datetime",
         "title" => "Search datetime",
+        "readonly" => TRUE,
         "show_column" => TRUE,
       ],
 
@@ -44,6 +54,20 @@ class SearchQuery extends \ADIOS\Core\Model {
         "columns" => ["query", "search_datetime"],
       ],
     ]);
+  }
+
+  public function tableParams($params) {
+    $params['show_add_button'] = FALSE;
+
+    return $this->adios->dispatchEventToPlugins("onModelAfterTableParams", [
+      "model" => $this,
+      "params" => $params,
+    ])["params"];
+  }
+
+  public function formParams($data, $params) {
+    $params['readonly'] = TRUE;
+    return $params;
   }
 
 }

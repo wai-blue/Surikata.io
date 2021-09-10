@@ -101,7 +101,7 @@
                     <li class="new">- {{ product.price.discountTotal|number_format(2, ",", " ") }}%</li>
                   </ul>
                   <div class="product-decs">
-                    <a class="inner-link" href="shop-4-column.html"><span>{{ product.brief_lang_1 }}</span></a>
+                    <a class="inner-link" href="shop-4-column.html"><span>{{ product.TRANSLATIONS.brief }}</span></a>
                     <h2>
                       <a 
                         href="{{ rootUrl }}/{{ product.url }}"
@@ -112,7 +112,7 @@
                           )
                         "
                         class="product-link"
-                      >{{ product.name_lang_1 }}</a>
+                      >{{ product.TRANSLATIONS.name }}</a>
                     </h2>
                     <div class="pricing-meta">
                       <ul>
@@ -181,12 +181,12 @@
                                   {{ product.id }}
                                 )
                               " 
-                              class="product-link">{{ product.name_lang_1 }}
+                              class="product-link">{{ product.TRANSLATIONS.name }}
                             </a>
                           </h2>
-                          <a class="inner-link" href="shop-4-column.html"><span>{{ product.ProductCategory.name_lang_1}}</span></a>
+                          <a class="inner-link" href="shop-4-column.html"><span>{{ product.ProductCategory.TRANSLATIONS.name }}</span></a>
                           <div class="product-intro-info">
-                            <p>{{ product.brief_lang_1 }}</p>
+                            <p>{{ product.TRANSLATIONS.brief }}</p>
                           </div>
                         </div>
                         <div class="box-inner d-flex">

@@ -64,10 +64,10 @@
               {% endif %}
 
               <div class="product-decs">
-                <a class="inner-link" href="shop-4-column.html"><span>{{ product.ProductCategory["name_lang_"~languageIndex] }}</span></a>
-                <h2><a href="{{ rootUrl }}/{{ product.url }}" class="product-link">{{ product["name_lang_"~languageIndex] }}</a></h2>
+                <a class="inner-link" href="shop-4-column.html"><span>{{ product.ProductCategory.TRANSLATIONS.name }}</span></a>
+                <h2><a href="{{ rootUrl }}/{{ product.url }}" class="product-link">{{ product.TRANSLATIONS.name }}</a></h2>
                 <!--<div class="availability-list in-stock">Availability: <span>300 In Stock</span></div>-->
-                <p>{{ product["brief_lang_"~languageIndex] }}</p>
+                <p>{{ product.TRANSLATIONS.brief }}</p>
                 <div class="pricing-meta">
                   <ul>
                     {% if (product.price.fullPrice > product.price.salePrice) %}

@@ -61,9 +61,18 @@ spl_autoload_register(function($class) {
               $pathLeft .= ($pathLeft == "" ? "" : "/").$pathPart;
               $pathRight = str_replace("{$pathLeft}/", "", $class);
 
-              $file = ADIOS_PLUGINS_DIR."/{$pathLeft}/Actions/{$pathRight}.php";
-              if (is_file($file)) {
-                include($file);
+              $included = FALSE;
+
+              foreach ($___ADIOSObject->pluginFolders as $pluginFolder) {
+                $file = "{$pluginFolder}/{$pathLeft}/Actions/{$pathRight}.php";
+                if (is_file($file)) {
+                  include($file);
+                  $included = TRUE;
+                  break;
+                }
+              }
+
+              if ($included) {
                 break;
               }
             }
@@ -82,8 +91,12 @@ spl_autoload_register(function($class) {
       }
 
     } else if (preg_match('/ADIOS\/Plugins\/([\w\/]+)/', $class, $m)) {
-      if (!include(ADIOS_PLUGINS_DIR."/{$m[1]}/Main.php")) {
-        include(ADIOS_PLUGINS_DIR."/{$m[1]}.php");
+      foreach ($___ADIOSObject->pluginFolders as $pluginFolder) {
+        if (include("{$pluginFolder}/{$m[1]}/Main.php")) {
+          break;
+        } else if (include("{$pluginFolder}/{$m[1]}.php")) {
+          break;
+        }
       }
 
     } else if (preg_match('/ADIOS\/([\w\/]+)/', $class, $m)) {

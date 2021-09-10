@@ -738,7 +738,19 @@ function validateProductQty(input) {
 
 function sendLoginForm(formId) {
     var form = document.getElementById(formId);
-    return form.reportValidity();
+    if (!form.reportValidity()) {
+        return false;
+    }
+    var test = true;
+    form = $("#" + formId);
+    form.find('input[name=loginEmail]').each(function () {
+        var element = $(this);
+        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        test = regex.test(element.val());
+    });
+    if (test) {
+        document.getElementById(formId).submit();
+    }
 }
 
 function sendContactForm(formId) {

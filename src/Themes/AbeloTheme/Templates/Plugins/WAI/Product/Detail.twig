@@ -16,11 +16,22 @@
           </div>
           <div id="gallery" class="product-dec-slider-2">
             <div class="single-slide-item">
-              <img class="img-responsive" data-image="{{ uploadedFileUrl }}/{{ productInfo["image"] }}" data-zoom-image="{{ uploadedFileUrl }}/{{ productInfo["image"] }}" src="{{ uploadedFileUrl }}/{{ productInfo["image"] }}" alt="{{ productInfo.name_lang_1 }}" />
+              <img
+                class="img-responsive"
+                data-image="{{ uploadedFileUrl }}/{{ productInfo["image"] }}"
+                data-zoom-image="{{ uploadedFileUrl }}/{{ productInfo["image"] }}"
+                src="{{ uploadedFileUrl }}/{{ productInfo["image"] }}"
+                alt="{{ productInfo["name_lang_"~languageIndex] }}"
+              />
             </div>
             {% for imgKey, image in productInfo["gallery"] %}
               <div class="single-slide-item">
-                <img class="img-responsive" data-image="{{ uploadedFileUrl }}/{{ image["image"] }}" data-zoom-image="{{ uploadedFileUrl }}/{{ image["image"] }}" src="{{ uploadedFileUrl }}/{{ image["image"] }}" alt="{{ productInfo.name_lang_1 }}" />
+                <img class="img-responsive"
+                  data-image="{{ uploadedFileUrl }}/{{ image["image"] }}"
+                  data-zoom-image="{{ uploadedFileUrl }}/{{ image["image"] }}"
+                  src="{{ uploadedFileUrl }}/{{ image["image"] }}"
+                  alt="{{ productInfo["name_lang_"~languageIndex] }}"
+                />
               </div>
             {% endfor %}
           </div>
@@ -44,7 +55,7 @@
             {% endif %}
           </div>
 
-          <h2>{{ productInfo.name_lang_1 }}</h2>
+          <h2>{{ productInfo["name_lang_"~languageIndex]}}</h2>
           <div class="pro-details-rating-wrap">
             {# Rating of the product (number of stars) #}
             {# Využije sa pre brand #}
@@ -62,7 +73,7 @@
             </ul>
           </div>
           <div class="pro-details-list">
-            <p>{{ productInfo.brief_lang_1|raw }}</p>
+            <p>{{ productInfo["brief_lang_"~languageIndex]|raw }}</p>
           </div>
           <div class="pro-details-quality mt-0px">
             <div class="cart-plus-minus">
@@ -131,7 +142,7 @@
                       <i class="fa fa-{{ service.pictogram }}"></i>
                     </div>
                     <div class="col-10">
-                      <span>{{ service.name_lang_1 }}</span>
+                      <span>{{ service["name_lang_"~languageIndex] }}</span>
                     </div>
                   </div>
                 </li>
@@ -173,7 +184,7 @@
         </div>
         <div id="des-details1" class="tab-pane">
           <div class="product-description-wrapper">
-           <p>{{ productInfo.description_lang_1|raw }}</p>
+           <p>{{ productInfo["description_lang_"~languageIndex]|raw }}</p>
           </div>
         </div>
         <div id="des-details3" class="tab-pane">

@@ -40,6 +40,11 @@ class Loader extends \ADIOS\Core\Loader {
     }
   }
   
+  public function onBeforePluginsLoaded() {
+    parent::onBeforePluginsLoaded();
+    $this->registerPluginFolder(__DIR__."/../../../Plugins");
+  }
+
   /**
    * Surikata's implementation of ADIOS checkPermissionsForAction.
    * Throws exception when signed user does not have permission for rendering

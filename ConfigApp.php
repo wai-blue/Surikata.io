@@ -22,11 +22,10 @@ define('UPLOADED_FILES_DIR', __DIR__."/upload");
 
 define('DEVEL_MODE', TRUE);
 define('PROJECT_ROOT_DIR', __DIR__);
-define('THEMES_DIR', __DIR__."/src/Themes");
-define('PLUGINS_DIR', __DIR__."/src/Plugins");
 define('CONTROLLERS_DIR', __DIR__."/src/Controllers");
 define('LOG_DIR', __DIR__."/log");
 define('DATA_DIR', __DIR__."/data");
+define('PROP_DIR', __DIR__."/prop");
 
 define('TWIG_CACHE_DIR', FALSE); // disable cache
 
@@ -36,7 +35,6 @@ define('TWIG_CACHE_DIR', FALSE); // disable cache
 define('CASCADA_CORE_DIR', __DIR__."/src/Surikata/Lib/CASCADA");
 define('ADIOS_CORE_DIR', __DIR__."/src/Surikata/Lib/ADIOS");
 define('ADIOS_WIDGETS_DIR', __DIR__."/src/Surikata/Widgets");
-define('ADIOS_PLUGINS_DIR', PLUGINS_DIR);
 
 ////////////////////////////////////////////////////////
 // Administration panel configuration
@@ -81,8 +79,6 @@ if (defined('SMTP_HOST')) {
   $adminPanelConfig["smtp_from"]               = SMTP_FROM;
 }
 
-$adminPanelConfig['themes_dir']              = THEMES_DIR;
-
 $adminPanelConfig['files_dir']               = UPLOADED_FILES_DIR;
 $adminPanelConfig['files_url']               = UPLOADED_FILES_URL;
 
@@ -116,8 +112,6 @@ $websiteRendererConfig = [
   "minifyOutputHtml" => $configEnv['minifyOutputHtml'] ?? FALSE,
   "validateOutputHtml" => $configEnv['validateOutputHtml'] ?? FALSE,
 
-  "pluginsDir" => PLUGINS_DIR,
-  "themesDir" => THEMES_DIR,
   "rewriteBase" => WEBSITE_REWRITE_BASE,
   "twigCacheDir" => TWIG_CACHE_DIR,
   "twigDebugEnabled" => TRUE,

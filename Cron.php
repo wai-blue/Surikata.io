@@ -4,10 +4,10 @@ try {
 
   require("../Init.php");
 
-  $web = new \MyOnlineStore\Web($websiteRendererConfig);
+  $web = new \MyEcommerceProject\Web($websiteRendererConfig);
   
   echo (
-    new \MyOnlineStore\AdminPanel(
+    new \MyEcommerceProject\AdminPanel(
       $adminPanelConfig + ['default_action' => ($argv[1] ?? "")],
       ADIOS_MODE_FULL,
       $web

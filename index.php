@@ -16,13 +16,13 @@ try {
 
   //
 
-  $adminPanel = new \MyOnlineStore\AdminPanel(
+  $adminPanel = new \MyEcommerceProject\AdminPanel(
     $adminPanelConfig,
     ADIOS_MODE_LITE
   );
   
   echo
-    (new \MyOnlineStore\Web(
+    (new \MyEcommerceProject\Web(
       $websiteRendererConfig,
       $adminPanel
     ))->render()

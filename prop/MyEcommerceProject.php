@@ -1,8 +1,14 @@
 <?php
 
-namespace MyOnlineStore;
+namespace MyEcommerceProject;
 
 class Web extends \Surikata\Core\Web\Loader {
+  public function __construct($config, $adminPanel = NULL) {
+    $this->registerPluginFolder(__DIR__."/Plugins");
+    $this->registerThemeFolder(__DIR__."/Themes");
+    parent::__construct($config, $adminPanel);
+  }
+
   /* Uncomment following method to create web pages programmatically */
   /*
   public function onGeneralControllerAfterRouting() {
@@ -25,4 +31,8 @@ class Web extends \Surikata\Core\Web\Loader {
 }
 
 class AdminPanel extends \Surikata\Core\AdminPanel\Loader {
+  public function onBeforePluginsLoaded() {
+    parent::onBeforePluginsLoaded();
+    $this->registerPluginFolder(__DIR__."/Plugins");
+  }
 }

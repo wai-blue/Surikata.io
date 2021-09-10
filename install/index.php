@@ -318,14 +318,14 @@ if (count($partsToInstall) == 0) {
 
       // products - categories
 
-      $productCategoryModel->insertRow([ "id" => 1, "id_parent" => 0, "code" => "Category_A", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A"]);
-      $productCategoryModel->insertRow([ "id" => 2, "id_parent" => 0, "code" => "Category_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_B"]);
-      $productCategoryModel->insertRow([ "id" => 3, "id_parent" => 0, "code" => "Category_C", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_C"]);
+      $productCategoryModel->insertRow([ "id" => 1, "id_parent" => 0, "code" => "Category_A", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A", "name_lang_2" => "Kategória_A"]);
+      $productCategoryModel->insertRow([ "id" => 2, "id_parent" => 0, "code" => "Category_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_B", "name_lang_2" => "Kategória_B"]);
+      $productCategoryModel->insertRow([ "id" => 3, "id_parent" => 0, "code" => "Category_C", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_C", "name_lang_2" => "Kategória_C"]);
 
-      $productCategoryModel->insertRow([ "id" => 4, "id_parent" => 1, "code" => "Category_A_A", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_A"]);
-      $productCategoryModel->insertRow([ "id" => 5, "id_parent" => 1, "code" => "Category_A_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_B"]);
-      $productCategoryModel->insertRow([ "id" => 6, "id_parent" => 1, "code" => "Category_A_C", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_C"]);
-      $productCategoryModel->insertRow([ "id" => 7, "id_parent" => 2, "code" => "Category_B_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_B_B"]);
+      $productCategoryModel->insertRow([ "id" => 4, "id_parent" => 1, "code" => "Category_A_A", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_A", "name_lang_2" => "Kategória_A_A"]);
+      $productCategoryModel->insertRow([ "id" => 5, "id_parent" => 1, "code" => "Category_A_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_B", "name_lang_2" => "Kategória_A_B"]);
+      $productCategoryModel->insertRow([ "id" => 6, "id_parent" => 1, "code" => "Category_A_C", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_C", "name_lang_2" => "Kategória_A_C"]);
+      $productCategoryModel->insertRow([ "id" => 7, "id_parent" => 2, "code" => "Category_B_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_B_B", "name_lang_2" => "Kategória_B_B"]);
       
       // produkty - vlastnosti produktov, ciselnik
       $productFeatureModel->insertRow(["id" => 1, "order_index" => 1, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Lange", "id_measurement_unit" => 1]);

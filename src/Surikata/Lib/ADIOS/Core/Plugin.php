@@ -67,13 +67,15 @@ class Plugin {
   }
 
   public function loadModels() {
-    $dir = ADIOS_PLUGINS_DIR."/{$this->name}/Models";
+    foreach ($this->adios->pluginFolders as $pluginFolder) {
+      $folder = $pluginFolder."/{$this->name}/Models";
 
-    if (is_dir($dir)) {
-      foreach (scandir($dir) as $file) {
-        if (is_file("{$dir}/{$file}")) {
-          $tmpModelName = str_replace(".php", "", $file);
-          $this->adios->models[] = "Plugins/{$this->name}/Models/{$tmpModelName}";
+      if (is_dir($folder)) {
+        foreach (scandir($folder) as $file) {
+          if (is_file("{$folder}/{$file}")) {
+            $tmpModelName = str_replace(".php", "", $file);
+            $this->adios->models[] = "Plugins/{$this->name}/Models/{$tmpModelName}";
+          }
         }
       }
     }

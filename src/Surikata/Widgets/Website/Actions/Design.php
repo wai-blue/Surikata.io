@@ -9,9 +9,9 @@ class Design extends \ADIOS\Core\Action {
     $themeEnumValues = [
       "" => "Choose your theme",
     ];
-    if (is_dir($this->adios->config['themes_dir'])) {
-      foreach (scandir($this->adios->config['themes_dir']) as $file) {
-        if (in_array($file, [".", ".."])) continue;
+    foreach ($this->adios->websiteRenderer->themeFolders as $themeFolder) {
+      foreach (scandir($themeFolder) as $file) {
+        if (strpos(".", $file) !== FALSE) continue;
         $themeEnumValues[$file] = $file;
       }
     }

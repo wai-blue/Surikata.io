@@ -38,8 +38,16 @@ class TwigLoader implements \Twig\Loader\LoaderInterface {
       // ...a nakoniec Plugin akciu
       if (!is_file($templateFile)) {
         preg_match('/(\w+)\/([\w\/]+)/', $templateName, $m);
-        $templateFile = ADIOS_PLUGINS_DIR."/{$m[1]}/Templates/{$m[2]}.twig";
+        foreach ($this->adios->pluginFolders as $pluginFolder) {
+          $folder = $pluginFolder."/{$this->name}/Models";
+
+          $templateFile = "{$folder}/{$m[1]}/Templates/{$m[2]}.twig";
+          if (is_file($templateFile)) {
+            break;
+          }
+        }
       }
+
     } else {
       return new \Twig\Source("", $name);
     }

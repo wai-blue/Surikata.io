@@ -2104,7 +2104,7 @@ p {
   position: relative;
   background: #fff;
   transition: all 300ms linear;
-  padding: 2%;
+  padding: 2% !important;
 }
 .list-product .product-inner {
   position: relative;
@@ -2119,11 +2119,16 @@ p {
   right: 2px;
   z-index: 1;
 }
-
+.list-product .img-block {
+  position: relative;
+  height: 175px;
+}
 .list-product .img-block img {
   width: 100%;
+  height: 175px;
   margin: 0;
   transition: all 300ms linear;
+  object-fit: cover;
 }
 .list-product .img-block .second-img {
   position: absolute;
@@ -6976,7 +6981,8 @@ offcanvas-menu > ul > li .menu-expand {
 }
 
 .contact-area .contact-map {
-  margin-bottom: 60px;
+  margin-bottom: 30px;
+  margin-top: 3rem;
 }
 .contact-area .contact-map #map {
   height: 560px;

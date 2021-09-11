@@ -181,6 +181,10 @@ namespace Surikata\Plugins\WAI\Misc {
         }
         foreach ($products as $product) {
           $product["url"] = $productDetailPlugin->getWebPageUrl($product); // TODO: UPPERCASE LOOKUP
+          $product['price'] = $this->adminPanel
+            ->getModel("Widgets/Products/Models/Product")
+            ->getPriceInfoForSingleProduct($product["id"])
+          ;
           $returnArray[] = [
             "model" => "Product",
             "data" => $product

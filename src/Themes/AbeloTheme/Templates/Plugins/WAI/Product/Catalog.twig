@@ -289,82 +289,86 @@
 {% endif %}
 
 {% if _GET.renderOnly == "" or _GET.renderOnly == "productPagination" %}
-  <div id="productPagination">
-    <div class="row mt-3 mb-5">
-      {% if not showPaging %}
-        <div class="col-lg-4"></div>
-        <div class="col-12 text-center col-lg-4 mb-2 mb-lg-0">
-          <div class='load-more'>
-            <button 
-              type="button" 
-              class='load-btn' 
-              onclick="AbeloThemeProductCatalog.loadNextPage().updatePagination();" 
-              {% if catalogInfo.lastPage <= catalogInfo.page %} disabled {% endif %}
-            >{{ translate("More products", "Product") }}</button>
+  {% if catalogInfo.products|length > 0 %}
+    <div id="productPagination">
+      <div class="row mt-3 mb-5">
+        {% if not showPaging %}
+          <div class="col-lg-4"></div>
+          <div class="col-12 text-center col-lg-4 mb-2 mb-lg-0">
+            {% if catalogInfo.page < catalogInfo.lastPage %}
+              <div class='load-more'>
+                <button
+                  type="button"
+                  class='load-btn'
+                  onclick="AbeloThemeProductCatalog.loadNextPage().updatePagination();"
+                  {% if catalogInfo.lastPage <= catalogInfo.page %} disabled {% endif %}
+                >{{ translate("More products", "Product") }}</button>
+              </div>
+            {% endif %}
           </div>
-        </div>
-      {% endif %}
-      <div class="
-        col-12 text-center col-lg-{% if showPaging %}12 {% else %}4 text-lg-right {% endif %}
-      ">
-        <div class="pro-pagination-style">
-          <ul class="pagination-small" id="pagination">
-            {% if catalogInfo.page != 1 %}
-              <li>
+        {% endif %}
+        <div class="
+          col-12 text-center col-lg-{% if showPaging %}12 {% else %}4 text-lg-right {% endif %}
+        ">
+          <div class="pro-pagination-style">
+            <ul class="pagination-small" id="pagination">
+              {% if catalogInfo.page != 1 %}
+                <li>
+                  <a
+                    class="prev"
+                    href="javascript:void(0)"
+                    onclick="AbeloThemeProductCatalog.loadPage('-').updatePagination();"
+                  ><i class="ion-ios-arrow-left"></i></a>
+                </li>
+              {% endif %}
+              <li id="page_1">
                 <a
-                  class="prev" 
+                  {% if catalogInfo.page == 1 %} class="active" {% endif %}
                   href="javascript:void(0)"
-                  onclick="AbeloThemeProductCatalog.loadPage('-').updatePagination();"
-                ><i class="ion-ios-arrow-left"></i></a>
+                  onclick="AbeloThemeProductCatalog.loadPage(1).updatePagination();"
+                >1</a>
               </li>
-            {% endif %}
-            <li id="page_1">
-              <a 
-                {% if catalogInfo.page == 1 %} class="active" {% endif %}
-                href="javascript:void(0)"
-                onclick="AbeloThemeProductCatalog.loadPage(1).updatePagination();"
-              >1</a>
-            </li>
-            {% if catalogInfo.page > 4 %}
-              <li class="dots"></li>
-            {% endif %}
-            {% if catalogInfo.lastPage > 2 %}
-              {% for page in 2..catalogInfo.lastPage - 1 %}
-                {% if page >= catalogInfo.page - 2 and page <= catalogInfo.page + 1 %}
-                  <li id="page_{{ page }}">
-                    <a 
-                      {% if page == catalogInfo.page %} class="active" {% endif %}
-                      href="javascript:void(0)"
-                      onclick="AbeloThemeProductCatalog.loadPage({{ page }}).updatePagination();"
-                    >{{ page }}</a>
-                  </li>
-                {% endif %}
-              {% endfor %}
-            {% endif %}
-            {% if catalogInfo.lastPage > catalogInfo.page + 2 %}
-              <li class="dots"></li>
-            {% endif %}
-            {% if catalogInfo.lastPage > 1 %}
-              <li id="page_{{ catalogInfo.lastPage }}">
-                <a 
-                  {% if catalogInfo.lastPage == catalogInfo.page %} class="active" {% endif %}
-                  href="javascript:void(0)"
-                  onclick="AbeloThemeProductCatalog.loadPage({{ catalogInfo.lastPage }}).updatePagination();"
-                >{{ catalogInfo.lastPage }}</a>
-              </li>
-            {% endif %}
-            {% if catalogInfo.lastPage != catalogInfo.page %}
-              <li>
-                <a
-                  class="next" 
-                  href="javascript:void(0)"
-                  onclick="AbeloThemeProductCatalog.loadPage('+').updatePagination();"
-                ><i class="ion-ios-arrow-right"></i></a>
-              </li>
-            {% endif %}
-          </ul>
+              {% if catalogInfo.page > 4 %}
+                <li class="dots"></li>
+              {% endif %}
+              {% if catalogInfo.lastPage > 2 %}
+                {% for page in 2..catalogInfo.lastPage - 1 %}
+                  {% if page >= catalogInfo.page - 2 and page <= catalogInfo.page + 1 %}
+                    <li id="page_{{ page }}">
+                      <a
+                        {% if page == catalogInfo.page %} class="active" {% endif %}
+                        href="javascript:void(0)"
+                        onclick="AbeloThemeProductCatalog.loadPage({{ page }}).updatePagination();"
+                      >{{ page }}</a>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+              {% if catalogInfo.lastPage > catalogInfo.page + 2 %}
+                <li class="dots"></li>
+              {% endif %}
+              {% if catalogInfo.lastPage > 1 %}
+                <li id="page_{{ catalogInfo.lastPage }}">
+                  <a
+                    {% if catalogInfo.lastPage == catalogInfo.page %} class="active" {% endif %}
+                    href="javascript:void(0)"
+                    onclick="AbeloThemeProductCatalog.loadPage({{ catalogInfo.lastPage }}).updatePagination();"
+                  >{{ catalogInfo.lastPage }}</a>
+                </li>
+              {% endif %}
+              {% if catalogInfo.lastPage != catalogInfo.page %}
+                <li>
+                  <a
+                    class="next"
+                    href="javascript:void(0)"
+                    onclick="AbeloThemeProductCatalog.loadPage('+').updatePagination();"
+                  ><i class="ion-ios-arrow-right"></i></a>
+                </li>
+              {% endif %}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  {% endif %}
 {% endif %}

@@ -262,3 +262,17 @@ function clearInputs(formId) {
 		}
 	});
 }
+
+function validateProductQty(input) {
+	input = $(input);
+	var value = input.val();
+	var reg = new RegExp('^[0-9]$');
+
+	if (!reg.test(value)) {
+		input.val('1');
+		return;
+	}
+	if (parseInt(value) < 1) {
+		input.val('1');
+	}
+}

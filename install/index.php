@@ -441,6 +441,8 @@ if (count($partsToInstall) == 0) {
           __DIR__."/SampleData/images/category_{$i}.png",
           "{$adminPanel->config['files_dir']}/blogs/category_{$i}.png",
         );
+      }
+    for ($i = 1; $i <= 10;$i++) {
         copy(
           __DIR__."/SampleData/images/product_{$i}.jpg",
           "{$adminPanel->config['files_dir']}/products/product_{$i}.jpg",

@@ -145,7 +145,7 @@
                     onclick="BasicThemeProductCatalog.loadNextPage().updatePagination();"
                     {% if catalogInfo.lastPage <= catalogInfo.page %} disabled {% endif %}
                   >
-                    More products
+                    {{ translate("More products", "Product") }}
                   </button>
                 </div>
               {% endif %}

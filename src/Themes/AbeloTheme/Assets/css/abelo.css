@@ -545,3 +545,6 @@ ul .dots::before {
 .search-element button {
   position: relative;
 }
+.contact-area h1 {
+  padding-bottom: 15px;
+}

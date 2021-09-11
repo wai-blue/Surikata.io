@@ -21,9 +21,9 @@
                         <p class="error">{{ translate("Failed to login.", "Customer") }}</p>
                       </div>
                     {% endif %}
-                    <form method="post" id="loginForm">
+                    <form method="post" id="loginForm" onsubmit="return false;">
                       <input type="hidden" name="doLogin" value="1" />
-                      <input type="text" name="loginEmail" placeholder="{{ translate("E-mail", "Customer") }}" required />
+                      <input type="email" name="loginEmail" placeholder="{{ translate("E-mail", "Customer") }}" required />
                       <input type="password" name="loginPassword" placeholder="{{ translate("Password", "Customer") }}" required />
                       <div class="button-box">
                         <div class="login-toggle-btn">
@@ -32,8 +32,8 @@
                         </div>
                         <div class="login-toggle-btn">
                           <button 
-                            type="submit"
-                            onclick="$('#loginForm').submit();"
+                            type="button"
+                            onclick="sendLoginForm('loginForm');"
                           ><span>Login</span></button>
                           <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/ForgotPassword', 'getWebPageUrl') }}">
                             {{ translate("Forgot password?", "Customer") }}

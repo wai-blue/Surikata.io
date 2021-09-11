@@ -38,24 +38,21 @@
 .orderAgreement input[type="checkbox"] {
   margin-right: 5px;
 }
-.list-product .new {
+.product-flag {
   position: absolute;
-  top: 10px !important;
-  left: 15px;
-  display: inline-block;
-  color: #272727;
-  background: #f7d807;
-  padding: 0;
-  width: 45px;
-  text-align: center;
-  line-height: 20px;
-  height: 22px;
-  font-size: 11px;
-  text-transform: capitalize;
-  text-align: center;
-  z-index: 4;
-  border-radius: 5px;
-  font-weight: 600;
+  top: 5px;
+  margin-left: 5px;
+}
+.product-flag .new {
+  background-color: #fcff54;
+}
+.product-flag .secondary{
+  background-color: #266cfb;
+  color: #fff;
+}
+.product-flag .top {
+  background-color: #d26e4b;
+  color: #fff;
 }
 .list-product .recommended {
   position: absolute;

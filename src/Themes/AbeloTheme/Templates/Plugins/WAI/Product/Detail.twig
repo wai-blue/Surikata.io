@@ -28,19 +28,27 @@
       </div>
       <div class="col-xl-6 col-lg-6 col-md-12">
         <div class="product-details-content">
-
           <div class="product-label-group" style="flex-direction: row;">
             {% if productInfo.is_new == 1 %}
               <label class="product-label label-new" style="margin-right: 5px;">{{ translate("New", "Product") }}</label>
             {% endif %}
             {% if productInfo.is_sale_out == 1 %}
-              <label class="product-label label-sale" style="margin-right: 5px;">{{ translate("Sale", "Product") }}</label>
+              <label class="product-label label-new" style="margin-right: 5px;">{{ translate("Sale", "Product") }}</label>
             {% endif %}
             {% if productInfo.is_on_sale == 1 %}
-              <label class="product-label label-stock" style="margin-right: 5px;">{{ translate("Action", "Product") }}</label>
+              <label class="product-label label-new" style="margin-right: 5px;">{{ translate("Action", "Product") }}</label>
             {% endif %}
-            {% if productInfo.is_recommended == 1 or productInfo.is_top == 1 %}
-              <label class="product-label label-top" style="margin-right: 5px;">{{ productInfo.is_top == 1 ? translate("Top", "Product") : translate("Recommended", "Product") }}</label>
+            {% if productInfo.is_top == 1 %}
+              <label class="product-label label-new" style="margin-right: 5px;">{{ translate("Top", "Product") }}</label>
+            {% endif %}
+            {% if productInfo.is_used == 1 %}
+              <label class="product-label label-new" style="margin-right: 5px;">{{ translate("Used", "Product") }}</label>
+            {% endif %}
+            {% if productInfo.is_unpacked == 1 %}
+              <label class="product-label label-new" style="margin-right: 5px;">{{ translate("Unpacked", "Product") }}</label>
+            {% endif %}
+            {% if productInfo.is_recommended == 1 %}
+              <label class="product-label label-new" style="margin-right: 5px;">{{ translate("Recommended", "Product") }}</label>
             {% endif %}
           </div>
 
@@ -296,6 +304,29 @@
                 <article class="list-product text-center">
                   <div class="product-inner">
                     <div class="img-block">
+                      <ul class="product-flag">
+                        {% if product.is_new == 1 %}
+                          <li class="tag new">{{ translate("New", "Product") }}</li>
+                        {% endif %}
+                        {% if product.is_sale_out == 1 %}
+                          <li class="tag new">{{ translate("Sale", "Product") }}</li>
+                        {% endif %}
+                        {% if product.is_on_sale == 1 %}
+                          <li class="tag new">{{ translate("Action", "Product") }}</li>
+                        {% endif %}
+                        {% if product.is_top == 1 %}
+                          <li class="tag top">{{ translate("Top", "Product") }}</li>
+                        {% endif %}
+                        {% if product.is_used == 1 %}
+                          <li class="tag new">{{ translate("Used", "Product") }}</li>
+                        {% endif %}
+                        {% if product.is_unpacked == 1 %}
+                          <li class="tag secondary">{{ translate("Unpacked", "Product") }}</li>
+                        {% endif %}
+                        {% if product.is_recommended == 1 %}
+                          <li class="tag secondary">{{ translate("Recommended", "Product") }}</li>
+                        {% endif %}
+                      </ul>
                       <a href="{{ rootUrl}}/{{ product.url }}" class="thumbnail">
                         <img class="first-img" src="{{ uploadedFileUrl }}/{{ product["image"] }}" alt="{{ product.TRANSLATIONS.name }}" />
                       </a>
@@ -309,23 +340,6 @@
                         </ul>
                       </div>
                     </div>
-                    <ul class="product-flag">
-                      {% if product.priceInfo.discountTotal != 0 %}
-                        <li class="tag new">-{{ product.priceInfo.discountTotal|number_format(2, ",", " ") }} %</li>
-                      {% endif %}
-                      {% if product.is_new == 1 %}
-                        <li class="tag new">{{ translate("New", "Product") }}</li>
-                      {% endif %}
-                      {% if product.is_sale_out == 1 %}
-                        <li class="tag sale">{{ translate("Sale", "Product") }}</li>
-                      {% endif %}
-                      {% if product.is_on_sale == 1 %}
-                        <li class="tag action">{{ translate("Action", "Product") }}</li>
-                      {% endif %}
-                      {% if product.is_recommended == 1 or product.is_top == 1 %}
-                        <li class="tag sale">{{ product.is_top == 1 ? translate("Top", "Product") : translate("Recommended", "Product") }}</li>
-                      {% endif %}
-                    </ul>
                     <div class="product-decs">
                       <a class="inner-link" href="shop-4-column.html"><span>{{ translate("STUDIO DESIGN", "Product") }}</span></a>
                       <h2><a href="single-product.html" class="product-link">{{ product.TRANSLATIONS.name }}</a></h2>
@@ -393,20 +407,26 @@
                       </div>
                     </div>
                     <ul class="product-flag">
-                      {% if product.priceInfo.discountTotal != 0 %}
-                        <li class="tag new">-{{ product.priceInfo.discountTotal|number_format(2, ",", " ") }} %</li>
-                      {% endif %}
                       {% if product.is_new == 1 %}
                         <li class="tag new">{{ translate("New", "Product") }}</li>
                       {% endif %}
                       {% if product.is_sale_out == 1 %}
-                        <li class="tag sale">{{ translate("Sale", "Product") }}</li>
+                        <li class="tag new">{{ translate("Sale", "Product") }}</li>
                       {% endif %}
                       {% if product.is_on_sale == 1 %}
-                        <li class="tag action">{{ translate("Action", "Product") }}</li>
+                        <li class="tag new">{{ translate("Action", "Product") }}</li>
                       {% endif %}
-                      {% if product.is_recommended == 1 or product.is_top == 1 %}
-                        <li class="tag sale">{{ product.is_top == 1 ? translate("Top", "Product") : translate("Recommended", "Product") }}</li>
+                      {% if product.is_top == 1 %}
+                        <li class="tag top">{{ translate("Top", "Product") }}</li>
+                      {% endif %}
+                      {% if product.is_used == 1 %}
+                        <li class="tag new">{{ translate("Used", "Product") }}</li>
+                      {% endif %}
+                      {% if product.is_unpacked == 1 %}
+                        <li class="tag secondary">{{ translate("Unpacked", "Product") }}</li>
+                      {% endif %}
+                      {% if product.is_recommended == 1 %}
+                        <li class="tag secondary">{{ translate("Recommended", "Product") }}</li>
                       {% endif %}
                     </ul>
                     <div class="product-decs">

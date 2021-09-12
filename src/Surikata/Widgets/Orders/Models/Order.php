@@ -232,6 +232,13 @@ class Order extends \ADIOS\Core\Model {
         "show_column" => true
       ],
 
+      "id_state" => [
+        "type" => "lookup",
+        "title" => "StateModel",
+        "model" => "Widgets/Orders/Models/OrderState",
+        "show_column" => TRUE,
+      ],
+
       "id_invoice" => [
         "type" => "lookup",
         "title" => "Invoice",
@@ -815,6 +822,7 @@ class Order extends \ADIOS\Core\Model {
                     </div>
                   "
                 ],
+                "id_state",
               ],
               "Delivery" => [
                 "required_delivery_time",

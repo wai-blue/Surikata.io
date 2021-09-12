@@ -206,6 +206,7 @@ if (count($partsToInstall) == 0) {
     $shoppingCartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($adminPanel);
     $invoiceModel = new \ADIOS\Widgets\Finances\Models\Invoice($adminPanel);
     $orderModel = new \ADIOS\Widgets\Orders\Models\Order($adminPanel);
+    $orderStateModel = new \ADIOS\Widgets\Orders\Models\OrderState($adminPanel);
     $websiteMenuModel = new \ADIOS\Widgets\Website\Models\WebMenu($adminPanel);
     $websiteMenuItemModel = new \ADIOS\Widgets\Website\Models\WebMenuItem($adminPanel);
     $websiteWebPageModel = new \ADIOS\Widgets\Website\Models\WebPage($adminPanel);
@@ -553,6 +554,13 @@ if (count($partsToInstall) == 0) {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // PART: orders
+
+    $orderStateModel->insertRow(["name" => "New", "color" => "#0000FF", "notes" => "New order"]);
+    $orderStateModel->insertRow(["name" => "Paid", "color" => "#FFA500", "notes" => "Order is set as paid"]);
+    $orderStateModel->insertRow(["name" => "Invoice issued", "color" => "#008000", "notes" => ""]);
+    $orderStateModel->insertRow(["name" => "Shipped", "color" => "#800080", "notes" => ""]);
+    $orderStateModel->insertRow(["name" => "Received", "color" => "#D3D3D3", "notes" => ""]);
+    $orderStateModel->insertRow(["name" => "Canceled", "color" => "#808080", "notes" => "Canceled order"]);
 
     if (in_array("orders", $partsToInstall)) {
       // invoice numerical series

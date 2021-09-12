@@ -308,10 +308,16 @@
                         </div>
                         <div class="your-order-total">
                           <ul>
-                            <li class="order-total">{{ translate("Shipping", "Order") }}</li>
-                            <li>{{ deliveryPrice|number_format(2, ",", " ") }} €</li>
+                            <li class="subTotal">{{ translate("Subtotal", "Order") }}</li>
+                            <li class="subTotal">{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+                          </ul>
+                          <ul>
+                            <li class="subTotal">{{ translate("Shipping", "Order") }}</li>
+                            <li class="subTotal">{{ deliveryPrice|number_format(2, ",", " ") }} €</li>
+                          </ul>
+                          <ul>
                             <li class="order-total">{{ translate("Total", "Order") }}</li>
-                            <li>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+                            <li>{{ totalPriceWithDelivery|number_format(2, ",", " ") }} €</li>
                           </ul>
                         </div>
                       </div>
@@ -422,10 +428,16 @@
         </div>
         <div class="your-order-total">
           <ul>
-            <li class="order-total">{{ translate("Shipping", "Order") }}</li>
-            <li>{{ deliveryPrice|number_format(2, ",", " ") }} €</li>
+            <li class="subTotal">{{ translate("Subtotal", "Order") }}</li>
+            <li class="subTotal">{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+          </ul>
+          <ul>
+            <li class="subTotal">{{ translate("Shipping", "Order") }}</li>
+            <li class="subTotal">{{ deliveryPrice|number_format(2, ",", " ") }} €</li>
+          </ul>
+          <ul>
             <li class="order-total">{{ translate("Total", "Order") }}</li>
-            <li>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+            <li>{{ totalPriceWithDelivery|number_format(2, ",", " ") }} €</li>
           </ul>
         </div>
       </div>

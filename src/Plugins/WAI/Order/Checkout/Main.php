@@ -28,12 +28,6 @@ namespace Surikata\Plugins\WAI\Order {
         )
       ;
 
-      $shipmentPriceModel = 
-        new \ADIOS\Widgets\Shipping\Models\ShipmentPrice(
-          $this->adminPanel
-        )
-      ;
-
       $userProfileController->reloadUserProfile();
       $twigParams['userLogged'] = $this->websiteRenderer->userLogged;
 
@@ -42,70 +36,36 @@ namespace Surikata\Plugins\WAI\Order {
         ->getCartContents()
       ;
 
-      /*foreach ($this->websiteRenderer->getPaymentPlugins() as $paymentPlugin) {
-        $twigParams["paymentMethods"][$paymentPlugin->name] = $paymentPlugin->getPaymentMeta();
-      }*/
-
       $deliveryServices = [];
 
       if ($this->shipping === NULL) {
         $this->shipping = 
-          $shipmentPriceModel->getAllBySummary(
+          $shipmentModel->getByCartSummary(
             $this->cartContents["summary"]
           )
         ;
       }
 
       foreach ($this->shipping as $shipment) {
-        $deliveryServices[$shipment['id']] = $shipment;
-        $deliveryServices[$shipment['id']]['PRICE'] = $shipment['shipment_price'];
+        $deliveryServices[$shipment['delivery']['id']] = $shipment['delivery'];
       }
 
-      $selectedDeliveryService = reset($this->shipping);
-
-      /*$shipmentPayments = 
-        $shipmentModel->getByIdDeliveryService(
-          $selectedDeliveryService["id"]
-        )
-      ;*/
+      $selectedDeliveryService = reset($this->shipping)['delivery'];
 
       $paymentMethods = [];
       foreach ($this->shipping as $shipment) {
-        if ($shipment['id'] == $selectedDeliveryService['id']) {
-          $paymentMethods[$shipment['id_payment_service']] = $shipment;
+        if ($shipment['delivery']['id'] == $selectedDeliveryService['id']) {
+          $paymentMethods[$shipment['payment']['id']] = $shipment['payment'];
         }
       }
 
       $selectedPaymentMethod = reset($paymentMethods);
-
-      /*foreach ($this->websiteRenderer->getDeliveryPlugins() as $deliveryPlugin) {
-        $tmpMeta = $deliveryPlugin->getDeliveryMeta();
-        if ($tmpMeta !== FALSE) {
-          $deliveryServices[$deliveryPlugin->name] = $tmpMeta;
-          $deliveryServices[$deliveryPlugin->name]["PRICE"] = $deliveryPlugin->calculatePriceForOrder(NULL, $this->cartContents);
-        }
-      }*/
 
       if (isset($this->websiteRenderer->urlVariables['orderData'])) {
         $orderData = $this->websiteRenderer->urlVariables['orderData'];
 
         $selectedPaymentMethod = $paymentMethods[$orderData["paymentMethod"]];
         $selectedDeliveryService = $deliveryServices[$orderData["deliveryService"]];
-
-        $shipment = 
-          $shipmentModel->getShipment(
-            $selectedDeliveryService["id"],
-            $selectedPaymentMethod["id_payment_service"]
-          )
-        ; 
-
-        $shipmentPrice = $shipmentPriceModel->getById($shipment['id']);
-
-        $twigParams['totalPriceWithDelivery'] = $this->getTotalPriceWithDelivery(
-          $shipmentPrice['shipment_price']
-        );
-
-        $twigParams['deliveryPrice'] = $shipmentPrice['shipment_price'];
 
         $shipmentPayments = 
           $shipmentModel->getByIdDeliveryService(
@@ -115,12 +75,10 @@ namespace Surikata\Plugins\WAI\Order {
 
         $paymentMethods = [];
         foreach ($shipmentPayments as $shipmentPayment) {
-          $paymentMethods[$shipmentPayment['payment']['name']] = $shipmentPayment['payment'];
+          $paymentMethods[$shipmentPayment['payment']['name']] = 
+            $shipmentPayment['payment']
+          ;
         }
-
-        //$customerUID = $this->websiteRenderer->getCustomerUID();
-        //$cartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($this->adminPanel);
-        //$this->cartContents = $cartModel->getCartContents($customerUID);
 
         if (!empty($orderData['voucher'])) {
           $voucherModel = new \ADIOS\Widgets\Customers\Models\Voucher($this->adminPanel);
@@ -139,18 +97,23 @@ namespace Surikata\Plugins\WAI\Order {
             $twigParams["voucherDiscountPercentage"] = $voucher['discount_percentage'];
           }
         }
-      } else {
-
-        $twigParams['totalPriceWithDelivery'] = 
-          $this->getTotalPriceWithDelivery(
-            $selectedDeliveryService["shipment_price"]
-          )
-        ;
-
-        $twigParams['deliveryPrice'] = $selectedDeliveryService["shipment_price"];
-
       }
 
+      foreach ($this->shipping as $shipment) {
+        if (
+          $shipment['delivery']['id'] == $selectedDeliveryService['id']
+          && $shipment['payment']['id'] == $selectedPaymentMethod['id']
+        ) {
+          $currentShipment = $shipment;
+        }
+      }
+
+      $twigParams['totalPriceWithDelivery'] = 
+        $this->getTotalPriceWithDelivery(
+          $currentShipment['price']['shipment_price']
+        )
+      ;
+      $twigParams['deliveryPrice'] = $currentShipment['price']['shipment_price'];
       $twigParams['cartContents'] = $this->cartContents;
       $twigParams["deliveryServices"] = $deliveryServices;
       $twigParams['paymentMethods'] = $paymentMethods;

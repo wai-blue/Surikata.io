@@ -81,14 +81,6 @@ class ShipmentPrice extends \ADIOS\Core\Model {
     ]);
   }
 
-  public function shipment() {
-    return $this->hasOne(\ADIOS\Widgets\Shipping\Models\Shipment::class, 'id', 'id_shipment');
-  }
-
-  public function getAll(string $keyBy = "id") {
-    return self::with('shipment')->get()->toArray();
-  }
-
   public function getById(int $idShipment) {
     return reset(
       $this
@@ -96,48 +88,6 @@ class ShipmentPrice extends \ADIOS\Core\Model {
       ->get()
       ->toArray()
     );
-  }
-  
-  public function getAllBySummary($summary) {
-    $shipmentModel = new \ADIOS\Widgets\Shipping\Models\Shipment($this->adminPanel);
-    $deliveryServiceModel = new \ADIOS\Widgets\Shipping\Models\DeliveryService($this->adminPanel);
-    $paymentServiceModel = new \ADIOS\Widgets\Shipping\Models\PaymentService($this->adminPanel);
-
-    return $this->adios->db->get_all_rows_query("
-      SELECT 
-        {$deliveryServiceModel->table}.name as delivery_name,
-        {$deliveryServiceModel->table}.id as id,
-        {$deliveryServiceModel->table}.description as delivery_desc,
-        {$this->table}.shipment_price as shipment_price,
-        {$this->table}.id_shipment as id_shipment,
-        {$shipmentModel->table}.description as shipment_desc,
-        {$paymentServiceModel->table}.id as id_payment_service,
-        {$paymentServiceModel->table}.name as payment_service_name
-      FROM {$this->table}
-      LEFT JOIN 
-        {$shipmentModel->table}
-      ON 
-        {$this->table}.id_shipment = {$shipmentModel->table}.id 
-      LEFT JOIN 
-        {$deliveryServiceModel->table}
-      ON
-        {$deliveryServiceModel->table}.id = {$shipmentModel->table}.id_delivery_service
-      LEFT JOIN
-        {$paymentServiceModel->table}
-      ON
-        {$shipmentModel->table}.id_payment_service = {$paymentServiceModel->table}.id
-      WHERE 
-      (
-        {$this->table}.shipment_price_calculation_method = 1	
-        AND {$this->table}.price_from <= {$summary['priceTotal']}
-        AND {$this->table}.price_to >= {$summary['priceTotal']}
-      ) OR 
-      (
-        {$this->table}.shipment_price_calculation_method = 2
-        AND {$this->table}.weight_from <= 0
-        AND {$this->table}.weight_to >= 100
-      )
-    ");
   }
 
 }

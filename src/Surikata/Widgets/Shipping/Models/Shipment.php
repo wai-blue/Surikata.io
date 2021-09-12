@@ -69,8 +69,20 @@ class Shipment extends \ADIOS\Core\Model {
     ]);
   }
 
+  public function price() {
+    return $this->hasOne(\ADIOS\Widgets\Shipping\Models\ShipmentPrice::class, 'id_shipment', 'id');
+  }
+
   public function payment() {
     return $this->hasOne(\ADIOS\Widgets\Shipping\Models\PaymentService::class, "id", "id_payment_service");
+  }
+
+  public function delivery() {
+    return $this->hasOne(\ADIOS\Widgets\Shipping\Models\DeliveryService::class, "id", "id_delivery_service");
+  }
+
+  public function country() {
+    return $this->hasOne(\ADIOS\Widgets\Shipping\Models\Country::class, "id", "id_country");
   }
 
   public function getByIdDeliveryService($idDelivery) {
@@ -85,14 +97,16 @@ class Shipment extends \ADIOS\Core\Model {
     ;
   }
 
-  public function getShipment($idDelivery, $idPayment) {
-    return reset(
+  public function getByCartSummary(array $summary) {
+    return 
       $this
-      ->where('id_delivery_service', '=', $idDelivery)
-      ->where('id_payment_service', '=', $idPayment)
+      ->with('price')
+      ->with('delivery')
+      ->with('payment')
+      ->with('country')
       ->get()
       ->toArray()
-    );
+    ;
   }
 
 }

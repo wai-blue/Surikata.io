@@ -385,8 +385,7 @@
                                   onchange="BasicThemeCart.updateCheckoutOverview()"
                                 >
                                 <label class="form-check-label" for="deliveryService-{{ loop.index }}">{{ deliveryService.delivery_name }}</label>
-                                <p data-method="{{ deliveryService.id_delivery }}" class="delivery-text">{{ deliveryService.description }}</p>
-                                <!--<p><b>{{ deliveryService.PRICE }} €</b></p>-->
+                                <p data-method="{{ deliveryService.id }}" class="delivery-text">{{ deliveryService.description }}</p>
                               </li>
                             {% endfor %}
                           {% else %}
@@ -500,8 +499,7 @@
                   onchange="BasicThemeCart.updateCheckoutOverview()"
                 >
                 <label class="form-check-label" for="deliveryService-{{ loop.index }}">{{ deliveryService.delivery_name }}</label>
-                <p data-method="{{ deliveryService.id_delivery }}" class="delivery-text">{{ deliveryService.description }}</p>
-                <!--<p><b>{{ deliveryService.PRICE }} €</b></p>-->
+                <p data-method="{{ deliveryService.id }}" class="delivery-text">{{ deliveryService.description }}</p>
               </li>
             {% endfor %}
           </ul>

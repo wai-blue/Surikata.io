@@ -617,7 +617,7 @@ class Table extends \ADIOS\Core\UI\View {
         $this->add_class('shadow');
 
         if (!_count($this->columns)) {
-            $this->adios->console->log('Component:table', 'No column_settings provided');
+            $this->adios->console->error('No column_settings provided');
         }
 
         if ('' != $params['width']) {

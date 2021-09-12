@@ -103,8 +103,8 @@ namespace Surikata\Plugins\WAI\Misc {
 
       if (count($returnArray) == 0) {
         $returnArray[] = ["category" => "we did not find",
-          "label" => $searchValue,
-          "value" => $searchValue
+          "label" => "",
+          "value" => ""
         ];
       }
 

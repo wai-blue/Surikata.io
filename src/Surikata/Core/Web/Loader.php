@@ -154,11 +154,13 @@ class Loader extends \Cascada\Loader {
 
       $this->twig->addFunction(new \Twig\TwigFunction(
         'translate',
-        function ($str, $context = NULL) {
+        function ($original, $context = NULL) {
           global $___CASCADAObject;
 
-          $domain = $___CASCADAObject->config['domainToRender'];
-          $translationModel = new \ADIOS\Widgets\Settings\Models\Translation($this->adminPanel);
+          $domains = $___CASCADAObject->adminPanel->config['widgets']['Website']['domains'];
+          $domainToRender = $___CASCADAObject->config['domainToRender'];
+
+          $translationModel = new \ADIOS\Widgets\Website\Models\Translation($this->adminPanel);
 
           if (
             $context === NULL
@@ -170,30 +172,23 @@ class Loader extends \Cascada\Loader {
           $context = (string) $context;
 
           if ($___CASCADAObject->translationCache === NULL) {
-
-            $allTranslations = $translationModel->get()->toArray();
-
-            foreach ($allTranslations as $translation) {
-              $___CASCADAObject->translationCache
-                [$translation["original"]]
-                [$translation["context"]] = json_decode($translation["translated"], true);
-            }
-
+            $___CASCADAObject->translationCache = $translationModel->loadCache();
           }
 
-          if (empty($___CASCADAObject->translationCache[$str][$context])) {
+          if (!isset($___CASCADAObject->translationCache[$domainToRender][$context][$original])) {
             $translationModel->insertRow([
+              "domain" => $domainToRender,
               "context" => $context,
-              "original" => $str,
+              "original" => $original,
               "translated" => "",
             ]);
 
-            $translatedText = $str;
+             $___CASCADAObject->translationCache[$domainToRender][$context][$original] = $original;
           } else {
-            $translatedText = $___CASCADAObject->translationCache[$str][$context][$domain];
+            $translatedText = $___CASCADAObject->translationCache[$domainToRender][$context][$original];
           }
 
-          return $translatedText;
+          return empty($translatedText) ? $original : $translatedText;
         }
       ));
 
@@ -201,6 +196,33 @@ class Loader extends \Cascada\Loader {
       $this->setRouter(new \Cascada\Router($this->getSiteMap()));
     }
 
+  }
+  
+
+  public function validateOutputHtml() {
+    // https://www.vzhurudolu.cz/prirucka/checklist
+    // TODO: automaticka kontrola vystupneho HMTL na SEO parametre
+    
+    $regexpMustNotMatch = TRUE; // ak sa retazec v HTML nachaza, je problem
+    $regexpMustMatch = FALSE; // ak sa retazec v HTML nenachaza, je problem
+
+    $validationRegexps = [
+      [
+        "/<script>/i",
+        "SCRIPT tag is found in HTML.",
+        $regexpMustNotMatch
+      ]
+    ];
+
+    foreach ($validationRegexps as $regexp) {
+      $match = preg_match($regexp[0], $this->outputHtml);
+      if (
+        ($match && $regexp[2])
+        || (!$match && !$regexp[2])
+      ) {
+        $this->adminPanel->console->warning($regexp[1], ["//{$_SERVER['HTTP_HOST']}/{$_SERVER['REQUEST_URI']}"]);
+      }
+    }
   }
 
   public function render() {
@@ -211,9 +233,7 @@ class Loader extends \Cascada\Loader {
 
       if ($outputFormat != "json" && $this->config['minifyOutputHtml'] ?? FALSE) {
         $htmlMinifier = new HtmlMin();
-        return $htmlMinifier->minify($this->outputHtml);
-      } else {
-        return $this->outputHtml;
+        $this->outputHtml = $htmlMinifier->minify($this->outputHtml);
       }
     } catch (
       \Illuminate\Database\QueryException
@@ -221,13 +241,19 @@ class Loader extends \Cascada\Loader {
       $e
     ) {
       $errorHash = md5(date("YmdHis").$e->getMessage());
-      $this->adminPanel->console->log($errorHash, $e->getMessage());
+      $this->adminPanel->console->error("{$errorHash} ".$e->getMessage());
       return json_encode([
         "status" => "FAIL",
         "exception" => "SurikataCore",
         "error" => "Oops! Something went wrong with the database. See logs for more information. Error hash: {$errorHash}",
       ]);
     }
+
+    if ($this->config['validateOutputHtml'] ?? FALSE) {
+      $this->validateOutputHtml();
+    }
+
+    return $this->outputHtml;
   }
 
   /**

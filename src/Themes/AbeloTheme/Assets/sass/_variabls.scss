@@ -1,0 +1,28 @@
+// Font Family
+$body-font: 'Muli', sans-serif;
+
+
+// Colors ---------------
+
+$white: #FFFFFF;
+$black: #272727;
+$grey: #F8F9FD;
+$orangered: orangered;
+$transition:all .3s ease-in-out;
+// Body Color
+$body-color: #9d9c9c;
+$theme-color:#266cfb;
+
+// Heading Color
+$heading-color: #272727;
+$heading-color-2: #47494a;
+
+// Responsive Variables
+$extraBig-device: "only screen and (min-width: 1500px)";
+$laptop-device: "only screen and (min-width: 1200px) and (max-width: 1499px)";
+$desktop-device: "only screen and (min-width: 992px) and (max-width: 1199px)";
+$tablet-device: "only screen and (min-width: 768px) and (max-width: 991px)";
+$large-mobile: "only screen and (max-width: 767px)";
+$small-mobile: "only screen and (max-width: 575px)";
+$extra-small-mobile: "only screen and (max-width: 479px)";
+$extra-mini-mobile: "only screen and (max-width: 360px)";

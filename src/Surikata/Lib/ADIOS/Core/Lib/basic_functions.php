@@ -60,7 +60,7 @@ function _d_echo($logger_class, $logger_name, $msg) {
         </div>
       ";
     } else {
-      $___ADIOSObject->console->log("$logger_name [$d_echo_id]", $msg);
+      $___ADIOSObject->console->info($msg);
     }
   }
 }

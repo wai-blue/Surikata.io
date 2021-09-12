@@ -501,7 +501,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     // default column settings
     foreach ($columns as $colName => $colDefinition) {
       if ($colDefinition["type"] == "char") {
-        $this->adios->console->log("Model", "{$this->name}, {$colName}: char type is deprecated");
+        $this->adios->console->info("{$this->name}, {$colName}: char type is deprecated");
       }
 
       switch ($colDefinition["type"]) {

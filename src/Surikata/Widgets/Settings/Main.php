@@ -22,16 +22,30 @@ class Settings extends \ADIOS\Core\Widget {
             "onclick" => "window_render('Settings/Units');",
           ],
           [
-            "title" => "Translations",
-            "onclick" => "window_render('Settings/Translations');",
-          ],
-          [
             "title" => "Users",
             "onclick" => "desktop_update('Pouzivatelia');",
           ],
           [
             "title" => "Imports",
             "onclick" => "desktop_update('Settings/Imports');",
+          ],
+          [
+            "title" => "Logs",
+            "onclick" => "desktop_update('Settings/LogViewer', {'severity': 'info'});",
+            "sub" => [
+              [
+                "title" => "Info",
+                "onclick" => "desktop_update('Settings/LogViewer', {'severity': 'info'});",
+              ],
+              [
+                "title" => "Warnings",
+                "onclick" => "desktop_update('Settings/LogViewer', {'severity': 'warning'});",
+              ],
+              [
+                "title" => "Errors",
+                "onclick" => "desktop_update('Settings/LogViewer', {'severity': 'error'});",
+              ],
+            ],
           ],
           [
             "title" => "Maintenance",

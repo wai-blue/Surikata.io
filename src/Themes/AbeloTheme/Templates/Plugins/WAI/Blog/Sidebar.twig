@@ -1,0 +1,93 @@
+<script>
+  $(document).ready(function() {
+    AbeloThemeBlogCatalog.loadUrlParams('tags');
+  })
+</script>
+<!-- Sidebar Area Start -->
+<div class="left-sidebar shop-sidebar-wrap">
+  <!-- Sidebar single item -->
+  <!--<div class="sidebar-widget">
+    <h3 class="sidebar-title"><span>Search</span></h3>
+    <div class="search-widget">
+      <form action="#">
+        <input placeholder="{{ translate("Search entire store here ...", "Blog") }}" type="text" />
+        <button type="submit"><i class="ion-ios-search-strong"></i></button>
+      </form>
+    </div>
+  </div>-->
+  <!-- Sidebar single item -->
+  <!-- Sidebar single item -->
+  {% if showArchive %}
+    <div class="sidebar-widget">
+      <h3 class="sidebar-title"><span>{{ translate("Archive", "Blog") }}</span></h3>
+      <div class="category-post">
+        <ul>
+          {% for date, item in archive %}
+            <li><a href="{{ rootUrl }}/{{ blogCatalogUrl }}/{{ item.year }}/{{ item.month }}">{{ date }} ({{ item.count }})</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% endif %}
+  <!-- Sidebar single item -->
+  {% if showRecent %}
+  <div class="sidebar-widget mt-40px">
+    <h3 class="sidebar-title"><span>{{ translate("Recent Posts", "Blog") }}</span></h3>
+
+    <div class="recent-post-widget">
+    {% for blog in blogs|slice(0,5) %}
+      <div class="recent-single-post d-flex">
+        <div class="thumb-side">
+          <a href="{{ rootUrl }}/{{ blog.url }}"><img src="{{ uploadedFileUrl }}/{{ blog.image }}" alt="{{ blog.image }}"/></a>
+        </div>
+        <div class="media-side">
+          <h5><a href="{{ rootUrl }}/{{ blog.url }}">{{ blog.name }}</a></h5>
+          <span class="date">{{ blog.created_at }}</span>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  <!-- Sidebar single item -->
+  <div class="sidebar-widget mt-40px">
+    <h3 class="sidebar-title"><span>{{ translate("Tags", "Blog") }}</span></h3>
+    <div class="sidebar-widget-tag">
+      <ul>
+        {% for singleTag in filterInfo.allTags %}
+          <li>
+            {% if blogDetailIsOpen %}
+              <a href="{{ rootUrl }}/{{ blogCatalogUrl }}?tags={{ singleTag.url }}">{{ singleTag.name }}</a>
+            {% else %}
+              <label
+                for="singleTag_{{ singleTag.id }}"
+                id="singleTag_{{ singleTag.id }}_label"
+                {% if singleTag.id in filterInfo.filteredTags %}
+                  class="active-tag"
+                {% endif %}
+              >{{ singleTag.name }}</label>
+              <input 
+                type="checkbox"
+                style="display:none" 
+                id="singleTag_{{ singleTag.id }}" 
+                onclick="
+                  let div = $('#blogCatalogDefaultContainerDiv');
+                  if ($(this).is(':checked')) {
+                    AbeloThemeBlogCatalog.addValueToFilter('tags', '{{ singleTag.url }}').update(div);
+                    $('#singleTag_{{ singleTag.id }}_label').addClass('active-tag');
+                  } else {
+                    AbeloThemeBlogCatalog.removeValueFromFilter('tags', '{{ singleTag.url }}').update(div);
+                    $('#singleTag_{{ singleTag.id }}_label').removeClass('active-tag');
+                  }
+                " 
+                {% if singleTag.id in filterInfo.filteredTags %} checked {% endif %}
+              >
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <!-- Sidebar single item -->
+</div>
+<!-- Sidebar Area End -->

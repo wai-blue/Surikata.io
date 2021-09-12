@@ -204,7 +204,7 @@ class ProductCategory extends \ADIOS\Core\Model {
     ////////////////////////////////////////
     // info about products
 
-    $productModel = $this->adios->getModel("Widgets/Products/Models/Product");
+    $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adios);
 
     $productsQuery = $productModel->getQuery();
 
@@ -248,6 +248,7 @@ class ProductCategory extends \ADIOS\Core\Model {
     $productsQuery->take($itemsPerPage);
 
     $catalogInfo["products"] = $this->fetchQueryAsArray($productsQuery); // TODO: UPPERCASE LOOKUP
+    $catalogInfo["products"] = $productModel->translateForWeb($catalogInfo["products"], $languageIndex);
 
     ////////////////////////////////////////
     // info about prices

@@ -87,11 +87,9 @@ class Shipment extends \ADIOS\Core\Model {
 
   public function getShipment($idDelivery, $idPayment) {
     return reset(
-      $this->
-      where([
-        ['id_delivery_service', $idDelivery],
-        ['id_payment_service', $idPayment]
-      ])
+      $this
+      ->where('id_delivery_service', '=', $idDelivery)
+      ->where('id_payment_service', '=', $idPayment)
       ->get()
       ->toArray()
     );

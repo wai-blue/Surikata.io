@@ -1,0 +1,24 @@
+
+.product-details-table{
+	&.pro-details-quality {
+	    display: block;
+	    margin: 20px 0;
+	}
+	.table {
+		tbody {
+			tr {
+				td {
+				    padding: 10px 15px;
+				    width: 33.33%;
+				    text-align: center;
+				    border: 1px solid #ebebeb;
+				    vertical-align: middle;
+				    a {
+					    color: #888;
+					}
+				}
+			}
+		}
+	}
+}
+

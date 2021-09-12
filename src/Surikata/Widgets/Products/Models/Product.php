@@ -617,12 +617,6 @@ class Product extends \ADIOS\Core\Model {
       ];
     }
 
-    $sidebarHtml = $this->adios->dispatchEventToPlugins("onProductDetailSidebarButtons", [
-      "model" => $this,
-      "params" => $params,
-      "data" => $data,
-    ])["html"];
-
     $params["template"] = [
       "columns" => [
         [
@@ -633,11 +627,16 @@ class Product extends \ADIOS\Core\Model {
           "class" => "col-md-3 pr-0",
           "rows" => [
             "image",
-            ["html" => $sidebarHtml],
           ],
         ],
       ],
     ];
+
+    $this->adios->dispatchEventToPlugins("onProductDetailSidebarButtons", [
+      "model" => $this,
+      "params" => $params,
+      "data" => $data,
+    ]);
 
     return parent::formParams($data, $params);
   }
@@ -923,6 +922,16 @@ class Product extends \ADIOS\Core\Model {
     return $priceInfo;
 
 
+  }
+
+  public function translateForWeb($products, $languageIndex) {
+    foreach ($products as $key => $value) {
+      $products[$key]["TRANSLATIONS"]["name"] = $value["name_lang_{$languageIndex}"];
+      $products[$key]["TRANSLATIONS"]["brief"] = $value["brief_lang_{$languageIndex}"];
+      $products[$key]["TRANSLATIONS"]["description"] = $value["description_lang_{$languageIndex}"];
+    }
+
+    return $products;
   }
 
 }

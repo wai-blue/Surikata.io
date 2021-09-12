@@ -1047,6 +1047,13 @@ ul.blog-page-meta {
 .login-register-form .form-control {
   margin-bottom: 10px;
 }
+.login-register-form p.error {
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fb383b;
+  margin: 0.5em;
+}
 
 .registration-confirmation {
   margin-top: 50px;
@@ -1137,11 +1144,11 @@ ul.breadcrumb li+li:before {
   content: "\203A";
 }
 ul.breadcrumb li a {
-  color: #0275d8;
+  color: var(--theme-main-color);
   text-decoration: none;
 }
 ul.breadcrumb li a:hover {
-  color: #01447e;
+  color: var(--theme-third-color);
   text-decoration: underline;
 }
 .input-required {

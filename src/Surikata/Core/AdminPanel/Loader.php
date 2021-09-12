@@ -28,7 +28,8 @@ class Loader extends \ADIOS\Core\Loader {
     parent::__construct($config, $mode);
 
     // override console to log DB errors
-    $this->console = new \Surikata\Core\AdminPanel\Console($this);
+    // 2021-09-09 deprecated. Default ADIOS console is used.
+    // $this->console = new \Surikata\Core\AdminPanel\Console($this);
 
     if (is_object($this->websiteRenderer)) {
       try {

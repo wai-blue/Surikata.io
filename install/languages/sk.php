@@ -98,17 +98,13 @@
     ];
   }
 
-  $contact_text_html = $theme == "Basic"
-    ? (__DIR__."/../SampleData/PageTexts/contact.html")
-    : (__DIR__."/../SampleData/PageTexts/kontakt.html");
-
   $webPages = [
-    "SK|home|WithoutSidebar|Home" => [
+    "SK|uvod|WithoutSidebar|Úvod" => [
       "section_1" => ["WAI/Misc/Slideshow", ["speed" => 1000]],
       "section_2" => [
         "WAI/SimpleContent/OneColumn",
         [
-          "heading" => "Welcome",
+          "heading" => "Vitajte",
           "headingLevel" => 1,
           "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
         ],
@@ -150,35 +146,35 @@
         ],
       ]
     ],
-    "SK|about-us|WithoutSidebar|About us" => [
+    "SK|o-nas|WithoutSidebar|O nás" => [
       "section_1" => [
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "O nás",
-          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/about-us.html"),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/o-nas.html"),
         ]
       ],
       "section_2" => [
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "Vitajte",
-          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/about-us.html"),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/o-nas.html"),
         ]
       ],
     ],
-    "SK|contact|WithoutSidebar|Contact" => [
+    "SK|kontakt|WithoutSidebar|Kontakt" => [
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
       "section_2" => [
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "",
-          "content" => file_get_contents($contact_text_html),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/kontakt.html"),
         ]
       ],
     ],
 
     // Product catalog pages
-    "SK|products|WithLeftSidebar|Katalóg produktov" => [
+    "SK|produkty|WithLeftSidebar|Katalóg produktov" => [
       "sidebar" => ["WAI/Product/Filter", ["showProductCategories" => 1, "layout" => "sidebar", "showProductCategories" => 1, "show_brands" => 1]],
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
       "section_2" => ["WAI/Product/Catalog", ["defaultItemsPerPage" => 6]],
@@ -189,10 +185,10 @@
     ],
 
     // Shopping cart, checkout and order confirmation
-    "SK|cart|WithoutSidebar|Nákupný košík" => [
+    "SK|kosik|WithoutSidebar|Nákupný košík" => [
       "section_1" => "WAI/Order/CartOverview",
     ],
-    "SK|checkout|WithoutSidebar|Vytvorenie objednávky" => [
+    "SK|objednat|WithoutSidebar|Vytvorenie objednávky" => [
       "section_1" => "WAI/Order/Checkout",
     ],
     "SK||WithoutSidebar|Potvrdenie objednávky" => [
@@ -200,22 +196,22 @@
     ],
 
     // My account pages
-    "SK|login|WithoutSidebar|Môj účet - prihlásenie" => [
+    "SK|prihlasit-sa|WithoutSidebar|Môj účet - prihlásenie" => [
       "section_1" => ["WAI/Customer/Login", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]],
     ],
-    "SK|my-account|WithoutSidebar|Môj účet" => [
+    "SK|moj-ucet|WithoutSidebar|Môj účet" => [
       "section_1" => "WAI/Customer/Home",
     ],
-    "SK|my-account/orders|WithoutSidebar|Môj účet - objednávky" => [
+    "SK|moj-ucet/objednavky|WithoutSidebar|Môj účet - objednávky" => [
       "section_1" => "WAI/Customer/OrderList",
     ],
-    "SK|reset-password|WithoutSidebar|Môj účet - resetovanie hesla" => [
+    "SK|zabudnute-heslo|WithoutSidebar|Môj účet - resetovanie hesla" => [
       "section_1" => "WAI/Customer/ForgotPassword"
     ],
-    "SK|registration|WithoutSidebar|Môj účet - registrácia" => [
+    "SK|registracia|WithoutSidebar|Môj účet - registrácia" => [
       "section_1" => ["WAI/Customer/Registration", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]]
     ],
-    "SK|registration-confirm|WithoutSidebar|Môj účet - potvrdenie registrácie" => [
+    "SK|potvrdenie-registracie|WithoutSidebar|Môj účet - potvrdenie registrácie" => [
       "section_1" => "WAI/Customer/RegistrationConfirmation"
     ],
     "SK||WithoutSidebar|Môj účet - validácia registrácie" => [
@@ -223,7 +219,7 @@
     ],
 
     // Blogs
-    "SK|blogs|WithLeftSidebar|Blogy" => [
+    "SK|blogy|WithLeftSidebar|Blogy" => [
       "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
       "section_2" => ["WAI/Blog/Catalog", ['itemsPerPage' => 3, "showAuthor" => 1]],
@@ -235,11 +231,11 @@
     ],
 
     // Miscelaneous pages
-    "SK|search|WithoutSidebar|Hľadať" => [
+    "SK|hladat|WithoutSidebar|Hľadať" => [
       "section_1" => [
         "WAI/Misc/WebsiteSearch",
         [
-          "heading" => "Search",
+          "heading" => "Hľadať",
           "numberOfResults" => 10,
           "searchInProducts" => "name_lang,brief_lang,description_lang",
           "searchInProductCategories" => "name_lang",
@@ -247,16 +243,16 @@
         ]
       ],
     ],
-    "SK|privacy-terms|WithoutSidebar|Zásady ochrany osobných údajov" => [
+    "SK|ochrana-osobnych-udajov|WithoutSidebar|Zásady ochrany osobných údajov" => [
       "section_1" => [
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "Hello",
-          "content" => file_get_contents(__DIR__."/SampleData/PageTexts/about-us.html"),
+          "content" => file_get_contents(__DIR__."/SampleData/PageTexts/o-nas.html"),
         ]
       ]
     ],
-    "SK|news|WithLeftSidebar|Novinky" => [
+    "SK|novinky|WithLeftSidebar|Novinky" => [
       "sidebar" => ["WAI/News", ["contentType" => "sidebar"]],
       "section_1" => ["WAI/News", ["contentType" => "listOrDetail"]],
     ],
@@ -293,7 +289,7 @@
   $websiteWebRedirectModel->insertRow([
     "domain" => "SK",
     "from_url" => "",
-    "to_url" => REWRITE_BASE."home",
+    "to_url" => REWRITE_BASE."uvod",
     "type" => 301
   ]);
 

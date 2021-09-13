@@ -67,18 +67,18 @@ class Console {
 
   public function info($message, array $context = []) {
     $this->logger->info($message, $context);
-    $this->infos[] = [$message, $context];
+    $this->infos[microtime()] = [$message, $context];
   }
   
   public function warning($message, array $context = []) {
     $this->logger->warning($message, $context);
-    $this->warnings[] = [$message, $context];
+    $this->warnings[microtime()] = [$message, $context];
   }
   
   public function error($message, array $context = []) {
     $this->logger->error($message, $context);
     $this->log($message);
-    $this->errors[] = [$message, $context];
+    $this->errors[microtime()] = [$message, $context];
   }
 
   public function getInfos() {
@@ -124,9 +124,13 @@ class Console {
     return $contents;
   }
 
-  public function convertLogsToHtml($logs) {
+  public function convertLogsToHtml($logs, $addTimestamps) {
     $html = "";
-    foreach ($logs as $log) {
+    foreach ($logs as $mictotime => $log) {
+      if ($addTimestamps) {
+        list($msec, $sec) = explode(" ", $mictotime);
+        $html .= date("Y-m-h H:i:s", $sec).".".round($msec*1000)." ";
+      }
       $html .= hsc($log[0])."<br/>";
     }
     return $html;

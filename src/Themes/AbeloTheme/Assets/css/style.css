@@ -1790,7 +1790,9 @@ p {
   }
 }
 .slider-area .bg-img .slider-content-1 a {
-  width: 140px;
+  /* width: 140px; */
+  padding-left: 1em;
+  padding-right: 1em;
   height: 45px;
   line-height: 45px;
   text-align: center;

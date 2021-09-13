@@ -270,7 +270,7 @@ class Order extends \ADIOS\Core\Model {
 
   public function routing(array $routing = []) {
     return parent::routing([
-      '/^Orders\/([Open|Closed]+)$/' => [
+      '/^Orders\/([New|InvoiceIssued|Paid|Shipped|Canceled]+)$/' => [
         "action" => "UI/Table",
         "params" => [
           "model" => "Widgets/Orders/Models/Order",
@@ -288,30 +288,28 @@ class Order extends \ADIOS\Core\Model {
 
   public function tableParams($params) {
     switch ($params['filter_type']) {
-      case "Vsetky":
+      case "New":
+        $params["title"] = "New orders";
+        $params['where'] = "{$this->table}.state = (".self::STATE_NEW.")";
+      break;
+      case "InvoiceIssued":
+        $params["title"] = "Orders with invoice issued";
+        $params['where'] = "{$this->table}.state = (".self::STATE_INVOICED.")";
+      break;
+      case "Paid":
+        $params["title"] = "Paid and not shipped orders";
+        $params['where'] = "{$this->table}.state = (".self::STATE_PAID.")";
+      break;
+      case "Shipped":
+        $params["title"] = "Shipped orders";
+        $params['where'] = "{$this->table}.state = (".self::STATE_SHIPPED.")";
+      break;
+      case "Canceled":
+        $params["title"] = "Canceled orders";
+        $params['where'] = "{$this->table}.state = (".self::STATE_CANCELED.")";
+      break;
+      default:
         $params["title"] = "All orders";
-      break;
-      case "Open":
-        $params["title"] = "Open orders";
-        $params['where'] = "
-          {$this->table}.state in (
-            ".self::STATE_NEW.",
-            ".self::STATE_INVOICED.",
-            ".self::STATE_PAID.",
-            ".self::STATE_SHIPPED."
-          )
-        ";
-      break;
-      case "Closed":
-        $params["title"] = "Closed orders";
-        $params['where'] = "
-          {$this->table}.state not in (
-            ".self::STATE_NEW.",
-            ".self::STATE_INVOICED.",
-            ".self::STATE_PAID.",
-            ".self::STATE_SHIPPED."
-          )
-        ";
       break;
     }
     $params['order_by'] = "number DESC";

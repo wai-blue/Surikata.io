@@ -1,7 +1,7 @@
 <!-- top Products -->
 <div class="ads-grid_shop">
   <div class="row shop_inner_inf">
-    <div class="col-md-4 single-right-left ">
+    <div class="col-md-6 single-right-left ">
       <div class="grid images_3_of_2">
         <div class="flexslider">
           <ul class="slides">
@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-8 single-right-left simpleCart_shelfItem">
+    <div class="col-md-6 single-right-left simpleCart_shelfItem">
       <h3>{{ productInfo["name_lang_"~languageIndex] }}</h3>
       {% if productInfo.priceInfo.fullPrice > 0 %}
         <p><span class="item_price">{{ productInfo.priceInfo.salePrice|number_format(2, ",", " ") }} €</span>

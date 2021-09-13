@@ -136,7 +136,7 @@ if (count($partsToInstall) == 0) {
         </tr>
         <tr>
           <td><input type='checkbox' name='customers' id='customers' value='yes'></td>
-          <td><label for='customers'>Sample set of customers</label></td>
+          <td><label for='customers'>Sample set of customers</label> (each customer will get a password '0000')</td>
         </tr>
         <tr>
           <td><input type='checkbox' name='orders' id='orders' value='yes'></td>
@@ -318,14 +318,63 @@ if (count($partsToInstall) == 0) {
 
       // products - categories
 
-      $productCategoryModel->insertRow([ "id" => 1, "id_parent" => 0, "code" => "Category_A", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A", "name_lang_2" => "Kategória_A"]);
-      $productCategoryModel->insertRow([ "id" => 2, "id_parent" => 0, "code" => "Category_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_B", "name_lang_2" => "Kategória_B"]);
-      $productCategoryModel->insertRow([ "id" => 3, "id_parent" => 0, "code" => "Category_C", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_C", "name_lang_2" => "Kategória_C"]);
+      $productCategoryModel->insertRow([
+        "id" => 1,
+        "id_parent" => 0,
+        "code" => "CatA",
+        "name_lang_1" => "Category_A (lng-1)",
+        "name_lang_2" => "Category_A (lng-2)",
+        "name_lang_3" => "Category_A (lng-3)"
+      ]);
+      $productCategoryModel->insertRow([
+        "id" => 2,
+        "id_parent" => 0,
+        "code" => "CatB",
+        "name_lang_1" => "Category_B (lng-1)",
+        "name_lang_2" => "Category_B (lng-2)",
+        "name_lang_3" => "Category_B (lng-3)"
+      ]);
+      $productCategoryModel->insertRow([
+        "id" => 3,
+        "id_parent" => 0,
+        "code" => "CatC",
+        "name_lang_1" => "Category_C (lng-1)",
+        "name_lang_2" => "Category_C (lng-2)",
+        "name_lang_3" => "Category_C (lng-3)"
+      ]);
 
-      $productCategoryModel->insertRow([ "id" => 4, "id_parent" => 1, "code" => "Category_A_A", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_A", "name_lang_2" => "Kategória_A_A"]);
-      $productCategoryModel->insertRow([ "id" => 5, "id_parent" => 1, "code" => "Category_A_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_B", "name_lang_2" => "Kategória_A_B"]);
-      $productCategoryModel->insertRow([ "id" => 6, "id_parent" => 1, "code" => "Category_A_C", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_C", "name_lang_2" => "Kategória_A_C"]);
-      $productCategoryModel->insertRow([ "id" => 7, "id_parent" => 2, "code" => "Category_B_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_B_B", "name_lang_2" => "Kategória_B_B"]);
+      $productCategoryModel->insertRow([
+        "id" => 4,
+        "id_parent" => 1,
+        "code" => "CatAA",
+        "name_lang_1" => "Category_A_A (lng-1)",
+        "name_lang_2" => "Category_A_A (lng-2)",
+        "name_lang_3" => "Category_A_A (lng-3)"
+      ]);
+      $productCategoryModel->insertRow([
+        "id" => 5,
+        "id_parent" => 1,
+        "code" => "CatAB",
+        "name_lang_1" => "Category_A_B (lng-1)",
+        "name_lang_2" => "Category_A_B (lng-2)",
+        "name_lang_3" => "Category_A_B (lng-3)"
+      ]);
+      $productCategoryModel->insertRow([
+        "id" => 6,
+        "id_parent" => 1,
+        "code" => "CatAC",
+        "name_lang_1" => "Category_A_C (lng-1)",
+        "name_lang_2" => "Category_A_C (lng-2)",
+        "name_lang_3" => "Category_A_C (lng-3)"
+      ]);
+      $productCategoryModel->insertRow([
+        "id" => 7,
+        "id_parent" => 2,
+        "code" => "CatBA",
+        "name_lang_1" => "Category_B_A (lng-1)",
+        "name_lang_2" => "Category_B_A (lng-2)",
+        "name_lang_3" => "Category_B_A (lng-3)"
+      ]);
       
       // produkty - vlastnosti produktov, ciselnik
       $productFeatureModel->insertRow(["id" => 1, "order_index" => 1, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Lange", "name_lang_2" => "Dĺžka", "id_measurement_unit" => 1]);
@@ -462,8 +511,8 @@ if (count($partsToInstall) == 0) {
       }
 
       copy(
-        __DIR__."/SampleData/images/surikata.png",
-        "{$adminPanel->config['files_dir']}/surikata.png",
+        __DIR__."/SampleData/images/your-logo.png",
+        "{$adminPanel->config['files_dir']}/your-logo.png",
       );
 
       require(__DIR__."/languages/{$languageToInstall}");

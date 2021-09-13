@@ -11,12 +11,24 @@ class Orders extends \ADIOS\Core\Widget {
         "onclick" => "desktop_update('Orders');",
         "sub" => [
           [
-            "title" => "Open",
-            "onclick" => "desktop_update('Orders/Open');",
+            "title" => "New",
+            "onclick" => "desktop_update('Orders/New');",
           ],
           [
-            "title" => "Closed",
-            "onclick" => "desktop_update('Orders/Closed');",
+            "title" => "Invoice issued",
+            "onclick" => "desktop_update('Orders/InvoiceIssued');",
+          ],
+          [
+            "title" => "Paid and not shipped",
+            "onclick" => "desktop_update('Orders/Paid');",
+          ],
+          [
+            "title" => "Shipped",
+            "onclick" => "desktop_update('Orders/Shipped');",
+          ],
+          [
+            "title" => "Canceled",
+            "onclick" => "desktop_update('Orders/Canceled');",
           ],
           //[
           //  "title" => "Claims",

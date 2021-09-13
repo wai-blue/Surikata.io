@@ -21,7 +21,8 @@ class Loader extends \Cascada\Loader {
   /** Stores the path to the folder with Theme's files */
   var $themeDir = "";
 
-  var $pluginsDir = "";
+  var $themeFolders = [];
+  var $pluginFolders = [];
 
   var $paymentPlugins = [];
   var $deliveryPlugins = [];
@@ -65,7 +66,8 @@ class Loader extends \Cascada\Loader {
     // parent::__construct
     parent::__construct($config);
 
-    $this->pluginsDir = $config['pluginsDir'];
+    $this->registerPluginFolder(__DIR__."/../../../Plugins");
+    $this->registerThemeFolder(__DIR__."/../../../Themes");
 
     if (is_object($this->adminPanel)) {
 
@@ -79,11 +81,29 @@ class Loader extends \Cascada\Loader {
       $this->adminPanel->webSettings = $this->loadSurikataSettings("web/{$this->config["domainToRender"]}");
 
       $this->themeName = $this->adminPanel->webSettings["design"]["theme"];
-      $this->themeDir = "{$this->adminPanel->config['themes_dir']}/{$this->themeName}";
+
+      $this->themeDir = "";
+      foreach ($this->themeFolders as $themeFolder) {
+        if (is_file("{$themeFolder}/{$this->themeName}/Main.php")) {
+          $this->themeDir = "{$themeFolder}/{$this->themeName}";
+        }
+      }
 
       $this->assetsUrlMap["core/assets/"] = ADMIN_PANEL_SRC_DIR."/Core/Assets/";
       $this->assetsUrlMap["theme/assets/"] = "{$this->themeDir}/Assets/";
-      $this->assetsUrlMap["plugins/assets/"] = PLUGINS_DIR."/";
+      $this->assetsUrlMap["plugins/assets/"] = function($websiteRenderer, $url) { 
+        $url = str_replace("plugins/assets/", "", $url);
+        preg_match('/(.+?)\/~\/(.+)/', $url, $m);
+
+        $plugin = $m[1];
+        $asset = $m[2];
+        foreach ($websiteRenderer->pluginFolders as $pluginFolder) {
+          $file = "{$pluginFolder}/{$plugin}/Assets/{$asset}";
+          if (is_file($file)) {
+            return $file;
+          }
+        }
+      };
       $this->assetsUrlMap["upload/image/resize/"] = function($websiteRenderer, $template) { 
         $template = str_replace("upload/image/resize/", "", $template);
         preg_match('/(\d+)\/(\d+)\/(.+)/', $template, $m);
@@ -192,7 +212,6 @@ class Loader extends \Cascada\Loader {
         }
       ));
 
-      $this->setGlobal();
       $this->setRouter(new \Cascada\Router($this->getSiteMap()));
     }
 
@@ -349,6 +368,18 @@ class Loader extends \Cascada\Loader {
     }
 
     return $pages;
+  }
+
+  public function registerThemeFolder($folder) {
+    if (is_dir($folder) && !in_array($folder, $this->themeFolders)) {
+      $this->themeFolders[] = realpath($folder);
+    }
+  }
+
+  public function registerPluginFolder($folder) {
+    if (is_dir($folder) && !in_array($folder, $this->pluginFolders)) {
+      $this->pluginFolders[] = realpath($folder);;
+    }
   }
 
   /**

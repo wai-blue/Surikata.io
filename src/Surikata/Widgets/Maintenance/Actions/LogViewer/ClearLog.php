@@ -1,6 +1,6 @@
 <?php
 
-namespace ADIOS\Actions\Settings\LogViewer;
+namespace ADIOS\Actions\Maintenance\LogViewer;
 
 class ClearLog extends \ADIOS\Core\Action {
   public function render() {

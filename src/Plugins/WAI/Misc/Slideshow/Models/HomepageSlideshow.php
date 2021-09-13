@@ -2,13 +2,20 @@
 
 namespace ADIOS\Plugins\WAI\Misc\Slideshow\Models;
 
-class UvodnaSlideshow extends \ADIOS\Core\Model {
+class HomepageSlideshow extends \ADIOS\Core\Model {
   var $sqlName = "homepage_slideshow";
   var $tableTitle = "Homepage slideshow";
   var $urlBase = "Website/Slideshow";
 
   public function columns(array $columns = []) {
     return parent::columns([
+      "domain" => [
+        "type" => "varchar",
+        "title" => "Domain",
+        "required" => TRUE,
+        "show_column" => TRUE,
+      ],
+
       "heading" => [
         "type" => "varchar",
         "title" => "Heading",
@@ -23,9 +30,15 @@ class UvodnaSlideshow extends \ADIOS\Core\Model {
         "show_column" => TRUE,
       ],
 
-      "url" => [
+      "button_url" => [
         "type" => "varchar",
-        "title" => "URL",
+        "title" => "Button: URL",
+        "show_column" => TRUE,
+      ],
+
+      "button_text" => [
+        "type" => "varchar",
+        "title" => "Button: Text",
         "show_column" => TRUE,
       ],
 
@@ -34,6 +47,15 @@ class UvodnaSlideshow extends \ADIOS\Core\Model {
         "title" => "Image",
         "required" => TRUE,
         "show_column" => TRUE,
+      ],
+    ]);
+  }
+
+  public function indexes(array $indexes = []) {
+    return parent::indexes([
+      "domain" => [
+        "type" => "index",
+        "columns" => ["domain"],
       ],
     ]);
   }

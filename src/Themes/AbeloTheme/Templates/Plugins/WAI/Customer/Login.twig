@@ -21,9 +21,9 @@
                         <p class="error">{{ translate("Failed to login.", "Customer") }}</p>
                       </div>
                     {% endif %}
-                    <form method="post" id="loginForm">
+                    <form method="post" id="loginForm" onsubmit="return false;">
                       <input type="hidden" name="doLogin" value="1" />
-                      <input type="text" name="loginEmail" placeholder="{{ translate("E-mail", "Customer") }}" required />
+                      <input type="email" name="loginEmail" placeholder="{{ translate("E-mail", "Customer") }}" required />
                       <input type="password" name="loginPassword" placeholder="{{ translate("Password", "Customer") }}" required />
                       <div class="button-box">
                         <div class="login-toggle-btn">
@@ -32,8 +32,8 @@
                         </div>
                         <div class="login-toggle-btn">
                           <button 
-                            type="submit"
-                            onclick="$('#loginForm').submit();"
+                            type="button"
+                            onclick="sendLoginForm('loginForm');"
                           ><span>Login</span></button>
                           <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/ForgotPassword', 'getWebPageUrl') }}">
                             {{ translate("Forgot password?", "Customer") }}
@@ -68,6 +68,8 @@
                       <input type="email" name="email" placeholder="{{ translate("Email", "Customer") }} *" />
                       <input type="text" name="given_name" placeholder="{{ translate("First name", "Customer") }} *" />
                       <input type="text" name="family_name" placeholder="{{ translate("Last name", "Customer") }} *" />
+                      <input type="password" name="password" placeholder="{{ translate("Password", "Customer") }} *" />
+                      <input type="password" name="password_2" placeholder="{{ translate("Password", "Customer") }} *" />
                       <div class="button-box">
                         <div class="login-toggle-btn">
                          <div class="notification">

@@ -189,19 +189,27 @@ html[xmlns] .flexslider .slides {
   margin: 5px 0 0;
   position: static;
   overflow: hidden;
+  padding: 60px 100px;
+}
+@media (max-width: 1368px) {
+  .flex-control-thumbs {
+    margin: 5px 0 0;
+    position: static;
+    overflow: hidden;
+    padding: auto;
+  }
 }
 .flex-control-thumbs li {
   width: 32.2%;
   min-height: 150px;
   float: left;
-  margin: 0 1% 0 0;
+  margin: 0 1% 1% 0;
 }
-.flex-control-thumbs li:nth-child(4){
-	margin:0;
-}
+
 .flex-control-thumbs img {
   width: 100%;
-  height: auto;
+  height: 150px;
+  object-fit: cover;
   display: block;
   opacity: .7;
   cursor: pointer;

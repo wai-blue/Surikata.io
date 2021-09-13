@@ -21,9 +21,9 @@
   $blogTagAssignmentModel->insertRow(["id_tag" => 2, "id_blog" => 4]);
 
   // Slideshow
-  $slideshowModel->insertRow(["heading" => "Welcome", "description" => "Get up to 50% off Today Only!", "image" => "slideshow/books_1.jpg",]);
-  $slideshowModel->insertRow(["heading" => "Sales", "description" => "50% off in all products", "image" => "slideshow/books_2.jpg"]);
-  $slideshowModel->insertRow(["heading" => "Black Friday", "description" => "Taking your Viewing Experience to Next Level", "image" => "slideshow/books_3.jpg"]);
+  $slideshowModel->insertRow(["heading" => "Welcome", "description" => "Get up to 50% off Today Only!", "image" => "slideshow/1.jpg",]);
+  $slideshowModel->insertRow(["heading" => "Sales", "description" => "50% off in all products", "image" => "slideshow/2.jpg"]);
+  $slideshowModel->insertRow(["heading" => "Black Friday", "description" => "Taking your Viewing Experience to Next Level", "image" => "slideshow/3.jpg"]);
 
   // novinky
 

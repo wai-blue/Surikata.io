@@ -5,6 +5,8 @@ namespace ADIOS\Widgets;
 class Orders extends \ADIOS\Core\Widget {
   public function init() {
     if ($this->adios->hasUserRole(\Surikata\Core\AdminPanel\Loader::USER_ROLE_SALES)) {
+      $orderModel = new \ADIOS\Widgets\Orders\Models\Order($this->adios);
+
       $this->adios->config['desktop']['sidebarItems']['Orders'] = [
         "fa_icon" => "fas fa-shopping-basket",
         "title" => "Orders",
@@ -13,22 +15,27 @@ class Orders extends \ADIOS\Core\Widget {
           [
             "title" => "New",
             "onclick" => "desktop_update('Orders/New');",
+            "style" => "border-left:5px solid {$orderModel->enumOrderStateColors[$orderModel::STATE_NEW]}",
           ],
           [
-            "title" => "Invoice issued",
+            "title" => "Invoiced",
             "onclick" => "desktop_update('Orders/InvoiceIssued');",
+            "style" => "border-left:5px solid {$orderModel->enumOrderStateColors[$orderModel::STATE_INVOICED]}",
           ],
           [
-            "title" => "Paid and not shipped",
+            "title" => "Paid",
             "onclick" => "desktop_update('Orders/Paid');",
+            "style" => "border-left:5px solid {$orderModel->enumOrderStateColors[$orderModel::STATE_PAID]}",
           ],
           [
             "title" => "Shipped",
             "onclick" => "desktop_update('Orders/Shipped');",
+            "style" => "border-left:5px solid {$orderModel->enumOrderStateColors[$orderModel::STATE_SHIPPED]}",
           ],
           [
             "title" => "Canceled",
             "onclick" => "desktop_update('Orders/Canceled');",
+            "style" => "border-left:5px solid {$orderModel->enumOrderStateColors[$orderModel::STATE_CANCELED]}",
           ],
           //[
           //  "title" => "Claims",

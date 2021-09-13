@@ -5,14 +5,7 @@ namespace Surikata\Plugins\WAI\Misc {
   class VisitorTracker extends \Surikata\Core\Web\Plugin {
 
     public function getTwigParams($pluginSettings) {
-      $twigParams = $pluginSettings;
-      
-      $twigParams["slideShowSlides"] = (new \ADIOS\Plugins\WAI\Misc\Slideshow\Models\UvodnaSlideshow($this->adminPanel))
-        ->get()
-        ->toArray()
-      ;
-      
-      return $twigParams;
+      return $pluginSettings;
     }
   }
 

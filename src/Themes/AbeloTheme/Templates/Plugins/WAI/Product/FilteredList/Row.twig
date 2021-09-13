@@ -1,35 +1,5 @@
  <div class="arrival-area mt-20px mt-lg-50px">
 	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="section-title">
-					<h2>	
-						{% if filterType == 'on_sale' %}
-							Discounted products
-						{% elseif filterType == 'news' %}
-							{{ translate("New products", "Product") }}
-						{% elseif filterType == 'top' %}
-							{{ translate("Top products", "Product") }}
-						{% elseif filterType == 'recommended' %}
-							{{ translate("Recommended products", "Product") }}
-						{% endif %}
-					</h2>
-					<!-- Nav tabs -->
-					<!--<ul class="nav nav-tabs sub-category">
-						<li class="nav-item">
-							<a class="nav-link active" data-toggle="tab" href="#tab-1">Home Audio</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" data-toggle="tab" href="#tab-2">Headphones</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" data-toggle="tab" href="#tab-3">Cameras</a>
-						</li>
-					</ul>-->
-					<!-- Nav tabs -->
-				</div>
-			</div>
-		</div>
 		<!-- tab content -->
 		<div class="tab-content hot-deal-area">
 			<!-- First-Tab -->

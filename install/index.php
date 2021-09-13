@@ -1,13 +1,14 @@
 <html>
 <head>
-  <title>Surikata eCommerce Installer</title>
+  <title>Surikata.io Installer</title>
+  <link rel='shortcut icon' href='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
   <style>
     * { font-family: verdana; font-size: 10pt; }
     body { background: #EEEEEE; }
     h1 { color: #224abe; font-size: 16pt; }
     h2 { color: #224abe; font-size: 12pt; }
 
-    table { border: 1px solid #F0F0F0; width: 100%; }
+    table { border: 1px solid #F0F0F0; }
     table tr:nth-child(even) td { background: #F0F0F0; }
     table td { padding: 2px; }
 
@@ -19,16 +20,27 @@
 
     a.btn { display: inline-block; text-decoration: none; }
 
-    .content { width: 600px; margin: auto; background: white; padding: 1em; }
+    .content { width: 820px; margin: auto; background: white; padding: 1em; }
     .logo { width: 100px; margin: auto; }
+
+    #log {
+      background: #2d2d2d;
+      font-family: courier;
+      color: white;
+      padding: 1em;
+      font-size: 9pt;
+      margin-top: 1em;
+    }
   </style>
 </head>
 <body>
   <div class='content'>
     <img class='logo' src='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
-    <h1>Surikata eCommerce Installer</h1>
+    <h1>Surikata.io Installer</h1>
 
 <?php
+
+$installationStart = microtime(TRUE);
 
 include("RandomGenerator.php");
 
@@ -134,7 +146,7 @@ if (count($partsToInstall) == 0) {
   echo "
     <form action='' method='GET'>
       <p>
-        Select whitch parts do you want to install:
+        Whitch parts do you want to install?
       </p>
       <table>
         <tr>
@@ -235,7 +247,7 @@ if (count($partsToInstall) == 0) {
     $translationModel = new \ADIOS\Widgets\Website\Models\Translation($adminPanel);
     $newsModel = new \ADIOS\Plugins\WAI\News\Models\News($adminPanel);
 
-    $slideshowModel = new \ADIOS\Plugins\WAI\Misc\Slideshow\Models\UvodnaSlideshow($adminPanel);
+    $slideshowModel = new \ADIOS\Plugins\WAI\Misc\Slideshow\Models\HomepageSlideshow($adminPanel);
     $blogCatalogModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\Blog($adminPanel);
     $blogTagModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\BlogTag($adminPanel);
     $blogTagAssignmentModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\BlogTagAssignment($adminPanel);
@@ -693,26 +705,39 @@ if (count($partsToInstall) == 0) {
   }
 
   $infos = $adminPanel->console->getInfos();
+
   echo "
-    <h2>Done</h2>
+    <h2>Done in ".round((microtime(true) - $installationStart), 2)." seconds.</h2>
+    <div style='color:green;margin-bottom:1em'>
+      ✓ Congratulations. You have successfuly installed your eCommerce project.
+    </div>
+    <div style='color:orange;margin-bottom:1em'>
+      ⚠ WARNING: You should delete the <i>install</i> folder now.
+    </div>
     <table>
-      <tr><td>Theme:</td><td>{$themeName}</td></tr>
-      <tr><td>Content language:</td><td>{$languageToInstall}</td></tr>
-      <tr><td>Slideshow image set:</td><td>{$slideshowImageSet}</td></tr>
-      <tr><td>Sample set of products:</td><td>".(in_array("product-catalog", $partsToInstall) ? "yes" : "no")."</td></tr>
-      <tr><td>Random products count:</td><td>{$randomProductsCount}</td></tr>
-      <tr><td>Sample set of customers:</td><td>".(in_array("customers", $partsToInstall) ? "yes" : "no")."</td></tr>
-      <tr><td>Sample set of orders:</td><td>".(in_array("orders", $partsToInstall) ? "yes" : "no")."</td></tr>
+      <tr><td>Theme</td><td>{$themeName}</td></tr>
+      <tr><td>Content language</td><td>{$languageToInstall}</td></tr>
+      <tr><td>Slideshow image set</td><td>{$slideshowImageSet}</td></tr>
+      <tr><td>Sample set of products</td><td>".(in_array("product-catalog", $partsToInstall) ? "yes" : "no")."</td></tr>
+      <tr><td>Random products count</td><td>{$randomProductsCount}</td></tr>
+      <tr><td>Sample set of customers</td><td>".(in_array("customers", $partsToInstall) ? "yes" : "no")."</td></tr>
+      <tr><td>Sample set of orders</td><td>".(in_array("orders", $partsToInstall) ? "yes" : "no")."</td></tr>
     </table>
-    <a href='../admin' class='btn' target=_blank>Open administration panel</a>
+    <a href='../admin' class='btn' target=_blank>Open administration panel</a><br/>
+    Login: administrator<br/>
+    Password: administrator<br/>
+    <br/>
     <a href='..' class='btn' target=_blank>Go to your e-shop</a>
     <br/>
     <h2>Installation log</h2>
     <a
       href='javascript:void(0)'
-      onclick='document.getElementById(\"log\").style.display = \"block\";'
-    >Show log</a>
-    <div id='log' style='display:none'>".$adminPanel->console->convertLogsToHtml($infos)."</div>
+      onclick='
+        document.getElementById(\"log\").style.display = \"block\";
+        this.style.display = \"none\";
+      '
+    >Show installation log</a>
+    <div id='log' style='display:none'>".$adminPanel->console->convertLogsToHtml($infos, TRUE)."</div>
   ";
 
   $warnings = $adminPanel->console->getWarnings();

@@ -21,9 +21,28 @@
   $blogTagAssignmentModel->insertRow(["id_tag" => 2, "id_blog" => 4]);
 
   // Slideshow
-  $slideshowModel->insertRow(["heading" => "Vitajte", "description" => "Všetko pre váš online nákup", "image" => "slideshow/1.jpg",]);
-  $slideshowModel->insertRow(["heading" => "Aktuálne zľavy", "description" => "Využite naše aktuálne zľavy", "image" => "slideshow/2.jpg"]);
-  $slideshowModel->insertRow(["heading" => "Top produkty", "description" => "Ponúkame najkvalitnejší sortiment", "image" => "slideshow/3.jpg"]);
+  $slideshowModel->insertRow([
+    "domain" => "SK",
+    "heading" => "Vitajte",
+    "description" => "Všetko pre váš online nákup",
+    "image" => "slideshow/1.jpg",
+    "button_url" => "produkty",
+    "button_text" => "Začať nakupovať",
+  ]);
+  $slideshowModel->insertRow([
+    "domain" => "SK",
+    "heading" => "Aktuálne zľavy",
+    "description" => "Využite naše aktuálne zľavy",
+    "image" => "slideshow/2.jpg",
+    "button_url" => "akcie-a-zlavy",
+    "button_text" => "Zobraziť akcie a zľavy",
+  ]);
+  $slideshowModel->insertRow([
+    "domain" => "SK",
+    "heading" => "Top sortiment",
+    "description" => "Ponúkame najkvalitnejší sortiment",
+    "image" => "slideshow/3.jpg",
+  ]);
 
   // novinky
 
@@ -53,7 +72,8 @@
   // web - menu items - SK
   $tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Úvod", "url" => "uvod"]);
   $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "O nás", "url" => "o-nas"]);
-  $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Produkty", "url" => "produkty"]);
+  $tmpProduktyID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Produkty", "url" => "produkty"]);
+  $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpProduktyID, "title" => "Akcie a zľavy", "url" => "akcie-a-zlavy"]);
   $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Blog", "url" => "blogy"]);
   $tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Prihlásiť sa", "url" => "prihlasit-sa"]);
   $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "Registrovať sa", "url" => "registracia"]);
@@ -109,7 +129,8 @@
           "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
         ],
       ],
-      "section_3" => [
+      "section_3" => ["WAI/SimpleContent/H2", ["heading" => "Odporúčame pre vás"]],
+      "section_4" => [
         "WAI/Product/FilteredList",
         [
           "filterType" => "recommended",
@@ -117,7 +138,7 @@
           "product_count" => 6,
         ],
       ],
-      "section_4" => [
+      "section_5" => [
         "WAI/SimpleContent/TwoColumns",
         [
           "column1Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
@@ -127,7 +148,8 @@
           "column2CSSClasses" => "text-right",
         ],
       ],
-      "section_5" => [
+      "section_6" => ["WAI/SimpleContent/H2", ["heading" => "Zľava"]],
+      "section_7" => [
         "WAI/Product/FilteredList",
         [
           "filterType" => "on_sale",
@@ -135,7 +157,7 @@
           "product_count" => 6,
         ],
       ],
-      "section_6" => [
+      "section_8" => [
         "WAI/SimpleContent/TwoColumns",
         [
           "column1Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-2.html"),
@@ -178,6 +200,27 @@
       "sidebar" => ["WAI/Product/Filter", ["showProductCategories" => 1, "layout" => "sidebar", "showProductCategories" => 1, "show_brands" => 1]],
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
       "section_2" => ["WAI/Product/Catalog", ["defaultItemsPerPage" => 6]],
+    ],
+    "SK|akcie-a-zlavy|WithoutSidebar|Akcie a zľavy" => [
+      "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+      "section_2" => ["WAI/SimpleContent/H2", ["heading" => "Zľava"]],
+      "section_3" => [
+        "WAI/Product/FilteredList",
+        [
+          "filterType" => "on_sale",
+          "layout" => "tiles",
+          "product_count" => 99,
+        ],
+      ],
+      "section_4" => ["WAI/SimpleContent/H2", ["heading" => "Výpredaj"]],
+      "section_5" => [
+        "WAI/Product/FilteredList",
+        [
+          "filterType" => "sale_out",
+          "layout" => "tiles",
+          "product_count" => 99,
+        ],
+      ],
     ],
     "SK||WithoutSidebar|Detail produktu" => [
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],

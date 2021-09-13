@@ -12,18 +12,19 @@ namespace Surikata\Plugins\WAI\Product {
 
       switch ($pluginSettings["filterType"]) {
         case "recommended":
-          $productIds = $productModel
-            ->where("is_recommended", TRUE)
-            ->skip(0)->take((int)$pluginSettings["product_count"]);
-          break;
+          $productIds = $productModel->where("is_recommended", TRUE);
+        break;
         case "on_sale":
-          $productIds = $productModel
-            ->where("is_on_sale", TRUE)
-            ->skip(0)->take((int)$pluginSettings["product_count"]);
-          break;
+          $productIds = $productModel->where("is_on_sale", TRUE);
+        break;
+        case "sale_out":
+          $productIds = $productModel->where("is_sale_out", TRUE);
+        break;
       }
 
       $productIds = $productIds
+        ->skip(0)
+        ->take((int) $pluginSettings["product_count"])
         ->get()
         ->pluck('id')
       ;

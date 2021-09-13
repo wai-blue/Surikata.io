@@ -378,11 +378,11 @@
         "SK" => [
           "signature" => "<p>Surikata - <a href='www.wai.sk' target='_blank'>WAI.sk</a></p>",
           "after_order_confirmation_SUBJECT" => "Surikata - objednávka č. {% number %}",
-          "after_order_confirmation_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/orderBody.html"),
+          "after_order_confirmation_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/orderBody.html"),
           "after_registration_SUBJECT" => "Surikata - Overte Vašu emailovú adresu",
-          "after_registration_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/registrationBody.html"),
+          "after_registration_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/registrationBody.html"),
           "forgot_password_SUBJECT" => "Surikata - Obnovenie hesla",
-          "forgot_password_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/forgotPasswordBody.html")
+          "forgot_password_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/forgotPasswordBody.html")
         ]
       ],
       "plugins" => [

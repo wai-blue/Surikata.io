@@ -69,6 +69,32 @@
               <article class="list-product p-0 text-center">
                 <div class="product-inner">
                   <div class="img-block">
+                    <ul class="product-flag">
+                      {% if product.is_new == 1 %}
+                        <li class="tag new">{{ translate("New", "Product") }}</li>
+                      {% endif %}
+                      {% if product.is_sale_out == 1 %}
+                        <li class="tag new">{{ translate("Sale", "Product") }}</li>
+                      {% endif %}
+                      {% if product.is_on_sale == 1 %}
+                        <li class="tag new">{{ translate("Action", "Product") }}</li>
+                      {% endif %}
+                      {% if product.is_top == 1 %}
+                        <li class="tag top">{{ translate("Top", "Product") }}</li>
+                      {% endif %}
+                      {% if product.is_used == 1 %}
+                        <li class="tag new">{{ translate("Used", "Product") }}</li>
+                      {% endif %}
+                      {% if product.is_unpacked == 1 %}
+                        <li class="tag secondary">{{ translate("Unpacked", "Product") }}</li>
+                      {% endif %}
+                      {% if product.is_recommended == 1 %}
+                        <li class="tag secondary">{{ translate("Recommended", "Product") }}</li>
+                      {% endif %}
+                      {% if (product.price.fullPrice != product.price.salePrice) %}
+                        <li class="top">- {{ product.price.discountTotal|number_format(2, ",", " ") }}%</li>
+                      {% endif %}
+                    </ul>
                     <a 
                       href="{{ rootUrl }}/{{ product.url }}"
                       onclick="
@@ -97,11 +123,6 @@
                       </ul>
                     </div>
                   </div>
-                  {% if (product.price.fullPrice != product.price.salePrice) %}
-                    <ul class="product-flag">
-                      <li class="new">- {{ product.price.discountTotal|number_format(2, ",", " ") }}%</li>
-                    </ul>
-                  {% endif %}
                   <div class="product-decs">
                     <a class="inner-link" href="shop-4-column.html"><span>{{ product.TRANSLATIONS.brief }}</span></a>
                     <h2>
@@ -163,6 +184,29 @@
                     <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 p-0">
                       <div class="left-img">
                         <div class="img-block pl-lg-3 pr-lg-3">
+                          <ul class="product-flag">
+                            {% if product.is_new == 1 %}
+                              <li class="tag new">{{ translate("New", "Product") }}</li>
+                            {% endif %}
+                            {% if product.is_sale_out == 1 %}
+                              <li class="tag new">{{ translate("Sale", "Product") }}</li>
+                            {% endif %}
+                            {% if product.is_on_sale == 1 %}
+                              <li class="tag new">{{ translate("Action", "Product") }}</li>
+                            {% endif %}
+                            {% if product.is_top == 1 %}
+                              <li class="tag top">{{ translate("Top", "Product") }}</li>
+                            {% endif %}
+                            {% if product.is_used == 1 %}
+                              <li class="tag new">{{ translate("Used", "Product") }}</li>
+                            {% endif %}
+                            {% if product.is_unpacked == 1 %}
+                              <li class="tag secondary">{{ translate("Unpacked", "Product") }}</li>
+                            {% endif %}
+                            {% if product.is_recommended == 1 %}
+                              <li class="tag secondary">{{ translate("Recommended", "Product") }}</li>
+                            {% endif %}
+                          </ul>
                           <a 
                             href="{{ rootUrl }}/{{ product.url }}" 
                             class="thumbnail"
@@ -173,11 +217,8 @@
                               )
                             "
                           >
-                            <img class="first-img" src="{{ uploadedFileUrl }}/{{ product.image }}" alt="{{ product.image }}" />
+                            <img class="first-img" style="z-index:-1" src="{{ uploadedFileUrl }}/{{ product.image }}" alt="{{ product.image }}" />
                           </a>
-                          <ul class="product-flag">
-                            <li class="new">-{{ product.price.discountTotal|number_format(2, ",", " ") }}%</li>
-                          </ul>
                         </div>
                       </div>
                     </div>

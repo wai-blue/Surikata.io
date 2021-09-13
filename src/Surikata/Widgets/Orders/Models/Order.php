@@ -26,7 +26,7 @@ class Order extends \ADIOS\Core\Model {
 
     $this->enumOrderStates = [
       self::STATE_NEW      => 'New',
-      self::STATE_INVOICED => 'Invoice issued',
+      self::STATE_INVOICED => 'Invoiced',
       self::STATE_PAID     => 'Paid',
       self::STATE_SHIPPED  => 'Shipped',
       self::STATE_RECEIVED => 'Received',
@@ -294,7 +294,7 @@ class Order extends \ADIOS\Core\Model {
         $params['where'] = "{$this->table}.state = (".self::STATE_NEW.")";
       break;
       case "InvoiceIssued":
-        $params["title"] = "Orders with invoice issued";
+        $params["title"] = "Invoiced orders";
         $params['where'] = "{$this->table}.state = (".self::STATE_INVOICED.")";
       break;
       case "Paid":
@@ -774,11 +774,10 @@ class Order extends \ADIOS\Core\Model {
       $sidebarHtml .= "
         <div class='card shadow mb-2'>
           <div class='card-header py-3'>
-            Order is <span
-              style='
-                background-color: {$this->enumOrderStateColors[$data['state']]};
-              '
+            Order is
+            <span
               class='badge badge-adios'
+              style='background-color: {$this->enumOrderStateColors[$data['state']]};'
             >
               {$this->enumOrderStates[$data['state']]}
             </span>
@@ -807,7 +806,10 @@ class Order extends \ADIOS\Core\Model {
                 [
                   "title" => "State",
                   "input" => "
-                    <div style='text-decoration:underline wavy {$this->enumOrderStateColors[$data['state']]}'>
+                    <div
+                      class='badge badge-adios'
+                      style='background-color: {$this->enumOrderStateColors[$data['state']]};'
+                    >
                       {$this->enumOrderStates[$data['state']]}
                     </div>
                   "
@@ -853,15 +855,15 @@ class Order extends \ADIOS\Core\Model {
   }
 
   public function tableCellCSSFormatter($data) {
-    if ($data['column'] == "id") {
-      return "border-left:10px solid {$this->enumOrderStateColors[$data['row']['state']]};";
-    }
+    // if ($data['column'] == "id") {
+    //   return "border-left:10px solid {$this->enumOrderStateColors[$data['row']['state']]};";
+    // }
     if ($data['column'] == "number") {
       return "border-left:10px solid {$this->enumOrderStateColors[$data['row']['state']]};";
     }
-    if ($data['column'] == "state") {
-      return "text-decoration:underline wavy {$this->enumOrderStateColors[$data['row']['state']]};";
-    }
+    // if ($data['column'] == "state") {
+    //   return "border-left: 1px solid {$this->enumOrderStateColors[$data['row']['state']]};";
+    // }
   }
 
   public function getById($id) {

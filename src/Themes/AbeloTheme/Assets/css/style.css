@@ -2173,6 +2173,8 @@ p {
 .list-product .new {
   color: #272727;
   background: #f7d807;
+  padding: 5px;
+  font-size: 16px;
 }
 .list-product .action {
   color: #fff;

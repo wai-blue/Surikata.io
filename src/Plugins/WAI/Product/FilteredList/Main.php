@@ -5,8 +5,10 @@ namespace Surikata\Plugins\WAI\Product {
 
     public function getTwigParams($pluginSettings) {
       $twigParams = $pluginSettings;
+      $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
 
       $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adminPanel);
+      $productCategoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
 
       switch ($pluginSettings["filterType"]) {
         case "recommended":
@@ -33,6 +35,18 @@ namespace Surikata\Plugins\WAI\Product {
         $twigParams["products"][$key]["url"] =
           $productDetailPlugin->getWebPageUrl($product)
         ;
+
+        $twigParams["products"][$key] =
+          $productModel->translateProductForWeb($twigParams["products"][$key], $languageIndex);
+
+        $twigParams["products"][$key]["ProductCategory"] =
+          $productCategoryModel
+            ->translateForWeb(
+              [
+                $productCategoryModel
+                ->getById($twigParams["products"][$key]["id_category"])
+              ], $languageIndex
+            )[0];
       }
 
       return $twigParams;

@@ -85,7 +85,15 @@ foreach (@scandir(__DIR__."/languages") as $file) {
   }
 }
 
+$availableSlideshowImageSets = [];
+foreach (@scandir(__DIR__."/SampleData/images/slideshow") as $file) {
+  if (!in_array($file, [".", ".."])) {
+    $availableSlideshowImageSets[] = $file;
+  }
+}
+
 $languageToInstall = $_GET['language_to_install'];
+$slideshowImageSet = $_GET['slideshow_image_set'];
 
 $randomProductsCount = $_GET['random_products_count'] ?? 50;
 if ($randomProductsCount > 5000) $randomProductsCount = 5000;
@@ -106,6 +114,13 @@ if (count($partsToInstall) == 0) {
   foreach ($availableLanguages as $availableLanguage) {
     $languageSelectOptions .= "
       <option value='{$availableLanguage}'>{$availableLanguage}</option>
+    ";
+  }
+
+  $slideshowImageSetSelectOptions = "";
+  foreach ($availableSlideshowImageSets as $availableSlideshowImageSet) {
+    $slideshowImageSetSelectOptions .= "
+      <option value='{$availableSlideshowImageSet}'>{$availableSlideshowImageSet}</option>
     ";
   }
 
@@ -148,6 +163,12 @@ if (count($partsToInstall) == 0) {
       </p>
       <select name='language_to_install'>
         {$languageSelectOptions}
+      </select>
+      <p>
+        Select a language for the website content:
+      </p>
+      <select name='slideshow_image_set'>
+        {$slideshowImageSetSelectOptions}
       </select>
       <p>
         Number of random products to be generated:
@@ -484,29 +505,24 @@ if (count($partsToInstall) == 0) {
     
       mkdir("../upload/blogs/");
       mkdir("../upload/products/");
+      mkdir("../upload/slideshow/");
 
-      for ($i = 1; $i <= 7;$i++) {
+      for ($i = 1; $i <= 7; $i++) {
         copy(
           __DIR__."/SampleData/images/category_{$i}.png",
           "{$adminPanel->config['files_dir']}/blogs/category_{$i}.png",
         );
       }
-    for ($i = 1; $i <= 10;$i++) {
+    for ($i = 1; $i <= 10; $i++) {
         copy(
           __DIR__."/SampleData/images/product_{$i}.jpg",
           "{$adminPanel->config['files_dir']}/products/product_{$i}.jpg",
         );
       }
-      for ($i = 1; $i <= 3;$i++) {
+      for ($i = 1; $i <= 3; $i++) {
         copy(
-          __DIR__."/SampleData/images/books_{$i}.jpg",
-          "{$adminPanel->config['files_dir']}/books_{$i}.jpg",
-        );
-      }
-      for ($i = 1; $i <= 4;$i++) {
-        copy(
-          __DIR__."/SampleData/images/product_{$i}.png",
-          "{$adminPanel->config['files_dir']}/products/product_{$i}.png",
+          __DIR__."/SampleData/images/slideshow/{$slideshowImageSet}/{$i}.jpg",
+          "{$adminPanel->config['files_dir']}/slideshow/{$i}.jpg",
         );
       }
 

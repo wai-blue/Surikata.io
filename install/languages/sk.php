@@ -21,9 +21,9 @@
   $blogTagAssignmentModel->insertRow(["id_tag" => 2, "id_blog" => 4]);
 
   // Slideshow
-  $slideshowModel->insertRow(["heading" => "Welcome", "description" => "Get up to 50% off Today Only!", "image" => "slideshow/books_1.jpg",]);
-  $slideshowModel->insertRow(["heading" => "Sales", "description" => "50% off in all products", "image" => "slideshow/books_2.jpg"]);
-  $slideshowModel->insertRow(["heading" => "Black Friday", "description" => "Taking your Viewing Experience to Next Level", "image" => "slideshow/books_3.jpg"]);
+  $slideshowModel->insertRow(["heading" => "Vitajte", "description" => "Všetko pre váš online nákup", "image" => "slideshow/1.jpg",]);
+  $slideshowModel->insertRow(["heading" => "Aktuálne zľavy", "description" => "Využite naše aktuálne zľavy", "image" => "slideshow/2.jpg"]);
+  $slideshowModel->insertRow(["heading" => "Top produkty", "description" => "Ponúkame najkvalitnejší sortiment", "image" => "slideshow/3.jpg"]);
 
   // novinky
 
@@ -98,10 +98,6 @@
     ];
   }
 
-  $contact_text_html = $theme == "Basic"
-    ? (__DIR__."/../SampleData/PageTexts/contact.html")
-    : (__DIR__."/../SampleData/PageTexts/kontakt.html");
-
   $webPages = [
     "SK|home|WithoutSidebar|Home" => [
       "section_1" => ["WAI/Misc/Slideshow", ["speed" => 1000]],
@@ -172,7 +168,7 @@
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "",
-          "content" => file_get_contents($contact_text_html),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/kontakt.html"),
         ]
       ],
     ],

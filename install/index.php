@@ -274,25 +274,34 @@ if (count($partsToInstall) == 0) {
       $paymentServiceModel->insertRow(["id" => 2, "name" => "CardPay", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => "WAI/Payment/Card"]);
       $paymentServiceModel->insertRow(["id" => 3, "name" => "Payment on delivery", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => ""]);
 
-      $shipmentModel->insertRow(["id" => 1, "name" => "UPS", "description" => "", "id_country" => 1, "id_delivery_service" => 1, "id_payment_service" => 1, "is_enabled" => TRUE, "order_index" => ""]);
-      $shipmentModel->insertRow(["id" => 2, "name" => "DPD", "description" => "", "id_country" => 1, "id_delivery_service" => 2, "id_payment_service" => 1, "is_enabled" => TRUE, "order_index" => ""]);
-      $shipmentModel->insertRow(["id" => 3, "name" => "Slovenská pošta", "description" => "", "id_country" => 1, "id_delivery_service" => 3, "id_payment_service" => 1, "is_enabled" => TRUE, "order_index" => ""]);
-      $shipmentModel->insertRow(["id" => 4, "name" => "Packeta", "description" => "", "id_country" => 1, "id_delivery_service" => 4, "id_payment_service" => 1, "is_enabled" => TRUE, "order_index" => ""]);
+      // UPS
+      $shipmentModel->insertRow(["id" => 1, "name" => "UPS Tatra banka", "description" => "", "id_country" => 1, "id_delivery_service" => 1, "id_payment_service" => 1, "is_enabled" => TRUE, "order_index" => ""]);
+      $shipmentModel->insertRow(["id" => 2, "name" => "UPS CardPay", "description" => "", "id_country" => 1, "id_delivery_service" => 1, "id_payment_service" => 2, "is_enabled" => TRUE, "order_index" => ""]);
+      $shipmentModel->insertRow(["id" => 3, "name" => "UPS Cash on delivery", "description" => "", "id_country" => 1, "id_delivery_service" => 1, "id_payment_service" => 3, "is_enabled" => TRUE, "order_index" => ""]);
 
-      $shipmentModel->insertRow(["id" => 5, "name" => "UPS", "description" => "", "id_country" => 1, "id_delivery_service" => 1, "id_payment_service" => 2, "is_enabled" => TRUE, "order_index" => ""]);
-      $shipmentModel->insertRow(["id" => 6, "name" => "DPD", "description" => "", "id_country" => 1, "id_delivery_service" => 2, "id_payment_service" => 2, "is_enabled" => TRUE, "order_index" => ""]);
-      $shipmentModel->insertRow(["id" => 7, "name" => "Slovenská pošta", "description" => "", "id_country" => 1, "id_delivery_service" => 3, "id_payment_service" => 2, "is_enabled" => TRUE, "order_index" => ""]);
-      $shipmentModel->insertRow(["id" => 8, "name" => "Packeta", "description" => "", "id_country" => 1, "id_delivery_service" => 4, "id_payment_service" => 2, "is_enabled" => TRUE, "order_index" => ""]);
+      $shipmentPriceModel->insertRow(["id" => 1, "id_shipment" => 1, "name" => "11", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 50, "shipment_price_calculation_method" => 1, "shipment_price" => 3.25]);
+      $shipmentPriceModel->insertRow(["id" => 2, "id_shipment" => 2, "name" => "12", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 50, "shipment_price_calculation_method" => 1, "shipment_price" => 3.95]);
+      $shipmentPriceModel->insertRow(["id" => 3, "id_shipment" => 3, "name" => "13", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 50, "shipment_price_calculation_method" => 1, "shipment_price" => 4.99]);
 
-      $shipmentModel->insertRow(["id" => 9, "name" => "UPS", "description" => "", "id_country" => 1, "id_delivery_service" => 1, "id_payment_service" => 3, "is_enabled" => TRUE, "order_index" => ""]);
-    
-      $shipmentPriceModel->insertRow(["id" => 1, "id_shipment" => 1, "name" => "a1", "weight_from" => 0, "weight_to" => 15, "price_from" => 0, "price_to" => 0, "shipment_price_calculation_method" => 2, "shipment_price" => 4]);
-      $shipmentPriceModel->insertRow(["id" => 2, "id_shipment" => 1, "name" => "a2", "weight_from" => 15, "weight_to" => 100, "price_from" => 0, "price_to" => 0, "shipment_price_calculation_method" => 2, "shipment_price" => 15]);
-      $shipmentPriceModel->insertRow(["id" => 3, "id_shipment" => 1, "name" => "a3", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 50, "shipment_price_calculation_method" => 1, "shipment_price" => 4]);
+      // Slovenska posta
+      $shipmentModel->insertRow(["id" => 4, "name" => "Slovenská pošta Tatra banka", "description" => "", "id_country" => 1, "id_delivery_service" => 3, "id_payment_service" => 1, "is_enabled" => TRUE, "order_index" => ""]);
+      $shipmentModel->insertRow(["id" => 5, "name" => "Slovenská pošta Cash on delivery", "description" => "", "id_country" => 1, "id_delivery_service" => 3, "id_payment_service" => 3, "is_enabled" => TRUE, "order_index" => ""]);
+
+      $shipmentPriceModel->insertRow(["id" => 4, "id_shipment" => 4, "name" => "21", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 1000, "shipment_price_calculation_method" => 1, "shipment_price" => 4.25]);
+      $shipmentPriceModel->insertRow(["id" => 5, "id_shipment" => 5, "name" => "22", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 1000, "shipment_price_calculation_method" => 1, "shipment_price" => 6.00]);
+
+      // Packeta
+      $shipmentModel->insertRow(["id" => 6, "name" => "Packeta Cash on delivery", "description" => "", "id_country" => 1, "id_delivery_service" => 4, "id_payment_service" => 3, "is_enabled" => TRUE, "order_index" => ""]);
+
+      $shipmentPriceModel->insertRow(["id" => 6, "id_shipment" => 6, "name" => "31", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 1000, "shipment_price_calculation_method" => 1, "shipment_price" => 2.00]);
+
+      // DPD
+      $shipmentModel->insertRow(["id" => 7, "name" => "DPD Tatra banka", "description" => "", "id_country" => 1, "id_delivery_service" => 2, "id_payment_service" => 1, "is_enabled" => TRUE, "order_index" => ""]);
+      $shipmentModel->insertRow(["id" => 8, "name" => "DPD CardPay", "description" => "", "id_country" => 1, "id_delivery_service" => 2, "id_payment_service" => 2, "is_enabled" => TRUE, "order_index" => ""]);
+
+      $shipmentPriceModel->insertRow(["id" => 7, "id_shipment" => 7, "name" => "41", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 1000, "shipment_price_calculation_method" => 1, "shipment_price" => 3.35]);
+      $shipmentPriceModel->insertRow(["id" => 8, "id_shipment" => 8, "name" => "42", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 1000, "shipment_price_calculation_method" => 1, "shipment_price" => 3.99]);
       
-      $shipmentPriceModel->insertRow(["id" => 5, "id_shipment" => 2, "name" => "b1", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 100, "shipment_price_calculation_method" => 1, "shipment_price" => 4.8]);
-      $shipmentPriceModel->insertRow(["id" => 6, "id_shipment" => 3, "name" => "c1", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 50, "shipment_price_calculation_method" => 1, "shipment_price" => 6]);
-      $shipmentPriceModel->insertRow(["id" => 7, "id_shipment" => 4, "name" => "d1", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 60, "shipment_price_calculation_method" => 1, "shipment_price" => 6]);
 
       // merne jednotky
       $unitModel->insertRow(["id" => 1, "unit" => "N/A", "name" => "no unit", "is_for_products" => TRUE, "is_for_features" => TRUE]);

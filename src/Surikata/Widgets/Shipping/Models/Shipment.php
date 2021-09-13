@@ -125,4 +125,18 @@ class Shipment extends \ADIOS\Core\Model {
     ;
   }
 
+  public function getShipment($idDelivery, $idPayment) {
+    $query =
+      $this
+      ->where([
+        ['id_delivery_service', '=', $idDelivery],
+        ['id_payment_service', '=', $idPayment]
+      ])
+      ->get()
+      ->toArray()
+    ;
+
+    return $query ? reset($query) : NULL;
+  }
+
 }

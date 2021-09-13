@@ -335,11 +335,11 @@
         "EN" => [
           "signature" => "<p>Surikata - <a href='www.wai.sk' target='_blank'>WAI.sk</a></p>",
           "after_order_confirmation_SUBJECT" => "Surikata - order n. {% number %}",
-          "after_order_confirmation_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/orderBody.html"),
+          "after_order_confirmation_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/orderBody.html"),
           "after_registration_SUBJECT" => "Surikata - Verify Email Address",
-          "after_registration_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/registrationBody.html"),
+          "after_registration_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/registrationBody.html"),
           "forgot_password_SUBJECT" => "Surikata - Password recovery",
-          "forgot_password_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/forgotPasswordBody.html")
+          "forgot_password_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/forgotPasswordBody.html")
         ]
       ],
       "plugins" => [

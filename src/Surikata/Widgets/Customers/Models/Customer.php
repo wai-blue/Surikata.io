@@ -492,7 +492,7 @@ class Customer extends \ADIOS\Core\Model {
     $data["password"] = $password;
     $data["password_1"] = $password;
     $data["password_2"] = $password;
-    $data["is_validated"] = TRUE;
+    $data["is_validated"] = FALSE;
     $data["is_blocked"] = FALSE;
 
     $idCustomer = $this->insertRow($data);

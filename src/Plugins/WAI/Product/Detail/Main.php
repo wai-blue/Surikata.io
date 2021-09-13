@@ -38,9 +38,12 @@ namespace Surikata\Plugins\WAI\Product {
         $productCatalog->getBreadCrumbs($productInfo)
       );
 
+      // REVIEW: toto "$productInfo["name_lang_{$languageIndex}"];" som
+      // opravil na $productInfo["TRANSLATIONS"]["name"];
+      // Treba podobnu opravu spravit aj na ostatnych miestach.
       $breadCrumbs[
         $this->getWebPageUrlFormatted($productInfo)
-      ] = $productInfo["name_lang_{$languageIndex}"];
+      ] = $productInfo["TRANSLATIONS"]["name"];
 
       return $breadCrumbs;
     }
@@ -55,34 +58,41 @@ namespace Surikata\Plugins\WAI\Product {
 
     function getProductInfo() {
       if ($this->productInfo === NULL) {
-        $this->productInfo = $this->adminPanel
-          ->getModel("Widgets/Products/Models/Product")
+
+        $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
+
+        $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adminPanel);
+        $productCategoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
+
+        $this->productInfo = $productModel
           ->getById((int) $this->websiteRenderer->urlVariables['idProduct'])
         ;
 
+        $this->productInfo = $productModel->translateProductForWeb($this->productInfo, $languageIndex);
+
         $allCategories = (new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel))->getAll(); // TODO: UPPERCASE LOOKUP
 
+        // REVIEW: atribut 'prislusenstvo' prelozit na 'accesories'
+        // REVIEW: nemal by "vypocet" URL adresy ist do nejakej separatnej funkcie?
         foreach ($this->productInfo['prislusenstvo'] as $key => $value) {
           $this->productInfo['prislusenstvo'][$key]['url'] =
-            \ADIOS\Core\HelperFunctions::str2url($value['name_lang_1'])
+            \ADIOS\Core\HelperFunctions::str2url($value['TRANSLATIONS']['name'])
             .".pid.{$value['id']}"
           ;
         }
 
         foreach ($this->productInfo['related'] as $key => $value) {
           $this->productInfo['related'][$key]['url'] =
-            \ADIOS\Core\HelperFunctions::str2url($value['name_lang_1'])
+            \ADIOS\Core\HelperFunctions::str2url($value['TRANSLATIONS']['name'])
             .".pid.{$value['id']}"
           ;
         }
 
-        $this->productInfo['priceInfo'] = $this->adminPanel
-          ->getModel("Widgets/Products/Models/Product")
+        $this->productInfo['priceInfo'] = $productModel
           ->getPriceInfoForSingleProduct((int) $this->websiteRenderer->urlVariables['idProduct'])
         ;
 
-        $this->productInfo['breadcrumbs'] = $this->adminPanel
-          ->getModel("Widgets/Products/Models/ProductCategory")
+        $this->productInfo['breadcrumbs'] = $productCategoryModel
           ->breadcrumbs((int) $this->productInfo['id_category'], $allCategories)
         ;
       }

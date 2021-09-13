@@ -1,6 +1,8 @@
 <?php
 
 namespace Surikata\Plugins\WAI\Common {
+
+  // REVIEW: pouziva sa BreadCrumb aj Breadcrumb. Zjednotit na Breadcrumb.
   class Breadcrumb extends \Surikata\Core\Web\Plugin {
 
     public function getMenuBreadCrumbs($pageUrl, $allowNestedPage = false) {
@@ -60,6 +62,9 @@ namespace Surikata\Plugins\WAI\Common {
       $breadCrumbs[$currentPage['url']] = $currentPage['name'];
 
       // GET Plugin BreadCrumbs if exists
+      // REVIEW: vid Widgets/Website/Actions/ContentStructure/PluginSettings:
+      //     foreach ($this->adios->getPlugins() as $pluginName => $plugin) {
+      // ... Myslim, ze kod nizsie sa da optimalizovat
       $contentStructure = 
         json_decode(
           $this->websiteRenderer->currentPage["content_structure"]

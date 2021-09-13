@@ -69,6 +69,29 @@
               <article class="list-product p-0 text-center">
                 <div class="product-inner">
                   <div class="img-block">
+                    <ul class="product-flag">
+                      {% if product.is_new == 1 %}
+                        <li class="tag new">{{ translate("New", "Product") }}</li>
+                      {% endif %}
+                      {% if product.is_sale_out == 1 %}
+                        <li class="tag new">{{ translate("Sale", "Product") }}</li>
+                      {% endif %}
+                      {% if product.is_on_sale == 1 %}
+                        <li class="tag new">{{ translate("Action", "Product") }}</li>
+                      {% endif %}
+                      {% if product.is_top == 1 %}
+                        <li class="tag top">{{ translate("Top", "Product") }}</li>
+                      {% endif %}
+                      {% if product.is_used == 1 %}
+                        <li class="tag new">{{ translate("Used", "Product") }}</li>
+                      {% endif %}
+                      {% if product.is_unpacked == 1 %}
+                        <li class="tag secondary">{{ translate("Unpacked", "Product") }}</li>
+                      {% endif %}
+                      {% if product.is_recommended == 1 %}
+                        <li class="tag secondary">{{ translate("Recommended", "Product") }}</li>
+                      {% endif %}
+                    </ul>
                     <a 
                       href="{{ rootUrl }}/{{ product.url }}"
                       onclick="
@@ -97,9 +120,6 @@
                       </ul>
                     </div>
                   </div>
-                  <ul class="product-flag">
-                    <li class="new">- {{ product.price.discountTotal|number_format(2, ",", " ") }}%</li>
-                  </ul>
                   <div class="product-decs">
                     <a class="inner-link" href="shop-4-column.html"><span>{{ product.TRANSLATIONS.brief }}</span></a>
                     <h2>
@@ -150,31 +170,6 @@
                   <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 p-0">
                       <div class="left-img">
-                        <!--<div 
-                          class="flags row pl-lg-3 pr-lg-3" 
-                        >
-                          {% if product.is_new == 1 %}
-                            <div class="col-lg-2 new">{{ translate("New", "Product") }}</div>
-                          {% endif %}
-                          {% if product.is_sale_out == 1 %}
-                            <div class="col-lg-2 new">{{ translate("Sale", "Product") }}</div>
-                          {% endif %}
-                          {% if product.is_on_sale == 1 %}
-                            <div class="col-lg-2 new">{{ translate("Action", "Product") }}</div>
-                          {% endif %}
-                          {% if product.is_top == 1 %}
-                            <div class="col-lg-2 new">{{ translate("Top", "Product") }}</div>
-                          {% endif %}
-                          {% if product.is_used == 1 %}
-                            <div class="col-lg-2 new">{{ translate("Used", "Product") }}</div>
-                          {% endif %}
-                          {% if product.is_unpacked == 1 %}
-                            <div class="col-lg-3 new">{{ translate("Unpacked", "Product") }}</div>
-                          {% endif %}
-                          {% if product.is_recommended == 1 %}
-                            <div class="col-lg-3 new">{{ translate("Recommended", "Product") }}</div>
-                          {% endif %}
-                        </div>-->
                         <div class="img-block pl-lg-3 pr-lg-3">
                           <ul class="product-flag">
                             {% if product.is_new == 1 %}

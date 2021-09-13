@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Surikata E-shop Installer</title>
+  <title>Surikata eCommerce Installer</title>
   <style>
     * { font-family: verdana; font-size: 10pt; }
     body { background: #EEEEEE; }
@@ -26,7 +26,7 @@
 <body>
   <div class='content'>
     <img class='logo' src='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
-    <h1>Surikata E-shop Installer</h1>
+    <h1>Surikata eCommerce Installer</h1>
 
 <?php
 
@@ -151,7 +151,7 @@ if (count($partsToInstall) == 0) {
         </tr>
         <tr>
           <td><input type='checkbox' name='customers' id='customers' value='yes'></td>
-          <td><label for='customers'>Sample set of customers</label> (each customer will get a password '0000')</td>
+          <td><label for='customers'>Sample set of customers (each customer will get a password '0000')</label></td>
         </tr>
         <tr>
           <td><input type='checkbox' name='orders' id='orders' value='yes'></td>
@@ -165,7 +165,7 @@ if (count($partsToInstall) == 0) {
         {$languageSelectOptions}
       </select>
       <p>
-        Select a language for the website content:
+        Select an image set for the homepage slideshow:
       </p>
       <select name='slideshow_image_set'>
         {$slideshowImageSetSelectOptions}
@@ -694,16 +694,25 @@ if (count($partsToInstall) == 0) {
 
   $infos = $adminPanel->console->getInfos();
   echo "
+    <h2>Done</h2>
+    <table>
+      <tr><td>Theme:</td><td>{$themeName}</td></tr>
+      <tr><td>Content language:</td><td>{$languageToInstall}</td></tr>
+      <tr><td>Slideshow image set:</td><td>{$slideshowImageSet}</td></tr>
+      <tr><td>Sample set of products:</td><td>".(in_array("product-catalog", $partsToInstall) ? "yes" : "no")."</td></tr>
+      <tr><td>Random products count:</td><td>{$randomProductsCount}</td></tr>
+      <tr><td>Sample set of customers:</td><td>".(in_array("customers", $partsToInstall) ? "yes" : "no")."</td></tr>
+      <tr><td>Sample set of orders:</td><td>".(in_array("orders", $partsToInstall) ? "yes" : "no")."</td></tr>
+    </table>
+    <a href='../admin' class='btn' target=_blank>Open administration panel</a>
+    <a href='..' class='btn' target=_blank>Go to your e-shop</a>
+    <br/>
     <h2>Installation log</h2>
     <a
       href='javascript:void(0)'
       onclick='document.getElementById(\"log\").style.display = \"block\";'
     >Show log</a>
     <div id='log' style='display:none'>".$adminPanel->console->convertLogsToHtml($infos)."</div>
-    <h2>Done</h2>
-    <a href='../admin' class='btn' target=_blank>Open administration panel</a><br/>
-    <a href='..' class='btn' target=_blank>Go to your e-shop</a><br/>
-    <br/>
   ";
 
   $warnings = $adminPanel->console->getWarnings();

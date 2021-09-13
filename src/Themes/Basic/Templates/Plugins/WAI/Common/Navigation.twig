@@ -33,6 +33,11 @@
                 </li>
               {% endfor %}
             {% endif %}
+            {% if user.isLogged %}
+              <li>
+                <a href='?doLogout=1'>{{ translate("Logout", "Common") }}</a>
+              </li>
+            {% endif %}
           </ul>
         </nav>
       </div>

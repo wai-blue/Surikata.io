@@ -13,9 +13,7 @@ namespace Surikata\Plugins\WAI\Product {
 
       $breadCrumbs = [];
 
-      $categoryModel = $this->adminPanel
-        ->getModel("Widgets/Products/Models/ProductCategory")
-      ;
+      $categoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
 
       if ($this->currentCategory === NULL) {
         $this->currentCategory = 
@@ -27,6 +25,7 @@ namespace Surikata\Plugins\WAI\Product {
 
       if ($this->currentCategory) {
         $allCategories = $categoryModel->getAllCached();
+        $allCategories = $categoryModel->translateForWeb($allCategories, $languageIndex);
 
         $parentCategories = array_reverse(
           $categoryModel->extractParentCategories(
@@ -34,13 +33,13 @@ namespace Surikata\Plugins\WAI\Product {
             $allCategories
           )
         );
-    
+
         foreach ($parentCategories as $category) {
           $url = $this->getWebPageUrl(
             $this->convertCategoryToUrlVariables($category)
           );
-  
-          $breadCrumbs[$url] = $category["name_lang_{$languageIndex}"];
+
+          $breadCrumbs[$url] = $category["TRANSLATIONS"]["name"];
         }
       }
 
@@ -73,10 +72,8 @@ namespace Surikata\Plugins\WAI\Product {
     }
 
     public function convertCategoryToUrlVariables($category) {
-      $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
-
       return [
-        "urlizedCategoryName" => \ADIOS\Core\HelperFunctions::str2url($category["name_lang_{$languageIndex}"]),
+        "urlizedCategoryName" => \ADIOS\Core\HelperFunctions::str2url($category["TRANSLATIONS"]["name"]),
         "idProductCategory" => $category['id'],
       ];
     }

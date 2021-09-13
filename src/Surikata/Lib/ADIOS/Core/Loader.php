@@ -582,8 +582,6 @@ class Loader {
 
     $this->db->start_transaction();
 
-    $this->console->info("Installing models");
-
     foreach ($this->models as $modelName) {
       try {
         $model = $this->getModel($modelName);
@@ -606,8 +604,6 @@ class Loader {
       }
     }
 
-    $this->console->info("Installing indexes");
-
     foreach ($this->models as $modelName) {
       try {
         $model = $this->getModel($modelName);
@@ -626,12 +622,8 @@ class Loader {
       }
     }
 
-    $this->console->info("Installing widgets");
-
     foreach ($this->widgets as $widget) {
       try {
-        $this->console->info("Installing widget: {$widget->name}");
-
         if ($widget->install()) {
           $this->widgetsInstalled[$widget->name] = TRUE;
           $this->console->info("Widget {$widget->name} installed.", ["duration" => round((microtime(true) - $start) * 1000, 2)." msec"]);
@@ -653,7 +645,7 @@ class Loader {
 
     $this->db->commit();
 
-    $this->console->info("Installation done. Duration: ".round((microtime(true) - $installationStart), 2)." s");
+    $this->console->info("Core installation done in ".round((microtime(true) - $installationStart), 2)." seconds.");
 
   }
 

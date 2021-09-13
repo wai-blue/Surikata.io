@@ -96,7 +96,24 @@ namespace Surikata\Plugins\WAI\Order {
             $selectedDeliveryService["id"],
             $selectedPaymentMethod["id"]
           )
-        ; 
+        ;
+
+        if ($shipment === false) {
+          $shipmentDeliveryServices =
+            $shipmentModel->getByIdDeliveryService(
+              $selectedDeliveryService["id"]
+            )
+          ;
+          if ($shipmentDeliveryServices !== false) {
+            $selectedPaymentMethod["id"] = $shipmentDeliveryServices[0]["id_payment_service"];
+            $shipment =
+              $shipmentModel->getShipment(
+                $selectedDeliveryService["id"],
+                $selectedPaymentMethod["id"]
+              )
+            ;
+          }
+        }
 
         $shipmentPrice = $shipmentPriceModel->getById($shipment['id']);
 

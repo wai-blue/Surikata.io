@@ -65,7 +65,7 @@
         {% if shortcut.separator %}
           <hr class="sidebar-divider d-none d-md-block">
         {% else %}
-          <li class="nav-item">
+          <li class="nav-item" style="{{ shortcut.style }}">
             <a
               id="nav-link-{{ loop.index }}"
               {% if shortcut.sub is iterable %}
@@ -99,6 +99,7 @@
                   {% for sub in shortcut.sub %}
                     <a
                       class="collapse-item dropdown collapsed {% if _COOKIE.sidebarActiveMainItem == loop.parent.loop.index and _COOKIE.sidebarActiveSubItem == loop.index %} active {% endif %}"
+                       style="{{ sub.style }}"
                       onclick="Cookies.set('sidebarActiveSubItem', '{{ loop.index }}', 1); {{ sub.onclick|raw }}"
                       role="button"
                       href="#sidebarSubSub{{ loop.parent.loop.index }}-{{ loop.index }}"

@@ -2,6 +2,8 @@
 
 namespace Surikata\Plugins\WAI\Common {
 
+  use Surikata\Plugins\WAI\Product\Catalog;
+
   class Navigation extends \Surikata\Core\Web\Plugin {
 
     var $navigationItems = NULL;
@@ -70,6 +72,7 @@ namespace Surikata\Plugins\WAI\Common {
 
     public function getTwigParams($pluginSettings) {
       $twigParams = $pluginSettings;
+      $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
 
       $twigParams["languages"] = $this->getLanguages();
 
@@ -86,6 +89,23 @@ namespace Surikata\Plugins\WAI\Common {
       // cartContents
       $twigParams["cartContents"] = (new \Surikata\Plugins\WAI\Customer\Cart($this->websiteRenderer))->getCartContents();
 
+      if ($pluginSettings["showCategories"]) {
+        $categoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
+        $categoryPlugin = new Catalog($this->adminPanel);
+        $allCategories = $categoryModel->getAllCached();
+        $allCategories = $categoryModel->translateForWeb($allCategories, $languageIndex);
+
+        foreach ($allCategories as $key => $category) {
+          $url = $categoryPlugin->replaceUrlVariables(
+            $categoryPlugin->defaultUrl,
+            $categoryPlugin->convertCategoryToUrlVariables($category)
+          )
+          ;
+          $allCategories[$key]["url"] = $url;
+        }
+        $categoryTree = $categoryModel->getAllCategoriesAndSubCategories($allCategories);
+        $twigParams["categories"] = $categoryTree;
+      }
       return $twigParams;
     }
   }
@@ -117,6 +137,10 @@ namespace ADIOS\Plugins\WAI\Common {
         "homepageUrl" => [
           "title" => "Homepage URL",
           "type" => "varchar",
+        ],
+        "showCategories" => [
+          "title" => "Show categories",
+          "type" => "bool",
         ],
       ];
     }

@@ -2,14 +2,14 @@
 
   // Blogs
   $blogCatalogModel->insertRow(["name" => "Ako vznikol vesmír?", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex1.html"), "image" => "blogs/category_7.png", "created_at" => date("Y-m-d"), "id_user" => 1]);
-  $blogCatalogModel->insertRow(["name" => "Where can I get some?", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex2.html"), "image" => "blogs/category_3.png", "created_at" => date("Y-m-d", strtotime("19.5.2000")),  "id_user" => 2]);
+  $blogCatalogModel->insertRow(["name" => "Blog?", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex2.html"), "image" => "blogs/category_3.png", "created_at" => date("Y-m-d", strtotime("19.5.2000")),  "id_user" => 2]);
   $blogCatalogModel->insertRow(["name" => "Lorem Ipsum", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex2.html"), "image" => "blogs/category_6.png", "created_at" => date("Y-m-d", strtotime("19.5.2000")), "id_user" => 1]);
-  $blogCatalogModel->insertRow(["name" => "Hello Blog", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex1.html"), "image" => "blogs/category_1.png", "created_at" => date("Y-m-d", strtotime("8.8.2000")), "id_user" => 3]);
+  $blogCatalogModel->insertRow(["name" => "Ahoj Blog", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex1.html"), "image" => "blogs/category_1.png", "created_at" => date("Y-m-d", strtotime("8.8.2000")), "id_user" => 3]);
 
   // Blogs tags
-  $blogTagModel->insertRow(["name" => "Yellow", "description" => "Yellow color"]);
-  $blogTagModel->insertRow(["name" => "Blue", "description" => "Blue color"]);
-  $blogTagModel->insertRow(["name" => "Boat", "description" => "Boat"]);
+  $blogTagModel->insertRow(["name" => "Žltý", "description" => "Žltá farba"]);
+  $blogTagModel->insertRow(["name" => "Modrý", "description" => "Modrá farba"]);
+  $blogTagModel->insertRow(["name" => "Červený", "description" => "Červená farba"]);
 
   // Blogs tags assignment
   $blogTagAssignmentModel->insertRow(["id_tag" => 1, "id_blog" => 1]);
@@ -21,25 +21,44 @@
   $blogTagAssignmentModel->insertRow(["id_tag" => 2, "id_blog" => 4]);
 
   // Slideshow
-  $slideshowModel->insertRow(["heading" => "Welcome", "description" => "Get up to 50% off Today Only!", "image" => "slideshow/books_1.jpg",]);
-  $slideshowModel->insertRow(["heading" => "Sales", "description" => "50% off in all products", "image" => "slideshow/books_2.jpg"]);
-  $slideshowModel->insertRow(["heading" => "Black Friday", "description" => "Taking your Viewing Experience to Next Level", "image" => "slideshow/books_3.jpg"]);
+  $slideshowModel->insertRow([
+    "domain" => "SK",
+    "heading" => "Vitajte",
+    "description" => "Všetko pre váš online nákup",
+    "image" => "slideshow/1.jpg",
+    "button_url" => "produkty",
+    "button_text" => "Začať nakupovať",
+  ]);
+  $slideshowModel->insertRow([
+    "domain" => "SK",
+    "heading" => "Aktuálne zľavy",
+    "description" => "Využite naše aktuálne zľavy",
+    "image" => "slideshow/2.jpg",
+    "button_url" => "akcie-a-zlavy",
+    "button_text" => "Zobraziť akcie a zľavy",
+  ]);
+  $slideshowModel->insertRow([
+    "domain" => "SK",
+    "heading" => "Top sortiment",
+    "description" => "Ponúkame najkvalitnejší sortiment",
+    "image" => "slideshow/3.jpg",
+  ]);
 
   // novinky
 
   $newsModel->insertRow([
-    "title" => "FIRST NEW",
-    "content" => "Very first new",
-    "perex" => "Short description for First New",
+    "title" => "Prvá novinka",
+    "content" => "Skutočne prvá novinka na Surikate Online Store",
+    "perex" => "Krátky popis stručnej novinky",
     "domain" => "sk",
     "image" => "",
     "show_from" => "20.6.2021",
   ]);
 
   $newsModel->insertRow([
-    "title" => "SECOND NEW",
-    "content" => "Second and the last new",
-    "perex" => "Short description for Second New",
+    "title" => "Druhá novinka",
+    "content" => "Surikata rastie - druhá novinka",
+    "perex" => "Popis druhej novinky pre rastúcu Surikatu",
     "domain" => "sk",
     "image" => "",
     "show_from" => "22.6.2021",
@@ -47,23 +66,24 @@
 
   // web - menu
 
-  $websiteMenuModel->insertRow(["id" => 1, "domain" => "SK", "name" => "Header Menu (SK)"]);
-  $websiteMenuModel->insertRow(["id" => 2, "domain" => "SK", "name" => "Footer Menu (SK)"]);
+  $websiteMenuModel->insertRow(["id" => 1, "domain" => "SK", "name" => "Menu v hlavičke (SK)"]);
+  $websiteMenuModel->insertRow(["id" => 2, "domain" => "SK", "name" => "Menu v päte stránky (SK)"]);
 
   // web - menu items - SK
-  $tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Úvod", "url" => "home"]);
-  $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "O nás", "url" => "about-us"]);
-  $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Produkty", "url" => "products"]);
-  $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Blog", "url" => "blogs"]);
-  $tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Prihlásiť sa", "url" => "login"]);
-  $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "Registrovať sa", "url" => "register"]);
-  $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Kontakt", "url" => "contact"]);
+  $tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Úvod", "url" => "uvod"]);
+  $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "O nás", "url" => "o-nas"]);
+  $tmpProduktyID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Produkty", "url" => "produkty"]);
+  $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpProduktyID, "title" => "Akcie a zľavy", "url" => "akcie-a-zlavy"]);
+  $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Blog", "url" => "blogy"]);
+  $tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Prihlásiť sa", "url" => "prihlasit-sa"]);
+  $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "Registrovať sa", "url" => "registracia"]);
+  $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Kontakt", "url" => "kontakt"]);
 
   // web - stranky
 
   $websiteCommonPanels["SK"] = [
     "header" => [ "plugin" => "WAI/Common/Header" ],
-    "navigation" => [ "plugin" => "WAI/Common/Navigation", "settings" => [ "menuId" => 1, "homepageUrl" => "home", ] ],
+    "navigation" => [ "plugin" => "WAI/Common/Navigation", "settings" => [ "menuId" => 1, "homepageUrl" => "home", "showCategories" => true, ] ],
     "footer" => [ 
       "plugin" => "WAI/Common/Footer", 
       "settings" => [ 
@@ -98,22 +118,19 @@
     ];
   }
 
-  $contact_text_html = $theme == "Basic"
-    ? (__DIR__."/../SampleData/PageTexts/contact.html")
-    : (__DIR__."/../SampleData/PageTexts/kontakt.html");
-
   $webPages = [
-    "SK|home|WithoutSidebar|Home" => [
+    "SK|uvod|WithoutSidebar|Úvod" => [
       "section_1" => ["WAI/Misc/Slideshow", ["speed" => 1000]],
       "section_2" => [
         "WAI/SimpleContent/OneColumn",
         [
-          "heading" => "Welcome",
+          "heading" => "Vitajte",
           "headingLevel" => 1,
           "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
         ],
       ],
-      "section_3" => [
+      "section_3" => ["WAI/SimpleContent/H2", ["heading" => "Odporúčame pre vás"]],
+      "section_4" => [
         "WAI/Product/FilteredList",
         [
           "filterType" => "recommended",
@@ -121,7 +138,7 @@
           "product_count" => 6,
         ],
       ],
-      "section_4" => [
+      "section_5" => [
         "WAI/SimpleContent/TwoColumns",
         [
           "column1Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
@@ -131,7 +148,8 @@
           "column2CSSClasses" => "text-right",
         ],
       ],
-      "section_5" => [
+      "section_6" => ["WAI/SimpleContent/H2", ["heading" => "Zľava"]],
+      "section_7" => [
         "WAI/Product/FilteredList",
         [
           "filterType" => "on_sale",
@@ -139,7 +157,7 @@
           "product_count" => 6,
         ],
       ],
-      "section_6" => [
+      "section_8" => [
         "WAI/SimpleContent/TwoColumns",
         [
           "column1Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-2.html"),
@@ -150,80 +168,101 @@
         ],
       ]
     ],
-    "SK|about-us|WithoutSidebar|About us" => [
+    "SK|o-nas|WithoutSidebar|O nás" => [
       "section_1" => [
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "O nás",
-          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/about-us.html"),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/o-nas.html"),
         ]
       ],
       "section_2" => [
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "Vitajte",
-          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/about-us.html"),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/o-nas.html"),
         ]
       ],
     ],
-    "SK|contact|WithoutSidebar|Contact" => [
+    "SK|kontakt|WithoutSidebar|Kontakt" => [
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
       "section_2" => [
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "",
-          "content" => file_get_contents($contact_text_html),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/kontakt.html"),
         ]
       ],
     ],
 
     // Product catalog pages
-    "SK|products|WithLeftSidebar|Products - Catalog" => [
+    "SK|produkty|WithLeftSidebar|Katalóg produktov" => [
       "sidebar" => ["WAI/Product/Filter", ["showProductCategories" => 1, "layout" => "sidebar", "showProductCategories" => 1, "show_brands" => 1]],
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
       "section_2" => ["WAI/Product/Catalog", ["defaultItemsPerPage" => 6]],
     ],
-    "SK||WithoutSidebar|Products - Detail" => [
+    "SK|akcie-a-zlavy|WithoutSidebar|Akcie a zľavy" => [
+      "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+      "section_2" => ["WAI/SimpleContent/H2", ["heading" => "Zľava"]],
+      "section_3" => [
+        "WAI/Product/FilteredList",
+        [
+          "filterType" => "on_sale",
+          "layout" => "tiles",
+          "product_count" => 99,
+        ],
+      ],
+      "section_4" => ["WAI/SimpleContent/H2", ["heading" => "Výpredaj"]],
+      "section_5" => [
+        "WAI/Product/FilteredList",
+        [
+          "filterType" => "sale_out",
+          "layout" => "tiles",
+          "product_count" => 99,
+        ],
+      ],
+    ],
+    "SK||WithoutSidebar|Detail produktu" => [
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
       "section_2" => ["WAI/Product/Detail", ["show_similar_products" => 1, "show_accessories" => 1, "showAuthor" => 1]],
     ],
 
     // Shopping cart, checkout and order confirmation
-    "SK|cart|WithoutSidebar|Shopping cart" => [
+    "SK|kosik|WithoutSidebar|Nákupný košík" => [
       "section_1" => "WAI/Order/CartOverview",
     ],
-    "SK|checkout|WithoutSidebar|Checkout" => [
+    "SK|objednat|WithoutSidebar|Vytvorenie objednávky" => [
       "section_1" => "WAI/Order/Checkout",
     ],
-    "SK||WithoutSidebar|Order - Confirmation" => [
+    "SK||WithoutSidebar|Potvrdenie objednávky" => [
       "section_1" => "WAI/Order/Confirmation"
     ],
 
     // My account pages
-    "SK|login|WithoutSidebar|My account - Login" => [
+    "SK|prihlasit-sa|WithoutSidebar|Môj účet - prihlásenie" => [
       "section_1" => ["WAI/Customer/Login", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]],
     ],
-    "SK|my-account|WithoutSidebar|My account - Home" => [
+    "SK|moj-ucet|WithoutSidebar|Môj účet" => [
       "section_1" => "WAI/Customer/Home",
     ],
-    "SK|my-account/orders|WithoutSidebar|My account - Orders" => [
+    "SK|moj-ucet/objednavky|WithoutSidebar|Môj účet - objednávky" => [
       "section_1" => "WAI/Customer/OrderList",
     ],
-    "SK|reset-password|WithoutSidebar|My account - Reset password" => [
+    "SK|zabudnute-heslo|WithoutSidebar|Môj účet - resetovanie hesla" => [
       "section_1" => "WAI/Customer/ForgotPassword"
     ],
-    "SK|registration|WithoutSidebar|My account - Registration" => [
+    "SK|registracia|WithoutSidebar|Môj účet - registrácia" => [
       "section_1" => ["WAI/Customer/Registration", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]]
     ],
-    "SK|registration-confirm|WithoutSidebar|My account - Registration - Confirmation" => [
+    "SK|potvrdenie-registracie|WithoutSidebar|Môj účet - potvrdenie registrácie" => [
       "section_1" => "WAI/Customer/RegistrationConfirmation"
     ],
-    "SK||WithoutSidebar|My account - Registration - Validation" => [
+    "SK||WithoutSidebar|Môj účet - validácia registrácie" => [
       "section_1" => "WAI/Customer/ValidationConfirmation"
     ],
 
     // Blogs
-    "SK|blogs|WithLeftSidebar|Blogs" => [
+    "SK|blogy|WithLeftSidebar|Blogy" => [
       "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
       "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
       "section_2" => ["WAI/Blog/Catalog", ['itemsPerPage' => 3, "showAuthor" => 1]],
@@ -235,11 +274,11 @@
     ],
 
     // Miscelaneous pages
-    "SK|search|WithoutSidebar|Search" => [
+    "SK|hladat|WithoutSidebar|Hľadať" => [
       "section_1" => [
         "WAI/Misc/WebsiteSearch",
         [
-          "heading" => "Search",
+          "heading" => "Hľadať",
           "numberOfResults" => 10,
           "searchInProducts" => "name_lang,brief_lang,description_lang",
           "searchInProductCategories" => "name_lang",
@@ -247,16 +286,16 @@
         ]
       ],
     ],
-    "SK|privacy-terms|WithoutSidebar|Privacy policy" => [
+    "SK|ochrana-osobnych-udajov|WithoutSidebar|Zásady ochrany osobných údajov" => [
       "section_1" => [
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "Hello",
-          "content" => file_get_contents(__DIR__."/SampleData/PageTexts/about-us.html"),
+          "content" => file_get_contents(__DIR__."/SampleData/PageTexts/o-nas.html"),
         ]
       ]
     ],
-    "SK|news|WithLeftSidebar|News" => [
+    "SK|novinky|WithLeftSidebar|Novinky" => [
       "sidebar" => ["WAI/News", ["contentType" => "sidebar"]],
       "section_1" => ["WAI/News", ["contentType" => "listOrDetail"]],
     ],
@@ -293,7 +332,7 @@
   $websiteWebRedirectModel->insertRow([
     "domain" => "SK",
     "from_url" => "",
-    "to_url" => REWRITE_BASE."home",
+    "to_url" => REWRITE_BASE."uvod",
     "type" => 301
   ]);
 
@@ -311,10 +350,10 @@
       "web" => [
         "SK" => [
           "profile" => [
-            "slogan" => "My online store",
+            "slogan" => "Môj nový eshop",
             "contactPhoneNumber" => "+421 111 222 333",
             "contactEmail" => "info@{$_SERVER['HTTP_HOST']}",
-            "logo" => "surikata.png",
+            "logo" => "your-logo.png",
             "urlFacebook" => "https://surikata.io",
             "urlTwitter" => "https://surikata.io",
             "urlYouTube" => "https://surikata.io",
@@ -338,11 +377,11 @@
       "emails" => [
         "SK" => [
           "signature" => "<p>Surikata - <a href='www.wai.sk' target='_blank'>WAI.sk</a></p>",
-          "after_order_confirmation_SUBJECT" => "Surikata - order n. {% number %}",
+          "after_order_confirmation_SUBJECT" => "Surikata - objednávka č. {% number %}",
           "after_order_confirmation_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/orderBody.html"),
-          "after_registration_SUBJECT" => "Surikata - Verify Email Address",
+          "after_registration_SUBJECT" => "Surikata - Overte Vašu emailovú adresu",
           "after_registration_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/registrationBody.html"),
-          "forgot_password_SUBJECT" => "Surikata - Password recovery",
+          "forgot_password_SUBJECT" => "Surikata - Obnovenie hesla",
           "forgot_password_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/forgotPasswordBody.html")
         ]
       ],

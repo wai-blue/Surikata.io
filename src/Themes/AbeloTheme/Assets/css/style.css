@@ -1790,7 +1790,9 @@ p {
   }
 }
 .slider-area .bg-img .slider-content-1 a {
-  width: 140px;
+  /* width: 140px; */
+  padding-left: 1em;
+  padding-right: 1em;
   height: 45px;
   line-height: 45px;
   text-align: center;
@@ -2173,6 +2175,8 @@ p {
 .list-product .new {
   color: #272727;
   background: #f7d807;
+  padding: 5px;
+  font-size: 16px;
 }
 .list-product .action {
   color: #fff;
@@ -7436,4 +7440,10 @@ offcanvas-menu > ul > li .menu-expand {
 }
 .blank-page-area .page-not-found a:hover {
   color: #266cfb;
+}
+
+.container.simple-text p {
+  line-height: 1.8em;
+  margin-top: 1em;
+  text-align: justify;
 }

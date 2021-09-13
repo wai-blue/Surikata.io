@@ -23,9 +23,10 @@ class Order extends \ADIOS\Core\Model {
   var $disableNotifications = FALSE;
 
   public function init() {
+
     $this->enumOrderStates = [
       self::STATE_NEW      => 'New',
-      self::STATE_INVOICED => 'Invoice issued',
+      self::STATE_INVOICED => 'Invoiced',
       self::STATE_PAID     => 'Paid',
       self::STATE_SHIPPED  => 'Shipped',
       self::STATE_RECEIVED => 'Received',
@@ -277,7 +278,7 @@ class Order extends \ADIOS\Core\Model {
 
   public function routing(array $routing = []) {
     return parent::routing([
-      '/^Orders\/([Open|Closed]+)$/' => [
+      '/^Orders\/([New|InvoiceIssued|Paid|Shipped|Canceled]+)$/' => [
         "action" => "UI/Table",
         "params" => [
           "model" => "Widgets/Orders/Models/Order",
@@ -295,30 +296,28 @@ class Order extends \ADIOS\Core\Model {
 
   public function tableParams($params) {
     switch ($params['filter_type']) {
-      case "Vsetky":
+      case "New":
+        $params["title"] = "New orders";
+        $params['where'] = "{$this->table}.state = (".self::STATE_NEW.")";
+      break;
+      case "InvoiceIssued":
+        $params["title"] = "Invoiced orders";
+        $params['where'] = "{$this->table}.state = (".self::STATE_INVOICED.")";
+      break;
+      case "Paid":
+        $params["title"] = "Paid orders";
+        $params['where'] = "{$this->table}.state = (".self::STATE_PAID.")";
+      break;
+      case "Shipped":
+        $params["title"] = "Shipped orders";
+        $params['where'] = "{$this->table}.state = (".self::STATE_SHIPPED.")";
+      break;
+      case "Canceled":
+        $params["title"] = "Canceled orders";
+        $params['where'] = "{$this->table}.state = (".self::STATE_CANCELED.")";
+      break;
+      default:
         $params["title"] = "All orders";
-      break;
-      case "Open":
-        $params["title"] = "Open orders";
-        $params['where'] = "
-          {$this->table}.state in (
-            ".self::STATE_NEW.",
-            ".self::STATE_INVOICED.",
-            ".self::STATE_PAID.",
-            ".self::STATE_SHIPPED."
-          )
-        ";
-      break;
-      case "Closed":
-        $params["title"] = "Closed orders";
-        $params['where'] = "
-          {$this->table}.state not in (
-            ".self::STATE_NEW.",
-            ".self::STATE_INVOICED.",
-            ".self::STATE_PAID.",
-            ".self::STATE_SHIPPED."
-          )
-        ";
       break;
     }
     $params['order_by'] = "number DESC";
@@ -687,7 +686,7 @@ class Order extends \ADIOS\Core\Model {
       $params['save_action'] = "Orders/PlaceOrder";
     } else {
 
-      $btnPlaceIssueInvoice = $this->adios->ui->button([
+      $btnIssueInvoice = $this->adios->ui->button([
         "text"    => "Issue invoice",
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
@@ -700,10 +699,11 @@ class Order extends \ADIOS\Core\Model {
             }
           });
         ",
-        "class"   => "btn-info mb-2 w-100",
+        "class"   => "btn-light mb-2 w-100",
+        "style" => "border-left: 10px solid {$this->enumOrderStateColors[self::STATE_INVOICED]}",
       ])->render();
 
-      $btnShowIssueInvoice = $this->adios->ui->button([
+      $btnShowInvoice = $this->adios->ui->button([
         "text" => "Show invoice nr. ".hsc($data['INVOICE']['number']),
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
@@ -712,7 +712,8 @@ class Order extends \ADIOS\Core\Model {
             window_refresh(tmp_form_id + '_form_window');
           });
         ",
-        "class" => "btn-primary mb-2 w-100",
+        "class"   => "btn-light mb-2 w-100",
+        "style" => "border-left: 10px solid {$this->enumOrderStateColors[self::STATE_INVOICED]}",
       ])->render();
 
       $btnOrderStatePaid = $this->adios->ui->button([
@@ -729,7 +730,8 @@ class Order extends \ADIOS\Core\Model {
             }
           });
         ",
-        "class" => "btn-primary mb-2 w-100",
+        "class" => "btn-light mb-2 w-100",
+        "style" => "border-left: 10px solid {$this->enumOrderStateColors[self::STATE_PAID]}",
       ])->render();
 
       $btnOrderStateShipped = $this->adios->ui->button([
@@ -746,14 +748,15 @@ class Order extends \ADIOS\Core\Model {
             }
           });
         ",
-        "class" => "btn-success mb-2 w-100",
+        "class" => "btn-light mb-2 w-100",
+        "style" => "border-left: 10px solid {$this->enumOrderStateColors[self::STATE_SHIPPED]}",
       ])->render();
 
 
       $btnOrderStateCanceled = $this->adios->ui->button([
         "text" => "Set as canceled",
         "onclick" => "
-          let tmp_form_id = $(this).closest('.adios.ui.form').attr('id');
+          let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
           _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_CANCELED."', function(res) {
             if (isNaN(res)) {
               alert(res);
@@ -764,42 +767,35 @@ class Order extends \ADIOS\Core\Model {
             }
           });
         ",
-        "class" => "btn-danger mb-2 w-100",
+        "class" => "btn-light mb-2 w-100",
+        "style" => "border-left: 10px solid {$this->enumOrderStateColors[self::STATE_CANCELED]}",
       ])->render();
 
-      $tab_invoice_and_delivery_note = "";
-      if ($data['INVOICE']['id'] <= 0) {
-        $tab_invoice_and_delivery_note .= "
-          {$btnPlaceIssueInvoice}
-        ";
-      } else {
-        $tab_invoice_and_delivery_note .= "
-          {$btnShowIssueInvoice}
-        ";
-      }
-
       $formTitle = "Order&nbsp;#&nbsp;".hsc($data["number"]);
-
-      $formTitle .= "
-        &nbsp;
-        <span
-          style='
-            background-color: {$this->enumOrderStateColors[$data['state']]};
-          '
-          class='badge badge-adios'
-        >
-          {$this->enumOrderStates[$data['state']]}
-        </span>
-      ";
 
       $sidebarHtml = $this->adios->dispatchEventToPlugins("onOrderDetailSidebarButtons", [
         "model" => $this,
         "params" => $params,
         "data" => $data,
       ])["html"];
-      $sidebarHtml .= $btnOrderStatePaid;
-      $sidebarHtml .= $btnOrderStateShipped;
-      $sidebarHtml .= $btnOrderStateCanceled;
+      $sidebarHtml .= "
+        <div class='card shadow mb-2'>
+          <div class='card-header py-3'>
+            Order is
+            <span
+              class='badge badge-adios'
+              style='background-color: {$this->enumOrderStateColors[$data['state']]};'
+            >
+              {$this->enumOrderStates[$data['state']]}
+            </span>
+          </div>
+          <div class='card-body'>
+            {$btnOrderStatePaid}
+            {$btnOrderStateShipped}
+            {$btnOrderStateCanceled}
+          </div>
+        </div>
+      ";
 
       $params["titleRaw"] = $formTitle;
       $params["template"] = [
@@ -817,7 +813,10 @@ class Order extends \ADIOS\Core\Model {
                 [
                   "title" => "State",
                   "input" => "
-                    <div style='text-decoration:underline wavy {$this->enumOrderStateColors[$data['state']]}'>
+                    <div
+                      class='badge badge-adios'
+                      style='background-color: {$this->enumOrderStateColors[$data['state']]};'
+                    >
                       {$this->enumOrderStates[$data['state']]}
                     </div>
                   "
@@ -849,7 +848,7 @@ class Order extends \ADIOS\Core\Model {
             "class" => "col-md-3",
             "html" => "
               <div style='margin-bottom:2em'>
-                {$tab_invoice_and_delivery_note}
+                ".($data['INVOICE']['id'] <= 0 ? $btnIssueInvoice : $btnShowInvoice)."
               </div>
               {$sidebarHtml}
             ",
@@ -864,15 +863,15 @@ class Order extends \ADIOS\Core\Model {
   }
 
   public function tableCellCSSFormatter($data) {
-    if ($data['column'] == "id") {
+    // if ($data['column'] == "id") {
+    //   return "border-left:10px solid {$this->enumOrderStateColors[$data['row']['state']]};";
+    // }
+    if ($data['column'] == "number") {
       return "border-left:10px solid {$this->enumOrderStateColors[$data['row']['state']]};";
     }
-    if ($data['column'] == "number") {
-      return "background-color: {$this->enumOrderStateColors[$data['row']['state']]}66;";
-    }
-    if ($data['column'] == "state") {
-      return "text-decoration:underline wavy {$this->enumOrderStateColors[$data['row']['state']]};";
-    }
+    // if ($data['column'] == "state") {
+    //   return "border-left: 1px solid {$this->enumOrderStateColors[$data['row']['state']]};";
+    // }
   }
 
   public function getById($id) {

@@ -98,12 +98,28 @@ class Shipment extends \ADIOS\Core\Model {
   }
 
   public function getByCartSummary(array $summary) {
+    $priceTotal = $summary['priceTotal'];
+
     return 
       $this
-      ->with('price')
-      ->with('delivery')
-      ->with('payment')
-      ->with('country')
+      ->with([
+        'price', 
+        'delivery',
+        'payment',
+        'country',
+      ])
+      ->whereHas('price', function ($q) use ($priceTotal){
+        $q->where([
+          ['shipment_price_calculation_method', '=', 1],	
+          ['price_from', '<=', $priceTotal],
+          ['price_to', '>=', $priceTotal]
+        ]);
+        $q->orWhere([
+          ['shipment_price_calculation_method', '=', 2],	
+          ['weight_from', '<=', $priceTotal],
+          ['weight_to', '>=', $priceTotal]
+        ]);
+      })
       ->get()
       ->toArray()
     ;

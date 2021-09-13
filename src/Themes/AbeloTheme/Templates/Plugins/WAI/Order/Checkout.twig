@@ -257,22 +257,26 @@
                                     <a data-toggle="collapse" data-parent="#accordion" href="#method2">{{ translate("Shipping", "Order") }}</a>
                                   </h4>
                                 </div>
-                                {% for deliveryService in deliveryServices %}
-                                  <div id="method2" class="panel-collapse collapse show">
-                                    <div class="panel-body">
-                                      <input 
-                                        type="radio" 
-                                        name="deliveryService" 
-                                        id="deliveryService-{{ loop.index }}" 
-                                        value="{{ deliveryService.id }}"
-                                        {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
-                                        onchange="AbeloThemeCart.updateCheckoutOverview()"
-                                      >
-                                      <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
-                                      <p data-method="{{ deliveryService.id }}" class="delivery-text">{{ deliveryService.description }}</p>
+                                {% if deliveryServices|length > 0 %}
+                                  {% for deliveryService in deliveryServices %}
+                                    <div id="method2" class="panel-collapse collapse show">
+                                      <div class="panel-body">
+                                        <input 
+                                          type="radio" 
+                                          name="deliveryService" 
+                                          id="deliveryService-{{ loop.index }}" 
+                                          value="{{ deliveryService.id }}"
+                                          {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
+                                          onchange="AbeloThemeCart.updateCheckoutOverview()"
+                                        >
+                                        <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
+                                        <p data-method="{{ deliveryService.id }}" class="delivery-text">{{ deliveryService.description }}</p>
+                                      </div>
                                     </div>
-                                  </div>
-                                {% endfor %}
+                                  {% endfor %}
+                                {% else %}
+                                  <p>Delivery services are unavailable</p>
+                                {% endif %}
                               </div>
                             </div>
                           </div>

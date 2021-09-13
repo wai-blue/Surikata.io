@@ -43,6 +43,7 @@ class Order extends \ADIOS\Core\Model {
     ];
 
     $this->enumDeliveryServices = (new DeliveryService($this->adios))->getEnumValues();
+    $this->enumOrderStates = (new OrderState($this->adios))->getEnumValues();
 
   }
 
@@ -234,9 +235,9 @@ class Order extends \ADIOS\Core\Model {
       ],
 
       "id_state" => [
-        "type" => "lookup",
+        "type" => "int",
         "title" => "State",
-        "model" => "Widgets/Orders/Models/OrderState",
+        "enum_values" => $this->enumOrderStates,
         "show_column" => TRUE,
       ],
 

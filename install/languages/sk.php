@@ -382,7 +382,9 @@
           "after_registration_SUBJECT" => "Surikata - Overte Vašu emailovú adresu",
           "after_registration_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/registrationBody.html"),
           "forgot_password_SUBJECT" => "Surikata - Obnovenie hesla",
-          "forgot_password_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/forgotPasswordBody.html")
+          "forgot_password_BODY" => file_get_contents(__DIR__."/SampleData/PageTexts/emails/forgotPasswordBody.html"),
+          "after_order_payment_SUBJECT" => "Surikata - objednávka č. {% number %}",
+          "after_order_payment_BODY" => "Platba bola prijatá",
         ]
       ],
       "plugins" => [

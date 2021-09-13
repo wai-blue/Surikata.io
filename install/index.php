@@ -640,6 +640,27 @@ if (count($partsToInstall) == 0) {
     $orderStateModel->insertRow(["name" => "Received", "color" => "#D3D3D3", "notes" => ""]);
     $orderStateModel->insertRow(["name" => "Canceled", "color" => "#808080", "notes" => "Canceled order"]);
 
+    $orderStateTransitionModel->insertRow([
+      "id_original_state" => 0,
+      "id_new_state" => 1,
+      "is_initial" => 1,
+      "action" => "after_order_confirmation_SUBJECT"
+    ]);
+
+    $orderStateTransitionModel->insertRow([
+      "id_original_state" => 1,
+      "id_new_state" => 2,
+      "is_initial" => 0,
+      "action" => ""
+    ]);
+
+    $orderStateTransitionModel->insertRow([
+      "id_original_state" => 2,
+      "id_new_state" => 3,
+      "is_initial" => 0,
+      "action" => ""
+    ]);
+
     if (in_array("orders", $partsToInstall)) {
       // invoice numerical series
       $invoiceNumericSeriesModel->insertRow(["id" => 1, "name" => "Regular invoices", "pattern" => "YYMMDDNNNN"]);

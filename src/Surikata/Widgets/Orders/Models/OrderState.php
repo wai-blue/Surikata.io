@@ -46,4 +46,12 @@ class OrderState extends \ADIOS\Core\Model {
     }
   }
 
+  public function getEnumValues() {
+    $enumOrderStates = [];
+    foreach ($this->getAll() as $orderState) {
+      $enumOrderStates[$orderState["id"]] = $orderState["name"];
+    }
+    return $enumOrderStates;
+  }
+
 }

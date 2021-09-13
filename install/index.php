@@ -1,13 +1,14 @@
 <html>
 <head>
-  <title>Surikata E-shop Installer</title>
+  <title>Surikata.io Installer</title>
+  <link rel='shortcut icon' href='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
   <style>
     * { font-family: verdana; font-size: 10pt; }
     body { background: #EEEEEE; }
     h1 { color: #224abe; font-size: 16pt; }
     h2 { color: #224abe; font-size: 12pt; }
 
-    table { border: 1px solid #F0F0F0; width: 100%; }
+    table { border: 1px solid #F0F0F0; }
     table tr:nth-child(even) td { background: #F0F0F0; }
     table td { padding: 2px; }
 
@@ -19,16 +20,27 @@
 
     a.btn { display: inline-block; text-decoration: none; }
 
-    .content { width: 600px; margin: auto; background: white; padding: 1em; }
+    .content { width: 820px; margin: auto; background: white; padding: 1em; }
     .logo { width: 100px; margin: auto; }
+
+    #log {
+      background: #2d2d2d;
+      font-family: courier;
+      color: white;
+      padding: 1em;
+      font-size: 9pt;
+      margin-top: 1em;
+    }
   </style>
 </head>
 <body>
   <div class='content'>
     <img class='logo' src='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
-    <h1>Surikata E-shop Installer</h1>
+    <h1>Surikata.io Installer</h1>
 
 <?php
+
+$installationStart = microtime(TRUE);
 
 include("RandomGenerator.php");
 
@@ -85,7 +97,15 @@ foreach (@scandir(__DIR__."/languages") as $file) {
   }
 }
 
+$availableSlideshowImageSets = [];
+foreach (@scandir(__DIR__."/SampleData/images/slideshow") as $file) {
+  if (!in_array($file, [".", ".."])) {
+    $availableSlideshowImageSets[] = $file;
+  }
+}
+
 $languageToInstall = $_GET['language_to_install'];
+$slideshowImageSet = $_GET['slideshow_image_set'];
 
 $randomProductsCount = $_GET['random_products_count'] ?? 50;
 if ($randomProductsCount > 5000) $randomProductsCount = 5000;
@@ -109,6 +129,13 @@ if (count($partsToInstall) == 0) {
     ";
   }
 
+  $slideshowImageSetSelectOptions = "";
+  foreach ($availableSlideshowImageSets as $availableSlideshowImageSet) {
+    $slideshowImageSetSelectOptions .= "
+      <option value='{$availableSlideshowImageSet}'>{$availableSlideshowImageSet}</option>
+    ";
+  }
+
   $themeSelectOptions = "";
   foreach ($availableThemes as $availableTheme) {
     $themeSelectOptions .= "
@@ -119,7 +146,7 @@ if (count($partsToInstall) == 0) {
   echo "
     <form action='' method='GET'>
       <p>
-        Select whitch parts do you want to install:
+        Whitch parts do you want to install?
       </p>
       <table>
         <tr>
@@ -136,7 +163,7 @@ if (count($partsToInstall) == 0) {
         </tr>
         <tr>
           <td><input type='checkbox' name='customers' id='customers' value='yes'></td>
-          <td><label for='customers'>Sample set of customers</label></td>
+          <td><label for='customers'>Sample set of customers (each customer will get a password '0000')</label></td>
         </tr>
         <tr>
           <td><input type='checkbox' name='orders' id='orders' value='yes'></td>
@@ -148,6 +175,12 @@ if (count($partsToInstall) == 0) {
       </p>
       <select name='language_to_install'>
         {$languageSelectOptions}
+      </select>
+      <p>
+        Select an image set for the homepage slideshow:
+      </p>
+      <select name='slideshow_image_set'>
+        {$slideshowImageSetSelectOptions}
       </select>
       <p>
         Number of random products to be generated:
@@ -214,7 +247,7 @@ if (count($partsToInstall) == 0) {
     $translationModel = new \ADIOS\Widgets\Website\Models\Translation($adminPanel);
     $newsModel = new \ADIOS\Plugins\WAI\News\Models\News($adminPanel);
 
-    $slideshowModel = new \ADIOS\Plugins\WAI\Misc\Slideshow\Models\UvodnaSlideshow($adminPanel);
+    $slideshowModel = new \ADIOS\Plugins\WAI\Misc\Slideshow\Models\HomepageSlideshow($adminPanel);
     $blogCatalogModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\Blog($adminPanel);
     $blogTagModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\BlogTag($adminPanel);
     $blogTagAssignmentModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\BlogTagAssignment($adminPanel);
@@ -311,30 +344,79 @@ if (count($partsToInstall) == 0) {
 
       // produkty - sluzby
 
-      $serviceModel->insertRow(["name_lang_1" => "Vrátenie do 30 dní"]);
-      $serviceModel->insertRow(["name_lang_1" => "Garancia spokojnosti"]);
-      $serviceModel->insertRow(["name_lang_1" => "Doprava zdarma"]);
-      $serviceModel->insertRow(["name_lang_1" => "Možná výmena"]);
+      $serviceModel->insertRow(["name_lang_1" => "Return within 30 days", "name_lang_2" => "Vrátenie do 30 dní"]);
+      $serviceModel->insertRow(["name_lang_1" => "Satisfaction guaranteed", "name_lang_2" => "Garancia spokojnosti"]);
+      $serviceModel->insertRow(["name_lang_1" => "Free shipping", "name_lang_2" => "Doprava zdarma"]);
+      $serviceModel->insertRow(["name_lang_1" => "Possible exchange", "name_lang_2" => "Možná výmena"]);
 
       // products - categories
 
-      $productCategoryModel->insertRow([ "id" => 1, "id_parent" => 0, "code" => "Category_A", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A"]);
-      $productCategoryModel->insertRow([ "id" => 2, "id_parent" => 0, "code" => "Category_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_B"]);
-      $productCategoryModel->insertRow([ "id" => 3, "id_parent" => 0, "code" => "Category_C", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_C"]);
+      $productCategoryModel->insertRow([
+        "id" => 1,
+        "id_parent" => 0,
+        "code" => "CatA",
+        "name_lang_1" => "Category_A (lng-1)",
+        "name_lang_2" => "Category_A (lng-2)",
+        "name_lang_3" => "Category_A (lng-3)"
+      ]);
+      $productCategoryModel->insertRow([
+        "id" => 2,
+        "id_parent" => 0,
+        "code" => "CatB",
+        "name_lang_1" => "Category_B (lng-1)",
+        "name_lang_2" => "Category_B (lng-2)",
+        "name_lang_3" => "Category_B (lng-3)"
+      ]);
+      $productCategoryModel->insertRow([
+        "id" => 3,
+        "id_parent" => 0,
+        "code" => "CatC",
+        "name_lang_1" => "Category_C (lng-1)",
+        "name_lang_2" => "Category_C (lng-2)",
+        "name_lang_3" => "Category_C (lng-3)"
+      ]);
 
-      $productCategoryModel->insertRow([ "id" => 4, "id_parent" => 1, "code" => "Category_A_A", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_A"]);
-      $productCategoryModel->insertRow([ "id" => 5, "id_parent" => 1, "code" => "Category_A_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_B"]);
-      $productCategoryModel->insertRow([ "id" => 6, "id_parent" => 1, "code" => "Category_A_C", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_A_C"]);
-      $productCategoryModel->insertRow([ "id" => 7, "id_parent" => 2, "code" => "Category_B_B", "obrazok" => "products/daltec-trailer.png", "name_lang_1" => "Category_B_B"]);
+      $productCategoryModel->insertRow([
+        "id" => 4,
+        "id_parent" => 1,
+        "code" => "CatAA",
+        "name_lang_1" => "Category_A_A (lng-1)",
+        "name_lang_2" => "Category_A_A (lng-2)",
+        "name_lang_3" => "Category_A_A (lng-3)"
+      ]);
+      $productCategoryModel->insertRow([
+        "id" => 5,
+        "id_parent" => 1,
+        "code" => "CatAB",
+        "name_lang_1" => "Category_A_B (lng-1)",
+        "name_lang_2" => "Category_A_B (lng-2)",
+        "name_lang_3" => "Category_A_B (lng-3)"
+      ]);
+      $productCategoryModel->insertRow([
+        "id" => 6,
+        "id_parent" => 1,
+        "code" => "CatAC",
+        "name_lang_1" => "Category_A_C (lng-1)",
+        "name_lang_2" => "Category_A_C (lng-2)",
+        "name_lang_3" => "Category_A_C (lng-3)"
+      ]);
+      $productCategoryModel->insertRow([
+        "id" => 7,
+        "id_parent" => 2,
+        "code" => "CatBA",
+        "name_lang_1" => "Category_B_A (lng-1)",
+        "name_lang_2" => "Category_B_A (lng-2)",
+        "name_lang_3" => "Category_B_A (lng-3)"
+      ]);
       
       // produkty - vlastnosti produktov, ciselnik
-      $productFeatureModel->insertRow(["id" => 1, "order_index" => 1, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Lange", "id_measurement_unit" => 1]);
-      $productFeatureModel->insertRow(["id" => 2, "order_index" => 2, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Breite", "id_measurement_unit" => 1]);
-      $productFeatureModel->insertRow(["id" => 3, "order_index" => 3, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Hohe", "id_measurement_unit" => 1]);
-      $productFeatureModel->insertRow(["id" => 4, "order_index" => 4, "value_type" => 1, "entry_method" => 5, "min" => 2, "min" => 5,     "name_lang_1" => "Achsen", "id_measurement_unit" => 1]);
-      $productFeatureModel->insertRow(["id" => 5, "order_index" => 5, "value_type" => 1, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Gesamtgewicht", "id_measurement_unit" => 9]);
-      $productFeatureModel->insertRow(["id" => 6, "order_index" => 6, "value_type" => 1, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Nutzlast ca.", "id_measurement_unit" => 9]);
-      $productFeatureModel->insertRow(["id" => 7, "order_index" => 7, "value_type" => 2, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Rader", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 1, "order_index" => 1, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Lange", "name_lang_2" => "Dĺžka", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 2, "order_index" => 2, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Breite", "name_lang_2" => "Šírka", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 3, "order_index" => 3, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Hohe", "name_lang_2" => "Výška", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 4, "order_index" => 4, "value_type" => 1, "entry_method" => 5, "min" => 2, "min" => 5,     "name_lang_1" => "Achsen", "name_lang_2" => "Nápravy", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 5, "order_index" => 5, "value_type" => 1, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Gesamtgewicht", "name_lang_2" => "Celková hmotnosť", "id_measurement_unit" => 9]);
+      $productFeatureModel->insertRow(["id" => 6, "order_index" => 6, "value_type" => 1, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Nutzlast ca.", "name_lang_2" => "Užitočné zaťaženie", "id_measurement_unit" => 9]);
+      $productFeatureModel->insertRow(["id" => 7, "order_index" => 7, "value_type" => 2, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Rader", "name_lang_2" => "Kolesá", "id_measurement_unit" => 1]);
 
       $productFeaturesCount = $productFeatureModel->get()->count();
 
@@ -435,35 +517,30 @@ if (count($partsToInstall) == 0) {
     
       mkdir("../upload/blogs/");
       mkdir("../upload/products/");
+      mkdir("../upload/slideshow/");
 
-      for ($i = 1; $i <= 7;$i++) {
+      for ($i = 1; $i <= 7; $i++) {
         copy(
           __DIR__."/SampleData/images/category_{$i}.png",
           "{$adminPanel->config['files_dir']}/blogs/category_{$i}.png",
         );
       }
-    for ($i = 1; $i <= 10;$i++) {
+    for ($i = 1; $i <= 10; $i++) {
         copy(
           __DIR__."/SampleData/images/product_{$i}.jpg",
           "{$adminPanel->config['files_dir']}/products/product_{$i}.jpg",
         );
       }
-      for ($i = 1; $i <= 3;$i++) {
+      for ($i = 1; $i <= 3; $i++) {
         copy(
-          __DIR__."/SampleData/images/books_{$i}.jpg",
-          "{$adminPanel->config['files_dir']}/books_{$i}.jpg",
-        );
-      }
-      for ($i = 1; $i <= 4;$i++) {
-        copy(
-          __DIR__."/SampleData/images/product_{$i}.png",
-          "{$adminPanel->config['files_dir']}/products/product_{$i}.png",
+          __DIR__."/SampleData/images/slideshow/{$slideshowImageSet}/{$i}.jpg",
+          "{$adminPanel->config['files_dir']}/slideshow/{$i}.jpg",
         );
       }
 
       copy(
-        __DIR__."/SampleData/images/surikata.png",
-        "{$adminPanel->config['files_dir']}/surikata.png",
+        __DIR__."/SampleData/images/your-logo.png",
+        "{$adminPanel->config['files_dir']}/your-logo.png",
       );
 
       require(__DIR__."/languages/{$languageToInstall}");
@@ -628,17 +705,39 @@ if (count($partsToInstall) == 0) {
   }
 
   $infos = $adminPanel->console->getInfos();
+
   echo "
+    <h2>Done in ".round((microtime(true) - $installationStart), 2)." seconds.</h2>
+    <div style='color:green;margin-bottom:1em'>
+      ✓ Congratulations. You have successfuly installed your eCommerce project.
+    </div>
+    <div style='color:orange;margin-bottom:1em'>
+      ⚠ WARNING: You should delete the <i>install</i> folder now.
+    </div>
+    <table>
+      <tr><td>Theme</td><td>{$themeName}</td></tr>
+      <tr><td>Content language</td><td>{$languageToInstall}</td></tr>
+      <tr><td>Slideshow image set</td><td>{$slideshowImageSet}</td></tr>
+      <tr><td>Sample set of products</td><td>".(in_array("product-catalog", $partsToInstall) ? "yes" : "no")."</td></tr>
+      <tr><td>Random products count</td><td>{$randomProductsCount}</td></tr>
+      <tr><td>Sample set of customers</td><td>".(in_array("customers", $partsToInstall) ? "yes" : "no")."</td></tr>
+      <tr><td>Sample set of orders</td><td>".(in_array("orders", $partsToInstall) ? "yes" : "no")."</td></tr>
+    </table>
+    <a href='../admin' class='btn' target=_blank>Open administration panel</a><br/>
+    Login: administrator<br/>
+    Password: administrator<br/>
+    <br/>
+    <a href='..' class='btn' target=_blank>Go to your e-shop</a>
+    <br/>
     <h2>Installation log</h2>
     <a
       href='javascript:void(0)'
-      onclick='document.getElementById(\"log\").style.display = \"block\";'
-    >Show log</a>
-    <div id='log' style='display:none'>".$adminPanel->console->convertLogsToHtml($infos)."</div>
-    <h2>Done</h2>
-    <a href='../admin' class='btn' target=_blank>Open administration panel</a><br/>
-    <a href='..' class='btn' target=_blank>Go to your e-shop</a><br/>
-    <br/>
+      onclick='
+        document.getElementById(\"log\").style.display = \"block\";
+        this.style.display = \"none\";
+      '
+    >Show installation log</a>
+    <div id='log' style='display:none'>".$adminPanel->console->convertLogsToHtml($infos, TRUE)."</div>
   ";
 
   $warnings = $adminPanel->console->getWarnings();

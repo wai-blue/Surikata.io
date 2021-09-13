@@ -91,6 +91,9 @@
                       {% if product.is_recommended == 1 %}
                         <li class="tag secondary">{{ translate("Recommended", "Product") }}</li>
                       {% endif %}
+                      {% if (product.price.fullPrice != product.price.salePrice) %}
+                        <li class="top">- {{ product.price.discountTotal|number_format(2, ",", " ") }}%</li>
+                      {% endif %}
                     </ul>
                     <a 
                       href="{{ rootUrl }}/{{ product.url }}"
@@ -136,8 +139,18 @@
                     </h2>
                     <div class="pricing-meta">
                       <ul>
-                        <li class="old-price">{{ product.price.fullPrice|number_format(2, ",", " ") }} €</li>
-                        <li class="current-price">{{ product.price.salePrice|number_format(2, ",", " ") }} €</li>
+                        {% if (product.price.fullPrice != product.price.salePrice) %}
+                          <li class="old-price">
+                            {{ product.price.fullPrice|number_format(2, ",", " ") }} {{ locale.currencySymbol }}
+                          </li>
+                          <li class="current-price">
+                            {{ product.price.salePrice|number_format(2, ",", " ") }} {{ locale.currencySymbol }}
+                          </li>
+                        {% else %}
+                          <li class="current-price">
+                            {{ product.price.fullPrice|number_format(2, ",", " ") }} {{ locale.currencySymbol }}
+                          </li>
+                        {% endif%}
                       </ul>
                     </div>
                   </div>

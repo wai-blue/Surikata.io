@@ -1,8 +1,8 @@
 <?php
 
-namespace ADIOS\Actions\Settings;
+namespace ADIOS\Actions\Maintenance;
 
-class Maitenance extends \ADIOS\Core\Action {
+class MaintenanceMode extends \ADIOS\Core\Action {
   public function render() {
     $settings = $this->adios->config["settings"]["web"]["maintenance"];
 
@@ -12,22 +12,22 @@ class Maitenance extends \ADIOS\Core\Action {
       "template" => [
         "items" => [
           [
-            "title" => "Turn on maintenance mode",
+            "title" => "Activate maintenance mode",
             "input" => $this->adios->ui->Input([
               "type" => "boolean",
               "uid" => "{$this->uid}_mod_udrzby",
               "value" => $settings['mod_udrzby'],
             ]),
-            "description" => "When checked, a maintenance notification will appear on the web.",
+            "description" => "When checked, a maintenance message will be displayed to your visitors.",
           ],
           [
-            "title" => "Supplementary notice",
+            "title" => "Additional note",
             "input" => $this->adios->ui->Input([
               "type" => "varchar",
               "uid" => "{$this->uid}_mod_udrzby_doplnujuci_oznam",
               "value" => $settings['mod_udrzby_doplnujuci_oznam'],
             ]),
-            "description" => "Enter the message that appears when the maintenance mode is on.",
+            "description" => "Enter the message that will be displayed to your visitors while the maintenance mode is activated.",
           ],
         ],
       ],

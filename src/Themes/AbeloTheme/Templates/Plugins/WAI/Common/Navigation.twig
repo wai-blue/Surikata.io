@@ -78,6 +78,9 @@
           <div class="header-right-element d-flex">
             <div class="search-element media-body mr-20px ml-20px">
               <form class="d-flex" action="#" onsubmit="return false;">
+                <!--<div class="search-category">
+
+                </div>-->
                 <input id="headerSearch" type="text" placeholder="{{ translate("Enter your search key ...", "Common") }}" autocomplete="off" onkeypress="searchKeyPressCallback(event, this)" />
                 <button onclick="sendSearchData('headerSearch')" type="button">{{ translate("Search", "Common") }}</button>
               </form>
@@ -106,79 +109,33 @@
           <div class="header-menu-vertical">
             <h4 class="menu-title">{{ translate("Browse Categories", "Common") }}</h4>
             <ul class="menu-content display-none">
-              <li class="menu-item"><a href="#">Televisions</a></li>
-              <li class="menu-item">
-                <a href="#">Electronics <i class="ion-ios-arrow-right"></i></a>
-                <ul class="sub-menu flex-wrap">
-                  <li>
-                    <a href="#">
-                      <span> <strong> Accessories & Parts</strong></span>
-                    </a>
-                    <ul class="submenu-item">
-                      <li><a href="#">Cables & Adapters</a></li>
-                      <li><a href="#">Batteries</a></li>
-                      <li><a href="#">Chargers</a></li>
-                      <li><a href="#">Bags & Cases</a></li>
-                      <li><a href="#">Electronic Cigarettes</a></li>
+
+              {% for category in categories %}
+                <li class="menu-item" value="{{ category.id }}">
+                  <a href="{{ category.url }}">
+                    {{ category.name }}
+                    {% if category.subCategory|length > 0 %}
+                      <i class="ion-ios-arrow-right"></i>
+                    {% endif %}
+                  </a>
+                  {% if category.subCategory|length > 0 %}
+                    <ul class="sub-menu flex-wrap">
+                      <li>
+                        <ul class="submenu-item">
+                          {% for subCategory in category.subCategory %}
+                                <li>
+                                  <a href="{{ subCategory.url }}">
+                                    {{ subCategory.TRANSLATIONS.name }}
+                                  </a>
+                                </li>
+                          {% endfor %}
+                        </ul>
+                      </li>
                     </ul>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span><strong>Camera & Photo</strong></span>
-                    </a>
-                    <ul class="submenu-item">
-                      <li><a href="#">Digital Cameras</a></li>
-                      <li><a href="#">Camcorders</a></li>
-                      <li><a href="#">Camera Drones</a></li>
-                      <li><a href="#">Action Cameras</a></li>
-                      <li><a href="#">Photo Studio Supplie</a></li>
-                    </ul>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span><strong>Smart Electronics</strong></span>
-                    </a>
-                    <ul class="submenu-item">
-                      <li><a href="#">Wearable Devices</a></li>
-                      <li><a href="#">Smart Home Appliances</a></li>
-                      <li><a href="#">Smart Remote Controls</a></li>
-                      <li><a href="#">Smart Watches</a></li>
-                      <li><a href="#">Smart Wristbands</a></li>
-                    </ul>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span><strong>Audio & Video</strong></span>
-                    </a>
-                    <ul class="submenu-item">
-                      <li><a href="#">Televisions</a></li>
-                      <li><a href="#">TV Receivers</a></li>
-                      <li><a href="#">Projectors</a></li>
-                      <li><a href="#">Audio Amplifier Boards</a></li>
-                      <li><a href="#">TV Sticks</a></li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-                <li class="menu-item">
-                  <a href="#">Video Games <i class="ion-ios-arrow-right"></i></a>
-                  <ul class="sub-menu sub-menu-2">
-                    <li>
-                      <ul class="submenu-item">
-                        <li><a href="#">Handheld Game Players</a></li>
-                        <li><a href="#">Game Controllers</a></li>
-                        <li><a href="#">Joysticks</a></li>
-                        <li><a href="#">Stickers</a></li>
-                      </ul>
-                    </li>
-                  </ul>
+                  {% endif %}
                 </li>
-                <li class="menu-item"><a href="#">Digital Cameras</a></li>
-                <li class="menu-item"><a href="#">Headphones</a></li>
-                <li class="menu-item"><a href="#"> Wearable Devices</a></li>
-                <li class="menu-item"><a href="#"> Smart Watches</a></li>
-                <li class="menu-item"><a href="#"> Game Controllers</a></li>
-                <li class="menu-item"><a href="#"> Smart Home Appliances</a></li>
+              {% endfor %}
+
             </ul>
           </div>
         </div>
@@ -396,7 +353,7 @@
             <!--<a href="#offcanvas-wishlist" class="heart offcanvas-toggle"><i class="lnr lnr-heart"></i><span>Wishlist</span></a>-->
             <a href="#offcanvas-cart" cart-count="{{ cartContents.items|length }}" class="bag offcanvas-toggle">
               <i class="lnr lnr-cart"></i>
-              <span>My Cart</span>
+              <span>{{ translate("My Cart", "Common") }}</span>
             </a>
           </div>
           <div class="mobile-menu-toggle">

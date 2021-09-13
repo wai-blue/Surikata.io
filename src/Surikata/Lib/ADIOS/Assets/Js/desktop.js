@@ -4,7 +4,7 @@
 
   var adios_menu_hidden = 0;
 
-  function window_render(action, params, onclose, no_history) {
+  function window_render(action, params, onclose) {
     if (typeof params == 'undefined') params = {};
     if (typeof options == 'undefined') options = {};
 
@@ -38,7 +38,12 @@
   function window_refresh(window_id) {
     let win = $('#' + window_id);
 
-    win.remove();
+    win
+      .attr('id', win.attr('id') + '_TO_BE_REMOVED')
+      .fadeOut(800, function() {
+        win.remove();
+      })
+    ;
     window_render(
       ADIOS_windows[window_id]['action'],
       ADIOS_windows[window_id]['params'],

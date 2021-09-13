@@ -1,13 +1,13 @@
 <div class="slider-area">
   <div class="hero-slider-wrapper">
     {% for slide in slideShowSlides %}
-      <div class="single-slide slider-height-1 bg-img d-flex" data-bg-image="{{ rootUrl }}/theme/assets/images/{{ slide.image }}">
+      <div class="single-slide slider-height-1 bg-img d-flex" data-bg-image="{{ uploadedFileUrl }}/{{ slide.image }}">
         <div class="container align-self-center">
           <div class="slider-content-1 slider-animated-1 text-left pl-60px">
-            <h1 class="animated color-black">{{ slide.nadpis }}</h1>
+            <h1 class="animated color-black">{{ slide.heading }}</h1>
             <p class="animated color-gray">{{ slide.description }}</p>
-            {% if slide.url|length != 0 %}
-              <a href="{{ rootUrl }}/{{ slide.url }}" class="shop-btn animated">{{ translate("Shop now", "Misc") }}</a>
+            {% if slide.button_url|length != 0 %}
+              <a href="{{ rootUrl }}/{{ slide.button_url }}" class="shop-btn animated">{{ slide.button_text }}</a>
             {% endif %}
           </div>
         </div>

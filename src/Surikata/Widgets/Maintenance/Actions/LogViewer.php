@@ -1,6 +1,6 @@
 <?php
 
-namespace ADIOS\Actions\Settings;
+namespace ADIOS\Actions\Maintenance;
 
 class LogViewer extends \ADIOS\Core\Action {
   public function preRender() {

@@ -108,6 +108,7 @@ $adminPanelConfig['widgets']['Stock']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Website']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Plugins']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Settings']['enabled'] = TRUE;
+$adminPanelConfig['widgets']['Maintenance']['enabled'] = TRUE;
 
 $adminPanelConfig['default_action'] = "Overview/Welcome";
 $adminPanelConfig['widgets']['Website']['domains'] = $configEnv["domains"];

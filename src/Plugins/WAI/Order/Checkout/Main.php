@@ -13,6 +13,17 @@ namespace Surikata\Plugins\WAI\Order {
       ;
     }
 
+    public function getPaymentMethods($selectedDeliveryService) {
+      $paymentMethods = [];
+      foreach ($this->shipping as $shipment) {
+        if ($shipment['delivery']['id'] == $selectedDeliveryService['id']) {
+          $paymentMethods[$shipment['payment']['id']] = $shipment['payment'];
+        }
+      }
+
+      return $paymentMethods;
+    }
+
     public function getTwigParams($pluginSettings) {
       $twigParams = $pluginSettings;
 
@@ -50,34 +61,15 @@ namespace Surikata\Plugins\WAI\Order {
         $deliveryServices[$shipment['delivery']['id']] = $shipment['delivery'];
       }
 
-      $selectedDeliveryService = reset($this->shipping)['delivery'];
-
-      $paymentMethods = [];
-      foreach ($this->shipping as $shipment) {
-        if ($shipment['delivery']['id'] == $selectedDeliveryService['id']) {
-          $paymentMethods[$shipment['payment']['id']] = $shipment['payment'];
-        }
-      }
-
-      $selectedPaymentMethod = reset($paymentMethods);
-
       if (isset($this->websiteRenderer->urlVariables['orderData'])) {
         $orderData = $this->websiteRenderer->urlVariables['orderData'];
 
-        $selectedPaymentMethod = $paymentMethods[$orderData["paymentMethod"]];
         $selectedDeliveryService = $deliveryServices[$orderData["deliveryService"]];
+        $paymentMethods = $this->getPaymentMethods($selectedDeliveryService);
+        $selectedPaymentMethod = $paymentMethods[$orderData["paymentMethod"]];
 
-        $shipmentPayments = 
-          $shipmentModel->getByIdDeliveryService(
-            $selectedDeliveryService["id"]
-          )
-        ;
-
-        $paymentMethods = [];
-        foreach ($shipmentPayments as $shipmentPayment) {
-          $paymentMethods[$shipmentPayment['payment']['name']] = 
-            $shipmentPayment['payment']
-          ;
+        if ($selectedPaymentMethod == NULL) {
+          $selectedPaymentMethod = reset($paymentMethods);
         }
 
         if (!empty($orderData['voucher'])) {
@@ -97,6 +89,10 @@ namespace Surikata\Plugins\WAI\Order {
             $twigParams["voucherDiscountPercentage"] = $voucher['discount_percentage'];
           }
         }
+      } else {
+        $selectedDeliveryService = reset($this->shipping)['delivery'];
+        $paymentMethods = $this->getPaymentMethods($selectedDeliveryService);
+        $selectedPaymentMethod = reset($paymentMethods);
       }
 
       foreach ($this->shipping as $shipment) {

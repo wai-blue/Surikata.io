@@ -7437,3 +7437,9 @@ offcanvas-menu > ul > li .menu-expand {
 .blank-page-area .page-not-found a:hover {
   color: #266cfb;
 }
+
+.container.simple-text p {
+  line-height: 1.8em;
+  margin-top: 1em;
+  text-align: justify;
+}

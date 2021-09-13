@@ -511,8 +511,8 @@ if (count($partsToInstall) == 0) {
       }
 
       copy(
-        __DIR__."/SampleData/images/surikata.png",
-        "{$adminPanel->config['files_dir']}/surikata.png",
+        __DIR__."/SampleData/images/your-logo.png",
+        "{$adminPanel->config['files_dir']}/your-logo.png",
       );
 
       require(__DIR__."/languages/{$languageToInstall}");

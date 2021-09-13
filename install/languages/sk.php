@@ -314,7 +314,7 @@
             "slogan" => "My online store",
             "contactPhoneNumber" => "+421 111 222 333",
             "contactEmail" => "info@{$_SERVER['HTTP_HOST']}",
-            "logo" => "surikata.png",
+            "logo" => "your-logo.png",
             "urlFacebook" => "https://surikata.io",
             "urlTwitter" => "https://surikata.io",
             "urlYouTube" => "https://surikata.io",

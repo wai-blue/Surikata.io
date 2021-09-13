@@ -2157,26 +2157,21 @@ p {
   transform: translateY(0) translateZ(0);
 }
 .list-product .tag {
-  position: absolute;
-  top: 10px !important;
-  left: 15px;
-  display: inline-block;
-  padding: 0 5px;
   text-align: center;
   line-height: 20px;
   height: 22px;
-  font-size: 11px;
+  font-size: 12px;
   text-transform: capitalize;
   text-align: center;
   z-index: 4;
   border-radius: 5px;
   font-weight: 600;
+  padding: 0 5px;
+  margin: 2px;
 }
 .list-product .new {
   color: #272727;
   background: #f7d807;
-  padding: 5px;
-  font-size: 16px;
 }
 .list-product .action {
   color: #fff;
@@ -2186,7 +2181,9 @@ p {
   color: #fff;
   background: #266cfb;
 }
-
+.product-flag ul {
+  margin: 20px !important;
+}
 .list-product .product-decs {
   padding: 15px;
 }
@@ -6786,7 +6783,6 @@ offcanvas-menu > ul > li .menu-expand {
   color: #272727;
 }
 .blog-single-tags-share .tag-list li {
-  display: inline-block;
   margin-left: 5px;
   color: #272727;
 }

@@ -15,24 +15,24 @@ class OrderHistory extends \ADIOS\Core\Model {
         "readonly" => TRUE,
       ],
 
-      "event_time" => [
-        "type" => "date",
-        "title" => $this->translate("Event time"),
-        "show_column" => true
-      ],
-
       "state" => [
         "type" => "int",
-        "enum_values" => $this->enumOrderStates,
+        "enum_values" => (new \ADIOS\Widgets\Orders\Models\Order($this->adios))->enumOrderStates,
         "title" => $this->translate("State"),
         "show_column" => true
       ],
 
-      "notes" => [
-        "type" => "varchar",
-        "title" => $this->translate("Notes"),
-        "show_column" => TRUE,
+      "event_time" => [
+        "type" => "datetime",
+        "title" => $this->translate("Event time"),
+        "show_column" => true
       ],
+
+      // "notes" => [
+      //   "type" => "varchar",
+      //   "title" => $this->translate("Notes"),
+      //   "show_column" => TRUE,
+      // ],
     ]);
   }
 
@@ -53,7 +53,18 @@ class OrderHistory extends \ADIOS\Core\Model {
     $params["where"] = "`{$this->table}`.`id_order` = ".(int) $params['id_order'];
     $params["show_title"] = FALSE;
     $params["show_controls"] = FALSE;
+
     return $params;
+  }
+
+  public function tableCellCSSFormatter($data) {
+
+    $orderModel = new \ADIOS\Widgets\Orders\Models\Order($this->adios);
+    $orderModel->init();
+
+    if ($data['column'] == "state") {
+      return "border-left: 10px solid {$orderModel->enumOrderStateColors[(int)$data['row']['state']]};";
+    }
   }
 
 }

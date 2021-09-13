@@ -5,6 +5,7 @@
         "illuminate/database": "^8.19",
         "twig/markdown-extra": "^3.2",
         "erusev/parsedown": "^1.7",
-        "voku/html-compress-twig": "^4.0"
+        "voku/html-compress-twig": "^4.0",
+        "monolog/monolog": "^2.3"
     }
 }

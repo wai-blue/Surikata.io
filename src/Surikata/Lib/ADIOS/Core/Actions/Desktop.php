@@ -28,11 +28,11 @@ class Desktop extends \ADIOS\Core\Action {
     $settingsMenuItems = [];
 
     $settingsMenuItems[] = [
-      "fa_icon" => "fas fa-exclamation-triangle",
+      "fa_icon" => "fas fa-user",
       "text" => "My profile",
       "onclick" => "
         window_render(
-          'MojProfil',
+          'MyProfile',
           '',
           function() {
             setTimeout(function() {

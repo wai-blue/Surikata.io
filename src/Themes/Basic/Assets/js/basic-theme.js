@@ -140,14 +140,12 @@ window.onpopstate = function (e) {
   BasicThemeCart.prototype.updateCheckoutOverview = function() {
     let data = this.serializeOrderData();
     data['renderOnly'] = 'orderOverview';
-    console.log(data);
-    $('.checkout-area').css('opacity', 0.5);
   
     Surikata.renderPlugin(
       'WAI/Order/Checkout',
       data,
       function (data) {
-        $('.checkout-area')
+        $('#order-area')
           .html(data)
           .css('opacity', 1)
         ;
@@ -170,7 +168,8 @@ window.onpopstate = function (e) {
   
   BasicThemeCart.prototype.placeOrder = function() {
     $('#orderDataForm input').removeClass('required-empty');
-  
+    $('#orderDataForm label').removeClass('required-empty');
+
     SurikataCart.prototype.placeOrder(
       function (dataSuccess) {
         if (dataSuccess.status == 'OK') {
@@ -182,8 +181,16 @@ window.onpopstate = function (e) {
 
           let emptyFields = dataFail.error.split(',');
 
+          $('html, body').animate({
+            scrollTop: $('#orderDataForm input[name=' + emptyFields[0] + ']').offset().top
+          }, 500);
+
           for (var i in emptyFields) {
-            $('#orderDataForm input[name=' + emptyFields[i] + ']').addClass('required-empty');
+            if (emptyFields[i] == "gdpr_consent" || emptyFields[i] == "general_terms_and_conditions") {
+              $('#' + emptyFields[i] + '_label').addClass('required-empty')
+            } else {
+              $('#orderDataForm input[name=' + emptyFields[i] + ']').addClass('required-empty');
+            }
           }
         } else if (dataFail.exception != '') {
           console.log(dataFail);
@@ -350,6 +357,12 @@ window.onpopstate = function (e) {
   BasicThemeBlogCatalog.prototype = Object.create(SurikataBlogCatalog.prototype);
 
   var BasicThemeBlogCatalog = new BasicThemeBlogCatalog();
+
+   // BasicTheme Blog
+   function BasicThemeBreadcrumb() { SurikataBreadcrumb.call(this); }
+   BasicThemeBreadcrumb.prototype = Object.create(SurikataBreadcrumb.prototype);
+ 
+   var BasicThemeBreadcrumb = new BasicThemeBreadcrumb();
 
 /*----------------------------
         Cart Plus Minus Button

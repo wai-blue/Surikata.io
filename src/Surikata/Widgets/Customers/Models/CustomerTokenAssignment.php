@@ -2,6 +2,8 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
+use ADIOS\Core\Models\Token;
+
 class CustomerTokenAssignment extends \ADIOS\Core\Model {
   const TOKEN_TYPE_ACCOUNT_VALIDATION = 15901;
   const TOKEN_TYPE_ACCOUNT_CONFIRMATION = 15902;
@@ -11,13 +13,18 @@ class CustomerTokenAssignment extends \ADIOS\Core\Model {
   var $urlBase = "Customer/{{ id_customer }}/Tokens";
   var $tableTitle = "Tokens";
 
-  public function init() {
-    parent::init();
-    $tokenModel = $this->adios->getModel("Core/Models/Token");
+  public static $init = TRUE;
 
-    $tokenModel->registerTokenType(self::TOKEN_TYPE_ACCOUNT_VALIDATION);
-    $tokenModel->registerTokenType(self::TOKEN_TYPE_ACCOUNT_CONFIRMATION);
-    $tokenModel->registerTokenType(self::TOKEN_TYPE_FORGOT_PASSWORD);
+  public function init() {
+    if (self::$init === TRUE) {
+      self::$init = FALSE;
+      parent::init();
+      $tokenModel = $this->adios->getModel("Core/Models/Token");
+
+      $tokenModel->registerTokenType(self::TOKEN_TYPE_ACCOUNT_VALIDATION);
+      $tokenModel->registerTokenType(self::TOKEN_TYPE_ACCOUNT_CONFIRMATION);
+      $tokenModel->registerTokenType(self::TOKEN_TYPE_FORGOT_PASSWORD);
+    }
   }
 
   public function columns(array $columns = []) {

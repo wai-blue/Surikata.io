@@ -540,6 +540,7 @@ select.form-control.option-w3ls {
 
 .form-control {
 	border-radius: 0;
+	margin-bottom: 10px;
 }
 
 .btn-primary {
@@ -547,6 +548,10 @@ select.form-control.option-w3ls {
 	background-color: #84c639;
 	border-color: #84c639;
 	border-radius: 0;
+}
+
+.checkout-account label {
+	margin-bottom: 10px;
 }
 
 button.submit.check_out {

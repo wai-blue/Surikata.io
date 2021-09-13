@@ -21,7 +21,8 @@ class Loader extends \Cascada\Loader {
   /** Stores the path to the folder with Theme's files */
   var $themeDir = "";
 
-  var $pluginsDir = "";
+  var $themeFolders = [];
+  var $pluginFolders = [];
 
   var $paymentPlugins = [];
   var $deliveryPlugins = [];
@@ -65,7 +66,8 @@ class Loader extends \Cascada\Loader {
     // parent::__construct
     parent::__construct($config);
 
-    $this->pluginsDir = $config['pluginsDir'];
+    $this->registerPluginFolder(__DIR__."/../../../Plugins");
+    $this->registerThemeFolder(__DIR__."/../../../Themes");
 
     if (is_object($this->adminPanel)) {
 
@@ -79,11 +81,29 @@ class Loader extends \Cascada\Loader {
       $this->adminPanel->webSettings = $this->loadSurikataSettings("web/{$this->config["domainToRender"]}");
 
       $this->themeName = $this->adminPanel->webSettings["design"]["theme"];
-      $this->themeDir = "{$this->adminPanel->config['themes_dir']}/{$this->themeName}";
+
+      $this->themeDir = "";
+      foreach ($this->themeFolders as $themeFolder) {
+        if (is_file("{$themeFolder}/{$this->themeName}/Main.php")) {
+          $this->themeDir = "{$themeFolder}/{$this->themeName}";
+        }
+      }
 
       $this->assetsUrlMap["core/assets/"] = ADMIN_PANEL_SRC_DIR."/Core/Assets/";
       $this->assetsUrlMap["theme/assets/"] = "{$this->themeDir}/Assets/";
-      $this->assetsUrlMap["plugins/assets/"] = PLUGINS_DIR."/";
+      $this->assetsUrlMap["plugins/assets/"] = function($websiteRenderer, $url) { 
+        $url = str_replace("plugins/assets/", "", $url);
+        preg_match('/(.+?)\/~\/(.+)/', $url, $m);
+
+        $plugin = $m[1];
+        $asset = $m[2];
+        foreach ($websiteRenderer->pluginFolders as $pluginFolder) {
+          $file = "{$pluginFolder}/{$plugin}/Assets/{$asset}";
+          if (is_file($file)) {
+            return $file;
+          }
+        }
+      };
       $this->assetsUrlMap["upload/image/resize/"] = function($websiteRenderer, $template) { 
         $template = str_replace("upload/image/resize/", "", $template);
         preg_match('/(\d+)\/(\d+)\/(.+)/', $template, $m);
@@ -154,11 +174,13 @@ class Loader extends \Cascada\Loader {
 
       $this->twig->addFunction(new \Twig\TwigFunction(
         'translate',
-        function ($str, $context = NULL) {
+        function ($original, $context = NULL) {
           global $___CASCADAObject;
 
-          $domain = $___CASCADAObject->config['domainToRender'];
-          $translationModel = new \ADIOS\Widgets\Settings\Models\Translation($this->adminPanel);
+          $domains = $___CASCADAObject->adminPanel->config['widgets']['Website']['domains'];
+          $domainToRender = $___CASCADAObject->config['domainToRender'];
+
+          $translationModel = new \ADIOS\Widgets\Website\Models\Translation($this->adminPanel);
 
           if (
             $context === NULL
@@ -170,37 +192,56 @@ class Loader extends \Cascada\Loader {
           $context = (string) $context;
 
           if ($___CASCADAObject->translationCache === NULL) {
-
-            $allTranslations = $translationModel->get()->toArray();
-
-            foreach ($allTranslations as $translation) {
-              $___CASCADAObject->translationCache
-                [$translation["original"]]
-                [$translation["context"]] = json_decode($translation["translated"], true);
-            }
-
+            $___CASCADAObject->translationCache = $translationModel->loadCache();
           }
 
-          if (empty($___CASCADAObject->translationCache[$str][$context])) {
+          if (!isset($___CASCADAObject->translationCache[$domainToRender][$context][$original])) {
             $translationModel->insertRow([
+              "domain" => $domainToRender,
               "context" => $context,
-              "original" => $str,
+              "original" => $original,
               "translated" => "",
             ]);
 
-            $translatedText = $str;
+             $___CASCADAObject->translationCache[$domainToRender][$context][$original] = $original;
           } else {
-            $translatedText = $___CASCADAObject->translationCache[$str][$context][$domain];
+            $translatedText = $___CASCADAObject->translationCache[$domainToRender][$context][$original];
           }
 
-          return $translatedText;
+          return empty($translatedText) ? $original : $translatedText;
         }
       ));
 
-      $this->setGlobal();
       $this->setRouter(new \Cascada\Router($this->getSiteMap()));
     }
 
+  }
+  
+
+  public function validateOutputHtml() {
+    // https://www.vzhurudolu.cz/prirucka/checklist
+    // TODO: automaticka kontrola vystupneho HMTL na SEO parametre
+    
+    $regexpMustNotMatch = TRUE; // ak sa retazec v HTML nachaza, je problem
+    $regexpMustMatch = FALSE; // ak sa retazec v HTML nenachaza, je problem
+
+    $validationRegexps = [
+      [
+        "/<script>/i",
+        "SCRIPT tag is found in HTML.",
+        $regexpMustNotMatch
+      ]
+    ];
+
+    foreach ($validationRegexps as $regexp) {
+      $match = preg_match($regexp[0], $this->outputHtml);
+      if (
+        ($match && $regexp[2])
+        || (!$match && !$regexp[2])
+      ) {
+        $this->adminPanel->console->warning($regexp[1], ["//{$_SERVER['HTTP_HOST']}/{$_SERVER['REQUEST_URI']}"]);
+      }
+    }
   }
 
   public function render() {
@@ -211,9 +252,7 @@ class Loader extends \Cascada\Loader {
 
       if ($outputFormat != "json" && $this->config['minifyOutputHtml'] ?? FALSE) {
         $htmlMinifier = new HtmlMin();
-        return $htmlMinifier->minify($this->outputHtml);
-      } else {
-        return $this->outputHtml;
+        $this->outputHtml = $htmlMinifier->minify($this->outputHtml);
       }
     } catch (
       \Illuminate\Database\QueryException
@@ -221,13 +260,19 @@ class Loader extends \Cascada\Loader {
       $e
     ) {
       $errorHash = md5(date("YmdHis").$e->getMessage());
-      $this->adminPanel->console->log($errorHash, $e->getMessage());
+      $this->adminPanel->console->error("{$errorHash} ".$e->getMessage());
       return json_encode([
         "status" => "FAIL",
         "exception" => "SurikataCore",
         "error" => "Oops! Something went wrong with the database. See logs for more information. Error hash: {$errorHash}",
       ]);
     }
+
+    if ($this->config['validateOutputHtml'] ?? FALSE) {
+      $this->validateOutputHtml();
+    }
+
+    return $this->outputHtml;
   }
 
   /**
@@ -325,6 +370,18 @@ class Loader extends \Cascada\Loader {
     return $pages;
   }
 
+  public function registerThemeFolder($folder) {
+    if (is_dir($folder) && !in_array($folder, $this->themeFolders)) {
+      $this->themeFolders[] = realpath($folder);
+    }
+  }
+
+  public function registerPluginFolder($folder) {
+    if (is_dir($folder) && !in_array($folder, $this->pluginFolders)) {
+      $this->pluginFolders[] = realpath($folder);;
+    }
+  }
+
   /**
    * Returns the object of the content plugin.
    * 
@@ -383,7 +440,7 @@ class Loader extends \Cascada\Loader {
   }
 
   public function registerPaymentPlugin($pluginName) {
-    $pluginClassName = "\\Surikata\\Plugins\\{$pluginName}";
+    $pluginClassName = "\\Surikata\\Plugins\\".str_replace("/", "\\", $pluginName);
     if (
       !in_array($pluginName, $this->paymentPlugins)
       && property_exists($pluginClassName, 'isPaymentPlugin')
@@ -397,12 +454,12 @@ class Loader extends \Cascada\Loader {
   }
 
   public function getPaymentPlugins() {
-    $plugins = scandir($this->pluginsDir);
-    foreach ($plugins as $pluginName) {
+    foreach ($this->adminPanel->plugins as $pluginName) {
       if (!in_array($pluginName, [".", ".."])) {
         $this->registerPaymentPlugin($pluginName);
       }
     }
+
     return $this->paymentPlugins;
   }
 

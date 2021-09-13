@@ -1,0 +1,92 @@
+<div class="best-sell-area">
+  <div class="best-sell-area-wrapper slider-nav-style-1 slider-nav-style-4">
+    {% for product in products %}
+      {% if
+        (filterType == 'on_sale' and product.is_on_sale == 1)
+        or
+        (filterType == 'news' and product.is_new == 1)
+        or
+        (filterType == 'top' and product.is_top == 1)
+        or
+        (filterType == 'recommended' and product.is_recommended == 1)
+      %}
+        <div class="single-slider-item">
+          <article class="list-product text-center">
+            <div class="product-inner">
+              <div class="img-block">
+                <a href="{{ rootUrl }}/{{ product.url }}" class="thumbnail">
+                  <img class="first-img" src="{{ uploadedFileUrl }}/{{ product.image }}" alt="" />
+                </a>
+                <div class="add-to-link">
+                  <ul>
+                    <li>
+                      <a class="quick_view" href="#" data-link-action="getQuickView" data-link-id="{{ product.id }}" onclick="openQuickModal(this)" {{ translate("Quick view", "Product") }}" data-toggle="modal" data-target="#quickViewModal">
+                        <i class="lnr lnr-frame-expand"></i>
+                      </a>
+                    </li>
+                    <!--<li>
+                      <a href="javascript:void(0)" title="Add to Wishlist"><i class="lnr lnr-heart"></i></a>
+                    </li>-->
+                    <!--<li>
+                      <a href="javascript:void(0)" title="Add to compare"><i class="lnr lnr-sync"></i></a>
+                    </li>-->
+                  </ul>
+                </div>
+              </div>
+
+              {% if (filterType == 'on_sale' and product.price.discountTotal != 0) or filterType == 'news' or filterType == 'top' %}
+                <ul class="product-flag">
+                  <li class="new">
+                    {% if filterType == 'on_sale' %}
+                      <span>- {{ product.price.discountTotal|number_format(2, ",", " ") }}%</span>
+                    {% elseif filterType == 'news' %}
+                      <span>{{ translate("New", "Product") }}</span>
+                    {% elseif filterType == 'top' %}
+                      <span style="color: red">{{ translate("Top", "Product") }}</span>
+                    {% endif %}
+                  </li>
+                </ul>
+              {% endif %}
+
+              <div class="product-decs">
+                <a class="inner-link" href="shop-4-column.html"><span>{{ product.ProductCategory.TRANSLATIONS.name }}</span></a>
+                <h2><a href="{{ rootUrl }}/{{ product.url }}" class="product-link">{{ product.TRANSLATIONS.name }}</a></h2>
+                <!--<div class="availability-list in-stock">Availability: <span>300 In Stock</span></div>-->
+                <p>{{ product.TRANSLATIONS.brief }}</p>
+                <div class="pricing-meta">
+                  <ul>
+                    {% if (product.price.fullPrice > product.price.salePrice) %}
+                      <li class="old-price">{{ product.price.fullPrice|number_format(2, ",", " ") }} €</li>
+                    {% endif %}
+                    <li class="current-price">{{ product.sale_price|number_format(2, ",", " ") }} €</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  function openQuickModal(element) {
+    element = $(element);
+    var requestData = {};
+    var pluginName = "WAI\\Product\\Detail"
+    requestData.__renderOnlyPlugin = pluginName;
+    requestData.__output = 'json';
+    requestData.productAction = element.attr("data-link-action");
+    requestData.idProduct = element.attr("data-link-id");
+
+    $.getJSON(
+      '',
+      requestData
+    ).done(function (data) {
+      $("#quickViewDocument").html(data.productModalContent);
+    }).fail(function (data) {
+      console.log('renderPluginJSON Error', pluginName, requestData, data);
+    });
+  }
+</script>

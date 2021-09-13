@@ -1,0 +1,28 @@
+@font-face {
+  font-family: 'SofiaPro-SemiBold';
+  src: url("../../fonts/SofiaPro-SemiBold.eot?#iefix") format("embedded-opentype"), 
+  url("../../fonts/SofiaPro-SemiBold.woff") format("woff"), 
+  url("../../fonts/SofiaPro-SemiBold.ttf") format("truetype"), 
+  url("../../fonts/SofiaPro-SemiBold.svg#SofiaPro-SemiBold") format("svg");
+  font-weight: normal;
+  font-style: normal; 
+}
+
+@font-face {
+  font-family: 'SofiaPro-Medium';
+  src: url("../../fonts/SofiaPro-Medium.eot?#iefix") format("embedded-opentype"), 
+  url("../../fonts/SofiaPro-Medium.woff") format("woff"), 
+  url("../../fonts/SofiaPro-Medium.ttf") format("truetype"), 
+  url("../../fonts/SofiaPro-Medium.svg#SofiaPro-Medium") format("svg");
+  font-weight: normal;
+  font-style: normal;
+   }
+
+@font-face {
+  font-family: 'SofiaPro-Regular';
+  src: url("../../fonts/SofiaPro-Regular.eot?#iefix") format("embedded-opentype"), 
+  url("../../fonts/SofiaPro-Regular.woff") format("woff"), 
+  url("../../fonts/SofiaPro-Regular.ttf") format("truetype"), 
+  url("../../fonts/SofiaPro-Regular.svg#SofiaPro-Regular") format("svg");
+  font-weight: normal;
+  font-style: normal; }

@@ -5,6 +5,32 @@ namespace Surikata\Plugins\WAI\Blog {
   class Detail extends \Surikata\Core\Web\Plugin {
 
     var $defaultBlogDetailUrl = "blog/{% idBlog %}/{% blogName %}";
+    var $deleteCurrentPageBreadCrumb = true;
+
+    public function getBreadCrumbs($urlVariables = []) {
+      $currentBlog = $this->getCurrentBlog();
+
+      $breadCrumb = 
+        new \Surikata\Plugins\WAI\Common\Breadcrumb(
+          $this->websiteRenderer
+        )
+      ;
+
+      $breadCrumbs = $breadCrumb->getMenuBreadCrumbs(
+        $currentBlog['blogCatalogUrl'], 
+        true
+      );
+
+      $currentBlogYear = date("Y", strtotime($currentBlog['created_at']));
+      $currentBlogMonth = date("m", strtotime($currentBlog['created_at']));
+
+      $breadCrumbs[$currentBlogYear] = $currentBlogYear;
+      $breadCrumbs[$currentBlogYear . "/" . $currentBlogMonth] = $currentBlogMonth;
+
+      $breadCrumbs[$this->getWebPageUrl($currentBlog)] = $currentBlog['name'];
+
+      return $breadCrumbs;
+    }
 
     public function getWebPageUrlFormatted($urlVariables, $pluginSettings = []) {
       $url = $pluginSettings["urlPattern"] ?? "";

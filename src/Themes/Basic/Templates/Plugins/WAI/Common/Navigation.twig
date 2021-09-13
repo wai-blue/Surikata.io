@@ -33,14 +33,21 @@
                 </li>
               {% endfor %}
             {% endif %}
+            {% if user.isLogged %}
+              <li>
+                <a href='?doLogout=1'>{{ translate("Logout", "Common") }}</a>
+              </li>
+            {% endif %}
           </ul>
         </nav>
       </div>
+      {% if navigationItems is iterable %}
       <div class="mobile-nav-button">
         <button id="trigger-overlay" type="button">
           <i class="fa fa-bars" aria-hidden="true"></i>
         </button>
       </div>
+      {% endif %}
       <!-- cart details -->
       <div class="top_nav_right">
         <div class="shoecart shoecart2 cart cart box_1">
@@ -66,8 +73,8 @@
           </ul>
         </div>
         <div id="cd-search" class="cd-search">
-          <form action="#" method="post">
-            <input id="headerSearch" name="Search" type="search" placeholder="Click enter after typing..." onkeypress="searchKeyPressCallback(event, this)">
+          <form action="search" method="get">
+            <input id="headerSearch" name="search" type="search" placeholder="Click enter after typing..." onkeypress="searchKeyPressCallback(event, this)">
           </form>
         </div>
       </div>

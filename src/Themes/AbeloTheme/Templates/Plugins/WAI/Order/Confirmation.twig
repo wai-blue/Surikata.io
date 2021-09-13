@@ -1,0 +1,17 @@
+<div class="blank-page-area mtb-50px">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="page-not-found text-center">
+          <h4>{{ translate("Thank you for your order. We sent the recapitulation and confirmation to the email.", "Order") }}</h4>
+          <p>
+            {{ translate("Order ID", "Order") }} = {{ order.id }}<br/>
+            {{ translate("Order number", "Order") }} = {{ order.number }}<br/>
+            {{ translate("You will be redirected to the payment gateway", "Order") }}<br/>
+          </p>
+          <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Product/Catalog', 'getWebPageUrl') }}">{{ translate("Continue shopping", "Order") }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

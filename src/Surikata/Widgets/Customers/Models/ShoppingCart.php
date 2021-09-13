@@ -8,6 +8,7 @@ class ShoppingCart extends \ADIOS\Core\Model {
   var $tableTitle = "Shopping carts";
   var $formTitleForInserting = "Shopping cart";
   var $formTitleForEditing = "Shopping cart";
+  var $lookupSqlValue = "{%TABLE%}.id";
 
   public function columns(array $columns = []) {
     return parent::columns([

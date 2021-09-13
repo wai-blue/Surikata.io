@@ -28,7 +28,8 @@ class Loader extends \ADIOS\Core\Loader {
     parent::__construct($config, $mode);
 
     // override console to log DB errors
-    $this->console = new \Surikata\Core\AdminPanel\Console($this);
+    // 2021-09-09 deprecated. Default ADIOS console is used.
+    // $this->console = new \Surikata\Core\AdminPanel\Console($this);
 
     if (is_object($this->websiteRenderer)) {
       try {
@@ -39,6 +40,11 @@ class Loader extends \ADIOS\Core\Loader {
     }
   }
   
+  public function onBeforePluginsLoaded() {
+    parent::onBeforePluginsLoaded();
+    $this->registerPluginFolder(__DIR__."/../../../Plugins");
+  }
+
   /**
    * Surikata's implementation of ADIOS checkPermissionsForAction.
    * Throws exception when signed user does not have permission for rendering
@@ -82,6 +88,8 @@ class Loader extends \ADIOS\Core\Loader {
     if ($this->config['smtp_protocol'] == 'tls') {
       $email->setProtocol(\Surikata\Lib\Email::TLS);
     }
+
+    $email->send();
 
   }
 

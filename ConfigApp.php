@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * DO NOT CHANGE THIS FILE UNLESS YOU WANT TO CONTRIBUTE TO
+ * Surikata.io's CORE.
+ *
+ * IF YOU WANT TO BUILD YOUR ECOMMERCE PROJECT, START IN
+ * THE prop/ FOLDER.
+ *
+ * Author: https://www.wai.blue
+ */
+
 ////////////////////////////////////////////////////////
 // Directories
 ////////////////////////////////////////////////////////
@@ -22,11 +32,10 @@ define('UPLOADED_FILES_DIR', __DIR__."/upload");
 
 define('DEVEL_MODE', TRUE);
 define('PROJECT_ROOT_DIR', __DIR__);
-define('THEMES_DIR', __DIR__."/src/Themes");
-define('PLUGINS_DIR', __DIR__."/src/Plugins");
 define('CONTROLLERS_DIR', __DIR__."/src/Controllers");
 define('LOG_DIR', __DIR__."/log");
 define('DATA_DIR', __DIR__."/data");
+define('PROP_DIR', __DIR__."/prop");
 
 define('TWIG_CACHE_DIR', FALSE); // disable cache
 
@@ -36,7 +45,6 @@ define('TWIG_CACHE_DIR', FALSE); // disable cache
 define('CASCADA_CORE_DIR', __DIR__."/src/Surikata/Lib/CASCADA");
 define('ADIOS_CORE_DIR', __DIR__."/src/Surikata/Lib/ADIOS");
 define('ADIOS_WIDGETS_DIR', __DIR__."/src/Surikata/Widgets");
-define('ADIOS_PLUGINS_DIR', PLUGINS_DIR);
 
 ////////////////////////////////////////////////////////
 // Administration panel configuration
@@ -47,13 +55,13 @@ define('GTP', 'srkt');
 $adminPanelConfig["build"]["version"]          = "1.2";
 
 $adminPanelConfig["session_salt"]              = "SurikataAdminPanel";
-$adminPanelConfig["brand"]["title"]            = ($configEnv["brand"]["title"] ?? "Surikata");
+$adminPanelConfig["brand"]["title"]            = ($configEnv["brand"]["title"] ?? "Surikata.io Administration Panel");
 $adminPanelConfig["brand"]["subtitle"]         = "Administration panel";
 $adminPanelConfig["brand"]["favicon"]          = ADMIN_PANEL_URL."/surikata/assets/images/Surikata_logo_farebne_znak.png";
 $adminPanelConfig["brand"]["login"]["splash"]  = ($configEnv["brand"]["login"]["splash"] ?? ADMIN_PANEL_URL."/surikata/assets/images/login-screen.jpg");
 $adminPanelConfig["brand"]["sidebar"]["icon"]  = ADMIN_PANEL_URL."/surikata/assets/images/Surikata_logo_biele_znak.png";
-$adminPanelConfig["brand"]["sidebar"]["title"] = "Surikata";
-$adminPanelConfig["brand"]["sidebar"]["subtitle"] = "Your e-commerce platform";
+$adminPanelConfig["brand"]["sidebar"]["title"] = "Surikata.io";
+$adminPanelConfig["brand"]["sidebar"]["subtitle"] = "Administration panel";
 $adminPanelConfig["global_table_prefix"]       = GTP;
 
 $adminPanelConfig['devel_mode']              = DEVEL_MODE;
@@ -81,8 +89,6 @@ if (defined('SMTP_HOST')) {
   $adminPanelConfig["smtp_from"]               = SMTP_FROM;
 }
 
-$adminPanelConfig['themes_dir']              = THEMES_DIR;
-
 $adminPanelConfig['files_dir']               = UPLOADED_FILES_DIR;
 $adminPanelConfig['files_url']               = UPLOADED_FILES_URL;
 
@@ -97,10 +103,12 @@ $adminPanelConfig['widgets']['Orders']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Finances']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Products']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Prices']['enabled'] = TRUE;
+$adminPanelConfig['widgets']['Shipping']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Stock']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Website']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Plugins']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Settings']['enabled'] = TRUE;
+$adminPanelConfig['widgets']['Maintenance']['enabled'] = TRUE;
 
 $adminPanelConfig['default_action'] = "Overview/Welcome";
 $adminPanelConfig['widgets']['Website']['domains'] = $configEnv["domains"];
@@ -112,10 +120,9 @@ $adminPanelConfig['widgets']['Website']['domainLanguages'] = $configEnv["domainL
 
 $websiteRendererConfig = [
   "domainToRender" => WEBSITE_DOMAIN_TO_RENDER,
-  "minifyOutputHtml" => TRUE,
+  "minifyOutputHtml" => $configEnv['minifyOutputHtml'] ?? FALSE,
+  "validateOutputHtml" => $configEnv['validateOutputHtml'] ?? FALSE,
 
-  "pluginsDir" => PLUGINS_DIR,
-  "themesDir" => THEMES_DIR,
   "rewriteBase" => WEBSITE_REWRITE_BASE,
   "twigCacheDir" => TWIG_CACHE_DIR,
   "twigDebugEnabled" => TRUE,

@@ -2,7 +2,11 @@
 
 namespace Surikata\Plugins\WAI\Common {
 
+  use Surikata\Plugins\WAI\Product\Catalog;
+
   class Navigation extends \Surikata\Core\Web\Plugin {
+
+    var $navigationItems = NULL;
 
     private function convertFlatMenuItemsToTree(&$flatMenuItems, $idParent = 0) {
       $treeItems = [];
@@ -68,18 +72,40 @@ namespace Surikata\Plugins\WAI\Common {
 
     public function getTwigParams($pluginSettings) {
       $twigParams = $pluginSettings;
+      $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
 
       $twigParams["languages"] = $this->getLanguages();
 
+      if ($this->navigationItems === NULL) {
+        $this->navigationItems = $this->convertFlatMenuItemsToTree(
+          (new \ADIOS\Widgets\Website\Models\WebMenuItem($this->adminPanel))
+            ->getByIdMenu((int) $pluginSettings['menuId'] ?? 0)
+        );
+      }
+
       // navigationItems
-      $twigParams["navigationItems"] = $this->convertFlatMenuItemsToTree(
-        (new \ADIOS\Widgets\Website\Models\WebMenuItem($this->adminPanel))
-          ->getByIdMenu((int) $pluginSettings['menuId'] ?? 0)
-      );
+      $twigParams["navigationItems"] = $this->navigationItems;
 
       // cartContents
       $twigParams["cartContents"] = (new \Surikata\Plugins\WAI\Customer\Cart($this->websiteRenderer))->getCartContents();
 
+      if ($pluginSettings["showCategories"]) {
+        $categoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
+        $categoryPlugin = new Catalog($this->adminPanel);
+        $allCategories = $categoryModel->getAllCached();
+        $allCategories = $categoryModel->translateForWeb($allCategories, $languageIndex);
+
+        foreach ($allCategories as $key => $category) {
+          $url = $categoryPlugin->replaceUrlVariables(
+            $categoryPlugin->defaultUrl,
+            $categoryPlugin->convertCategoryToUrlVariables($category)
+          )
+          ;
+          $allCategories[$key]["url"] = $url;
+        }
+        $categoryTree = $categoryModel->getAllCategoriesAndSubCategories($allCategories);
+        $twigParams["categories"] = $categoryTree;
+      }
       return $twigParams;
     }
   }
@@ -107,6 +133,14 @@ namespace ADIOS\Plugins\WAI\Common {
         "shortContact" => [
           "title" => "Short contact info in header",
           "type" => "varchar",
+        ],
+        "homepageUrl" => [
+          "title" => "Homepage URL",
+          "type" => "varchar",
+        ],
+        "showCategories" => [
+          "title" => "Show categories",
+          "type" => "bool",
         ],
       ];
     }

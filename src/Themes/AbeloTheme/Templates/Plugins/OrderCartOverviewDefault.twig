@@ -1,0 +1,128 @@
+
+ <div class="cart-main-area">
+	<div class="container">
+		{% if cartContents.items|length > 0 %}
+			<h3 class="cart-page-title">{{ translate("Your cart items") }}</h3>
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+					<div id="customerCartDefault">
+						<div class="table-content table-responsive cart-table-content">
+							<table>
+								<thead>
+									<tr>
+										<th></th>
+										<th>{{ translate("Product") }}</th>
+										<th>{{ translate("Price") }}</th>
+										<th>{{ translate("Quantity") }}</th>
+										<th>{{ translate("Total Price") }}</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for item in cartContents.items %}
+										<tr>
+											<td class="product-thumbnail">
+												<a  href="{{ item.product.url }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ item.product.image }}" alt="{{ item.product.TRANSLATIONS.name }}" /></a>
+											</td>
+											<td class="product-name"><a href="{{ item.product.url }}">{{ item.product.TRANSLATIONS.name }}</a></td>
+											<td class="product-price-cart"><span class="amount">{{ item.unit_price|number_format(2, ",", " ") }} €</span></td>
+											<td class="product-quantity">
+												<div class="cart-plus-minus">
+													<input
+														onchange="AbeloThemeCart.updateProductQty(
+															{{ item.product.id }},
+															this.value,
+															function(data) {
+																AbeloThemeCart.updateDetailedOverview();
+															}
+														)"
+														class="cart-plus-minus-box"
+														type="text"
+														name="qtybutton"
+														value="{{ item.quantity }}"
+													/>
+												</div>
+											</td>
+											<td class="product-subtotal_{{ item.product.id }}"> {{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} €</td>
+											<td class="product-remove">
+												<!--<a
+													href="javascript:void(0)"
+												><i class="fa fa-pencil-alt"></i></a>-->
+												<a
+													href="javascript:void(0)"
+													onclick="
+														AbeloThemeCart.removeProduct(
+															{{ item.product.id }},
+															function(data) {
+																AbeloThemeCart.updateDetailedOverview();
+															}
+														);
+													"
+												><i class="fa fa-trash-alt"></i></a>
+											</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="cart-shiping-update-wrapper">
+									<div class="cart-clear">
+										<!--<button>Update Shopping Cart</button>-->
+										<a href="javascript:void(0)" onclick="
+											 AbeloThemeCart.removeProduct(
+											 0,
+											 function(data) {
+											 AbeloThemeCart.updateDetailedOverview();
+											 }
+											 );
+										"
+										>{{ translate("Clear Shopping Cart") }}</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						{% if couponCard %}
+							<div class="col-lg-4 col-md-6 mb-lm-30px">
+								<div class="discount-code-wrapper">
+									<div class="title-wrap">
+										<h4 class="cart-bottom-title section-bg-gray">{{ translate("Use Coupon Code") }}</h4>
+									</div>
+									<div class="discount-code">
+										<p>{{ translate("Enter your coupon code if you have one.") }}</p>
+										<form>
+											<input type="text" required="" name="name" />
+											<button class="cart-btn-2" type="submit">{{ translate("Apply Coupon") }}</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+						<div class="col-lg-4 col-md-12 mt-md-30px">
+							<div class="grand-totall">
+								<div class="title-wrap">
+									<h4 class="cart-bottom-title section-bg-gary-cart">{{ translate("Cart Total") }}</h4>
+								</div>
+								<h4 class="grand-totall-title mt-3">{{ translate("Grand Total") }} <span id="priceTotal">{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</span></h4>
+								<a href="{{ rootUrl }}/{{ callPluginMethod('OrderCheckoutDefault', 'getWebPageUrl') }}">{{ translate("Proceed to Checkout") }}</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% else %}
+			<div class="col-md-12">
+				<div class="empty-text-contant text-center">
+					<i class="lnr lnr-cart"></i>
+					<h1>{{ translate("There are no more items in your cart") }}</h1>
+					<a class="empty-cart-btn" href="javascript:void(0);">
+						<i class="ion-ios-arrow-left"> </i> {{ translate("Continue shopping") }}
+					</a>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+</div>

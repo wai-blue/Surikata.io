@@ -31,7 +31,7 @@ class Table extends \ADIOS\Core\Action {
     ];
     foreach ($secure_inputs as $val) {
       if ($this->params[$val] == $_REQUEST[$val] && '' != $this->params[$val]) {
-        $this->adios->console->log('UI TABLE', "Unsecure REQUEST input {$val}: {$this->params[$val]}");
+        $this->adios->console->warning("Unsecure REQUEST input {$val}: {$this->params[$val]}");
         unset($this->params[$val]);
       }
     }

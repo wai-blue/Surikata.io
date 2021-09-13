@@ -5,8 +5,10 @@ namespace Surikata\Plugins\WAI\Product {
 
     public function getTwigParams($pluginSettings) {
       $twigParams = $pluginSettings;
+      $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
 
       $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adminPanel);
+      $productCategoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
 
       switch ($pluginSettings["filterType"]) {
         case "recommended":
@@ -14,14 +16,17 @@ namespace Surikata\Plugins\WAI\Product {
             ->where("is_recommended", TRUE)
             ->skip(0)->take((int)$pluginSettings["product_count"]);
         break;
-        case "discounted":
-          $productIds = $productModel
-            ->where("is_on_sale", TRUE)
-            ->skip(0)->take((int)$pluginSettings["product_count"]);
+        case "on_sale":
+          $productIds = $productModel->where("is_on_sale", TRUE);
+        break;
+        case "sale_out":
+          $productIds = $productModel->where("is_sale_out", TRUE);
         break;
       }
 
       $productIds = $productIds
+        ->skip(0)
+        ->take((int) $pluginSettings["product_count"])
         ->get()
         ->pluck('id')
       ;
@@ -33,6 +38,18 @@ namespace Surikata\Plugins\WAI\Product {
         $twigParams["products"][$key]["url"] =
           $productDetailPlugin->getWebPageUrl($product)
         ;
+
+        $twigParams["products"][$key] =
+          $productModel->translateProductForWeb($twigParams["products"][$key], $languageIndex);
+
+        $twigParams["products"][$key]["ProductCategory"] =
+          $productCategoryModel
+            ->translateForWeb(
+              [
+                $productCategoryModel
+                ->getById($twigParams["products"][$key]["id_category"])
+              ], $languageIndex
+            )[0];
       }
 
       return $twigParams;
@@ -50,7 +67,7 @@ namespace ADIOS\Plugins\WAI\Product {
           "title" => "Products for display",
           "type" => "varchar",
           "enum_values" => [
-            "discounted" => "Discounted products",
+            "on_sale" => "Discounted products",
             "news" => "New products",
             "recommended" => "Recommended products",
             "top" => "Top products",
@@ -66,11 +83,11 @@ namespace ADIOS\Plugins\WAI\Product {
           ],
         ],
         "product_count" => [
-          "title" => "Count of products",
+          "title" => "Number of products",
           "type" => "int",
         ],
       ];
     }
-    
+
   }
 }

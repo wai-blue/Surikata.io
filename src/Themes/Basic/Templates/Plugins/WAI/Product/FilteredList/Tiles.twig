@@ -3,7 +3,7 @@
     <div class="wrapper_top_shop">
       <div class="section-title">
         <h2>
-          {% if filterType == 'discounted' %}
+          {% if filterType == 'on_sale' %}
             {{ translate("Discounted products") }}
           {% elseif filterType == 'news' %}
             {{ translate("New products") }}
@@ -18,7 +18,7 @@
       <div class="product-sec1 row">
         {% for product in products %}
           {% if
-            (filterType == 'discounted' and product.is_on_sale == 1)
+            (filterType == 'on_sale' and product.is_on_sale == 1)
             or
             (filterType == 'news' and product.is_new == 1)
             or

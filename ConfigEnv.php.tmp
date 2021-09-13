@@ -57,3 +57,9 @@ define('SMTP_FROM', '');
 $configEnv["brand"]["title"] = "";
 $configEnv["brand"]["login"]["splash"] = "";
 */
+
+////////////////////////////////////////////////////////
+// Misc
+
+$configEnv["minifyOutputHtml"] = FALSE;
+$configEnv["validateOutputHtml"] = TRUE;

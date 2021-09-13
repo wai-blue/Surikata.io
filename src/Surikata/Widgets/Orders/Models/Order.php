@@ -234,7 +234,7 @@ class Order extends \ADIOS\Core\Model {
 
       "id_state" => [
         "type" => "lookup",
-        "title" => "StateModel",
+        "title" => "State",
         "model" => "Widgets/Orders/Models/OrderState",
         "show_column" => TRUE,
       ],

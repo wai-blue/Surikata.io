@@ -204,9 +204,10 @@ if (count($partsToInstall) == 0) {
     $productFeatureAssignmentModel = new \ADIOS\Widgets\Products\Models\ProductFeatureAssignment($adminPanel);
     $productPriceModel = new \ADIOS\Widgets\Prices\Models\ProductPrice($adminPanel);
     $shoppingCartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($adminPanel);
+    $orderStateModel = new \ADIOS\Widgets\Orders\Models\OrderState($adminPanel);
+    $orderStateTransitionModel = new \ADIOS\Widgets\Orders\Models\OrderStateTransition($adminPanel);
     $invoiceModel = new \ADIOS\Widgets\Finances\Models\Invoice($adminPanel);
     $orderModel = new \ADIOS\Widgets\Orders\Models\Order($adminPanel);
-    $orderStateModel = new \ADIOS\Widgets\Orders\Models\OrderState($adminPanel);
     $websiteMenuModel = new \ADIOS\Widgets\Website\Models\WebMenu($adminPanel);
     $websiteMenuItemModel = new \ADIOS\Widgets\Website\Models\WebMenuItem($adminPanel);
     $websiteWebPageModel = new \ADIOS\Widgets\Website\Models\WebPage($adminPanel);

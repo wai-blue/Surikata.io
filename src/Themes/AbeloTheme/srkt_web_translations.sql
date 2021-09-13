@@ -204,7 +204,7 @@ INSERT INTO `srkt_web_translations` (`domain`, `context`, `original`, `translate
 ('SK', 'Common', 'Search', 'Hľadať'),
 ('SK', 'Common', 'My Cart', 'Môj košík'),
 ('SK', 'Common', 'Browse Categories', 'Prehľadávať kategórie'),
-('SK', 'Common', 'Enter your search key ...', 'Zadajte hľadanú frázu...'),
+('SK', 'Common', 'Enter your search key ...', 'Začnite vyhľadávať...'),
 ('SK', 'Common', 'More Categories', 'Viac kategórií'),
 ('SK', 'Common', 'Wishlist', 'Zoznam'),
 ('SK', 'WAI/Common/Navigation', 'View wishlist', 'Zobraziť zoznam'),

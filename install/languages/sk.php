@@ -26,14 +26,16 @@
     "heading" => "Vitajte",
     "description" => "Všetko pre váš online nákup",
     "image" => "slideshow/1.jpg",
-    "button_url" => "akcie-a-zlavy",
-    "button_text" => "Zobraziť akcie a zľavy",
+    "button_url" => "produkty",
+    "button_text" => "Začať nakupovať",
   ]);
   $slideshowModel->insertRow([
     "domain" => "SK",
     "heading" => "Aktuálne zľavy",
     "description" => "Využite naše aktuálne zľavy",
     "image" => "slideshow/2.jpg",
+    "button_url" => "akcie-a-zlavy",
+    "button_text" => "Zobraziť akcie a zľavy",
   ]);
   $slideshowModel->insertRow([
     "domain" => "SK",

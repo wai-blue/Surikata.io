@@ -1,6 +1,7 @@
 <html>
 <head>
   <title>Surikata.io Installer</title>
+  <link rel='shortcut icon' href='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
   <style>
     * { font-family: verdana; font-size: 10pt; }
     body { background: #EEEEEE; }
@@ -145,7 +146,7 @@ if (count($partsToInstall) == 0) {
   echo "
     <form action='' method='GET'>
       <p>
-        Select whitch parts do you want to install:
+        Whitch parts do you want to install?
       </p>
       <table>
         <tr>

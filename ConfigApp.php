@@ -55,13 +55,13 @@ define('GTP', 'srkt');
 $adminPanelConfig["build"]["version"]          = "1.2";
 
 $adminPanelConfig["session_salt"]              = "SurikataAdminPanel";
-$adminPanelConfig["brand"]["title"]            = ($configEnv["brand"]["title"] ?? "Surikata");
+$adminPanelConfig["brand"]["title"]            = ($configEnv["brand"]["title"] ?? "Surikata.io Administration Panel");
 $adminPanelConfig["brand"]["subtitle"]         = "Administration panel";
 $adminPanelConfig["brand"]["favicon"]          = ADMIN_PANEL_URL."/surikata/assets/images/Surikata_logo_farebne_znak.png";
 $adminPanelConfig["brand"]["login"]["splash"]  = ($configEnv["brand"]["login"]["splash"] ?? ADMIN_PANEL_URL."/surikata/assets/images/login-screen.jpg");
 $adminPanelConfig["brand"]["sidebar"]["icon"]  = ADMIN_PANEL_URL."/surikata/assets/images/Surikata_logo_biele_znak.png";
-$adminPanelConfig["brand"]["sidebar"]["title"] = "Surikata";
-$adminPanelConfig["brand"]["sidebar"]["subtitle"] = "Your e-commerce platform";
+$adminPanelConfig["brand"]["sidebar"]["title"] = "Surikata.io";
+$adminPanelConfig["brand"]["sidebar"]["subtitle"] = "Administration panel";
 $adminPanelConfig["global_table_prefix"]       = GTP;
 
 $adminPanelConfig['devel_mode']              = DEVEL_MODE;

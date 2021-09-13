@@ -26,12 +26,6 @@
 .input-required {
   color: #e6230e;
 }
-.list-product .tag:nth-child(2) {  
-  left: 65px;
-}
-.list-product .tag:nth-child(3) {  
-  left: 113px;
-}
 .orderAgreement .form-check-label {
   margin-bottom: 5px;
 }
@@ -72,9 +66,6 @@
   z-index: 4;
   border-radius: 5px;
   font-weight: 600;
-}
-.tag .new {
-  font-size: 45px !important;
 }
 .delivery-text {
   color: #888!important;

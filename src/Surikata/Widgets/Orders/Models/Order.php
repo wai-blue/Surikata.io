@@ -249,10 +249,11 @@ class Order extends \ADIOS\Core\Model {
         "type" => "varchar",
         "title" => "Contact: Email",
       ],
+
       "domain" => [
         "type" => "varchar",
         "title" => "Domain",
-        "required" => TRUE,
+        "readonly" => TRUE,
         "show_column" => TRUE,
       ],
     ]);
@@ -670,20 +671,6 @@ class Order extends \ADIOS\Core\Model {
 
   public function formParams($data, $params) {
 
-    $domains = [];
-    foreach ($this->adios->config["widgets"]["Website"]["domains"] as $key => $domain) {
-      $domains[$key] = $key;
-    }
-    $domain = $data === false ? array_keys($this->adios->config["settings"]["web"])[0] : $data["domain"];
-    $select_domain = $this->adios->ui->input([
-      "type" => "varchar",
-      "enum_values" => $domains,
-      "value" => $domain,
-      "text" => "Domain",
-      "uid" => $params["uid"]."_domain",
-      "class" => "mb-2 w-100",
-    ])->render();
-
     if ($data['id'] <= 0) {
       $params["template"] = [
         "columns" => [
@@ -691,7 +678,6 @@ class Order extends \ADIOS\Core\Model {
             "rows" => [
               "id_customer",
               // "number_customer",
-              ["html" => $select_domain],
               "notes",
             ],
           ],
@@ -825,7 +811,7 @@ class Order extends \ADIOS\Core\Model {
                 "confirmation_time",
                 "number_customer",
                 "notes",
-                ["html" => $select_domain],
+                "domain",
                 [
                   "title" => "State",
                   "input" => "
@@ -883,18 +869,6 @@ class Order extends \ADIOS\Core\Model {
     // }
     if ($data['column'] == "number") {
       return "border-left:10px solid {$this->enumOrderStateColors[$data['row']['state']]};";
-    }
-
-    if ($data['column'] == "domain") {
-
-      $color = "#FFFFFF";
-      foreach ($this->adios->config["widgets"]["Website"]["domains"] as $key => $domain) {
-        if ($key == $data['row']['domain']) {
-          $color = $domain["color"];
-        }
-      }
-
-      return "font-size: 11px; color: {$color};";
     }
   }
 

@@ -209,7 +209,7 @@ class ProductCategory extends \ADIOS\Core\Model {
     $productsQuery = $productModel->getQuery();
 
     // id_brand lookup information will be used in extracting information about brands
-    $productModel->addLookupsToQuery($productsQuery, ['id_brand' => 'id_brand']);
+    // $productModel->addLookupsToQuery($productsQuery, ['id_brand' => 'id_brand']);
 
     if ($idCategory > 0) {
       // not adding where condition if all products should be retreived,
@@ -247,16 +247,11 @@ class ProductCategory extends \ADIOS\Core\Model {
     $productsQuery->skip(($page - 1) * $itemsPerPage);
     $productsQuery->take($itemsPerPage);
 
-    $catalogInfo["products"] = $this->fetchQueryAsArray($productsQuery); // TODO: UPPERCASE LOOKUP
+    $catalogInfo["products"] = $this->fetchQueryAsArray($productsQuery);
+
+    $catalogInfo["products"] = $productModel->addPriceInfoForListOfProducts($catalogInfo["products"]);
+    $catalogInfo["products"] = $productModel->unifyProductInformationForListOfProduct($catalogInfo["products"]);
     $catalogInfo["products"] = $productModel->translateForWeb($catalogInfo["products"], $languageIndex);
-
-    ////////////////////////////////////////
-    // info about prices
-
-    $priceInfo = $productModel->getPriceInfoForListOfProducts(array_keys($catalogInfo["products"]));
-    foreach ($priceInfo as $tmpIdProduct => $tmpPriceInfo) {
-      $catalogInfo["products"][$tmpIdProduct]["price"] = $tmpPriceInfo;
-    }
 
     ////////////////////////////////////////
     // info about parameters

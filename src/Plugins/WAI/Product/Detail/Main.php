@@ -68,7 +68,7 @@ namespace Surikata\Plugins\WAI\Product {
           ->getById((int) $this->websiteRenderer->urlVariables['idProduct'])
         ;
 
-        $this->productInfo = $productModel->translateProductForWeb($this->productInfo, $languageIndex);
+        $this->productInfo = $productModel->translateSingleProductForWeb($this->productInfo, $languageIndex);
 
         $allCategories = (new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel))->getAll(); // TODO: UPPERCASE LOOKUP
 

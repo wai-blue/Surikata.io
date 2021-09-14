@@ -236,12 +236,10 @@
                       <div class="grid_meta">
                         <div class="product_price">
                           <div class="grid-price ">
-                            {% if product.price.fullPrice != product.price.salePrice %}
-                              <span class="money old-price">{{ product.price.fullPrice|number_format(2, ",", " ") }} €</span><br/>
-                              <span class="money">{{ product.price.salePrice|number_format(2, ",", " ") }} €</span>
-                            {% else %}
-                              <span class="money">{{ product.sale_price|number_format(2, ",", " ") }} €</span>
-                            {% endif %}
+                              {% if product.PRICE.fullPrice != product.PRICE.salePrice %}
+                                <span class="money old-price">{{ product.PRICE.fullPrice|number_format(2, ",", " ") }} €</span>
+                              {% endif %}
+                              <span class="money">{{ product.PRICE.salePrice|number_format(2, ",", " ") }} €</span>
                           </div>
                         </div>
                       </div>

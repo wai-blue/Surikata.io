@@ -70,7 +70,7 @@ class Shipment extends \ADIOS\Core\Model {
   }
 
   public function price() {
-    return $this->hasOne(\ADIOS\Widgets\Shipping\Models\ShipmentPrice::class, 'id_shipment', 'id');
+    return $this->hasMany(\ADIOS\Widgets\Shipping\Models\ShipmentPrice::class, 'id_shipment', 'id');
   }
 
   public function payment() {
@@ -98,26 +98,35 @@ class Shipment extends \ADIOS\Core\Model {
   }
 
   public function getByCartSummary(array $summary) {
-    $priceTotal = $summary['priceTotal'];
-
     return 
       $this
       ->with([
-        'price', 
         'delivery',
         'payment',
         'country',
+        'price' => function($q) use ($summary) {
+          $q->where([
+            ['shipment_price_calculation_method', '=', 1],	
+            ['price_from', '<=', $summary['priceTotal']],
+            ['price_to', '>=', $summary['priceTotal']]
+          ]);
+          $q->orWhere([
+            ['shipment_price_calculation_method', '=', 2],	
+            ['weight_from', '<=', $summary['weightTotal']],
+            ['weight_to', '>=', $summary['weightTotal']]
+          ]);
+        }
       ])
-      ->whereHas('price', function ($q) use ($priceTotal){
+      ->whereHas('price', function ($q) use ($summary){
         $q->where([
           ['shipment_price_calculation_method', '=', 1],	
-          ['price_from', '<=', $priceTotal],
-          ['price_to', '>=', $priceTotal]
+          ['price_from', '<=', $summary['priceTotal']],
+          ['price_to', '>=', $summary['priceTotal']]
         ]);
         $q->orWhere([
           ['shipment_price_calculation_method', '=', 2],	
-          ['weight_from', '<=', $priceTotal],
-          ['weight_to', '>=', $priceTotal]
+          ['weight_from', '<=', $summary['weightTotal']],
+          ['weight_to', '>=', $summary['weightTotal']]
         ]);
       })
       ->get()

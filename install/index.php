@@ -283,6 +283,11 @@ if (count($partsToInstall) == 0) {
       $shipmentPriceModel->insertRow(["id" => 2, "id_shipment" => 2, "name" => "12", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 50, "shipment_price_calculation_method" => 1, "shipment_price" => 3.95]);
       $shipmentPriceModel->insertRow(["id" => 3, "id_shipment" => 3, "name" => "13", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 50, "shipment_price_calculation_method" => 1, "shipment_price" => 4.99]);
 
+      // UPS FREE
+      $shipmentPriceModel->insertRow(["id" => 9, "id_shipment" => 1, "name" => "14", "weight_from" => 0, "weight_to" => 0, "price_from" => 50, "price_to" => 100000, "shipment_price_calculation_method" => 1, "shipment_price" => 0.00]);
+      $shipmentPriceModel->insertRow(["id" => 10, "id_shipment" => 2, "name" => "15", "weight_from" => 0, "weight_to" => 0, "price_from" => 50, "price_to" => 100000, "shipment_price_calculation_method" => 1, "shipment_price" => 0.00]);
+      $shipmentPriceModel->insertRow(["id" => 11, "id_shipment" => 3, "name" => "16", "weight_from" => 0, "weight_to" => 0, "price_from" => 50, "price_to" => 100000, "shipment_price_calculation_method" => 1, "shipment_price" => 0.75]);
+
       // Slovenska posta
       $shipmentModel->insertRow(["id" => 4, "name" => "Slovenská pošta Tatra banka", "description" => "", "id_country" => 1, "id_delivery_service" => 3, "id_payment_service" => 1, "is_enabled" => TRUE, "order_index" => ""]);
       $shipmentModel->insertRow(["id" => 5, "name" => "Slovenská pošta Cash on delivery", "description" => "", "id_country" => 1, "id_delivery_service" => 3, "id_payment_service" => 3, "is_enabled" => TRUE, "order_index" => ""]);

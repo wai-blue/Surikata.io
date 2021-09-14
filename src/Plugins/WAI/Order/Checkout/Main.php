@@ -57,8 +57,10 @@ namespace Surikata\Plugins\WAI\Order {
         ;
       }
 
-      foreach ($this->shipping as $shipment) {
+      foreach ($this->shipping as $index => $shipment) {
         $deliveryServices[$shipment['delivery']['id']] = $shipment['delivery'];
+
+        $this->shipping[$index]['price'] = reset($shipment['price']);
       }
 
       if (isset($this->websiteRenderer->urlVariables['orderData'])) {

@@ -24,6 +24,7 @@ class Loader {
   public $routing = [];
   public $widgets = [];
 
+  public $pluginFolders = [];
   public $pluginObjects = [];
   public $plugins = [];
 
@@ -45,7 +46,6 @@ class Loader {
 
   public $actionNestingLevel = 0;
   public $actionStack = [];
-
 
   public function __construct($config = NULL, $mode = NULL) {
 
@@ -103,10 +103,13 @@ class Loader {
       $plugin = $m[1];
       $asset = $m[2];
 
-      return ADIOS_PLUGINS_DIR."/{$plugin}/Assets/{$asset}";
+      foreach ($adios->pluginFolders as $pluginFolder) {
+        $file = "{$pluginFolder}/{$plugin}/Assets/{$asset}";
+        if (is_file($file)) {
+          return $file;
+        }
+      }
     };
-
-    $this->renderAssets();
 
     //////////////////////////////////////////////////
     // inicializacia
@@ -170,10 +173,15 @@ class Loader {
 
       // inicializacia pluginov - aj pre FULL aj pre LITE mod
 
+      $this->onBeforePluginsLoaded();
+    
       $this->loadAllPlugins();
 
-      $this->onPluginsLoaded();
-    
+      $this->onAfterPluginsLoaded();
+
+      $this->renderAssets();
+
+
       if ($mode == ADIOS_MODE_FULL) {
 
         // start session
@@ -218,15 +226,13 @@ class Loader {
         'db_codepage' => $this->getConfig('db_codepage', 'utf8mb4'),
       ]);
 
+      $this->onBeforeConfigLoaded();
+
       $this->loadConfigFromDB();
 
       if ($mode == ADIOS_MODE_FULL) {
 
-        // timezone
-        date_default_timezone_set($this->config['timezone']);
-
         // set language
-
         if (!empty($_SESSION[_ADIOS_ID]['language'])) {
           $this->config['language'] = $_SESSION[_ADIOS_ID]['language'];
         }
@@ -272,18 +278,22 @@ class Loader {
       // finalizacia konfiguracie - aj pre FULL aj pre LITE mode
       $this->finalizeConfig();
 
-      // callback na konci konfiguracneho procesu - aj pre FULL aj pre LITE mode
-      $this->onConfigLoaded();
+      $this->onAfterConfigLoaded();
+
+      // timezone
+      date_default_timezone_set($this->config['timezone']);
 
       if ($mode == ADIOS_MODE_FULL) {
 
         // inicializacia widgetov
 
+        $this->onBeforeWidgetsLoaded();
+
         foreach ($this->config['widgets'] as $w_name => $w_config) {
           $this->addWidget($w_name);
         }
 
-        $this->onWidgetsLoaded();
+        $this->onAfterWidgetsLoaded();
 
         // vytvorim definiciu tables podla nacitanych modelov
 
@@ -342,6 +352,9 @@ class Loader {
     return isset($_REQUEST['__IS_WINDOW__']) && $_REQUEST['__IS_WINDOW__'] == "1";
   }
 
+  //////////////////////////////////////////////////////////////////////////////
+  // ROUTING
+
   public function setRouting($routing) {
     if (is_array($routing)) {
       $this->routing = $routing;
@@ -354,6 +367,9 @@ class Loader {
     }
   }
 
+  //////////////////////////////////////////////////////////////////////////////
+  // WIDGETS
+
   public function addWidget($widgetName) {
     if (!isset($this->widgets[$widgetName])) {
       try {
@@ -364,6 +380,9 @@ class Loader {
       }
     }
   }
+
+  //////////////////////////////////////////////////////////////////////////////
+  // MODELS
 
   public function getModelClassName($modelName) {
     return "\\ADIOS\\".str_replace("/", "\\", $modelName);
@@ -390,6 +409,15 @@ class Loader {
     return $this->modelObjects[$modelName];
   }
 
+  //////////////////////////////////////////////////////////////////////////////
+  // PLUGINS
+
+  public function registerPluginFolder($folder) {
+    if (is_dir($folder) && !in_array($folder, $this->pluginFolders)) {
+      $this->pluginFolders[] = $folder;
+    }
+  }
+
   public function getPluginClassName($pluginName) {
     return "\\ADIOS\\Plugins\\".str_replace("/", "\\", $pluginName);
   }
@@ -402,35 +430,39 @@ class Loader {
     return $this->pluginObjects;
   }
 
-  public function loadAllPlugins($subdir = "") {
-    if (!defined('ADIOS_PLUGINS_DIR')) return;
+  public function loadAllPlugins($subFolder = "") {
+    foreach ($this->pluginFolders as $pluginFolder) {
+      $folder = $pluginFolder.(empty($subFolder) ? "" : "/{$subFolder}");
 
-    $dir = ADIOS_PLUGINS_DIR.(empty($subdir) ? "" : "/{$subdir}");
+      foreach (scandir($folder) as $file) {
+        // if (in_array($file, [".", ".."])) continue;
+        if (strpos($file, ".") !== FALSE) continue;
 
-    foreach (scandir($dir) as $file) {
-      if (in_array($file, [".", ".."])) continue;
+        $fullPath = (empty($subFolder) ? "" : "{$subFolder}/").$file;
 
-      $fullPath = (empty($subdir) ? "" : "{$subdir}/").$file;
+        if (
+          is_dir("{$folder}/{$file}")
+          && !is_file("{$folder}/{$file}/Main.php")
+        ) {
+          $this->loadAllPlugins($fullPath);
+        } else if (is_file("{$folder}/{$file}/Main.php")) {
+          try {
+            $tmpPluginClassName = $this->getPluginClassName($fullPath);
 
-      if (
-        is_dir("{$dir}/{$file}")
-        && !is_file("{$dir}/{$file}/Main.php")
-      ) {
-        $this->loadAllPlugins($fullPath);
-      } else {
-        try {
-          $tmpPluginClassName = $this->getPluginClassName($fullPath);
-
-          if (class_exists($tmpPluginClassName)) {
-            $this->plugins[] = $fullPath;
-            $this->pluginObjects[$fullPath] = new $tmpPluginClassName($this);
+            if (class_exists($tmpPluginClassName)) {
+              $this->plugins[] = $fullPath;
+              $this->pluginObjects[$fullPath] = new $tmpPluginClassName($this);
+            }
+          } catch (\Exception $e) {
+            exit("Failed to load plugin {$fullPath}: ".$e->getMessage());
           }
-        } catch (\Exception $e) {
-          exit("Failed to load plugin {$fullPath}: ".$e->getMessage());
         }
       }
     }
   }
+
+  //////////////////////////////////////////////////////////////////////////////
+  // MISCELANEOUS
 
   public function translate($string, $context = "", $toLanguage = "", $dictionary = []) {
     if ($toLanguage == "") {
@@ -550,22 +582,19 @@ class Loader {
 
     $this->db->start_transaction();
 
-    echo "<h2>Installing models</h2>";
-
     foreach ($this->models as $modelName) {
       try {
         $model = $this->getModel($modelName);
 
         $start = microtime(TRUE);
 
-        echo "<b>{$modelName}</b>";
-
         $model->install();
-        echo " [".round((microtime(true) - $start) * 1000, 2)." msec]. ";
+        $this->console->info("Model {$modelName} installed.", ["duration" => round((microtime(true) - $start) * 1000, 2)." msec"]);
+
       } catch (\ADIOS\Core\Exceptions\ModelInstallationException $e) {
-        echo ", <span style='color:orange'>Skipped. Reason: {$e->getMessage()}</span> ";
+        $this->console->warning("Model {$modelName} installation skipped.", ["exception" => $e->getMessage()]);
       } catch (\Exception $e) {
-        echo ", <span style='color:red'>Failed. Reason: {$e->getMessage()}.</span> ";
+        $this->console->error("Model {$modelName} installation failed.", ["exception" => $e->getMessage()]);
       } catch (\Illuminate\Database\QueryException $e) {
         //
       } catch (\ADIOS\Core\Exceptions\DBException $e) {
@@ -575,20 +604,17 @@ class Loader {
       }
     }
 
-    echo "<h2>Creating indexes</h2>";
-
     foreach ($this->models as $modelName) {
       try {
         $model = $this->getModel($modelName);
 
         $start = microtime(TRUE);
 
-        echo "<b>{$modelName}</b>";
-
         $model->installForeignKeys();
-        echo " [".round((microtime(true) - $start) * 1000, 2)." msec]. ";
+        $this->console->info("Indexes for model {$modelName} installed.", ["duration" => round((microtime(true) - $start) * 1000, 2)." msec"]);
+
       } catch (\Exception $e) {
-        echo ", <span style='color:red'>Failed. Reason: {$e->getMessage()}.</span> ";
+        $this->console->error("Indexes installation for model {$modelName} failed.", ["exception" => $e->getMessage()]);
       } catch (\Illuminate\Database\QueryException $e) {
         //
       } catch (\ADIOS\Core\Exceptions\DBException $e) {
@@ -596,20 +622,16 @@ class Loader {
       }
     }
 
-    echo "<h2>Installing widgets</h2>";
-
     foreach ($this->widgets as $widget) {
       try {
-        echo "<b>{$widget->name}</b>";
-
         if ($widget->install()) {
           $this->widgetsInstalled[$widget->name] = TRUE;
-          echo ". ";
+          $this->console->info("Widget {$widget->name} installed.", ["duration" => round((microtime(true) - $start) * 1000, 2)." msec"]);
         } else {
-          echo ", <span style='color:orange'>skipped.</span> ";
+          $this->console->warning("Model {$modelName} installation skipped.");
         }
       } catch (\Exception $e) {
-        echo ", <span style='color:red'>failed.</span> ";
+        $this->console->error("Model {$modelName} installation failed.");
       } catch (\ADIOS\Core\Exceptions\DBException $e) {
         // Moze sa stat, ze vytvorenie tabulky zlyha napr. kvoli
         // "Cannot add or update a child row: a foreign key constraint fails".
@@ -623,13 +645,8 @@ class Loader {
 
     $this->db->commit();
 
-    echo "<h2>Done</h2>";
-    echo "Installation time: ".round((microtime(true) - $installationStart), 2)." s";
+    $this->console->info("Core installation done in ".round((microtime(true) - $installationStart), 2)." seconds.");
 
-    if (count($this->console->getLogs()) > 0) {
-      echo "<h2>Errors</h2>";
-      echo "<div style='color:red'>".nl2br($this->console->getContents())."</div>";
-    }
   }
 
 
@@ -856,7 +873,7 @@ class Loader {
     ) {
       $errorMessage = $e->getMessage();
       $errorHash = md5(date("YmdHis").$errorMessage);
-      $this->console->log($errorHash, "{$errorMessage}\t{$this->db->last_query}\t{$this->db->db_error}");
+      $this->console->error("{$errorHash}\t{$errorMessage}\t{$this->db->last_query}\t{$this->db->db_error}");
       $actionHtml = $this->renderHtmlWarning("
         <div style='text-align:center;font-size:5em;color:red'>
           🥴
@@ -1094,15 +1111,27 @@ class Loader {
 
   }
 
-  public function onConfigLoaded() {
+  public function onBeforeConfigLoaded() {
     // to be overriden
   }
 
-  public function onWidgetsLoaded() {
+  public function onAfterConfigLoaded() {
     // to be overriden
   }
 
-  public function onPluginsLoaded() {
+  public function onBeforeWidgetsLoaded() {
+    // to be overriden
+  }
+
+  public function onAfterWidgetsLoaded() {
+    // to be overriden
+  }
+
+  public function onBeforePluginsLoaded() {
+    // to be overriden
+  }
+
+  public function onAfterPluginsLoaded() {
     // to be overriden
   }
 

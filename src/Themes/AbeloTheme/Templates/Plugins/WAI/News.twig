@@ -1,0 +1,100 @@
+{% if contentType == "sidebar" %}
+    <div class="left-sidebar shop-sidebar-wrap">
+        <div class="mt-40px sidebar-widget">
+            <div class="recent-post-widget">
+                {% for key,new in news %}
+
+                    <div class="d-flex recent-single-post">
+                        <div class="thumb-side">
+                            {% if detail.image|length > 0 %}
+                                <a href="{{ rootUrl }}/{{ new.url }}">
+                                    <img alt="{{ new.title }}" style="max-width: 90px;"
+                                         src={{ uploadedFileUrl }}/images/{{ new.image }}">
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="media-side">
+                            <h5>
+                                <a href="{{ rootUrl }}/{{ new.url }}">
+                                    {{ new.title }}
+                                </a>
+                            </h5>
+                            <span class="date">{{ new.show_from|date("F d Y") }}</span></div>
+                    </div>
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% if contentType == "listOrDetail" %}
+    {% if id_detail <= 0 %}
+        <div id="blogCatalogDefaultContainerDiv" class="post-archive">
+
+            {% for key,new in news %}
+                <div class="mb-50px row">
+                    <div class="col-lg-5 col-md-6">
+                        <div class="blog-list-post single-blog-post">
+                            <div class="blog-post-media">
+                                <div class="blog-image">
+                                    {% if detail.image|length > 0 %}
+                                        <a href="{{ rootUrl }}/{{ new.url }}">
+                                            <img alt="{{ new.title }}" class="img-responsive"
+                                                    src="{{ uploadedFileUrl }}/images/{{ new.image }}">
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="align-items-center align-self-center col-lg-7 col-md-6">
+                        <div class="blog-post-content-inner mt-lm-30px">
+                            <h4 class="blog-title">
+                                <a href="{{ rootUrl }}/{{ new.url }}">{{ new.title }}</a>
+                            </h4>
+                            <ul class="blog-page-meta">
+                                <li><a href="{{ rootUrl }}/{{ new.url }}"><i
+                                                class="ion-calendar"></i>&nbsp;{{ new.show_from|date("F d Y") }}</a>
+                                </li>
+                            </ul>
+                            <div>
+                                {{ new.perex|slice(0, 450)|raw }}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </div>
+    {% else %}
+        <div class="d-flex justify-content-center shop-category-area single-blog-page">
+            <div class="col-lg-9 col-md-12 order-lg-last order-md-first">
+
+                <div class="blog-posts">
+                    <div class="blog-grid-post single-blog-post">
+                        <div class="blog-post-media">
+                            <div class="blog-image single-blog">
+                                {% if detail.image|length > 0 %}
+                                    <img alt="{{ detail.title }}" src="{{ uploadedFileUrl }}/images/{{ detail.image }}">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="blog-post-content-inner mt-30px">
+                            <h4 class="blog-title">
+                                {{ detail.title }}
+                            </h4>
+                            {{ detail.show_from|date("F d Y") }}<br/>
+
+                            {{ detail.content|raw }}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endif %}

@@ -13,6 +13,8 @@ class ProductModal
   }
 
   public function renderDefaultModal($product) {
+    // REVIEW: preco je v tomto plugine priamo referencovana AbeloTheme?
+    
     $priceString = number_format($product['sale_price'], 2, ",", " ");
     $html = "
       <div class='modal-header'>

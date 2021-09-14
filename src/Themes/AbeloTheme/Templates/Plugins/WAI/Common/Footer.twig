@@ -1,0 +1,424 @@
+<!-- News letter area -->
+<div class="news-letter-area">
+  {% if Newsletter %}
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-4 mb-md-30px mb-lm-30px">
+          <div class="title-newsletter">
+            <h2>{{ translate("Sign Up For Newsletters", "Common") }}</h2>
+            <p class="des">{{ translate("Be the First to Know. Sign up for newsletter today !", "Common") }}</p>
+          </div>
+        </div>
+        <div class="col-md-12 col-lg-8">
+          <div id="mc_embed_signup" class="subscribe-form">
+            <form
+                id="mc-embedded-subscribe-form"
+                class="validate"
+                novalidate=""
+                target="_blank"
+                name="mc-embedded-subscribe-form"
+                method="post"
+                action=""
+            >
+              <div id="mc_embed_signup_scroll" class="mc-form">
+                <input class="email" type="email" required="" placeholder="{{ translate("Enter your email here", "Common") }}" name="EMAIL" value="" />
+                <div class="mc-news" aria-hidden="true">
+                    <input type="text" value="" tabindex="-1" name="b_6bbb9b6f5827bd842d9640c82_05d85f18ef" />
+                </div>
+                <div class="clear">
+                  <input id="mc-embedded-subscribe" class="button" type="submit" name="subscribe" value="{{ translate("Sign Up", "Common") }}" />
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+<!-- News letter area  End -->
+
+<!-- Footer Area Start --> 
+<div class="footer-area">
+  <div class="footer-container">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <div class="single-wedge">
+              <div class="footer-logo text-medium">
+                <a href="{{ rootUrl }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ settings.profile.logo }}" alt="Logo" /></a>
+                <p class="mt-3">{{ settings.profile.storeName }}</p>
+                <p class="text-infor">{{ settings.profile.slogan }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="single-wedge">
+              {% if contactTitle %}
+                <p class="text-medium mb-3">{{ contactTitle }}</p>
+              {% endif %}
+              <div class="need_help">
+                <p class="add">
+                  {% if showContactAddress %}
+                    <span class="address">{{ translate("Address", "Common") }}:</span> 
+                    {{ settings.profile.sidlo_ulica_1 }} {{ settings.profile.sidlo_ulica_2 }}
+                    {{ settings.profile.sidlo_psc }} {{ settings.profile.sidlo_mesto }}
+                  {% endif %}
+                </p>
+                {% if showContactEmail %}
+                  <p class="mail">
+                    <span class="email">{{ translate("E-mail", "Common") }}:</span>
+                    <a href="mailto:{{ settings.profile.contactEmail }}">
+                      {{ settings.profile.contactEmail }}
+                    </a>
+                  </p>
+                {% endif %}
+                {% if showContactPhoneNumber %}
+                  <p class="phone">
+                    <span class="call us">{{ translate("Phone", "Common") }}:</span>
+                    <a href="tel:{{ settings.profile.contactPhoneNumber }}">
+                      {{ settings.profile.contactPhoneNumber }}
+                    </a>
+                  </p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% if showMainMenu %}
+            <div class="col">
+              <div class="single-wedge">
+                <p class="text-medium mb-3">{{ mainMenuTitle }}</p>
+                  <div class="footer-links">
+                    <ul>
+                      {% for menuItem in mainMenuItems %}
+                        <li><a href="{{ rootUrl }}/{{ menuItem.url }}">{{ menuItem.text }}</a></li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+              </div>
+            </div>
+          {% endif %}
+          {% if showSecondaryMenu %}
+            <div class="col">
+              <div class="single-wedge">
+                <p class="text-medium mb-3">{{ secondaryMenuTitle }}</p>
+                <div class="footer-links">
+                  <ul>
+                    {% for menuItem in secondaryMenuItems %}
+                      <li><a href="{{ rootUrl }}/{{ menuItem.url }}">{{ menuItem.text }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          {% if showBlogs %}
+            <div class="col-lg-4 col-sm-12">
+              <div class="single-wedge">
+                <p class="text-medium mb-3">{{ blogsTitle }}</p>
+                <div class="footer-blog-slider">
+                  <div class="footer-blog-slider-wrapper slider-nav-style-3 ">
+                    <!-- Single-item -->
+                    {% for blog in blogs %}
+                      {% if loop.index % 2 != 0 %}
+                        <div class="single-slider-item">
+                      {% endif %}
+                      <div class="footer-blog-post d-flex mb-30px">
+                        <div class="footer-blog-post-top">
+                          <div class="post-thumbnail">
+                            <a href="{{ rootUrl }}/{{ blog.url }}">
+                              <img src="{{ uploadedFileUrl }}/{{ blog.image }}" alt="{{ blog.name }}">
+                            </a>
+                          </div>
+                        </div>
+                        <div class="footer-blog-content">
+                          <p class="text-medium-2"><a href="{{ blog.url }}">{{ blog.name }}</a></p>
+                          <div class="footer-blog-meta">
+                            <span class="autor">{{ translate("Posted by", "Common") }} {{ blog.USER.name }}</span>
+                            <span class="date">{{ blog.created_at|date(locale.dateFormat) }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      {% if loop.index % 2 == 0 %}
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                    <!-- Single-item -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="footer-center">
+      <div class="container">
+        <div class="row text-center">
+          {% if showPayments %}
+            <div class="col">
+              <div class="footer-paymet-warp">
+                <div class="payment-way">
+                  <img src="{{ rootUrl }}/theme/assets/images/icons/payment.png" alt="payments" />
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          {% if showSocialMedia %}
+            <div class="col">
+              <div class="footer-social-icon" style="float:none">
+                <div class="social-icon">
+                  <ul>
+                    {% if settings.profile.urlFacebook != "" %}
+                      <li class="facebook"><a href="{{ settings.profile.urlFacebook }}"><i class="ion-social-facebook"></i></a></li>
+                    {% endif %}
+                    {% if settings.profile.urlTwitter != "" %}
+                      <li class="twitter"><a href="{{ settings.profile.urlTwitter }}"><i class="ion-social-twitter"></i></a></li>
+                    {% endif %}
+                    {% if settings.profile.urlYouTube != "" %}
+                      <li class="google"><a href="{{ settings.profile.urlYouTube }}"><i class="ion-social-youtube-outline"></i></a></li>
+                    {% endif %}
+                    {% if settings.profile.urlInstagram != "" %}
+                      <li class="instagram"><a href="{{ settings.profile.urlInstagram }}"><i class="ion-social-instagram-outline"></i></a></li>
+                    {% endif %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="footer-tags">
+      <div class="container">
+        <div class="row"> 
+          <div class="col-md-12 text-center">
+            <p class="copy-text">{{ translate("Copyright ©") }} <a href=""> {{ currentYear }} {{ settings.profile.storeName }}</a>. {{ translate("All Rights Reserved", "Common") }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Footer Area End -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="{{ translate("Close", "Common") }}"><span aria-hidden="true">x</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6 col-sm-12 col-xs-12 mb-lm-100px mb-sm-30px">
+            <div class="quickview-wrapper">
+              <!-- slider -->
+              <div class="gallery-top">
+                <div class="single-slide"> 
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/8.jpg" alt="">
+                </div>
+                <div class="single-slide"> 
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/14.jpg" alt="">
+                </div>
+                <div class="single-slide"> 
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/15.jpg" alt="">
+                </div>
+                <div class="single-slide"> 
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/11.jpg" alt="">
+                </div>
+                <div class="single-slide"> 
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/19.jpg" alt="">
+                </div>
+              </div>
+              <div class=" gallery-thumbs">
+                <div class="single-slide"> 
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/8.jpg" alt="">
+                </div>
+                <div class="single-slide"> 
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/14.jpg" alt="">
+                </div>
+                <div class="single-slide"> 
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/15.jpg" alt="">
+                </div>
+                <div class="single-slide"> 
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/11.jpg" alt="">
+                </div>
+                <div class="single-slide"> 
+                  <img class="img-responsive m-auto" src="{{ rootUrl }}/theme/assets/images/product-image/19.jpg" alt="">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12 col-xs-12">
+            <div class="product-details-content quickview-content">
+              <h2>{{ translate("Originals Kaval Windbr", "Common") }}</h2>
+              <p class="reference">{{ translate("Reference", "Common") }}:<span> demo_17</span></p>
+              <div class="pro-details-rating-wrap">
+                <div class="rating-product">
+                  <i class="ion-android-star"></i>
+                  <i class="ion-android-star"></i>
+                  <i class="ion-android-star"></i>
+                  <i class="ion-android-star"></i>
+                  <i class="ion-android-star"></i>
+                </div>
+                <span class="read-review"><a class="reviews" href="#">{{ translate("Read reviews", "Common") }} (1)</a></span>
+              </div>
+              <div class="pricing-meta">
+                <ul>
+                  <li class="old-price not-cut">€18.90</li>
+                </ul>
+              </div>
+              <p class="quickview-para">{{ translate("Lorem ipsum dolor sit amet, consectetur adipisic elit eiusm tempor incidid ut labore et dolore magna aliqua. Ut enim ad minim venialo quis nostrud exercitation ullamco", "Common") }}</p>
+              <div class="pro-details-size-color">
+                <div class="pro-details-color-wrap">
+                  <span>Color</span>
+                  <div class="pro-details-color-content">
+                    <ul>
+                      <li class="blue"></li>
+                      <li class="maroon active"></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="pro-details-quality">
+                <div class="cart-plus-minus">
+                  <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
+                </div>
+                <div class="pro-details-cart btn-hover">
+                  <a href="#"> + {{ translate("Add To Cart", "Common") }}</a>
+                </div>
+              </div>
+              <div class="pro-details-wish-com">
+                <div class="pro-details-wishlist">
+                  <a href="wishlist.html"><i class="ion-android-favorite-outline"></i>{{ translate("Add to wishlist", "Common") }}</a>
+                </div>
+                <div class="pro-details-compare">
+                  <a href="compare.html"><i class="ion-ios-shuffle-strong"></i>{{ translate("Add to compare", "Common") }}</a>
+                </div>
+              </div>
+              <div class="pro-details-social-info">
+                <span>{{ translate("Share", "Common") }}</span>
+                <div class="social-info">
+                  <ul>
+                    <li>
+                      <a href="#"><i class="ion-social-facebook"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="ion-social-twitter"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="ion-social-google"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="ion-social-instagram"></i></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal end -->
+
+<!-- Modal -->
+<div class="modal fade" id="quickViewModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" id="quickViewDocument">
+
+      <!-- AJAX Preloader -->
+      {# ProductDetailDefault/Actions/ProductModal.php #}
+
+    </div>
+  </div>
+</div>
+<!-- Modal end -->
+
+<!-- Home Popup Section -->
+<div class="modal fade subscribe_popup" id="onload-popup" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body" style="padding: 2rem;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="{{ translate("Close", "Common") }}">
+          <span aria-hidden="true"><i class="ion-ios-close-empty"></i></span>
+        </button>
+        <div class="row no-gutters">
+          <div class="col-sm-5">
+            <div class="background_bg h-100 AbeloModalImage" data-img-src="{{ rootUrl }}/theme/assets/images/popup_img.jpg"></div>
+          </div>
+          <div class="col-sm-7">
+            <div class="popup_content">
+              <div class="popup-text">
+                <div class="heading_s1">
+                  <h4>{{ translate("Subscribe", "Common") }}</h4>
+                </div>
+                <p>{{ translate("Subscribe to the newsletter", "Common") }}</p>
+              </div>
+              <form method="post">
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-6 btn-config">
+                      <button type="button" class="btn btn-fill-out btn-block rounded-0 btn-confirm AbeloModalButton" title="">{{ translate("Confirm", "Common") }}</button>
+                    </div>
+                    <div class="col-6">
+                      <button type="button" class="btn btn-fill-line btn-block rounded-0 btn-cancel AbeloModalButton" title=""
+                              onclick="AbeloThemeCart.closeModals(['#onload-popup', '#quickViewModal']);">
+                        {{ translate("Cancel", "Common") }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <!-- <div class="check-form">
+                <div class="custom-checkbox">
+                  <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox3" value="">
+                  <label class="form-check-label" for="exampleCheckbox3"><span>{{ translate("Don't show this popup again!", "Common") }}</span></label>
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Screen Load Popup Section -->
+
+<!-- Vendors JS -->
+<script src="{{ rootUrl }}/theme/assets/js/vendor/bootstrap.bundle.min.js"></script>
+<script src="{{ rootUrl }}/theme/assets/js/vendor/jquery-migrate-3.1.0.min.js"></script>
+<script src="{{ rootUrl }}/theme/assets/js/vendor/modernizr-3.6.0.min.js"></script>
+
+<!-- Theme Plugins JS -->
+<script src="{{ rootUrl }}/theme/assets/js/plugins/slick.js"></script>
+<script src="{{ rootUrl }}/theme/assets/js/plugins/countdown.js"></script>
+<script src="{{ rootUrl }}/theme/assets/js/plugins/scrollup.js"></script>
+<script src="{{ rootUrl }}/theme/assets/js/plugins/elevateZoom.js"></script>
+
+<!-- Surikata js -->
+<script src="{{ rootUrl }}/core/assets/js/main.js"></script>
+
+<!-- Surikata Plugins js -->
+<script src="{{ rootUrl }}/plugins/assets/WAI/Product/Catalog/~/main.js"></script>
+<script src="{{ rootUrl }}/plugins/assets/WAI/Customer/Home/~/main.js"></script>
+<script src="{{ rootUrl }}/plugins/assets/WAI/Customer/Cart/~/main.js"></script>
+<script src="{{ rootUrl }}/plugins/assets/WAI/Blog/Catalog/~/main.js"></script>
+<script src="{{ rootUrl }}/plugins/assets/WAI/Common/Breadcrumb/~/main.js"></script>
+
+<!-- Use the minified version files listed below for better performance and remove the files listed above -->
+<!-- <script src="assets/js/vendor/vendor.min.js"></script>
+<script src="assets/js/plugins/plugins.min.js"></script> -->
+<!-- Sweet Alert JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+
+<!-- Main Activation JS -->
+<script src="{{ rootUrl }}/theme/assets/js/main.js"></script>
+
+<!-- Abelo-theme js --> 
+<script src="{{ rootUrl }}/theme/assets/js/abelo-theme.js"></script>
+</body>
+</html>

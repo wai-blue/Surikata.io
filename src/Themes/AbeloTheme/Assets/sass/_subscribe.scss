@@ -1,0 +1,61 @@
+// Subscribe Style
+
+.news-letter-area{
+    position: relative;
+    padding: 45px 0;
+    background: #266cfb;
+
+	.title-newsletter{
+			h2{
+				font-size: 24px;
+			    color: #fff;
+			    font-weight: 500;
+			    line-height:24px;
+			    margin:0 0 10px;
+			}
+		p{
+			color: #fff;
+    		font-size: 14px;
+		}
+	}
+	.subscribe-form {
+	    position: relative;
+	    overflow: hidden;
+	    .validate {
+		    height: 47px;
+		    background: #fff;
+		    border: 0;
+		    color: #b1b1b1;
+		    padding: 15px 120px 0px 20px;
+		    display: inline-block;
+		    width: 100%;
+		    font-size: 14px;
+		    border: none;
+		    border-radius: 5px;
+		    input{
+			    &.email {
+				    width: 100%;
+				}
+		    }
+
+		    .button {
+			    position: absolute;
+			    top: 0;
+			    right: 0;
+			    text-transform: capitalize;
+			    font-size: 0;
+			    font-weight: 700;
+			    font-size: 14px;
+			    color: #fff;
+			    background: #1d1d1d;
+			    border: 0;
+			    box-shadow: none;
+			    padding: 0 20px;
+			    line-height: 47px;
+			    height: 47px;
+			    border-radius: 0 5px 5px 0;
+			    transition: all 300ms linear;
+			}
+		}
+	}
+}

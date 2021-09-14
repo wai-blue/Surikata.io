@@ -3895,7 +3895,7 @@ input[type="button"].btn-block {
 
 .nav-link {
   display: block;
-  padding: 0.33rem;
+  padding: 0.63rem;
 }
 
 .nav-link:hover, .nav-link:focus {
@@ -3936,7 +3936,7 @@ input[type="button"].btn-block {
 .nav-tabs .nav-item.show .nav-link {
   color: #6e707e;
   background-color: #fff;
-  border-color: #dddfeb #dddfeb #fff;
+  border-color: var(--cl-main) #dddfeb #fff;
 }
 
 .nav-tabs .dropdown-menu {

@@ -5,12 +5,12 @@ namespace Surikata\Plugins\WAI\Delivery {
   class UPS extends \Surikata\Core\Web\Plugin\Delivery {
     public $heurekaId = "UPS";
 
-    public function getDeliveryMeta() {
-      return [
-        "name" => "Preprava UPS",
-        "description" => "Su najlacnejsi",
-      ];
-    }
+    // public function getDeliveryMeta() {
+    //   return [
+    //     "name" => "Preprava UPS",
+    //     "description" => "Su najlacnejsi",
+    //   ];
+    // }
 
     public function calculatePriceForProduct($product) {
       return 5;

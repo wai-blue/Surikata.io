@@ -5,12 +5,12 @@ namespace Surikata\Plugins\WAI\Delivery {
   class DPD extends \Surikata\Core\Web\Plugin\Delivery {
     public $heurekaId = "DPD";
 
-    public function getDeliveryMeta() {
-      return [
-        "name" => "Preprava DPD",
-        "description" => "Su najrychlejsi",
-      ];
-    }
+    // public function getDeliveryMeta() {
+    //   return [
+    //     "name" => "Preprava DPD",
+    //     "description" => "Su najrychlejsi",
+    //   ];
+    // }
 
     public function calculatePriceForProduct($product) {
       return 4;

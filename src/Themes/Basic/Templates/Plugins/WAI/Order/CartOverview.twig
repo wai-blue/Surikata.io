@@ -32,14 +32,17 @@
                     <div class="quantity-select">
                       <div class="cart-plus-minus">
                         <input
-                          onchange="BasicThemeCart.updateProductQty(
-                          {{ item.PRODUCT.id }},
-                            this.value,
-                            function(data) {
-                            console.log(data);
-                            BasicThemeCart.updatePrice(data);
-                            }
-                            )"
+                          onchange="
+                            validateProductQty(this);
+                            BasicThemeCart.updateProductQty(
+                              {{ item.PRODUCT.id }},
+                              this.value,
+                              function(data) {
+                                console.log(data);
+                                BasicThemeCart.updatePrice(data);
+                              }
+                            )
+                          "
                           class="cart-plus-minus-box"
                           type="text"
                           name="qtybutton"

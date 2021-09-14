@@ -89,13 +89,20 @@ Default logins and passwords are:
 
 It is adviced to change these defaults.
 
+## Customize your ecommerce project
+
+All your customizations should be made in the prop/ folder ('prop' stands for 'proprietary'). Files
+stored in this folder are not part of Surikata.io package and therefore are not GPL-licensed.
+
+For example, start with creating your first plugin in prop/Plugins/ folder.
+
 ## Go beyond
 
 Now, when you are ready with your first & default Surikata online store, follow the <a href='https://www.surikata.io/documentation/programmers-guide' target=_blank>programmer's guide</a> to become a Surikata.io master.
 
 ## Contribute
 
-We happily welcome the contributions for plugins (the src/Plugins/ folder) or themes (the src/Themes/) folder. Or you can buy us a beer.
+We happily welcome the contributions for GPL-licensed plugins (the src/Plugins/ folder) or GPL-licensed themes (the src/Themes/) folder. Or you can buy us a beer.
 
 ## Give us a feedback
 

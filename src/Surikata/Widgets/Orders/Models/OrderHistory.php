@@ -17,12 +17,24 @@ class OrderHistory extends \ADIOS\Core\Model {
         "readonly" => TRUE,
       ],
 
+      "state" => [
+        "type" => "int",
+        "enum_values" => (new \ADIOS\Widgets\Orders\Models\Order($this->adios))->enumOrderStates,
+        "title" => $this->translate("State"),
+        "show_column" => true
+      ],
+
       "event_time" => [
         "type" => "datetime",
         "title" => $this->translate("Event time"),
         "show_column" => true
       ],
 
+      // "notes" => [
+      //   "type" => "varchar",
+      //   "title" => $this->translate("Notes"),
+      //   "show_column" => TRUE,
+      // ],
       "state" => [
         "type" => "int",
         "enum_values" => $this->enumOrderStates,
@@ -90,7 +102,7 @@ class OrderHistory extends \ADIOS\Core\Model {
     $orderModel->init();
 
     if ($data['column'] == "state") {
-      return "background-color: {$orderModel->enumOrderStateColors[(int)$data['row']['state']]}99;";
+      return "border-left: 10px solid {$orderModel->enumOrderStateColors[(int)$data['row']['state']]};";
     }
   }
 

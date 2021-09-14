@@ -4,6 +4,49 @@ namespace Surikata\Plugins\WAI\Product {
   use ADIOS\Widgets\Products\Models\Service;
   class Detail extends \Surikata\Core\Web\Plugin {
     var $productInfo = NULL;
+    var $deleteCurrentPageBreadCrumb = true;
+
+    public function getBreadCrumbs($urlVariables = []) {
+      $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
+
+      $productInfo = $this->getProductInfo();
+      $productInfo['idProductCategory'] = $productInfo['id_category'];
+
+      $productCatalog = 
+        new \Surikata\Plugins\WAI\Product\Catalog(
+          $this->websiteRenderer
+        )
+      ;
+
+      $productCatalogUrl = $productCatalog->getWebPageUrl();
+
+      $breadCrumb = 
+        new \Surikata\Plugins\WAI\Common\Breadcrumb(
+          $this->websiteRenderer
+        )
+      ;
+
+      $breadCrumbs = 
+        $breadCrumb->getMenuBreadCrumbs(
+          $productCatalogUrl, 
+          true
+        )
+      ;
+
+      $breadCrumbs = array_merge(
+        $breadCrumbs, 
+        $productCatalog->getBreadCrumbs($productInfo)
+      );
+
+      // REVIEW: toto "$productInfo["name_lang_{$languageIndex}"];" som
+      // opravil na $productInfo["TRANSLATIONS"]["name"];
+      // Treba podobnu opravu spravit aj na ostatnych miestach.
+      $breadCrumbs[
+        $this->getWebPageUrlFormatted($productInfo)
+      ] = $productInfo["TRANSLATIONS"]["name"];
+
+      return $breadCrumbs;
+    }
 
     public function getWebPageUrlFormatted($urlVariables, $pluginSettings = []) {
       $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
@@ -15,34 +58,41 @@ namespace Surikata\Plugins\WAI\Product {
 
     function getProductInfo() {
       if ($this->productInfo === NULL) {
-        $this->productInfo = $this->adminPanel
-          ->getModel("Widgets/Products/Models/Product")
+
+        $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
+
+        $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adminPanel);
+        $productCategoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
+
+        $this->productInfo = $productModel
           ->getById((int) $this->websiteRenderer->urlVariables['idProduct'])
         ;
 
+        $this->productInfo = $productModel->translateProductForWeb($this->productInfo, $languageIndex);
+
         $allCategories = (new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel))->getAll(); // TODO: UPPERCASE LOOKUP
 
+        // REVIEW: atribut 'prislusenstvo' prelozit na 'accesories'
+        // REVIEW: nemal by "vypocet" URL adresy ist do nejakej separatnej funkcie?
         foreach ($this->productInfo['prislusenstvo'] as $key => $value) {
           $this->productInfo['prislusenstvo'][$key]['url'] =
-            \ADIOS\Core\HelperFunctions::str2url($value['name_lang_1'])
+            \ADIOS\Core\HelperFunctions::str2url($value['TRANSLATIONS']['name'])
             .".pid.{$value['id']}"
           ;
         }
 
-        foreach ($this->productInfo['podobne'] as $key => $value) {
-          $this->productInfo['podobne'][$key]['url'] =
-            \ADIOS\Core\HelperFunctions::str2url($value['name_lang_1'])
+        foreach ($this->productInfo['related'] as $key => $value) {
+          $this->productInfo['related'][$key]['url'] =
+            \ADIOS\Core\HelperFunctions::str2url($value['TRANSLATIONS']['name'])
             .".pid.{$value['id']}"
           ;
         }
 
-        $this->productInfo['priceInfo'] = $this->adminPanel
-          ->getModel("Widgets/Products/Models/Product")
+        $this->productInfo['priceInfo'] = $productModel
           ->getPriceInfoForSingleProduct((int) $this->websiteRenderer->urlVariables['idProduct'])
         ;
 
-        $this->productInfo['breadcrumbs'] = $this->adminPanel
-          ->getModel("Widgets/Products/Models/ProductCategory")
+        $this->productInfo['breadcrumbs'] = $productCategoryModel
           ->breadcrumbs((int) $this->productInfo['id_category'], $allCategories)
         ;
       }
@@ -136,26 +186,30 @@ namespace ADIOS\Plugins\WAI\Product {
           "title" => "Show accessories for products",
           "type" => "boolean",
         ],
-        "zobrazit_podobne_produkty" => [
+        "show_similar_products" => [
           "title" => "Zobraziť podobné produkty",
           "type" => "boolean",
         ],
       ];
     }
 
-    public function onProductDetailSidebarButtons($event) {
-      $productUrl = $this->adios->websiteRenderer->getPlugin("WAI/Product/Detail")->getWebpageUrl($event["data"]);
-      $event["html"] = "
-        <a 
-          class='btn btn-icon-split btn-light mt-4'
-          target='_blank'
-          href='../../../{$this->adios->config["language"]}/{$productUrl}'
-        >
-          <span class='icon'><i class='fa fa-link'></i></span>
-          <span class='text'>Open product page</span>
-        </a>"
-      ;
+    public function onModelAfterFormParams($event) {
+      $data = $event["data"];
+
+      if ($event["model"]->name == "Widgets/Products/Models/Product") {
+        $productUrl = $this->adios->websiteRenderer->getPlugin("WAI/Product/Detail")->getWebpageUrl($event["data"]);
+        // REVIEW: Este jednu vec som si uvedomil.
+        // $adios->config["language"] nie je to iste, ako jazyky v "domains".
+        // To bude treba opravit, zatial ponechame tento komentar ako pripomienku.
+        $event["params"]["template"]["columns"][1]["rows"][2]["html"] .= "
+          <a class='btn btn-icon-split btn-light' target='_blank' href='{$this->adios->websiteRenderer->rootUrl}/{$this->adios->config["language"]}/{$productUrl}'>
+            <span class='icon'><i class='fa fa-link'></i></span>
+            <span class='text'>Open product page</span>
+          </a>"
+        ;
+      }
+
       return $event;
-   }
+    }
   }
 }

@@ -2,7 +2,7 @@
 <div class="footer_agileinfo_w3">
   <div class="footer_inner_info_w3ls_agileits row">
     <div class="col-md-3 footer-left">
-      <a href="{{ rootUrl }}"><img class="img-responsive" src="{{ rootUrl }}./upload/{{ settings.profile.logo }}" alt="logo.jpg" /></a>
+      <a href="{{ rootUrl }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ settings.profile.logo }}" alt="surikata.io" /></a>
       <h2>
           <p class="mt-3">{{ settings.profile.storeName }}</p>
           <p class="text-infor">{{ settings.profile.slogan }}</p>
@@ -48,11 +48,11 @@
         <div class="col-md-4 sign-gd">
           <h4>Our <span>Information</span> </h4>
           <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="404.html">Services</a></li>
-            <li><a href="404.html">Short Codes</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="{{ rootUrl }}/home">Home</a></li>
+            <li><a href="{{ rootUrl }}/about-us">About</a></li>
+            <li><a href="{{ rootUrl }}/products">Products</a></li>
+            <li><a href="{{ rootUrl }}/blog">Blog</a></li>
+            <li><a href="{{ rootUrl }}/contact">Contact</a></li>
           </ul>
         </div>
 
@@ -126,13 +126,15 @@
 <!-- js -->
 
 <!-- Surikata js -->
-<script src="{{ rootUrl }}/core/assets/js/surikata.js"></script>
+<script src="{{ rootUrl }}/core/assets/js/main.js"></script>
+<script src="{{ rootUrl }}/theme/assets/js/basic-theme.js"></script>
 
 <!-- Surikata Plugins js -->
-<script src="{{ rootUrl }}/plugins/assets/WAI/Product/Catalog/main.js"></script>
-<script src="{{ rootUrl }}/plugins/assets/WAI/Customer/Home/main.js"></script>
-<script src="{{ rootUrl }}/plugins/assets/WAI/Customer/Cart/main.js"></script>
-<script src="{{ rootUrl }}/plugins/assets/WAI/Blog/Catalog/main.js"></script>
+<script src="{{ rootUrl }}/plugins/assets/WAI/Product/Catalog/~/main.js"></script>
+<script src="{{ rootUrl }}/plugins/assets/WAI/Customer/Home/~/main.js"></script>
+<script src="{{ rootUrl }}/plugins/assets/WAI/Customer/Cart/~/main.js"></script>
+<script src="{{ rootUrl }}/plugins/assets/WAI/Blog/Catalog/~/main.js"></script>
+<script src="{{ rootUrl }}/plugins/assets/WAI/Common/Breadcrumb/~/main.js"></script>
 
 <!-- Main Activation JS -->
 <!--<script src="{{ rootUrl }}/theme/assets/js/main.js"></script>-->

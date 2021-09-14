@@ -7,9 +7,9 @@ class Website extends \ADIOS\Core\Widget {
 
   public function init() {
 
-    if (is_dir($this->adios->config['themes_dir'])) {
-      foreach (scandir($this->adios->config['themes_dir']) as $file) {
-        if (in_array($file, [".", ".."])) continue;
+    foreach ($this->adios->websiteRenderer->themeFolders as $themeFolder) {
+      foreach (scandir($themeFolder) as $file) {
+        if (strpos($file, ".") !== FALSE) continue;
         $this->getTheme($file);
       }
     }
@@ -53,6 +53,10 @@ class Website extends \ADIOS\Core\Widget {
             [
               "title" => "Emails",
               "onclick" => "window_render('Website/{$domain}/Emails');",
+            ],
+            [
+              "title" => "Translations",
+              "onclick" => "desktop_update('Website/{$domain}/Translations');",
             ],
           ],
         ];

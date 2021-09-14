@@ -45,9 +45,10 @@
                         onclick="
                           BasicThemeProductCatalog.setFilter('idProductCategory', {{ subCategory.id }});
                           BasicThemeProductCatalog.update(
-                          $('#productCatalogDefaultContainerDiv'),
-                          '{{ rewriteBase }}{{ subCategory.url }}'
+                            $('#productCatalogDefaultContainerDiv'),
+                            '{{ rewriteBase }}{{ subCategory.url }}'
                           );
+                          BasicThemeBreadcrumb.update($('#breadCrumbDiv'));
                           $(this).addClass('sidebar-active');
                           ">{{ subCategory.TRANSLATIONS.name }}
                       </a>

@@ -122,6 +122,7 @@ namespace Surikata\Plugins\WAI\Customer {
             | \ADIOS\Widgets\Orders\Exceptions\EmptyRequiredFields
             | \ADIOS\Widgets\Orders\Exceptions\UnknownCustomer
             | \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService
+            | \ADIOS\Widgets\Orders\Exceptions\UnknownShipment
             | \ADIOS\Widgets\Customers\Exceptions\EmailIsEmpty
             | \ADIOS\Widgets\Customers\Exceptions\EmailIsInvalid
             | \ADIOS\Widgets\Customers\Exceptions\AccountAlreadyExists

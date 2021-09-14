@@ -260,7 +260,7 @@
                                 {% if deliveryServices|length > 0 %}
                                   {% for deliveryService in deliveryServices %}
                                     <div id="method2" class="panel-collapse collapse show">
-                                      <div class="panel-body">
+                                      <div class="panel-body delivery">
                                         <input 
                                           type="radio" 
                                           name="deliveryService" 
@@ -270,6 +270,9 @@
                                           onchange="AbeloThemeCart.updateCheckoutOverview()"
                                         >
                                         <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
+                                        {% if deliveryService.logo %}
+                                          <img class="order-img" src="./upload/{{ deliveryService.logo }}"/>
+                                        {% endif %}
                                         <p data-method="{{ deliveryService.id }}" class="delivery-text">{{ deliveryService.description }}</p>
                                       </div>
                                     </div>
@@ -292,7 +295,7 @@
                                 </div>
                                 {% for paymentMethod in paymentMethods %}
                                   <div id="method1" class="panel-collapse collapse show">
-                                    <div class="panel-body">
+                                    <div class="panel-body delivery">
                                       <input 
                                         required type="radio" 
                                         name="paymentMethod" 
@@ -302,6 +305,9 @@
                                         onchange="AbeloThemeCart.updateCheckoutOverview()"
                                       >
                                       <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
+                                      {% if paymentMethod.logo %}
+                                        <img class="order-img" src="{{ uploadedFileUrl }}/{{ paymentMethod.logo }}"/>
+                                      {% endif %}
                                       <p data-method="{{ paymentMethod.id }}" class="payment-text">{{ paymentMethod.description }}</p>
                                     </div>
                                   </div>
@@ -383,7 +389,7 @@
                 </div>
                 {% for deliveryService in deliveryServices %}
                   <div id="method1" class="panel-collapse collapse show">
-                    <div class="panel-body">
+                    <div class="panel-body delivery">
                       <input 
                         type="radio" 
                         name="deliveryService" 
@@ -393,6 +399,9 @@
                         onchange="AbeloThemeCart.updateCheckoutOverview()"
                       >
                       <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
+                      {% if deliveryService.logo %}
+                        <img class="order-img" src="./upload/{{ deliveryService.logo }}"/>
+                      {% endif %}
                       <p data-method="{{ deliveryService.id }}" class="delivery-text">{{ deliveryService.description }}</p>
                     </div>
                   </div>
@@ -412,7 +421,7 @@
                 </div>
                 {% for paymentMethod in paymentMethods %}
                   <div id="method1" class="panel-collapse collapse show">
-                    <div class="panel-body">
+                    <div class="panel-body delivery">
                       <input 
                         required type="radio" 
                         name="paymentMethod" 
@@ -422,6 +431,9 @@
                         onchange="AbeloThemeCart.updateCheckoutOverview()"
                       >
                       <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
+                      {% if paymentMethod.logo %}
+                        <img class="order-img" src="{{ uploadedFileUrl }}/{{ paymentMethod.logo }}"/>
+                      {% endif %}
                       <p data-method="{{ paymentMethod.id }}" class="payment-text">{{ paymentMethod.description }}</p>
                     </div>
                   </div>

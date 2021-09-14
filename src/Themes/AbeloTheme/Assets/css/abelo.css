@@ -32,6 +32,14 @@
 .orderAgreement input[type="checkbox"] {
   margin-right: 5px;
 }
+.order-img {
+  width: 35px;
+  height: 35px;
+  margin: 5px;
+}
+.delivery img{
+  width: auto;
+}
 .product-flag {
   position: absolute;
   top: 5px;

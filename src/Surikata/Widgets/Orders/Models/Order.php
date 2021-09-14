@@ -350,6 +350,7 @@ class Order extends \ADIOS\Core\Model {
    * @throws \ADIOS\Widgets\Orders\Exceptions\PlaceOrderUnknownError
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownCustomer
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService
+   * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownShipment
    */
   public function placeOrder($orderData, $customerUID = NULL, $cartContents = NULL, $checkRequiredFields = TRUE) {
     $idCustomer = 0;
@@ -460,7 +461,7 @@ class Order extends \ADIOS\Core\Model {
       ; 
 
       if ($shipment === NULL) {
-        throw new \ADIOS\Widgets\Orders\Exceptions\PlaceOrderUnknownError('Unknown shipment');
+        throw new \ADIOS\Widgets\Orders\Exceptions\UnknownShipment();
       }
 
       $deliveryPrice = 

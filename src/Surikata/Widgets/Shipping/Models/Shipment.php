@@ -129,6 +129,7 @@ class Shipment extends \ADIOS\Core\Model {
           ['weight_to', '>=', $summary['weightTotal']]
         ]);
       })
+      ->where('is_enabled', 1)
       ->get()
       ->toArray()
     ;

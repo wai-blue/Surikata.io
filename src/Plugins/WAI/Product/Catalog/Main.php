@@ -116,8 +116,7 @@ namespace Surikata\Plugins\WAI\Product {
           $filter["sort"] = $this->websiteRenderer->urlVariables["sort"];
         }
 
-        $this->catalogInfo = $this->adminPanel
-          ->getModel("Widgets/Products/Models/ProductCategory")
+        $this->catalogInfo = (new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel))
           ->getCatalogInfo($idProductCategory, $page, $itemsPerPage, $filter, $languageIndex)
         ;
 

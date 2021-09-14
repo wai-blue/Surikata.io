@@ -1,40 +1,33 @@
 <?php
 
-namespace ADIOS\Widgets\Prices\Models;
+namespace ADIOS\Widgets\Products\Models;
 
-class ProductMargin extends \ADIOS\Core\Model {
-  var $sqlName = "product_margins";
-  var $urlBase = "Products/Prices/Margins";
-  var $tableTitle = "Product-based margins";
-  var $formTitleForEditing = "Product-based margin";
-  var $formTitleForInserting = "New product-based margin";
-
-  public function init() {
-    $this->languageDictionary["en"] = [
-      "Klient" => "Customer",
-      "Klient: Kategória" => "Customer: Category",
-    ];
-  }
+class ProductDiscount extends \ADIOS\Core\Model {
+  var $sqlName = "product_price_discounts";
+  var $urlBase = "Products/Prices/Discounts";
+  var $tableTitle = "Product-based discounts";
+  var $formTitleForEditing = "Product price discount";
+  var $formTitleForInserting = "New product price discount";
 
   public function columns(array $columns = []) {
     return parent::columns([
       "id_customer" => [
         "type" => "lookup",
-        "title" => $this->translate("Klient"),
+        "title" => $this->translate("Customer"),
         "model" => "Widgets/Customers/Models/Customer",
         "show_column" => TRUE,
       ],
 
       "id_customer_category" => [
         "type" => "lookup",
-        "title" => $this->translate("Klient: Kategória"),
+        "title" => $this->translate("Customer: Category"),
         "model" => "Widgets/Customers/Models/CustomerCategory",
         "show_column" => TRUE,
       ],
 
       "id_product" => [
         "type" => "lookup",
-        "title" => "Produkt",
+        "title" => $this->translate("Product"),
         "model" => "Widgets/Products/Models/Product",
         "show_column" => TRUE,
       ],
@@ -42,28 +35,27 @@ class ProductMargin extends \ADIOS\Core\Model {
       "id_product_category" => [
         "type" => "lookup",
         "model" => "Widgets/Products/Models/ProductCategory",
-        "title" => "Produkt: Kategória",
-        "show_column" => true
+        "title" => $this->translate("Product: Category"),
+        "show_column" => TRUE,
       ],
 
       "id_brand" => [
         "type" => "lookup",
         "model" => "Widgets/Products/Models/Brand",
-        "title" => "Výrobca",
-        "show_column" => true
+        "title" => $this->translate("Brand"),
+        "show_column" => TRUE,
       ],
 
       "id_supplier" => [
         "type" => "lookup",
         "model" => "Widgets/Products/Models/Supplier",
-        "title" => "Dodávateľ",
-        "show_column" => true
+        "title" => $this->translate("Supplier"),
+        "show_column" => TRUE,
       ],
 
-      "margin" => [
+      "discount_percentage" => [
         "type" => "float",
-        "decimals" => 2,
-        "title" => "Marža",
+        "title" => $this->translate("Discount"),
         "unit" => "%",
         "show_column" => TRUE,
       ],

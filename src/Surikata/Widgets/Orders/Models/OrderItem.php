@@ -72,6 +72,9 @@ class OrderItem extends \ADIOS\Core\Model {
       let productId = $(this).val();
       let inputName = $(this).attr('name');
       _ajax_read('Orders/AddOrderItem', 'id_product='+productId, function(res) {
+
+        // REVIEW: je pouzitie res.sale_price spravne po upravach v pocitani cien produktu?
+        // Treba otestovat
         let price = res.sale_price;
         let vat_percent = res.vat_percent;
         let delivery_unit = res.DELIVERY_UNIT;

@@ -59,10 +59,22 @@ class RandomGenerator {
 
     $i = 0;
     foreach ($productsData as $tmpProduct) {
+      $tmpSalePrice = $tmpProduct[6];
+
+      if (rand(0, 5) == 1) {
+        $tmpFullPrice = $tmpProduct[6]*(1 + rand(0, 50)/100);
+      } else {
+        $tmpFullPrice = $tmpSalePrice;
+      }
+
       $idProduct = $productModel->insertRow([
         "id_category" => $tmpProduct[0],
         "id_brand" => $tmpProduct[1],
-        "sale_price" => $tmpProduct[6],
+        "price_calculation_method" => \ADIOS\Widgets\Products\Models\Product::PRICE_CALCULATION_METHOD_CUSTOM_PRICE,
+        "full_price_custom" => $tmpFullPrice,
+        "sale_price_custom" => $tmpSalePrice,
+        "full_price_cached" => $tmpFullPrice,
+        "sale_price_cached" => $tmpSalePrice,
         "id_delivery_unit" => rand(2, 21),
         "is_new" => $tmpProduct[9],
         "is_top" => $tmpProduct[10],

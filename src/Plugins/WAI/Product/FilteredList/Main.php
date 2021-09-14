@@ -40,7 +40,7 @@ namespace Surikata\Plugins\WAI\Product {
         ;
 
         $twigParams["products"][$key] =
-          $productModel->translateProductForWeb($twigParams["products"][$key], $languageIndex);
+          $productModel->translateSingleProductForWeb($twigParams["products"][$key], $languageIndex);
 
         $twigParams["products"][$key]["ProductCategory"] =
           $productCategoryModel

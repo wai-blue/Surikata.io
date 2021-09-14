@@ -379,12 +379,12 @@ class Order extends \ADIOS\Core\Model {
 
     $requiredFieldsEmpty = [];
 
-    $requiredAgreementsFields = [
-      "general_terms_and_conditions",
-      "gdpr_consent"
-    ];
-
     if ($idAddress <= 0 && $checkRequiredFields) {
+      $requiredFieldsConsents = [
+        "general_terms_and_conditions",
+        "gdpr_consent"
+      ];
+
       $requiredFieldsBilling = [
         "inv_given_name",
         "inv_family_name",
@@ -421,7 +421,7 @@ class Order extends \ADIOS\Core\Model {
       }
     }
 
-    foreach ($requiredAgreementsFields as $fieldName) {
+    foreach ($requiredFieldsConsents as $fieldName) {
       if (empty($orderData[$fieldName])) {
         $requiredFieldsEmpty[] = $fieldName;
       }

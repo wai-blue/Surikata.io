@@ -246,8 +246,10 @@
                           <div class="align-self-center">
                             <div class="pricing-meta">
                               <ul>
-                                <li class="old-price">{{ product.price.fullPrice|number_format(2, ",", " ") }} €</li>
-                                <li class="current-price">{{ product.price.salePrice|number_format(2, ",", " ") }} €</li>
+                                {% if product.PRICE.fullPrice != product.PRICE.salePrice %}
+                                  <li class="old-price">{{ product.PRICE.fullPrice|number_format(2, ",", " ") }} €</li>
+                                {% endif %}
+                                <li class="current-price">{{ product.PRICE.salePrice|number_format(2, ",", " ") }} €</li>
                               </ul>
                             </div>
                             <div class="cart-btn">

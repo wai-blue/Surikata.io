@@ -20,7 +20,16 @@
                 <div class="add-to-link">
                   <ul>
                     <li>
-                      <a class="quick_view" href="#" data-link-action="getQuickView" data-link-id="{{ product.id }}" onclick="openQuickModal(this)" {{ translate("Quick view", "Product") }}" data-toggle="modal" data-target="#quickViewModal">
+                      <a
+                        class="quick_view"
+                        href="#"
+                        data-link-action="getQuickView"
+                        data-link-id="{{ product.id }}"
+                        onclick="openQuickModal(this)"
+                        title="{{ translate("Quick view", "Product") }}"
+                        data-toggle="modal"
+                        data-target="#quickViewModal"
+                      >
                         <i class="lnr lnr-frame-expand"></i>
                       </a>
                     </li>
@@ -55,10 +64,10 @@
                 <p>{{ product.TRANSLATIONS.brief }}</p>
                 <div class="pricing-meta">
                   <ul>
-                    {% if (product.price.fullPrice > product.price.salePrice) %}
-                      <li class="old-price">{{ product.price.fullPrice|number_format(2, ",", " ") }} €</li>
+                    {% if product.PRICE.fullPrice != product.PRICE.salePrice %}
+                      <li class="old-price">{{ product.PRICE.fullPrice|number_format(2, ",", " ") }} €</li>
                     {% endif %}
-                    <li class="current-price">{{ product.sale_price|number_format(2, ",", " ") }} €</li>
+                    <li class="current-price">{{ product.PRICE.salePrice|number_format(2, ",", " ") }} €</li>
                   </ul>
                 </div>
               </div>

@@ -222,10 +222,6 @@ class Input extends \ADIOS\Core\UI\View {
               {$this->params['html_attributes']}
               ".($this->params['readonly'] ? "disabled='disabled'" : '')."
             >
-              ".($this->params['type'] == 'int' && empty($this->params['enum_values'][0])
-                ? "<option value=''>".('' == $this->params['not_selected_text'] ? l('unselected') : $this->params['not_selected_text']).'</option>'
-                : ""
-              )."
           ";
 
           foreach ($this->params['enum_values'] as $enum_key => $enum_value) {

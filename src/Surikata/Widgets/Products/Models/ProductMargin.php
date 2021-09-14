@@ -1,40 +1,33 @@
 <?php
 
-namespace ADIOS\Widgets\Prices\Models;
+namespace ADIOS\Widgets\Products\Models;
 
-class ProductDiscount extends \ADIOS\Core\Model {
-  var $sqlName = "product_discounts";
-  var $urlBase = "Products/Prices/Discounts";
-  var $tableTitle = "Product-based discounts";
-  var $formTitleForEditing = "Product-based discount";
-  var $formTitleForInserting = "New product-based discount";
-
-  public function init() {
-    $this->languageDictionary["en"] = [
-      "Klient" => "Customer",
-      "Klient: Kategória" => "Customer: Category",
-    ];
-  }
+class ProductMargin extends \ADIOS\Core\Model {
+  var $sqlName = "product_price_margins";
+  var $urlBase = "Products/Prices/Margins";
+  var $tableTitle = "Product price margins";
+  var $formTitleForEditing = "Product price margin";
+  var $formTitleForInserting = "New product price margin";
 
   public function columns(array $columns = []) {
     return parent::columns([
       "id_customer" => [
         "type" => "lookup",
-        "title" => "Customer",
+        "title" => $this->translate("Customer"),
         "model" => "Widgets/Customers/Models/Customer",
         "show_column" => TRUE,
       ],
 
       "id_customer_category" => [
         "type" => "lookup",
-        "title" => $this->translate("Klient: Kategória"),
+        "title" => $this->translate("Customer: Category"),
         "model" => "Widgets/Customers/Models/CustomerCategory",
         "show_column" => TRUE,
       ],
 
       "id_product" => [
         "type" => "lookup",
-        "title" => "Product",
+        "title" => $this->translate("Product"),
         "model" => "Widgets/Products/Models/Product",
         "show_column" => TRUE,
       ],
@@ -42,27 +35,28 @@ class ProductDiscount extends \ADIOS\Core\Model {
       "id_product_category" => [
         "type" => "lookup",
         "model" => "Widgets/Products/Models/ProductCategory",
-        "title" => "Product: Category",
-        "show_column" => true
+        "title" => $this->translate("Product: Category"),
+        "show_column" => TRUE,
       ],
 
       "id_brand" => [
         "type" => "lookup",
         "model" => "Widgets/Products/Models/Brand",
-        "title" => "Brand",
-        "show_column" => true
+        "title" => $this->translate("Brand"),
+        "show_column" => TRUE,
       ],
 
       "id_supplier" => [
         "type" => "lookup",
         "model" => "Widgets/Products/Models/Supplier",
-        "title" => "Supplier",
-        "show_column" => true
+        "title" => $this->translate("Supplier"),
+        "show_column" => TRUE,
       ],
 
-      "discount_percentage" => [
+      "margin" => [
         "type" => "float",
-        "title" => "Discount",
+        "decimals" => 2,
+        "title" => $this->translate("Margin"),
         "unit" => "%",
         "show_column" => TRUE,
       ],

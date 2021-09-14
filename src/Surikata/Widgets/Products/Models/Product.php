@@ -3,9 +3,9 @@
 namespace ADIOS\Widgets\Products\Models;
 
 class Product extends \ADIOS\Core\Model {
-  const SALE_PRICE_CALCULATION_METHOD_BASE       = 1;
-  const SALE_PRICE_CALCULATION_METHOD_PRICE_LIST = 2;
-  const SALE_PRICE_CALCULATION_METHOD_PLUGIN     = 3;
+  const PRICE_CALCULATION_METHOD_CUSTOM_PRICE  = 1;
+  const PRICE_CALCULATION_METHOD_PRICE_LIST    = 2;
+  const PRICE_CALCULATION_METHOD_PLUGIN        = 3;
   
   var $sqlName = "products";
   var $lookupSqlValue = "concat({%TABLE%}.number, ' ', {%TABLE%}.name_lang_1)";
@@ -19,9 +19,9 @@ class Product extends \ADIOS\Core\Model {
     $this->tableTitle = $this->translate("Products");
 
     $this->enumValuesSalePriceCalculationMethod = [
-      self::SALE_PRICE_CALCULATION_METHOD_BASE => "Base: Base sale price will be used",
-      self::SALE_PRICE_CALCULATION_METHOD_PRICE_LIST => "Price list: Margins and discounts from price list will be applied",
-      self::SALE_PRICE_CALCULATION_METHOD_PLUGIN => "Plugin: Plugin will be called to calculate price",
+      self::PRICE_CALCULATION_METHOD_CUSTOM_PRICE => "Custom price: You can enter your custom price",
+      self::PRICE_CALCULATION_METHOD_PRICE_LIST => "Price list: Margins and discounts from price list will be applied",
+      self::PRICE_CALCULATION_METHOD_PLUGIN => "Plugin: Plugin will be called to calculate price",
     ];
   }
 
@@ -79,22 +79,39 @@ class Product extends \ADIOS\Core\Model {
           "show_column" => FALSE,
         ],
 
-        "sale_price_calculation_method" => [
+        "price_calculation_method" => [
           "type" => "int",
-          "title" => $this->translate("Sale price - Method for calculation"),
+          "title" => $this->translate("Which price will be displayed on the web?"),
           "enum_values" => $this->enumValuesSalePriceCalculationMethod,
         ],
 
-        "sale_price" => [
+        "sale_price_custom" => [
           "type" => "float",
           "sql_data_type" => "decimal",
           "decimals" => 4,
-          "title" => $this->translate("Base sale price"),
+          "title" => $this->translate("Custom sale price"),
           "unit" => $this->adios->locale->currencySymbol(),
           "show_column" => FALSE,
         ],
 
-        "sale_price_calculated" => [
+        "full_price_custom" => [
+          "type" => "float",
+          "sql_data_type" => "decimal",
+          "decimals" => 4,
+          "title" => $this->translate("Custom full price"),
+          "unit" => $this->adios->locale->currencySymbol(),
+          "show_column" => FALSE,
+        ],
+
+        "sale_price_cached" => [
+          "type" => "float",
+          "title" => $this->translate("Calculated sale price"),
+          "description" => "WARNING: Final sale price of the product will be updated after save.",
+          "readonly" => TRUE,
+          "show_column" => FALSE,
+        ],
+
+        "full_price_cached" => [
           "type" => "float",
           "title" => $this->translate("Calculated sale price"),
           "description" => "WARNING: Final sale price of the product will be updated after save.",
@@ -285,40 +302,40 @@ class Product extends \ADIOS\Core\Model {
     return $this->hasMany(\ADIOS\Widgets\Products\Models\ProductExtension::class, 'id_product');
   }
 
-  public function nakupnaCena() {
-    return $this->hasOne(\ADIOS\Widgets\Prices\Models\ProductPrice::class, 'id_product');
+  public function priceList() {
+    return $this->hasOne(\ADIOS\Widgets\Products\Models\ProductPrice::class, 'id_product');
   }
 
-  public function productDiscounts() {
-    return $this->hasMany(\ADIOS\Widgets\Prices\Models\ProductDiscount::class, 'id_product');
+  public function priceListDiscounts() {
+    return $this->hasMany(\ADIOS\Widgets\Products\Models\ProductDiscount::class, 'id_product');
   }
 
-  public function productCategoryDiscounts() {
-    return $this->hasMany(\ADIOS\Widgets\Prices\Models\ProductDiscount::class, 'id_product_category', 'id_category');
+  public function priceListDiscountsForCategory() {
+    return $this->hasMany(\ADIOS\Widgets\Products\Models\ProductDiscount::class, 'id_product_category', 'id_category');
   }
 
-  public function productBrandDiscounts() {
-    return $this->hasMany(\ADIOS\Widgets\Prices\Models\ProductDiscount::class, 'id_brand', 'id_brand');
+  public function priceListDiscountsForBrand() {
+    return $this->hasMany(\ADIOS\Widgets\Products\Models\ProductDiscount::class, 'id_brand', 'id_brand');
   }
 
-  public function productSupplierDiscounts() {
-    return $this->hasMany(\ADIOS\Widgets\Prices\Models\ProductDiscount::class, 'id_supplier', 'id_supplier');
+  public function priceListDiscountsForSupplier() {
+    return $this->hasMany(\ADIOS\Widgets\Products\Models\ProductDiscount::class, 'id_supplier', 'id_supplier');
   }
 
-  public function productMargins() {
-    return $this->hasMany(\ADIOS\Widgets\Prices\Models\ProductMargin::class, 'id_product');
+  public function priceListMargins() {
+    return $this->hasMany(\ADIOS\Widgets\Products\Models\ProductMargin::class, 'id_product');
   }
 
-  public function productCategoryMargins() {
-    return $this->hasMany(\ADIOS\Widgets\Prices\Models\ProductMargin::class, 'id_product_category', 'id_category');
+  public function priceListMarginsForCategory() {
+    return $this->hasMany(\ADIOS\Widgets\Products\Models\ProductMargin::class, 'id_product_category', 'id_category');
   }
 
-  public function productBrandMargins() {
-    return $this->hasMany(\ADIOS\Widgets\Prices\Models\ProductMargin::class, 'id_brand', 'id_brand');
+  public function priceListMarginsForBrand() {
+    return $this->hasMany(\ADIOS\Widgets\Products\Models\ProductMargin::class, 'id_brand', 'id_brand');
   }
 
-  public function productSupplierMargins() {
-    return $this->hasMany(\ADIOS\Widgets\Prices\Models\ProductMargin::class, 'id_supplier', 'id_supplier');
+  public function priceListMarginsForSupplier() {
+    return $this->hasMany(\ADIOS\Widgets\Products\Models\ProductMargin::class, 'id_supplier', 'id_supplier');
   }
 
   public function brand() {
@@ -387,6 +404,9 @@ class Product extends \ADIOS\Core\Model {
     ]);
   }
 
+  ////////////////////////////////////////////////////////////////
+  // ADIOS UI METHODS
+
   public function tableParams($params) {
     $params['show_search_button'] = TRUE;
 
@@ -444,12 +464,6 @@ class Product extends \ADIOS\Core\Model {
       $params['subtitle'] = $this->translate("Product");
     }
 
-    // $params['show_delete_button'] = FALSE;
-
-    // $params["columns"]["sale_price"]["readonly"] = (
-    //   $data['sale_price_calculation_method'] != self::SALE_PRICE_CALCULATION_METHOD_BASE
-    // );
-
     $params["columns"]["table_categories_assignment"] = [
       "type" => "table",
       "table" => $this->adios->getModel("Widgets/Products/Models/ProductCategoryAssignment")->table,
@@ -484,6 +498,48 @@ class Product extends \ADIOS\Core\Model {
       $tabTranslations[] = ["html" => "No translations available."];
     }
 
+    $params["columns"]["price_calculation_method"]["onchange"] = "{$params['uid']}_price_calculation_method_onchange();";
+
+    $params["javascript"] = "
+      function {$params['uid']}_price_calculation_method_onchange(el) {
+        let input = $('#{$params['uid']}_price_calculation_method');
+        let value = input.val();
+        let thisRow = $(input).closest('.subrow');
+        let rowFullPricePriceList = thisRow.next('.subrow');
+        let rowSalePricePriceList = rowFullPricePriceList.next('.subrow');
+        let rowPriceListOpen = rowSalePricePriceList.next('.subrow');
+        let rowFullPricePlugin = rowPriceListOpen.next('.subrow');
+        let rowSalePricePlugin = rowFullPricePlugin.next('.subrow');
+        let rowFullPriceCustom = rowSalePricePlugin.next('.subrow');
+        let rowSalePriceCustom = rowFullPriceCustom.next('.subrow');
+
+        rowFullPricePriceList.hide();
+        rowSalePricePriceList.hide();
+        rowPriceListOpen.hide();
+        rowFullPricePlugin.hide();
+        rowSalePricePlugin.hide();
+        rowFullPriceCustom.hide();
+        rowSalePriceCustom.hide();
+
+        if (value == ".self::PRICE_CALCULATION_METHOD_PRICE_LIST.") {
+          rowFullPricePriceList.show();
+          rowSalePricePriceList.show();
+          rowPriceListOpen.show();
+        } else if (value == ".self::PRICE_CALCULATION_METHOD_PLUGIN.") {
+          rowFullPricePlugin.show();
+          rowSalePricePlugin.show();
+        } else if (value == ".self::PRICE_CALCULATION_METHOD_CUSTOM_PRICE.") {
+          rowFullPriceCustom.show();
+          rowSalePriceCustom.show();
+        }
+      }
+
+      {$params['uid']}_price_calculation_method_onchange();
+    ";
+
+    $priceInfoPriceList = $this->getPriceInfoForSingleProduct($data, self::PRICE_CALCULATION_METHOD_PRICE_LIST, FALSE);
+    $priceInfoPlugin = $this->getPriceInfoForSingleProduct($data, self::PRICE_CALCULATION_METHOD_PLUGIN, FALSE);
+
     $templateTabs = [
       $this->translate("General") => [
         "number",
@@ -499,9 +555,72 @@ class Product extends \ADIOS\Core\Model {
         "extended_warranty",
       ],
       $this->translate("Price") => [
-        "sale_price_calculation_method",
-        "sale_price",
-        "sale_price_calculated",
+        "price_calculation_method",
+        [
+          "title" => "Full price calculated from price list",
+          "input" => "
+            <input
+              type='text'
+              class='adios ui Input ui_input_type_float'
+              disabled
+              value='".number_format($priceInfoPriceList["fullPrice"], 4, ".", " ")."'
+            />
+            ".$this->adios->locale->currencySymbol()."
+          ",
+        ],
+        [
+          "title" => "Sale price calculated from price list",
+          "input" => "
+            <input
+              type='text'
+              class='adios ui Input ui_input_type_float'
+              disabled
+              value='".number_format($priceInfoPriceList["salePrice"], 4, ".", " ")."'
+            />
+            ".$this->adios->locale->currencySymbol()."
+          ",
+        ],
+        [
+          "html" => "
+            <a
+              href='javascript:void(0)'
+              class='btn btn-icon-split btn-light'
+              style='margin-top:1em;'
+              onclick='window_render(\"Products/{$data['id']}/Prices\");'
+            >
+              <span class=\"icon\"><i class=\"fas fa-euro-sign\"></i></span>
+              <span class=\"text\">Open price list</span>
+            </a>
+          ",
+        ],
+        [
+          "title" => "Full price calculated by plugin",
+          "input" => "
+            <input
+              type='text'
+              class='adios ui Input ui_input_type_float'
+              disabled
+              value='".number_format($priceInfoPlugin["fullPrice"], 4, ".", " ")."'
+            />
+            ".$this->adios->locale->currencySymbol()."
+          ",
+        ],
+        [
+          "title" => "Sale price calculated by plugin",
+          "input" => "
+            <input
+              type='text'
+              class='adios ui Input ui_input_type_float'
+              disabled
+              value='".number_format($priceInfoPlugin["salePrice"], 4, ".", " ")."'
+            />
+            ".$this->adios->locale->currencySymbol()."
+          ",
+        ],
+        "full_price_custom",
+        "sale_price_custom",
+        // "full_price_cached",
+        // "sale_price_calculated",
       ],
       $this->translate("Stock & Delivery") => [
         "stock_quantity",
@@ -656,6 +775,9 @@ class Product extends \ADIOS\Core\Model {
     return $product;
   }
 
+  ////////////////////////////////////////////////////////////////
+  // HOOKS AND CALLBACKS
+
   public function recalculatePriceForSingleProduct($productOrIdProduct) {
     if (is_numeric($productOrIdProduct)) {
       $idProduct = $productOrIdProduct;
@@ -663,9 +785,15 @@ class Product extends \ADIOS\Core\Model {
       $idProduct = $productOrIdProduct['id'];
     }
 
-    $tmp = $this->getPriceInfoForSingleProduct($productOrIdProduct);
+    $tmp = $this->getPriceInfoForSingleProduct($productOrIdProduct, NULL, FALSE);
 
-    $this->where('id', $idProduct)->update(["sale_price_calculated" => $tmp['salePrice']]);
+    $this
+      ->where('id', $idProduct)
+      ->update([
+        "full_price_cached" => $tmp['fullPrice'],
+        "sale_price_cached" => $tmp['salePrice'],
+      ]
+    );
   }
 
   public function recalculateAllPrices() {
@@ -724,33 +852,20 @@ class Product extends \ADIOS\Core\Model {
     return parent::onAfterSave($data, $returnValue);
   }
 
-  public function convertKeysForLookupData($item) {
-    $conversionTable = [
-      "features" => "FEATURES",
-      "services" => "SERVICES",
-    ];
-
-    foreach ($conversionTable as $src => $dst) {
-      if (is_array($item[$src])) {
-        $item[$dst] = $item[$src];
-        unset($item[$src]);
-      }
-    }
-
-    return $item;
-  }
+  ////////////////////////////////////////////////////////////////
+  // GETTERS
 
   public function getForPriceInfo() {
     return $this
-      ->with('nakupnaCena')
-      ->with('productDiscounts')
-      ->with('productCategoryDiscounts')
-      ->with('productBrandDiscounts')
-      ->with('productSupplierDiscounts')
-      ->with('productMargins')
-      ->with('productCategoryMargins')
-      ->with('productBrandMargins')
-      ->with('productSupplierMargins')
+      ->with('priceList')
+      ->with('priceListMargins')
+      ->with('priceListMarginsForCategory')
+      ->with('priceListMarginsForBrand')
+      ->with('priceListMarginsForSupplier')
+      ->with('priceListDiscounts')
+      ->with('priceListDiscountsForCategory')
+      ->with('priceListDiscountsForBrand')
+      ->with('priceListDiscountsForSupplier')
     ;
   }
 
@@ -768,22 +883,24 @@ class Product extends \ADIOS\Core\Model {
   }
 
   public function getById($id) {
-    return $this->convertKeysForLookupData(
-      reset($this->getForDetail()
-        ->where('id', $id)
-        ->get()
-        ->toArray()
-      )
+    return $this->getDetailedInfoForSingleProduct($id);
+  }
+
+  ////////////////////////////////////////////////////////////////
+  // METHODS FOR DATA PROCESSING OF A SINGLE PRODUCT
+
+  public function getDetailedInfoForSingleProduct($idProduct) {
+    $product = $this->unifyProductInformationForSingleProduct(
+      reset($this->getForDetail()->where('id', $idProduct)->get()->toArray())
     );
+
+    $product['PRICE'] = $this->getPriceInfoForSingleProduct($product);
+
+    return $product;
 
   }
 
-  public function getDetailedInfoForListOfProducts($idProducts) {
-    $products = $this->getForDetail()
-      ->whereIn('id', $idProducts)
-      ->get()
-      ->toArray()
-    ;
+  public function unifyProductInformationForSingleProduct($product) {
 
     $keyConversionTable = [
       "brand" => "BRAND",
@@ -794,38 +911,58 @@ class Product extends \ADIOS\Core\Model {
       "related" => "RELATED",
       "accessories" => "ACCESSORIES",
       "services" => "SERVICES",
+      "price_list" => "PRICELIST",
     ];
 
-    foreach ($products as $key => $product) {
-      $products[$key]['PRICE'] = $this->getPriceInfoForSingleProduct($product);
+    foreach ($keyConversionTable as $from => $to) {
+      if (isset($product[$from])) {
+        $product[$to] = $product[$from];
+        unset($product[$from]);
+      }
+    }
 
-      foreach ($keyConversionTable as $from => $to) {
-        $products[$key][$to] = $product[$from];
-        unset($products[$key][$from]);
+    if (is_array($product["PRICELIST"])) {
+
+      if (!empty($product["price_list_margins"])) {
+        $product["PRICELIST"]["MARGINS"] = $product["price_list_margins"];
+        unset($product["price_list_margins"]);
+      }
+      if (!empty($product["price_list_margins_for_category"])) {
+        $product["PRICELIST"]["MARGINS"]["CATEGORY"] = $product["price_list_margins_for_category"];
+        unset($product["price_list_margins_for_category"]);
+      }
+      if (!empty($product["price_list_margins_for_brand"])) {
+        $product["PRICELIST"]["MARGINS"]["BRAND"] = $product["price_list_margins_for_brand"];
+        unset($product["price_list_margins_for_brand"]);
+      }
+      if (!empty($product["price_list_margins_for_supplier"])) {
+        $product["PRICELIST"]["MARGINS"]["SUPPLIER"] = $product["price_list_margins_for_supplier"];
+        unset($product["price_list_margins_for_supplier"]);
+      }
+
+      if (!empty($product["price_list_discounts"])) {
+        $product["PRICELIST"]["DISCOUNTS"] = $product["price_list_discounts"];
+        unset($product["price_list_discounts"]);
+      }
+      if (!empty($product["price_list_discounts_for_category"])) {
+        $product["PRICELIST"]["DISCOUNTS"]["CATEGORY"] = $product["price_list_discounts_for_category"];
+        unset($product["price_list_discounts_for_category"]);
+      }
+      if (!empty($product["price_list_discounts_for_brand"])) {
+        $product["PRICELIST"]["DISCOUNTS"]["BRAND"] = $product["price_list_discounts_for_brand"];
+        unset($product["price_list_discounts_for_brand"]);
+      }
+      if (!empty($product["price_list_discounts_for_supplier"])) {
+        $product["PRICELIST"]["DISCOUNTS"]["SUPPLIER"] = $product["price_list_discounts_for_supplier"];
+        unset($product["price_list_discounts_for_supplier"]);
       }
     }
 
 
-    return $products;
-
+    return $product;
   }
 
-  public function getPriceInfoForListOfProducts($idProducts) {
-    $products = $this->getForPriceInfo()
-      ->whereIn('id', $idProducts)
-      ->get()
-      ->toArray()
-    ;
-
-    $priceInfo = [];
-    foreach ($products as $product) {
-      $priceInfo[$product['id']] = $this->getPriceInfoForSingleProduct($product);
-    }
-
-    return $priceInfo;
-  }
-
-  public function getPriceInfoForSingleProduct($productOrIdProduct) {
+  public function getPriceInfoForSingleProduct($productOrIdProduct, $calculationMethod = NULL, $useCache = TRUE) {
     $priceInfo = [];
     
     if (is_array($productOrIdProduct)) {
@@ -836,95 +973,92 @@ class Product extends \ADIOS\Core\Model {
       $product = $this->getById($idProduct);
     }
 
-    $method = (int) $product['sale_price_calculation_method'];
-    if ($method === 0) {
-      $method = self::SALE_PRICE_CALCULATION_METHOD_BASE;
+    if ($calculationMethod === NULL) {
+      $calculationMethod = (int) $product['price_calculation_method'];
     }
 
-    switch ($method) {
-      case self::SALE_PRICE_CALCULATION_METHOD_PRICE_LIST:
-        $purchasePrice = (float) $product['nakupna_cena']['price_excl_vat'] ?? 0;
-        $salePrice = $purchasePrice;
-        $discountsTotal = 0;
-        $calculationSteps = [ [ "Nákupná cena", $purchasePrice ] ];
+    // SALE PRICE && FULL PRICE
 
-        // aplikujem marze
+    switch ($calculationMethod) {
+      case self::PRICE_CALCULATION_METHOD_PRICE_LIST:
+        if ($useCache) {
+          $priceInfo = [
+            "salePrice" => $product['sale_price_cached'],
+            "fullPrice" => $product['full_price_cached'],
+          ];
+        } else {
+          $purchasePrice = (float) $product['PRICELIST']['purchase_price'] ?? 0;
+          $recommendedPrice = (float) $product['PRICELIST']['recommended_price'] ?? 0;
 
-        foreach ($product['product_margins'] as $margin) {
-          $salePrice = $salePrice * (1 + $margin['margin'] / 100);
-          $calculationSteps[] = ["Marža na produkt {$margin['margin']} %", $salePrice];
-        }
-        foreach ($product['product_category_margins'] as $margin) {
-          $salePrice = $salePrice * (1 + $margin['margin'] / 100);
-          $calculationSteps[] = ["Marža na kategóriu {$margin['margin']} %", $salePrice];
-        }
-        foreach ($product['product_brand_margins'] as $margin) {
-          $salePrice = $salePrice * (1 + $margin['margin'] / 100);
-          $calculationSteps[] = ["Marža na výrobcu {$margin['margin']} %", $salePrice];
-        }
-        foreach ($product['product_supplier_margins'] as $margin) {
-          $salePrice = $salePrice * (1 + $margin['margin'] / 100);
-          $calculationSteps[] = ["Marža na dodávateľa {$margin['margin']} %", $salePrice];
-        }
+          $salePrice = $purchasePrice;
 
-        $fullPrice = $salePrice;
+          // applying margins
 
-        // aplikujem zlavy
+          foreach ($product['PRICELIST']['MARGINS'] as $margin) {
+            $salePrice = $salePrice * (1 + $margin['margin'] / 100);
+          }
+          foreach ($product['PRICELIST']['MARGINS']['CATEGORY'] as $margin) {
+            $salePrice = $salePrice * (1 + $margin['margin'] / 100);
+          }
+          foreach ($product['PRICELIST']['MARGINS']['BRAND'] as $margin) {
+            $salePrice = $salePrice * (1 + $margin['margin'] / 100);
+          }
+          foreach ($product['PRICELIST']['MARGINS']['SUPPLIER'] as $margin) {
+            $salePrice = $salePrice * (1 + $margin['margin'] / 100);
+          }
 
-        foreach ($product['product_discounts'] as $discount) {
-          $salePrice = $salePrice * (1 - $discount['discount_percentage'] / 100);
-          $discountsTotal += $discount['discount_percentage'];
-          $calculationSteps[] = ["Zľava na produkt {$discount['discount_percentage']} %", $salePrice];
-        }
-        foreach ($product['product_category_discounts'] as $discount) {
-          $salePrice = $salePrice * (1 - $discount['discount_percentage'] / 100);
-          $discountsTotal += $discount['discount_percentage'];
-          $calculationSteps[] = ["Zľava na kategóriu {$discount['discount_percentage']} %", $salePrice];
-        }
-        foreach ($product['product_brand_discounts'] as $discount) {
-          $salePrice = $salePrice * (1 - $discount['discount_percentage'] / 100);
-          $discountsTotal += $discount['discount_percentage'];
-          $calculationSteps[] = ["Zľava na výrobcu {$discount['discount_percentage']} %", $salePrice];
-        }
-        foreach ($product['product_supplier_discounts'] as $discount) {
-          $salePrice = $salePrice * (1 - $discount['discount_percentage'] / 100);
-          $discountsTotal += $discount['discount_percentage'];
-          $calculationSteps[] = ["Zľava na dodávateľa {$discount['discount_percentage']} %", $salePrice];
-        }
+          $priceWithoutDiscounts = $salePrice;
 
-        $priceInfo = [
-          "salePrice" => $salePrice,
-          "fullPrice" => $fullPrice,
-          "discountsTotal" => $discountsTotal,
-          "calculationSteps" => $calculationSteps,
-        ];
+          // applying discounts
+
+          foreach ($product['PRICELIST']['DISCOUNTS'] as $discount) {
+            $salePrice = $salePrice * (1 - $discount['discount_percentage'] / 100);
+          }
+          foreach ($product['PRICELIST']['DISCOUNTS']['CATEGORY'] as $discount) {
+            $salePrice = $salePrice * (1 - $discount['discount_percentage'] / 100);
+          }
+          foreach ($product['PRICELIST']['DISCOUNTS']['BRAND'] as $discount) {
+            $salePrice = $salePrice * (1 - $discount['discount_percentage'] / 100);
+          }
+          foreach ($product['PRICELIST']['DISCOUNTS']['SUPPLIER'] as $discount) {
+            $salePrice = $salePrice * (1 - $discount['discount_percentage'] / 100);
+          }
+
+          $priceInfo = [
+            "salePrice" => $salePrice,
+            "fullPrice" => ($recommendedPrice == 0 ? $priceWithoutDiscounts : $recommendedPrice),
+          ];
+        }
       break;
 
-      case self::SALE_PRICE_CALCULATION_METHOD_PLUGIN:
-        $priceInfo = $this->adios->dispatchEventToPlugins("onProductAfterPriceCalculation", [
+      case self::PRICE_CALCULATION_METHOD_PLUGIN:
+        $priceInfo = $this->adios->dispatchEventToPlugins("onProductGetPriceInfoForSingleProduct", [
           "model" => $this,
           "idProduct" => $idProduct,
           "priceInfo" => $priceInfo,
         ])["priceInfo"];
       break;
 
-      case self::SALE_PRICE_CALCULATION_METHOD_BASE:
+      case self::PRICE_CALCULATION_METHOD_CUSTOM_PRICE:
+      default:
         $priceInfo = [
-          "salePrice" => $product['sale_price'],
-          "fullPrice" => $product['sale_price'],
-          "discountsTotal" => 0,
-          "calculationSteps" => [],
+          "salePrice" => $product['sale_price_custom'],
+          "fullPrice" => $product['full_price_custom'],
         ];
       break;
 
     }
+
+    // DISCOUNT
+
+    $priceInfo["discount"] = $priceInfo["fullPrice"] - $priceInfo["salePrice"];
 
     return $priceInfo;
 
 
   }
 
-  public function translateProductForWeb($product, $languageIndex) {
+  public function translateSingleProductForWeb($product, $languageIndex) {
     $product["TRANSLATIONS"]["name"] = $product["name_lang_{$languageIndex}"];
     $product["TRANSLATIONS"]["brief"] = $product["brief_lang_{$languageIndex}"];
     $product["TRANSLATIONS"]["description"] = $product["description_lang_{$languageIndex}"];
@@ -932,9 +1066,33 @@ class Product extends \ADIOS\Core\Model {
     return $product;
   }
 
+  ////////////////////////////////////////////////////////////////
+  // METHODS FOR DATA PROCESSING OF LIST OF PRODUCTS
+
+  public function getDetailedInfoForListOfProducts($idProducts) {
+    return $this->unifyProductInformationForListOfProduct(
+      $this->getForDetail()->whereIn('id', $idProducts)->get()->toArray()
+    );
+  }
+
+  public function unifyProductInformationForListOfProduct($products) {
+    foreach ($products as $key => $product) {
+      $products[$key] = $this->unifyProductInformationForSingleProduct($product);
+    }
+    return $products;
+  }
+
+  public function addPriceInfoForListOfProducts($products, $useCache = TRUE) {
+    foreach ($products as $key => $product) {
+      $products[$key]['PRICE'] = $this->getPriceInfoForSingleProduct($product, NULL, $useCache);
+    }
+
+    return $products;
+  }
+
   public function translateForWeb($products, $languageIndex) {
     foreach ($products as $key => $value) {
-      $products[$key] = $this->translateProductForWeb($value, $languageIndex);
+      $products[$key] = $this->translateSingleProductForWeb($value, $languageIndex);
     }
 
     return $products;

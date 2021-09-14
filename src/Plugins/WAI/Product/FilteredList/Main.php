@@ -12,7 +12,9 @@ namespace Surikata\Plugins\WAI\Product {
 
       switch ($pluginSettings["filterType"]) {
         case "recommended":
-          $productIds = $productModel->where("is_recommended", TRUE);
+          $productIds = $productModel
+            ->where("is_recommended", TRUE)
+            ->skip(0)->take((int)$pluginSettings["product_count"]);
         break;
         case "on_sale":
           $productIds = $productModel->where("is_on_sale", TRUE);
@@ -38,7 +40,7 @@ namespace Surikata\Plugins\WAI\Product {
         ;
 
         $twigParams["products"][$key] =
-          $productModel->translateProductForWeb($twigParams["products"][$key], $languageIndex);
+          $productModel->translateSingleProductForWeb($twigParams["products"][$key], $languageIndex);
 
         $twigParams["products"][$key]["ProductCategory"] =
           $productCategoryModel

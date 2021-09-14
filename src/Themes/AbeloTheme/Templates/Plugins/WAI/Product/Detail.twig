@@ -356,8 +356,10 @@
                       <h2><a href="single-product.html" class="product-link">{{ product.TRANSLATIONS.name }}</a></h2>
                       <div class="pricing-meta">
                         <ul>
-                          <li class="old-price">{{ product.sale_price|number_format(2, ",", " ") }} €</li>
-                          <li class="current-price">{{ product.sale_price|number_format(2, ",", " ") }} €</li>
+                          {% if product.PRICE.fullPrice != product.PRICE.salePrice %}
+                            <li class="old-price">{{ product.PRICE.fullPrice|number_format(2, ",", " ") }} €</li>
+                          {% endif %}
+                          <li class="current-price">{{ product.PRICE.fullPrice|number_format(2, ",", " ") }} €</li>
                         </ul>
                       </div>
                     </div>
@@ -444,8 +446,10 @@
                       <h2><a href="single-product.html" class="product-link">{{ product.TRANSLATIONS.name }}</a></h2>
                       <div class="pricing-meta">
                         <ul>
-                          <li class="old-price">{{ product.sale_price|number_format(2, ",", " ") }} €</li>
-                          <li class="current-price">{{ product.sale_price|number_format(2, ",", " ") }} €</li>
+                          {% if product.PRICE.fullPrice != product.PRICE.salePrice %}
+                            <li class="old-price">{{ product.PRICE.fullPrice|number_format(2, ",", " ") }} €</li>
+                          {% endif %}
+                          <li class="current-price">{{ product.PRICE.salePrice|number_format(2, ",", " ") }} €</li>
                         </ul>
                       </div>
                     </div>

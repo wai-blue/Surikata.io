@@ -124,7 +124,7 @@ class Console {
     return $contents;
   }
 
-  public function convertLogsToHtml($logs, $addTimestamps) {
+  public function convertLogsToHtml($logs, $addTimestamps = FALSE) {
     $html = "";
     foreach ($logs as $mictotime => $log) {
       if ($addTimestamps) {

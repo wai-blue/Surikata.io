@@ -235,7 +235,7 @@ if (count($partsToInstall) == 0) {
     $productAccessoryModel = new \ADIOS\Widgets\Products\Models\ProductAccessory($adminPanel);
     $productFeatureModel = new \ADIOS\Widgets\Products\Models\ProductFeature($adminPanel);
     $productFeatureAssignmentModel = new \ADIOS\Widgets\Products\Models\ProductFeatureAssignment($adminPanel);
-    $productPriceModel = new \ADIOS\Widgets\Prices\Models\ProductPrice($adminPanel);
+    $productPriceModel = new \ADIOS\Widgets\Products\Models\ProductPrice($adminPanel);
     $shoppingCartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($adminPanel);
     $invoiceModel = new \ADIOS\Widgets\Finances\Models\Invoice($adminPanel);
     $orderModel = new \ADIOS\Widgets\Orders\Models\Order($adminPanel);
@@ -528,7 +528,7 @@ if (count($partsToInstall) == 0) {
 
       ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // PART: website content
-    
+
       mkdir("../upload/blogs/");
       mkdir("../upload/products/");
       mkdir("../upload/slideshow/");
@@ -692,6 +692,7 @@ if (count($partsToInstall) == 0) {
             "inv_country"       => $address['inv_country'],
             "phone_number"      => $address['phone_number'],
             "email"             => $address['email'],
+            "domain"            => "EN",
             "general_terms_and_conditions"  => 1,
             "gdpr_consent"                  => 1,
             "confirmation_time" => $orderConfirmationTime,

@@ -249,6 +249,13 @@ class Order extends \ADIOS\Core\Model {
         "type" => "varchar",
         "title" => "Contact: Email",
       ],
+
+      "domain" => [
+        "type" => "varchar",
+        "title" => "Domain",
+        "readonly" => TRUE,
+        "show_column" => TRUE,
+      ],
     ]);
   }
 
@@ -347,7 +354,6 @@ class Order extends \ADIOS\Core\Model {
   public function placeOrder($orderData, $customerUID = NULL, $cartContents = NULL, $checkRequiredFields = TRUE) {
     $idCustomer = 0;
     $idAddress = (int) $orderData['id_address'];
-
     $cartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($this->adios);
     $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adios);
     $customerUIDModel = new \ADIOS\Widgets\Customers\Models\CustomerUID($this->adios);
@@ -373,12 +379,12 @@ class Order extends \ADIOS\Core\Model {
 
     $requiredFieldsEmpty = [];
 
-    $requiredAgreementsFields = [
-      "general_terms_and_conditions",
-      "gdpr_consent"
-    ];
-
     if ($idAddress <= 0 && $checkRequiredFields) {
+      $requiredFieldsConsents = [
+        "general_terms_and_conditions",
+        "gdpr_consent"
+      ];
+
       $requiredFieldsBilling = [
         "inv_given_name",
         "inv_family_name",
@@ -415,7 +421,7 @@ class Order extends \ADIOS\Core\Model {
       }
     }
 
-    foreach ($requiredAgreementsFields as $fieldName) {
+    foreach ($requiredFieldsConsents as $fieldName) {
       if (empty($orderData[$fieldName])) {
         $requiredFieldsEmpty[] = $fieldName;
       }
@@ -515,6 +521,7 @@ class Order extends \ADIOS\Core\Model {
       "delivery_service"  => $orderData['deliveryService'],
       "delivery_price"    => $deliveryPrice,
       "notes"             => $orderData['notes'],
+      "domain"            => $orderData['domain'],
       "state"             => self::STATE_NEW,
     ]);
 
@@ -641,14 +648,16 @@ class Order extends \ADIOS\Core\Model {
     return $orderData;
   }
 
-  public function changeOrderState($idOrder, $data) {
+  public function changeOrderState($idOrder, $data, $isCron = false) {
     $this->updateRow(["state" => $data["state"]], $idOrder);
 
+    $idUser = $isCron ? 0 : $this->adios->userProfile['id'];
     (new \ADIOS\Widgets\Orders\Models\OrderHistory($this->adios))
       ->insertRow([
         "id_order" => $idOrder,
         "state" => $data["state"],
         "event_time" => "SQL:now()",
+        "user" => $idUser,
       ])
     ;
 
@@ -662,6 +671,7 @@ class Order extends \ADIOS\Core\Model {
   }
 
   public function formParams($data, $params) {
+
     if ($data['id'] <= 0) {
       $params["template"] = [
         "columns" => [
@@ -802,6 +812,7 @@ class Order extends \ADIOS\Core\Model {
                 "confirmation_time",
                 "number_customer",
                 "notes",
+                "domain",
                 [
                   "title" => "State",
                   "input" => "
@@ -860,9 +871,6 @@ class Order extends \ADIOS\Core\Model {
     if ($data['column'] == "number") {
       return "border-left:10px solid {$this->enumOrderStateColors[$data['row']['state']]};";
     }
-    // if ($data['column'] == "state") {
-    //   return "border-left: 1px solid {$this->enumOrderStateColors[$data['row']['state']]};";
-    // }
   }
 
   public function getById($id) {
@@ -1020,13 +1028,8 @@ class Order extends \ADIOS\Core\Model {
       "state" => self::STATE_INVOICED,
     ], $idOrder);
 
-    (new \ADIOS\Widgets\Orders\Models\OrderHistory($this->adios))
-      ->insertRow([
-        "id_order" => $idOrder,
-        "state" => self::STATE_INVOICED,
-        "event_time" => "SQL:now()",
-      ])
-    ;
+    $this->changeOrderState($idOrder, ["state" => self::STATE_INVOICED]);
+    
   }
 
   public function issueInvoce($idOrder, $useDatesFromOrder = FALSE) {

@@ -136,6 +136,7 @@ namespace Surikata\Plugins\WAI\Product {
       switch ($productAction) {
         case "getQuickView":
           $product = $this->getProductInfo();
+          $product["url"] = $this->getWebPageUrlFormatted($product);
           $returnArray["product"] = [];
           $returnArray["product"] = $product;
           $returnArray["productModalContent"] = (new \Surikata\Plugins\WAI\Product\Detail\Modals\ProductModal($this->websiteRenderer))

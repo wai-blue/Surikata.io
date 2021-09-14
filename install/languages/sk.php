@@ -320,6 +320,8 @@
     $websiteWebPageModel->insertRow([
       "domain" => $tmpDomain,
       "name" => $tmpTitle,
+      "seo_title" => $tmpTitle,
+      "seo_description" => $tmpTitle,
       "url" => $tmpUrl,
       "publish_always" => 1,
       "content_structure" => json_encode([

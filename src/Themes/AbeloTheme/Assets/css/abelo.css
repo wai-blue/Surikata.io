@@ -539,3 +539,18 @@ ul .dots::before {
 .contact-area h1 {
   padding-bottom: 15px;
 }
+
+.page-404 {
+  background-color: #266cfb;
+  color: #eee;
+  font-size: 18px;
+  padding: 3em;
+  text-align: center;
+}
+.page-404 h2 a {
+  color: #fff;
+  text-decoration: none;
+}
+.page-404 h2 a:hover {
+  color: #222;
+}

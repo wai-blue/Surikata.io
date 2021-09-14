@@ -30,23 +30,11 @@ class OrderHistory extends \ADIOS\Core\Model {
         "show_column" => true
       ],
 
-      // "notes" => [
-      //   "type" => "varchar",
-      //   "title" => $this->translate("Notes"),
-      //   "show_column" => TRUE,
-      // ],
-      "state" => [
-        "type" => "int",
-        "enum_values" => $this->enumOrderStates,
-        "title" => $this->translate("State"),
-        "show_column" => true
-      ],
-
-      "notes" => [
-        "type" => "varchar",
-        "title" => $this->translate("Notes"),
-        "show_column" => TRUE,
-      ],
+      //"notes" => [
+      //  "type" => "varchar",
+      //  "title" => $this->translate("Notes"),
+      //  "show_column" => TRUE,
+      //],
 
       "user" => [
         "type" => "lookup",

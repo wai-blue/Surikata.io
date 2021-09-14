@@ -857,3 +857,22 @@ function clearInputs(formId) {
         }
     });
 }
+
+function openQuickModal(element) {
+    element = $(element);
+    var requestData = {};
+    var pluginName = "WAI\\Product\\Detail"
+    requestData.__renderOnlyPlugin = pluginName;
+    requestData.__output = 'json';
+    requestData.productAction = element.attr("data-link-action");
+    requestData.idProduct = element.attr("data-link-id");
+
+    $.getJSON(
+        '',
+        requestData
+    ).done(function (data) {
+        $("#quickViewDocument").html(data.productModalContent);
+    }).fail(function (data) {
+        console.log('renderPluginJSON Error', pluginName, requestData, data);
+    });
+}

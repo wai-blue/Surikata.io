@@ -5505,6 +5505,9 @@ offcanvas-menu > ul > li .menu-expand {
   max-height: 100px;
   padding-left: 10px;
 }
+.cart-main-area .product-thumbnail img {
+  max-height: 100px;
+}
 .cart-main-area .product-name {
   color: #266cfb;
   font-weight: 600;

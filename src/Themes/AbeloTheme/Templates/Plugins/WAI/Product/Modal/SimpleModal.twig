@@ -33,12 +33,18 @@
         <p class='quickview-para'>{{ product.TRANSLATIONS.brief }}</p>
         <div class='pro-details-quality'>
           <div class='cart-plus-minus'>
-            <input class='cart-plus-minus-box' type='text' name='qtybutton' value='1' disabled/>
+            <input
+              class='cart-plus-minus-box'
+              type='text'
+              name='qtybutton'
+              value='1'
+              onchange="validateProductQty(this)"
+            />
           </div>
           <div class='pro-details-cart btn-hover'>
             <a href='javascript:void(0)' data-dismiss='modal' onclick='AbeloThemeCart.addProduct(
               {{ product.id }},
-              1,
+              $(".cart-plus-minus > input[name=qtybutton]").val(),
               function(data) {
                 AbeloThemePopup
                   .setImage("{{ uploaded_file_url }}/{{ product.image }}")
@@ -72,3 +78,6 @@
     </div>
   </div>
 </div>
+<script>
+  AbeloThemeCart.initPlusMinusButtons();
+</script>

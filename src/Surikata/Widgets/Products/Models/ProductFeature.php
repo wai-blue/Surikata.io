@@ -219,4 +219,10 @@ class ProductFeature extends \ADIOS\Core\Model {
     return $params;
   }
 
+    public function translateProductFeatureForWeb($productFeature, $languageIndex) {
+        $productFeature["TRANSLATIONS"]["name"] = $productFeature["name_lang_{$languageIndex}"];
+
+        return $productFeature;
+    }
+
 }

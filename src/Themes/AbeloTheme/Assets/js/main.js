@@ -876,3 +876,22 @@ function openQuickModal(element) {
         console.log('renderPluginJSON Error', pluginName, requestData, data);
     });
 }
+
+function openAddAddressModal(element) {
+    element = $(element);
+    var requestData = {};
+    var pluginName = "WAI\\Customer\\Home"
+    requestData.__renderOnlyPlugin = pluginName;
+    requestData.__output = 'json';
+    requestData.customerAction = element.attr("data-link-action");
+    requestData.idAddress = element.attr("data-link-id");
+
+    $.getJSON(
+        '',
+        requestData
+    ).done(function (data) {
+        $("#addAddressDocument").html(data.addressModalContent);
+    }).fail(function (data) {
+        console.log('renderPluginJSON Error', pluginName, requestData, data);
+    });
+}

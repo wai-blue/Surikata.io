@@ -1,0 +1,186 @@
+<div class='modal-header'>
+  <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>x</span></button>
+</div>
+<div class='modal-body'>
+  <div class="single-my-account">
+    <div class="myaccount-info-wrapper">
+      <div class="row">
+        <form method="post" id="addAddressForm">
+          <input type="hidden" name="addAddress" value="1" />
+          <div class="col-lg-12 col-md-12">
+            <div class="billing-info">
+              <label>{{ translate("Invoice given name", "Customer") }}</label>
+              <input
+                  type="text"
+                  name="inv_given_name"
+                  value="{{ address.inv_given_name }}"
+              />
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="billing-info">
+              <label>{{ translate("Invoice family name", "Customer") }}</label>
+              <input
+                  type="text"
+                  name="inv_family_name"
+                  value="{{ address.inv_family_name }}"
+              />
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="billing-info">
+              <label>{{ translate("Invoice company name", "Customer") }}</label>
+              <input
+                  type="text"
+                  name="inv_company_name"
+                  value="{{ address.inv_company_name }}"
+              />
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="billing-info">
+              <label>{{ translate("Invoice Street 1", "Customer") }}</label>
+              <input
+                  type="text"
+                  name="inv_street_1"
+                  value="{{ address.inv_street_1 }}"
+              />
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="billing-info">
+              <label>{{ translate("Invoice Street 2", "Customer") }}</label>
+              <input
+                  type="text"
+                  name="inv_street_2"
+                  value="{{ address.inv_street_2 }}"
+              />
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="billing-info">
+              <label>{{ translate("Invoice ZIP", "Customer") }}</label>
+              <input
+                  type="text"
+                  name="inv_zip"
+                  value="{{ address.inv_zip }}"
+              />
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="billing-info">
+              <label>{{ translate("Invoice City", "Customer") }}</label>
+              <input
+                  type="text"
+                  name="inv_city"
+                  value="{{ address.inv_city }}"
+              />
+            </div>
+          </div>
+
+          <hr/>
+
+          <div class="col-lg-12 col-md-12">
+            <div class="billing-info">
+              <label>{{ translate("Delivery Given Name", "Customer") }}</label>
+              <input
+                  type="text"
+                  name="del_given_name"
+                  value="{{ address.del_given_name }}"
+              />
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="billing-info">
+              <label>{{ translate("Delivery Family Name", "Customer") }}</label>
+              <input
+                  type="text"
+                  name="del_family_name"
+                  value="{{ address.del_family_name }}"
+              />
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="billing-info">
+              <label>{{ translate("Delivery Company Name", "Customer") }}</label>
+              <input
+                  type="text"
+                  name="del_company_name"
+                  value="{{ address.del_company_name }}"
+              />
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="billing-info">
+              <label>{{ translate("Delivery Street 1", "Customer") }}</label>
+              <input
+                  type="text"
+                  name="del_street_1"
+                  value="{{ address.del_street_1 }}"
+              />
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="billing-info">
+              <label>{{ translate("Delivery Street 2", "Customer") }}</label>
+              <input
+                  type="text"
+                  name="del_street_2"
+                  value="{{ address.del_street_2 }}"
+              />
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="billing-info">
+              <label>{{ translate("Delivery ZIP", "Customer") }}</label>
+              <input
+                  type="text"
+                  name="del_zip"
+                  value="{{ address.del_zip }}"
+              />
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="billing-info">
+              <label>{{ translate("Delivery City", "Customer") }}</label>
+              <input
+                  type="text"
+                  name="del_city"
+                  value="{{ address.del_city }}"
+              />
+            </div>
+          </div>
+
+          <hr/>
+
+          <div class="col-lg-12 col-md-12">
+            <div class="billing-info">
+              <label>{{ translate("Phone number", "Customer") }}</label>
+              <input
+                  type="text"
+                  name="phone_number"
+                  value="{{ address.phone_number }}"
+              />
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="billing-info">
+              <label>{{ translate("Email", "Customer") }}</label>
+              <input
+                  type="text"
+                  name="email"
+                  value="{{ address.email }}"
+              />
+            </div>
+          </div>
+        </form>
+
+        <div class="col-12 d-flex align-items-center justify-content-center">
+          <div class="entries-edit-delete text-center">
+            <a href="javascript:void(0);" onclick="AbeloThemeCustomer.addAddress({)">{{ translate("Add", "Customer") }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

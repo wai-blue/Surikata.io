@@ -235,7 +235,6 @@ class CustomerAddress extends \ADIOS\Core\Model {
       $item = $this->firstOrCreate($addressData);
     }
     else {
-
       self::where('id', $data["idAddress"])->update($addressData);
       $item = $addressData;
       $item["id"] = $data["idAddress"];

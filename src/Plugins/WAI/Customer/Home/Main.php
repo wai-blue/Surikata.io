@@ -69,10 +69,11 @@ namespace Surikata\Plugins\WAI\Customer {
               $params["address"] = $this->getAddress($idAddress);
             }
             $returnArray["status"] = "OK";
-            $returnArray["addressModalContent"] = $this->websiteRenderer->twig->render(
-              "{$this->websiteRenderer->twigTemplatesSubDir}/Plugins/WAI/Customer/Modal/EditAddress.twig",
-              $params
-            )
+            $returnArray["addressModalContent"] =
+              $this->websiteRenderer->twig->render(
+                "{$this->websiteRenderer->twigTemplatesSubDir}/Plugins/WAI/Customer/Modal/EditAddress.twig",
+                $params
+              )
             ;
           }
           catch (\Exception $e) {

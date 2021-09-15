@@ -310,14 +310,14 @@ window.onpopstate = function (e) {
 
   AbeloThemeCustomer.prototype.addAddress = function () {
     SurikataCustomer.prototype.addAddress(
-        function(dataSuccess) {
-          if (dataSuccess.status == 'OK') {
-            location.reload();
-          }
-        },
-        function(dataFail) {
-          console.log(dataFail);
+      function(dataSuccess) {
+        if (dataSuccess.status == 'OK') {
+          location.reload();
         }
+      },
+      function(dataFail) {
+        console.log(dataFail);
+      }
     );
   }
 

@@ -231,7 +231,15 @@ class CustomerAddress extends \ADIOS\Core\Model {
 
     $addressData['hash'] = md5(json_encode($addressData));
 
-    $item = $this->firstOrCreate($addressData);
+    if ($data["idAddress"] == 0) {
+      $item = $this->firstOrCreate($addressData);
+    }
+    else {
+
+      self::where('id', $data["idAddress"])->update($addressData);
+      $item = $addressData;
+      $item["id"] = $data["idAddress"];
+    }
 
     return $item['id'];
   }

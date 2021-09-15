@@ -81,14 +81,6 @@ class ShipmentPrice extends \ADIOS\Core\Model {
     ]);
   }
 
-  public function shipment() {
-    return $this->hasOne(\ADIOS\Widgets\Shipping\Models\Shipment::class, 'id', 'id_shipment');
-  }
-
-  public function getAll(string $keyBy = "id") {
-    return self::with('shipment')->get()->toArray();
-  }
-
   public function getById(int $idShipment) {
     return reset(
       $this
@@ -96,38 +88,6 @@ class ShipmentPrice extends \ADIOS\Core\Model {
       ->get()
       ->toArray()
     );
-  }
-  
-  public function getAllBySummary($summary) {
-    $shipmentModel = new \ADIOS\Widgets\Shipping\Models\Shipment($this->adminPanel);
-    $deliveryServiceModel = new \ADIOS\Widgets\Shipping\Models\DeliveryService($this->adminPanel);
-
-    return $this->adios->db->get_all_rows_query("
-      SELECT 
-        {$deliveryServiceModel->table}.name as name,
-        {$this->table}.shipment_price as shipment_price,
-        {$deliveryServiceModel->table}.id as id
-      FROM {$this->table}
-      LEFT JOIN 
-        {$shipmentModel->table}
-      ON 
-        {$this->table}.id_shipment = {$shipmentModel->table}.id 
-      LEFT JOIN 
-        {$deliveryServiceModel->table}
-      ON
-        {$deliveryServiceModel->table}.id = {$shipmentModel->table}.id_delivery_service
-      WHERE 
-      (
-        {$this->table}.shipment_price_calculation_method = 1	
-        AND {$this->table}.price_from <= {$summary['priceTotal']}
-        AND {$this->table}.price_to >= {$summary['priceTotal']}
-      ) OR 
-      (
-        {$this->table}.shipment_price_calculation_method = 2
-        AND {$this->table}.weight_from <= 0
-        AND {$this->table}.weight_to >= 100
-      )
-    ");
   }
 
 }

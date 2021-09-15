@@ -32,6 +32,14 @@
 .orderAgreement input[type="checkbox"] {
   margin-right: 5px;
 }
+.order-img {
+  width: 35px;
+  height: 35px;
+  margin: 5px;
+}
+.delivery img{
+  width: auto;
+}
 .product-flag {
   position: absolute;
   top: 5px;
@@ -119,6 +127,18 @@
   letter-spacing: 0.2px;
   font-weight: 600;
   color: #272727;
+}
+.your-order-total .subTotal{
+  font-size: 16px !important;
+  color: #1d1d1d !important;
+}
+.your-order-total ul {
+  margin-bottom: 5px;
+}
+.your-order-total .order-total {
+  color: #266cfb !important;
+  margin-top: 5px;
+  font-size: 20px !important;
 }
 .notification .error {
   background-color: #ffc8c7 !important;

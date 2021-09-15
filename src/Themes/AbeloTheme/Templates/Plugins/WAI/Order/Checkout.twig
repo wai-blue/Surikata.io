@@ -257,22 +257,29 @@
                                     <a data-toggle="collapse" data-parent="#accordion" href="#method2">{{ translate("Shipping", "Order") }}</a>
                                   </h4>
                                 </div>
-                                {% for deliveryService in deliveryServices %}
-                                  <div id="method2" class="panel-collapse collapse show">
-                                    <div class="panel-body">
-                                      <input 
-                                        type="radio" 
-                                        name="deliveryService" 
-                                        id="deliveryService-{{ loop.index }}" 
-                                        value="{{ deliveryService.id }}"
-                                        {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
-                                        onchange="AbeloThemeCart.updateCheckoutOverview()"
-                                      >
-                                      <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
-                                      <p data-method="{{ deliveryService.id }}" class="delivery-text">{{ deliveryService.description }}</p>
+                                {% if deliveryServices|length > 0 %}
+                                  {% for deliveryService in deliveryServices %}
+                                    <div id="method2" class="panel-collapse collapse show">
+                                      <div class="panel-body delivery">
+                                        <input 
+                                          type="radio" 
+                                          name="deliveryService" 
+                                          id="deliveryService-{{ loop.index }}" 
+                                          value="{{ deliveryService.id }}"
+                                          {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
+                                          onchange="AbeloThemeCart.updateCheckoutOverview()"
+                                        >
+                                        <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
+                                        {% if deliveryService.logo %}
+                                          <img class="order-img" src="./upload/{{ deliveryService.logo }}"/>
+                                        {% endif %}
+                                        <p data-method="{{ deliveryService.id }}" class="delivery-text">{{ deliveryService.description }}</p>
+                                      </div>
                                     </div>
-                                  </div>
-                                {% endfor %}
+                                  {% endfor %}
+                                {% else %}
+                                  <p>{{ translate("Delivery services are unavailable", "Order") }}</p>
+                                {% endif %}
                               </div>
                             </div>
                           </div>
@@ -288,7 +295,7 @@
                                 </div>
                                 {% for paymentMethod in paymentMethods %}
                                   <div id="method1" class="panel-collapse collapse show">
-                                    <div class="panel-body">
+                                    <div class="panel-body delivery">
                                       <input 
                                         required type="radio" 
                                         name="paymentMethod" 
@@ -298,6 +305,9 @@
                                         onchange="AbeloThemeCart.updateCheckoutOverview()"
                                       >
                                       <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
+                                      {% if paymentMethod.logo %}
+                                        <img class="order-img" src="{{ uploadedFileUrl }}/{{ paymentMethod.logo }}"/>
+                                      {% endif %}
                                       <p data-method="{{ paymentMethod.id }}" class="payment-text">{{ paymentMethod.description }}</p>
                                     </div>
                                   </div>
@@ -308,10 +318,16 @@
                         </div>
                         <div class="your-order-total">
                           <ul>
-                            <li class="order-total">{{ translate("Shipping", "Order") }}</li>
-                            <li>{{ deliveryPrice|number_format(2, ",", " ") }} €</li>
+                            <li class="subTotal">{{ translate("Subtotal", "Order") }}</li>
+                            <li class="subTotal">{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+                          </ul>
+                          <ul>
+                            <li class="subTotal">{{ translate("Shipping", "Order") }}</li>
+                            <li class="subTotal">{{ deliveryPrice|number_format(2, ",", " ") }} €</li>
+                          </ul>
+                          <ul>
                             <li class="order-total">{{ translate("Total", "Order") }}</li>
-                            <li>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+                            <li>{{ totalPriceWithDelivery|number_format(2, ",", " ") }} €</li>
                           </ul>
                         </div>
                       </div>
@@ -373,7 +389,7 @@
                 </div>
                 {% for deliveryService in deliveryServices %}
                   <div id="method1" class="panel-collapse collapse show">
-                    <div class="panel-body">
+                    <div class="panel-body delivery">
                       <input 
                         type="radio" 
                         name="deliveryService" 
@@ -383,6 +399,9 @@
                         onchange="AbeloThemeCart.updateCheckoutOverview()"
                       >
                       <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
+                      {% if deliveryService.logo %}
+                        <img class="order-img" src="./upload/{{ deliveryService.logo }}"/>
+                      {% endif %}
                       <p data-method="{{ deliveryService.id }}" class="delivery-text">{{ deliveryService.description }}</p>
                     </div>
                   </div>
@@ -402,7 +421,7 @@
                 </div>
                 {% for paymentMethod in paymentMethods %}
                   <div id="method1" class="panel-collapse collapse show">
-                    <div class="panel-body">
+                    <div class="panel-body delivery">
                       <input 
                         required type="radio" 
                         name="paymentMethod" 
@@ -412,6 +431,9 @@
                         onchange="AbeloThemeCart.updateCheckoutOverview()"
                       >
                       <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
+                      {% if paymentMethod.logo %}
+                        <img class="order-img" src="{{ uploadedFileUrl }}/{{ paymentMethod.logo }}"/>
+                      {% endif %}
                       <p data-method="{{ paymentMethod.id }}" class="payment-text">{{ paymentMethod.description }}</p>
                     </div>
                   </div>
@@ -422,10 +444,16 @@
         </div>
         <div class="your-order-total">
           <ul>
-            <li class="order-total">{{ translate("Shipping", "Order") }}</li>
-            <li>{{ deliveryPrice|number_format(2, ",", " ") }} €</li>
+            <li class="subTotal">{{ translate("Subtotal", "Order") }}</li>
+            <li class="subTotal">{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+          </ul>
+          <ul>
+            <li class="subTotal">{{ translate("Shipping", "Order") }}</li>
+            <li class="subTotal">{{ deliveryPrice|number_format(2, ",", " ") }} €</li>
+          </ul>
+          <ul>
             <li class="order-total">{{ translate("Total", "Order") }}</li>
-            <li>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+            <li>{{ totalPriceWithDelivery|number_format(2, ",", " ") }} €</li>
           </ul>
         </div>
       </div>

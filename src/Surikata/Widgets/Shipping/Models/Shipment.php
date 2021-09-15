@@ -69,27 +69,84 @@ class Shipment extends \ADIOS\Core\Model {
     ]);
   }
 
+  public function price() {
+    return $this->hasMany(\ADIOS\Widgets\Shipping\Models\ShipmentPrice::class, 'id_shipment', 'id');
+  }
+
   public function payment() {
     return $this->hasOne(\ADIOS\Widgets\Shipping\Models\PaymentService::class, "id", "id_payment_service");
+  }
+
+  public function delivery() {
+    return $this->hasOne(\ADIOS\Widgets\Shipping\Models\DeliveryService::class, "id", "id_delivery_service");
+  }
+
+  public function country() {
+    return $this->hasOne(\ADIOS\Widgets\Shipping\Models\Country::class, "id", "id_country");
   }
 
   public function getByIdDeliveryService($idDelivery) {
     return $this
       ->with('payment')
-      ->where('id_delivery_service', $idDelivery)
+      ->where([
+        ['id_delivery_service', $idDelivery],
+        ['is_enabled', 1]
+      ])
+      ->get()
+      ->toArray()
+    ;
+  }
+
+  public function getByCartSummary(array $summary) {
+    return 
+      $this
+      ->with([
+        'delivery',
+        'payment',
+        'country',
+        'price' => function($q) use ($summary) {
+          $q->where([
+            ['shipment_price_calculation_method', '=', 1],	
+            ['price_from', '<=', $summary['priceTotal']],
+            ['price_to', '>=', $summary['priceTotal']]
+          ]);
+          $q->orWhere([
+            ['shipment_price_calculation_method', '=', 2],	
+            ['weight_from', '<=', $summary['weightTotal']],
+            ['weight_to', '>=', $summary['weightTotal']]
+          ]);
+        }
+      ])
+      ->whereHas('price', function ($q) use ($summary){
+        $q->where([
+          ['shipment_price_calculation_method', '=', 1],	
+          ['price_from', '<=', $summary['priceTotal']],
+          ['price_to', '>=', $summary['priceTotal']]
+        ]);
+        $q->orWhere([
+          ['shipment_price_calculation_method', '=', 2],	
+          ['weight_from', '<=', $summary['weightTotal']],
+          ['weight_to', '>=', $summary['weightTotal']]
+        ]);
+      })
+      ->where('is_enabled', 1)
       ->get()
       ->toArray()
     ;
   }
 
   public function getShipment($idDelivery, $idPayment) {
-    return reset(
+    $query =
       $this
-      ->where('id_delivery_service', '=', $idDelivery)
-      ->where('id_payment_service', '=', $idPayment)
+      ->where([
+        ['id_delivery_service', '=', $idDelivery],
+        ['id_payment_service', '=', $idPayment]
+      ])
       ->get()
       ->toArray()
-    );
+    ;
+
+    return $query ? reset($query) : NULL;
   }
 
 }

@@ -88,14 +88,18 @@ class ShoppingCart extends \ADIOS\Core\Model {
 
     // calculate total price
     $priceTotal = 0;
+    $weightTotal = 0;
+
     foreach ($items as $item) {
       $priceTotal += $item['quantity'] * $item['unit_price'];
+      $weightTotal += $item['quantity'] * $item['PRODUCT']['weight'];
     }
 
     return [
       'items' => $items,
       'summary' => [
         'priceTotal' => $priceTotal,
+        'weightTotal' => $weightTotal
       ],
     ];
   }

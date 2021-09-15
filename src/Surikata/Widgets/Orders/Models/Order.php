@@ -350,6 +350,7 @@ class Order extends \ADIOS\Core\Model {
    * @throws \ADIOS\Widgets\Orders\Exceptions\PlaceOrderUnknownError
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownCustomer
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService
+   * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownShipment
    */
   public function placeOrder($orderData, $customerUID = NULL, $cartContents = NULL, $checkRequiredFields = TRUE) {
     $idCustomer = 0;
@@ -440,13 +441,6 @@ class Order extends \ADIOS\Core\Model {
     }
 
     if (!empty($orderData['deliveryService'])) {
-      /*$deliveryPlugin = $this->adios->websiteRenderer->getPlugin($orderData['deliveryService']);
-      if (!is_object($deliveryPlugin)) {
-        throw new \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService($orderData['deliveryService']);
-      }
-      $deliveryPrice = $deliveryPlugin->calculatePriceForOrder($orderData, $cartContents);
-      */
-
       $shipmentModel = 
         new \ADIOS\Widgets\Shipping\Models\Shipment(
           $this->adminPanel
@@ -466,7 +460,13 @@ class Order extends \ADIOS\Core\Model {
         )
       ; 
 
-      $deliveryPrice = ($shipmentPriceModel->getById($shipment['id']))['shipment_price'];
+      if ($shipment === NULL) {
+        throw new \ADIOS\Widgets\Orders\Exceptions\UnknownShipment();
+      }
+
+      $deliveryPrice = 
+        ($shipmentPriceModel->getById($shipment['id']))['shipment_price']
+      ;
     } else {
       //$deliveryPlugin = NULL;
       $deliveryPrice = 0;
@@ -649,14 +649,16 @@ class Order extends \ADIOS\Core\Model {
     return $orderData;
   }
 
-  public function changeOrderState($idOrder, $data) {
+  public function changeOrderState($idOrder, $data, $isCron = false) {
     $this->updateRow(["state" => $data["state"]], $idOrder);
 
+    $idUser = $isCron ? 0 : $this->adios->userProfile['id'];
     (new \ADIOS\Widgets\Orders\Models\OrderHistory($this->adios))
       ->insertRow([
         "id_order" => $idOrder,
         "state" => $data["state"],
         "event_time" => "SQL:now()",
+        "user" => $idUser,
       ])
     ;
 
@@ -1027,13 +1029,8 @@ class Order extends \ADIOS\Core\Model {
       "state" => self::STATE_INVOICED,
     ], $idOrder);
 
-    (new \ADIOS\Widgets\Orders\Models\OrderHistory($this->adios))
-      ->insertRow([
-        "id_order" => $idOrder,
-        "state" => self::STATE_INVOICED,
-        "event_time" => "SQL:now()",
-      ])
-    ;
+    $this->changeOrderState($idOrder, ["state" => self::STATE_INVOICED]);
+    
   }
 
   public function issueInvoce($idOrder, $useDatesFromOrder = FALSE) {

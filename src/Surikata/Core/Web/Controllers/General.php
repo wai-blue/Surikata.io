@@ -96,6 +96,11 @@ class General extends \Surikata\Core\Web\Controller {
     $this->websiteRenderer->idWebPage = $this->websiteRenderer->urlVariables["idWebPage"] ?? 0;
     $this->websiteRenderer->currentPage = $this->websiteRenderer->pages[$this->websiteRenderer->idWebPage] ?? NULL;
 
+    if ($this->websiteRenderer->currentPage === NULL) {
+      header("Location: {$this->websiteRenderer->rewriteBase}");
+      exit();
+    }
+
     $this->websiteRenderer->onGeneralControllerAfterRouting() ;
 
     $this->adminPanel->dispatchEventToPlugins("onGeneralControllerPreRender", [

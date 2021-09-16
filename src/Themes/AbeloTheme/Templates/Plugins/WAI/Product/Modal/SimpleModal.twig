@@ -38,13 +38,14 @@
               type='text'
               name='qtybutton'
               value='1'
-              onchange="validateProductQty(this)"
+              id='modalProductQty_{{ product.id }}'
+              onchange='validateProductQty(this)'
             />
           </div>
           <div class='pro-details-cart btn-hover'>
             <a href='javascript:void(0)' data-dismiss='modal' onclick='AbeloThemeCart.addProduct(
               {{ product.id }},
-              $(".cart-plus-minus > input[name=qtybutton]").val(),
+              $("#modalProductQty_{{ product.id }}").val(),
               function(data) {
                 AbeloThemePopup
                   .setImage("{{ uploaded_file_url }}/{{ product.image }}")

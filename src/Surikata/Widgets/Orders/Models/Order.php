@@ -86,6 +86,8 @@ class Order extends \ADIOS\Core\Model {
         "show_column" => FALSE,
       ],
 
+
+
       "del_given_name" => [
         "type" => "varchar",
         "title" => "Delivery: Given Name",
@@ -167,11 +169,6 @@ class Order extends \ADIOS\Core\Model {
         "title" => "Invoice: Street, 2nd line",
       ],
 
-      "inv_floor" => [
-        "type" => "varchar",
-        "title" => "Invoice: Floor",
-      ],
-
       "inv_city" => [
         "type" => "varchar",
         "title" => "Invoice: City",
@@ -192,6 +189,8 @@ class Order extends \ADIOS\Core\Model {
         "type" => "varchar",
         "title" => "Invoice: Country",
       ],
+
+
 
       "confirmation_time" => [
         "type" => "datetime",
@@ -511,6 +510,7 @@ class Order extends \ADIOS\Core\Model {
       "],
       "id_customer"       => $idCustomer ?? 0,
       "id_customer_uid"   => $idCustomerUID ?? 0,
+
       "del_given_name"    => $orderData['del_given_name'],
       "del_family_name"   => $orderData['del_family_name'],
       "del_company_name"  => $orderData['del_company_name'],
@@ -521,16 +521,17 @@ class Order extends \ADIOS\Core\Model {
       "del_zip"           => $orderData['del_zip'],
       "del_region"        => $orderData['del_region"'],
       "del_country"       => $orderData['del_country'],
+
       "inv_given_name"    => $orderData['inv_given_name'],
       "inv_family_name"   => $orderData['inv_family_name'],
       "inv_company_name"  => $orderData['inv_company_name'],
       "inv_street_1"      => $orderData['inv_street_1'],
       "inv_street_2"      => $orderData['inv_street_2'],
-      "inv_floor"         => $orderData['inv_floor'],
       "inv_city"          => $orderData['inv_city'],
       "inv_zip"           => $orderData['inv_zip'],
       "inv_region"        => $orderData['inv_region'],
       "inv_country"       => $orderData['inv_country'],
+
       "phone_number"      => $orderData['phone_number'],
       "email"             => $orderData['email'],
       "confirmation_time" => $confirmationTime,
@@ -634,21 +635,32 @@ class Order extends \ADIOS\Core\Model {
     $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adios);
     $customer = $customerModel->getById($orderData["id_customer"]);
 
+    $orderData["inv_given_name"] = $customer["inv_given_name"];
+    $orderData["inv_family_name"] = $customer["inv_family_name"];
+    $orderData["inv_company_name"] = $customer["inv_company_name"];
+    $orderData["inv_street_1"] = $customer["inv_street_1"];
+    $orderData["inv_street_2"] = $customer["inv_street_2"];
+    $orderData["inv_city"] = $customer["inv_city"];
+    $orderData["inv_zip"] = $customer["inv_zip"];
+    $orderData["inv_region"] = $customer["inv_region"];
+    $orderData["inv_country"] = $customer["inv_country"];
+
+
     if (count($customer["ADDRESSES"]) > 0) {
       $orderData["id_address"] = $customer["ADDRESSES"][0]["id"];
       $addressFields = [
-        "inv_given_name",
-        "inv_family_name",
-        "inv_street_1",
-        "inv_city",
-        "inv_zip",
         "phone_number",
         "email",
         "del_given_name",
         "del_family_name",
+        "del_company_name",
         "del_street_1",
+        "del_street_2",
+        "del_floor",
         "del_city",
         "del_zip",
+        "del_region",
+        "del_country",
       ];
       foreach ($addressFields as $field) {
         $orderData[$field] = $customer["ADDRESSES"][0][$field];
@@ -847,22 +859,31 @@ class Order extends \ADIOS\Core\Model {
                   "
                 ],
               ],
-              "Addresses" => [
+              "Billing" => [
                 "inv_given_name",
                 "inv_family_name",
+                "inv_company_name",
                 "inv_street_1",
+                "inv_street_2",
                 "inv_city",
                 "inv_zip",
-                "del_given_name",
-                "del_family_name",
-                "del_street_1",
-                "del_city",
-                "del_zip",
+                "inv_region",
+                "inv_country",
               ],
               "Delivery" => [
                 "required_delivery_time",
                 "delivery_service",
                 "delivery_price",
+                "del_given_name",
+                "del_family_name",
+                "del_company_name",
+                "del_street_1",
+                "del_street_2",
+                "del_floor",
+                "del_city",
+                "del_zip",
+                "del_region",
+                "del_country",
               ],
               "Items" => [
                 "action" => "UI/Table",

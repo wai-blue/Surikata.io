@@ -1,6 +1,9 @@
 <?php
 
 namespace Surikata\Plugins\WAI\Customer {
+
+  use Surikata\Core\Web\Controllers\UserProfile;
+
   class Home extends \Surikata\Core\Web\Plugin {
 
     public function removeAddress() {
@@ -11,6 +14,32 @@ namespace Surikata\Plugins\WAI\Customer {
       $customerAddressModel->removeAddress($idCustomer, $idAddress);
 
       return TRUE;
+    }
+
+    public function editAddress($idAddress) {
+      $idCustomer = (int) $this->websiteRenderer->userLogged['id'];
+      $customerAddressModel = new \ADIOS\Widgets\Customers\Models\CustomerAddress($this->adminPanel);
+      $data = $this->websiteRenderer->urlVariables;
+
+      if ($idAddress > 0) {
+        return $customerAddressModel->saveAddress($idCustomer, $data);
+      }
+      else {
+        return $customerAddressModel->saveAddress($idCustomer, $data);
+      }
+    }
+
+    public function getAddress($idAddress) {
+      $idCustomer = (int) $this->websiteRenderer->userLogged['id'];
+
+      $customerAddressModel = new \ADIOS\Widgets\Customers\Models\CustomerAddress($this->adminPanel);
+      $address = $customerAddressModel->getById($idAddress);
+
+      if ($address["id_customer"] != $idCustomer) {
+        return [];
+      }
+
+      return $address;
     }
 
     public function renderJSON() {
@@ -27,6 +56,39 @@ namespace Surikata\Plugins\WAI\Customer {
 
             $returnArray["status"] = "OK";
           } catch (\ADIOS\Widgets\Customers\Exceptions\RemoveAddressUnknownError $e) {
+            $returnArray["status"] = "FAIL";
+            $returnArray["exception"] = get_class($e);
+            $returnArray["error"] = $e->getMessage();
+          }
+        break;
+        case 'editAddressModal':
+          try {
+            $idAddress = (int)$this->websiteRenderer->urlVariables['idAddress'] ?? 0;
+            $params = [];
+            if ($idAddress !== 0) {
+              $params["address"] = $this->getAddress($idAddress);
+            }
+            $returnArray["status"] = "OK";
+            $returnArray["addressModalContent"] =
+              $this->websiteRenderer->twig->render(
+                "{$this->websiteRenderer->twigTemplatesSubDir}/Plugins/WAI/Customer/Modal/EditAddress.twig",
+                $params
+              )
+            ;
+          }
+          catch (\Exception $e) {
+            $returnArray["status"] = "FAIL";
+            $returnArray["exception"] = get_class($e);
+            $returnArray["error"] = $e->getMessage();
+          }
+        break;
+        case "editAddress":
+          try {
+            $idAddress = (int)$this->websiteRenderer->urlVariables['idAddress'] ?? 0;
+            $returnArray["status"] = "OK";
+            $returnArray["id_address"] = $this->editAddress($idAddress);
+          }
+          catch (\Exception $e) {
             $returnArray["status"] = "FAIL";
             $returnArray["exception"] = get_class($e);
             $returnArray["error"] = $e->getMessage();

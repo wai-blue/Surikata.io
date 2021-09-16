@@ -26,6 +26,7 @@ Now, you should have following folder structure in your project folder:
       admin/      // the index.php and .htaccess for the administration panel
       install/    // the installer; should be used only once
       log/        // log files
+      prop/       // your proprietary code: plugins and themes
       src/        // source code including all "boxes" (core, plugins & theme)
       tmp/        // temporary files
       upload/     // files uploaded in the administration panel

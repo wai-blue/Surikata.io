@@ -12,6 +12,19 @@ SurikataCustomer.prototype.createAccount = function (success, fail) {
   );
 }
 
+SurikataCustomer.prototype.addAddress = function (success, fail) {
+  let data = Surikata.serializeForm('#addAddressForm');
+  data['createAddress'] = true;
+  data['customerAction'] = "editAddress";
+
+  Surikata.renderPluginJSON(
+      'WAI/Customer/Home',
+      data,
+      success,
+      fail
+  );
+}
+
 SurikataCustomer.prototype.removeAddress = function (data, success, fail) {
   Surikata.renderPluginJSON(
     'WAI/Customer/Home',

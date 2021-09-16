@@ -185,6 +185,9 @@
                   {% else %}
                     {{ feature.pivot.value_number }} {# feature.jednotka #}
                   {% endif %}
+                  {% if feature.MEASUREMENT_UNIT.unit != "N/A" %}
+                    {{ feature.MEASUREMENT_UNIT.unit }}
+                  {% endif %}
                 </li>
               {% endfor %}
             </ul>

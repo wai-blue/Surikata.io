@@ -308,6 +308,19 @@ window.onpopstate = function (e) {
     }
   }
 
+  AbeloThemeCustomer.prototype.addAddress = function () {
+    SurikataCustomer.prototype.addAddress(
+      function(dataSuccess) {
+        if (dataSuccess.status == 'OK') {
+          location.reload();
+        }
+      },
+      function(dataFail) {
+        console.log(dataFail);
+      }
+    );
+  }
+
   AbeloThemeCustomer.prototype.removeAddress = function (idAddress) {
     SurikataCustomer.prototype.removeAddress(
       {

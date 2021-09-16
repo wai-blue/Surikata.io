@@ -124,6 +124,24 @@ class General extends \Surikata\Core\Web\Controller {
       "locale" => $this->adminPanel->locale->getAll(),
     ]);
 
+    $adminPanelConfig = $this->websiteRenderer->adminPanel->config;
+    $maintenanceSettings = $adminPanelConfig["settings"]["web"]["maintenance"] ?? [];
+    $maintenanceModeActivated = (bool) ($maintenanceSettings["activated"] ?? FALSE);
+
+    if ($maintenanceModeActivated) {
+      $this->websiteRenderer->outputHtml =
+        $this->websiteRenderer->twig->render(
+          "{$this->websiteRenderer->twigTemplatesSubDir}/Maintenance.twig",
+          array_merge(
+            $this->websiteRenderer->twigParams,
+            [
+              "additionalInfo" => $maintenanceSettings["additionalInfo"]
+            ]
+          )
+        );
+      $this->websiteRenderer->cancelRendering();
+    }
+
     if (empty($_GET['__renderOnlyPlugin'])) {
       if (is_array($this->websiteRenderer->contentStructure)) {
         $contentStructure = $this->websiteRenderer->contentStructure;

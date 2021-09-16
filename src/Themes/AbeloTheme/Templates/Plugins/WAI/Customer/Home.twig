@@ -115,7 +115,21 @@
                   <div class="myaccount-info-wrapper">
                     <div class="account-info-wrapper">
                       <h4>{{ translate("Address Book Entries", "Customer") }}</h4>
+                      <div class="entries-edit-add text-right" style="float: right">
+                        <a
+                          href="javascript:void(0);"
+                          data-link-action="editAddressModal"
+                          data-link-id="0"
+                          onclick="openAddAddressModal(this)"
+                          title="{{ translate("Add Address", "Customer") }}"
+                          data-toggle="modal"
+                          data-target="#addAddressModal"
+                        >
+                          {{ translate("Add address", "Customer") }}
+                        </a>
+                      </div>
                     </div>
+
                     {% for address in user.profile.ADDRESSES %}
                       <div class="entries-wrapper">
                         <div class="row">
@@ -150,6 +164,19 @@
                             </div>
                           </div>
                           <div class="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
+                            <div class="entries-edit-add text-center">
+                              <a
+                                  href="javascript:void(0);"
+                                  data-link-action="editAddressModal"
+                                  data-link-id="{{ address.id }}"
+                                  onclick="openAddAddressModal(this)"
+                                  title="{{ translate("Add Address", "Customer") }}"
+                                  data-toggle="modal"
+                                  data-target="#addAddressModal"
+                              >
+                                {{ translate("Edit", "Customer") }}
+                              </a>
+                            </div>
                             <div class="entries-edit-delete text-center">
                               <a href="javascript:void(0);" onclick="AbeloThemeCustomer.removeAddress({{ address.id }})">{{ translate("Delete", "Customer") }}</a>
                             </div>

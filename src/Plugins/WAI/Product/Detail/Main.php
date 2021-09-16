@@ -1,7 +1,9 @@
 <?php
 
 namespace Surikata\Plugins\WAI\Product {
-  use ADIOS\Widgets\Products\Models\Service;
+
+    use ADIOS\Widgets\Products\Models\ProductFeature;
+    use ADIOS\Widgets\Products\Models\Service;
   class Detail extends \Surikata\Core\Web\Plugin {
     var $productInfo = NULL;
     var $deleteCurrentPageBreadCrumb = true;
@@ -111,6 +113,8 @@ namespace Surikata\Plugins\WAI\Product {
             break;
           }
         }
+        $this->productInfo['FEATURES'][$key] = (new ProductFeature($this->adminPanel))
+          ->translateProductFeatureForWeb($this->productInfo['FEATURES'][$key], $languageIndex);
       }
       return $this->productInfo;
     }
@@ -136,6 +140,7 @@ namespace Surikata\Plugins\WAI\Product {
       switch ($productAction) {
         case "getQuickView":
           $product = $this->getProductInfo();
+          $product["url"] = $this->getWebPageUrlFormatted($product);
           $returnArray["product"] = [];
           $returnArray["product"] = $product;
           $returnArray["productModalContent"] = (new \Surikata\Plugins\WAI\Product\Detail\Modals\ProductModal($this->websiteRenderer))

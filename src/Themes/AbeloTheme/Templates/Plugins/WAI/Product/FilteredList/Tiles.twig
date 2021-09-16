@@ -64,10 +64,10 @@
                 <p>{{ product.TRANSLATIONS.brief }}</p>
                 <div class="pricing-meta">
                   <ul>
-                    {% if product.PRICE.fullPrice != product.PRICE.salePrice %}
-                      <li class="old-price">{{ product.PRICE.fullPrice|number_format(2, ",", " ") }} €</li>
+                    {% if product.sale_price_cached != product.full_price_cached %}
+                      <li class="old-price">{{ product.full_price_cachede|number_format(2, ",", " ") }} €</li>
                     {% endif %}
-                    <li class="current-price">{{ product.PRICE.salePrice|number_format(2, ",", " ") }} €</li>
+                    <li class="current-price">{{ product.sale_price_cached|number_format(2, ",", " ") }} €</li>
                   </ul>
                 </div>
               </div>
@@ -78,24 +78,3 @@
     {% endfor %}
   </div>
 </div>
-
-<script>
-  function openQuickModal(element) {
-    element = $(element);
-    var requestData = {};
-    var pluginName = "WAI\\Product\\Detail"
-    requestData.__renderOnlyPlugin = pluginName;
-    requestData.__output = 'json';
-    requestData.productAction = element.attr("data-link-action");
-    requestData.idProduct = element.attr("data-link-id");
-
-    $.getJSON(
-      '',
-      requestData
-    ).done(function (data) {
-      $("#quickViewDocument").html(data.productModalContent);
-    }).fail(function (data) {
-      console.log('renderPluginJSON Error', pluginName, requestData, data);
-    });
-  }
-</script>

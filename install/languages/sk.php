@@ -75,8 +75,8 @@
   $tmpProduktyID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Produkty", "url" => "produkty"]);
   $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpProduktyID, "title" => "Akcie a zľavy", "url" => "akcie-a-zlavy"]);
   $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Blog", "url" => "blogy"]);
-  $tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Prihlásiť sa", "url" => "prihlasit-sa"]);
-  $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "Registrovať sa", "url" => "registracia"]);
+  //$tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Prihlásiť sa", "url" => "prihlasit-sa"]);
+  //$websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => $tmpHomepageID, "title" => "Registrovať sa", "url" => "registracia"]);
   $websiteMenuItemModel->insertRow(["id_menu" => 1, "id_parent" => 0, "title" => "Kontakt", "url" => "kontakt"]);
 
   // web - stranky
@@ -190,7 +190,7 @@
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => "",
-          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/kontakt.html"),
+          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/kontakt_sk.html"),
         ]
       ],
     ],
@@ -320,6 +320,8 @@
     $websiteWebPageModel->insertRow([
       "domain" => $tmpDomain,
       "name" => $tmpTitle,
+      "seo_title" => $tmpTitle,
+      "seo_description" => $tmpTitle,
       "url" => $tmpUrl,
       "publish_always" => 1,
       "content_structure" => json_encode([

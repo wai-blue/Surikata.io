@@ -87,6 +87,60 @@ class Customer extends \ADIOS\Core\Model {
 
 
 
+
+      "inv_given_name" => [
+        "type" => "varchar",
+        "title" => "Billing: Given Name",
+      ],
+
+      "inv_family_name" => [
+        "type" => "varchar",
+        "title" => "Billing: Family Name",
+        "show_column" => TRUE,
+      ],
+
+      "inv_company_name" => [
+        "type" => "varchar",
+        "title" => "Billing: Company Name",
+        "show_column" => TRUE,
+      ],
+
+      "inv_street_1" => [
+        "type" => "varchar",
+        "title" => "Billing: Street, 1st line",
+        "show_column" => TRUE,
+      ],
+
+      "inv_street_2" => [
+        "type" => "varchar",
+        "title" => "Billing: Street, 2nd line",
+      ],
+
+      "inv_city" => [
+        "type" => "varchar",
+        "title" => "Billing: City",
+        "show_column" => TRUE,
+      ],
+
+      "inv_zip" => [
+        "type" => "varchar",
+        "title" => "Billing: ZIP",
+      ],
+
+      "inv_region" => [
+        "type" => "varchar",
+        "title" => "Billing: Region",
+      ],
+
+      "inv_country" => [
+        "type" => "varchar",
+        "title" => "Billing: Country",
+      ],
+
+
+
+
+
       "password" => [
         "type" => "password",
         "title" => "Password",
@@ -329,7 +383,18 @@ class Customer extends \ADIOS\Core\Model {
                 "is_wholesale",
                 "id_category",
               ],
-              "Addresses" => [
+              "Billing" => [
+                "inv_given_name",
+                "inv_family_name",
+                "inv_company_name",
+                "inv_street_1",
+                "inv_street_2",
+                "inv_city",
+                "inv_zip",
+                "inv_region",
+                "inv_country",
+              ],
+              "Delivery addresses" => [
                 "action" => "UI/Table",
                 "params" => [
                   "model" => "Widgets/Customers/Models/CustomerAddress",

@@ -5505,6 +5505,9 @@ offcanvas-menu > ul > li .menu-expand {
   max-height: 100px;
   padding-left: 10px;
 }
+.cart-main-area .product-thumbnail img {
+  max-height: 100px;
+}
 .cart-main-area .product-name {
   color: #266cfb;
   font-weight: 600;
@@ -6444,6 +6447,51 @@ offcanvas-menu > ul > li .menu-expand {
 }
 .single-my-account .myaccount-info-wrapper .entries-wrapper .entries-edit-delete a.edit:hover {
   background-color: #266cfb;
+}
+
+.single-my-account .myaccount-info-wrapper .entries-wrapper .entries-edit-add a {
+  background-color: #266cfb;
+  color: #fff;
+  display: inline-block;
+  line-height: 1;
+  margin: 0 2px;
+  padding: 12px 15px;
+  text-transform: uppercase;
+  font-weight: 700;
+  top: auto !important;
+}
+.single-my-account .myaccount-info-wrapper .entries-wrapper .entries-edit-add a:hover {
+  background-color: #1fa219;
+}
+.single-my-account .myaccount-info-wrapper .entries-wrapper .entries-edit-add a.edit {
+  background-color: #272727;
+  font-weight: 700;
+}
+.single-my-account .myaccount-info-wrapper .entries-wrapper .entries-edit-add a.edit:hover {
+  background-color: #1fa219;
+}
+
+.myaccount-info-wrapper .entries-edit-add a {
+  background-color: #266cfb;
+  color: #fff;
+  display: inline-block;
+  line-height: 1;
+  margin: 0 2px;
+  padding: 12px 15px;
+  text-transform: uppercase;
+  font-weight: 700;
+  top: -24px;
+  position: relative;
+}
+.myaccount-info-wrapper .entries-edit-add a:hover {
+  background-color: #1fa219;
+}
+.myaccount-info-wrapper .entries-edit-add a.edit {
+  background-color: #272727;
+  font-weight: 700;
+}
+.myaccount-info-wrapper .entries-edit-add a.edit:hover {
+  background-color: #1fa219;
 }
 
 .cart-heading h2 {

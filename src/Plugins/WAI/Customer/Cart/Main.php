@@ -1,10 +1,14 @@
 <?php
 
 namespace Surikata\Plugins\WAI\Customer {
+
+  use ADIOS\Widgets\Products\Models\Product;
+
   class Cart extends \Surikata\Core\Web\Plugin {
     var $cartContents = NULL;
 
     public function getCartContents($reload = FALSE) {
+      $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
       if ($reload || $this->cartContents === NULL) {
         $customerUID = $this->websiteRenderer->getCustomerUID();
 
@@ -18,6 +22,11 @@ namespace Surikata\Plugins\WAI\Customer {
             (new \Surikata\Plugins\WAI\Product\Detail($this->websiteRenderer))
             ->getWebPageUrl($this->cartContents['items'][$key]['PRODUCT'])
           ;
+
+          $this->cartContents['items'][$key]['PRODUCT'] = (new Product($this->websiteRenderer->adminPanel))
+            ->translateSingleProductForWeb($this->cartContents['items'][$key]['PRODUCT'], $languageIndex)
+          ;
+
           $idProducts[] = $this->cartContents['items'][$key]['PRODUCT']['id'];
         }
       }

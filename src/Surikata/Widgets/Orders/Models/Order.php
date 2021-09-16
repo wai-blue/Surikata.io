@@ -1,6 +1,7 @@
 <?php
 
 namespace ADIOS\Widgets\Orders\Models;
+use ADIOS\Widgets\CRM\Models\Newsletter;
 use ADIOS\Widgets\Shipping\Models\DeliveryService;
 
 class Order extends \ADIOS\Core\Model {
@@ -557,6 +558,10 @@ class Order extends \ADIOS\Core\Model {
 
     $this->sendNotificationForPlacedOrder($placedOrderData);
 
+    if (isset($orderData["marketingAgreement"])) {
+      (new Newsletter($this->adios))->registerForNewsletter($orderData["email"]);
+    }
+
     return $idOrder;
 
   }
@@ -810,6 +815,8 @@ class Order extends \ADIOS\Core\Model {
                 "serial_number",
                 "number",
                 "id_customer",
+                "phone_number",
+                "email",
                 "confirmation_time",
                 "number_customer",
                 "notes",
@@ -825,6 +832,18 @@ class Order extends \ADIOS\Core\Model {
                     </div>
                   "
                 ],
+              ],
+              "Addresses" => [
+                "inv_given_name",
+                "inv_family_name",
+                "inv_street_1",
+                "inv_city",
+                "inv_zip",
+                "del_given_name",
+                "del_family_name",
+                "del_street_1",
+                "del_city",
+                "del_zip",
               ],
               "Delivery" => [
                 "required_delivery_time",

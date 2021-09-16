@@ -5,9 +5,9 @@ namespace ADIOS\Widgets\CRM\Models;
 class Newsletter extends \ADIOS\Core\Model {
   var $sqlName = "newsletter";
   var $urlBase = "CRM/Newsletter";
-  var $tableTitle = "Prihlásení do newsletteru";
-  var $formTitleForEditing = "Prihlásený do newsletteru";
-  var $formTitleForInserting = "Prihlásený do newsletteru";
+  var $tableTitle = "Newsletter Subscribers";
+  var $formTitleForEditing = "Newsletter new subscribe";
+  var $formTitleForInserting = "Newsletter edit subscribe";
 
   public function columns(array $columns = []) {
     return parent::columns([
@@ -19,7 +19,7 @@ class Newsletter extends \ADIOS\Core\Model {
 
       "created_at" => [
         "type" => "datetime",
-        "title" => $this->translate("Prijaté"),
+        "title" => $this->translate("Created at"),
         "show_column" => TRUE,
       ],
     ]);

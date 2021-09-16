@@ -437,6 +437,20 @@ class Order extends \ADIOS\Core\Model {
       $idAddress = $customerAddressModel->saveAddress($idCustomer, $orderData);
     }
 
+    // Create user if not exist
+    if ($idCustomer == 0) {
+      if ($customerModel->getByEmail($orderData["email"]) === false) {
+        $createCustomerData = array_merge(
+          $orderData,
+          [
+            "family_name" => $orderData["inv_given_name"],
+            "given_name" => $orderData["inv_given_name"]
+          ]
+        );
+        $idCustomer = $customerModel->createAccount($customerUID, $orderData["email"], $createCustomerData, true, true);
+      }
+    }
+
     if ($cartContents === NULL && !empty($customerUID)) {
       $cartContents = $cartModel->getCartContents($customerUID);
     }

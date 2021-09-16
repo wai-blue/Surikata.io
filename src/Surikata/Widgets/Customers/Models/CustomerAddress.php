@@ -10,10 +10,10 @@ class CustomerAddress extends \ADIOS\Core\Model {
   var $formTitleForEditing = "Customer address";
   var $lookupSqlValue = "
     concat(
-      ifnull({%TABLE%}.inv_given_name, ''), ' ',
-      ifnull({%TABLE%}.inv_family_name, ''), ' ',
-      ifnull({%TABLE%}.inv_company_name, ''), ', ',
-      ifnull({%TABLE%}.inv_city, '')
+      ifnull({%TABLE%}.del_given_name, ''), ' ',
+      ifnull({%TABLE%}.del_family_name, ''), ' ',
+      ifnull({%TABLE%}.del_company_name, ''), ', ',
+      ifnull({%TABLE%}.del_city, '')
     )
   ";
 
@@ -36,112 +36,56 @@ class CustomerAddress extends \ADIOS\Core\Model {
 
       "del_given_name" => [
         "type" => "varchar",
-        "title" => "Delivery: Given Name",
+        "title" => "Given Name",
       ],
 
       "del_family_name" => [
         "type" => "varchar",
-        "title" => "Delivery: Family Name",
+        "title" => "Family Name",
         "show_column" => TRUE,
       ],
 
       "del_company_name" => [
         "type" => "varchar",
-        "title" => "Delivery: Company Name",
+        "title" => "Company Name",
         "show_column" => TRUE,
       ],
 
       "del_street_1" => [
         "type" => "varchar",
-        "title" => "Delivery: Street, 1st line",
+        "title" => "Street, 1st line",
         "show_column" => TRUE,
       ],
 
       "del_street_2" => [
         "type" => "varchar",
-        "title" => "Delivery: Street, 2nd line",
+        "title" => "Street, 2nd line",
       ],
 
       "del_floor" => [
         "type" => "varchar",
-        "title" => "Delivery: Floor",
+        "title" => "Floor",
       ],
 
       "del_city" => [
         "type" => "varchar",
-        "title" => "Delivery: City",
+        "title" => "City",
         "show_column" => TRUE,
       ],
 
       "del_zip" => [
         "type" => "varchar",
-        "title" => "Delivery: ZIP",
+        "title" => "ZIP",
       ],
 
       "del_region" => [
         "type" => "varchar",
-        "title" => "Delivery: Region",
+        "title" => "Region",
       ],
 
       "del_country" => [
         "type" => "varchar",
-        "title" => "Delivery: Country",
-      ],
-
-
-
-      "inv_given_name" => [
-        "type" => "varchar",
-        "title" => "Billing: Given Name",
-      ],
-
-      "inv_family_name" => [
-        "type" => "varchar",
-        "title" => "Billing: Family Name",
-        "show_column" => TRUE,
-      ],
-
-      "inv_company_name" => [
-        "type" => "varchar",
-        "title" => "Billing: Company Name",
-        "show_column" => TRUE,
-      ],
-
-      "inv_street_1" => [
-        "type" => "varchar",
-        "title" => "Billing: Street, 1st line",
-        "show_column" => TRUE,
-      ],
-
-      "inv_street_2" => [
-        "type" => "varchar",
-        "title" => "Billing: Street, 2nd line",
-      ],
-
-      "inv_floor" => [
-        "type" => "varchar",
-        "title" => "Billing: Floor",
-      ],
-
-      "inv_city" => [
-        "type" => "varchar",
-        "title" => "Billing: City",
-        "show_column" => TRUE,
-      ],
-
-      "inv_zip" => [
-        "type" => "varchar",
-        "title" => "Billing: ZIP",
-      ],
-
-      "inv_region" => [
-        "type" => "varchar",
-        "title" => "Billing: Region",
-      ],
-
-      "inv_country" => [
-        "type" => "varchar",
-        "title" => "Billing: Country",
+        "title" => "Country",
       ],
 
 
@@ -181,23 +125,16 @@ class CustomerAddress extends \ADIOS\Core\Model {
               "phone_number",
               "email",
             ],
-            "Billing address" => [
-              "inv_family_name",
-              "inv_given_name",
-              "inv_company_name",
-              "inv_street_1",
-              "inv_street_12",
-              "inv_city",
-              "inv_zip",
-            ],
             "Delivery address" => [
-              "del_family_name",
               "del_given_name",
+              "del_family_name",
               "del_company_name",
               "del_street_1",
-              "del_street_12",
+              "del_street_2",
               "del_city",
               "del_zip",
+              "del_region",
+              "del_country",
             ],
           ],
         ],

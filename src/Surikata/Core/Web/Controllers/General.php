@@ -124,15 +124,18 @@ class General extends \Surikata\Core\Web\Controller {
       "locale" => $this->adminPanel->locale->getAll(),
     ]);
 
-    if ((int) $this->websiteRenderer->adminPanel->config["settings"]["web"]["maintenance"]["mod_udrzby"] == 1) {
+    $adminPanelConfig = $this->websiteRenderer->adminPanel->config;
+    $maintenanceSettings = $adminPanelConfig["settings"]["web"]["maintenance"] ?? [];
+    $maintenanceModeActivated = (bool) ($maintenanceSettings["activated"] ?? FALSE);
+
+    if ($maintenanceModeActivated) {
       $this->websiteRenderer->outputHtml =
         $this->websiteRenderer->twig->render(
-          "{$this->websiteRenderer->twigTemplatesSubDir}/maintenance.twig",
+          "{$this->websiteRenderer->twigTemplatesSubDir}/Maintenance.twig",
           array_merge(
             $this->websiteRenderer->twigParams,
             [
-              "additional_info" =>
-                $this->websiteRenderer->adminPanel->config["settings"]["web"]["maintenance"]["mod_udrzby_doplnujuci_oznam"]
+              "additionalInfo" => $maintenanceSettings["additionalInfo"]
             ]
           )
         );

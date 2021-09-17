@@ -57,20 +57,23 @@ class ShipmentPrice extends \ADIOS\Core\Model {
       "price_from" => [
         "type" => "float",
         "title" => $this->translate("Offer price start"),
-        "show_column" => TRUE
+        "show_column" => TRUE,
+        "unit" => "€"
       ],
 
       "price_to" => [
         "type" => "float",
         "title" => $this->translate("Offer price to"),
-        "show_column" => TRUE
+        "show_column" => TRUE,
+        "unit" => "€"
       ],
 
       "shipment_price" => [
         "type" => "float",
         "title" => $this->translate("Shipment price"),
         "show_column" => TRUE,
-        "required" => TRUE
+        "required" => TRUE,
+        "unit" => "€"
       ],
 
     ]);

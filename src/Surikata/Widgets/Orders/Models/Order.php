@@ -1,8 +1,6 @@
 <?php
 
 namespace ADIOS\Widgets\Orders\Models;
-use ADIOS\Widgets\CRM\Models\Newsletter;
-use ADIOS\Widgets\Shipping\Models\DeliveryService;
 
 class Order extends \ADIOS\Core\Model {
   const STATE_NEW      = 1;
@@ -42,8 +40,6 @@ class Order extends \ADIOS\Core\Model {
       self::STATE_RECEIVED => '#D3D3D3',     //light-gray
       self::STATE_CANCELED => '#808080',     //gray
     ];
-
-    $this->enumDeliveryServices = (new DeliveryService($this->adios))->getEnumValues();
 
   }
 
@@ -198,23 +194,49 @@ class Order extends \ADIOS\Core\Model {
         "show_column" => true
       ],
 
-      "delivery_service" => [
-        "type" => "varchar",
+
+
+      "id_delivery_service" => [
+        "type" => "lookup",
         "title" => "Delivery service",
-        "enum_values" => $this->enumDeliveryServices,
+        "model" => "Widgets/Shipping/Models/DeliveryService",
+        "show_column" => TRUE,
       ],
 
-      "required_delivery_time" => [
-        "type" => "date",
-        "title" => "Required delivery time",
-        "show_column" => true
+      "id_payment_service" => [
+        "type" => "lookup",
+        "title" => "Payment service",
+        "model" => "Widgets/Shipping/Models/PaymentService",
+        "show_column" => TRUE,
       ],
-    
-      "delivery_price" => [
+
+      "id_destination_country" => [
+        "type" => "lookup",
+        "title" => "Destination country",
+        "model" => "Widgets/Shipping/Models/DestinationCountry",
+        "show_column" => TRUE,
+      ],
+
+      "delivery_fee" => [
         "type" => "float",
-        "title" => "Delivery price",
+        "title" => "Delivery fee",
         "unit" => $this->adios->locale->currencySymbol(),
+        "show_column" => TRUE,
       ],
+
+      "payment_fee" => [
+        "type" => "float",
+        "title" => "Payment fee",
+        "unit" => $this->adios->locale->currencySymbol(),
+        "show_column" => TRUE,
+      ],
+
+      "preferred_delivery_day" => [
+        "type" => "date",
+        "title" => "Preferred delivery day",
+      ],
+
+
 
       "number_customer" => [
         "type" => "varchar",
@@ -268,10 +290,6 @@ class Order extends \ADIOS\Core\Model {
       "order___number" => [
         "type" => "unique",
         "columns" => ["number"],
-      ],
-      "order___delivery_service" => [
-        "type" => "index",
-        "columns" => ["delivery_service"],
       ],
     ]);
   }
@@ -454,37 +472,42 @@ class Order extends \ADIOS\Core\Model {
       $cartContents = $cartModel->getCartContents($customerUID);
     }
 
-    if (!empty($orderData['deliveryService'])) {
-      $shipmentModel = 
-        new \ADIOS\Widgets\Shipping\Models\Shipment(
-          $this->adminPanel
-        )
-      ;
+    // REVIEW: cele $orderData je o udajoch z DB, cize polozky pola nepouzivaju_camel_case.
+    // Preco je tu zrazu deliveryServiceVCamelCase?
+    // if (!empty($orderData['deliveryService'])) {
+    //   $shipmentModel = 
+    //     new \ADIOS\Widgets\Shipping\Models\Shipment(
+    //       $this->adminPanel
+    //     )
+    //   ;
 
-      $shipmentPriceModel = 
-        new \ADIOS\Widgets\Shipping\Models\ShipmentPrice(
-          $this->adminPanel
-        )
-      ;
+    //   $shipmentPriceModel = 
+    //     new \ADIOS\Widgets\Shipping\Models\ShipmentPrice(
+    //       $this->adminPanel
+    //     )
+    //   ;
 
-      $shipment = 
-        $shipmentModel->getShipment(
-          $orderData['deliveryService'],
-          $orderData['paymentMethod']
-        )
-      ; 
+    //   // REVIEW: Upravit podla noveho stlpca Order.id_shipment
+    //   // Resp. otazka - v checkout formulari sa vlastne ma volit co? Shipment alebo DeliveryService?
+    //   // Mam za to, ze po novom je to shipment.
+    //   $shipment = 
+    //     $shipmentModel->getShipment(
+    //       $orderData['deliveryService'],
+    //       $orderData['paymentMethod']
+    //     )
+    //   ; 
 
-      if ($shipment === NULL) {
-        throw new \ADIOS\Widgets\Orders\Exceptions\UnknownShipment();
-      }
+    //   if ($shipment === NULL) {
+    //     throw new \ADIOS\Widgets\Orders\Exceptions\UnknownShipment();
+    //   }
 
-      $deliveryPrice = 
-        ($shipmentPriceModel->getById($shipment['id']))['shipment_price']
-      ;
-    } else {
-      //$deliveryPlugin = NULL;
-      $deliveryPrice = 0;
-    }
+    //   $deliveryPrice = 
+    //     ($shipmentPriceModel->getById($shipment['id']))['price']
+    //   ;
+    // } else {
+    //   //$deliveryPlugin = NULL;
+    //   $deliveryPrice = 0;
+    // }
 
     if (empty($orderData['confirmation_time'])) {
       $confirmationTime = date("Y-m-d H:i:s");
@@ -508,38 +531,39 @@ class Order extends \ADIOS\Core\Model {
       "number" => $orderData['number'] ?? ["sql" => "
         @number := concat('".date("ymd", strtotime($confirmationTime))."', lpad(@serial_number, 4, '0'))
       "],
-      "id_customer"       => $idCustomer ?? 0,
-      "id_customer_uid"   => $idCustomerUID ?? 0,
+      "id_customer"            => $idCustomer ?? 0,
+      "id_customer_uid"        => $idCustomerUID ?? 0,
 
-      "del_given_name"    => $orderData['del_given_name'],
-      "del_family_name"   => $orderData['del_family_name'],
-      "del_company_name"  => $orderData['del_company_name'],
-      "del_street_1"      => $orderData['del_street_1'],
-      "del_street_2"      => $orderData['del_street_2'],
-      "del_floor"         => $orderData['del_floor'],
-      "del_city"          => $orderData['del_city'],
-      "del_zip"           => $orderData['del_zip'],
-      "del_region"        => $orderData['del_region"'],
-      "del_country"       => $orderData['del_country'],
+      "del_given_name"         => $orderData['del_given_name'],
+      "del_family_name"        => $orderData['del_family_name'],
+      "del_company_name"       => $orderData['del_company_name'],
+      "del_street_1"           => $orderData['del_street_1'],
+      "del_street_2"           => $orderData['del_street_2'],
+      "del_floor"              => $orderData['del_floor'],
+      "del_city"               => $orderData['del_city'],
+      "del_zip"                => $orderData['del_zip'],
+      "del_region"             => $orderData['del_region"'],
+      "del_country"            => $orderData['del_country'],
 
-      "inv_given_name"    => $orderData['inv_given_name'],
-      "inv_family_name"   => $orderData['inv_family_name'],
-      "inv_company_name"  => $orderData['inv_company_name'],
-      "inv_street_1"      => $orderData['inv_street_1'],
-      "inv_street_2"      => $orderData['inv_street_2'],
-      "inv_city"          => $orderData['inv_city'],
-      "inv_zip"           => $orderData['inv_zip'],
-      "inv_region"        => $orderData['inv_region'],
-      "inv_country"       => $orderData['inv_country'],
+      "inv_given_name"         => $orderData['inv_given_name'],
+      "inv_family_name"        => $orderData['inv_family_name'],
+      "inv_company_name"       => $orderData['inv_company_name'],
+      "inv_street_1"           => $orderData['inv_street_1'],
+      "inv_street_2"           => $orderData['inv_street_2'],
+      "inv_city"               => $orderData['inv_city'],
+      "inv_zip"                => $orderData['inv_zip'],
+      "inv_region"             => $orderData['inv_region'],
+      "inv_country"            => $orderData['inv_country'],
 
-      "phone_number"      => $orderData['phone_number'],
-      "email"             => $orderData['email'],
-      "confirmation_time" => $confirmationTime,
-      "delivery_service"  => $orderData['deliveryService'],
-      "delivery_price"    => $deliveryPrice,
-      "notes"             => $orderData['notes'],
-      "domain"            => $orderData['domain'],
-      "state"             => self::STATE_NEW,
+      "phone_number"           => $orderData['phone_number'],
+      "email"                  => $orderData['email'],
+      "confirmation_time"      => $confirmationTime,
+      "id_destination_country" => $orderData['id_destination_country'],
+      "id_delivery_service"    => $orderData['id_delivery_service'],
+      "id_payment_service"     => $orderData['id_payment_service'],
+      "notes"                  => $orderData['notes'],
+      "domain"                 => $orderData['domain'],
+      "state"                  => self::STATE_NEW,
     ]);
 
     if (!is_numeric($idOrder)) {
@@ -554,11 +578,6 @@ class Order extends \ADIOS\Core\Model {
       ])
     ;
 
-    $placedOrderData = $this->getById($idOrder);
-    // $placedOrderNumber = $this->calculateOrderNumber($placedOrderData);
-    // $this->updateRow(["number" => $placedOrderNumber], $idOrder);
-    // $placedOrderData["number"] = $placedOrderNumber;
-
     foreach ($cartContents['items'] as $item) {
       $this->addItem($idOrder, [
         "id_product" => $item["id_product"],
@@ -570,6 +589,23 @@ class Order extends \ADIOS\Core\Model {
     }
 
     $cartModel->emptyCart($customerUID);
+
+    $placedOrderData = $this->getById($idOrder);
+
+    $shipmentPriceModel = 
+      new \ADIOS\Widgets\Shipping\Models\ShipmentPrice(
+        $this->adminPanel
+      )
+    ;
+
+    $fees = $shipmentPriceModel->getFeesForOrder($placedOrderData);
+    $this->updateRow(
+      [
+        "delivery_fee" => $fees["deliveryFee"],
+        "payment_fee" => $fees["paymentFee"],
+      ],
+      $idOrder
+    );
 
     $this->sendNotificationForPlacedOrder($placedOrderData);
 
@@ -872,8 +908,11 @@ class Order extends \ADIOS\Core\Model {
               ],
               "Delivery" => [
                 "required_delivery_time",
-                "delivery_service",
-                "delivery_price",
+                "id_delivery_service",
+                "id_payment_service",
+                "id_destination_country",
+                "delivery_fee",
+                "payment_fee",
                 "del_given_name",
                 "del_family_name",
                 "del_company_name",
@@ -963,6 +1002,7 @@ class Order extends \ADIOS\Core\Model {
         select
           i.*,
           p.number as product_number,
+          p.weight as product_weight,
           p.name_lang_1 as product_name
         from `{$orderItemModel->table}` i
         left join `{$productModel->table}` p on p.id = i.id_product
@@ -982,6 +1022,17 @@ class Order extends \ADIOS\Core\Model {
         from `{$invoiceModel->table}` f
         where f.id = ".(int) $order['id_invoice']."
       "));
+
+      $order['SUMMARY'] = [
+        'price_total' => 0,
+        'weight_total' => 0,
+      ];
+
+      foreach ($order['ITEMS'] as $item) {
+        $order['SUMMARY']['price_total'] += $item['quantity'] * $item['unit_price'];
+        $order['SUMMARY']['weight_total'] += $item['quantity'] * $item['product_weight'];
+      }
+
     }
 
     return $order;

@@ -272,6 +272,30 @@ class Order extends \ADIOS\Core\Model {
         "title" => "Contact: Email",
       ],
 
+      "company_id" => [
+        "type" => "varchar",
+        "title" => "Company ID",
+        "pattern" => '\d{8}',
+        "show_column" => TRUE,
+      ],
+      "company_tax_id" => [
+        "type" => "varchar",
+        "title" => "Company Tax ID",
+        "pattern" => '\d{10}',
+        "show_column" => FALSE,
+      ],
+      "company_vat_id" => [
+        "type" => "varchar",
+        "title" => "Company VAT ID",
+        "pattern" => '(SK|CZ)\d{10}',
+        "show_column" => FALSE,
+      ],
+      "buy_as_company" => [
+        "type" => "varchar",
+        "title" => "Contact: Email",
+      ],
+
+
       "domain" => [
         "type" => "varchar",
         "title" => "Domain",
@@ -543,6 +567,10 @@ class Order extends \ADIOS\Core\Model {
 
       "phone_number"           => $orderData['phone_number'],
       "email"                  => $orderData['email'],
+      "company_id"             => $orderData['company_id'],
+      "company_tax_id"         => $orderData['company_tax_id'],
+      "company_vat_id"         => $orderData['company_vat_id'],
+      "buy_as_company"         => $orderData['buy_as_company'],
       "confirmation_time"      => $confirmationTime,
       "id_destination_country" => $orderData['id_destination_country'],
       "id_delivery_service"    => $orderData['id_delivery_service'],

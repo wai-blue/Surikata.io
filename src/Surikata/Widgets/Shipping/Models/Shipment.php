@@ -12,33 +12,6 @@ class Shipment extends \ADIOS\Core\Model {
 
   public function columns(array $columns = []) {
     return parent::columns([
-      "name" => [
-        'type' => 'varchar',
-        'title' => $this->translate("Shipment name"),
-        'show_column' => TRUE,
-        'required' => TRUE
-      ],
-
-      "description" => [
-        'type' => 'text',
-        'title' => $this->translate("Shipment description"),
-        'show_column' => TRUE,
-      ],
-
-      "logo" => [
-        'type' => 'image',
-        'title' => $this->translate("Shipment logo"),
-        'show_column' => TRUE,
-      ],
-
-      "id_country" => [
-        "type" => "lookup",
-        "title" => $this->translate("Country"),
-        "model" => "Widgets/Shipping/Models/Country",
-        "show_column" => TRUE,
-        'required' => TRUE
-      ],
-
       "id_delivery_service" => [
         "type" => "lookup",
         "title" => $this->translate("Delivery service"),
@@ -55,6 +28,32 @@ class Shipment extends \ADIOS\Core\Model {
         'required' => TRUE
       ],
 
+      "id_destination_country" => [
+        "type" => "lookup",
+        "title" => $this->translate("Country of destination"),
+        "model" => "Widgets/Shipping/Models/DestinationCountry",
+        "show_column" => TRUE,
+        'required' => TRUE
+      ],
+
+      "name" => [
+        'type' => 'varchar',
+        'title' => $this->translate("Shipment name"),
+        'show_column' => TRUE,
+        'required' => TRUE
+      ],
+
+      "description" => [
+        'type' => 'text',
+        'title' => $this->translate("Shipment description"),
+      ],
+
+      "logo" => [
+        'type' => 'image',
+        'title' => $this->translate("Shipment logo"),
+        'show_column' => TRUE,
+      ],
+
       "is_enabled" => [
         "type" => "boolean",
         "title" => $this->translate("Enable"),
@@ -67,6 +66,60 @@ class Shipment extends \ADIOS\Core\Model {
       ]
 
     ]);
+  }
+
+  public function indexes($columns = []) {
+    return parent::indexes([
+      [
+        "type" => "index",
+        "columns" => ["id_delivery_service", "id_payment_service", "id_destination_country"],
+      ]
+    ]);
+  }
+
+  public function tableParams($params) {
+    $params['header'] = "
+      <p>".$this->translate("Here you connect your contracted delivery services, contracted payment services and countries of destination to a unique shipment.")."</p>
+      <p>".$this->translate("Prices based on order's weight or value are defined for each shipment separately.")."</p>
+    ";
+
+    return $params;
+  }
+
+  public function formParams($data, $params) {
+    $params["template"] = [
+      "columns" => [
+        [
+          "tabs" => [
+            "Delivery / Payment / Destination Country" => [
+              "id_delivery_service",
+              "id_payment_service",
+              "id_destination_country",
+            ],
+            "Shipment" => [
+              "name",
+              "description",
+              "logo",
+            ],
+            "Enable / Disable" => [
+              "is_enabled",
+            ],
+            "Prices" => [
+              "action" => "UI/Table",
+              "params" => [
+                "model"    => "Widgets/Shipping/Models/ShipmentPrice",
+                "id_shipment" => (int) $data['id'],
+              ]
+            ],
+            "Miscelaneous" => [
+              "order_index",
+            ],
+          ],
+        ],
+      ],
+    ];
+
+    return $params;
   }
 
   public function price() {
@@ -82,7 +135,7 @@ class Shipment extends \ADIOS\Core\Model {
   }
 
   public function country() {
-    return $this->hasOne(\ADIOS\Widgets\Shipping\Models\Country::class, "id", "id_country");
+    return $this->hasOne(\ADIOS\Widgets\Shipping\Models\DestinationCountry::class, "id", "id_destination_country");
   }
 
   public function getByIdDeliveryService($idDelivery) {
@@ -106,12 +159,12 @@ class Shipment extends \ADIOS\Core\Model {
         'country',
         'price' => function($q) use ($summary) {
           $q->where([
-            ['shipment_price_calculation_method', '=', 1],	
-            ['price_from', '<=', $summary['priceTotal']],
-            ['price_to', '>=', $summary['priceTotal']]
+            ['delivery_fee_calculation_method', '=', 1],	
+            ['value_to', '<=', $summary['priceTotal']],
+            ['value_to', '>=', $summary['priceTotal']]
           ]);
           $q->orWhere([
-            ['shipment_price_calculation_method', '=', 2],	
+            ['delivery_fee_calculation_method', '=', 2],	
             ['weight_from', '<=', $summary['weightTotal']],
             ['weight_to', '>=', $summary['weightTotal']]
           ]);
@@ -119,12 +172,12 @@ class Shipment extends \ADIOS\Core\Model {
       ])
       ->whereHas('price', function ($q) use ($summary){
         $q->where([
-          ['shipment_price_calculation_method', '=', 1],	
-          ['price_from', '<=', $summary['priceTotal']],
-          ['price_to', '>=', $summary['priceTotal']]
+          ['delivery_fee_calculation_method', '=', 1],	
+          ['value_to', '<=', $summary['priceTotal']],
+          ['value_to', '>=', $summary['priceTotal']]
         ]);
         $q->orWhere([
-          ['shipment_price_calculation_method', '=', 2],	
+          ['delivery_fee_calculation_method', '=', 2],	
           ['weight_from', '<=', $summary['weightTotal']],
           ['weight_to', '>=', $summary['weightTotal']]
         ]);

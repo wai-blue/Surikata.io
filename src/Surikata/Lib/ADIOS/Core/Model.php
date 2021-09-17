@@ -145,7 +145,13 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
       $this->pdo = $this->getConnection()->getPdo();
 
-      $this->init();
+      // During the installation no SQL tables exist. If child's init() 
+      // method uses data from DB, $this->init() call would fail.
+      try {
+        $this->init();
+      } catch (\Exception $e) {
+        //
+      }
 
       $this->adios->db->addTable($this->table, $this->columns());
       $this->adios->addRouting($this->routing());
@@ -266,7 +272,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
       foreach ($this->indexes() as $indexOrConstraintName => $indexDef) {
         if (empty($indexOrConstraintName) || is_numeric($indexOrConstraintName)) {
-          $indexOrConstraintName = md5(json_encode($indexDef));
+          $indexOrConstraintName = md5(json_encode($indexDef).uniqid());
         }
 
         switch ($indexDef["type"]) {

@@ -7,7 +7,7 @@ class Shipping extends \ADIOS\Core\Widget {
     if ($this->adios->hasUserRole(\Surikata\Core\AdminPanel\Loader::USER_ROLE_SALES)) {
       $this->adios->config['desktop']['sidebarItems']['Shipping'] = [
         "fa_icon" => "fas fa-shipping-fast",
-        "title" => "Shipping",
+        "title" => "Shipping & Payment",
         "sub" => [
           [
             "title" => "Delivery Services",
@@ -24,10 +24,6 @@ class Shipping extends \ADIOS\Core\Widget {
           [
             "title" => "Shipments",
             "onclick" => "desktop_update('Shipping/Shipments');",
-          ],
-          [
-            "title" => "Shipments prices",
-            "onclick" => "desktop_update('Shipping/ShipmentPrices');",
           ],
         ]
       ];

@@ -15,8 +15,8 @@
 
 .adios.ui.Table.header {
   padding: 1em;
-  border: 1px solid var(--cl-main);
-  color: var(--cl-main);
+  /* border: 1px solid var(--cl-main);
+  color: var(--cl-main); */
   font-size: 0.8em;
   margin-bottom: 1em;
 }

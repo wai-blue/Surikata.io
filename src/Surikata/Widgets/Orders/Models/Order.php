@@ -219,14 +219,14 @@ class Order extends \ADIOS\Core\Model {
 
       "delivery_fee" => [
         "type" => "float",
-        "title" => "Delivery extra fee",
+        "title" => "Delivery fee",
         "unit" => $this->adios->locale->currencySymbol(),
         "show_column" => TRUE,
       ],
 
       "payment_fee" => [
         "type" => "float",
-        "title" => "Payment extra fee",
+        "title" => "Payment fee",
         "unit" => $this->adios->locale->currencySymbol(),
         "show_column" => TRUE,
       ],

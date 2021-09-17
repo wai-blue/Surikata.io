@@ -155,33 +155,33 @@
                     </div>
                   </div>
                   <div class="checkout-account mt-25">
-                    <input class="checkout-toggle" type="checkbox" name="buy_as_company" id="buyAsCompany" value="1"/>
-                    <label for="buy_as_company">{{ translate("Buy as Company?", "Order") }}</label>
+                    <input class="checkout-toggle" type="checkbox" name="buyAsCompany" id="buyAsCompany" value="1"/>
+                    <label for="buyAsCompany">{{ translate("Buy as Company?", "Order") }}</label>
                   </div>
                   <div class="different-address open-toggle mt-30px">
                     <div class="row">
                       <div class="col-lg-6 col-md-6">
                         <div class="billing-info mb-20px">
                           <label>{{ translate("Company Name", "Order") }}<span class="input-required"> *</span></label>
-                          <input type="text" name="inv_company_name" required/>
+                          <input type="text" name="inv_company_name" onblur="AbeloThemeCart.checkCompanyFields(this)"/>
                         </div>
                       </div>
                       <div class="col-lg-6 col-md-6">
                         <div class="billing-info mb-20px">
                           <label>{{ translate("Company ID", "Order") }}<span class="input-required"> *</span></label>
-                          <input type="text" name="company_id" required/>
+                          <input type="text" name="company_id" onblur="AbeloThemeCart.checkCompanyFields(this)"/>
                         </div>
                       </div>
                       <div class="col-lg-6 col-md-6">
                         <div class="billing-info mb-20px">
                           <label>{{ translate("Company Tax ID", "Order") }}<span class="input-required"> *</span></label>
-                          <input type="text" name="company_tax_id" required/>
+                          <input type="text" name="company_tax_id" onblur="AbeloThemeCart.checkCompanyFields(this)"/>
                         </div>
                       </div>
                       <div class="col-lg-6 col-md-6">
                         <div class="billing-info mb-20px">
                           <label>{{ translate("Company Vat ID", "Order") }}</label>
-                          <input type="text" name="company_vat_id" required/>
+                          <input type="text" name="company_vat_id" onblur="AbeloThemeCart.checkCompanyFields(this)"/>
                         </div>
                       </div>
                     </div>

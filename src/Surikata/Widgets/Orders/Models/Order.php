@@ -448,6 +448,11 @@ class Order extends \ADIOS\Core\Model {
         "del_city",
         "del_zip",
       ];
+      $requiredFieldsCompany = [
+        "inv_company_name",
+        "company_id",
+        "company_tax_id",
+      ];
 
       foreach ($requiredFieldsBilling as $fieldName) {
         if (empty($orderData[$fieldName])) {
@@ -461,6 +466,34 @@ class Order extends \ADIOS\Core\Model {
 
       if ($orderData["differentDeliveryAddress"] == "1") {
         foreach ($requiredFieldsDelivery as $fieldName) {
+          if (empty($orderData[$fieldName])) {
+            $requiredFieldsEmpty[] = $fieldName;
+          }
+        }
+      }
+
+      if ($orderData["buyAsCompany"] == "1") {
+        foreach ($requiredFieldsCompany as $fieldName) {
+          if (
+            $fieldName === "company_id" &&
+            (
+              strlen($orderData[$fieldName]) !== 8 ||
+              !ctype_digit($orderData[$fieldName])
+            ))
+          {
+            $requiredFieldsEmpty[] = $fieldName;
+            continue;
+          }
+          if (
+            $fieldName === "company_tax_id" &&
+            (
+              strlen($orderData[$fieldName]) !== 10 ||
+              !ctype_digit($orderData[$fieldName])
+            ))
+          {
+            $requiredFieldsEmpty[] = $fieldName;
+            continue;
+          }
           if (empty($orderData[$fieldName])) {
             $requiredFieldsEmpty[] = $fieldName;
           }

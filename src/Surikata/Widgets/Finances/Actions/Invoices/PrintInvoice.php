@@ -16,14 +16,17 @@ class PrintInvoice extends \ADIOS\Core\Action {
 
   public function preRender() {
 
-    $language = $this->websiteRenderer->urlVariables["invoiceLanguage"] ?? "sk";
+    $language = $this->params["invoiceLanguage"] ?? "sk";
     $taxSetting =
-      isset($this->websiteRenderer->urlVariables["taxSetting"])
-      ? $this->websiteRenderer->urlVariables["taxSetting"]
+      isset($this->params["taxSetting"])
+      ? $this->params["taxSetting"]
       : 1
     ;
 
     return [
+      "language" => $language,
+      "taxSetting" => $this->enumTaxSettings[$taxSetting],
+      "tax" => $taxSetting,
       "invoice" => (new \ADIOS\Widgets\Finances\Models\Invoice($this->adios))->getById($this->params['id']),
     ];
   }

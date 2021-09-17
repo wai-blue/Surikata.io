@@ -13,6 +13,10 @@ class CRM extends \ADIOS\Core\Widget {
             "title" => "Contact form",
             "onclick" => "desktop_update('CRM/ContactForm');",
           ],
+          [
+            "title" => "Newsletter",
+            "onclick" => "desktop_update('CRM/Newsletter');",
+          ],
         ],
       ];
     }

@@ -219,14 +219,14 @@ class Order extends \ADIOS\Core\Model {
 
       "delivery_fee" => [
         "type" => "float",
-        "title" => "Delivery extra fee",
+        "title" => "Delivery fee",
         "unit" => $this->adios->locale->currencySymbol(),
         "show_column" => TRUE,
       ],
 
       "payment_fee" => [
         "type" => "float",
-        "title" => "Payment extra fee",
+        "title" => "Payment fee",
         "unit" => $this->adios->locale->currencySymbol(),
         "show_column" => TRUE,
       ],
@@ -478,6 +478,20 @@ class Order extends \ADIOS\Core\Model {
       $idAddress = $customerAddressModel->saveAddress($idCustomer, $orderData);
     }
 
+    // Create user if not exist
+    if ($idCustomer == 0) {
+      if ($customerModel->getByEmail($orderData["email"]) === false) {
+        $createCustomerData = array_merge(
+          $orderData,
+          [
+            "family_name" => $orderData["inv_family_name"],
+            "given_name" => $orderData["inv_given_name"]
+          ]
+        );
+        $idCustomer = $customerModel->createAccount($customerUID, $orderData["email"], $createCustomerData, true, true);
+      }
+    }
+
     if ($cartContents === NULL && !empty($customerUID)) {
       $cartContents = $cartModel->getCartContents($customerUID);
     }
@@ -575,8 +589,6 @@ class Order extends \ADIOS\Core\Model {
       "id_destination_country" => $orderData['id_destination_country'],
       "id_delivery_service"    => $orderData['id_delivery_service'],
       "id_payment_service"     => $orderData['id_payment_service'],
-      "delivery_fee"           => $shipmentPrice['delivery_fee'],
-      "payment_fee"            => $shipmentPrice['payment_fee'],
       "notes"                  => $orderData['notes'],
       "domain"                 => $orderData['domain'],
       "state"                  => self::STATE_NEW,
@@ -624,6 +636,10 @@ class Order extends \ADIOS\Core\Model {
     );
 
     $this->sendNotificationForPlacedOrder($placedOrderData);
+
+    if (isset($orderData["marketingAgreement"])) {
+      (new Newsletter($this->adios))->registerForNewsletter($orderData["email"]);
+    }
 
     return $idOrder;
 
@@ -889,6 +905,8 @@ class Order extends \ADIOS\Core\Model {
                 "serial_number",
                 "number",
                 "id_customer",
+                "phone_number",
+                "email",
                 "confirmation_time",
                 "number_customer",
                 "notes",

@@ -5,7 +5,7 @@ namespace ADIOS\Widgets\Shipping\Models;
 class Shipment extends \ADIOS\Core\Model {
   var $sqlName = "shipping_shipments";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
-  var $urlBase = "Shipping/Shipments";
+  var $urlBase = "DeliveryAndPayment/Prices";
   var $tableTitle = "Shipments";
   var $formTitleForInserting = "New shipment";
   var $formTitleForEditing = "Shipment";

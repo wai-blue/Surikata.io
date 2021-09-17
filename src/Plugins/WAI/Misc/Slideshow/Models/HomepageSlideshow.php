@@ -32,7 +32,7 @@ class HomepageSlideshow extends \ADIOS\Core\Model {
 
       "button_url" => [
         "type" => "varchar",
-        "title" => "Button: URL",
+        "title" => "Button: URL (without root URL)",
         "show_column" => TRUE,
       ],
 

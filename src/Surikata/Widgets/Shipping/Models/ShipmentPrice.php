@@ -8,7 +8,7 @@ class ShipmentPrice extends \ADIOS\Core\Model {
 
   var $sqlName = "shipping_prices";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
-  var $urlBase = "Shipping/Prices";
+  // var $urlBase = "DeliveryAndPayment/Prices";
   var $tableTitle = "Shipment prices";
   var $formTitleForInserting = "New shipment price";
   var $formTitleForEditing = "Shipment price";
@@ -34,18 +34,6 @@ class ShipmentPrice extends \ADIOS\Core\Model {
         'show_column' => TRUE,
       ],
 
-      "weight_from" => [
-        "type" => "float",
-        "title" => $this->translate("Order weight: From"),
-        "show_column" => TRUE
-      ],
-
-      "weight_to" => [
-        "type" => "float",
-        "title" => $this->translate("Order weight: To"),
-        "show_column" => TRUE
-      ],
-
       "price_from" => [
         "type" => "float",
         "title" => $this->translate("Order price: From"),
@@ -55,6 +43,18 @@ class ShipmentPrice extends \ADIOS\Core\Model {
       "price_to" => [
         "type" => "float",
         "title" => $this->translate("Order price: To"),
+        "show_column" => TRUE
+      ],
+
+      "weight_from" => [
+        "type" => "float",
+        "title" => $this->translate("Order weight: From"),
+        "show_column" => TRUE
+      ],
+
+      "weight_to" => [
+        "type" => "float",
+        "title" => $this->translate("Order weight: To"),
         "show_column" => TRUE
       ],
 
@@ -83,9 +83,25 @@ class ShipmentPrice extends \ADIOS\Core\Model {
 
   public function indexes($columns = []) {
     return parent::indexes([
-      "unique_name" => [
+      [
         "type" => "unique",
         "columns" => ["name"],
+      ],
+      [
+        "type" => "index",
+        "columns" => ["price_from"],
+      ],
+      [
+        "type" => "index",
+        "columns" => ["price_to"],
+      ],
+      [
+        "type" => "index",
+        "columns" => ["weight_from"],
+      ],
+      [
+        "type" => "index",
+        "columns" => ["weight_to"],
       ],
     ]);
   }

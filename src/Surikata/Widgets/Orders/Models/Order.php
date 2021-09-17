@@ -485,7 +485,8 @@ class Order extends \ADIOS\Core\Model {
           $orderData,
           [
             "family_name" => $orderData["inv_family_name"],
-            "given_name" => $orderData["inv_given_name"]
+            "given_name" => $orderData["inv_given_name"],
+            "company_name" => $orderData["inv_company_name"]
           ]
         );
         $idCustomer = $customerModel->createAccount($customerUID, $orderData["email"], $createCustomerData, true, true);

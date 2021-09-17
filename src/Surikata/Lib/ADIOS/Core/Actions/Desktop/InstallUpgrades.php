@@ -16,27 +16,37 @@ namespace ADIOS\Actions\Desktop;
  * @package UI\Actions\Desktop
  */
 class InstallUpgrades extends \ADIOS\Core\Action {
-  function render() {
+  function render($params = []) {
+    $contentHtml = "";
+
+    foreach ($this->adios->models as $modelName) {
+      $model = $this->adios->getModel($modelName);
+
+      if (!$model->hasSqlTable()) {
+        $model->install();
+        $model->saveConfig('installed-version', 0);
+        $contentHtml .= "{$model->name}: <span style='color:green'>SQL table created</span><br/>";
+      } else if ($model->hasAvailableUpgrades()) {
+        $contentHtml .= "{$model->name}: ";
+        try {
+          $model->installUpgrades();
+          $contentHtml .= "<span style='color:green'>OK</span><br/>";
+        } catch (\ADIOS\Core\Exceptions\DBException $e) {
+          $contentHtml .= "<span style='color:red'>".$e->getMessage()."</span><br/>";
+        }
+      } else if (!$model->isInstalled()) {
+        $contentHtml .= "<span style='color:orange'>{$model->name}: Information about installed version was missing. Set to 0.</span><br/>";
+        $model->saveConfig('installed-version', 0);
+      }
+    }
+
     $html = "
       <div class='card shadow mb-4'>
         <div class='card-header py-3'>
           <h6 class='m-0 font-weight-bold text-primary'>Installing upgrades</h6>
         </div>
         <div class='card-body'>
-    ";
-    foreach ($this->adios->models as $modelName) {
-      $model = $this->adios->getModel($modelName);
-      if ($model->hasAvailableUpgrades()) {
-        $html .= "{$model->name}: ";
-        try {
-          $model->installUpgrades();
-          $html .= "<span style='color:green'>OK</span><br/>";
-        } catch (\ADIOS\Core\Exceptions\DBException $e) {
-          $html .= "<span style='color:red'>".$e->getMessage()."</span><br/>";
-        }
-      }
-    }
-    $html .= "
+          ".($contentHtml == "" ? "Nothing to be done here." : $contentHtml)."
         </div>
       </div>
 

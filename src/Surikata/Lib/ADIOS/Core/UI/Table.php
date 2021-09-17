@@ -478,12 +478,17 @@ class Table extends \ADIOS\Core\UI\View {
         );
       }
 
-      $this->params['show_add_button'] = ('' != $this->params['add_button_params']['onclick'] || $this->adios->has_perms("db/{$this->params['table']}/insert") ? $this->params['show_add_button'] : false);
+      $this->params['show_add_button'] = (empty($this->params['add_button_params']['onclick']) ? FALSE : $this->params['show_add_button']);
 
       if ($this->params['show_add_button']) {
         if ('' == $this->params['add_button_params']['type']) {
           $this->params['add_button_params']['type'] = 'add';
         }
+
+        if (!empty($this->model->addButtonText)) {
+          $this->params['add_button_params']['text'] = $this->model->addButtonText;
+        }
+
         if ('' == $this->params['add_button_params']['onclick']) {
           if ('desktop' == $this->params['form_type']) {
             $this->params['add_button_params']['onclick'] = "
@@ -522,6 +527,7 @@ class Table extends \ADIOS\Core\UI\View {
             ";
           }
         }
+
         $add_button = $this->adios->ui->button($this->params['add_button_params']);
       }
 
@@ -614,7 +620,9 @@ class Table extends \ADIOS\Core\UI\View {
 
         $html = "";
 
-        $this->add_class('shadow');
+        if (!in_array("UI/Form", $this->adios->actionStack)) {
+          $this->add_class('shadow');
+        }
 
         if (!_count($this->columns)) {
             $this->adios->console->error('No column_settings provided');
@@ -679,10 +687,6 @@ class Table extends \ADIOS\Core\UI\View {
 
             $ordering = explode(' ', $this->params['order_by']);
 
-            if ($params['allow_order_modification']) {
-                $order_modification_class = 'modificable';
-            }
-
             // tabulka zoznamu
 
             $html .= "
@@ -692,7 +696,7 @@ class Table extends \ADIOS\Core\UI\View {
 
             // title riadok - nazvy stlpcov
 
-            if ($params['show_titles']) {
+            if (_count($this->table_data) && $params['show_titles']) {
                 $html .= "<div class='table_tr table_header'>";
 
                 if ($params['show_multiselect']) {
@@ -709,42 +713,32 @@ class Table extends \ADIOS\Core\UI\View {
                     if ($params['allow_order_modification']) {
                         $new_ordering = "$col_name asc";
                         $order_class = 'unordered';
-                        $order_title = l('Zoradiť vzostupne');
 
                         if ($ordering[0] == $col_name || $params['table'].'.'.$col_name == $ordering[0]) {
                             switch ($ordering[1]) {
                                 case 'asc': $new_ordering = "$col_name desc";
                                     $order_class = 'asc_ordered';
-                                    $order_title = l('Zoradiť zostupne');
                                     break;
                                 case 'desc': $new_ordering = 'none';
                                     $order_class = 'desc_ordered';
-                                    $order_title = l('Zrušiť zoradenie');
                                     break;
                             }
                         }
                     }
 
-                    $order_img_down = "<i class='fas fa-chevron-down order_desc'></i>";
-                    $order_img_up = "<i class='fas fa-chevron-up order_asc'></i>";
-                    $order_img_none = "<i class='fas fa-minus order_none'></i>";
                     $html .= "
                       <div
-                        class='table_td {$order_modification_class} {$order_class}'
-                        title='$order_title'
+                        class='table_td {$order_class}'
                         ".($params['allow_order_modification'] ? "
                           onclick='
                             ui_table_refresh(\"{$params['uid']}\", {order_by: \"{$new_ordering}\"});
                           '
                         " : "")."
-                        style='
-                          width:{$col_def['column_width']};
-                          ".($params['allow_order_modification'] ? "" : "cursor:default;")."
-                        '
                       >
-                        {$order_img_down}{$order_img_up}{$order_img_none}
                         ".hsc($col_def['title'])."
                         ".('' == $col_def['unit'] ? '' : '['.hsc($col_def['unit']).']')."
+                        <i class='fas fa-chevron-down order_desc'></i>
+                        <i class='fas fa-chevron-up order_asc'></i>
                       </div>
                     ";
                 }
@@ -763,7 +757,7 @@ class Table extends \ADIOS\Core\UI\View {
 
             // filtrovaci riadok
 
-            if ($params['show_filter']) {
+            if (_count($this->table_data) && $params['show_filter']) {
                 $html .= "<div class='table_tr table_filter'>";
 
                 if ($params['show_multiselect']) {

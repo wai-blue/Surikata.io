@@ -1217,10 +1217,7 @@ class Loader {
       while ($data = $this->db->fetch_array()) {
         $passwordMatch = FALSE;
 
-        if (!empty($password) && $data['password'] == $password) {
-          // plain text, deprecated
-          $passwordMatch = TRUE;
-        } else if (!empty($password) && password_verify($password, $data['password'])) {
+        if (!empty($password) && password_verify($password, $data['password'])) {
           // plain text
           $passwordMatch = TRUE;
         } else if ($_COOKIE[_ADIOS_ID.'-user'] == $this->authCookieSerialize($data['login'], $data['password'])) {

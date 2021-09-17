@@ -315,6 +315,10 @@ class Order extends \ADIOS\Core\Model {
         "type" => "unique",
         "columns" => ["number"],
       ],
+      "" => [
+        "type" => "index",
+        "columns" => ["company_id"],
+      ],
     ]);
   }
 

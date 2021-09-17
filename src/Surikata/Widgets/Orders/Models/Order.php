@@ -442,7 +442,7 @@ class Order extends \ADIOS\Core\Model {
         $createCustomerData = array_merge(
           $orderData,
           [
-            "family_name" => $orderData["inv_given_name"],
+            "family_name" => $orderData["inv_family_name"],
             "given_name" => $orderData["inv_given_name"]
           ]
         );

@@ -16,8 +16,6 @@ class Design extends \ADIOS\Core\Action {
       }
     }
 
-    $ponukyMenuEnumValues = $this->adios->getModel("Widgets/Website/Models/WebMenu")->getEnumValues();
-
     return $this->adios->renderAction("UI/SettingsPanel", [
       "settings_group" => "web/{$this->params['domain']}/design",
       "title" => "Website - {$this->params['domain']} - Design",

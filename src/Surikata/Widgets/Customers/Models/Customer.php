@@ -519,14 +519,16 @@ class Customer extends \ADIOS\Core\Model {
     return $customerUID;
   }
 
-  public function createAccount($customerUID, $email, $accountInfo, $saveAddress) {
+  public function createAccount($customerUID, $email, $accountInfo, $saveAddress, $createFromOrder = false) {
     $requiredFieldsEmpty = [];
     $requiredFieldsRegistration = [
       "email",
       "family_name",
       "given_name",
-      "password"
     ];
+    if (!$createFromOrder) {
+      $requiredFieldsRegistration[] = "password";
+    }
 
     foreach ($requiredFieldsRegistration as $fieldName) {
       if (empty($accountInfo[$fieldName])) {
@@ -543,7 +545,15 @@ class Customer extends \ADIOS\Core\Model {
     }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) throw new \ADIOS\Widgets\Customers\Exceptions\EmailIsInvalid();
-    if ($this->where('email', '=', $email)->count() > 0) throw new \ADIOS\Widgets\Customers\Exceptions\AccountAlreadyExists();
+
+    $tmpCustomer = $this->where('email', '=', $email)->get()->toArray();
+    $idCustomer = 0;
+    if (count($tmpCustomer) > 0) {
+      if (strlen($tmpCustomer[0]["password"]) > 0 && $tmpCustomer[0]["is_validated"] !== 0) {
+        throw new \ADIOS\Widgets\Customers\Exceptions\AccountAlreadyExists();
+      }
+      $idCustomer = $tmpCustomer[0]["id"];
+    }
   
     $password = $accountInfo["password"];
 
@@ -560,7 +570,18 @@ class Customer extends \ADIOS\Core\Model {
     $data["is_validated"] = FALSE;
     $data["is_blocked"] = FALSE;
 
-    $idCustomer = $this->insertRow($data);
+    if (count($tmpCustomer) == 0) {
+      $idCustomer = $this->insertRow($data);
+    }
+    else {
+      $this->where('email', '=', $data['email'])
+        ->update([
+          "password" => password_hash($data["password"],PASSWORD_DEFAULT),
+          "is_validated" => $data["is_validated"],
+          "is_blocked" => $data["is_blocked"]]
+        )
+      ;
+    }
 
     if ($idCustomer == 0) throw new \ADIOS\Widgets\Customers\Exceptions\CreateAccountUnknownError();
 
@@ -580,8 +601,9 @@ class Customer extends \ADIOS\Core\Model {
 
     $this->lastCreatedAccountPassword = $password;
 
-    $this->sendNotificationForCreateAccount($createdAccountInfo);
-
+    if (!$createFromOrder) {
+      $this->sendNotificationForCreateAccount($createdAccountInfo);
+    }
     return $idCustomer;
   }
 

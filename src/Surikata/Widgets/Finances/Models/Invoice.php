@@ -15,6 +15,10 @@ class Invoice extends \ADIOS\Core\Model {
   const STATE_SENT   = 2;
   const STATE_PAID   = 3;
 
+  /* Invoice languages */
+  const LANGUAGE_SK = "sk";
+  const LANGUAGE_EN = "en";
+
   var $sqlName = "invoices";
   var $lookupSqlValue = "{%TABLE%}.number";
   var $urlBase = "Invoices";
@@ -36,6 +40,11 @@ class Invoice extends \ADIOS\Core\Model {
       self::STATE_ISSUED => 'Issued',
       self::STATE_SENT   => 'Sent',
       self::STATE_PAID   => 'Paid',
+    ];
+
+    $this->enumInvoiceLanguages = [
+      self::LANGUAGE_SK   => 'Slovensky',
+      self::LANGUAGE_EN   => 'English',
     ];
 
   }
@@ -479,8 +488,17 @@ class Invoice extends \ADIOS\Core\Model {
 
       $btn_print_invoice_html = $this->adios->ui->button([
         "text"    => "Print invoice",
-        "onclick" => "window.open(_APP_URL + '/Invoices/".(int) $data['id']."/PrintInvoice');",
+        "onclick" => "
+          var invoiceLanguage = $('#".$params["uid"]."_invoiceLanguage').val();
+          window.open(_APP_URL + '/Invoices/".(int) $data['id']."/PrintInvoice?invoiceLanguage='+invoiceLanguage);",
         "class"   => "btn-primary mb-2 w-100",
+      ])->render();
+
+      $btn_select_language_html = $this->adios->ui->Input([
+        "type"    => "varchar",
+        "enum_values" => $this->enumInvoiceLanguages,
+        "uid" => $params["uid"]."_invoiceLanguage",
+        "class"   => "mb-2 w-100",
       ])->render();
 
       // $btn_vytlacit_dodaci_list_html = $this->adios->ui->button([
@@ -592,8 +610,12 @@ class Invoice extends \ADIOS\Core\Model {
           [
             "class" => "col-md-3 pr-0",
             "html" => "
+              <span>Invoice language</span>
+              {$btn_select_language_html}
               {$btn_print_invoice_html}
-              <br/><br/>
+              <br/>
+              <hr/>
+              <br/>
               <b>Customer</b><br/>
               ".hsc($data['customer_name'])."</br>
               ".hsc($data['customer_street_1'])."</br>

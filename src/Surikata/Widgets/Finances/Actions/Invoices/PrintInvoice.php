@@ -17,6 +17,7 @@ class PrintInvoice extends \ADIOS\Core\Action {
   public function preRender() {
 
     $language = $this->params["invoiceLanguage"] ?? "sk";
+    
     $taxSetting =
       isset($this->params["taxSetting"])
       ? $this->params["taxSetting"]

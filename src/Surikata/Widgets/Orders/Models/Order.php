@@ -2,6 +2,9 @@
 
 namespace ADIOS\Widgets\Orders\Models;
 
+use ADIOS\Widgets\CRM\Exceptions\DuplicateNewsletterEmail;
+use ADIOS\Widgets\CRM\Models\Newsletter;
+
 class Order extends \ADIOS\Core\Model {
   const STATE_NEW      = 1;
   const STATE_INVOICED = 2;
@@ -610,7 +613,12 @@ class Order extends \ADIOS\Core\Model {
     $this->sendNotificationForPlacedOrder($placedOrderData);
 
     if (isset($orderData["marketingAgreement"])) {
-      (new Newsletter($this->adios))->registerForNewsletter($orderData["email"]);
+      try {
+        (new Newsletter($this->adios))->registerForNewsletter($orderData["email"]);
+      }
+      catch (DuplicateNewsletterEmail $e) {
+
+      }
     }
 
     return $idOrder;

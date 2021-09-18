@@ -575,25 +575,28 @@ class DB {
     }
 
     public function create_foreign_keys($table_name) {
-        $table_columns = $this->tables[$table_name];
+      $table_columns = $this->tables[$table_name];
 
-        $sql = '';
-        foreach ($table_columns as $col_name => $col_definition) {
-            if (!$col_definition['disable_foreign_key'] && 'lookup' == $col_definition['type']) {
-                $lookupModel = $this->adios->getModel($col_definition['model']);
+      $sql = '';
+      foreach ($table_columns as $col_name => $col_definition) {
+        if (
+          !$col_definition['disable_foreign_key']
+          && 'lookup' == $col_definition['type']
+        ) {
+          $lookupModel = $this->adios->getModel($col_definition['model']);
 
-                $sql .= "
-                    ALTER TABLE `{$table_name}`
-                    ADD CONSTRAINT `fk_".md5($table_name.'_'.$col_name)."`
-                    FOREIGN KEY (`{$col_name}`)
-                    REFERENCES `".$lookupModel->getFullTableSQLName()."` (`id`);;
-                ";
-            }
+          $sql .= "
+            ALTER TABLE `{$table_name}`
+            ADD CONSTRAINT `fk_".md5($table_name.'_'.$col_name)."`
+            FOREIGN KEY (`{$col_name}`)
+            REFERENCES `".$lookupModel->getFullTableSQLName()."` (`id`);;
+          ";
         }
+      }
 
-        if(!empty($sql)) {
-            $this->multi_query($sql);
-        }
+      if (!empty($sql)) {
+        $this->multi_query($sql);
+      }
     }
 
     /**
@@ -1212,140 +1215,120 @@ class DB {
       $having = $params['having'] ?? "";
       $order = $params['order'] ?? "";
       $group = $params['group'] ?? "";
-      $limit_start = $params['limit_start'] ?? "";
-      $limit_end = $params['limit_end'] ?? "";
+      $limit_start = (int) ($params['limit_start'] ?? 0);
+      $limit_end = (int) ($params['limit_end'] ?? 0);
       $summary_settings = $params['summary_settings'] ?? "";
       // $left_join = $params['left_join'] ?? "";
       $count_rows = $params['count_rows'] ?? FALSE;
 
-      if (!is_array($this->tables[$table_name])) {
-        $error = "Trying to get_all_rows from undefined table $table_name <hr>"._print_r(debug_backtrace(false), true);
-        _d_echo("DB", "", $error);
-        exit($error);
-      } else {
-        $summaryColumns = [];
-        $virtualColumns = [];
-        $codeListColumns = [];
-        $summaryColumnsSubselect = [];
-        $leftJoins = [];
+      $summaryColumns = [];
+      $virtualColumns = [];
+      $codeListColumns = [];
+      $summaryColumnsSubselect = [];
+      $leftJoins = [];
 
-        if (_count($summary_settings)) {
-          foreach ($summary_settings as $col_name => $func) {
-            $summaryColumns[] = $this->aggregate('sumtable.'.$col_name, $col_name, $func);
-          }
-
-          $group2 = '';
-          foreach ($summary_settings as $col_name => $sql_func) {
-            if ('group' == $sql_func) {
-              $group2 .= "$table_name.$col_name, ";
-            }
-          }
-          $group2 = substr($group2, 0, -2);
-          if ('' == $group) {
-            $group = $group2;
-          } else {
-            $group = "$group".('' != $group2 ? ", $group2" : '');
-          }
+      if (_count($summary_settings)) {
+        foreach ($summary_settings as $col_name => $func) {
+          $summaryColumns[] = $this->aggregate('sumtable.'.$col_name, $col_name, $func);
         }
 
-        foreach ($this->tables[$table_name] as $col_name => $col_definition) {
-          if (
-            $col_definition['virtual']
-            && !empty($col_definition['sql'])
-            && !_count($col_definition['enum_values'])
-          ) {
-            $virtualColumns[] = "({$col_definition['sql']}) as {$col_name}";
-
-          } else if ($col_definition['type'] == 'lookup') {
-            $lookupModel = $this->adios->getModel($col_definition['model']);
-            $lookupTable = $lookupModel->getFullTableSqlName();
-            $lookupTableAlias = "lookup_{$lookupTable}_{$col_name}";
-            $lookupSqlValue = $lookupModel->lookupSqlValue($lookupTableAlias);
-
-            $virtualColumns[] = "({$lookupSqlValue}) as {$col_name}_lookup_sql_value";
-            $leftJoins[] = "
-              left join
-                `{$lookupTable}` as `{$lookupTableAlias}`
-                on `{$lookupTableAlias}`.`id` = `{$table_name}`.`{$col_name}`
-            ";
-          }
-
-          if ('int' == $col_definition['type'] && is_array($col_definition['code_list'])) {
-            $tmp_sql = "case ({$table_name}.{$col_name}) ";
-            foreach ($col_definition['code_list'] as $tmp_key => $tmp_value) {
-              $tmp_sql .= "when {$tmp_key} then '{$tmp_value}' ";
-            }
-            $tmp_sql .= ' end';
-
-            $codeListColumns[] = "({$tmp_sql}) as {$col_name}, {$table_name}.{$col_name} as {$col_name}_raw";
-          }
-
-          if (('int' == $col_definition['type'] || 'varchar' == $col_definition['type']) && is_array($col_definition['enum_values'])) {
-            if ($col_definition['virtual']) {
-              $tmp_sql = "case ({$col_definition['sql']}) ";
-            } else {
-              $tmp_sql = "case ({$table_name}.{$col_name}) ";
-            }
-            foreach ($col_definition['enum_values'] as $tmp_key => $tmp_value) {
-              $tmp_sql .= "when '{$tmp_key}' then '{$tmp_value}' ";
-            }
-            $tmp_sql .= ' end';
-
-            $codeListColumns[] = "({$tmp_sql}) as {$col_name}_enum_value";
-            if ($col_definition['virtual']) {
-              $codeListColumns[] = "({$col_definition['sql']}) as {$col_name}";
-            } else {
-              $codeListColumns[] = "{$table_name}.{$col_name} as {$col_name}";
-            }
-          } else if (
-            !$this->tables[$table_name][$col_name]['virtual']
-            && 'none' != $this->tables[$table_name][$col_name]['type']
-          ) {
-            $summaryColumnsSubselect .= "{$table_name}.{$col_name}";
+        $group2 = '';
+        foreach ($summary_settings as $col_name => $sql_func) {
+          if ('group' == $sql_func) {
+            $group2 .= "$table_name.$col_name, ";
           }
         }
-
-        if ('' != $where) {
-          $where = "where $where";
-        }
-        if ('' != $having) {
-          $having = "having $having";
-        }
-        if ('' != $order) {
-          $order = "order by $order";
-        }
-        if ('' != $group) {
-          $group = "group by $group";
-        }
-        if ('' != $limit_start) {
-          $limit = "limit $limit_start";
-          if ('' != $limit_end) {
-            $limit .= ", $limit_end";
-          }
-        }
-
-        if (_count($summaryColumns)) {
-          $query = "
-            select
-              ".join(", ", ["0 as dummy"] + $summaryColumns)."
-            from (
-              select
-                ".join(", ", array_merge($summaryColumnsSubselect, $virtualColumns, $codeListColumns))."
-              from $table_name
-              ".join(" ", $leftJoins)."
-              $where
-              $group
-              $having
-              $order
-              $limit
-            ) as sumtable
-          ";
+        $group2 = substr($group2, 0, -2);
+        if ('' == $group) {
+          $group = $group2;
         } else {
-          $selectItems = array_merge(["{$table_name}.*"], $virtualColumns, $codeListColumns);
+          $group = "$group".('' != $group2 ? ", $group2" : '');
+        }
+      }
 
-          $query = "
+      foreach ($this->tables[$table_name] as $col_name => $col_definition) {
+        if (
+          $col_definition['virtual']
+          && !empty($col_definition['sql'])
+          && !_count($col_definition['enum_values'])
+        ) {
+          $virtualColumns[] = "({$col_definition['sql']}) as {$col_name}";
+
+        } else if ($col_definition['type'] == 'lookup') {
+          $lookupModel = $this->adios->getModel($col_definition['model']);
+          $lookupTable = $lookupModel->getFullTableSqlName();
+          $lookupTableAlias = "lookup_{$lookupTable}_{$col_name}";
+          $lookupSqlValue = $lookupModel->lookupSqlValue($lookupTableAlias);
+
+          $virtualColumns[] = "({$lookupSqlValue}) as {$col_name}_lookup_sql_value";
+          $leftJoins[] = "
+            left join
+              `{$lookupTable}` as `{$lookupTableAlias}`
+              on `{$lookupTableAlias}`.`id` = `{$table_name}`.`{$col_name}`
+          ";
+        }
+
+        if ('int' == $col_definition['type'] && is_array($col_definition['code_list'])) {
+          $tmp_sql = "case ({$table_name}.{$col_name}) ";
+          foreach ($col_definition['code_list'] as $tmp_key => $tmp_value) {
+            $tmp_sql .= "when {$tmp_key} then '{$tmp_value}' ";
+          }
+          $tmp_sql .= ' end';
+
+          $codeListColumns[] = "({$tmp_sql}) as {$col_name}, {$table_name}.{$col_name} as {$col_name}_raw";
+        }
+
+        if (('int' == $col_definition['type'] || 'varchar' == $col_definition['type']) && is_array($col_definition['enum_values'])) {
+          if ($col_definition['virtual']) {
+            $tmp_sql = "case ({$col_definition['sql']}) ";
+          } else {
+            $tmp_sql = "case ({$table_name}.{$col_name}) ";
+          }
+          foreach ($col_definition['enum_values'] as $tmp_key => $tmp_value) {
+            $tmp_sql .= "when '{$tmp_key}' then '{$tmp_value}' ";
+          }
+          $tmp_sql .= ' end';
+
+          $codeListColumns[] = "({$tmp_sql}) as {$col_name}_enum_value";
+          if ($col_definition['virtual']) {
+            $codeListColumns[] = "({$col_definition['sql']}) as {$col_name}";
+          } else {
+            $codeListColumns[] = "{$table_name}.{$col_name} as {$col_name}";
+          }
+        } else if (
+          !$this->tables[$table_name][$col_name]['virtual']
+          && 'none' != $this->tables[$table_name][$col_name]['type']
+        ) {
+          $summaryColumnsSubselect .= "{$table_name}.{$col_name}";
+        }
+      }
+
+      if ('' != $where) {
+        $where = "where $where";
+      }
+      if ('' != $having) {
+        $having = "having $having";
+      }
+      if ('' != $order) {
+        $order = "order by $order";
+      }
+      if ('' != $group) {
+        $group = "group by $group";
+      }
+      if ($limit_start > 0 || $limit_end > 0) {
+        $limit = "limit $limit_start";
+        if ($limit_end > 0) {
+          $limit .= ", $limit_end";
+        }
+      }
+
+      if (_count($summaryColumns)) {
+        $query = "
+          select
+            ".join(", ", ["0 as dummy"] + $summaryColumns)."
+          from (
             select
-              ".join(", ", $selectItems)."
+              ".join(", ", array_merge($summaryColumnsSubselect, $virtualColumns, $codeListColumns))."
             from $table_name
             ".join(" ", $leftJoins)."
             $where
@@ -1353,20 +1336,34 @@ class DB {
             $having
             $order
             $limit
-          ";
-        }
+          ) as sumtable
+        ";
+      } else {
+        $selectItems = array_merge(["{$table_name}.*"], $virtualColumns, $codeListColumns);
 
-        $this->query($query);
-
-        $rows = [];
-        $count = 0;
-        while ($row = $this->fetch_array()) {
-          if ($count_rows) { $count++; }
-          else { $rows[] = $row; }
-        }
-
-        return ($count_rows ? $count : $rows);
+        $query = "
+          select
+            ".join(", ", $selectItems)."
+          from $table_name
+          ".join(" ", $leftJoins)."
+          $where
+          $group
+          $having
+          $order
+          $limit
+        ";
       }
+
+      $this->query($query);
+
+      $rows = [];
+      $count = 0;
+      while ($row = $this->fetch_array()) {
+        if ($count_rows) { $count++; }
+        else { $rows[] = $row; }
+      }
+
+      return ($count_rows ? $count : $rows);
     }
 
     public function count_all_rows($table_name, $params = []) {

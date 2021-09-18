@@ -15,11 +15,8 @@ class Products extends \ADIOS\Core\Widget {
         "sub" => [
           [
             "title" => $this->translate("Categories"),
+            "onclick" => "desktop_update('Products/Categories');",
             "sub" => [
-              [
-                "title" => $this->translate("View as table"),
-                "onclick" => "desktop_update('Products/Categories');",
-              ],
               [
                 "title" => $this->translate("View as tree"),
                 "onclick" => "window_render('Products/Categories/Tree');",

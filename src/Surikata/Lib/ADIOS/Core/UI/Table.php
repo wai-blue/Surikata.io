@@ -37,7 +37,6 @@ class Table extends \ADIOS\Core\UI\View {
       $params = parent::params_merge([
         'table' => '',
         'column_settings' => [],
-        'title_type' => 'title',
         'order' => ('' != $params['table'] ? "{$params['table']}.id desc" : ''),
         'title' => '',
         'tag' => '',
@@ -71,13 +70,11 @@ class Table extends \ADIOS\Core\UI\View {
         'columns_order' => [],
         'show_fulltext_search' => false,
         'fulltext_search_columns' => [],
-        'min_paging_count' => 0,
         'simple_insert' => false,
         'edit_form_default_values' => [],
         'default_filter' => [],
         'force_default_filter' => false,
         'display_columns' => [],
-        'onclick_available_columns' => [],
       ], $params);
 
       if (empty($params['model'])) {
@@ -221,10 +218,6 @@ class Table extends \ADIOS\Core\UI\View {
 
       }
 
-      if ($this->table_item_count <= $this->params['min_paging_count']) {
-        $this->params['show_paging'] = false;
-      }
-
       if ($this->params['show_paging']) {
         if ($this->params['page'] * $this->params['items_per_page'] > $this->table_item_count) {
           $this->params['page'] = floor($this->table_item_count / $this->params['items_per_page']) + 1;
@@ -233,15 +226,12 @@ class Table extends \ADIOS\Core\UI\View {
         $limit_2 = ($this->params['show_paging'] ? $this->params['items_per_page'] : '');
       } else {
         $this->table_item_count = 0;
-        $page = 1;
       }
 
       $get_all_rows_params = [
         'where' => $where,
         'having' => $having,
         'order' => $order_by,
-        // 'follow_lookups' => (_count($this->search) ? TRUE : FALSE),
-        // 'wa_list_follow' => true,
       ];
 
       if (is_numeric($limit_1)) $get_all_rows_params['limit_start'] = $limit_1;
@@ -261,40 +251,6 @@ class Table extends \ADIOS\Core\UI\View {
       }
 
       $this->model->onTableAfterDataLoaded($this);
-
-      // generovanie komponentov
-
-      if ($this->table_item_count > 0) {
-        $this->add("<div class='count_content'>{$this->table_item_count} items total</div>", 'count');
-
-
-        $items_per_page_select = "
-          <select
-            id='{$this->params['uid']}_table_count'
-            onchange='ui_table_change_items_per_page(\"{$this->params['uid']}\", this.value);'
-          >
-            <option value='10' ".($this->params['items_per_page'] == 10 ? "selected" : "").">10</option>
-            <option value='25' ".($this->params['items_per_page'] == 25 ? "selected" : "").">25</option>
-            <option value='100' ".($this->params['items_per_page'] == 100 ? "selected" : "").">100</option>
-            <option value='500' ".($this->params['items_per_page'] == 500 ? "selected" : "").">500</option>
-            <option value='1000' ".($this->params['items_per_page'] == 1000 ? "selected" : "").">1000</option>
-          </select>
-        ";
-
-        $this->add($items_per_page_select, 'settings');
-      }
-
-      if ($this->params['show_refresh']) {
-        $this->add(
-          $this->adios->ui->button([
-            'fa_icon' => 'fas fa-sync-alt',
-            'class' => 'btn-light btn-circle btn-sm',
-            'title' => l('Obnoviť'),
-            'onclick' => " ui_table_refresh('{$this->params['uid']}');",
-          ]),
-          'settings'
-        );
-      }
 
       // strankovanie
 
@@ -355,75 +311,12 @@ class Table extends \ADIOS\Core\UI\View {
 
       $this->params['show_add_button'] = (empty($this->params['add_button_params']['onclick']) ? FALSE : $this->params['show_add_button']);
 
-      if ($this->params['show_add_button']) {
-        if ('' == $this->params['add_button_params']['type']) {
-          $this->params['add_button_params']['type'] = 'add';
-        }
-
-        if (!empty($this->model->addButtonText)) {
-          $this->params['add_button_params']['text'] = $this->model->addButtonText;
-        }
-
-        if ('' == $this->params['add_button_params']['onclick']) {
-          if ('desktop' == $this->params['form_type']) {
-            $this->params['add_button_params']['onclick'] = "
-              desktop_render(
-                'UI/Form', 
-                {
-                  form_type: 'desktop',
-                  table: '{$this->params['table']}', 
-                  id: -1,
-                  simple_insert: ".($this->params['simple_insert'] ? 1 : 0).",
-                  default_values: $.parseJSON(decodeURIComponent('".rawurlencode(json_encode($this->params['edit_form_default_values']))."')),
-                }
-              );
-            ";
-          } else {
-            $this->params['add_button_params']['onclick'] = "
-              let tmp_params = {
-                table: '{$this->params['table']}',
-                id: -1
-              };
-
-              ".($this->params['simple_insert'] ? "
-                tmp_params['simple_insert'] = '1';
-              " : "")."
-
-              ".(empty($this->params['edit_form_default_values']) ? "" : "
-                tmp_params['default_values'] = '".rawurlencode(json_encode($this->params['edit_form_default_values']))."';
-              ")."
-
-              window_render('UI/Form', tmp_params);
-            ";
-          }
-        }
-
-        $add_button = $this->adios->ui->button($this->params['add_button_params']);
+      if ('' == $this->params['add_button_params']['type']) {
+        $this->params['add_button_params']['type'] = 'add';
       }
 
-      if ($this->params['show_search_button']) {
-        if (empty($this->model->searchAction)) {
-          $search_action = $this->model->getFullUrlBase($params)."/Search";
-        } else {
-          $search_action = $this->model->searchAction;
-        }
-
-        $search_button = $this->adios->ui->button([
-          "type" => "search",
-          "onclick" => "window_render('{$search_action}');",
-        ]);
-      }
-
-      if ($this->params['show_title']) {
-        $this->params['title_params']['left'] = [$add_button, $search_button];
-        $this->params['title_params']['center'] = $this->params['title'];
-        $this->params['title_params']['class'] = 'table_title';
-        if ('title' == $this->params['title_type']) {
-          $this->add(
-            $this->adios->ui->Title($this->params['title_params']),
-            'title'
-          );
-        }
+      if (!empty($this->model->addButtonText)) {
+        $this->params['add_button_params']['text'] = $this->model->addButtonText;
       }
 
       if (_count($this->search)) {
@@ -489,6 +382,7 @@ class Table extends \ADIOS\Core\UI\View {
         $params = $this->params;
 
         $html = "";
+        $this->add_class('Container');
 
         if (!in_array("UI/Form", $this->adios->actionStack)) {
           $this->add_class('shadow');
@@ -499,7 +393,33 @@ class Table extends \ADIOS\Core\UI\View {
         }
 
         if (!$this->params['refresh']) {
-          $html .= parent::render('title');
+          if ($this->params['show_title']) {
+
+            if (empty($this->model->searchAction)) {
+              $searchAction = $this->model->getFullUrlBase($params)."/Search";
+            } else {
+              $searchAction = $this->model->searchAction;
+            }
+
+            $html .= $this->adios->ui->Title([
+              'left' => [
+                (
+                  $this->params['show_add_button']
+                  ? $this->adios->ui->Button($this->params['add_button_params'])
+                  : ""
+                ),
+                (
+                  $this->params['show_search_button']
+                  ? $this->adios->ui->Button([
+                    "type" => "search",
+                    "onclick" => "window_render('{$searchAction}');",
+                  ])
+                  : ""
+                ),
+              ],
+              'center' => $this->params['title'],
+            ])->render();
+          }
 
           if (!empty($this->params['header'])) {
             $html .= "
@@ -512,6 +432,7 @@ class Table extends \ADIOS\Core\UI\View {
           $html .= "
             <div
               ".$this->main_params()."
+              data-model='".ads($this->params['model'])."'
               data-refresh-action='".ads($this->params['refresh_action'])."'
               data-refresh-params='".(empty($this->params['uid'])
                 ? json_encode($this->params['_REQUEST'])
@@ -527,333 +448,327 @@ class Table extends \ADIOS\Core\UI\View {
         }
 
         if (_count($this->columns)) {
+          foreach ($this->columns as $col_name => $col_def) {
+            if (!$col_def['show_column']) {
+              unset($this->columns[$col_name]);
+            }
+          }
+
+          $ordering = explode(' ', $this->params['order_by']);
+
+          $html .= "<div class='adios ui Table Header'>";
+
+          // title riadok - nazvy stlpcov
+
+          if ($params['show_titles']) {
+            $html .= "<div class='Row ColumnNames'>";
+
             foreach ($this->columns as $col_name => $col_def) {
-              if (!$col_def['show_column']) {
-                unset($this->columns[$col_name]);
+              if ($params['allow_order_modification']) {
+                $new_ordering = "$col_name asc";
+                $order_class = 'unordered';
+
+                if ($ordering[0] == $col_name || $params['table'].'.'.$col_name == $ordering[0]) {
+                  switch ($ordering[1]) {
+                    case 'asc': $new_ordering = "$col_name desc";
+                      $order_class = 'asc_ordered';
+                      break;
+                    case 'desc': $new_ordering = 'none';
+                      $order_class = 'desc_ordered';
+                      break;
+                  }
+                }
               }
+
+              $html .= "
+                <div
+                  class='Column {$col_def['css_class']} {$order_class}'
+                  ".($params['allow_order_modification'] ? "
+                    onclick='
+                      ui_table_refresh(\"{$params['uid']}\", {order_by: \"{$new_ordering}\"});
+                    '
+                  " : "")."
+                >
+                  ".hsc($col_def['title'])."
+                  ".('' == $col_def['unit'] ? '' : '['.hsc($col_def['unit']).']')."
+                  <i class='fas fa-chevron-down order_desc'></i>
+                  <i class='fas fa-chevron-up order_asc'></i>
+                </div>
+              ";
             }
 
-            // zakladne nastavenia
+            // koniec headeru
+            $html .= '  </div>';
+          }
 
-            $ordering = explode(' ', $this->params['order_by']);
+          // filtrovaci riadok
 
-            // tabulka zoznamu
+          if ($params['show_filter']) {
+            $html .= "<div class='Row ColumnFilters'>";
 
-            if (_count($this->table_data)) {
-              $html .= "<div class='adios ui Table Container'>";
-
-              $html .= "<div class='adios ui Table Header'>";
-
-              // title riadok - nazvy stlpcov
-
-              if ($params['show_titles']) {
-                $html .= "<div class='Row ColumnNames'>";
-
-                foreach ($this->columns as $col_name => $col_def) {
-                  if ($params['allow_order_modification']) {
-                    $new_ordering = "$col_name asc";
-                    $order_class = 'unordered';
-
-                    if ($ordering[0] == $col_name || $params['table'].'.'.$col_name == $ordering[0]) {
-                      switch ($ordering[1]) {
-                        case 'asc': $new_ordering = "$col_name desc";
-                          $order_class = 'asc_ordered';
-                          break;
-                        case 'desc': $new_ordering = 'none';
-                          $order_class = 'desc_ordered';
-                          break;
-                      }
+            foreach ($this->columns as $col_name => $col_def) {
+                $filter_input = "";
+                
+                switch ($col_def['type']) {
+                  case 'varchar':
+                  case 'text':
+                  case 'password':
+                  case 'lookup':
+                  case 'color':
+                  case 'date':
+                  case 'datetime':
+                  case 'timestamp':
+                  case 'time':
+                  case 'year':
+                    $input_type = 'text';
+                  break;
+                  case 'float':
+                  case 'int':
+                    if (_count($col_def['enum_values'])) {
+                      $input_type = 'select';
+                      $input_values = $col_def['enum_values'];
+                    } else {
+                      $input_type = 'text';
                     }
-                  }
-
-                  $html .= "
-                    <div
-                      class='Column {$order_class}'
-                      ".($params['allow_order_modification'] ? "
-                        onclick='
-                          ui_table_refresh(\"{$params['uid']}\", {order_by: \"{$new_ordering}\"});
-                        '
-                      " : "")."
-                    >
-                      ".hsc($col_def['title'])."
-                      ".('' == $col_def['unit'] ? '' : '['.hsc($col_def['unit']).']')."
-                      <i class='fas fa-chevron-down order_desc'></i>
-                      <i class='fas fa-chevron-up order_asc'></i>
-                    </div>
-                  ";
+                  break;
+                  case 'enum':
+                    $input_type = 'select';
+                    $input_values = explode(',', $col_def['enum_values']);
+                  break;
+                  case 'boolean':
+                    $input_type = 'bool';
+                    $true_value = 1;
+                    $false_value = 0;
+                  break;
+                  default:
+                    $input_type = '';
+                    $filter_input = '';
                 }
 
-                // koniec headeru
-                $html .= '  </div>';
-              }
-
-              // filtrovaci riadok
-
-              if ($params['show_filter']) {
-                  $html .= "<div class='Row ColumnFilters'>";
-
-                  foreach ($this->columns as $col_name => $col_def) {
-                      $filter_input = "";
-                      
-                      switch ($col_def['type']) {
-                        case 'varchar':
-                        case 'text':
-                        case 'password':
-                        case 'lookup':
-                        case 'color':
-                        case 'date':
-                        case 'datetime':
-                        case 'timestamp':
-                        case 'time':
-                        case 'year':
-                          $input_type = 'text';
-                        break;
-                        case 'float':
-                        case 'int':
-                          if (_count($col_def['enum_values'])) {
-                            $input_type = 'select';
-                            $input_values = $col_def['enum_values'];
-                          } else {
-                            $input_type = 'text';
-                          }
-                        break;
-                        case 'enum':
-                          $input_type = 'select';
-                          $input_values = explode(',', $col_def['enum_values']);
-                        break;
-                        case 'boolean':
-                          $input_type = 'bool';
-                          $true_value = 1;
-                          $false_value = 0;
-                        break;
-                        default:
-                          $input_type = '';
-                          $filter_input = '';
-                      }
-
-                      if ('text' == $input_type) {
-                          $filter_input = "
-                            <input
-                              type='text'
-                              class='{$params['uid']}_column_filter'
-                              data-col-name='{$col_name}'
-                              id='{$params['uid']}_column_filter_{$col_name}'
-                              required='required'
-                              value=\"".htmlspecialchars($this->columnsFilter[$col_name])."\"
-                              title=' '
-                              onkeydown='if (event.keyCode == 13) { event.cancelBubble = true; }'
-                              onkeypress='if (event.keyCode == 13) { event.cancelBubble = true; ui_table_set_column_filter(\"{$params['uid']}\", {}); }'
-                              {$col_def['table_filter_attributes']}
-                              placeholder='🔍'
-                            >
-                          ";
-                      }
-
-                      if ('select' == $input_type) {
-                          $filter_input = "<select
-                              class='{$params['uid']}_column_filter'
-                              data-col-name='{$col_name}'
-                              id='{$params['uid']}_column_filter_{$col_name}'
-                              title=' '
-                              required='required'
-                              onchange=' ui_table_set_column_filter(\"{$params['uid']}\", {}); '><option></option>";
-
-                          if (_count($input_values)) {
-                              foreach ($input_values as $enum_val) {
-                                  $filter_input .= "<option value='{$enum_val}' ".($this->columnsFilter[$col_name] == $enum_val ? "selected='selected'" : '').'>'.l($enum_val).'</option>';
-                              }
-                          }
-
-                          $filter_input .= '</select>';
-                      }
-
-                      if ('bool' == $input_type) {
-                          $filter_input = "
-                            <div
-                              class='bool_controls ".(is_numeric($this->columnsFilter[$col_name]) ? "filter_active" : "")."'
-                            >
-                              <input type='hidden'
-                                class='{$params['uid']}_column_filter'
-                                data-col-name='{$col_name}'
-                                id='{$params['uid']}_column_filter_{$col_name}'
-                                required='required'
-                                value='".ads($this->columnsFilter[$col_name])."'
-                              />
-
-                              <i
-                                class='fas fa-check-circle ".($this->columnsFilter[$col_name] == 1 ? "active" : "")."'
-                                style='color:#4caf50'
-                                onclick='
-                                  if ($(\"#{$params['uid']}_column_filter_{$col_name}\").val() == \"$true_value\") $(\"#{$params['uid']}_column_filter_{$col_name}\").val(\"\"); else $(\"#{$params['uid']}_column_filter_{$col_name}\").val(\"{$true_value}\");
-                                  ui_table_set_column_filter(\"{$params['uid']}\", {});
-                                '
-                              ></i>
-                              <i
-                                class='fas fa-times-circle ".($this->columnsFilter[$col_name] == 0 ? "active" : "")."'
-                                style='color:#ff5722'
-                                onclick='
-                                  if ($(\"#{$params['uid']}_column_filter_{$col_name}\").val() == \"{$false_value}\") $(\"#{$params['uid']}_column_filter_{$col_name}\").val(\"\"); else $(\"#{$params['uid']}_column_filter_{$col_name}\").val(\"{$false_value}\");
-                                  ui_table_set_column_filter(\"{$params['uid']}\", {});
-                                '
-                              ></i>
-                            </div>
-                          ";
-                      }
-
-                      $html .= "
-                        <div class='Column {$input_type}'>
-                          {$filter_input}
-                        </div>
-                      ";
-                  }
-
-                  // koniec filtra
-                  $html .= '</div>';
-              }
-
-              $html .= "</div>"; // adios ui Table Header
-              $html .= "<div class='adios ui Table Content'>";
-
-              // zaznamy tabulky
-
-              foreach ($this->table_data as $val) {
-                if (empty($params['onclick'])) {
-                  if ('desktop' == $params['form_type']) {
-                    $params['onclick'] = "
-                      desktop_render(
-                        'UI/Form',
-                        {
-                          form_type: 'desktop',
-                          table: '{$this->params['table']}',
-                          id: id,
-                        }
-                      );
+                if ('text' == $input_type) {
+                    $filter_input = "
+                      <input
+                        type='text'
+                        class='{$params['uid']}_column_filter'
+                        data-col-name='{$col_name}'
+                        id='{$params['uid']}_column_filter_{$col_name}'
+                        required='required'
+                        value=\"".htmlspecialchars($this->columnsFilter[$col_name])."\"
+                        title=' '
+                        onkeydown='if (event.keyCode == 13) { event.cancelBubble = true; }'
+                        onkeypress='if (event.keyCode == 13) { event.cancelBubble = true; ui_table_set_column_filter(\"{$params['uid']}\", {}); }'
+                        {$col_def['table_filter_attributes']}
+                        placeholder='🔍'
+                      >
                     ";
-                  } else {
-                    $params['onclick'] = "
-                      window_render(
-                        'UI/Form',
-                        {
-                          table: '{$this->params['table']}',
-                          id: id,
-                        }
-                      );
-                    ";
-                  }
                 }
 
-                $onclick_available_columns_js = '';
+                if ('select' == $input_type) {
+                    $filter_input = "<select
+                        class='{$params['uid']}_column_filter'
+                        data-col-name='{$col_name}'
+                        id='{$params['uid']}_column_filter_{$col_name}'
+                        title=' '
+                        required='required'
+                        onchange=' ui_table_set_column_filter(\"{$params['uid']}\", {}); '><option></option>";
 
-                if (_count($params['onclick_available_columns'])) {
-                  foreach ($params['onclick_available_columns'] as $click_column) {
-                    if (isset($val[$click_column])) {
-                      $onclick_available_columns_js .= " var {$click_column} = '".$this->adios->db->escape($val[$click_column])."'; ";
+                    if (_count($input_values)) {
+                        foreach ($input_values as $enum_val) {
+                            $filter_input .= "<option value='{$enum_val}' ".($this->columnsFilter[$col_name] == $enum_val ? "selected='selected'" : '').'>'.l($enum_val).'</option>';
+                        }
                     }
-                  }
+
+                    $filter_input .= '</select>';
                 }
 
-                $rowCss = $this->model->tableRowCSSFormatter([
+                if ('bool' == $input_type) {
+                    $filter_input = "
+                      <div
+                        class='bool_controls ".(is_numeric($this->columnsFilter[$col_name]) ? "filter_active" : "")."'
+                      >
+                        <input type='hidden'
+                          class='{$params['uid']}_column_filter'
+                          data-col-name='{$col_name}'
+                          id='{$params['uid']}_column_filter_{$col_name}'
+                          required='required'
+                          value='".ads($this->columnsFilter[$col_name])."'
+                        />
+
+                        <i
+                          class='fas fa-check-circle ".($this->columnsFilter[$col_name] == 1 ? "active" : "")."'
+                          style='color:#4caf50'
+                          onclick='
+                            if ($(\"#{$params['uid']}_column_filter_{$col_name}\").val() == \"$true_value\") $(\"#{$params['uid']}_column_filter_{$col_name}\").val(\"\"); else $(\"#{$params['uid']}_column_filter_{$col_name}\").val(\"{$true_value}\");
+                            ui_table_set_column_filter(\"{$params['uid']}\", {});
+                          '
+                        ></i>
+                        <i
+                          class='fas fa-times-circle ".($this->columnsFilter[$col_name] == 0 ? "active" : "")."'
+                          style='color:#ff5722'
+                          onclick='
+                            if ($(\"#{$params['uid']}_column_filter_{$col_name}\").val() == \"{$false_value}\") $(\"#{$params['uid']}_column_filter_{$col_name}\").val(\"\"); else $(\"#{$params['uid']}_column_filter_{$col_name}\").val(\"{$false_value}\");
+                            ui_table_set_column_filter(\"{$params['uid']}\", {});
+                          '
+                        ></i>
+                      </div>
+                    ";
+                }
+
+                $html .= "
+                  <div class='Column {$col_def['css_class']} {$input_type}'>
+                    {$filter_input}
+                  </div>
+                ";
+            }
+
+            // koniec filtra
+            $html .= '</div>';
+          }
+
+          $html .= "</div>"; // adios ui Table Header
+          $html .= "<div class='adios ui Table Content ".(_count($this->table_data) == 0 ? "empty" : "")."'>";
+
+          // zaznamy tabulky
+          if (_count($this->table_data)) {
+
+            foreach ($this->table_data as $val) {
+              // if (empty($params['onclick'])) {
+              //   if ('desktop' == $params['form_type']) {
+              //     $params['onclick'] = "
+              //       desktop_render(
+              //         'UI/Form',
+              //         {
+              //           form_type: 'desktop',
+              //           table: '{$this->params['table']}',
+              //           id: id,
+              //         }
+              //       );
+              //     ";
+              //   } else {
+              //     $params['onclick'] = "
+              //       window_render(
+              //         'UI/Form',
+              //         {
+              //           table: '{$this->params['table']}',
+              //           id: id,
+              //         }
+              //       );
+              //     ";
+              //   }
+              // }
+
+              $rowCss = $this->model->tableRowCSSFormatter([
+                'table' => $this,
+                'row' => $val,
+              ]);
+
+              $html .= "
+                <div 
+                  class='Row'
+                  data-id='{$val['id']}'
+                  style='{$rowCss}'
+                  onclick=\"
+                    let _this = $(this);
+                    _this.closest('.data_tr').css('opacity', 0.5);
+                    setTimeout(function() {
+                      _this.closest('.data_tr').css('opacity', 1);
+                    }, 300);
+                    let id = ".(int) $val['id'].";
+                    {$params['onclick']}
+                  \"
+                >
+              ";
+
+              foreach ($this->columns as $col_name => $col_def) {
+                if (!empty($col_def['input']) && is_string($col_def['input'])) {
+                  $inputClassName = "\\ADIOS\\".str_replace("/", "\\", $col_def['input']);
+                  $tmpInput = new $inputClassName($this->adios, "", ["value" => $val[$col_name]]);
+                  $cellHtml = $tmpInput->formatValueToHtml();
+                } else if ($this->adios->db->is_registered_column_type($col_def['type'])) {
+                  $cellHtml = $this->adios->db->registered_columns[$col_def['type']]->get_html(
+                    $val[$col_name],
+                    [
+                      'col_name' => $col_name,
+                      'col_definition' => $col_def,
+                      'row' => $val,
+                    ]
+                  );
+                } else {
+                  $cellHtml = $val[$col_name];
+                }
+
+                if ((in_array($col_def['type'], ['int', 'float']) && !is_array($col_def['enum_values']))) {
+                  $align_class = 'align_right';
+                } else {
+                  $align_class = 'align_left';
+                }
+
+                $cellStyle = $this->model->tableCellCSSFormatter([
                   'table' => $this,
+                  'column' => $col_name,
                   'row' => $val,
+                  'value' => $val[$col_name],
                 ]);
 
+                $cellHtml = $this->model->tableCellHTMLFormatter([
+                  'table' => $this,
+                  'column' => $col_name,
+                  'row' => $val,
+                  'html' => $cellHtml,
+                ]);
+                
                 $html .= "
-                  <div 
-                    class='Row'
-                    data-id='{$val['id']}'
-                    style='{$rowCss}'
-                    onclick=\"
-                      let _this = $(this);
-                      _this.closest('.data_tr').css('opacity', 0.5);
-                      setTimeout(function() {
-                        _this.closest('.data_tr').css('opacity', 1);
-                      }, 300);
-                      let id = ".(int) $val['id'].";
-                      {$onclick_available_columns_js}
-                      {$params['onclick']}
-                    \"
-                  >
-                ";
-
-                foreach ($this->columns as $col_name => $col_def) {
-                  if (!empty($col_def['input']) && is_string($col_def['input'])) {
-                    $inputClassName = "\\ADIOS\\".str_replace("/", "\\", $col_def['input']);
-                    $tmpInput = new $inputClassName($this->adios, "", ["value" => $val[$col_name]]);
-                    $cellHtml = $tmpInput->formatValueToHtml();
-                  } else if ($this->adios->db->is_registered_column_type($col_def['type'])) {
-                    $cellHtml = $this->adios->db->registered_columns[$col_def['type']]->get_html(
-                      $val[$col_name],
-                      [
-                        'col_name' => $col_name,
-                        'col_definition' => $col_def,
-                        'row' => $val,
-                      ]
-                    );
-                  } else {
-                    $cellHtml = $val[$col_name];
-                  }
-
-                  if ((in_array($col_def['type'], ['int', 'float']) && !is_array($col_def['enum_values']))) {
-                    $align_class = 'align_right';
-                  } else {
-                    $align_class = 'align_left';
-                  }
-
-                  $cellStyle = $this->model->tableCellCSSFormatter([
-                    'table' => $this,
-                    'column' => $col_name,
-                    'row' => $val,
-                    'value' => $val[$col_name],
-                  ]);
-
-                  $cellHtml = $this->model->tableCellHTMLFormatter([
-                    'table' => $this,
-                    'column' => $col_name,
-                    'row' => $val,
-                    'html' => $cellHtml,
-                  ]);
-                  
-                  $html .= "
-                    <div class='Column {$align_class}' style='{$cellStyle}'>
-                      {$cellHtml}
-                    </div>
-                  ";
-                }
-
-                $html .= '</div>';
-              }
-
-              $html .= "</div>"; // adios ui Table Content
-
-              if ($params['show_controls']) {
-                $html .= "
-                  <div class='adios ui Table Footer'>
-                    <div class='Row'>
-                      <div class='Column count'>
-                        ".parent::render('count')."
-                      </div>
-                      <div class='Column paging'>
-                        ".parent::render('paging')."
-                      </div>
-                      <div class='Column settings'>
-                        ".parent::render('settings')."
-                      </div>
-                    </div>
+                  <div class='Column {$col_def['css_class']} {$align_class}' style='{$cellStyle}'>
+                    {$cellHtml}
                   </div>
                 ";
               }
 
-              $html .= "</div>"; // adios ui Table Container
-            } else {
-              $html .= "
-                <div class='info-no-data'>".hsc($params['info_no_data'])."</div>
-              ";
+              $html .= '</div>';
             }
+          }
 
+          $html .= "</div>"; // adios ui Table Content
+
+          if ($params['show_controls']) {
+            $html .= "
+              <div class='adios ui Table Footer'>
+                <div class='Row'>
+                  <div class='Column count'>
+                    {$this->table_item_count} items total
+                  </div>
+                  <div class='Column paging'>
+                    ".parent::render('paging')."
+                  </div>
+                  <div class='Column settings'>
+                    <select
+                      id='{$this->params['uid']}_table_count'
+                      onchange='ui_table_change_items_per_page(\"{$this->params['uid']}\", this.value);'
+                    >
+                      <option value='10' ".($this->params['items_per_page'] == 10 ? "selected" : "").">10</option>
+                      <option value='25' ".($this->params['items_per_page'] == 25 ? "selected" : "").">25</option>
+                      <option value='100' ".($this->params['items_per_page'] == 100 ? "selected" : "").">100</option>
+                      <option value='500' ".($this->params['items_per_page'] == 500 ? "selected" : "").">500</option>
+                      <option value='1000' ".($this->params['items_per_page'] == 1000 ? "selected" : "").">1000</option>
+                    </select>
+
+                    ".($this->params['show_refresh'] ?
+                        $this->adios->ui->button([
+                          'fa_icon' => 'fas fa-sync-alt',
+                          'class' => 'btn-light btn-circle btn-sm',
+                          'title' => "Refresh",
+                          'onclick' => "ui_table_refresh('{$this->params['uid']}');",
+                        ])->render()
+                    : "")."
+                  </div>
+                </div>
+              </div>
+            ";
+          }
         }
 
         // koniec obsahu
-        if (!$this->params['refresh']) { // || $_REQUEST['adios_history_go_back']) {
+        if (!$this->params['refresh']) {
           $html .= '</div>';
         }
 

@@ -27,9 +27,9 @@ namespace Surikata\Plugins\WAI\Product {
         $productFeatureAssignmentModel = new \ADIOS\Widgets\Products\Models\ProductFeatureAssignment($this->adminPanel);
         $productCategoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
 
-        $allFeatures = $productFeatureModel->getAll('id'); // TODO: UPPERCASE LOOKUP
-        $allFeaturesAssignements = $productFeatureAssignmentModel->getAll(); // TODO: UPPERCASE LOOKUP
-        $allCategories = $productCategoryModel->translateForWeb($productCategoryModel->getAllCached(), $languageIndex); // TODO: UPPERCASE LOOKUP
+        $allFeatures = $productFeatureModel->getAll();
+        $allFeaturesAssignements = $productFeatureAssignmentModel->getAll();
+        $allCategories = $productCategoryModel->translateForWeb($productCategoryModel->getAllCached(), $languageIndex);
 
         $productCatalogPlugin = new \Surikata\Plugins\WAI\Product\Catalog($this->websiteRenderer);
 

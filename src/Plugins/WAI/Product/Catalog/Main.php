@@ -120,15 +120,15 @@ namespace Surikata\Plugins\WAI\Product {
           ->getCatalogInfo($idProductCategory, $page, $itemsPerPage, $filter, $languageIndex)
         ;
 
-        foreach ($this->catalogInfo["allCategories"] as $key => $category) {
-          $this->catalogInfo["allCategories"][$key]["url"] = $this->getWebPageUrl($this->convertCategoryToUrlVariables($category));
-        }
-        foreach ($this->catalogInfo["allSubCategories"] as $key => $category) {
-          $this->catalogInfo["allSubCategories"][$key]["url"] = $this->getWebPageUrl($this->convertCategoryToUrlVariables($category));
-        }
-        foreach ($this->catalogInfo["allSubCategories"] as $key => $category) {
-          $this->catalogInfo["directSubCategories"][$key]["url"] = $this->getWebPageUrl($this->convertCategoryToUrlVariables($category));
-        }
+        // foreach ($this->catalogInfo["allCategories"] as $key => $category) {
+        //   $this->catalogInfo["allCategories"][$key]["url"] = $this->getWebPageUrl($this->convertCategoryToUrlVariables($category));
+        // }
+        // foreach ($this->catalogInfo["allSubCategories"] as $key => $category) {
+        //   $this->catalogInfo["allSubCategories"][$key]["url"] = $this->getWebPageUrl($this->convertCategoryToUrlVariables($category));
+        // }
+        // foreach ($this->catalogInfo["allSubCategories"] as $key => $category) {
+        //   $this->catalogInfo["directSubCategories"][$key]["url"] = $this->getWebPageUrl($this->convertCategoryToUrlVariables($category));
+        // }
 
         $this->catalogInfo["category"]["url"] = $this->getWebPageUrl($this->convertCategoryToUrlVariables($this->catalogInfo["category"]));
 

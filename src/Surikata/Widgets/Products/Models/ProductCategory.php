@@ -154,16 +154,16 @@ class ProductCategory extends \ADIOS\Core\Model {
     return $params;
   }
 
-  public function getAll(string $keyBy = "") {
-    return $this->associateKey(
-      $this->fetchQueryAsArray($this->getQuery('*')),
-      'id'
-    );
-  }
+  // public function getAll(string $keyBy = "", $withLookups = FALSE, $processLookups = FALSE) {
+  //   return $this->associateKey(
+  //     $this->fetchQueryAsArray($this->getQuery('*'), FALSE, $processLookups),
+  //     'id',
+  //   );
+  // }
 
   public function getAllCached() {
     if ($this->allCategoriesCache === NULL) {
-      $this->allCategoriesCache = $this->getAll(); // TODO: UPPERCASE LOOKUP
+      $this->allCategoriesCache = $this->getAll();
     }
 
     return $this->allCategoriesCache;
@@ -190,7 +190,7 @@ class ProductCategory extends \ADIOS\Core\Model {
     ////////////////////////////////////////
     // info about categories
 
-    $allCategories = $this->translateForWeb($this->getAllCached(), $languageIndex); // TODO: UPPERCASE LOOKUP
+    $allCategories = $this->translateForWeb($this->getAllCached(), $languageIndex);
 
     $allSubCategories = $this->extractAllSubCategories($idCategory, $allCategories);
     // $directSubCategories = $this->extractDirectSubCategories($idCategory, $allCategories);
@@ -247,7 +247,7 @@ class ProductCategory extends \ADIOS\Core\Model {
     $productsQuery->skip(($page - 1) * $itemsPerPage);
     $productsQuery->take($itemsPerPage);
 
-    $catalogInfo["products"] = $this->fetchQueryAsArray($productsQuery);
+    $catalogInfo["products"] = $this->fetchQueryAsArray($productsQuery, 'id', FALSE);
 
     $catalogInfo["products"] = $productModel->addPriceInfoForListOfProducts($catalogInfo["products"]);
     $catalogInfo["products"] = $productModel->unifyProductInformationForListOfProduct($catalogInfo["products"]);
@@ -269,24 +269,24 @@ class ProductCategory extends \ADIOS\Core\Model {
       $parameterModel->addLookupsToQuery($parametersQuery, ['id_feature' => 'ProductFeature']);
     }
 
-    $allParameters = $this->fetchQueryAsArray($parametersQuery, FALSE, FALSE);
+    $allParameters = $this->fetchQueryAsArray($parametersQuery, 'id', FALSE);
     $catalogInfo["availableProductParameters"] = $this->extractLookupFromQueryResult($allParameters, 'ProductFeature'); // TODO: UPPERCASE LOOKUP
     $catalogInfo["availableProductParameters"] = $this->associateKey($catalogInfo["availableProductParameters"], 'id');
 
     ////////////////////////////////////////
     // info about brands
 
-    // $tmpBrands = [];
+    $tmpBrands = [];
 
-    // foreach ($allProducts as $tmpProduct) {
-    //   if (!empty($tmpProduct['Brand___LOOKUP___id'])) {
-    //     $tmpBrands[$tmpProduct['Brand___LOOKUP___id']] = $tmpProduct;
-    //   }
-    // }
-    // $tmpBrands = $this->processLookupsInQueryResult($tmpBrands);
-    // foreach ($tmpBrands as $key => $value) {
-    //   $catalogInfo["availableProductBrands"][] = $value['Brand'];
-    // }
+    foreach ($allProducts as $tmpProduct) {
+      if (!empty($tmpProduct['Brand___LOOKUP___id'])) {
+        $tmpBrands[$tmpProduct['Brand___LOOKUP___id']] = $tmpProduct;
+      }
+    }
+    $tmpBrands = $this->processLookupsInQueryResult($tmpBrands);
+    foreach ($tmpBrands as $key => $value) {
+      $catalogInfo["availableProductBrands"][] = $value['Brand'];
+    }
 
     // var_dump(round((microtime(true) - $start) * 1000, 2));
     // // var_dump(reset($tmpBrands));

@@ -3,9 +3,12 @@
 namespace ADIOS\Widgets\Shipping\Models;
 
 class ShipmentPrice extends \ADIOS\Core\Model {
-  var $sqlName = "shipping_shipment_prices";
+  const DELIVERY_FEE_BY_ORDER_PRICE = 1;
+  const DELIVERY_FEE_BY_ORDER_WEIGHT = 2;
+
+  var $sqlName = "shipping_prices";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
-  var $urlBase = "Shipping/ShipmentPrices";
+  // var $urlBase = "DeliveryAndPayment/Prices";
   var $tableTitle = "Shipment prices";
   var $formTitleForInserting = "New shipment price";
   var $formTitleForEditing = "Shipment price";
@@ -14,8 +17,8 @@ class ShipmentPrice extends \ADIOS\Core\Model {
   const PRICE_CALCULATION_METHOD_WEIGHT  = 2;
 
   var $shipmentPriceCalculationMethodEnumValues = [
-    self::PRICE_CALCULATION_METHOD_PRICE  => "Calculate by offer value",
-    self::PRICE_CALCULATION_METHOD_WEIGHT => "Calculate by offer weight"
+    self::DELIVERY_FEE_BY_ORDER_PRICE => "Total value of the order",
+    self::DELIVERY_FEE_BY_ORDER_WEIGHT => "Total weight of the order",
   ];
 
   public function columns(array $columns = []) {
@@ -25,55 +28,57 @@ class ShipmentPrice extends \ADIOS\Core\Model {
         "title" => $this->translate("Shipment"),
         "model" => "Widgets/Shipping/Models/Shipment",
         "required" => TRUE,
-        "show_column" => TRUE,
       ],
 
-      "name" => [
+      "delivery_fee_calculation_method" => [
         'type' => 'varchar',
-        'title' => $this->translate("Unique name"),
-        "required" => TRUE,
-        'show_column' => TRUE,
-      ],
-
-      "shipment_price_calculation_method" => [
-        'type' => 'varchar',
-        'title' => $this->translate("Shipment price calculation method"),
+        'title' => $this->translate("Delivery price calculation method"),
         "enum_values" => $this->shipmentPriceCalculationMethodEnumValues,
         'show_column' => TRUE,
       ],
 
+      "price_from" => [
+        "type" => "float",
+        "title" => $this->translate("Order price: From"),
+        "show_column" => TRUE
+      ],
+
+      "price_to" => [
+        "type" => "float",
+        "title" => $this->translate("Order price: To"),
+        "show_column" => TRUE
+      ],
+
       "weight_from" => [
         "type" => "float",
-        "title" => $this->translate("Offer weight from"),
+        "title" => $this->translate("Order weight: From"),
         "show_column" => TRUE
       ],
 
       "weight_to" => [
         "type" => "float",
-        "title" => $this->translate("Offer weight to"),
+        "title" => $this->translate("Order weight: To"),
         "show_column" => TRUE
       ],
 
-      "price_from" => [
+      "delivery_fee" => [
         "type" => "float",
-        "title" => $this->translate("Offer price start"),
+        "title" => $this->translate("Delivery extra fee"),
+        "unit" => $this->adios->locale->currencySymbol(),
         "show_column" => TRUE,
-        "unit" => "€"
       ],
 
-      "price_to" => [
+      "payment_fee" => [
         "type" => "float",
-        "title" => $this->translate("Offer price to"),
+        "title" => $this->translate("Payment extra fee"),
+        "unit" => $this->adios->locale->currencySymbol(),
         "show_column" => TRUE,
-        "unit" => "€"
       ],
 
-      "shipment_price" => [
-        "type" => "float",
-        "title" => $this->translate("Shipment price"),
-        "show_column" => TRUE,
-        "required" => TRUE,
-        "unit" => "€"
+      "name" => [
+        "type" => 'varchar',
+        "title" => $this->translate("Name"),
+        "description" => $this->translate("Optional. Some design themes may use this value."),
       ],
 
     ]);
@@ -81,11 +86,35 @@ class ShipmentPrice extends \ADIOS\Core\Model {
 
   public function indexes($columns = []) {
     return parent::indexes([
-      "unique_name" => [
+      [
         "type" => "unique",
         "columns" => ["name"],
       ],
+      [
+        "type" => "index",
+        "columns" => ["price_from"],
+      ],
+      [
+        "type" => "index",
+        "columns" => ["price_to"],
+      ],
+      [
+        "type" => "index",
+        "columns" => ["weight_from"],
+      ],
+      [
+        "type" => "index",
+        "columns" => ["weight_to"],
+      ],
     ]);
+  }
+
+  public function tableParams($params) {
+    $params["where"] = "`{$this->table}`.`id_shipment` = ".(int) $params['id_shipment'];
+    $params["show_controls"] = FALSE;
+    $params["show_search_button"] = FALSE;
+    $params["title"] = " ";
+    return $params;
   }
 
   public function getById(int $idShipment) {
@@ -170,6 +199,60 @@ class ShipmentPrice extends \ADIOS\Core\Model {
     ";
 
     return $params;
+  }
+
+  public function getFeesForOrder($orderData) {
+    $idDestinationCountry = (int) ($orderData['id_destination_country'] ?? 0);
+    $idDeliveryService = (int) ($orderData['id_delivery_service'] ?? 0);
+    $idPaymentService = (int) ($orderData['id_payment_service'] ?? 0);
+    $priceTotal = (float) ($orderData['SUMMARY']['price_total'] ?? 0);
+    $weightTotal = (float) ($orderData['SUMMARY']['weight_total'] ?? 0);
+
+    $deliveryFee = 0;
+    $paymentFee = 0;
+
+    $shipmentModel = new \ADIOS\Widgets\Shipping\Models\Shipment($this->adminPanel);
+    $shipment = reset($shipmentModel
+      ->where('id_destination_country', $idDestinationCountry)
+      ->where('id_delivery_service', $idDeliveryService)
+      ->where('id_payment_service', $idPaymentService)
+      ->get()
+      ->toArray()
+    );
+
+    if ($shipment['id'] > 0) {
+      $shipmentPrice = reset(
+        $this
+        ->where('id_shipment', $shipment['id'])
+        ->where('delivery_fee_calculation_method', self::DELIVERY_FEE_BY_ORDER_PRICE)
+        ->where('price_from', '<=', $priceTotal)
+        ->where('price_to', '>=', $priceTotal)
+        ->get()
+        ->toArray()
+      );
+
+      if ($shipmentPrice === NULL) {
+        $shipmentPrice = reset(
+          $this
+          ->where('id_shipment', $shipment['id'])
+          ->where('delivery_fee_calculation_method', self::DELIVERY_FEE_BY_ORDER_WEIGHT)
+          ->where('weight_from', '<=', $weightTotal)
+          ->where('weight_to', '>=', $weightTotal)
+          ->get()
+          ->toArray()
+        );
+      }
+
+      if ($shipmentPrice !== NULL) {
+        $deliveryFee = (float) $shipmentPrice['delivery_fee'];
+        $paymentFee = (float) $shipmentPrice['payment_fee'];
+      }
+    }
+
+    return [
+      'deliveryFee' => $deliveryFee,
+      'paymentFee' => $paymentFee,
+    ];
   }
 
 }

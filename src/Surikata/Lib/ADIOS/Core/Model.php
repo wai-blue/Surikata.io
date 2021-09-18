@@ -145,14 +145,28 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
       $this->pdo = $this->getConnection()->getPdo();
 
-      $this->init();
+      // During the installation no SQL tables exist. If child's init() 
+      // method uses data from DB, $this->init() call would fail.
+      try {
+        $this->init();
+      } catch (\Exception $e) {
+        //
+      }
 
       $this->adios->db->addTable($this->table, $this->columns());
       $this->adios->addRouting($this->routing());
 
     }
 
-    if (!$this->isInstalled()) {
+    if (!$this->hasSqlTable()) {
+      $this->adios->userNotifications->addHtml("
+        Model <b>{$this->name}</b> has no SQL table.
+        <a
+          href='javascript:void(0)'
+          onclick='desktop_update(\"Desktop/InstallUpgrades\");'
+        >Create table</a>
+      ");
+    } else if (!$this->isInstalled()) {
       $this->adios->userNotifications->addHtml("
         Model <b>{$this->name}</b> is not installed.
         <a
@@ -223,6 +237,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   public function translate($string, $context = "", $toLanguage = "") {
     return $this->adios->translate($string, $context, $toLanguage, $this->languageDictionary);
   }
+
+  public function hasSqlTable() {
+    return in_array($this->table, $this->adios->db->existingSqlTables);
+  }
   
   /**
    * Checks whether model is installed.
@@ -266,7 +284,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
       foreach ($this->indexes() as $indexOrConstraintName => $indexDef) {
         if (empty($indexOrConstraintName) || is_numeric($indexOrConstraintName)) {
-          $indexOrConstraintName = md5(json_encode($indexDef));
+          $indexOrConstraintName = md5(json_encode($indexDef).uniqid());
         }
 
         switch ($indexDef["type"]) {

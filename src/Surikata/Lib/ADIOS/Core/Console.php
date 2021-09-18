@@ -131,7 +131,7 @@ class Console {
         list($msec, $sec) = explode(" ", $mictotime);
         $html .= date("Y-m-h H:i:s", $sec).".".round($msec*1000)." ";
       }
-      $html .= hsc($log[0])."<br/>";
+      $html .= hsc($log[0])." ".hsc($log[1]['exception'])."<br/>";
     }
     return $html;
   }

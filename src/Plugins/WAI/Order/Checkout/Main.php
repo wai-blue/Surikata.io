@@ -66,6 +66,7 @@ namespace Surikata\Plugins\WAI\Order {
       if (isset($this->websiteRenderer->urlVariables['orderData'])) {
         $orderData = $this->websiteRenderer->urlVariables['orderData'];
 
+        // REVIEW: Upravit podla noveho stlpca Order.id_shipment
         $selectedDeliveryService = $deliveryServices[$orderData["deliveryService"]];
         $paymentMethods = $this->getPaymentMethods($selectedDeliveryService);
         $selectedPaymentMethod = $paymentMethods[$orderData["paymentMethod"]];
@@ -108,10 +109,10 @@ namespace Surikata\Plugins\WAI\Order {
 
       $twigParams['totalPriceWithDelivery'] = 
         $this->getTotalPriceWithDelivery(
-          $currentShipment['price']['shipment_price']
+          $currentShipment['price']['price']
         )
       ;
-      $twigParams['deliveryPrice'] = $currentShipment['price']['shipment_price'];
+      $twigParams['deliveryPrice'] = $currentShipment['price']['price'];
       $twigParams['cartContents'] = $this->cartContents;
       $twigParams["deliveryServices"] = $deliveryServices;
       $twigParams['paymentMethods'] = $paymentMethods;

@@ -15,8 +15,8 @@
 
 .adios.ui.Table.header {
   padding: 1em;
-  border: 1px solid var(--cl-main);
-  color: var(--cl-main);
+  /* border: 1px solid var(--cl-main);
+  color: var(--cl-main); */
   font-size: 0.8em;
   margin-bottom: 1em;
 }
@@ -47,7 +47,11 @@
   color:white;border-color:#EEEEEE;
 } */
 
-.adios.ui.Table .info-no-data { color: var(--cl-main); padding: 2em; font-size: 10pt; }
+.adios.ui.Table .info-no-data {
+  /* color: var(--cl-main);
+  padding: 2em; */
+  /* font-size: 10pt; */
+}
 
 /* table paging */
 
@@ -120,27 +124,26 @@
 
 .adios.ui.Table .table_tr.table_header {
   font-weight: bold;
-  padding: 10px 0px;
+  border-bottom: 1px solid var(--cl-main);
   user-select: none;
   align-items: start;
 }
 .adios.ui.Table .table_tr.table_header .table_td {
   border-left: none;
-  color: #424242;
+  padding: 3px;
+  color: var(--cl-main);
   text-align: left;
   vertical-align: bottom;
 }
-.adios.ui.Table .table_tr.table_header .table_td:hover {background:#E0E0E0;cursor:pointer;}
+.adios.ui.Table .table_tr.table_header .table_td:hover { background: #E0E0E0; cursor: pointer; }
 
-.adios.ui.Table .table_tr.table_header .table_td.modificable i {display:none;position:absolute;top:1em;right:1em;}
+.adios.ui.Table .table_tr.table_header .table_td i { display: none; }
 
-.adios.ui.Table .table_tr.table_header .table_td.modificable.unordered .order_none {display:inline;opacity:0;}
+.adios.ui.Table .table_tr.table_header .table_td.asc_ordered {background:#E6E6E6;}
+.adios.ui.Table .table_tr.table_header .table_td.asc_ordered i.order_asc {display:inline;}
 
-.adios.ui.Table .table_tr.table_header .table_td.modificable.asc_ordered {background:#E6E6E6;}
-.adios.ui.Table .table_tr.table_header .table_td.modificable.asc_ordered .order_asc {display:inline;}
-
-.adios.ui.Table .table_tr.table_header .table_td.modificable.desc_ordered {background:#E6E6E6;}
-.adios.ui.Table .table_tr.table_header .table_td.modificable.desc_ordered .order_desc {display:inline;}
+.adios.ui.Table .table_tr.table_header .table_td.desc_ordered {background:#E6E6E6;}
+.adios.ui.Table .table_tr.table_header .table_td.desc_ordered i.order_desc {display:inline;}
 
 /* table insert row */
 
@@ -151,7 +154,7 @@
 
 .adios.ui.Table .table_tr.table_filter {
   font-weight: bold;
-  padding: 10px 0px;
+  /* padding: 10px 0px; */
   cursor: default;
   user-select: none;
   white-space: nowrap;
@@ -215,7 +218,7 @@
   overflow: hidden;
   /* vertical-align: middle; */
   /* align-content: center; */
-  padding: 2px 1em;
+  padding: 2px;
   font-size: 10pt;
   color: black;
   cursor: pointer;

@@ -158,7 +158,15 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
     }
 
-    if (!$this->isInstalled()) {
+    if (!$this->hasSqlTable()) {
+      $this->adios->userNotifications->addHtml("
+        Model <b>{$this->name}</b> has no SQL table.
+        <a
+          href='javascript:void(0)'
+          onclick='desktop_update(\"Desktop/InstallUpgrades\");'
+        >Create table</a>
+      ");
+    } else if (!$this->isInstalled()) {
       $this->adios->userNotifications->addHtml("
         Model <b>{$this->name}</b> is not installed.
         <a
@@ -228,6 +236,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
    */
   public function translate($string, $context = "", $toLanguage = "") {
     return $this->adios->translate($string, $context, $toLanguage, $this->languageDictionary);
+  }
+
+  public function hasSqlTable() {
+    return in_array($this->table, $this->adios->db->existingSqlTables);
   }
   
   /**

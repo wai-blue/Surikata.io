@@ -866,7 +866,7 @@ class Input extends \ADIOS\Core\UI\View {
                   {$this->params['html_attributes']}
                   ".($this->params['readonly'] ? "disabled='disabled'" : '')."
                 >
-                  ".($this->params['show_lookup_not_selected_option']
+                  ".(!$this->params['required']
                     ? "<option value='0'>".($this->params['not_selected_text'] ?? "[Not selected]")."</option>"
                     : ""
                   )."

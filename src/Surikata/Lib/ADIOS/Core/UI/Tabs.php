@@ -54,7 +54,7 @@ class Tabs extends \ADIOS\Core\UI\View {
                 $(this).addClass('active');
               \"
             >
-              <div class='tab_title_tag'>
+              <div class='tab_title_tag' onclick='$(this).next(\"div\").slideToggle(180);'>
                 ".hsc($val['title'])."
               </div>
               <div class='px-2'>

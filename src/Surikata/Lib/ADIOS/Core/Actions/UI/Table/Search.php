@@ -43,6 +43,7 @@ class Search extends \ADIOS\Core\Action {
             $tabs[$lookupModel->name]["items"][] = [
               "title" => $lookupColDef['title'],
               "input" => $this->adios->ui->Input([
+                "model" => $this->params['model'],
                 "type" => $lookupColDef["type"],
                 "uid" => "{$this->uid}_LOOKUP___{$colName}___{$lookupColName}",
               ]),
@@ -55,6 +56,7 @@ class Search extends \ADIOS\Core\Action {
         $tabs[$model->name]["items"][] = [
           "title" => $colDef['title'],
           "input" => $this->adios->ui->Input([
+            "model" => $this->params['model'],
             "type" => $colDef["type"],
             "uid" => "{$this->uid}_{$colName}",
           ]),

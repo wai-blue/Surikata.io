@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Orders\Models;
 
-use ADIOS\Widgets\CRM\Exceptions\DuplicateNewsletterEmail;
+use ADIOS\Widgets\CRM\Exceptions\NewsletterException;
 use ADIOS\Widgets\CRM\Models\Newsletter;
 
 class Order extends \ADIOS\Core\Model {
@@ -616,7 +616,7 @@ class Order extends \ADIOS\Core\Model {
       try {
         (new Newsletter($this->adios))->registerForNewsletter($orderData["email"]);
       }
-      catch (DuplicateNewsletterEmail $e) {
+      catch (NewsletterException $e) {
 
       }
     }

@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\CRM\Models;
 
-use ADIOS\Widgets\CRM\Exceptions\DuplicateNewsletterEmail;
+use ADIOS\Widgets\CRM\Exceptions\NewsletterException;
 
 class Newsletter extends \ADIOS\Core\Model {
   var $sqlName = "newsletter";
@@ -45,6 +45,9 @@ class Newsletter extends \ADIOS\Core\Model {
     if ($domain === "") {
       $domain = $this->enumDomains[array_key_first($this->enumDomains)];
     }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      throw new NewsletterException("Email is not valid.");
+    }
     $newsletter = $this
       ->where('email', '=', $email)
       ->get()
@@ -57,7 +60,7 @@ class Newsletter extends \ADIOS\Core\Model {
       );
     }
     else {
-      throw new DuplicateNewsletterEmail('Duplicate email');
+      throw new NewsletterException('Duplicate email');
     }
     return $id;
   }

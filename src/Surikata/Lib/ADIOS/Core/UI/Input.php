@@ -632,15 +632,6 @@ class Input extends \ADIOS\Core\UI\View {
               onclick='$(\"#{$this->params['uid']}_browser\").show(100);'
             />
 
-            <!-- ".$this->adios->ui->Button([
-              "fa_icon" => "fas fa-file-upload",
-              "class" => "btn btn-light btn-icon-split ml-1",
-              "text" => "Browse or Upload",
-              "onclick" => "
-                $('#{$this->params['uid']}_browser').show(100);
-              ",
-            ])->render()." -->
-
             <div
               id='{$this->params['uid']}_browser'
               style='

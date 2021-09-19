@@ -30,6 +30,12 @@ class Cards extends \ADIOS\Core\UI\View {
     });
 
     $html = "
+      <div class='row mb-3'>
+        ".$this->adios->ui->Button([
+          "type" => "add",
+          "onclick" => "window_render('".$model->getFullUrlBase($this->params)."/Add');"
+        ])->render()."
+      </div>
       <div class='row'>
     ";
     foreach ($cards as $card) {
@@ -43,7 +49,7 @@ class Cards extends \ADIOS\Core\UI\View {
       </div>
     ";
 
-    if ($this->adios->isWindow()) {
+    if ($this->params['__IS_WINDOW__']) {
       $html = $this->adios->ui->Window([
         'content' => $html,
         'titleRaw' => $params['window']['titleRaw'],

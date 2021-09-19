@@ -19,6 +19,14 @@ class Locale {
     return $this->adios->config["locale"]["date"]["format"] ?? "d.m.Y";
   }
 
+  public function datetimeFormat() {
+    return $this->adios->config["locale"]["datetime"]["format"] ?? "d.m.Y H:i:s";
+  }
+
+  public function timeFormat() {
+    return $this->adios->config["locale"]["time"]["format"] ?? "H:i:s";
+  }
+
   public function currencySymbol() {
     return $this->adios->config["locale"]["currency"]["symbol"] ?? "€";
   }

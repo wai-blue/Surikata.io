@@ -2,17 +2,6 @@
 
 
 
-.adios.ui.Table {
-  background: white;
-  width: 100%;
-  overflow: auto;
-  margin-bottom: 0;
-}
-
-.adios.ui.Table[data-is-in-form="0"] {
-  height: calc(100vh - 200px);
-}
-
 .adios.ui.TableHeader {
   padding: 1em;
   font-size: 0.8em;
@@ -21,6 +10,8 @@
 
 /* Table.Container */
 .adios.ui.Table.Container {
+  flex: 1;
+  margin-bottom: 1em;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -36,6 +27,23 @@
     display: flex;
     align-items: stretch;
   }
+
+
+  .adios.ui.Table.Container .Row .Column {
+    flex: 1;
+    overflow: hidden;
+    padding: 2px;
+    font-size: 10pt;
+    color: black;
+    cursor: pointer;
+  }
+
+  .adios.ui.Table.Container .Row .Column.flex-2 { flex: 2; }
+  .adios.ui.Table.Container .Row .Column.flex-3 { flex: 3; }
+  .adios.ui.Table.Container .Row .Column.flex-4 { flex: 4; }
+  .adios.ui.Table.Container .Row .Column.flex-5 { flex: 5; }
+  .adios.ui.Table.Container .Row .Column.flex-6 { flex: 6; }
+  .adios.ui.Table.Container .Row .Column.flex-7 { flex: 7; }
 
   /* Table.Container .Header */
   .adios.ui.Table.Container .Header {
@@ -80,16 +88,12 @@
       box-sizing: border-box;
       width: 100%;
       border-color: #EEEEEE;
-      transition: background-color 0.3s;
     }
     .adios.ui.Table.Container .Header .Row.ColumnFilters .Column input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
       opacity: 0.2;
       padding-left: 3px;
       filter: grayscale(100%);
     }
-    .adios.ui.Table.Container .Header .Row.ColumnFilters .Column select {color:#888888;font-size:10pt;box-sizing:border-box;width:100%;background-color:#EEEEEE;border-color:#EEEEEE;transition:background-color 0.3s;}
-    .adios.ui.Table.Container .Header .Row.ColumnFilters .Column input:valid {background-color:#ffc107;border-color:#EEEEEE;}
-    .adios.ui.Table.Container .Header .Row.ColumnFilters .Column select:valid {background-color:#ffc107;border-color:#EEEEEE;}
 
     .adios.ui.Table.Container .Header .Row.ColumnFilters .Column input:hover,
     .adios.ui.Table.Container .Header .Row.ColumnFilters .Column input:focus {
@@ -97,6 +101,18 @@
       border-color: #E0E0E0;
       color: #424242;
     }
+
+    .adios.ui.Table.Container .Header .Row.ColumnFilters .Column input:valid {
+      background-color: var(--cl-href);
+      color: #EEEEEE;
+    }
+
+    .adios.ui.Table.Container .Header .Row.ColumnFilters .Column select {
+      box-sizing: border-box;
+      width: 100%;
+      border-color: #EEEEEE;
+    }
+    .adios.ui.Table.Container .Header .Row.ColumnFilters .Column select:valid {background-color: var(--cl-href); color: #EEEEEE;}
 
     .adios.ui.Table.Container .Header .Row.ColumnFilters .table_td input:focus::placeholder {
       opacity: 0;
@@ -122,7 +138,7 @@
     .adios.ui.Table.Container .Header .Row.ColumnFilters .Column .bool_controls i { display: inline-block; padding: 0.25em; }
     .adios.ui.Table.Container .Header .Row.ColumnFilters .Column .bool_controls:hover i { opacity: 0.5; }
     .adios.ui.Table.Container .Header .Row.ColumnFilters .Column .bool_controls i:hover { cursor: pointer; opacity: 1 }
-    .adios.ui.Table.Container .Header .Row.ColumnFilters .Column .bool_controls.filter_active { background-color: #ffc107; }
+    .adios.ui.Table.Container .Header .Row.ColumnFilters .Column .bool_controls.filter_active { background-color: var(--cl-href); }
     .adios.ui.Table.Container .Header .Row.ColumnFilters .Column .bool_controls.filter_active i { opacity: 0.1; }
     .adios.ui.Table.Container .Header .Row.ColumnFilters .Column .bool_controls.filter_active i.active { opacity: 1; }
 
@@ -130,19 +146,24 @@
   /* Table.Container .Content */
   .adios.ui.Table.Container .Content {
     flex: 1 1 auto;
-    height: 0px;
     overflow-y: auto;
   }
 
-    .adios.ui.Table[data-is-in-form="1"] .Container .Content {
-      height: auto;
-    }
+  .adios.ui.Table.Container .Content.empty {
+    background: repeating-linear-gradient(
+      135deg,
+      #FCFCFC,
+      #FCFCFC 150px,
+      #F9F9F9 150px,
+      #F9F9F9 300px
+    )
+  }
 
     .adios.ui.Table.Container .Content .Row:nth-child(odd) {
       background: #FAFAFA;
     }
     .adios.ui.Table.Container .Content .Row:hover {
-      background: var(--cl-bckg-1) !important;
+      background: var(--cl-href);
     }
     .adios.ui.Table.Container .Content .Row:hover * {
       color: white;
@@ -210,14 +231,6 @@
 
 
 
-.adios.ui.Table .Row .Column {
-  flex: 1;
-  overflow: hidden;
-  padding: 2px;
-  font-size: 10pt;
-  color: black;
-  cursor: pointer;
-}
 
 .adios.ui.Table .Row .Column.align_right {text-align:right;}
 .adios.ui.Table .Row .Column.align_left {text-align:left;}
@@ -236,5 +249,40 @@
 
 
 
-.adios.ui.Table .Row.summary_tr {background:#BDBDBD;color:black;font-weight:bold;}
-.adios.ui.Table .Row.summary_tr .table_td {padding-top:7px;padding-bottom:7px;}
+/* X-Small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+  .adios.ui.Table.Container .Column:nth-child(n+3) {
+    display: none;
+  }
+}
+
+/* Small devices (landscape phones, less than 768px) */
+@media (max-width: 767.98px) {
+  .adios.ui.Table.Container .Column:nth-child(n+4) {
+    display: none;
+  }
+
+  .adios.ui.Table.Container .Footer .count {
+    display: none;
+  }
+
+  .adios.ui.Table.Container .Footer .settings {
+    display: none;
+  }
+}
+
+/* Medium devices (tablets, less than 992px) */
+@media (max-width: 991.98px) {
+  .adios.ui.Table.Container .Column:nth-child(n+5) {
+    display: none;
+  }
+}
+
+/* Large devices (desktops, less than 1200px) */
+@media (max-width: 1199.98px) {
+}
+
+/* X-Large devices (large desktops, less than 1400px) */
+@media (max-width: 1399.98px) {
+}
+

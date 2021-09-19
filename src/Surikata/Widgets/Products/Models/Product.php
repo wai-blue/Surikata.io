@@ -700,7 +700,7 @@ class Product extends \ADIOS\Core\Model {
         ],
       ];
       $templateTabs[$this->translate("Gallery")] = [
-        "action" => "UI/Table",
+        "action" => "UI/Cards",
         "params" => [
           "model"    => "Widgets/Products/Models/ProductGallery",
           "id_product" => $data['id'],

@@ -18,7 +18,7 @@ use Monolog\Handler\RotatingFileHandler;
  * Debugger console for ADIOS application.
  */
 class Console {
-  var $logger = NULL;
+  var $loggers = [];
 
   var $infos = [];
   var $warnings = [];
@@ -27,21 +27,33 @@ class Console {
   public function __construct(&$adios) {
     $this->adios = $adios;
 
+    $this->initLogger('core');
+  }
+
+  public function initLogger(string $loggerName = "") {
     // inicializacia loggerov
-    $this->logger = new Logger('core');
-    $infoStreamHandler = new RotatingFileHandler($this->adios->config['log_dir'].'/info.log', 1000, Logger::INFO);
+    $this->loggers[$loggerName] = new Logger($loggerName);
+    $infoStreamHandler = new RotatingFileHandler($this->adios->config['log_dir']."/{$loggerName}-info.log", 1000, Logger::INFO);
     $infoStreamHandler->setFilenameFormat('{date}/{filename}', 'Y/m/d');
 
-    $warningStreamHandler = new RotatingFileHandler($this->adios->config['log_dir'].'/warning.log', 1000, Logger::WARNING);
+    $warningStreamHandler = new RotatingFileHandler($this->adios->config['log_dir']."/{$loggerName}-warning.log", 1000, Logger::WARNING);
     $warningStreamHandler->setFilenameFormat('{date}/{filename}', 'Y/m/d');
 
-    $errorStreamHandler = new RotatingFileHandler($this->adios->config['log_dir'].'/error.log', 1000, Logger::ERROR);
+    $errorStreamHandler = new RotatingFileHandler($this->adios->config['log_dir']."/{$loggerName}-error.log", 1000, Logger::ERROR);
     $errorStreamHandler->setFilenameFormat('{date}/{filename}', 'Y/m/d');
 
-    $this->logger->pushHandler($infoStreamHandler);
-    $this->logger->pushHandler($warningStreamHandler);
-    $this->logger->pushHandler($errorStreamHandler);
+    $this->loggers[$loggerName]->pushHandler($infoStreamHandler);
+    $this->loggers[$loggerName]->pushHandler($warningStreamHandler);
+    $this->loggers[$loggerName]->pushHandler($errorStreamHandler);
 
+  }
+  
+  public function getLogger($loggerName) {
+    if (!isset($this->loggers[$loggerName])) {
+      $this->initLogger($loggerName);
+    }
+
+    return $this->loggers[$loggerName];
   }
   
   /**
@@ -55,28 +67,20 @@ class Console {
       'header' => date('H:i:s'),
       'message' => trim($message),
     ];
-
-    // if (!empty($this->adios->config['console']['log_file'])) {
-    //   $logFile = $this->adios->config['console']['log_file'];
-
-    //   $h = fopen($logFile, "a");
-    //   fwrite($h, date("Y-m-d H:i:s")."\t{$message}\n");
-    //   fclose($h);
-    // }
   }
 
-  public function info($message, array $context = []) {
-    $this->logger->info($message, $context);
+  public function info($message, array $context = [], $loggerName = 'core') {
+    $this->getLogger($loggerName)->info($message, $context);
     $this->infos[microtime()] = [$message, $context];
   }
   
-  public function warning($message, array $context = []) {
-    $this->logger->warning($message, $context);
+  public function warning($message, array $context = [], $loggerName = 'core') {
+    $this->getLogger($loggerName)->warning($message, $context);
     $this->warnings[microtime()] = [$message, $context];
   }
   
-  public function error($message, array $context = []) {
-    $this->logger->error($message, $context);
+  public function error($message, array $context = [], $loggerName = 'core') {
+    $this->getLogger($loggerName)->error($message, $context);
     $this->log($message);
     $this->errors[microtime()] = [$message, $context];
   }

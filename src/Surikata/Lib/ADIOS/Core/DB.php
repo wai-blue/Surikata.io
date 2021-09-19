@@ -47,7 +47,7 @@ class DB {
 
       $this->tables = [];
 
-      $tmp = $this->get_all_rows_query("show tables");
+      $tmp = $this->get_all_rows_query("show tables", "");
       foreach ($tmp as $value) {
         $this->existingSqlTables[] = reset($value);
       }
@@ -945,27 +945,24 @@ class DB {
      * @see update_row_query
      * @see update_row
      */
-    public function update_row_part($table_name, $data, $id, $only_sql_command = false)
-    {
-        $allowed = true;
-        $my_data = $data;
+    public function update_row_part($table_name, $data, $id, $only_sql_command = FALSE) {
+      $my_data = $data;
 
-        $sql = $this->update_row_query($table_name, $my_data, $id, $whole_row = false);
+      $sql = $this->update_row_query($table_name, $data, $id, FALSE);
 
-        if ($only_sql_command) {
-            return $sql;
-        } else {
-            $this->query($sql);
-            $error = $this->get_error();
+      if ($only_sql_command) {
+        return $sql;
+      } else {
+        $this->query($sql);
+        // $error = $this->get_error();
 
-            if ('' != $error) {
-                $this->db_rights_callback_return['error'] = $error;
+        // if ('' != $error) {
+        //   $this->db_rights_callback_return['error'] = $error;
+        //   return false;
+        // }
 
-                return false;
-            }
-
-            return true;
-        }
+        return $id;
+      }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1381,16 +1378,16 @@ class DB {
      * @see get_row
      * @see get_column_data
      */
-    public function get_all_rows_query($query, $params = []) {
+    public function get_all_rows_query($query, $keyBy = "id") {
       $this->query($query);
 
       $rows = [];
 
       while ($row = $this->fetch_array()) {
-        if ($params['key_column']) {
-          $rows[$row[$params['key_column']]] = $row;
-        } else {
+        if (empty($keyBy)) {
           $rows[] = $row;
+        } else {
+          $rows[$row[$keyBy]] = $row;
         }
       }
 

@@ -4,7 +4,7 @@ namespace ADIOS\Widgets\Website\Models;
 
 class WebMenu extends \ADIOS\Core\Model {
   var $sqlName = "web_menu";
-  var $urlBase = "Website/{{ domain }}/Menu";
+  var $urlBase = "Website/{{ domainName }}/Menu";
   var $tableTitle = "Website menu";
   var $formTitleForInserting = "New website menu";
   var $formTitleForEditing = "Website menu";
@@ -37,8 +37,17 @@ class WebMenu extends \ADIOS\Core\Model {
   }
 
   public function tableParams($params) {
-    $params["title"] = "Website - {$params['domain']} - Menu";
-    $params['where'] = "`domain` = '".$this->adios->db->escape($params['domain'])."'";
+    $params["title"] = "{$params['domainName']} &raquo; Menu";
+
+    $domains = $this->adios->config['widgets']['Website']['domains'];
+    $domain = "";
+    foreach ($domains as $key => $domainInfo) {
+      if ($domainInfo['name'] == $params['domainName']) {
+        $domain = $key;
+      }
+    }
+
+    $params['where'] = "`domain` = '".$this->adios->db->escape($domain)."'";
 
     return $this->adios->dispatchEventToPlugins("onModelAfterTableParams", [
       "model" => $this,

@@ -62,7 +62,6 @@ class Form extends \ADIOS\Core\UI\View
       'onload' => '',
       'simple_insert' => false,
       'javascript' => '',
-      'refresh_table_onclose' => false,
     ], $params);
 
     // nacitanie udajov
@@ -443,11 +442,11 @@ class Form extends \ADIOS\Core\UI\View
           data-copy-action='{$this->params['copy_action']}'
           data-id='{$this->params['id']}'
           data-model='{$this->params['model']}'
+          data-model-url-base='".ads($this->model->getFullUrlBase($this->params))."'
           data-table='{$this->params['table']}'
           data-do-not-close='{$this->params['do_not_close']}'
           data-window-uid='{$this->params['window_uid']}'
           data-form-type='{$this->params['form_type']}'
-          data-refresh-table-onclose='".($this->params['refresh_table_onclose'] ? 1 : 0)."'
           data-is-ajax='".($this->params['__IS_AJAX__'] || $this->adios->isAjax() ? "1" : "0")."'
         >
           {$form_content_html}

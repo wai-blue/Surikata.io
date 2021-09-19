@@ -9,6 +9,8 @@ class ProductFeatureAssignment extends \ADIOS\Core\Model {
   var $formTitleForInserting = "New product feature";
   var $formTitleForEditing = "Product feature";
 
+  public static $allItemsCache = NULL;
+
   public function columns(array $columns = []) {
     return parent::columns([
       "id_product" => [

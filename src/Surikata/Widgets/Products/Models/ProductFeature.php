@@ -9,6 +9,8 @@ class ProductFeature extends \ADIOS\Core\Model {
   var $formTitleForInserting = "New product feature";
   var $formTitleForEditing = "Product feature";
 
+  public static $allItemsCache = NULL;
+
   public function init() {
 
     // TODO: cisla zamenit za konstanty

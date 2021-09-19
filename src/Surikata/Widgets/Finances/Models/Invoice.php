@@ -69,7 +69,6 @@ class Invoice extends \ADIOS\Core\Model {
         "title" => "Serial number",
         "readonly" => TRUE,
         "description" => "Will be generated automaticaly",
-        "show_column" => TRUE,
       ],
 
       "number" => [

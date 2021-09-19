@@ -8,6 +8,7 @@ class Shipping extends \ADIOS\Core\Widget {
       $this->adios->config['desktop']['sidebarItems']['Shipping'] = [
         "fa_icon" => "fas fa-shipping-fast",
         "title" => "Delivery & Payment",
+        "onclick" => "desktop_update('DeliveryAndPayment/DeliveryServices');",
         "sub" => [
           [
             "title" => "Delivery Services",

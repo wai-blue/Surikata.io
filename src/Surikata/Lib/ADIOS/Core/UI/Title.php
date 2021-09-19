@@ -25,13 +25,22 @@ class Title extends \ADIOS\Core\UI\View {
     }
 
     public function render($render_panel = '') {
+      $center = (string) parent::render('center');
+      $center = trim($center);
+
       return "
+        ".(empty($center) ? "" : "
+          <div class='row mb-3'>
+            <div class='col-lg-12 p-0'>
+              <div class='h3 text-primary mb-0'>{$center}</div>
+            </div>
+          </div>
+        ")."
         <div class='row mb-3'>
-          <div class='col-lg-6 px-0'>
-            <h1 class='h3 mb-0'>".parent::render('center')."</h1>
+          <div class='col-lg-6 p-0'>
+            ".parent::render('left')."
           </div>
           <div class='col-lg-6 text-right'>
-            ".parent::render('left')."
             ".parent::render('right')."
           </div>
         </div>

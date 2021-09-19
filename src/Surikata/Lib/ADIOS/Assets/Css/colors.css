@@ -1,6 +1,7 @@
 :root {
   --cl-main: #2d4a8a;
-  --cl-href: #2d4a8a;
+  --cl-altr: #ff9800;
+  --cl-href: #e78b00;
 
   --cl-text-1: #212121;
   --cl-text-2: #616161;
@@ -10,6 +11,12 @@
 
   --cl-bckg-1: #2d4a8a;
   --cl-bckg-2: #4b68a7;
+
+  --cl-gray-1: #2D2D2D;
+  --cl-gray-2: #464646;
+  --cl-gray-3: #727272;
+  --cl-gray-4: #A0A0A0;
+  --cl-gray-5: #F0F0F0;
 
   --cl-bord-1: #DDDDDD;
   --cl-bord-2: #FAFAFA;

@@ -15,20 +15,25 @@ class Website extends \ADIOS\Core\Widget {
     }
 
     if ($this->adios->hasUserRole(\Surikata\Core\AdminPanel\Loader::USER_ROLE_ONLINE_MARKETING)) {
+      $domains = $this->adios->config['widgets']['Website']['domains'];
+
       $sub = [];
-      foreach ($this->adios->config['widgets']['Website']['domains'] as $domain => $domainInfo) {
+      foreach ($domains as $domain => $domainInfo) {
         $sub[] = [
-          // "fa_icon" => "fas fa-flag",
           "title" => $domainInfo["name"],
-          "onclick" => "desktop_update('Website/{$domain}/Pages');",
+          "onclick" => "desktop_update('Website/{$domainInfo['name']}/Pages');",
           "sub" => [
             [
               "title" => $this->translate("Pages"),
-              "onclick" => "desktop_update('Website/{$domain}/Pages');",
+              "onclick" => "desktop_update('Website/{$domainInfo['name']}/Pages');",
             ],
             [
               "title" => $this->translate("Redirects"),
-              "onclick" => "desktop_update('Website/{$domain}/Redirects');",
+              "onclick" => "desktop_update('Website/{$domainInfo['name']}/Redirects');",
+            ],
+            [
+              "title" => $this->translate("Menu"),
+              "onclick" => "desktop_update('Website/{$domainInfo['name']}/Menu');",
             ],
             [
               "title" => $this->translate("Profile"),
@@ -37,10 +42,6 @@ class Website extends \ADIOS\Core\Widget {
             [
               "title" => $this->translate("Design"),
               "onclick" => "window_render('Website/{$domain}/Design');",
-            ],
-            [
-              "title" => $this->translate("Menu"),
-              "onclick" => "desktop_update('Website/{$domain}/Menu');",
             ],
             [
               "title" => $this->translate("Online marketing"),
@@ -80,6 +81,7 @@ class Website extends \ADIOS\Core\Widget {
       $this->adios->config['desktop']['sidebarItems']['Website'] = [
         "fa_icon" => "fas fa-globe",
         "title" => $this->translate("Websites"),
+        "onclick" => "desktop_update('Website/".reset($domains)["name"]."/Pages');",
         "sub" => $sub,
       ];
 

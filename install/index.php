@@ -310,14 +310,14 @@ if (count($partsToInstall) == 0) {
         "id" => 2, "id_shipment" => 2, "name" => "12",
         "weight_from" => 0, "weight_to" => 0,
         "price_from" => 0, "price_to" => 50,
-        "delivery_fee_calculation_method" => 1, "delivery_fee" => 3.95,
+        "delivery_fee_calculation_method" => 1, "delivery_fee" => 3.25,
         "payment_fee" => 2.10,
       ]);
       $shipmentPriceModel->insertRow([
         "id" => 3, "id_shipment" => 3, "name" => "13",
         "weight_from" => 0, "weight_to" => 0,
         "price_from" => 0, "price_to" => 50,
-        "delivery_fee_calculation_method" => 1, "delivery_fee" => 4.99,
+        "delivery_fee_calculation_method" => 1, "delivery_fee" => 3.25,
         "payment_fee" => 3.11,
       ]);
 
@@ -326,7 +326,7 @@ if (count($partsToInstall) == 0) {
         "id" => 9, "id_shipment" => 1, "name" => "14",
         "weight_from" => 0, "weight_to" => 0,
         "price_from" => 50, "price_to" => 100000,
-        "delivery_fee_calculation_method" => 1, "delivery_fee" => 3.33,
+        "delivery_fee_calculation_method" => 1, "delivery_fee" => 0.00,
         "payment_fee" => 4.44,
       ]);
       $shipmentPriceModel->insertRow([
@@ -340,7 +340,7 @@ if (count($partsToInstall) == 0) {
         "id" => 11, "id_shipment" => 3, "name" => "16",
         "weight_from" => 0, "weight_to" => 0,
         "price_from" => 50, "price_to" => 100000,
-        "delivery_fee_calculation_method" => 1, "delivery_fee" => 0.75,
+        "delivery_fee_calculation_method" => 1, "delivery_fee" => 0.00,
         "payment_fee" => 0.90,
       ]);
 

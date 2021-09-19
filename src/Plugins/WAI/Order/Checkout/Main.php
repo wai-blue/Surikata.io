@@ -9,7 +9,9 @@ namespace Surikata\Plugins\WAI\Order {
       return
         $this->cartContents["summary"]["priceTotal"] 
           + 
-        $deliveryServicePrice
+        $deliveryServicePrice['delivery_fee']
+          +
+        $deliveryServicePrice['payment_fee']
       ;
     }
 
@@ -18,6 +20,9 @@ namespace Surikata\Plugins\WAI\Order {
       foreach ($this->shipping as $shipment) {
         if ($shipment['delivery']['id'] == $selectedDeliveryService['id']) {
           $paymentMethods[$shipment['payment']['id']] = $shipment['payment'];
+          $paymentMethods[$shipment['payment']['id']]['price'] = 
+            $shipment['price']['payment_fee']
+          ;
         }
       }
 
@@ -58,9 +63,13 @@ namespace Surikata\Plugins\WAI\Order {
       }
 
       foreach ($this->shipping as $index => $shipment) {
-        $deliveryServices[$shipment['delivery']['id']] = $shipment['delivery'];
-
         $this->shipping[$index]['price'] = reset($shipment['price']);
+        if (!array_key_exists($shipment['delivery']['id'], $deliveryServices)) {
+          $deliveryServices[$shipment['delivery']['id']] = $shipment['delivery'];
+          $deliveryServices[$shipment['delivery']['id']]['price'] = 
+            reset($shipment['price'])['delivery_fee']
+          ;
+        }
       }
 
       if (isset($this->websiteRenderer->urlVariables['orderData'])) {
@@ -93,7 +102,7 @@ namespace Surikata\Plugins\WAI\Order {
           }
         }
       } else {
-        $selectedDeliveryService = reset($this->shipping)['delivery'];
+        $selectedDeliveryService = reset($deliveryServices);
         $paymentMethods = $this->getPaymentMethods($selectedDeliveryService);
         $selectedPaymentMethod = reset($paymentMethods);
       }
@@ -109,10 +118,15 @@ namespace Surikata\Plugins\WAI\Order {
 
       $twigParams['totalPriceWithDelivery'] = 
         $this->getTotalPriceWithDelivery(
-          $currentShipment['price']['price']
+          $currentShipment['price']
         )
       ;
-      $twigParams['deliveryPrice'] = $currentShipment['price']['price'];
+
+      $twigParams['deliveryPrice'] = (
+        $currentShipment['price']['delivery_fee'] 
+          + 
+        $currentShipment['price']['payment_fee']
+      );
       $twigParams['cartContents'] = $this->cartContents;
       $twigParams["deliveryServices"] = $deliveryServices;
       $twigParams['paymentMethods'] = $paymentMethods;

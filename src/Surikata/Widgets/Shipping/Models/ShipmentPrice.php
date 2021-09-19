@@ -8,13 +8,10 @@ class ShipmentPrice extends \ADIOS\Core\Model {
 
   var $sqlName = "shipping_prices";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
-  // var $urlBase = "DeliveryAndPayment/Prices";
+  var $urlBase = "DeliveryAndPayment/Prices/Method";
   var $tableTitle = "Shipment prices";
   var $formTitleForInserting = "New shipment price";
   var $formTitleForEditing = "Shipment price";
-
-  const PRICE_CALCULATION_METHOD_PRICE  = 1;
-  const PRICE_CALCULATION_METHOD_WEIGHT  = 2;
 
   var $shipmentPriceCalculationMethodEnumValues = [
     self::DELIVERY_FEE_BY_ORDER_PRICE => "Total value of the order",
@@ -117,15 +114,6 @@ class ShipmentPrice extends \ADIOS\Core\Model {
     return $params;
   }
 
-  public function getById(int $idShipment) {
-    return reset(
-      $this
-      ->where('id_shipment', $idShipment)
-      ->get()
-      ->toArray()
-    );
-  }
-
   public function formParams($data, $params) {
     $params['columns']['id_shipment']['onchange'] = "
       {$params['uid']}_generate_unique_name();
@@ -142,8 +130,14 @@ class ShipmentPrice extends \ADIOS\Core\Model {
     $params['columns']['weight_to']['onchange'] = "
       {$params['uid']}_generate_unique_name();
     ";
+    $params['columns']['delivery_fee']['onchange'] = "
+      {$params['uid']}_generate_unique_name();
+    ";
+    $params['columns']['payment_fee']['onchange'] = "
+      {$params['uid']}_generate_unique_name();
+    ";
 
-    $params['columns']['shipment_price_calculation_method']['onchange'] = "
+    $params['columns']['delivery_fee_calculation_method']['onchange'] = "
       {$params['uid']}_change_inputs($(this).val());
       {$params['uid']}_generate_unique_name();
     ";
@@ -153,7 +147,7 @@ class ShipmentPrice extends \ADIOS\Core\Model {
 
         var data = {
           shipmentId: $('#{$params['uid']}_id_shipment').val(),
-          method: $('#{$params['uid']}_shipment_price_calculation_method').val(),
+          method: $('#{$params['uid']}_delivery_fee_calculation_method').val(),
           price_from: $('#{$params['uid']}_price_from').val(),
           price_to: $('#{$params['uid']}_price_to').val(),
           weight_from: $('#{$params['uid']}_weight_from').val(),
@@ -170,7 +164,7 @@ class ShipmentPrice extends \ADIOS\Core\Model {
         );
       }
 
-      var input = $('#{$params['uid']}_shipment_price_calculation_method');
+      var input = $('#{$params['uid']}_delivery_fee_calculation_method');
       var value = input.val();
       var thisRow = $(input).closest('.subrow');
       var offerWeightFrom = thisRow.next('.subrow');
@@ -188,12 +182,12 @@ class ShipmentPrice extends \ADIOS\Core\Model {
         offerPriceTo.hide();
         offerPriceFrom.hide();
 
-        if (shipmentCalculationMethod == ".self::PRICE_CALCULATION_METHOD_PRICE.") {
-          offerPriceTo.show();
-          offerPriceFrom.show();
-        } else if (shipmentCalculationMethod == ".self::PRICE_CALCULATION_METHOD_WEIGHT.") {
+        if (shipmentCalculationMethod == ".self::DELIVERY_FEE_BY_ORDER_PRICE.") {
           offerWeightFrom.show();
           offerWeightTo.show();
+        } else if (shipmentCalculationMethod == ".self::DELIVERY_FEE_BY_ORDER_WEIGHT.") {
+          offerPriceTo.show();
+          offerPriceFrom.show();
         }
       }
     ";
@@ -253,6 +247,15 @@ class ShipmentPrice extends \ADIOS\Core\Model {
       'deliveryFee' => $deliveryFee,
       'paymentFee' => $paymentFee,
     ];
+  }
+
+  public function getById(int $idShipment) {
+    return reset(
+      $this
+      ->where('id_shipment', $idShipment)
+      ->get()
+      ->toArray()
+    );
   }
 
 }

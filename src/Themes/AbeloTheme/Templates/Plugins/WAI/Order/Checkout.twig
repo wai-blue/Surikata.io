@@ -269,7 +269,7 @@
                                           {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
                                           onchange="AbeloThemeCart.updateCheckoutOverview()"
                                         >
-                                        <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
+                                        <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }} <b>{{ deliveryService.price|number_format(2, ",", " ") }} €</b></label>
                                         {% if deliveryService.logo %}
                                           <img class="order-img" src="./upload/{{ deliveryService.logo }}"/>
                                         {% endif %}
@@ -304,7 +304,7 @@
                                         {% if selectedPaymentMethod.id == paymentMethod.id %} checked="checked" {% endif %}
                                         onchange="AbeloThemeCart.updateCheckoutOverview()"
                                       >
-                                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
+                                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }} <b>{{ paymentMethod.price|number_format(2, ",", " ") }} €</b></label>
                                       {% if paymentMethod.logo %}
                                         <img class="order-img" src="{{ uploadedFileUrl }}/{{ paymentMethod.logo }}"/>
                                       {% endif %}
@@ -398,7 +398,7 @@
                         {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
                         onchange="AbeloThemeCart.updateCheckoutOverview()"
                       >
-                      <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
+                      <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }} <b>{{ deliveryService.price|number_format(2, ",", " ") }} €</b></label>
                       {% if deliveryService.logo %}
                         <img class="order-img" src="./upload/{{ deliveryService.logo }}"/>
                       {% endif %}
@@ -430,7 +430,7 @@
                         {% if selectedPaymentMethod.id == paymentMethod.id %} checked="checked" {% endif %}
                         onchange="AbeloThemeCart.updateCheckoutOverview()"
                       >
-                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
+                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }} <b>{{ paymentMethod.price|number_format(2, ",", " ") }} €</b></label>
                       {% if paymentMethod.logo %}
                         <img class="order-img" src="{{ uploadedFileUrl }}/{{ paymentMethod.logo }}"/>
                       {% endif %}

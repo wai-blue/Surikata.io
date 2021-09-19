@@ -718,6 +718,10 @@ $(function() {
         $(".open-toggle").slideToggle(1000);
     });
 
+    $(".checkout-toggle-company").on("click", function() {
+        $(".company-toggle").slideToggle(1000);
+    });
+
 
 
 });

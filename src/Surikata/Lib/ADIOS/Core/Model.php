@@ -114,6 +114,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   var $pdo;
   var $eloquentQuery;
   var $searchAction;
+
+  private static $allItemsCache = NULL;
   
   /**
    * Creates instance of model's object.
@@ -566,7 +568,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   // CRUD methods
 
   public function getExtendedData($item) {
-    return $item; // to be overriden
+    return NULL; // to be overriden, should return $item with extended information
+    // the NULL return is for optimization in getAll() method
   }
 
   public function getById(int $id) {
@@ -581,11 +584,21 @@ class Model extends \Illuminate\Database\Eloquent\Model {
       $items = $this->adios->db->get_all_rows_query("select * from `{$this->table}`", $keyBy);
     }
 
-    foreach ($items as $key => $item) {
-      $items[$key] = $this->getExtendedData($item);
+    if ($this->getExtendedData([]) !== NULL) {
+      foreach ($items as $key => $item) {
+        $items[$key] = $this->getExtendedData($item);
+      }
+    }
+    
+    return $items;
+  }
+
+  public function getAllCached() {
+    if (static::$allItemsCache === NULL) {
+      static::$allItemsCache = $this->getAll();
     }
 
-    return $items;
+    return static::$allItemsCache;
   }
 
   public function getQueryWithLookups($callback = NULL) {
@@ -1224,20 +1237,6 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     return $processedRows;
   }
 
-  // extractLookupFromQueryResult
-  public function extractLookupFromQueryResult($rows, $lookup) {
-    $processedRows = [];
-    foreach ($rows as $rowKey => $row) {
-      $processedRows[$rowKey] = [];
-      foreach ($row as $colName => $colValue) {
-        if (strpos($colName, "{$lookup}___LOOKUP___") === 0) {
-          $processedRows[$rowKey][str_replace("{$lookup}___LOOKUP___", "", $colName)] = $colValue;
-        }
-      }
-    }
-    return $processedRows;
-  }
-  
   // fetchQueryAsArray
   public function fetchQueryAsArray($eloquentQuery, $keyBy = 'id', $processLookups = TRUE) {
     $query = $this->pdo->prepare($eloquentQuery->toSql());

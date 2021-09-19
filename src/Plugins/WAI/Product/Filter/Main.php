@@ -2,36 +2,28 @@
 
 namespace Surikata\Plugins\WAI\Product {
   class Filter extends \Surikata\Core\Web\Plugin {
-    var $filterInfo = NULL;
-    var $brands = NULL;
-
-    public function getBrands() {
-      if ($this->brands === NULL) {
-        $this->brands = $this->adminPanel
-          ->getModel("Widgets/Products/Models/Brand")
-          ->get()
-          ->toArray()
-        ;
-      }
-
-      return $this->brands;
-    }
+    public static $filterInfo = NULL;
 
     public function getFilterInfo() {
-      if ($this->filterInfo === NULL) {
+      if (self::$filterInfo === NULL) {
         $idCategory = (int) $this->websiteRenderer->urlVariables["idProductCategory"] ?? 0;
         $brands = $this->websiteRenderer->urlVariables["brands"] ?? "";
         $languageIndex = (int) $this->websiteRenderer->domain["languageIndex"];
 
+        $brandModel = new \ADIOS\Widgets\Products\Models\Brand($this->adminPanel);
         $productFeatureModel = new \ADIOS\Widgets\Products\Models\ProductFeature($this->adminPanel);
         $productFeatureAssignmentModel = new \ADIOS\Widgets\Products\Models\ProductFeatureAssignment($this->adminPanel);
         $productCategoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
 
-        $allFeatures = $productFeatureModel->getAll();
-        $allFeaturesAssignements = $productFeatureAssignmentModel->getAll();
-        $allCategories = $productCategoryModel->translateForWeb($productCategoryModel->getAllCached(), $languageIndex);
-
         $productCatalogPlugin = new \Surikata\Plugins\WAI\Product\Catalog($this->websiteRenderer);
+
+        $allBrands = $brandModel->getAllCached();
+        $allFeatures = $productFeatureModel->getAllCached();
+        $allFeaturesAssignments = $productFeatureAssignmentModel->getAllCached();
+        $allCategories = $productCategoryModel->translateForWeb(
+          $productCategoryModel->getAllCached(),
+          $languageIndex
+        );
 
         foreach ($allCategories as $key => $category) {
           $allCategories[$key]["url"] = $productCatalogPlugin->getWebPageUrl(
@@ -47,7 +39,7 @@ namespace Surikata\Plugins\WAI\Product {
           $directSubCategories = $productCategoryModel->extractDirectSubCategories($idCategory, $allCategories);
         }
 
-        foreach ($allFeaturesAssignements as $value) {
+        foreach ($allFeaturesAssignments as $value) {
           $allFeatures[$value['id_feature']]['minValue'] = min(
             $allFeatures[$value['id_feature']]['minValue'] ?? 0,
             (int) $value['value_number']
@@ -58,8 +50,8 @@ namespace Surikata\Plugins\WAI\Product {
           );
         }
 
-        $this->filterInfo = [
-          "allBrands" => $this->getBrands(),
+        self::$filterInfo = [
+          "allBrands" => $allBrands,
           "allCategories" => $allCategories,
           "allCategoriesAndSubCategories" => $allCategoriesAndSubCategories,
           "parentCategories" => $parentCategories,
@@ -71,14 +63,15 @@ namespace Surikata\Plugins\WAI\Product {
 
         if (!empty($brands)) {
           if (is_string($brands)) {
-            $this->filterInfo['filteredBrands'] = explode(" ", $brands);
+            self::$filterInfo['filteredBrands'] = explode(" ", $brands);
           } else if (is_array($brands)) {
-            $this->filterInfo['filteredBrands'] = $brands;
+            self::$filterInfo['filteredBrands'] = $brands;
           }
         }
+
       }
 
-      return $this->filterInfo;
+      return self::$filterInfo;
     }
 
     public function getTwigParams($pluginSettings) {

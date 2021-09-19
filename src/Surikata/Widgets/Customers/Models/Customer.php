@@ -517,8 +517,6 @@ class Customer extends \ADIOS\Core\Model {
     $requiredFieldsEmpty = [];
     $requiredFieldsRegistration = [
       "email",
-      "family_name",
-      "given_name",
     ];
     if (!$createFromOrder) {
       $requiredFieldsRegistration[] = "password";
@@ -636,6 +634,24 @@ class Customer extends \ADIOS\Core\Model {
 
     if (!$customer->update(
       ["password" => password_hash($password1, PASSWORD_DEFAULT)]
+    )) {
+      throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error!");
+    }
+
+    return TRUE;
+  }
+
+  public function changeName($userLoggedInfo, $given_name, $family_name) {
+    if (empty($userLoggedInfo)) {
+      throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error! Try refreshing the page.");
+    }
+
+    $customer = $this
+      ->where('id', '=', (int) $userLoggedInfo['id'])
+    ;
+
+    if (!$customer->update(
+      ["given_name" => $given_name, "family_name" => $family_name]
     )) {
       throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error!");
     }

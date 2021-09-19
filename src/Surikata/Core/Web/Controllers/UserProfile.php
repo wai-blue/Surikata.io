@@ -6,6 +6,7 @@ class UserProfile extends \Surikata\Core\Web\Controller {
 
   var $loginFailed = FALSE;
   var $changePasswordError = FALSE;
+  var $changeNameError = FALSE;
 
   // getters
   public function isUserLogged() {
@@ -50,6 +51,30 @@ class UserProfile extends \Surikata\Core\Web\Controller {
   // preRender
   public function preRender() {
     $this->websiteRenderer->userLogged = NULL;
+
+    // Request to change customer password
+    if (isset($_POST['changeName']) && $_POST['changeName'] == "1") {
+      $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adminPanel);
+      $given_name = $_POST["given_name"] ?? "";
+      $family_name = $_POST["family_name"] ?? "";
+      $email = $_POST["email"] ?? "";
+
+      try {
+        $customerModel->changeName(
+          $this->getUserLogged(),
+          $given_name,
+          $family_name
+        );
+        $this->changeNameError = "";
+      } catch(
+        \ADIOS\Widgets\Customers\Exceptions\UnknownError
+      $e
+      ) {
+        $this->changeNameError = $e->getMessage();
+      }
+
+
+    }
 
     // Request to change customer password
     if ($_POST['changePassword'] ?? "0" == "1") { 
@@ -140,6 +165,7 @@ class UserProfile extends \Surikata\Core\Web\Controller {
         "profile" => $this->websiteRenderer->userLogged,
         "loginFailed" => $this->loginFailed,
         "changePasswordError" => $this->changePasswordError,
+        "changeNameError" => $this->changeNameError,
       ],
     ]);
   }

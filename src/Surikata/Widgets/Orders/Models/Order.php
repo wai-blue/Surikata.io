@@ -612,7 +612,7 @@ class Order extends \ADIOS\Core\Model {
     $this->sendNotificationForPlacedOrder($placedOrderData);
 
     if (isset($orderData["marketingAgreement"])) {
-      (new Newsletter($this->adios))->registerForNewsletter($orderData["email"]);
+      (new \ADIOS\Widgets\CRM\Models\Newsletter($this->adios))->registerForNewsletter($orderData["email"]);
     }
 
     return $idOrder;

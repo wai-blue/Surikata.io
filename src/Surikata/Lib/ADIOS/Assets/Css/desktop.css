@@ -236,6 +236,8 @@ h3 { padding-bottom: 0.5em; }
   height: calc(100vh - 5em);
   padding-top: 1em;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .ui-tooltip-content {

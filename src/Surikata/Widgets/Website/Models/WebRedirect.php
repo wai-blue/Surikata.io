@@ -4,7 +4,7 @@ namespace ADIOS\Widgets\Website\Models;
 
 class WebRedirect extends \ADIOS\Core\Model {
   var $sqlName = "web_redirects";
-  var $urlBase = "Website/{{ domain }}/Redirects";
+  var $urlBase = "Website/{{ domainName }}/Redirects";
   var $tableTitle = "Website redirects";
   var $formTitleForInserting = "New website redirect";
   var $formTitleForEditing = "Website redirect";
@@ -56,8 +56,17 @@ class WebRedirect extends \ADIOS\Core\Model {
   }
 
   public function tableParams($params) {
-    $params["title"] = "Website - {$params['domain']} - Redirects";
-    $params['where'] = "`domain` = '".$this->adios->db->escape($params['domain'])."'";
+    $params["title"] = "{$params['domainName']} &raquo; Redirects";
+
+    $domains = $this->adios->config['widgets']['Website']['domains'];
+    $domain = "";
+    foreach ($domains as $key => $domainInfo) {
+      if ($domainInfo['name'] == $params['domainName']) {
+        $domain = $key;
+      }
+    }
+
+    $params['where'] = "`domain` = '".$this->adios->db->escape($domain)."'";
 
     return $this->adios->dispatchEventToPlugins("onModelAfterTableParams", [
       "model" => $this,

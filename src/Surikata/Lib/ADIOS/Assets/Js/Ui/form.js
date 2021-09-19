@@ -6,6 +6,7 @@
     data.id = $('#'+uid).attr('data-id');
     data.table = $('#'+uid).attr('data-table');
     data.model = $('#' + uid).attr('data-model');
+    data.modelUrlBase = $('#' + uid).attr('data-model-url-base');
     data.values = ui_form_get_values(uid);
 
     var allowed = true;
@@ -63,39 +64,32 @@
     if (allowed) {
       var action = $('#'+uid).attr('data-save-action');
 
-      _ajax_read(action, data, function(_saved_id) {
-        $('.'+uid+'_button').removeAttr('disabled');
-        if (isNaN(_saved_id)) _alert(_saved_id); else {
+      _ajax_read(action, data, function(saved_id) {
 
-          if (data.id < 0) data.inserted_id = _saved_id;
+        $('.'+uid+'_button').removeAttr('disabled');
+
+        if (isNaN(saved_id)) _alert(saved_id); else {
+
+          if (data.id < 0) data.inserted_id = saved_id;
           else data.inserted_id = 0;
+
+          data.id = saved_id;
 
           if (typeof window[uid + '_onaftersave'] == 'function') {
             window[uid + '_onaftersave'](uid, data, {});
           }
 
-          var close_form = (data.id < 0);
-          // if (typeof params.do_not_close === 'undefined'){
-          //   if (!($('#'+uid).attr('data-do-not-close'))){
-          //     close_form = true;
-          //   }
-          // }else if(!params.do_not_close){
-          //   close_form = true;
-          // }
-
-          if (close_form) {
-            $('#' + uid).attr('data-id', _saved_id);
-            ui_form_close(uid);
-          }
+          ui_form_close(uid);
+          window_render(data.modelUrlBase + '/' + data.id + '/Edit');
 
           if (typeof params.aftersave_callback === 'function') {
             params.aftersave_callback(uid, data);
-          }else if(typeof window[params.aftersave_callback] === 'function'){
+          } else if(typeof window[params.aftersave_callback] === 'function') {
             window[params.aftersave_callback](uid, data);
           }
-        };
+        }
       });
-    }else{
+    } else {
       $('.'+uid+'_button').removeAttr('disabled');
     };
 
@@ -205,7 +199,7 @@
           {'uid': uid, 'data': data}
         );
 
-        ui_table_refresh_by_tag(data.table);
+        ui_table_refresh_by_model(data.model);
 
         if (typeof window[uid + '_onafterclose'] == 'function') {
           window[uid + '_onafterclose'](uid, data, {});

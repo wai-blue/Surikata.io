@@ -79,15 +79,11 @@
     _file_download(action, params);
   };
 
-  function ui_table_refresh_by_tag(tag, params){
+  function ui_table_refresh_by_model(model, params) {
     if (typeof params == 'undefined') params = {};
 
-    $('.ui_table_tag_'+tag).each(function(){
-      uid = $(this).attr('id');
-      // action = $('#'+uid).attr('data-refresh-action');
-      // params.uid = uid;
-      // _ajax_update(action, params, uid);
-      ui_table_refresh(uid, params);
+    $('.adios.ui.Table[data-model="' + model + '"]').each(function(){
+      ui_table_refresh($(this).attr('id'), params);
     });
   };
 

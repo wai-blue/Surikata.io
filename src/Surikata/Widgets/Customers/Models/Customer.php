@@ -32,17 +32,10 @@ class Customer extends \ADIOS\Core\Model {
         "show_column" => TRUE,
       ],
 
-      // "code" => [
-      //   "type" => "varchar",
-      //   "title" => "Code",
-      //   "pattern" => '[A-Z]{2}\-[A-Z\d]{4}\-[A-Z\d]{4}',
-      //   "show_column" => TRUE,
-      // ],
-
       "email" => [
         "type" => "varchar",
         "title" => "Email",
-        // "pattern" => "[abcdefghijklmnopqrstuvwxyz0123456789._%\+\-]+@[abcdefghijklmnopqrstuvwxyz0123456789.\-]+\.[abcdefghijklmnopqrstuvwxyz]{2,4}",
+        "css_class" => "flex-2",
         "show_column" => TRUE,
       ],
 
@@ -331,6 +324,7 @@ class Customer extends \ADIOS\Core\Model {
     if ($data['column'] == "given_name") {
       return "font-weight:bold;";
     }
+
     if ($data['column'] == "email") {
       return "color:blue;";
     }

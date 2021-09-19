@@ -7,7 +7,7 @@ class WebPage extends \ADIOS\Core\Model {
   const WEBPAGE_VISIBILITY_PRIVATE = 1;
 
   var $sqlName = "web_pages";
-  var $urlBase = "Website/{{ domain }}/Pages";
+  var $urlBase = "Website/{{ domainName }}/Pages";
   var $tableTitle = "Website pages";
   var $formTitleForInserting = "Website - {{ domain }} - New Page";
   var $formTitleForEditing = "Website - {{ domain }} - Edit Page";
@@ -114,8 +114,17 @@ class WebPage extends \ADIOS\Core\Model {
   }
 
   public function tableParams($params) {
-    $params["title"] = "Website - {$params['domain']} - Pages";
-    $params['where'] = "`domain` = '".$this->adios->db->escape($params['domain'])."'";
+    $params["title"] = "{$params['domainName']} &raquo; Pages";
+
+    $domains = $this->adios->config['widgets']['Website']['domains'];
+    $domain = "";
+    foreach ($domains as $key => $domainInfo) {
+      if ($domainInfo['name'] == $params['domainName']) {
+        $domain = $key;
+      }
+    }
+
+    $params['where'] = "`domain` = '".$this->adios->db->escape($domain)."'";
 
     return $this->adios->dispatchEventToPlugins("onModelAfterTableParams", [
       "model" => $this,

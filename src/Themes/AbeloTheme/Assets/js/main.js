@@ -947,7 +947,7 @@ function subscribeNewsletter(formId) {
       },
       timer: 10000,
     });
-    clearInputs(formId);
+    clearInputs("#"+formId);
   }).fail(function (data) {
     console.log('renderPluginJSON Error', pluginName, requestData, data);
     Swal.fire({

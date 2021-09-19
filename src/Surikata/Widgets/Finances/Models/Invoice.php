@@ -19,6 +19,11 @@ class Invoice extends \ADIOS\Core\Model {
   const LANGUAGE_SK = "sk";
   const LANGUAGE_EN = "en";
 
+  /* Invoice tax setting */
+  const WITH_VAT        = 1;
+  const WITHOUT_VAT     = 2;
+  const FOREIGN_INV     = 3;
+
   var $sqlName = "invoices";
   var $lookupSqlValue = "{%TABLE%}.number";
   var $urlBase = "Invoices";
@@ -45,6 +50,12 @@ class Invoice extends \ADIOS\Core\Model {
     $this->enumInvoiceLanguages = [
       self::LANGUAGE_SK   => 'Slovensky',
       self::LANGUAGE_EN   => 'English',
+    ];
+
+    $this->enumTaxSettings = [
+      self::WITH_VAT          => 'With VAT',
+      self::WITHOUT_VAT       => 'Without VAT',
+      self::FOREIGN_INV       => 'Invoice to foreign country',
     ];
 
   }
@@ -489,7 +500,10 @@ class Invoice extends \ADIOS\Core\Model {
         "text"    => "Print invoice",
         "onclick" => "
           var invoiceLanguage = $('#".$params["uid"]."_invoiceLanguage').val();
-          window.open(_APP_URL + '/Invoices/".(int) $data['id']."/PrintInvoice?invoiceLanguage='+invoiceLanguage);",
+          var taxSetting = $('#".$params["uid"]."_taxSetting').val();
+          window.open(_APP_URL + '/Invoices/"
+            .(int) $data['id'].
+            "/PrintInvoice?invoiceLanguage='+invoiceLanguage+'&taxSetting='+taxSetting);",
         "class"   => "btn-primary mb-2 w-100",
       ])->render();
 
@@ -497,6 +511,13 @@ class Invoice extends \ADIOS\Core\Model {
         "type"    => "varchar",
         "enum_values" => $this->enumInvoiceLanguages,
         "uid" => $params["uid"]."_invoiceLanguage",
+        "class"   => "mb-2 w-100",
+      ])->render();
+
+      $btn_tax_setting_html = $this->adios->ui->Input([
+        "type"    => "varchar",
+        "enum_values" => $this->enumTaxSettings,
+        "uid" => $params["uid"]."_taxSetting",
         "class"   => "mb-2 w-100",
       ])->render();
 
@@ -611,6 +632,8 @@ class Invoice extends \ADIOS\Core\Model {
             "html" => "
               <span>Invoice language</span>
               {$btn_select_language_html}
+              <span>VAT Setting</span>
+              {$btn_tax_setting_html}
               {$btn_print_invoice_html}
               <br/>
               <hr/>

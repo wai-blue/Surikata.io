@@ -361,20 +361,24 @@
                   Price<br/>excl. VAT
                 {% endif %}
               </td>
-              <td style='width:9%;' class='_num'>
-                {% if language == "sk" %}
-                  DPH
-                {% elseif language == "en" %}
-                  VAT
-                {% endif %}
-              </td>
-              <td style='width:9%;' class='_num'>
-                {% if language == "sk" %}
-                  J.cena<br/>s DPH
-                {% elseif language == "en" %}
-                  Price<br/>incl. VAT
-                {% endif %}
-              </td>
+              {% if vat == 1 %}
+                <td style='width:9%;' class='_num'>
+                  {% if language == "sk" %}
+                    DPH
+                  {% elseif language == "en" %}
+                    VAT
+                  {% endif %}
+                </td>
+              {% endif %}
+              {% if vat == 1 %}
+                <td style='width:9%;' class='_num'>
+                  {% if language == "sk" %}
+                    J.cena<br/>s DPH
+                  {% elseif language == "en" %}
+                    Price<br/>incl. VAT
+                  {% endif %}
+                </td>
+              {% endif %}
               <td style='width:7%;' class='_num'>
                 {% if language == "sk" %}
                   Množstvo
@@ -396,13 +400,15 @@
                   Subtotal<br/>excl. VAT
                 {% endif %}
               </td>
-              <td style='width:11%;' class='_num'>
-                {% if language == "sk" %}
-                  Spolu<br/>s DPH
-                {% elseif language == "en" %}
-                  Subtotal<br/>incl. VAT
-                {% endif %}
-              </td>
+              {% if vat == 1 %}
+                <td style='width:11%;' class='_num'>
+                  {% if language == "sk" %}
+                    Spolu<br/>s DPH
+                  {% elseif language == "en" %}
+                    Subtotal<br/>incl. VAT
+                  {% endif %}
+                </td>
+              {% endif %}
             </tr>
           </thead>
           <tbody>
@@ -414,12 +420,18 @@
                   {{ item.item }}
                 </td>
                 <td style='white-space:nowrap;width:9%;' class='_num'>{{ item.jednotkova_cena_bez_dph|number_format(2, ',', ' ') }} €</td>
-                <td style='white-space:nowrap;width:6%;' class='_num'>{{ item.sadzba_dph }} %</td>
-                <td style='white-space:nowrap;width:9%;' class='_num'>{{ item.jednotkova_cena_s_dph|number_format(2, ',', ' ') }} €</td>
+                {% if vat == 1 %}
+                  <td style='white-space:nowrap;width:6%;' class='_num'>{{ item.sadzba_dph }} %</td>
+                {% endif %}
+                {% if vat == 1 %}
+                  <td style='white-space:nowrap;width:9%;' class='_num'>{{ item.jednotkova_cena_s_dph|number_format(2, ',', ' ') }} €</td>
+                {% endif %}
                 <td style='white-space:nowrap;width:7%;' class='_num'><b>{{ item.quantity|number_format(2, ',', ' ') }}</b></td>
                 <td style='white-space:nowrap;width:5%; text-align:center;' class=''>{{ item.merna_jednotka }}</td>
                 <td style='white-space:nowrap;width:11%;' class='_num'>{{ item.suma_bez_dph|number_format(2, ',', ' ') }} €</td>
-                <td style='white-space:nowrap;width:11%;' class='_num'>{{ item.suma_s_dph|number_format(2, ',', ' ') }} €</td>
+                {% if vat == 1 %}
+                  <td style='white-space:nowrap;width:11%;' class='_num'>{{ item.suma_s_dph|number_format(2, ',', ' ') }} €</td>
+                {% endif %}
               </tr>
             {% endfor %}
           </tbody>
@@ -434,82 +446,93 @@
         <div id='w_swi_invoices_template_sumar'>
           <table>
 
-            {% for sadzba in invoice.SADZBY_DPH %}
-              <tr>
-                <td>
-                  {% if language == "sk" %}
-                    Základ DPH
-                  {% elseif language == "en" %}
-                    VAT
-                  {% endif %}
-                  {{ sadzba.sadzba }} %
-                </td>
-                <td class='_num'>
-                  {{ sadzba.zaklad_celkom|number_format(2, ',', ' ') }} €
-                </td>
-              </tr>
-            {% endfor %}
+            {% if vat == 1 %}
+              {% for sadzba in invoice.SADZBY_DPH %}
+                <tr>
+                  <td>
+                    {% if language == "sk" %}
+                      Základ DPH
+                    {% elseif language == "en" %}
+                      VAT
+                    {% endif %}
+                    {{ sadzba.sadzba }} %
+                  </td>
+                  <td class='_num'>
+                    {{ sadzba.zaklad_celkom|number_format(2, ',', ' ') }} €
+                  </td>
+                </tr>
+              {% endfor %}
+            {% endif %}
 
             <tr>
               <td class='fbigger'>
-                {% if language == "sk" %}
-                  Spolu bez DPH
-                {% elseif language == "en" %}
-                  Total excl. VAT
-                {% endif %}
+                {% if vat == 2 or vat == 3 %} <b> {% endif %}
+                  {% if language == "sk" %}
+                    Spolu bez DPH
+                  {% elseif language == "en" %}
+                    Total excl. VAT
+                  {% endif %}
+                {% if vat == 2 or vat == 3 %} </b> {% endif %}
               </td>
               <td class='_num fbigger'>
+                {% if vat == 2 or vat == 3 %} <b> {% endif %}
                 {{ invoice.SUMAR.suma_celkom_bez_dph|number_format(2, ',', ' ') }} €
+                {% if vat == 2 or vat == 3 %} </b> {% endif %}
               </td>
             </tr>
             
             <tr class='sep'><td colspan=2><div></div></td></tr>
-            
-            {% for sadzba in invoice.SADZBY_DPH %}
+
+            {% if vat == 1 %}
+              {% for sadzba in invoice.SADZBY_DPH %}
+                <tr>
+                  <td>
+                    {% if language == "sk" %}
+                      DPH
+                    {% elseif language == "en" %}
+                      VAT
+                    {% endif %}
+                    {{ sadzba.sadzba }} %
+                  </td>
+                  <td class='_num'>
+                    {{ sadzba.suma_celkom|number_format(2, ',', ' ') }} €
+                  </td>
+                </tr>
+              {% endfor %}
+            {% endif %}
+            {% if vat == 1 %}
               <tr>
                 <td>
                   {% if language == "sk" %}
-                    DPH
+                    Spolu DPH
                   {% elseif language == "en" %}
-                    VAT
+                    VAT Total
                   {% endif %}
-                  {{ sadzba.sadzba }} %
                 </td>
                 <td class='_num'>
-                  {{ sadzba.suma_celkom|number_format(2, ',', ' ') }} €
+                  {{ invoice.SUMAR.suma_celkom_dph|number_format(2, ',', ' ') }} €
                 </td>
               </tr>
-            {% endfor %}
-
-            <tr>
-              <td>
-                {% if language == "sk" %}
-                  Spolu DPH
-                {% elseif language == "en" %}
-                  VAT Total
-                {% endif %}
-              </td>
-              <td class='_num'>
-                {{ invoice.SUMAR.suma_celkom_dph|number_format(2, ',', ' ') }} €
-              </td>
-            </tr>
+            {% endif %}
 
             <tr class='sep'><td colspan=2><div></div></td></tr>
-            
-            <tr class='suma'>
-              <td class='fbigger'>
-                <b>
-                  {% if language == "sk" %}
-                    Spolu s DPH
-                  {% elseif language == "en" %}
-                    Total incl. VAT
-                  {% endif %}
-                </b>
-              </td>
-              <td class='_num fbigger'>
-                <b>{{ invoice.SUMAR.suma_celkom_s_dph|number_format(2, ',', ' ') }} €</b>
-              </td>
-            </tr>
+
+            {% if vat == 1 %}
+              <tr class='suma'>
+                <td class='fbigger'>
+                  <b>
+                    {% if language == "sk" %}
+                      Spolu s DPH
+                    {% elseif language == "en" %}
+                      Total incl. VAT
+                    {% endif %}
+                  </b>
+                </td>
+                <td class='_num fbigger'>
+                  <b>{{ invoice.SUMAR.suma_celkom_s_dph|number_format(2, ',', ' ') }} €</b>
+                </td>
+              </tr>
+            {% endif %}
           </table>
         </div>
 

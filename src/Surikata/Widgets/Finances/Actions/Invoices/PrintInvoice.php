@@ -8,7 +8,7 @@ class PrintInvoice extends \ADIOS\Core\Action {
   const WITHOUT_TAX    = 2;
   const FOREIGN_INV    = 3;
 
-  public $enumTaxSettings = [
+  public $enumVatSettings = [
     self::WITH_TAX        => 'With Tax',
     self::WITHOUT_TAX     => 'Without Tax',
     self::FOREIGN_INV     => 'Foreign invoice',
@@ -18,7 +18,7 @@ class PrintInvoice extends \ADIOS\Core\Action {
 
     $language = $this->params["invoiceLanguage"] ?? "sk";
     
-    $taxSetting =
+    $vatSetting =
       isset($this->params["taxSetting"])
       ? $this->params["taxSetting"]
       : 1
@@ -26,8 +26,8 @@ class PrintInvoice extends \ADIOS\Core\Action {
 
     return [
       "language" => $language,
-      "taxSetting" => $this->enumTaxSettings[$taxSetting],
-      "tax" => $taxSetting,
+      "vatSetting" => $this->enumVatSettings[$vatSetting],
+      "vat" => $vatSetting,
       "invoice" => (new \ADIOS\Widgets\Finances\Models\Invoice($this->adios))->getById($this->params['id']),
     ];
   }

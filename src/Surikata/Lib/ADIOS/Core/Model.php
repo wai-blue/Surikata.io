@@ -114,6 +114,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   var $pdo;
   var $eloquentQuery;
   var $searchAction;
+
+  private static $allItemsCache = NULL;
   
   /**
    * Creates instance of model's object.
@@ -566,7 +568,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   // CRUD methods
 
   public function getExtendedData($item) {
-    return $item; // to be overriden
+    return NULL; // to be overriden, should return $item with extended information
+    // the NULL return is for optimization in getAll() method
   }
 
   public function getById(int $id) {
@@ -574,14 +577,28 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     return $this->getExtendedData($item);
   }
 
-  public function getAll(string $keyBy = "id") {
-    $items = $this->getWithLookups(NULL, $keyBy);
-
-    foreach ($items as $key => $item) {
-      $items[$key] = $this->getExtendedData($item);
+  public function getAll(string $keyBy = "id", $withLookups = FALSE, $processLookups = FALSE) {
+    if ($withLookups) {
+      $items = $this->getWithLookups(NULL, $keyBy, $processLookups);
+    } else {
+      $items = $this->adios->db->get_all_rows_query("select * from `{$this->table}`", $keyBy);
     }
 
+    if ($this->getExtendedData([]) !== NULL) {
+      foreach ($items as $key => $item) {
+        $items[$key] = $this->getExtendedData($item);
+      }
+    }
+    
     return $items;
+  }
+
+  public function getAllCached() {
+    if (static::$allItemsCache === NULL) {
+      static::$allItemsCache = $this->getAll();
+    }
+
+    return static::$allItemsCache;
   }
 
   public function getQueryWithLookups($callback = NULL) {
@@ -595,11 +612,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     return $query;
   }
 
-  public function getWithLookups($callback = NULL, $keyBy = 'id') {
+  public function getWithLookups($callback = NULL, $keyBy = 'id', $processLookups = FALSE) {
     $query = $this->getQueryWithLookups($callback);
     return $this->processLookupsInQueryResult(
       $this->fetchQueryAsArray($query, $keyBy, FALSE),
-      TRUE
+      $processLookups
     );
   }
 
@@ -608,7 +625,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   }
 
   public function insertRandomRow($data = [], $dictionary = []) {
-    return $this->adios->db->insert_random_row($this->table, $data ,$dictionary);
+    return $this->adios->db->insert_random_row($this->table, $data, $dictionary);
   }
 
   public function updateRow($data, $id) {
@@ -1068,7 +1085,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     return $this->adios->dispatchEventToPlugins("onModelAfterCardsCardHtmlFormatter", [
       "model" => $this,
       "data" => $data,
-    ])["data"];
+    ])["html"];
   }
 
   //////////////////////////////////////////////////////////////////
@@ -1207,9 +1224,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     $processedRows = [];
     foreach ($rows as $rowKey => $row) {
       foreach ($row as $colName => $colValue) {
-        if (strpos($colName, "___LOOKUP___") !== FALSE) {
-          list($tmp1, $tmp2) = explode("___LOOKUP___", $colName);
-          $tmp1 = strtoupper($tmp1); // TODO: UPPERCASE LOOKUP
+        $strpos = strpos($colName, "___LOOKUP___");
+        if ($strpos !== FALSE) {
+          $tmp1 = strtoupper(substr($colName, 0, $strpos));
+          $tmp2 = substr($colName, $strpos + strlen("___LOOKUP___"));
           $row[$tmp1][$tmp2] = $colValue;
           unset($row[$colName]);
         }
@@ -1219,28 +1237,14 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     return $processedRows;
   }
 
-  // extractLookupFromQueryResult
-  public function extractLookupFromQueryResult($rows, $lookup) {
-    $processedRows = [];
-    foreach ($rows as $rowKey => $row) {
-      $processedRows[$rowKey] = [];
-      foreach ($row as $colName => $colValue) {
-        if (strpos($colName, "{$lookup}___LOOKUP___") === 0) {
-          $processedRows[$rowKey][str_replace("{$lookup}___LOOKUP___", "", $colName)] = $colValue;
-        }
-      }
-    }
-    return $processedRows;
-  }
-  
   // fetchQueryAsArray
-  public function fetchQueryAsArray($eloquentQuery, $keyBy = 'id', $processOutput = TRUE) {
+  public function fetchQueryAsArray($eloquentQuery, $keyBy = 'id', $processLookups = TRUE) {
     $query = $this->pdo->prepare($eloquentQuery->toSql());
     $query->execute($eloquentQuery->getBindings());
 
     $rows = $this->associateKey($query->fetchAll(\PDO::FETCH_ASSOC), 'id');
 
-    if ($processOutput) {
+    if ($processLookups) {
       $rows = $this->processLookupsInQueryResult($rows);
     }
 

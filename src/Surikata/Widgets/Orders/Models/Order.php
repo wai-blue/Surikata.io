@@ -63,6 +63,7 @@ class Order extends \ADIOS\Core\Model {
         "type" => "varchar",
         "title" => "Number",
         "pattern" => '\d{10}',
+        "css_class" => "flex-2",
         "readonly" => TRUE,
         "description" => "Will be generated automaticaly",
         "show_column" => TRUE,
@@ -72,6 +73,7 @@ class Order extends \ADIOS\Core\Model {
         "type" => "lookup",
         "title" => "Customer",
         "model" => "Widgets/Customers/Models/Customer",
+        "css_class" => "flex-3",
         "show_column" => TRUE,
       ],
 

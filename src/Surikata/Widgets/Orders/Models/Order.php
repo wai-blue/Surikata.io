@@ -280,18 +280,21 @@ class Order extends \ADIOS\Core\Model {
         "pattern" => '\d{8}',
         "show_column" => TRUE,
       ],
+
       "company_tax_id" => [
         "type" => "varchar",
         "title" => "Company Tax ID",
         "pattern" => '\d{10}',
         "show_column" => FALSE,
       ],
+
       "company_vat_id" => [
         "type" => "varchar",
         "title" => "Company VAT ID",
         "pattern" => '(SK|CZ)\d{10}',
         "show_column" => FALSE,
       ],
+
       "buy_as_company" => [
         "type" => "varchar",
         "title" => "Contact: Email",
@@ -317,7 +320,7 @@ class Order extends \ADIOS\Core\Model {
         "type" => "unique",
         "columns" => ["number"],
       ],
-      "" => [
+      [
         "type" => "index",
         "columns" => ["company_id"],
       ],
@@ -476,26 +479,6 @@ class Order extends \ADIOS\Core\Model {
 
       if ($orderData["buyAsCompany"] == "1") {
         foreach ($requiredFieldsCompany as $fieldName) {
-          if (
-            $fieldName === "company_id" &&
-            (
-              strlen($orderData[$fieldName]) !== 8 ||
-              !ctype_digit($orderData[$fieldName])
-            ))
-          {
-            $requiredFieldsEmpty[] = $fieldName;
-            continue;
-          }
-          if (
-            $fieldName === "company_tax_id" &&
-            (
-              strlen($orderData[$fieldName]) !== 10 ||
-              !ctype_digit($orderData[$fieldName])
-            ))
-          {
-            $requiredFieldsEmpty[] = $fieldName;
-            continue;
-          }
           if (empty($orderData[$fieldName])) {
             $requiredFieldsEmpty[] = $fieldName;
           }

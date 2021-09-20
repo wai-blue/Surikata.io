@@ -581,7 +581,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     if ($withLookups) {
       $items = $this->getWithLookups(NULL, $keyBy, $processLookups);
     } else {
-      $items = $this->adios->db->get_all_rows_query("select * from `{$this->table}`", $keyBy);
+      $items = $this->pdoPrepareExecuteAndFetch("select * from :table", []);
     }
 
     if ($this->getExtendedData([]) !== NULL) {

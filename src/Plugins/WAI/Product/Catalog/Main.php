@@ -133,6 +133,11 @@ namespace Surikata\Plugins\WAI\Product {
         if (!empty($filter['filteredBrands'])) {
           $productsQuery->whereIn('id_brand', $filter['filteredBrands']);
         }
+$console = $this->websiteRenderer->adminPanel->console;
+$console->info("#1", [], "product-catalog");
+
+        self::$catalogInfo["productCount"] = $productModel->countRowsInQuery($productsQuery);
+$console->info("#2", [], "product-catalog");
 
         if (array_key_exists("sort", $filter)) {
           $sortType = $filter["sort"];
@@ -153,17 +158,17 @@ namespace Surikata\Plugins\WAI\Product {
           }
         }
 
-        self::$catalogInfo["productCount"] = $productModel->countRowsInQuery($productsQuery);
-
         $productModel->addLookupsToQuery($productsQuery);
         $productsQuery->skip(($page - 1) * $itemsPerPage);
         $productsQuery->take($itemsPerPage);
+$console->info("#3", [], "product-catalog");
 
         self::$catalogInfo["products"] = $productModel->fetchRows($productsQuery);
+$console->info("#4", [], "product-catalog");
         self::$catalogInfo["products"] = $productModel->addPriceInfoForListOfProducts(self::$catalogInfo["products"]);
         self::$catalogInfo["products"] = $productModel->unifyProductInformationForListOfProduct(self::$catalogInfo["products"]);
         self::$catalogInfo["products"] = $productModel->translateForWeb(self::$catalogInfo["products"], $languageIndex);
-
+$console->info("#5", [], "product-catalog");
         $productDetailPlugin = new \Surikata\Plugins\WAI\Product\Detail($this->websiteRenderer);
         foreach (self::$catalogInfo["products"] as $key => $product) {
           self::$catalogInfo["products"][$key]["url"] =

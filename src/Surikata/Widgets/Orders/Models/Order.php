@@ -298,11 +298,6 @@ class Order extends \ADIOS\Core\Model {
         "show_column" => FALSE,
       ],
 
-      "buy_as_company" => [
-        "type" => "varchar",
-        "title" => "Contact: Email",
-      ],
-
 
       "domain" => [
         "type" => "varchar",
@@ -610,7 +605,6 @@ class Order extends \ADIOS\Core\Model {
       "company_id"             => $orderData['company_id'],
       "company_tax_id"         => $orderData['company_tax_id'],
       "company_vat_id"         => $orderData['company_vat_id'],
-      "buy_as_company"         => $orderData['buy_as_company'],
       "confirmation_time"      => $confirmationTime,
       "id_destination_country" => $orderData['id_destination_country'],
       "id_delivery_service"    => $orderData['id_delivery_service'],

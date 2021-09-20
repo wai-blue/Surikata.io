@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Orders\Models;
 
-use ADIOS\Widgets\CRM\Exceptions\NewsletterException;
+use ADIOS\Widgets\CRM\Exceptions\AlreadyRegisteredForNewsletter;
 use ADIOS\Widgets\CRM\Models\Newsletter;
 
 class Order extends \ADIOS\Core\Model {
@@ -614,12 +614,12 @@ class Order extends \ADIOS\Core\Model {
 
     $this->sendNotificationForPlacedOrder($placedOrderData);
 
-    if (isset($orderData["marketingAgreement"])) {
+    if (isset($orderData["newsletterConsent"])) {
       try {
         (new Newsletter($this->adios))->registerForNewsletter($orderData["email"]);
       }
-      catch (NewsletterException $e) {
-
+      catch (AlreadyRegisteredForNewsletter $e) {
+        // Nothing to do here
       }
     }
 

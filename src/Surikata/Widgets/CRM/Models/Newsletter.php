@@ -2,14 +2,15 @@
 
 namespace ADIOS\Widgets\CRM\Models;
 
-use ADIOS\Widgets\CRM\Exceptions\NewsletterException;
+use ADIOS\Widgets\CRM\Exceptions\AlreadyRegisteredForNewsletter;
+use ADIOS\Widgets\CRM\Exceptions\EmailIsInvalid;
 
 class Newsletter extends \ADIOS\Core\Model {
   var $sqlName = "newsletter";
   var $urlBase = "CRM/Newsletter";
   var $tableTitle = "Newsletter Subscribers";
-  var $formTitleForEditing = "Newsletter new subscribe";
-  var $formTitleForInserting = "Newsletter edit subscribe";
+  var $formTitleForEditing = "Newsletter new subscriber";
+  var $formTitleForInserting = "Newsletter edit subscriber";
 
   public function init() {
 
@@ -26,6 +27,7 @@ class Newsletter extends \ADIOS\Core\Model {
         "title" => $this->translate("Email"),
         "show_column" => TRUE,
       ],
+
       "domain" => [
         "type" => "varchar",
         "title" => $this->translate("Domain"),
@@ -46,7 +48,7 @@ class Newsletter extends \ADIOS\Core\Model {
       $domain = $this->enumDomains[array_key_first($this->enumDomains)];
     }
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      throw new NewsletterException("Email is not valid.");
+      throw new EmailIsInvalid();
     }
     $newsletter = $this
       ->where('email', '=', $email)
@@ -60,18 +62,9 @@ class Newsletter extends \ADIOS\Core\Model {
       );
     }
     else {
-      throw new NewsletterException('Duplicate email');
+      throw new AlreadyRegisteredForNewsletter();
     }
     return $id;
   }
 
-  // public function install() {
-  //   if (!parent::install()) return FALSE;
-
-  //   for ($i = 0; $i < 30; $i++) {
-  //     $this->insertRandomRow();
-  //   }
-
-  //   return TRUE;
-  // }
 }

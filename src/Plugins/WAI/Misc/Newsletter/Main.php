@@ -2,16 +2,15 @@
 
 namespace Surikata\Plugins\WAI\Misc {
 
-  use Hoa\Exception\Exception;
-
   class Newsletter extends \Surikata\Core\Web\Plugin {
 
     public function renderJSON() {
       $returnArray = array();
 
-      $domain = $this->websiteRenderer->twigParams["domain"];
-      $action = $this->websiteRenderer->urlVariables['action'];
-      $email = $this->websiteRenderer->urlVariables['email'];
+      $domain = $this->websiteRenderer->twigParams["domain"] ?? "";
+      $action = $this->websiteRenderer->urlVariables['action'] ?? "";
+      $email = $this->websiteRenderer->urlVariables['email'] ?? "";
+
       switch ($action) {
         case "subscribe":
           try {
@@ -19,7 +18,7 @@ namespace Surikata\Plugins\WAI\Misc {
             $newsletterModel->registerForNewsletter($email, $domain);
             $returnArray["status"] = "OK";
           }
-          catch (Exception $e) {
+          catch (\Exception $e) {
             $returnArray["status"] = "FAIL";
             $returnArray["exception"] = get_class($e);
             $returnArray["error"] = $e->getMessage();

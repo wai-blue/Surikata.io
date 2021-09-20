@@ -132,11 +132,13 @@ class ShoppingCart extends \ADIOS\Core\Model {
         "id_product" => $idProduct,
         "quantity" => $qty,
         "unit_price" => $product['salePrice'],
+        "added_on" => "SQL:now()",
       ]);
     } else {
       $item->update([
         "quantity" => max(0, $item->get()->first()->quantity + $qty),
         "unit_price" => $product['salePrice'],
+        "updated_on" => "SQL:now()",
       ]);
     }
 
@@ -159,6 +161,7 @@ class ShoppingCart extends \ADIOS\Core\Model {
     $item->update([
       "quantity" => $qty,
       "unit_price" => $product['salePrice'],
+      "updated_on" => "SQL:now()",
     ]);
 
     return $item->get()->first()->toArray();

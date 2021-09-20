@@ -47,6 +47,19 @@ class ShoppingCartItem extends \ADIOS\Core\Model {
         "show_column" => TRUE,
       ],
 
+      "added_on" => [
+        "type" => "datetime",
+        "title" => $this->translate("Added on"),
+        "required" => TRUE,
+        "show_column" => TRUE,
+      ],
+
+      "updated_on" => [
+        "type" => "datetime",
+        "title" => $this->translate("Updated on"),
+        "show_column" => TRUE,
+      ],
+
       "virt_delivery_unit" => [
         "type" => "varchar",
         "virtual" => TRUE,

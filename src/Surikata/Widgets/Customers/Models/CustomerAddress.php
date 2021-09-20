@@ -157,8 +157,7 @@ class CustomerAddress extends \ADIOS\Core\Model {
 
   public function belongsToCustomer($idCustomer, $idAddress) {
 
-    $addressQuery = self::where("id", $idAddress);
-    $address = $this->fetchQueryAsArray($addressQuery);
+    $address = $this->getById($idAddress);
     return ((int)$address["id_customer"] === $idCustomer);
 
   }
@@ -184,9 +183,11 @@ class CustomerAddress extends \ADIOS\Core\Model {
       $item = $this->firstOrCreate($addressData);
     }
     else {
+
       if (!$this->belongsToCustomer($idCustomer, $data["idAddress"])) {
         throw new UnknownAccount();
       }
+
       self::where('id', $data["idAddress"])->update($addressData);
       $item = $addressData;
       $item["id"] = $data["idAddress"];

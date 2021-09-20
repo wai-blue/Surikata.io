@@ -26,8 +26,14 @@
                       <h5>{{ translate("Your Personal Details", "Customer") }}</h5>
                     </div>
                     <form method="post" id="customerChangeNames">
-                      <input type="hidden" name="changeName" value="1" />
+                      <input type="hidden" name="changeBasicInformation" value="1" />
                       <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                          <div class="billing-info">
+                            <label>{{ translate("Email Address", "Customer") }}</label>
+                            <input name="email" type="email" value="{{ user.profile.email }}" disabled/>
+                          </div>
+                        </div>
                         <div class="col-lg-6 col-md-6">
                           <div class="billing-info">
                             <label>{{ translate("First Name", "Customer") }}</label>
@@ -42,8 +48,107 @@
                         </div>
                         <div class="col-lg-6 col-md-6">
                           <div class="billing-info">
-                            <label>{{ translate("Email Address", "Customer") }}</label>
-                            <input name="email" type="email" value="{{ user.profile.email }}" disabled/>
+                            <label>{{ translate("Company Name", "Customer") }}</label>
+                            <input name="company_name" type="text" value="{{ user.profile.company_name }}"/>
+                          </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                          <div class="billing-info">
+                            <label>{{ translate("Company ID", "Customer") }}</label>
+                            <input name="company_id" type="text" value="{{ user.profile.company_id }}"/>
+                          </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                          <div class="billing-info">
+                            <label>{{ translate("Company TAX ID", "Customer") }}</label>
+                            <input name="company_tax_id" type="text" value="{{ user.profile.company_tax_id }}"/>
+                          </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                          <div class="billing-info">
+                            <label>{{ translate("Company TAX ID", "Customer") }}</label>
+                            <input name="company_vat_id" type="text" value="{{ user.profile.company_vat_id }}"/>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="account-info-wrapper">
+                        <h5>{{ translate("Your Billing Details", "Customer") }}</h5>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                          <div class="billing-info">
+                            <label>{{ translate("Invoice given name", "Customer") }}</label>
+                            <input
+                              type="text"
+                              name="inv_given_name"
+                              value="{{ user.profile.inv_given_name }}"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                          <div class="billing-info">
+                            <label>{{ translate("Invoice family name", "Customer") }}</label>
+                            <input
+                              type="text"
+                              name="inv_family_name"
+                              value="{{ user.profile.inv_family_name }}"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                          <div class="billing-info">
+                            <label>{{ translate("Invoice company name", "Customer") }}</label>
+                            <input
+                              type="text"
+                              name="inv_company_name"
+                              value="{{ user.profile.inv_company_name }}"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                          <div class="billing-info">
+                            <label>{{ translate("Invoice Street 1", "Customer") }}</label>
+                            <input
+                              type="text"
+                              name="inv_street_1"
+                              value="{{ user.profile.inv_street_1 }}"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                          <div class="billing-info">
+                            <label>{{ translate("Invoice Street 2", "Customer") }}</label>
+                            <input
+                              type="text"
+                              name="inv_street_2"
+                              value="{{ user.profile.inv_street_2 }}"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                          <div class="billing-info">
+                            <label>{{ translate("Invoice ZIP", "Customer") }}</label>
+                            <input
+                              type="text"
+                              name="inv_zip"
+                              value="{{ user.profile.inv_zip }}"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                          <div class="billing-info">
+                            <label>{{ translate("Invoice City", "Customer") }}</label>
+                            <input
+                              type="text"
+                              name="inv_city"
+                              value="{{ user.profile.inv_city }}"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                          <div class="billing-info">
+
                           </div>
                         </div>
                         <div class="col-md-12">
@@ -53,9 +158,6 @@
                                 type="submit"
                                 onclick="
                                   $('#customerChangeNames').submit();
-                                  window.setTimeout(function() {
-                                    location.reload();
-                                  }, 500);
                                 "
                               >
                                 {{ translate("Save changes", "Customer") }}

@@ -652,11 +652,42 @@ class Customer extends \ADIOS\Core\Model {
       ->where('id', '=', (int) $userLoggedInfo['id'])
     ;
 
-    if (!$customer->update(
-      ["given_name" => $given_name, "family_name" => $family_name]
-    )) {
-      throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error!");
+    $update = $customer->update(["given_name" => $given_name, "family_name" => $family_name]);
+
+    return TRUE;
+  }
+
+  public function changeCompanyInfo($userLoggedInfo, $company_name, $company_id, $company_tax_id, $company_vat_id) {
+    if (empty($userLoggedInfo)) {
+      throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error! Try refreshing the page.");
     }
+
+    $customer = $this
+      ->where('id', '=', (int) $userLoggedInfo['id'])
+    ;
+
+    $update = $customer->update(
+      [
+        "company_name" => $company_name,
+        "company_id" => $company_id,
+        "company_tax_id" => $company_tax_id,
+        "company_vat_id" => $company_vat_id,
+      ]
+    );
+
+    return TRUE;
+  }
+
+  public function changeBillingInfo($userLoggedInfo, $address) {
+    if (empty($userLoggedInfo)) {
+      throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error! Try refreshing the page.");
+    }
+
+    $customer = $this
+      ->where('id', '=', (int) $userLoggedInfo['id'])
+    ;
+
+    $update = $customer->update($address);
 
     return TRUE;
   }

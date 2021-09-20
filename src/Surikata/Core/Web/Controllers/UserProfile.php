@@ -24,7 +24,6 @@ class UserProfile extends \Surikata\Core\Web\Controller {
       $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adminPanel);
       $_SESSION['userProfile'] = $customerModel->getById($idUserLogged);
     }
-     
     return $_SESSION['userProfile'];
   }
 
@@ -53,11 +52,25 @@ class UserProfile extends \Surikata\Core\Web\Controller {
     $this->websiteRenderer->userLogged = NULL;
 
     // Request to change customer password
-    if (isset($_POST['changeName']) && $_POST['changeName'] == "1") {
+    if (isset($_POST['changeBasicInformation']) && $_POST['changeBasicInformation'] == "1") {
       $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adminPanel);
       $given_name = $_POST["given_name"] ?? "";
       $family_name = $_POST["family_name"] ?? "";
+
+      $company_name = $_POST["company_name"] ?? "";
+      $company_id = $_POST["company_id"] ?? "";
+      $company_tax_id = $_POST["company_tax_id"] ?? "";
+      $company_vat_id = $_POST["company_vat_id"] ?? "";
       $email = $_POST["email"] ?? "";
+
+      $address = [];
+      $address["inv_given_name"] = $_POST["inv_given_name"] ?? "";
+      $address["inv_family_name"] = $_POST["inv_family_name"] ?? "";
+      $address["inv_company_name"] = $_POST["inv_company_name"] ?? "";
+      $address["inv_street_1"] = $_POST["inv_street_1"] ?? "";
+      $address["inv_street_2"] = $_POST["inv_street_2"] ?? "";
+      $address["inv_zip"] = $_POST["inv_zip"] ?? "";
+      $address["inv_city"] = $_POST["inv_city"] ?? "";
 
       try {
         $customerModel->changeName(
@@ -65,14 +78,26 @@ class UserProfile extends \Surikata\Core\Web\Controller {
           $given_name,
           $family_name
         );
-        $this->changeNameError = "";
-      } catch(
-        \ADIOS\Widgets\Customers\Exceptions\UnknownError
-      $e
-      ) {
-        $this->changeNameError = $e->getMessage();
-      }
 
+        $customerModel->changeCompanyInfo(
+          $this->getUserLogged(),
+          $company_name,
+          $company_id,
+          $company_tax_id,
+          $company_vat_id
+        );
+
+        $customerModel->changeBillingInfo(
+          $this->getUserLogged(),
+          $address
+        );
+        $this->reloadUserProfile();
+        $this->changeNameError = "";
+      } catch(\ADIOS\Widgets\Customers\Exceptions\UnknownError $e) {
+
+        $this->changeNameError = $e->getMessage();
+
+      }
 
     }
 

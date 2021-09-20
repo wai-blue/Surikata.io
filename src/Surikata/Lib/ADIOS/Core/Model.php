@@ -574,7 +574,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
   public function getById(int $id) {
     $item = reset($this->where('id', $id)->get()->toArray());
-    return $this->getExtendedData($item);
+
+    if ($this->getExtendedData([]) !== NULL) {
+      return $this->getExtendedData($item);
+    } else {
+      return $item;
+    }
   }
 
   public function getAll(string $keyBy = "id", $withLookups = FALSE, $processLookups = FALSE) {

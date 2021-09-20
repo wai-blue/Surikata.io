@@ -203,13 +203,11 @@ namespace ADIOS\Plugins\WAI\Product {
 
       if ($event["model"]->name == "Widgets/Products/Models/Product") {
         $productUrl = $this->adios->websiteRenderer->getPlugin("WAI/Product/Detail")->getWebpageUrl($event["data"]);
-        // REVIEW: Este jednu vec som si uvedomil.
-        // $adios->config["language"] nie je to iste, ako jazyky v "domains".
-        // To bude treba opravit, zatial ponechame tento komentar ako pripomienku.
+
         $event["params"]["template"]["columns"][1]["rows"][2]["html"] .= "
-          <a class='btn btn-icon-split btn-light' target='_blank' href='{$this->adios->websiteRenderer->rootUrl}/{$this->adios->config["language"]}/{$productUrl}'>
+          <a class='btn btn-icon-split btn-light' target='_blank' href='{$this->adios->websiteRenderer->rootUrl}/{$productUrl}'>
             <span class='icon'><i class='fa fa-link'></i></span>
-            <span class='text'>Open product page</span>
+            <span class='text'>Visit product on website</span>
           </a>"
         ;
       }

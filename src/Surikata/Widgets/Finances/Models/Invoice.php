@@ -19,6 +19,10 @@ class Invoice extends \ADIOS\Core\Model {
   const LANGUAGE_SK = "sk";
   const LANGUAGE_EN = "en";
 
+  const TEMPLATE_WITH_VAT       = 1;
+  const TEMPLATE_WITHOUT_VAT    = 2;
+  const TEMPLATE_FOREIGN_INV    = 3;
+
   var $sqlName = "invoices";
   var $lookupSqlValue = "{%TABLE%}.number";
   var $urlBase = "Invoices";
@@ -47,6 +51,11 @@ class Invoice extends \ADIOS\Core\Model {
       self::LANGUAGE_EN   => 'English',
     ];
 
+    $this->enumInvoiceTemplates = [
+      self::TEMPLATE_WITH_VAT        => 'With Value Added Tax',
+      self::TEMPLATE_WITHOUT_VAT     => 'Without Value Added Tax',
+      self::TEMPLATE_FOREIGN_INV     => 'Foreign invoice',
+    ];
   }
 
   public function columns(array $columns = []) {
@@ -489,7 +498,8 @@ class Invoice extends \ADIOS\Core\Model {
         "text"    => "Print invoice",
         "onclick" => "
           var invoiceLanguage = $('#".$params["uid"]."_invoiceLanguage').val();
-          window.open(_APP_URL + '/Invoices/".(int) $data['id']."/PrintInvoice?invoiceLanguage='+invoiceLanguage);",
+          var invoiceTemplate = $('#".$params["uid"]."_invoiceTemplate').val();
+          window.open(_APP_URL + '/Invoices/".(int) $data['id']."/PrintInvoice?invoiceLanguage='+invoiceLanguage+'&invoiceTemplate='+invoiceTemplate);",
         "class"   => "btn-primary mb-2 w-100",
       ])->render();
 
@@ -497,6 +507,13 @@ class Invoice extends \ADIOS\Core\Model {
         "type"    => "varchar",
         "enum_values" => $this->enumInvoiceLanguages,
         "uid" => $params["uid"]."_invoiceLanguage",
+        "class"   => "mb-2 w-100",
+      ])->render();
+
+      $btn_select_template_html = $this->adios->ui->Input([
+        "type"    => "varchar",
+        "enum_values" => $this->enumInvoiceTemplates,
+        "uid" => $params["uid"]."_enumInvoiceTemplates",
         "class"   => "mb-2 w-100",
       ])->render();
 
@@ -609,8 +626,8 @@ class Invoice extends \ADIOS\Core\Model {
           [
             "class" => "col-md-3 pr-0",
             "html" => "
-              <span>Invoice language</span>
               {$btn_select_language_html}
+              {$btn_select_template_html}
               {$btn_print_invoice_html}
               <br/>
               <hr/>

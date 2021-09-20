@@ -31,17 +31,22 @@
                   name="newsletterEmail" value=""
                 />
                 <div class="clear">
-                  <input
+                  <button
                     onclick="subscribeNewsletter('subscribeForm')"
                     id="mc-embedded-subscribe"
                     class="button"
                     type="button"
                     name="subscribe"
-                    value="{{ translate("Sign Up", "Common") }}"
-                  />
+                    value=""
+                  >{{ translate("Sign Up", "Common") }}</button>
                 </div>
               </div>
             </form>
+            <script>
+              var unknownNewsletterError = '{{ translate("Unknown error", "CRM") }}';
+              var alreadyRegisteredNewsletter = '{{ translate("Email is already registered", "CRM") }}';
+              var emailIsInvalidNewsletter = '{{ translate("Email is invalid", "CRM") }}';
+            </script>
           </div>
         </div>
       </div>

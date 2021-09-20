@@ -2,6 +2,9 @@
 
 namespace Surikata\Plugins\WAI\Misc {
 
+  use ADIOS\Widgets\CRM\Exceptions\AlreadyRegisteredForNewsletter;
+  use ADIOS\Widgets\CRM\Exceptions\EmailIsInvalid;
+
   class Newsletter extends \Surikata\Core\Web\Plugin {
 
     public function renderJSON() {

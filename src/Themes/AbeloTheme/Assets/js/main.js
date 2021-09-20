@@ -936,18 +936,41 @@ function subscribeNewsletter(formId) {
     '',
     requestData
   ).done(function (data) {
-    Swal.fire({
-      width: '40rem',
-      title: '<strong>Your email is subscribe</strong>',
-      text: '',
-      icon: 'success',
-      confirmButtonText: 'OK',
-      customClass: {
-        confirmButton: 'swal-confirm-button',
-      },
-      timer: 10000,
-    });
-    clearInputs("#"+formId);
+    if (data.status == "OK") {
+      Swal.fire({
+        width: '40rem',
+        title: '<strong>Your email is subscribe</strong>',
+        text: '',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        customClass: {
+          confirmButton: 'swal-confirm-button',
+        },
+        timer: 10000,
+      });
+      clearInputs("#" + formId);
+    }
+    else {
+      console.log('renderPluginJSON Error', pluginName, requestData, data);
+      var text = unknownNewsletterError;
+      if (data.exception.includes("AlreadyRegisteredForNewsletter")) {
+        text = alreadyRegisteredNewsletter;
+      }
+      if (data.exception.includes("EmailIsInvalid")) {
+        text = emailIsInvalidNewsletter;
+      }
+      Swal.fire({
+        width: '40rem',
+        title: '<strong>' + text + '</strong>',
+        text: '',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        customClass: {
+          confirmButton: 'swal-confirm-button',
+        },
+        timer: 10000,
+      });
+    }
   }).fail(function (data) {
     console.log('renderPluginJSON Error', pluginName, requestData, data);
     Swal.fire({

@@ -1,4 +1,4 @@
-<div id="breadCrumbDiv">
+<div id="breadcrumbDiv">
   <ul class="breadcrumb">
     {% if showHomePage %}
       <li>
@@ -7,11 +7,11 @@
         </a>
       </li>
     {% endif %}
-    {% for url, breadCrumb in breadCrumbs %}
+    {% for url, breadcrumb in breadcrumbs %}
       {% if loop.last %}
-        <li>{{ breadCrumb | title }}</li>
+        <li>{{ breadcrumb | title }}</li>
       {% else %}
-        <li><a href="{{ rootUrl }}/{{ url }}">{{ breadCrumb | title }}</a></li>
+        <li><a href="{{ rootUrl }}/{{ url }}">{{ breadcrumb | title }}</a></li>
       {% endif %}
     {% endfor %}
   </ul>

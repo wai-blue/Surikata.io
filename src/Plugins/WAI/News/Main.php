@@ -22,7 +22,7 @@ namespace Surikata\Plugins\WAI {
       $newsQuery->where('domain', '=', $domain);
       $newsQuery->orderBy("show_from", "DESC");
 
-      $news = $newsModel->fetchQueryAsArray($newsQuery);
+      $news = $newsModel->fetchRows($newsQuery);
       return $news;
     }
 
@@ -33,7 +33,7 @@ namespace Surikata\Plugins\WAI {
       $newsQuery->select("*");
       $newsQuery->where('id', '=', $id);
 
-      $new = $newsModel->fetchQueryAsArray($newsQuery);
+      $new = $newsModel->fetchRows($newsQuery);
       return empty($new) ? null : $new[$id];
     }
 

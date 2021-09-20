@@ -217,6 +217,7 @@ if (count($partsToInstall) == 0) {
 
     $websiteRenderer = new \Surikata\Core\Web\Loader($websiteRendererConfig);
     $adminPanel = new \Surikata\Core\AdminPanel\Loader($adminPanelConfig, ADIOS_MODE_FULL, $websiteRenderer);
+
     $adminPanel->install();
     $adminPanel->installDefaultUsers();
     $adminPanel->createMissingFolders();
@@ -262,6 +263,8 @@ if (count($partsToInstall) == 0) {
     $paymentServiceModel = new \ADIOS\Widgets\Shipping\Models\PaymentService($adminPanel);
     $shipmentModel = new \ADIOS\Widgets\Shipping\Models\Shipment($adminPanel);
     $shipmentPriceModel = new \ADIOS\Widgets\Shipping\Models\ShipmentPrice($adminPanel);
+
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // PART: delivery and payment services

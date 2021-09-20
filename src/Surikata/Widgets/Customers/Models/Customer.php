@@ -600,6 +600,8 @@ class Customer extends \ADIOS\Core\Model {
   }
 
   public function changePassword($userLoggedInfo, $currentPassword, $password1, $password2) {
+    // REVIEW: premysliet, co s argumentami v thrown exceptions
+
     if (empty($userLoggedInfo)) {
       throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error! Try refreshing the page.");
     }

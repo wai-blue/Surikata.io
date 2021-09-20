@@ -110,8 +110,13 @@ class UserProfile extends \Surikata\Core\Web\Controller {
       $customerTokenAssignmentModel = new \ADIOS\Widgets\Customers\Models\CustomerTokenAssignment($this->adminPanel);
       
       $password = $_POST['password'] ?? "";
+
       try {
         $tokenData = $customerTokenAssignmentModel->validateToken($token, FALSE);
+
+        if (empty($tokenData["CUSTOMER"]['email'])) {
+          throw new \ADIOS\Widgets\Customers\Exceptions\UnknownAccount();
+        }
 
         $customerInfo = $customerModel->getByEmail($tokenData["CUSTOMER"]['email']);
         $customerModel->changeForgotPassword(

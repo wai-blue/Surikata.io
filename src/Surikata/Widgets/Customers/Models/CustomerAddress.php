@@ -153,7 +153,13 @@ class CustomerAddress extends \ADIOS\Core\Model {
     return $params;
   }
 
+  public function belongsToCustomer($idCustomer, $idAddress) {
+    return TRUE;
+  }
+
   public function saveAddress($idCustomer, $data) {
+    // REVIEW: nutne zvalidovat, ci $data['idAddress'] patri $idCustomer, vid belongsToCustomer()
+
     $addressData = ["id_customer" => $idCustomer];
 
     foreach ($this->columnNames() as $colName) {
@@ -181,6 +187,8 @@ class CustomerAddress extends \ADIOS\Core\Model {
   }
 
   public function removeAddress($idCustomer, $idAddress) {
+    // REVIEW: nutne zvalidovat, ci $data['idAddress'] patri $idCustomer
+
     $removeAddress = self::where('id', $idAddress)
       ->where('id_customer', $idCustomer)
     ;

@@ -106,9 +106,17 @@ class ShoppingCart extends \ADIOS\Core\Model {
 
   public function emptyCart($customerUID) {
     $idCart = $this->getOrCreateCartForCustomerUID($customerUID);
-    $cartItemModel = $this->adios->getModel("Widgets/Customers/Models/ShoppingCartItem");
+
+    $cartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($this->adios);
+    $cartItemModel = new \ADIOS\Widgets\Customers\Models\ShoppingCartItem($this->adios);
+
     $cartItemModel
       ->where('id_shopping_cart', '=', $idCart)
+      ->delete()
+    ;
+
+    $cartModel
+      ->where('id', '=', $idCart)
       ->delete()
     ;
   }
@@ -116,8 +124,8 @@ class ShoppingCart extends \ADIOS\Core\Model {
   public function addProductToCart($customerUID, $idProduct, $qty) {
     $idCart = $this->getOrCreateCartForCustomerUID($customerUID);
 
-    $productModel = $this->adios->getModel("Widgets/Products/Models/Product");
-    $cartItemModel = $this->adios->getModel("Widgets/Customers/Models/ShoppingCartItem");
+    $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adios);
+    $cartItemModel = new \ADIOS\Widgets\Customers\Models\ShoppingCartItem($this->adios);
 
     $product = $productModel->getPriceInfoForSingleProduct($idProduct);
 
@@ -132,13 +140,13 @@ class ShoppingCart extends \ADIOS\Core\Model {
         "id_product" => $idProduct,
         "quantity" => $qty,
         "unit_price" => $product['salePrice'],
-        "added_on" => "SQL:now()",
+        "added_on" => date("Y-m-d H:i:s"),
       ]);
     } else {
       $item->update([
         "quantity" => max(0, $item->get()->first()->quantity + $qty),
         "unit_price" => $product['salePrice'],
-        "updated_on" => "SQL:now()",
+        "updated_on" => date("Y-m-d H:i:s"),
       ]);
     }
 
@@ -148,8 +156,8 @@ class ShoppingCart extends \ADIOS\Core\Model {
   public function updateProductQty($customerUID, $idProduct, $qty) {
     $idCart = $this->getOrCreateCartForCustomerUID($customerUID);
 
-    $productModel = $this->adios->getModel("Widgets/Products/Models/Product");
-    $cartItemModel = $this->adios->getModel("Widgets/Customers/Models/ShoppingCartItem");
+    $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adios);
+    $cartItemModel = new \ADIOS\Widgets\Customers\Models\ShoppingCartItem($this->adios);
 
     $product = $productModel->getPriceInfoForSingleProduct($idProduct);
 
@@ -161,7 +169,7 @@ class ShoppingCart extends \ADIOS\Core\Model {
     $item->update([
       "quantity" => $qty,
       "unit_price" => $product['salePrice'],
-      "updated_on" => "SQL:now()",
+      "updated_on" => date("Y-m-d H:i:s"),
     ]);
 
     return $item->get()->first()->toArray();

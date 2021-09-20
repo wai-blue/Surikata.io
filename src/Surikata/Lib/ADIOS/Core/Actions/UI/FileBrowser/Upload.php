@@ -31,13 +31,13 @@ class Upload extends \ADIOS\Core\Action {
 
       $error = "";
       if (in_array($uploadedFileExtension, ['php', 'sh', 'exe', 'bat', 'htm', 'html'])) {
-        $error = l('Súbor tohto typu nie je povolený.');
+        $error = "This file type cannot be uploaded";
       } elseif (!empty($_FILES['upload']['error'])) {
-        $error = l('Nastala chyba pri nahrávaní súboru.').' '.l('Maximálna povolená veľkosť je:').' '.ini_get('upload_max_filesize');
+        $error = "File is too large. Maximum size of file to upload is ".round(ini_get('upload_max_filesize'), 2)." MB.";
       } elseif (empty($_FILES['upload']['tmp_name']) || 'none' == $_FILES['upload']['tmp_name']) {
-        $error = l('Nastala chyba pri nahrávaní súboru.');
+        $error = "Failed to upload the file for an unknown error. Try again in few minutes.";
       } elseif (file_exists($destinationFile)) {
-        $error = l("Súbor s týmto názvom už existuje. {$destinationFile}");
+        $error = "File with this name is already uploaded.";
       }
 
       if (empty($error)) {

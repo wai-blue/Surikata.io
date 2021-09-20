@@ -55,7 +55,7 @@ class CustomerTokenAssignment extends \ADIOS\Core\Model {
     
     $customerTokenQuery->where('token', $token);
     
-    return reset($this->fetchQueryAsArray($customerTokenQuery));
+    return reset($this->fetchRows($customerTokenQuery));
   }
 
   public function generateToken($idCustomer, $tokenSalt, $tokenType) {

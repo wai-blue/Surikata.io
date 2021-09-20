@@ -6,7 +6,8 @@ namespace Surikata\Plugins\WAI\Product {
 
     public function getFilterInfo() {
       if (self::$filterInfo === NULL) {
-        $idCategory = (int) $this->websiteRenderer->urlVariables["idProductCategory"] ?? 0;
+        $idCategory = (int) $this->websiteRenderer->urlVariables["idCategory"] ?? 0;
+        $idBrand = (int) $this->websiteRenderer->urlVariables["idBrand"] ?? 0;
         $brands = $this->websiteRenderer->urlVariables["brands"] ?? "";
         $languageIndex = (int) $this->websiteRenderer->domain["languageIndex"];
 
@@ -50,6 +51,28 @@ namespace Surikata\Plugins\WAI\Product {
           );
         }
 
+        $filteredBrands = [];
+
+        if (!empty($brands)) {
+          if (is_string($brands)) {
+            $filteredBrands = explode(" ", $brands);
+          } else if (is_array($brands)) {
+            $filteredBrands = $brands;
+          }
+        }
+
+        if ($idBrand > 0) {
+          $filteredBrands[] = $idBrand;
+          $filteredBrands = array_unique($filteredBrands);
+        }
+
+        foreach ($filteredBrands as $key => $value) {
+          $value = (int) $value;
+          if ($value <= 0) {
+            unset($filteredBrands[$key]);
+          }
+        }
+
         self::$filterInfo = [
           "allBrands" => $allBrands,
           "allCategories" => $allCategories,
@@ -59,15 +82,9 @@ namespace Surikata\Plugins\WAI\Product {
           "directSubCategories" => $directSubCategories,
           "allFeatures" => $allFeatures,
           "idCategory" => $idCategory,
+          "filteredBrands" => $filteredBrands,
         ];
 
-        if (!empty($brands)) {
-          if (is_string($brands)) {
-            self::$filterInfo['filteredBrands'] = explode(" ", $brands);
-          } else if (is_array($brands)) {
-            self::$filterInfo['filteredBrands'] = $brands;
-          }
-        }
 
       }
 
@@ -90,23 +107,23 @@ namespace ADIOS\Plugins\WAI\Product {
     public function getSettingsForWebsite() {
       return [
         "layout" => [
-          "title" => "Spôsob zobrazenia",
+          "title" => "Layout",
           "type" => "varchar",
           "enum_values" => [
-            "" => "Zvoľte spôsob zobrazenia filtra",
-            "sidebar" => "V bočnom paneli",
+            "" => "Choose layout",
+            "sidebar" => "Sidebar layout",
           ],
         ],
         "showProductCategories" => [
-          "title" => "Zobraziť kategórie",
+          "title" => "Show product categories",
           "type" => "boolean",
         ],
-        "zobrazit_filter" => [
-          "title" => "Zobraziť filter",
+        "showFeaturesFilter" => [
+          "title" => "Show features filter",
           "type" => "boolean",
         ],
-        "show_brands" => [
-          "title" => "Zobraziť výrobcov",
+        "showBrands" => [
+          "title" => "Show brands",
           "type" => "boolean",
         ],
       ];

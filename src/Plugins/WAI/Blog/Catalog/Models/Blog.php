@@ -125,7 +125,7 @@ class Blog extends \ADIOS\Core\Model {
       $query = $query->skip(0)->take($limit);
     }
 
-    return $this->fetchQueryAsArray($query);
+    return $this->fetchRows($query);
   }
 
   public function getById($id) {

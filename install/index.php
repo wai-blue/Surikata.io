@@ -696,8 +696,8 @@ if (count($partsToInstall) == 0) {
           $customerWishlistModel->insertRow(["id_customer" => $idCustomer, "id_product" => 4]);
 
           // watchdog
-          $customerWatchdogModel->insertRow(["id_customer" => $idCustomer, "id_product" => 5]);
-          $customerWatchdogModel->insertRow(["id_customer" => $idCustomer, "id_product" => 8]);
+          $customerWatchdogModel->insertRow(["id_customer" => $idCustomer, "id_product" => 1]);
+          $customerWatchdogModel->insertRow(["id_customer" => $idCustomer, "id_product" => 2]);
         }
 
         $cnt++;

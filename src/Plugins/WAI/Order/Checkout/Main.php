@@ -4,29 +4,41 @@ namespace Surikata\Plugins\WAI\Order {
   class Checkout extends \Surikata\Core\Web\Plugin {
     var $cartContents = NULL;
     var $shipping = NULL;
-
-    public function getTotalPriceWithDelivery($deliveryServicePrice) {
-      return
-        $this->cartContents["summary"]["priceTotal"] 
-          + 
-        $deliveryServicePrice['delivery_fee']
-          +
-        $deliveryServicePrice['payment_fee']
-      ;
-    }
+    var $selectedDestinationCountry = NULL;
 
     public function getPaymentMethods($selectedDeliveryService) {
       $paymentMethods = [];
       foreach ($this->shipping as $shipment) {
-        if ($shipment['delivery']['id'] == $selectedDeliveryService['id']) {
-          $paymentMethods[$shipment['payment']['id']] = $shipment['payment'];
-          $paymentMethods[$shipment['payment']['id']]['price'] = 
+        if (
+          $shipment['id_delivery_service'] == $selectedDeliveryService['id']
+          && $shipment['id_destination_country'] == $this->selectedDestinationCountry['id']
+          ) {
+          $paymentMethods[$shipment['id_payment_service']] = $shipment['payment'];
+          $paymentMethods[$shipment['id_payment_service']]['price'] = 
             $shipment['price']['payment_fee']
           ;
         }
       }
 
       return $paymentMethods;
+    }
+
+    public function getDeliveryServices() {
+      $deliveryServices = [];
+      foreach ($this->shipping as $index => $shipment) {
+        $this->shipping[$index]['price'] = reset($shipment['price']);
+        if (
+          !array_key_exists($shipment['id_delivery_service'], $deliveryServices)
+          && $shipment['id_destination_country'] == $this->selectedDestinationCountry['id']
+        ) {
+          $deliveryServices[$shipment['id_delivery_service']] = $shipment['delivery'];
+          $deliveryServices[$shipment['id_delivery_service']]['price'] = 
+            reset($shipment['price'])['delivery_fee']
+          ;
+        }
+      }
+
+      return $deliveryServices;
     }
 
     public function getTwigParams($pluginSettings) {
@@ -44,6 +56,12 @@ namespace Surikata\Plugins\WAI\Order {
         )
       ;
 
+      $destinationCountryModel = 
+        new \ADIOS\Widgets\Shipping\Models\DestinationCountry(
+          $this->adminPanel
+        )
+      ;
+
       $userProfileController->reloadUserProfile();
       $twigParams['userLogged'] = $this->websiteRenderer->userLogged;
 
@@ -51,8 +69,6 @@ namespace Surikata\Plugins\WAI\Order {
         (new \Surikata\Plugins\WAI\Customer\Cart($this->websiteRenderer))
         ->getCartContents()
       ;
-
-      $deliveryServices = [];
 
       if ($this->shipping === NULL) {
         $this->shipping = 
@@ -62,27 +78,24 @@ namespace Surikata\Plugins\WAI\Order {
         ;
       }
 
-      foreach ($this->shipping as $index => $shipment) {
-        $this->shipping[$index]['price'] = reset($shipment['price']);
-        if (!array_key_exists($shipment['delivery']['id'], $deliveryServices)) {
-          $deliveryServices[$shipment['delivery']['id']] = $shipment['delivery'];
-          $deliveryServices[$shipment['delivery']['id']]['price'] = 
-            reset($shipment['price'])['delivery_fee']
-          ;
-        }
-      }
+      $destinationCountries = [];
+      $destinationCountries = $destinationCountryModel->getAll();
 
       if (isset($this->websiteRenderer->urlVariables['orderData'])) {
         $orderData = $this->websiteRenderer->urlVariables['orderData'];
+        $this->selectedDestinationCountry = $destinationCountries[$orderData["id_destination_country"]];
 
-        // REVIEW: Upravit podla noveho stlpca Order.id_shipment
-        $selectedDeliveryService = $deliveryServices[$orderData["deliveryService"]];
+        $deliveryServices = $this->getDeliveryServices();
+        $selectedDeliveryService = 
+          $deliveryServices[$orderData["id_delivery_service"]] 
+          ?? reset($deliveryServices)
+        ;
+
         $paymentMethods = $this->getPaymentMethods($selectedDeliveryService);
-        $selectedPaymentMethod = $paymentMethods[$orderData["paymentMethod"]];
-
-        if ($selectedPaymentMethod == NULL) {
-          $selectedPaymentMethod = reset($paymentMethods);
-        }
+        $selectedPaymentMethod = 
+          $paymentMethods[$orderData["id_payment_service"]] 
+          ?? reset($paymentMethods)
+        ;
 
         if (!empty($orderData['voucher'])) {
           $voucherModel = new \ADIOS\Widgets\Customers\Models\Voucher($this->adminPanel);
@@ -102,6 +115,8 @@ namespace Surikata\Plugins\WAI\Order {
           }
         }
       } else {
+        $this->selectedDestinationCountry = reset($destinationCountries);
+        $deliveryServices = $this->getDeliveryServices();
         $selectedDeliveryService = reset($deliveryServices);
         $paymentMethods = $this->getPaymentMethods($selectedDeliveryService);
         $selectedPaymentMethod = reset($paymentMethods);
@@ -116,22 +131,27 @@ namespace Surikata\Plugins\WAI\Order {
         }
       }
 
+      $twigParams['deliveryPrice'] = (
+        floatval($currentShipment['price']['delivery_fee']) 
+          + 
+        floatval($currentShipment['price']['payment_fee'])
+      );
+
       $twigParams['totalPriceWithDelivery'] = 
-        $this->getTotalPriceWithDelivery(
-          $currentShipment['price']
-        )
+        floatval($this->cartContents["summary"]["priceTotal"]) 
+          + 
+        floatval($twigParams['deliveryPrice'])
       ;
 
-      $twigParams['deliveryPrice'] = (
-        $currentShipment['price']['delivery_fee'] 
-          + 
-        $currentShipment['price']['payment_fee']
-      );
       $twigParams['cartContents'] = $this->cartContents;
+
       $twigParams["deliveryServices"] = $deliveryServices;
       $twigParams['paymentMethods'] = $paymentMethods;
+      $twigParams["destinationCountries"] = $destinationCountries;
+
       $twigParams["selectedDeliveryService"] = $selectedDeliveryService;
       $twigParams["selectedPaymentMethod"] = $selectedPaymentMethod;
+      $twigParams["selectedDestinationCountry"] = $this->selectedDestinationCountry;
 
       return $twigParams;
     }

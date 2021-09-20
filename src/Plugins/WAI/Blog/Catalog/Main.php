@@ -5,7 +5,7 @@ namespace Surikata\Plugins\WAI\Blog {
   class Catalog extends \Surikata\Core\Web\Plugin {
     public static $blogCatalogInfo = NULL;
 
-    public function getBreadCrumbs($urlVariables = []) {
+    public function getBreadcrumbs($urlVariables = []) {
       $webPageUrl = $this->websiteRenderer->currentPage['url'];
 
       foreach ($urlVariables as $key => $url) {
@@ -14,11 +14,11 @@ namespace Surikata\Plugins\WAI\Blog {
             && ($key == "year" || $key == "month")
           ) { 
           $webPageUrl = $webPageUrl . "/" . $url;
-          $breadCrumbs[$webPageUrl] = $url;
+          $breadcrumbs[$webPageUrl] = $url;
         }
       }
 
-      return $breadCrumbs;
+      return $breadcrumbs;
     }
 
     public function getBlogCatalogInfo($year = NULL, $month = NULL, $filter = NULL, $limit = NULL) {

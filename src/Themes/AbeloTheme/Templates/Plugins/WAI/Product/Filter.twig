@@ -33,12 +33,12 @@
                 >
                   <span 
                     onclick="
-                      AbeloThemeProductCatalog.setFilter('idProductCategory', {{ category.id }});
+                      AbeloThemeProductCatalog.setFilter('idCategory', {{ category.id }});
                       AbeloThemeProductCatalog.update(
                         $('#productCatalogDefaultContainerDiv'),
                         '{{ rewriteBase }}{{ category.url }}'
                       );
-                      AbeloThemeBreadcrumb.update($('#breadCrumbDiv'));
+                      AbeloThemeBreadcrumb.update($('#breadcrumbDiv'));
                       $(this).addClass('sidebar-active');
                     "
                   >{{ category.name }}</span>
@@ -64,12 +64,12 @@
                             class="sidebar-active"
                           {% endif %}
                           onclick="
-                            AbeloThemeProductCatalog.setFilter('idProductCategory', {{ subCategory.id }});
+                            AbeloThemeProductCatalog.setFilter('idCategory', {{ subCategory.id }});
                             AbeloThemeProductCatalog.update(
                               $('#productCatalogDefaultContainerDiv'),
                               '{{ rewriteBase }}{{ subCategory.url }}'
                             );
-                            AbeloThemeBreadcrumb.update($('#breadCrumbDiv'));
+                            AbeloThemeBreadcrumb.update($('#breadcrumbDiv'));
                             $(this).addClass('sidebar-active');
                           ">{{ subCategory.TRANSLATIONS.name }}
                         </a>
@@ -87,12 +87,12 @@
                     class="sidebar-active"
                   {% endif  %}
                   onclick="
-                    AbeloThemeProductCatalog.setFilter('idProductCategory', {{ category.id }});
+                    AbeloThemeProductCatalog.setFilter('idCategory', {{ category.id }});
                     AbeloThemeProductCatalog.update(
                       $('#productCatalogDefaultContainerDiv'),
                       '{{ rewriteBase }}{{ category.url }}'
                     );
-                    AbeloThemeBreadcrumb.update($('#breadCrumbDiv'));
+                    AbeloThemeBreadcrumb.update($('#breadcrumbDiv'));
                     $(this).addClass('sidebar-active');
                   "
                 >{{ category.name }}</span>
@@ -107,7 +107,7 @@
 
   <!-- Sidebar single item -->
   <div class="sidebar-widget-group mt-20">
-    {% if zobrazit_filter %}
+    {% if showFeaturesFilter %}
       <h3 class="sidebar-title m-0"><span>{{ translate("Filter By", "Product") }}</span></h3>
       <!-- Sidebar single item -->
       <div class="sidebar-widget no-cba mt-20">
@@ -142,7 +142,7 @@
         </div>
       </div>   
     {% endif %}
-    {% if show_brands %}
+    {% if showBrands %}
       <div class="sidebar-widget mt-30">
         <h4 class="pro-sidebar-title">{{ translate("Brand", "Product") }}</h4>
         <div class="sidebar-widget-list">

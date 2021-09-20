@@ -581,7 +581,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     if ($withLookups) {
       $items = $this->getWithLookups(NULL, $keyBy, $processLookups);
     } else {
-      $items = $this->adios->db->get_all_rows_query("select * from `{$this->table}`", $keyBy);
+      $items = $this->pdoPrepareExecuteAndFetch("select * from :table", []);
     }
 
     if ($this->getExtendedData([]) !== NULL) {
@@ -615,7 +615,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   public function getWithLookups($callback = NULL, $keyBy = 'id', $processLookups = FALSE) {
     $query = $this->getQueryWithLookups($callback);
     return $this->processLookupsInQueryResult(
-      $this->fetchQueryAsArray($query, $keyBy, FALSE),
+      $this->fetchRows($query, $keyBy, FALSE),
       $processLookups
     );
   }
@@ -1237,8 +1237,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     return $processedRows;
   }
 
-  // fetchQueryAsArray
-  public function fetchQueryAsArray($eloquentQuery, $keyBy = 'id', $processLookups = TRUE) {
+  // fetchRows
+  public function fetchRows($eloquentQuery, $keyBy = 'id', $processLookups = TRUE) {
     $query = $this->pdo->prepare($eloquentQuery->toSql());
     $query->execute($eloquentQuery->getBindings());
 
@@ -1256,7 +1256,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         $tmpCrossTableModel->addLookupsToQuery($tmpCrossQuery);
         $tmpCrossQuery->whereIn($tmpForeignKey, array_keys($rows));
 
-        $tmpCrossTableValues = $this->fetchQueryAsArray($tmpCrossQuery, 'id', FALSE);
+        $tmpCrossTableValues = $this->fetchRows($tmpCrossQuery, 'id', FALSE);
 
         foreach ($tmpCrossTableValues as $tmpCrossTableValue) {
           $rows
@@ -1276,4 +1276,13 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
   }
 
+  // countRowsInQuery
+  public function countRowsInQuery($eloquentQuery) {
+    $query = $this->pdo->prepare($eloquentQuery->toSql());
+    $query->execute($eloquentQuery->getBindings());
+
+    $rows = $query->fetchAll(\PDO::FETCH_COLUMN, 0);
+
+    return count($rows);
+  }
 }

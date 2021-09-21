@@ -6060,7 +6060,7 @@ offcanvas-menu > ul > li .menu-expand {
   background-color: #1d1d1d;
 }
 
-.open-toggle, .open-toggle2 {
+.open-toggle, .open-toggle2, .company-toggle {
   display: none;
 }
 

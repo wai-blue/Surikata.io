@@ -397,7 +397,7 @@
                 {% if language == "sk" %}
                   Spolu<br/>bez DPH
                 {% elseif language == "en" %}
-                  Subtotal<br/>excl. template
+                  Subtotal<br/>excl. VAT
                 {% endif %}
               </td>
               {% if template == 1 %}
@@ -405,7 +405,7 @@
                   {% if language == "sk" %}
                     Spolu<br/>s DPH
                   {% elseif language == "en" %}
-                    Subtotal<br/>incl. template
+                    Subtotal<br/>incl. VAT
                   {% endif %}
                 </td>
               {% endif %}
@@ -453,7 +453,7 @@
                     {% if language == "sk" %}
                       Základ DPH
                     {% elseif language == "en" %}
-                      template
+                      VAT
                     {% endif %}
                     {{ sadzba.sadzba }} %
                   </td>
@@ -470,7 +470,7 @@
                   {% if language == "sk" %}
                     Spolu bez DPH
                   {% elseif language == "en" %}
-                    Total excl. template
+                    Total excl. VAT
                   {% endif %}
                 {% if template == 2 or template == 3 %} </b> {% endif %}
               </td>
@@ -524,7 +524,7 @@
                     {% if language == "sk" %}
                       Spolu s DPH
                     {% elseif language == "en" %}
-                      Total incl. template
+                      Total incl. VAT
                     {% endif %}
                   </b>
                 </td>

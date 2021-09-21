@@ -60,7 +60,6 @@ class Customer extends \ADIOS\Core\Model {
       "company_id" => [
         "type" => "varchar",
         "title" => "Company ID",
-        "pattern" => '\d{8}',
         "show_column" => TRUE,
       ],
 
@@ -74,7 +73,6 @@ class Customer extends \ADIOS\Core\Model {
       "company_vat_id" => [
         "type" => "varchar",
         "title" => "Company VAT ID",
-        "pattern" => '(SK|CZ)\d{10}',
         "show_column" => FALSE,
       ],
 
@@ -341,10 +339,10 @@ class Customer extends \ADIOS\Core\Model {
             "rows" => [
               // "code",
               "email",
-              // "given_name",
-              // "family_name",
-              // "company_name",
-              // "company_id",
+              "given_name",
+              "family_name",
+              "company_name",
+              "company_id",
             ],
           ],
         ],

@@ -29,6 +29,7 @@ class WebPage extends \ADIOS\Core\Model {
         "type" => "varchar",
         "title" => "Domain",
         "required" => TRUE,
+        "readonly" => TRUE,
       ],
 
       "name" => [
@@ -134,14 +135,18 @@ class WebPage extends \ADIOS\Core\Model {
 
   public function formParams($data, $params) {
     if ($params['id'] == -1) {
-      $params['default_values'] = ["domain" => $params['domain']];
-    }
-    $tmp_domena = "//".($this->adios->config['settings']['web']['profile']['rootUrl'] ?? "MojaDomena.sk");
+      $domains = $this->adios->config['widgets']['Website']['domains'];
+      $domainName = $params['domainName'];
 
-    // $params["titleRaw"] = "
-    //   <a href='{$tmp_domena}/{$data['url']}' target=_blank>".hsc($data['name'])."</a>
-    //   <i class='fas fa-external-link-alt ml-2'></i>
-    // ";
+      $domain = "";
+      foreach ($domains as $tmpDomain => $tmpDomainInfo) {
+        if ($tmpDomainInfo['name'] == $domainName) {
+          $domain = $tmpDomain;
+        }
+      }
+
+      $params['default_values'] = ["domain" => $domain];
+    }
 
     $params["template"] = [
       "columns" => [

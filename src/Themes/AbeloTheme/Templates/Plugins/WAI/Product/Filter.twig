@@ -1,5 +1,8 @@
 <script>
   $(document).ready(function() {
+    if ($( window ).width() > 991) {
+      $("#productListFilter").addClass("show");
+    }
     AbeloThemeProductCatalog.loadUrlParams('brands');
   })
 </script>
@@ -104,9 +107,16 @@
     </div>
   {% endif %}
 
+  <div class="filter-mobile">
+    <h3 class="sidebar-title">
+      <a data-toggle="collapse" href="#productListFilter" role="button">
+        {{ translate("Filter", "Product") }}
+      </a>
+    </h3>
+  </div>
 
   <!-- Sidebar single item -->
-  <div class="sidebar-widget-group mt-20">
+  <div class="sidebar-widget-group mt-20 collapse" id="productListFilter">
     {% if showFeaturesFilter %}
       <h3 class="sidebar-title m-0"><span>{{ translate("Filter By", "Product") }}</span></h3>
       <!-- Sidebar single item -->

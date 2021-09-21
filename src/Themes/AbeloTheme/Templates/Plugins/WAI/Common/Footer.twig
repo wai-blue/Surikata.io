@@ -61,7 +61,7 @@
     <div class="footer-top">
       <div class="container">
         <div class="row">
-          <div class="col">
+          <div class="col-6 col-md-2">
             <div class="single-wedge">
               <div class="footer-logo text-medium">
                 <a href="{{ rootUrl }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ settings.profile.logo }}" alt="Logo" /></a>
@@ -70,7 +70,7 @@
               </div>
             </div>
           </div>
-          <div class="col">
+          <div class="col-6 col-md-3">
             <div class="single-wedge">
               {% if contactTitle %}
                 <p class="text-medium mb-3">{{ contactTitle }}</p>
@@ -103,7 +103,7 @@
             </div>
           </div>
           {% if showMainMenu %}
-            <div class="col">
+            <div class="col-6 col-md-2">
               <div class="single-wedge">
                 <p class="text-medium mb-3">{{ mainMenuTitle }}</p>
                   <div class="footer-links">
@@ -117,7 +117,7 @@
             </div>
           {% endif %}
           {% if showSecondaryMenu %}
-            <div class="col">
+            <div class="col-6 col-md-1">
               <div class="single-wedge">
                 <p class="text-medium mb-3">{{ secondaryMenuTitle }}</p>
                 <div class="footer-links">
@@ -131,7 +131,7 @@
             </div>
           {% endif %}
           {% if showBlogs %}
-            <div class="col-lg-4 col-sm-12">
+            <div class="col-lg-4 col-md-4 col-sm-12">
               <div class="single-wedge">
                 <p class="text-medium mb-3">{{ blogsTitle }}</p>
                 <div class="footer-blog-slider">
@@ -174,7 +174,7 @@
       <div class="container">
         <div class="row text-center">
           {% if showPayments %}
-            <div class="col">
+            <div class="col-12 col-md-6">
               <div class="footer-paymet-warp">
                 <div class="payment-way">
                   <img src="{{ rootUrl }}/theme/assets/images/icons/payment.png" alt="payments" />
@@ -183,7 +183,7 @@
             </div>
           {% endif %}
           {% if showSocialMedia %}
-            <div class="col">
+            <div class="col-12 col-md-6">
               <div class="footer-social-icon" style="float:none">
                 <div class="social-icon">
                   <ul>
@@ -391,10 +391,10 @@
               <form method="post">
                 <div class="form-group">
                   <div class="row">
-                    <div class="col-6 btn-config">
+                    <div class="col-12 col-sm-6 btn-config">
                       <button type="button" class="btn btn-fill-out btn-block rounded-0 btn-confirm AbeloModalButton" title="">{{ translate("Confirm", "Common") }}</button>
                     </div>
-                    <div class="col-6">
+                    <div class="col-12 col-sm-6">
                       <button type="button" class="btn btn-fill-line btn-block rounded-0 btn-cancel AbeloModalButton" title=""
                               onclick="AbeloThemeCart.closeModals(['#onload-popup', '#quickViewModal']);">
                         {{ translate("Cancel", "Common") }}

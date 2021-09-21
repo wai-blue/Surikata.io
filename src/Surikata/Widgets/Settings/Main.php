@@ -14,6 +14,10 @@ class Settings extends \ADIOS\Core\Widget {
           //   "onclick" => "window_render('Settings/MerchantProfile');",
           // ],
           [
+            "title" => "Miscellaneous",
+            "onclick" => "window_render('Settings/Miscellaneous');",
+          ],
+          [
             "title" => "Delivery defaults",
             "onclick" => "window_render('Settings/DeliveryDefaults');",
           ],

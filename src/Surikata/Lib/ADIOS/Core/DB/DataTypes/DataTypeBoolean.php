@@ -53,7 +53,7 @@ class DataTypeBoolean extends DataType {
   /**
    * @internal
    */
-  private function get_html_or_csv($value, $params = []) {
+  public function get_html($value, $params = []) {
     if ((int) $value !== 0) {
       $html = "<i class='fas fa-check-circle' style='color:#4caf50'></i>";
     } else {
@@ -63,11 +63,11 @@ class DataTypeBoolean extends DataType {
     return "<div style='text-align:center'>{$html}</div>";
   }
 
-  public function get_html($value, $params = []) {
-    return $this->get_html_or_csv($value, $params);
-  }
-
   public function get_csv($value, $params = []) {
-    return $this->get_html_or_csv($value, $params);
+    if ((int) $value !== 0) {
+      return "x";
+    } else {
+      return "";
+    }
   }
 }

@@ -125,8 +125,8 @@ class Emails extends \ADIOS\Core\Action {
                   {% notes %}, {% state %}, {% phoneNumber %}, {% email %}, </br>
                   {% delGivenName %}, {% delFamilyName %}, {% delCompanyName %}, {% delStreet1 %}, {% delStreet2 %}, </br>
                   {% delFloor %}, {% delCity %}, {% delZip %}, {% delRegion %}, {% delCountry %}, </br> 
-                  {% invGivenName %}, {% invFamilyName %}, {% invCompanyName %}, {% invStreet1 %}, {% invStreet2 %}, </br> 
-                  {% invFloor %}, {% invCity %}, {% invZip %}, {% invRegion %}, {% invCountry %}, {% confirmationTime %}, </br> 
+                  {% invGivenName %}, {% invFamilyName %}, {% invCompanyName %}, {% companyId %}, {% companyTaxId %}, {% companyVatId %}, </br>
+                  {% invStreet1 %}, {% invStreet2 %}, {% invFloor %}, {% invCity %}, {% invZip %}, {% invRegion %}, {% invCountry %}, {% confirmationTime %}, </br> 
                   {% deliveryService %}, {% requiredDeliveryTime %}, {% deliveryPrice %}, {% dodacieInfo %} 
                 ",
               ],

@@ -29,4 +29,8 @@ class Input {
   public function formatValueToHtml() {
     return $this->value;
   }
+
+  public function formatValueToCsv() {
+    return $this->value;
+  }
 }

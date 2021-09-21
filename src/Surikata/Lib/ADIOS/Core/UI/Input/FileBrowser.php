@@ -148,7 +148,7 @@ class FileBrowser extends \ADIOS\Core\Input {
                         .append(btnHtml)
                       ;
                     } else {
-                      alert(res.error.message);
+                      alert(res.error);
                     };
                   });
                 }

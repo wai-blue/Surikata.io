@@ -574,3 +574,8 @@ ul .dots::before {
 .page-404 h2 a:hover {
   color: #222;
 }
+
+.error-input {
+  border: 1px solid #ec1b1b !important;
+
+}

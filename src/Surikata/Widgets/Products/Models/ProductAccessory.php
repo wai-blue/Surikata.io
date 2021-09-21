@@ -44,6 +44,11 @@ class ProductAccessory extends \ADIOS\Core\Model {
     $params['show_controls'] = FALSE;
     $params['show_filter'] = FALSE;
     $params['title'] = " ";
+    $params['header'] = "
+      Product accessories are separate products with their identification number but
+      are closely related to this product. Accessories can be offered in the product's
+      detail page as separate links to another products.
+    ";
 
     return $params;
   }

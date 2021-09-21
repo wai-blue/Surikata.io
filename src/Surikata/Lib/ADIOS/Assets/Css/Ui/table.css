@@ -150,13 +150,8 @@
   }
 
   .adios.ui.Table.Container .Content.empty {
-    background: repeating-linear-gradient(
-      135deg,
-      #FCFCFC,
-      #FCFCFC 150px,
-      #F9F9F9 150px,
-      #F9F9F9 300px
-    )
+    background: repeating-linear-gradient(135deg, #FCFCFC, #FCFCFC 150px, #F9F9F9 150px, #F9F9F9 300px);
+    min-height: 4em;
   }
 
     .adios.ui.Table.Container .Content .Row:nth-child(odd) {
@@ -266,6 +261,10 @@
     display: none;
   }
 
+  .adios.ui.Table.Container .Footer .btn.pages {
+    display: none;
+  }
+
   .adios.ui.Table.Container .Footer .settings {
     display: none;
   }
@@ -273,6 +272,10 @@
 
 /* Medium devices (tablets, less than 992px) */
 @media (max-width: 991.98px) {
+  .adios.ui.Table.Container .Row .Column {
+    padding: 10px;
+  }
+
   .adios.ui.Table.Container .Column:nth-child(n+5) {
     display: none;
   }

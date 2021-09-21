@@ -4,11 +4,11 @@ namespace ADIOS\Actions\Website;
 
 class Emails extends \ADIOS\Core\Action {
   public function render() {
-    $settings = $this->adios->config["settings"]["emails"][$this->params['domain']];
+    $settings = $this->adios->config["settings"]["web"][$this->params['domainName']]["emails"];
 
     return $this->adios->renderAction("UI/SettingsPanel", [
-      "settings_group" => "emails/{$this->params['domain']}",
-      "title" => "Website - {$this->params['domain']} - Emails",
+      "settings_group" => "web/{$this->params['domainName']}/emails",
+      "title" => "{$this->params['domainName']} » Emails",
       "template" => [
         "tabs" => [
           [

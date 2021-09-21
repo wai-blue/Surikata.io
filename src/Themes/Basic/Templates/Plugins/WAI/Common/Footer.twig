@@ -2,40 +2,40 @@
 <div class="footer_agileinfo_w3">
   <div class="footer_inner_info_w3ls_agileits row">
     <div class="col-md-3 footer-left">
-      <a href="{{ rootUrl }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ settings.profile.logo }}" alt="surikata.io" /></a>
+      <a href="{{ rootUrl }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ settings.companyInfo.logo }}" alt="surikata.io" /></a>
       <h2>
-          <p class="mt-3">{{ settings.profile.storeName }}</p>
-          <p class="text-infor">{{ settings.profile.slogan }}</p>
+          <p class="mt-3">{{ settings.companyInfo.storeName }}</p>
+          <p class="text-infor">{{ settings.companyInfo.slogan }}</p>
       </h2>
       <p>Lorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora.</p>
       <ul class="social-nav model-3d-0 footer-social social two">
-        {% if settings.profile.urlFacebook != "" %}
+        {% if settings.companyInfo.urlFacebook != "" %}
           <li>
-            <a  href="{{ settings.profile.urlFacebook }}" class="facebook">
+            <a  href="{{ settings.companyInfo.urlFacebook }}" class="facebook">
               <div class="front" style="background: var(--theme-main-color);"><i class="fa fa-facebook" aria-hidden="true"></i></div>
               <div class="back"><i class="fa fa-facebook" aria-hidden="true"></i></div>
             </a>
           </li>
         {% endif %}
-        {% if settings.profile.urlTwitter != "" %}
+        {% if settings.companyInfo.urlTwitter != "" %}
           <li>
-            <a href="{{ settings.profile.urlTwitter }}" class="twitter">
+            <a href="{{ settings.companyInfo.urlTwitter }}" class="twitter">
               <div class="front" style="background: var(--theme-second-color);"><i class="fa fa-twitter" aria-hidden="true"></i></div>
               <div class="back"><i class="fa fa-twitter" aria-hidden="true"></i></div>
             </a>
           </li>
         {% endif %}
-        {% if settings.profile.urlYouTube != "" %}
+        {% if settings.companyInfo.urlYouTube != "" %}
           <li>
-            <a href="{{ settings.profile.urlYouTube }}" class="pinterest">
+            <a href="{{ settings.companyInfo.urlYouTube }}" class="pinterest">
               <div class="front" style="background: var(--theme-lightgrey-color);"><i class="fa fa-youtube" style="color: var(--theme-second-color);" aria-hidden="true"></i></div>
               <div class="back"><i class="fa fa-youtube" aria-hidden="true"></i></div>
             </a>
           </li>
         {% endif %}
-        {% if settings.profile.urlInstagram != "" %}
+        {% if settings.companyInfo.urlInstagram != "" %}
           <li>
-            <a href="{{ settings.profile.urlInstagram }}" class="instagram">
+            <a href="{{ settings.companyInfo.urlInstagram }}" class="instagram">
               <div class="front" style="background: var(--theme-third-color);"><i class="fa fa-instagram" aria-hidden="true"></i></div>
               <div class="back"><i class="fa fa-instagram" aria-hidden="true"></i></div>
             </a>
@@ -66,7 +66,7 @@
               <div class="address-right">
                 {% if showContactPhoneNumber %}
                   <h6>Phone Number</h6>
-                  <p><a href="">{{ settings.profile.contactPhoneNumber }}</a></p>
+                  <p><a href="">{{ settings.companyInfo.contactPhoneNumber }}</a></p>
                 {% endif %}
               </div>
               <div class="clearfix"> </div>
@@ -78,7 +78,7 @@
               <div class="address-right">
                 {% if showContactEmail %}
                   <h6>Email Address</h6>
-                  <p><a href="mailto:{{ settings.profile.contactEmail }}">{{ settings.profile.contactEmail }}</a></p>
+                  <p><a href="mailto:{{ settings.companyInfo.contactEmail }}">{{ settings.companyInfo.contactEmail }}</a></p>
                 {% endif %}
               </div>
               <div class="clearfix"> </div>
@@ -91,8 +91,8 @@
                 {% if showContactAddress %}
                   <h6>Location</h6>
                   <p>
-                    {{ settings.profile.sidlo_ulica_1 }} {{ settings.profile.sidlo_ulica_2 }}
-                    {{ settings.profile.sidlo_psc }} {{ settings.profile.sidlo_mesto }}
+                    {{ settings.companyInfo.sidlo_ulica_1 }} {{ settings.companyInfo.sidlo_ulica_2 }}
+                    {{ settings.companyInfo.sidlo_psc }} {{ settings.companyInfo.sidlo_mesto }}
                   </p>
                 {% endif %}
               </div>

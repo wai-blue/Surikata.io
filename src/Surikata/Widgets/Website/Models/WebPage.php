@@ -116,16 +116,7 @@ class WebPage extends \ADIOS\Core\Model {
 
   public function tableParams($params) {
     $params["title"] = "{$params['domainName']} &raquo; Pages";
-
-    $domains = $this->adios->config['widgets']['Website']['domains'];
-    $domain = "";
-    foreach ($domains as $key => $domainInfo) {
-      if ($domainInfo['name'] == $params['domainName']) {
-        $domain = $key;
-      }
-    }
-
-    $params['where'] = "`domain` = '".$this->adios->db->escape($domain)."'";
+    $params['where'] = "`domain` = '".$this->adios->db->escape($params['domainName'])."'";
 
     return $this->adios->dispatchEventToPlugins("onModelAfterTableParams", [
       "model" => $this,

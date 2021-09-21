@@ -726,9 +726,9 @@ class Customer extends \ADIOS\Core\Model {
   public function sendNotificationForCreateAccount($accountInfo) {
     $domain = $this->adios->websiteRenderer->currentPage['domain'];
 
-    $subject = $this->adios->config["settings"]["emails"][$domain]['after_registration_SUBJECT'];
-    $body = $this->adios->config["settings"]["emails"][$domain]['after_registration_BODY'];
-    $signature = $this->adios->config["settings"]["emails"][$domain]['signature'];
+    $subject = $this->adios->config["settings"]["web"][$domain]["emails"]['after_registration_SUBJECT'];
+    $body = $this->adios->config["settings"]["web"][$domain]["emails"]['after_registration_BODY'];
+    $signature = $this->adios->config["settings"]["web"][$domain]["emails"]['signature'];
 
     $accountValidationURL = (new \Surikata\Plugins\WAI\Customer\ValidationConfirmation($this->adios->websiteRenderer))
       ->getWebPageUrl(["email" => $accountInfo['email']])
@@ -759,9 +759,9 @@ class Customer extends \ADIOS\Core\Model {
   public function sendNotificationForForgotPassword($accountInfo) {
     $domain = $this->adios->websiteRenderer->currentPage['domain'];
 
-    $subject = $this->adios->config["settings"]["emails"][$domain]['forgot_password_SUBJECT'];
-    $body = $this->adios->config["settings"]["emails"][$domain]['forgot_password_BODY'];
-    $signature = $this->adios->config["settings"]["emails"][$domain]['signature'];
+    $subject = $this->adios->config["settings"]["web"][$domain]["emails"]['forgot_password_SUBJECT'];
+    $body = $this->adios->config["settings"]["web"][$domain]["emails"]['forgot_password_BODY'];
+    $signature = $this->adios->config["settings"]["web"][$domain]["emails"]['signature'];
 
     $passwordRecoveryUrl = (new \Surikata\Plugins\WAI\Customer\ForgotPassword($this->adios->websiteRenderer))
       ->getWebPageUrl(["email" => $accountInfo['email']])

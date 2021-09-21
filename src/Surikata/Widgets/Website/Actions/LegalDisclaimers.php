@@ -4,11 +4,11 @@ namespace ADIOS\Actions\Website;
 
 class LegalDisclaimers extends \ADIOS\Core\Action {
   public function render() {
-    $settings = $this->adios->config["settings"]["web"][$this->params['domain']]["legalDisclaimers"];
+    $settings = $this->adios->config["settings"]["web"][$this->params['domainName']]["legalDisclaimers"];
 
     return $this->adios->renderAction("UI/SettingsPanel", [
-      "settings_group" => "web/{$this->params['domain']}/legalDisclaimers",
-      "title" => "Website - {$this->params['domain']} - Legal disclaimers",
+      "settings_group" => "web/{$this->params['domainName']}/legalDisclaimers",
+      "title" => "{$this->params['domainName']} » Legal disclaimers",
       "template" => [
         "tabs" => [
           [

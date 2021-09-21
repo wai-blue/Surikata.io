@@ -302,51 +302,53 @@
 
   // nastavenia webu
 
-  $adminPanel->saveConfig([
-    "settings" => [
-      "web" => [
-        "EN" => [
-          "profile" => [
-            "slogan" => "My online store",
-            "contactPhoneNumber" => "+421 111 222 333",
-            "contactEmail" => "info@{$_SERVER['HTTP_HOST']}",
-            "logo" => "surikata.png",
-            "urlFacebook" => "www.google.com",
-            "urlTwitter" => "www.google.com",
-            "urlYouTube" => "www.google.com",
-            "urlInstagram" => "www.google.com"
-          ],
-          "design" => array_merge(
-            $themeObject->getDefaultColorsAndStyles(),
-            [
-              "theme" => $themeName,
-              "headerMenuID" => 1,
-              "footerMenuID" => 2,
-            ]
-          ),
-          "legalDisclaimers" => [
-            "generalTerms" => "Bienvenue. VOP!",
-            "privacyPolicy" => "Bienvenue. OOU!",
-            "returnPolicy" => "Bienvenue. RP!",
+  foreach ($configEnv["domains"] as $domain => $domainInfo) {
+    $domainName = $domainInfo['name'];
+
+    $adminPanel->saveConfig([
+      "settings" => [
+        "web" => [
+          $domainName => [
+            "companyInfo" => [
+              "slogan" => "Môj nový eshop: {$domainName}",
+              "contactPhoneNumber" => "+421 111 222 333",
+              "contactEmail" => "info@{$_SERVER['HTTP_HOST']}",
+              "logo" => "your-logo.png",
+              "urlFacebook" => "https://surikata.io",
+              "urlTwitter" => "https://surikata.io",
+              "urlYouTube" => "https://surikata.io",
+              "urlInstagram" => "https://surikata.io"
+            ],
+            "design" => array_merge(
+              $themeObject->getDefaultColorsAndStyles(),
+              [
+                "theme" => $themeName,
+                "headerMenuID" => 1,
+                "footerMenuID" => 2,
+              ]
+            ),
+            "legalDisclaimers" => [
+              "generalTerms" => "Bienvenue. VOP!",
+              "privacyPolicy" => "Bienvenue. OOU!",
+              "returnPolicy" => "Bienvenue. RP!",
+            ],
+            "emails" => [
+              "signature" => "<p>{$domainName} - <a href='http://{$domainName}' target='_blank'>{$domainName}</a></p>",
+              "after_order_confirmation_SUBJECT" => "{$domainName} - Your Order nr. {% number %}",
+              "after_order_confirmation_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/orderBody.html"),
+              "after_registration_SUBJECT" => "{$domainName} - Verify Your Email Address",
+              "after_registration_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/registrationBody.html"),
+              "forgot_password_SUBJECT" => "{$domainName} - Password recovery",
+              "forgot_password_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/forgotPasswordBody.html")
+            ],
           ],
         ],
-      ],
-      "emails" => [
-        "EN" => [
-          "signature" => "<p>Surikata - <a href='www.wai.sk' target='_blank'>WAI.sk</a></p>",
-          "after_order_confirmation_SUBJECT" => "Surikata - order n. {% number %}",
-          "after_order_confirmation_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/orderBody.html"),
-          "after_registration_SUBJECT" => "Surikata - Verify Email Address",
-          "after_registration_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/registrationBody.html"),
-          "forgot_password_SUBJECT" => "Surikata - Password recovery",
-          "forgot_password_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/forgotPasswordBody.html")
-        ]
-      ],
-      "plugins" => [
-        "WAI/Export/MoneyS3" => [
-          "outputFileProducts" => "tmp/money_s3_products.xml",
-          "outputFileOrders" => "tmp/money_s3_orders.xml",
+        "plugins" => [
+          "WAI/Export/MoneyS3" => [
+            "outputFileProducts" => "tmp/money_s3_products.xml",
+            "outputFileOrders" => "tmp/money_s3_orders.xml",
+          ],
         ],
-      ],
-    ]
-  ]);
+      ]
+    ]);
+  }

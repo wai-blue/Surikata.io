@@ -509,6 +509,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
           "searchGroup" => $urlBase,
         ])
       ],
+      '/^'.$urlBase.'\/Export\/CSV$/' => [
+        "action" => "UI/Table/Export/CSV",
+        "params" => array_merge($urlParams, [
+          "model" => $this->name,
+        ])
+      ],
     ]);
 
     return $routing;
@@ -721,8 +727,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     ])["data"]["html"];
   }
 
-  public function tableCellCSVExportFormatter($data) {
-    return $this->adios->dispatchEventToPlugins("onTableCellCSVExportFormatter", [
+  public function tableCellCSVFormatter($data) {
+    return $this->adios->dispatchEventToPlugins("onTableCellCSVFormatter", [
       "model" => $this,
       "data" => $data,
     ])["data"]["csv"];

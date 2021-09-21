@@ -43,26 +43,11 @@ class DataTypePassword extends DataType
       return $sql;
     }
 
-    public function get_html_or_csv($value, $params = [])
-    {
-        $html = '';
-
-        $value = $params['export_csv'] ? $value : htmlspecialchars($value);
-        $html = mb_substr($value, 0, ($params['col_definition']['wa_list_char_length'] ? $params['col_definition']['wa_list_char_length'] : 80), 'utf-8');
-        if (strlen($html) < strlen($value)) {
-            $html .= '...';
-        }
-
-        return $html;
+    public function get_html($value, $params = []) {
+      return "...".substr(hsc($value), 8, 8)."...";
     }
 
-    public function get_html($value, $params = [])
-    {
-        return $this->get_html_or_csv($value, $params);
-    }
-
-    public function get_csv($value, $params = [])
-    {
-        return '';
+    public function get_csv($value, $params = []) {
+      return '';
     }
 }

@@ -56,7 +56,11 @@ class DataTypeDatetime extends DataType {
       $dateStr = date($dateFormat, $ts);
       $timeStr = date($timeFormat, $ts);
 
-      return "{$dateStr} <span style='color:var(--cl-gray-4)'>{$timeStr}</span>";
+      if ($ts <= 0) {
+        return "";
+      } else {
+        return "{$dateStr} <span style='color:var(--cl-gray-4)'>{$timeStr}</span>";
+      }
     }
 
     public function get_html($value, $params = []) {

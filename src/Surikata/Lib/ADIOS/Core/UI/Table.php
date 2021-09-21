@@ -54,26 +54,16 @@ class Table extends \ADIOS\Core\UI\View {
         'show_controls' => true,
         'show_add_button' => true,
         'show_search_button' => true,
-        'sortable' => false,
-        'custom_select' => '',
-        'custom_group' => '',
+        'show_export_csv_button' => true,
         'refresh_action' => 'UI/Table',
         'items_per_page' => 25,
-        'width' => '',
         'allow_order_modification' => true,
         'form_type' => 'window',
         'info_no_data' => "No items found.",
         'clear_filter' => false,
         'add_button_params' => [],
-        'title_params' => [],
         'custom_filters' => [],
         'columns_order' => [],
-        'show_fulltext_search' => false,
-        'fulltext_search_columns' => [],
-        'simple_insert' => false,
-        'edit_form_default_values' => [],
-        'default_filter' => [],
-        'force_default_filter' => false,
         'display_columns' => [],
       ], $params);
 
@@ -175,8 +165,6 @@ class Table extends \ADIOS\Core\UI\View {
 
         $this->params['show_settings'] = false;
         $this->params['show_add_button'] = false;
-        $this->params['sortable'] = false;
-        $this->params['show_fulltext_search'] = false;
       }
 
       // where a having
@@ -192,10 +180,6 @@ class Table extends \ADIOS\Core\UI\View {
       }
 
       $order_by = $this->params['order_by'];
-
-      if ($this->params['debug']) {
-        _d(true);
-      }
 
       if ($this->params['show_paging']) {
         // ak sa zobrazuje sumarny/statisticky riadok,
@@ -371,7 +355,47 @@ class Table extends \ADIOS\Core\UI\View {
 
 
 
+    public function getCellHtml($columnName, $columnDefinition, $rowValues) {
+      if (!empty($col_def['input']) && is_string($col_def['input'])) {
+        $inputClassName = "\\ADIOS\\".str_replace("/", "\\", $col_def['input']);
+        $tmpInput = new $inputClassName($this->adios, "", ["value" => $rowValues[$columnName]]);
+        $cellHtml = $tmpInput->formatValueToHtml();
+      } else if ($this->adios->db->is_registered_column_type($columnDefinition['type'])) {
+        $cellHtml = $this->adios->db->registered_columns[$columnDefinition['type']]->get_html(
+          $rowValues[$columnName],
+          [
+            'col_name' => $columnName,
+            'col_definition' => $columnDefinition,
+            'row' => $rowValues,
+          ]
+        );
+      } else {
+        $cellHtml = $rowValues[$columnName];
+      }
 
+      return $cellHtml;
+    }
+
+    public function getCellCsv($columnName, $columnDefinition, $rowValues) {
+      if (!empty($col_def['input']) && is_string($col_def['input'])) {
+        $inputClassName = "\\ADIOS\\".str_replace("/", "\\", $col_def['input']);
+        $tmpInput = new $inputClassName($this->adios, "", ["value" => $rowValues[$columnName]]);
+        $cellCsv = $tmpInput->formatValueToCsv();
+      } else if ($this->adios->db->is_registered_column_type($columnDefinition['type'])) {
+        $cellCsv = $this->adios->db->registered_columns[$columnDefinition['type']]->get_csv(
+          $rowValues[$columnName],
+          [
+            'col_name' => $columnName,
+            'col_definition' => $columnDefinition,
+            'row' => $rowValues,
+          ]
+        );
+      } else {
+        $cellCsv = $rowValues[$columnName];
+      }
+
+      return $cellCsv;
+    }
 
 
 
@@ -395,28 +419,46 @@ class Table extends \ADIOS\Core\UI\View {
         if (!$this->params['refresh']) {
           if ($this->params['show_title']) {
 
-            if (empty($this->model->searchAction)) {
-              $searchAction = $this->model->getFullUrlBase($params)."/Search";
-            } else {
-              $searchAction = $this->model->searchAction;
+            $moreActionsButtonItems = [];
+
+            if ($this->params['show_search_button']) {
+              $searchAction = $this->model->searchAction ?? $this->model->getFullUrlBase($params)."/Search";
+
+              $moreActionsButtonItems[] = [
+                "fa_icon" => "fas fa-search",
+                "text" => $this->translate("Search"),
+                "onclick" => "window_render('{$searchAction}');",
+              ];
+            }
+
+            if ($this->params['show_export_csv_button']) {
+              $exportCsvAction = $this->model->exportCsvAction ?? $this->model->getFullUrlBase($params)."/Export/CSV";
+
+              $moreActionsButtonItems[] = [
+                "fa_icon" => "fas fa-file-export",
+                "text" => $this->translate("Export to CSV"),
+                "onclick" => "window.open('{$this->adios->config['url']}/{$exportCsvAction}');",
+              ];
+            }
+
+            $titleButtons = [];
+
+            if ($this->params['show_add_button']) {
+              $titleButtons[] = $this->adios->ui->Button($this->params['add_button_params']);
+            }
+
+            if (_count($moreActionsButtonItems)) {
+              $titleButtons[] = $this->adios->ui->Button([
+                "fa_icon" => "fas fa-ellipsis-v",
+                "title" => "",
+                "onclick" => "window_render('{$searchAction}');",
+                "dropdown" => $moreActionsButtonItems,
+                "class" => "btn-light",
+              ]);
             }
 
             $html .= $this->adios->ui->Title([
-              'left' => [
-                (
-                  $this->params['show_add_button']
-                  ? $this->adios->ui->Button($this->params['add_button_params'])
-                  : ""
-                ),
-                (
-                  $this->params['show_search_button']
-                  ? $this->adios->ui->Button([
-                    "type" => "search",
-                    "onclick" => "window_render('{$searchAction}');",
-                  ])
-                  : ""
-                ),
-              ],
+              'left' => $titleButtons,
               'center' => $this->params['title'],
             ])->render();
           }
@@ -680,22 +722,13 @@ class Table extends \ADIOS\Core\UI\View {
               ";
 
               foreach ($this->columns as $col_name => $col_def) {
-                if (!empty($col_def['input']) && is_string($col_def['input'])) {
-                  $inputClassName = "\\ADIOS\\".str_replace("/", "\\", $col_def['input']);
-                  $tmpInput = new $inputClassName($this->adios, "", ["value" => $val[$col_name]]);
-                  $cellHtml = $tmpInput->formatValueToHtml();
-                } else if ($this->adios->db->is_registered_column_type($col_def['type'])) {
-                  $cellHtml = $this->adios->db->registered_columns[$col_def['type']]->get_html(
-                    $val[$col_name],
-                    [
-                      'col_name' => $col_name,
-                      'col_definition' => $col_def,
-                      'row' => $val,
-                    ]
-                  );
-                } else {
-                  $cellHtml = $val[$col_name];
-                }
+                $cellHtml = $this->getCellHtml($col_name, $col_def, $val);
+                $cellHtml = $this->model->tableCellHTMLFormatter([
+                  'table' => $this,
+                  'column' => $col_name,
+                  'row' => $val,
+                  'html' => $cellHtml,
+                ]);
 
                 if ((in_array($col_def['type'], ['int', 'float']) && !is_array($col_def['enum_values']))) {
                   $align_class = 'align_right';
@@ -710,13 +743,6 @@ class Table extends \ADIOS\Core\UI\View {
                   'value' => $val[$col_name],
                 ]);
 
-                $cellHtml = $this->model->tableCellHTMLFormatter([
-                  'table' => $this,
-                  'column' => $col_name,
-                  'row' => $val,
-                  'html' => $cellHtml,
-                ]);
-                
                 $html .= "
                   <div class='Column {$col_def['css_class']} {$align_class}' style='{$cellStyle}'>
                     {$cellHtml}

@@ -43,7 +43,21 @@ class ShoppingCartItem extends \ADIOS\Core\Model {
       "unit_price" => [
         "type" => "float",
         "title" => $this->translate("Unit price"),
+        "unit" => $this->adios->locale->currencySymbol(),
         "required" => TRUE,
+        "show_column" => TRUE,
+      ],
+
+      "added_on" => [
+        "type" => "datetime",
+        "title" => $this->translate("Added on"),
+        "required" => TRUE,
+        "show_column" => TRUE,
+      ],
+
+      "updated_on" => [
+        "type" => "datetime",
+        "title" => $this->translate("Updated on"),
         "show_column" => TRUE,
       ],
 

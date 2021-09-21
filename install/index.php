@@ -774,9 +774,9 @@ if (count($partsToInstall) == 0) {
             "phone_number"                 => $address['phone_number'],
             "email"                        => $address['email'],
 
-            "id_destination_country"       => $destinationCountriesIds[rand(0, count($destinationCountriesIds) - 1)],
-            "id_delivery_service"          => $deliveryServicesIds[rand(0, count($deliveryServicesIds) - 1)],
-            "id_payment_service"           => $paymentServicesIds[rand(0, count($paymentServicesIds) - 1)],
+            "id_destination_country"       => $destinationCountries[rand(0, count($destinationCountriesIds) - 1)]['id'],
+            "id_delivery_service"          => $deliveryServices[rand(0, count($deliveryServicesIds) - 1)]['id'],
+            "id_payment_service"           => $paymentServices[rand(0, count($paymentServicesIds) - 1)]['id'],
 
             "domain"                       => "EN",
             "general_terms_and_conditions" => 1,

@@ -213,6 +213,38 @@ window.onpopstate = function (e) {
     );
   }
 
+  AbeloThemeCart.prototype.checkCompanyFields = function(element) {
+    element = $(element);
+    element.removeClass('required-empty');
+    let isnum;
+    switch (element.attr("name")) {
+      case "inv_company_name":
+        if (element.val().length === 0) {
+          element.addClass('required-empty');
+        }
+        break;
+      case "company_id":
+        isnum = /^\d+$/.test(element.val());
+        if (element.val().length !== 8 || !isnum) {
+          element.addClass('required-empty');
+        }
+        break;
+      case "company_tax_id":
+        isnum = /^\d+$/.test(element.val());
+        if (element.val().length > 0) {
+          if (element.val().length !== 10 || !isnum) {
+            element.addClass('required-empty');
+          }
+        }
+        break;
+      case "company_vat_id":
+        if (element.val().length > 0 && element.val().length !== 12) {
+          element.addClass('required-empty');
+        }
+        break;
+    }
+  }
+
   AbeloThemeCart.prototype.closeModals = function(modals) {
     modals.forEach((element) => {
       $(element).modal('hide');

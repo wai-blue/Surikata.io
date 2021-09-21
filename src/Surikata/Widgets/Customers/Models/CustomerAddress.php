@@ -2,6 +2,8 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
+use ADIOS\Widgets\Customers\Exceptions\UnknownAccount;
+
 class CustomerAddress extends \ADIOS\Core\Model {
   var $sqlName = "customers_addresses";
   var $urlBase = "Customers/{{ id_customer }}/Addresses";
@@ -153,7 +155,16 @@ class CustomerAddress extends \ADIOS\Core\Model {
     return $params;
   }
 
+  public function belongsToCustomer($idCustomer, $idAddress) {
+
+    $address = $this->getById($idAddress);
+    return ((int)$address["id_customer"] === $idCustomer);
+
+  }
+
   public function saveAddress($idCustomer, $data) {
+    // REVIEW: nutne zvalidovat, ci $data['idAddress'] patri $idCustomer, vid belongsToCustomer()
+
     $addressData = ["id_customer" => $idCustomer];
 
     foreach ($this->columnNames() as $colName) {
@@ -172,6 +183,11 @@ class CustomerAddress extends \ADIOS\Core\Model {
       $item = $this->firstOrCreate($addressData);
     }
     else {
+
+      if (!$this->belongsToCustomer($idCustomer, $data["idAddress"])) {
+        throw new UnknownAccount();
+      }
+
       self::where('id', $data["idAddress"])->update($addressData);
       $item = $addressData;
       $item["id"] = $data["idAddress"];
@@ -181,6 +197,11 @@ class CustomerAddress extends \ADIOS\Core\Model {
   }
 
   public function removeAddress($idCustomer, $idAddress) {
+
+    if (!$this->belongsToCustomer($idCustomer, $idAddress)) {
+      throw new UnknownAccount();
+    }
+    
     $removeAddress = self::where('id', $idAddress)
       ->where('id_customer', $idCustomer)
     ;

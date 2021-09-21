@@ -222,7 +222,7 @@ class ProductCategory extends \ADIOS\Core\Model {
       }
     }
 
-    $allProducts = $this->fetchQueryAsArray($productsQuery, 'id', FALSE);
+    $allProducts = $this->fetchRows($productsQuery, 'id', FALSE);
 
     $catalogInfo["productCount"] = count($allProducts);
 
@@ -230,7 +230,7 @@ class ProductCategory extends \ADIOS\Core\Model {
     $productsQuery->skip(($page - 1) * $itemsPerPage);
     $productsQuery->take($itemsPerPage);
 
-    $catalogInfo["products"] = $this->fetchQueryAsArray($productsQuery, 'id', FALSE);
+    $catalogInfo["products"] = $this->fetchRows($productsQuery, 'id', FALSE);
     $catalogInfo["products"] = $productModel->addPriceInfoForListOfProducts($catalogInfo["products"]);
     $catalogInfo["products"] = $productModel->unifyProductInformationForListOfProduct($catalogInfo["products"]);
     $catalogInfo["products"] = $productModel->translateForWeb($catalogInfo["products"], $languageIndex);

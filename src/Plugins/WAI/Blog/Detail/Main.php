@@ -7,16 +7,16 @@ namespace Surikata\Plugins\WAI\Blog {
     var $defaultBlogDetailUrl = "blog/{% idBlog %}/{% blogName %}";
     var $deleteCurrentPageBreadCrumb = true;
 
-    public function getBreadCrumbs($urlVariables = []) {
+    public function getBreadcrumbs($urlVariables = []) {
       $currentBlog = $this->getCurrentBlog();
 
-      $breadCrumb = 
+      $breadcrumb = 
         new \Surikata\Plugins\WAI\Common\Breadcrumb(
           $this->websiteRenderer
         )
       ;
 
-      $breadCrumbs = $breadCrumb->getMenuBreadCrumbs(
+      $breadcrumbs = $breadcrumb->getMenuBreadcrumbs(
         $currentBlog['blogCatalogUrl'], 
         true
       );
@@ -24,12 +24,12 @@ namespace Surikata\Plugins\WAI\Blog {
       $currentBlogYear = date("Y", strtotime($currentBlog['created_at']));
       $currentBlogMonth = date("m", strtotime($currentBlog['created_at']));
 
-      $breadCrumbs[$currentBlogYear] = $currentBlogYear;
-      $breadCrumbs[$currentBlogYear . "/" . $currentBlogMonth] = $currentBlogMonth;
+      $breadcrumbs[$currentBlogYear] = $currentBlogYear;
+      $breadcrumbs[$currentBlogYear . "/" . $currentBlogMonth] = $currentBlogMonth;
 
-      $breadCrumbs[$this->getWebPageUrl($currentBlog)] = $currentBlog['name'];
+      $breadcrumbs[$this->getWebPageUrl($currentBlog)] = $currentBlog['name'];
 
-      return $breadCrumbs;
+      return $breadcrumbs;
     }
 
     public function getWebPageUrlFormatted($urlVariables, $pluginSettings = []) {

@@ -58,6 +58,7 @@ class Search extends \ADIOS\Core\Action {
           "input" => $this->adios->ui->Input([
             "model" => $this->params['model'],
             "type" => $colDef["type"],
+            "input_style" => "select",
             "uid" => "{$this->uid}_{$colName}",
           ]),
         ];

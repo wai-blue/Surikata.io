@@ -88,7 +88,7 @@ SurikataProductCatalog.prototype.getURL = function (url) {
 
   for (let varName in this.filter) {
     //if (varName == 'page' && this.filter[varName] == 1) continue;
-    if (varName == 'idProductCategory') continue;
+    if (varName == 'idCategory') continue;
 
     if (varName == 'brands') {
       urlObject.searchParams.set('brands', this.filter['brands'].join(' '));
@@ -111,12 +111,15 @@ SurikataProductCatalog.prototype.update = function (updateDiv, url) {
   pluginParams = { ...this.filter };
   window.history.pushState({}, '', _this.getURL(url));
 
+  updateDiv.css('opacity', 0.5);
+
   Surikata.renderPlugin(
     "WAI/Product/Catalog",
     pluginParams,
     function (data) {
       updateDiv.fadeOut(100, function () {
         updateDiv.replaceWith(data).fadeIn(100);
+        updateDiv.css('opacity', 1);
       });
     }
   );

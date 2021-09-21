@@ -17,7 +17,7 @@ namespace ADIOS\Core\Models;
  */
 class User extends \ADIOS\Core\Model {
   var $sqlName = "";
-  var $urlBase = "Pouzivatelia";
+  var $urlBase = "Users";
   var $tableTitle = "Users";
   var $lookupSqlValue = "concat({%TABLE%}.name, ' ', {%TABLE%}.surname)";
 

@@ -328,7 +328,7 @@ class Loader {
 
         // inicializacia UI wrappera
 
-        $this->ui = new UI($this, []);
+        $this->ui = new \ADIOS\Core\UI($this, []);
       }
 
       $this->dispatchEventToPlugins("onADIOSAfterInit", ["adios" => $this]);

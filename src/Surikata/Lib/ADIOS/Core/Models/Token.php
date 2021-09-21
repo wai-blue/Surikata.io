@@ -91,7 +91,7 @@ class Token extends \ADIOS\Core\Model {
       ->whereDate("valid_to", ">=", date("Y-m-d H:i:s"))
     ;
 
-    $tokenData = reset($this->fetchQueryAsArray($tokenQuery));
+    $tokenData = reset($this->fetchRows($tokenQuery));
 
     if (!is_array($tokenData)) {
       throw new \ADIOS\Core\Exceptions\InvalidToken($token);

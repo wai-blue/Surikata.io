@@ -2,6 +2,9 @@
 
 namespace ADIOS\Widgets\Orders\Models;
 
+use ADIOS\Widgets\CRM\Exceptions\AlreadyRegisteredForNewsletter;
+use ADIOS\Widgets\CRM\Models\Newsletter;
+
 class Order extends \ADIOS\Core\Model {
   const STATE_NEW      = 1;
   const STATE_INVOICED = 2;
@@ -274,6 +277,28 @@ class Order extends \ADIOS\Core\Model {
         "title" => "Contact: Email",
       ],
 
+      "company_id" => [
+        "type" => "varchar",
+        "title" => "Company ID",
+        "pattern" => '\d{8}',
+        "show_column" => TRUE,
+      ],
+
+      "company_tax_id" => [
+        "type" => "varchar",
+        "title" => "Company Tax ID",
+        "pattern" => '\d{10}',
+        "show_column" => FALSE,
+      ],
+
+      "company_vat_id" => [
+        "type" => "varchar",
+        "title" => "Company VAT ID",
+        "pattern" => '(SK|CZ)\d{10}',
+        "show_column" => FALSE,
+      ],
+
+
       "domain" => [
         "type" => "varchar",
         "title" => "Domain",
@@ -292,6 +317,10 @@ class Order extends \ADIOS\Core\Model {
       "order___number" => [
         "type" => "unique",
         "columns" => ["number"],
+      ],
+      [
+        "type" => "index",
+        "columns" => ["company_id"],
       ],
     ]);
   }
@@ -422,6 +451,11 @@ class Order extends \ADIOS\Core\Model {
         "del_city",
         "del_zip",
       ];
+      $requiredFieldsCompany = [
+        "inv_company_name",
+        "company_id",
+        "company_tax_id",
+      ];
 
       foreach ($requiredFieldsBilling as $fieldName) {
         if (empty($orderData[$fieldName])) {
@@ -435,6 +469,14 @@ class Order extends \ADIOS\Core\Model {
 
       if ($orderData["differentDeliveryAddress"] == "1") {
         foreach ($requiredFieldsDelivery as $fieldName) {
+          if (empty($orderData[$fieldName])) {
+            $requiredFieldsEmpty[] = $fieldName;
+          }
+        }
+      }
+
+      if ($orderData["buyAsCompany"] == "1") {
+        foreach ($requiredFieldsCompany as $fieldName) {
           if (empty($orderData[$fieldName])) {
             $requiredFieldsEmpty[] = $fieldName;
           }
@@ -463,7 +505,8 @@ class Order extends \ADIOS\Core\Model {
           $orderData,
           [
             "family_name" => $orderData["inv_family_name"],
-            "given_name" => $orderData["inv_given_name"]
+            "given_name" => $orderData["inv_given_name"],
+            "company_name" => $orderData["inv_company_name"]
           ]
         );
         $idCustomer = $customerModel->createAccount($customerUID, $orderData["email"], $createCustomerData, true, true);
@@ -559,6 +602,9 @@ class Order extends \ADIOS\Core\Model {
 
       "phone_number"           => $orderData['phone_number'],
       "email"                  => $orderData['email'],
+      "company_id"             => $orderData['company_id'],
+      "company_tax_id"         => $orderData['company_tax_id'],
+      "company_vat_id"         => $orderData['company_vat_id'],
       "confirmation_time"      => $confirmationTime,
       "id_destination_country" => $orderData['id_destination_country'],
       "id_delivery_service"    => $orderData['id_delivery_service'],
@@ -611,8 +657,13 @@ class Order extends \ADIOS\Core\Model {
 
     $this->sendNotificationForPlacedOrder($placedOrderData);
 
-    if (isset($orderData["marketingAgreement"])) {
-      (new Newsletter($this->adios))->registerForNewsletter($orderData["email"]);
+    if (isset($orderData["newsletterConsent"])) {
+      try {
+        (new Newsletter($this->adios))->registerForNewsletter($orderData["email"]);
+      }
+      catch (AlreadyRegisteredForNewsletter $e) {
+        // Nothing to do here
+      }
     }
 
     return $idOrder;

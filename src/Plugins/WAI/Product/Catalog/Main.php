@@ -2,23 +2,24 @@
 
 namespace Surikata\Plugins\WAI\Product {
   class Catalog extends \Surikata\Core\Web\Plugin {
-    var $catalogInfo = NULL;
+    public static $catalogInfo = NULL;
     var $currentCategory = NULL;
 
     // must be the same as in ADIOS\Plugins namespace
-    var $defaultUrl = "{% urlizedCategoryName %}.cid.{% idProductCategory %}";
+    var $defaultUrlForCategories = "{% urlizedCategoryName %}.cid.{% idCategory %}";
+    var $defaultUrlForBrands = "products/brand/{% idBrand %}/{% urlizedBrandName %}";
 
-    public function getBreadCrumbs($urlVariables = []) {
+    public function getBreadcrumbs($urlVariables = []) {
       $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
 
-      $breadCrumbs = [];
+      $breadcrumbs = [];
 
       $categoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
 
       if ($this->currentCategory === NULL) {
         $this->currentCategory = 
-          $urlVariables['idProductCategory'] 
-            ? $categoryModel->getById($urlVariables['idProductCategory'])
+          $urlVariables['idCategory'] 
+            ? $categoryModel->getById($urlVariables['idCategory'])
             : NUll
         ;
       }
@@ -39,11 +40,11 @@ namespace Surikata\Plugins\WAI\Product {
             $this->convertCategoryToUrlVariables($category)
           );
 
-          $breadCrumbs[$url] = $category["TRANSLATIONS"]["name"];
+          $breadcrumbs[$url] = $category["TRANSLATIONS"]["name"];
         }
       }
 
-      return $breadCrumbs;
+      return $breadcrumbs;
     }
 
     /**
@@ -54,17 +55,13 @@ namespace Surikata\Plugins\WAI\Product {
      * @return string Final formatted relative URL
      * */
     public function getWebPageUrlFormatted($urlVariables, $pluginSettings = []) {
-      $urlizedCategoryName = $urlVariables["urlizedCategoryName"] ?? "";
-      $idProductCategory = (int) $urlVariables["idProductCategory"] ?? 0;
+      $idCategory = (int) $urlVariables["idCategory"] ?? 0;
 
-      $url = $pluginSettings["urlForProductsInCategory"] ?? "";
-
-      if (empty($url)) {
-        $url = $this->defaultUrl;
-      }
-
-      if ($idProductCategory != 0) {
-        return $this->replaceUrlVariables($url, $urlVariables);
+      if ($idCategory != 0) {
+        return $this->replaceUrlVariables(
+          $pluginSettings["urlForProductsInCategory"] ?? $this->defaultUrlForCategories,
+          $urlVariables
+        );
       } else {
         return NULL;
       }
@@ -74,39 +71,30 @@ namespace Surikata\Plugins\WAI\Product {
     public function convertCategoryToUrlVariables($category) {
       return [
         "urlizedCategoryName" => \ADIOS\Core\HelperFunctions::str2url($category["TRANSLATIONS"]["name"]),
-        "idProductCategory" => $category['id'],
+        "idCategory" => $category['id'],
       ];
     }
 
-    public function getCatalogInfo($idProductCategory = NULL, $page = NULL, $itemsPerPage = NULL, $filter = NULL) {
+    public function getCatalogInfo($idCategory = NULL, $idBrand = NULL) {
+      if (self::$catalogInfo === NULL) {
+        $pluginSettings = $this->websiteRenderer->getCurrentPagePluginSettings("WAI/Product/Catalog");
+        $languageIndex = (int) $this->websiteRenderer->domain["languageIndex"];
 
-      $pluginSettings = $this->websiteRenderer->getCurrentPagePluginSettings("WAI/Product/Catalog");
-      $languageIndex = (int) $this->websiteRenderer->domain["languageIndex"];
+        $defaultItemsPerPage = (int) ($pluginSettings["defaultItemsPerPage"] ? $pluginSettings["defaultItemsPerPage"] : 6);
 
-      $defaultItemsPerPage = (int) ($pluginSettings["defaultItemsPerPage"] ? $pluginSettings["defaultItemsPerPage"] : 6);
-
-      if ($this->catalogInfo === NULL) {
-        if ($idProductCategory === NULL) {
-          $idProductCategory = (int) $this->websiteRenderer->urlVariables["idProductCategory"] ?? 0;
+        if ($idCategory === NULL) {
+          $idCategory = (int) $this->websiteRenderer->urlVariables["idCategory"] ?? 0;
         }
 
-        if ($page === NULL) {
-          $page = (int) trim($this->websiteRenderer->urlVariables["page"], "/");
+        if ($idBrand === NULL) {
+          $idBrand = (int) $this->websiteRenderer->urlVariables["idBrand"] ?? 0;
         }
+
+        $page = (int) trim($this->websiteRenderer->urlVariables["page"], "/");
+        $itemsPerPage = (int) trim($this->websiteRenderer->urlVariables["itemsPerPage"], "/");
 
         if ($page < 1) $page = 1;
-
-        if ($itemsPerPage === NULL) {
-          $itemsPerPage = (int) trim($this->websiteRenderer->urlVariables["itemsPerPage"], "/");
-        }
-
-        if ($itemsPerPage < 1) {
-          $itemsPerPage = $defaultItemsPerPage;
-        }
-
-        if ($page === NULL) {
-          $page = (int) trim($this->websiteRenderer->urlVariables["page"], "/");
-        }
+        if ($itemsPerPage < 1) $itemsPerPage = $defaultItemsPerPage;
 
         $filter = (new \Surikata\Plugins\WAI\Product\Filter($this->websiteRenderer))
           ->getFilterInfo()
@@ -116,35 +104,85 @@ namespace Surikata\Plugins\WAI\Product {
           $filter["sort"] = $this->websiteRenderer->urlVariables["sort"];
         }
 
-        $this->catalogInfo = (new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel))
-          ->getCatalogInfo($idProductCategory, $page, $itemsPerPage, $filter, $languageIndex)
-        ;
 
-        // foreach ($this->catalogInfo["allCategories"] as $key => $category) {
-        //   $this->catalogInfo["allCategories"][$key]["url"] = $this->getWebPageUrl($this->convertCategoryToUrlVariables($category));
-        // }
-        // foreach ($this->catalogInfo["allSubCategories"] as $key => $category) {
-        //   $this->catalogInfo["allSubCategories"][$key]["url"] = $this->getWebPageUrl($this->convertCategoryToUrlVariables($category));
-        // }
-        // foreach ($this->catalogInfo["allSubCategories"] as $key => $category) {
-        //   $this->catalogInfo["directSubCategories"][$key]["url"] = $this->getWebPageUrl($this->convertCategoryToUrlVariables($category));
-        // }
 
-        $this->catalogInfo["category"]["url"] = $this->getWebPageUrl($this->convertCategoryToUrlVariables($this->catalogInfo["category"]));
+        self::$catalogInfo = [];
 
+        $productModel = new \ADIOS\Widgets\Products\Models\Product($this->websiteRenderer->adminPanel);
+
+        $productsQuery = $productModel->getQuery();
+
+        if ($filter['idCategory'] > 0) {
+          $productCategoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->websiteRenderer->adminPanel);
+
+          $allCategories = $productCategoryModel->translateForWeb(
+            $productCategoryModel->getAllCached(),
+            $languageIndex
+          );
+
+          $allSubCategories = $productCategoryModel->extractAllSubCategories($filter['idCategory'], $allCategories);
+          self::$catalogInfo["category"] = $allCategories[$filter['idCategory']];
+          self::$catalogInfo["category"]["url"] = $this->getWebPageUrl($this->convertCategoryToUrlVariables(self::$catalogInfo["category"]));
+
+          $categoryIdsToBrowse = array_keys($allSubCategories);
+          $categoryIdsToBrowse[] = $filter['idCategory'];
+
+          $productsQuery->whereIn('id_category', $categoryIdsToBrowse);
+        }
+
+        if (!empty($filter['filteredBrands'])) {
+          $productsQuery->whereIn('id_brand', $filter['filteredBrands']);
+        }
+$console = $this->websiteRenderer->adminPanel->console;
+$console->info("#1", [], "product-catalog");
+
+        self::$catalogInfo["productCount"] = $productModel->countRowsInQuery($productsQuery);
+$console->info("#2", [], "product-catalog");
+
+        if (array_key_exists("sort", $filter)) {
+          $sortType = $filter["sort"];
+          $sortDesc = strpos($sortType, "desc") !== false ? "DESC" : "ASC";
+          switch ($sortType) {
+            case "price":
+            case "price_desc":
+              $productsQuery->orderBy('sale_price', $sortDesc);
+                break;
+            case "title":
+            case "title_desc":
+              $productsQuery->orderBy('name_lang_'.$languageIndex, $sortDesc);
+              break;
+            case "date":
+            case "date_desc":
+              $productsQuery->orderBy('id', $sortDesc);
+              break;
+          }
+        }
+
+        $productModel->addLookupsToQuery($productsQuery);
+        $productsQuery->skip(($page - 1) * $itemsPerPage);
+        $productsQuery->take($itemsPerPage);
+$console->info("#3", [], "product-catalog");
+
+        self::$catalogInfo["products"] = $productModel->fetchRows($productsQuery);
+$console->info("#4", [], "product-catalog");
+        self::$catalogInfo["products"] = $productModel->addPriceInfoForListOfProducts(self::$catalogInfo["products"]);
+        self::$catalogInfo["products"] = $productModel->unifyProductInformationForListOfProduct(self::$catalogInfo["products"]);
+        self::$catalogInfo["products"] = $productModel->translateForWeb(self::$catalogInfo["products"], $languageIndex);
+$console->info("#5", [], "product-catalog");
         $productDetailPlugin = new \Surikata\Plugins\WAI\Product\Detail($this->websiteRenderer);
-        foreach ($this->catalogInfo["products"] as $key => $product) {
-          $this->catalogInfo["products"][$key]["url"] =
+        foreach (self::$catalogInfo["products"] as $key => $product) {
+          self::$catalogInfo["products"][$key]["url"] =
             $productDetailPlugin->getWebPageUrl($product)
           ;
         }
 
-        $this->catalogInfo["page"] = $page;
-        $this->catalogInfo["lastPage"] = ceil(($this->catalogInfo["productCount"] / $itemsPerPage));
-        $this->catalogInfo["catalogListType"] = $_COOKIE['catalogListType'] ?? 'list';
+        self::$catalogInfo["page"] = $page;
+        self::$catalogInfo["lastPage"] = ceil((self::$catalogInfo["productCount"] / $itemsPerPage));
+        self::$catalogInfo["catalogListType"] = $_COOKIE['catalogListType'] ?? 'list';
+
       }
 
-      return $this->catalogInfo;
+      return self::$catalogInfo;
 
     }
 
@@ -164,21 +202,28 @@ namespace ADIOS\Plugins\WAI\Product {
     var $niceName = "Product Catalog";
     
     // must be the same as in Surikata\Plugins namespace
-    var $defaultUrl = "{% urlizedCategoryName %}.cid.{% idProductCategory %}";
+    var $defaultUrlForCategories = "{% urlizedCategoryName %}.cid.{% idCategory %}";
+    var $defaultUrlForBrands = "products/brand/{% idBrand %}/{% urlizedBrandName %}";
 
     public function getSiteMap($pluginSettings = [], $webPageUrl = "") {
 
-      $urlPattern = $pluginSettings["urlForProductsInCategory"] ?? "";
-      if (empty($urlPattern)) {
-        $urlPattern = $this->defaultUrl;
-      }
-
+      // Sitemap for categories
       $this->convertUrlPatternToSiteMap(
         $siteMap,
-        $urlPattern,
+        $pluginSettings["urlForProductsInCategory"] ?? $this->defaultUrlForCategories,
         [
           "urlizedCategoryName" => '(.+)',
-          "idProductCategory" => '(\d+)'
+          "idCategory" => '(\d+)'
+        ]
+      );
+
+      // Sitemap for brands
+      $this->convertUrlPatternToSiteMap(
+        $siteMap,
+        $pluginSettings["urlForBrands"] ?? $this->defaultUrlForBrands,
+        [
+          "urlizedBrandName" => '(.+)',
+          "idBrand" => '(\d+)'
         ]
       );
 
@@ -192,6 +237,14 @@ namespace ADIOS\Plugins\WAI\Product {
           "type" => "varchar",
           "description" => "
             Relative URL for list of products in a specific category.<br/>
+            Default value: {$this->defaultUrl}<br/>
+          ",
+        ],
+        "urlForBrands" => [
+          "title" => "Product brands URL",
+          "type" => "varchar",
+          "description" => "
+            Relative URL for list of products from a specific brand.<br/>
             Default value: {$this->defaultUrl}<br/>
           ",
         ],

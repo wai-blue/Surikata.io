@@ -10,6 +10,8 @@ class ProductCategory extends \ADIOS\Core\Model {
   var $formTitleForInserting = "New product category";
   var $formTitleForEditing = "Product category";
 
+  public static $allItemsCache = NULL;
+
   public function columns(array $columns = []) {
     $translatedColumns = [];
     $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
@@ -154,21 +156,6 @@ class ProductCategory extends \ADIOS\Core\Model {
     return $params;
   }
 
-  // public function getAll(string $keyBy = "", $withLookups = FALSE, $processLookups = FALSE) {
-  //   return $this->associateKey(
-  //     $this->fetchQueryAsArray($this->getQuery('*'), FALSE, $processLookups),
-  //     'id',
-  //   );
-  // }
-
-  public function getAllCached() {
-    if ($this->allCategoriesCache === NULL) {
-      $this->allCategoriesCache = $this->getAll();
-    }
-
-    return $this->allCategoriesCache;
-  }
-
   public function translateForWeb($categories, $languageIndex) {
     foreach ($categories as $key => $value) {
       $categories[$key]["TRANSLATIONS"]["name"] = $value["name_lang_{$languageIndex}"];
@@ -178,6 +165,7 @@ class ProductCategory extends \ADIOS\Core\Model {
   }
 
   public function getCatalogInfo($idCategory, $page = 0, $itemsPerPage = 0, $filter = NULL, $languageIndex = 1) {
+
     $idCategory = (int) $idCategory;
     $languageIndex = (int) $languageIndex;
 
@@ -193,13 +181,10 @@ class ProductCategory extends \ADIOS\Core\Model {
     $allCategories = $this->translateForWeb($this->getAllCached(), $languageIndex);
 
     $allSubCategories = $this->extractAllSubCategories($idCategory, $allCategories);
-    // $directSubCategories = $this->extractDirectSubCategories($idCategory, $allCategories);
     $catalogInfo["category"] = $allCategories[$idCategory];
 
     $categoryIdsToBrowse = array_keys($allSubCategories);
     $categoryIdsToBrowse[] = $idCategory;
-
-    $start = microtime(true);
 
     ////////////////////////////////////////
     // info about products
@@ -207,9 +192,6 @@ class ProductCategory extends \ADIOS\Core\Model {
     $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adios);
 
     $productsQuery = $productModel->getQuery();
-
-    // id_brand lookup information will be used in extracting information about brands
-    // $productModel->addLookupsToQuery($productsQuery, ['id_brand' => 'id_brand']);
 
     if ($idCategory > 0) {
       // not adding where condition if all products should be retreived,
@@ -240,61 +222,18 @@ class ProductCategory extends \ADIOS\Core\Model {
       }
     }
 
-    $allProducts = $this->fetchQueryAsArray($productsQuery, 'id', FALSE);
+    $allProducts = $this->fetchRows($productsQuery, 'id', FALSE);
+
     $catalogInfo["productCount"] = count($allProducts);
 
     $productModel->addLookupsToQuery($productsQuery);
     $productsQuery->skip(($page - 1) * $itemsPerPage);
     $productsQuery->take($itemsPerPage);
 
-    $catalogInfo["products"] = $this->fetchQueryAsArray($productsQuery, 'id', FALSE);
-
+    $catalogInfo["products"] = $this->fetchRows($productsQuery, 'id', FALSE);
     $catalogInfo["products"] = $productModel->addPriceInfoForListOfProducts($catalogInfo["products"]);
     $catalogInfo["products"] = $productModel->unifyProductInformationForListOfProduct($catalogInfo["products"]);
     $catalogInfo["products"] = $productModel->translateForWeb($catalogInfo["products"], $languageIndex);
-
-    ////////////////////////////////////////
-    // info about parameters
-
-    $parameterModel = $this->adios->getModel("Widgets/Products/Models/ProductFeatureAssignment");
-
-    $parametersQuery = $parameterModel->getQuery();
-    if ($idCategory > 0) {
-      $parameterModel->addLookupsToQuery($parametersQuery, ['id_feature' => 'ProductFeature', 'id_product' => 'Product']);
-      $parametersQuery->whereIn($productModel->table.'.id_category', $categoryIdsToBrowse);
-    } else {
-      // 1. not adding where condition if all products should be retreived,
-      // the condition slows down the query
-      // 2. do not need information about products - not filtering by product's category
-      $parameterModel->addLookupsToQuery($parametersQuery, ['id_feature' => 'ProductFeature']);
-    }
-
-    $allParameters = $this->fetchQueryAsArray($parametersQuery, 'id', FALSE);
-    $catalogInfo["availableProductParameters"] = $this->extractLookupFromQueryResult($allParameters, 'ProductFeature'); // TODO: UPPERCASE LOOKUP
-    $catalogInfo["availableProductParameters"] = $this->associateKey($catalogInfo["availableProductParameters"], 'id');
-
-    ////////////////////////////////////////
-    // info about brands
-
-    $tmpBrands = [];
-
-    foreach ($allProducts as $tmpProduct) {
-      if (!empty($tmpProduct['Brand___LOOKUP___id'])) {
-        $tmpBrands[$tmpProduct['Brand___LOOKUP___id']] = $tmpProduct;
-      }
-    }
-    $tmpBrands = $this->processLookupsInQueryResult($tmpBrands);
-    foreach ($tmpBrands as $key => $value) {
-      $catalogInfo["availableProductBrands"][] = $value['Brand'];
-    }
-
-    // var_dump(round((microtime(true) - $start) * 1000, 2));
-    // // var_dump(reset($tmpBrands));
-    // var_dump(($catalogInfo["availableProductBrands"]));
-    // var_dump(array_keys($catalogInfo["allSubCategories"]));
-    // exit();
-
-    // var_dump($catalogInfo["availableProductParameters"]);exit();
 
     return $catalogInfo;
   }

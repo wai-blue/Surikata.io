@@ -114,6 +114,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   var $pdo;
   var $eloquentQuery;
   var $searchAction;
+
+  private static $allItemsCache = NULL;
   
   /**
    * Creates instance of model's object.
@@ -507,6 +509,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
           "searchGroup" => $urlBase,
         ])
       ],
+      '/^'.$urlBase.'\/Export\/CSV$/' => [
+        "action" => "UI/Table/Export/CSV",
+        "params" => array_merge($urlParams, [
+          "model" => $this->name,
+        ])
+      ],
     ]);
 
     return $routing;
@@ -566,26 +574,42 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   // CRUD methods
 
   public function getExtendedData($item) {
-    return $item; // to be overriden
+    return NULL; // to be overriden, should return $item with extended information
+    // the NULL return is for optimization in getAll() method
   }
 
   public function getById(int $id) {
     $item = reset($this->where('id', $id)->get()->toArray());
-    return $this->getExtendedData($item);
+
+    if ($this->getExtendedData([]) !== NULL) {
+      return $this->getExtendedData($item);
+    } else {
+      return $item;
+    }
   }
 
   public function getAll(string $keyBy = "id", $withLookups = FALSE, $processLookups = FALSE) {
     if ($withLookups) {
       $items = $this->getWithLookups(NULL, $keyBy, $processLookups);
     } else {
-      $items = $this->adios->db->get_all_rows_query("select * from `{$this->table}`", $keyBy);
+      $items = $this->pdoPrepareExecuteAndFetch("select * from :table", []);
     }
 
-    foreach ($items as $key => $item) {
-      $items[$key] = $this->getExtendedData($item);
+    if ($this->getExtendedData([]) !== NULL) {
+      foreach ($items as $key => $item) {
+        $items[$key] = $this->getExtendedData($item);
+      }
     }
-
+    
     return $items;
+  }
+
+  public function getAllCached() {
+    if (static::$allItemsCache === NULL) {
+      static::$allItemsCache = $this->getAll();
+    }
+
+    return static::$allItemsCache;
   }
 
   public function getQueryWithLookups($callback = NULL) {
@@ -602,7 +626,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   public function getWithLookups($callback = NULL, $keyBy = 'id', $processLookups = FALSE) {
     $query = $this->getQueryWithLookups($callback);
     return $this->processLookupsInQueryResult(
-      $this->fetchQueryAsArray($query, $keyBy, FALSE),
+      $this->fetchRows($query, $keyBy, FALSE),
       $processLookups
     );
   }
@@ -703,8 +727,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     ])["data"]["html"];
   }
 
-  public function tableCellCSVExportFormatter($data) {
-    return $this->adios->dispatchEventToPlugins("onTableCellCSVExportFormatter", [
+  public function tableCellCSVFormatter($data) {
+    return $this->adios->dispatchEventToPlugins("onTableCellCSVFormatter", [
       "model" => $this,
       "data" => $data,
     ])["data"]["csv"];
@@ -1224,22 +1248,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     return $processedRows;
   }
 
-  // extractLookupFromQueryResult
-  public function extractLookupFromQueryResult($rows, $lookup) {
-    $processedRows = [];
-    foreach ($rows as $rowKey => $row) {
-      $processedRows[$rowKey] = [];
-      foreach ($row as $colName => $colValue) {
-        if (strpos($colName, "{$lookup}___LOOKUP___") === 0) {
-          $processedRows[$rowKey][str_replace("{$lookup}___LOOKUP___", "", $colName)] = $colValue;
-        }
-      }
-    }
-    return $processedRows;
-  }
-  
-  // fetchQueryAsArray
-  public function fetchQueryAsArray($eloquentQuery, $keyBy = 'id', $processLookups = TRUE) {
+  // fetchRows
+  public function fetchRows($eloquentQuery, $keyBy = 'id', $processLookups = TRUE) {
     $query = $this->pdo->prepare($eloquentQuery->toSql());
     $query->execute($eloquentQuery->getBindings());
 
@@ -1257,7 +1267,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         $tmpCrossTableModel->addLookupsToQuery($tmpCrossQuery);
         $tmpCrossQuery->whereIn($tmpForeignKey, array_keys($rows));
 
-        $tmpCrossTableValues = $this->fetchQueryAsArray($tmpCrossQuery, 'id', FALSE);
+        $tmpCrossTableValues = $this->fetchRows($tmpCrossQuery, 'id', FALSE);
 
         foreach ($tmpCrossTableValues as $tmpCrossTableValue) {
           $rows
@@ -1277,4 +1287,13 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
   }
 
+  // countRowsInQuery
+  public function countRowsInQuery($eloquentQuery) {
+    $query = $this->pdo->prepare($eloquentQuery->toSql());
+    $query->execute($eloquentQuery->getBindings());
+
+    $rows = $query->fetchAll(\PDO::FETCH_COLUMN, 0);
+
+    return count($rows);
+  }
 }

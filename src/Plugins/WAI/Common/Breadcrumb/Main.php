@@ -5,7 +5,7 @@ namespace Surikata\Plugins\WAI\Common {
   // REVIEW: pouziva sa BreadCrumb aj Breadcrumb. Zjednotit na Breadcrumb.
   class Breadcrumb extends \Surikata\Core\Web\Plugin {
 
-    public function getMenuBreadCrumbs($pageUrl, $allowNestedPage = false) {
+    public function getMenuBreadcrumbs($pageUrl, $allowNestedPage = false) {
       $webMenuItemModel = 
         new \ADIOS\Widgets\Website\Models\WebMenuItem(
           $this->adminPanel
@@ -24,7 +24,7 @@ namespace Surikata\Plugins\WAI\Common {
         )
       ; 
 
-      $breadCrumbs = 
+      $breadcrumbs = 
         $webMenuItemModel->extractParentMenuItems(
           $pageUrl, 
           $allMenuItems
@@ -36,20 +36,20 @@ namespace Surikata\Plugins\WAI\Common {
 
         foreach ($allPages as $page) {
           if ($page['url'] == $pageUrl) {
-            $breadCrumbs[$pageUrl] = $page['name'];
+            $breadcrumbs[$pageUrl] = $page['name'];
           }
         }
       }
 
-      return $breadCrumbs;
+      return $breadcrumbs;
     }
 
     /**
      * Returns array with full breadcrumbs array gradually
      * Get sequence of pages from WebMenuItem
-     * @return array BreadCrumbs
+     * @return array Breadcrumbs
      * */
-    public function getBreadCrumbsUrl() {
+    public function getBreadcrumbsUrl() {
       $urlVariables = $this->websiteRenderer->urlVariables;
 
       $currentPage = 
@@ -58,10 +58,10 @@ namespace Surikata\Plugins\WAI\Common {
       ;
 
       // GET menu items
-      $breadCrumbs = $this->getMenuBreadCrumbs($currentPage['url']);
-      $breadCrumbs[$currentPage['url']] = $currentPage['name'];
+      $breadcrumbs = $this->getMenuBreadcrumbs($currentPage['url']);
+      $breadcrumbs[$currentPage['url']] = $currentPage['name'];
 
-      // GET Plugin BreadCrumbs if exists
+      // GET Plugin Breadcrumbs if exists
       // REVIEW: vid Widgets/Website/Actions/ContentStructure/PluginSettings:
       //     foreach ($this->adios->getPlugins() as $pluginName => $plugin) {
       // ... Myslim, ze kod nizsie sa da optimalizovat
@@ -85,25 +85,25 @@ namespace Surikata\Plugins\WAI\Common {
 
             $getPlugin = new $plugin($this->websiteRenderer);
 
-            if (method_exists($getPlugin, 'getBreadCrumbs')) {
-              if ($getPlugin->deleteCurrentPageBreadCrumb) array_shift($breadCrumbs);
-              $pluginBreadcrumbs = $getPlugin->getBreadCrumbs($urlVariables);
+            if (method_exists($getPlugin, 'getBreadcrumbs')) {
+              if ($getPlugin->deleteCurrentPageBreadCrumb) array_shift($breadcrumbs);
+              $pluginBreadcrumbs = $getPlugin->getBreadcrumbs($urlVariables);
               
               foreach ($pluginBreadcrumbs as $url => $item) {
-                $breadCrumbs[$url] = $item;
+                $breadcrumbs[$url] = $item;
               }
             }
           }
         }
       }
 
-      return $breadCrumbs;
+      return $breadcrumbs;
     }
 
     public function getTwigParams($pluginSettings) {
       $twigParams = $pluginSettings;
 
-      $twigParams['breadCrumbs'] = $this->getBreadCrumbsUrl();
+      $twigParams['breadcrumbs'] = $this->getBreadcrumbsUrl();
 
       return $twigParams;
     }

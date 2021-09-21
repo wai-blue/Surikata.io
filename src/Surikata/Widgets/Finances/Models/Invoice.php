@@ -19,10 +19,9 @@ class Invoice extends \ADIOS\Core\Model {
   const LANGUAGE_SK = "sk";
   const LANGUAGE_EN = "en";
 
-  /* Invoice tax setting */
-  const WITH_VAT        = 1;
-  const WITHOUT_VAT     = 2;
-  const FOREIGN_INV     = 3;
+  const TEMPLATE_WITH_VAT       = 1;
+  const TEMPLATE_WITHOUT_VAT    = 2;
+  const TEMPLATE_FOREIGN_INV    = 3;
 
   var $sqlName = "invoices";
   var $lookupSqlValue = "{%TABLE%}.number";
@@ -52,12 +51,11 @@ class Invoice extends \ADIOS\Core\Model {
       self::LANGUAGE_EN   => 'English',
     ];
 
-    $this->enumTaxSettings = [
-      self::WITH_VAT          => 'With VAT',
-      self::WITHOUT_VAT       => 'Without VAT',
-      self::FOREIGN_INV       => 'Invoice to foreign country',
+    $this->enumInvoiceTemplates = [
+      self::TEMPLATE_WITH_VAT        => 'With Value Added Tax',
+      self::TEMPLATE_WITHOUT_VAT     => 'Without Value Added Tax',
+      self::TEMPLATE_FOREIGN_INV     => 'Foreign invoice',
     ];
-
   }
 
   public function columns(array $columns = []) {
@@ -500,10 +498,8 @@ class Invoice extends \ADIOS\Core\Model {
         "text"    => "Print invoice",
         "onclick" => "
           var invoiceLanguage = $('#".$params["uid"]."_invoiceLanguage').val();
-          var taxSetting = $('#".$params["uid"]."_taxSetting').val();
-          window.open(_APP_URL + '/Invoices/"
-            .(int) $data['id'].
-            "/PrintInvoice?invoiceLanguage='+invoiceLanguage+'&taxSetting='+taxSetting);",
+          var invoiceTemplate = $('#".$params["uid"]."_invoiceTemplate').val();
+          window.open(_APP_URL + '/Invoices/".(int) $data['id']."/PrintInvoice?invoiceLanguage='+invoiceLanguage+'&invoiceTemplate='+invoiceTemplate);",
         "class"   => "btn-primary mb-2 w-100",
       ])->render();
 
@@ -514,10 +510,10 @@ class Invoice extends \ADIOS\Core\Model {
         "class"   => "mb-2 w-100",
       ])->render();
 
-      $btn_tax_setting_html = $this->adios->ui->Input([
+      $btn_select_template_html = $this->adios->ui->Input([
         "type"    => "varchar",
-        "enum_values" => $this->enumTaxSettings,
-        "uid" => $params["uid"]."_taxSetting",
+        "enum_values" => $this->enumInvoiceTemplates,
+        "uid" => $params["uid"]."_enumInvoiceTemplates",
         "class"   => "mb-2 w-100",
       ])->render();
 
@@ -630,10 +626,8 @@ class Invoice extends \ADIOS\Core\Model {
           [
             "class" => "col-md-3 pr-0",
             "html" => "
-              <span>Invoice language</span>
               {$btn_select_language_html}
-              <span>VAT Setting</span>
-              {$btn_tax_setting_html}
+              {$btn_select_template_html}
               {$btn_print_invoice_html}
               <br/>
               <hr/>

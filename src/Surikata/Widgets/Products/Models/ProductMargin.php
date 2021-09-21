@@ -64,4 +64,37 @@ class ProductMargin extends \ADIOS\Core\Model {
     ]);
   }
 
+  public function formParams($data, $params) {
+    $params["template"] = [
+      "columns" => [
+        [
+          "tabs" => [
+            "Product" => [
+              "id_product",
+            ],
+            "Product category" => [
+              "id_product_category",
+            ],
+            "Customer" => [
+              "id_customer",
+            ],
+            "Customer category" => [
+              "id_customer_category",
+            ],
+            "Brand" => [
+              "id_brand",
+            ],
+            "Supplier" => [
+              "id_supplier",
+            ],
+            "Margin [%]" => [
+              "margin",
+            ],
+          ],
+        ],
+      ],
+    ];
+    
+    return $params;
+  }
 }

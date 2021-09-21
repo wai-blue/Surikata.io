@@ -6,6 +6,7 @@ class UserProfile extends \Surikata\Core\Web\Controller {
 
   var $loginFailed = FALSE;
   var $changePasswordError = FALSE;
+  var $changeNameError = FALSE;
 
   // getters
   public function isUserLogged() {
@@ -23,7 +24,6 @@ class UserProfile extends \Surikata\Core\Web\Controller {
       $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adminPanel);
       $_SESSION['userProfile'] = $customerModel->getById($idUserLogged);
     }
-     
     return $_SESSION['userProfile'];
   }
 
@@ -50,6 +50,56 @@ class UserProfile extends \Surikata\Core\Web\Controller {
   // preRender
   public function preRender() {
     $this->websiteRenderer->userLogged = NULL;
+
+    // Request to change customer password
+    if (isset($_POST['changeBasicInformation']) && $_POST['changeBasicInformation'] == "1") {
+      $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adminPanel);
+      $given_name = $_POST["given_name"] ?? "";
+      $family_name = $_POST["family_name"] ?? "";
+
+      $company_name = $_POST["company_name"] ?? "";
+      $company_id = $_POST["company_id"] ?? "";
+      $company_tax_id = $_POST["company_tax_id"] ?? "";
+      $company_vat_id = $_POST["company_vat_id"] ?? "";
+      $email = $_POST["email"] ?? "";
+
+      $address = [];
+      $address["inv_given_name"] = $_POST["inv_given_name"] ?? "";
+      $address["inv_family_name"] = $_POST["inv_family_name"] ?? "";
+      $address["inv_company_name"] = $_POST["inv_company_name"] ?? "";
+      $address["inv_street_1"] = $_POST["inv_street_1"] ?? "";
+      $address["inv_street_2"] = $_POST["inv_street_2"] ?? "";
+      $address["inv_zip"] = $_POST["inv_zip"] ?? "";
+      $address["inv_city"] = $_POST["inv_city"] ?? "";
+
+      try {
+        $customerModel->changeName(
+          $this->getUserLogged(),
+          $given_name,
+          $family_name
+        );
+
+        $customerModel->changeCompanyInfo(
+          $this->getUserLogged(),
+          $company_name,
+          $company_id,
+          $company_tax_id,
+          $company_vat_id
+        );
+
+        $customerModel->changeBillingInfo(
+          $this->getUserLogged(),
+          $address
+        );
+        $this->reloadUserProfile();
+        $this->changeNameError = "";
+      } catch(\ADIOS\Widgets\Customers\Exceptions\UnknownError $e) {
+
+        $this->changeNameError = $e->getMessage();
+
+      }
+
+    }
 
     // Request to change customer password
     if ($_POST['changePassword'] ?? "0" == "1") { 
@@ -85,8 +135,13 @@ class UserProfile extends \Surikata\Core\Web\Controller {
       $customerTokenAssignmentModel = new \ADIOS\Widgets\Customers\Models\CustomerTokenAssignment($this->adminPanel);
       
       $password = $_POST['password'] ?? "";
+
       try {
         $tokenData = $customerTokenAssignmentModel->validateToken($token, FALSE);
+
+        if (empty($tokenData["CUSTOMER"]['email'])) {
+          throw new \ADIOS\Widgets\Customers\Exceptions\UnknownAccount();
+        }
 
         $customerInfo = $customerModel->getByEmail($tokenData["CUSTOMER"]['email']);
         $customerModel->changeForgotPassword(
@@ -140,6 +195,7 @@ class UserProfile extends \Surikata\Core\Web\Controller {
         "profile" => $this->websiteRenderer->userLogged,
         "loginFailed" => $this->loginFailed,
         "changePasswordError" => $this->changePasswordError,
+        "changeNameError" => $this->changeNameError,
       ],
     ]);
   }

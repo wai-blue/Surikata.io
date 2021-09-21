@@ -76,7 +76,7 @@ namespace Surikata\Plugins\WAI\Misc {
       $productsQuery->select("*");
       $productsQuery->where('name_lang_'.$languageIndex, 'like', '%' . $searchValue . '%');
       $productsQuery->skip(0)->take(20);
-      $products = $productModel->fetchQueryAsArray($productsQuery); // TODO: UPPERCASE LOOKUP
+      $products = $productModel->fetchRows($productsQuery); // TODO: UPPERCASE LOOKUP
       foreach ($products as $product) {
         $returnArray[] = [
           "category" => "products",
@@ -93,7 +93,7 @@ namespace Surikata\Plugins\WAI\Misc {
       $productCategoriesQuery = $productCategoryModel->getQuery();
       $productCategoriesQuery->select("*");
       $productCategoriesQuery->where('name_lang_'.$languageIndex, 'like', '%' . $searchValue . '%');
-      $categories = $productCategoryModel->fetchQueryAsArray($productCategoriesQuery); // TODO: UPPERCASE LOOKUP
+      $categories = $productCategoryModel->fetchRows($productCategoriesQuery); // TODO: UPPERCASE LOOKUP
       foreach ($categories as $category) {
         $returnArray[] = [
           "category" => "product categories",
@@ -112,7 +112,7 @@ namespace Surikata\Plugins\WAI\Misc {
       $blogQuery->select("*");
       $blogQuery->where('name', 'like', '%' . $searchValue . '%');
       $blogQuery->orWhere('content', 'like', '%' . $searchValue . '%');
-      $blogs = $blogModel->fetchQueryAsArray($blogQuery); // TODO: UPPERCASE LOOKUP
+      $blogs = $blogModel->fetchRows($blogQuery); // TODO: UPPERCASE LOOKUP
       foreach ($blogs as $blog) {
         $returnArray[] = [
           "category" => "blogs",
@@ -171,7 +171,7 @@ namespace Surikata\Plugins\WAI\Misc {
         $productsQuery = $productModel->getQuery();
         $productsQuery->select("*");
         $productsQuery = $this->setWhereOrClausule($productsQuery, "Product", "_".$languageIndex, $searchValue);
-        $products = $productModel->fetchQueryAsArray($productsQuery); // TODO: UPPERCASE LOOKUP
+        $products = $productModel->fetchRows($productsQuery); // TODO: UPPERCASE LOOKUP
         if (count($products) > 0) {
           $returnArray[] = [
             "model" => "Divider",
@@ -199,7 +199,7 @@ namespace Surikata\Plugins\WAI\Misc {
 
         $productCategoriesQuery = $this->setWhereOrClausule($productCategoriesQuery, "ProductCategory", "_".$languageIndex, $searchValue);
 
-        $categories = $productCategoryModel->fetchQueryAsArray($productCategoriesQuery); // TODO: UPPERCASE LOOKUP
+        $categories = $productCategoryModel->fetchRows($productCategoriesQuery); // TODO: UPPERCASE LOOKUP
         if (count($categories) > 0) {
           $returnArray[] = [
             "model" => "Divider",
@@ -222,7 +222,7 @@ namespace Surikata\Plugins\WAI\Misc {
 
         $blogQuery = $this->setWhereOrClausule($blogQuery, "Blog", "", $searchValue);
 
-        $blogs = $blogModel->fetchQueryAsArray($blogQuery); // TODO: UPPERCASE LOOKUP
+        $blogs = $blogModel->fetchRows($blogQuery); // TODO: UPPERCASE LOOKUP
         if (count($blogs) > 0) {
           $returnArray[] = [
             "model" => "Divider",
@@ -247,7 +247,7 @@ namespace Surikata\Plugins\WAI\Misc {
         $pageQuery->where('name', 'like', '%' . $searchValue . '%');
         $pageQuery->orWhere('url', 'like', '%' . $searchValue . '%');
         $pageQuery->orWhere('content_structure', 'like', '%' . $searchValue . '%');
-        $pages = $pageModel->fetchQueryAsArray($pageQuery);
+        $pages = $pageModel->fetchRows($pageQuery);
         if (count($pages) > 0) {
           $returnArray[] = [
             "model" => "Divider",

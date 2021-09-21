@@ -43,12 +43,12 @@
                           class="sidebar-active"
                         {% endif %}
                         onclick="
-                          BasicThemeProductCatalog.setFilter('idProductCategory', {{ subCategory.id }});
+                          BasicThemeProductCatalog.setFilter('idCategory', {{ subCategory.id }});
                           BasicThemeProductCatalog.update(
                             $('#productCatalogDefaultContainerDiv'),
                             '{{ rewriteBase }}{{ subCategory.url }}'
                           );
-                          BasicThemeBreadcrumb.update($('#breadCrumbDiv'));
+                          BasicThemeBreadcrumb.update($('#breadcrumbDiv'));
                           $(this).addClass('sidebar-active');
                           ">{{ subCategory.TRANSLATIONS.name }}
                       </a>
@@ -73,7 +73,7 @@
   <!-- // preference -->
 {% endif %}
 <!-- discounts -->
-{% if zobrazit_filter %}
+{% if showFeaturesFilter %}
   <h3 class="sidebar-title m-0"><span>Filter By</span></h3>
   <!-- Sidebar single item -->
   <div class="left-side">
@@ -108,7 +108,7 @@
 {% endif %}
 <!-- //discounts -->
 <!-- reviews -->
-{% if show_brands %}
+{% if showBrands %}
   <div class="customer-rev left-side">
     <h3 class="agileits-sear-head">Brands</h3>
     <ul>

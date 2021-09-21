@@ -8,11 +8,11 @@ namespace Surikata\Plugins\WAI\Product {
     var $productInfo = NULL;
     var $deleteCurrentPageBreadCrumb = true;
 
-    public function getBreadCrumbs($urlVariables = []) {
+    public function getBreadcrumbs($urlVariables = []) {
       $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
 
       $productInfo = $this->getProductInfo();
-      $productInfo['idProductCategory'] = $productInfo['id_category'];
+      $productInfo['idCategory'] = $productInfo['id_category'];
 
       $productCatalog = 
         new \Surikata\Plugins\WAI\Product\Catalog(
@@ -22,32 +22,32 @@ namespace Surikata\Plugins\WAI\Product {
 
       $productCatalogUrl = $productCatalog->getWebPageUrl();
 
-      $breadCrumb = 
+      $breadcrumb = 
         new \Surikata\Plugins\WAI\Common\Breadcrumb(
           $this->websiteRenderer
         )
       ;
 
-      $breadCrumbs = 
-        $breadCrumb->getMenuBreadCrumbs(
+      $breadcrumbs = 
+        $breadcrumb->getMenuBreadcrumbs(
           $productCatalogUrl, 
           true
         )
       ;
 
-      $breadCrumbs = array_merge(
-        $breadCrumbs, 
-        $productCatalog->getBreadCrumbs($productInfo)
+      $breadcrumbs = array_merge(
+        $breadcrumbs, 
+        $productCatalog->getBreadcrumbs($productInfo)
       );
 
       // REVIEW: toto "$productInfo["name_lang_{$languageIndex}"];" som
       // opravil na $productInfo["TRANSLATIONS"]["name"];
       // Treba podobnu opravu spravit aj na ostatnych miestach.
-      $breadCrumbs[
+      $breadcrumbs[
         $this->getWebPageUrlFormatted($productInfo)
       ] = $productInfo["TRANSLATIONS"]["name"];
 
-      return $breadCrumbs;
+      return $breadcrumbs;
     }
 
     public function getWebPageUrlFormatted($urlVariables, $pluginSettings = []) {
@@ -203,13 +203,11 @@ namespace ADIOS\Plugins\WAI\Product {
 
       if ($event["model"]->name == "Widgets/Products/Models/Product") {
         $productUrl = $this->adios->websiteRenderer->getPlugin("WAI/Product/Detail")->getWebpageUrl($event["data"]);
-        // REVIEW: Este jednu vec som si uvedomil.
-        // $adios->config["language"] nie je to iste, ako jazyky v "domains".
-        // To bude treba opravit, zatial ponechame tento komentar ako pripomienku.
+
         $event["params"]["template"]["columns"][1]["rows"][2]["html"] .= "
-          <a class='btn btn-icon-split btn-light' target='_blank' href='{$this->adios->websiteRenderer->rootUrl}/{$this->adios->config["language"]}/{$productUrl}'>
+          <a class='btn btn-icon-split btn-light' target='_blank' href='{$this->adios->websiteRenderer->rootUrl}/{$productUrl}'>
             <span class='icon'><i class='fa fa-link'></i></span>
-            <span class='text'>Open product page</span>
+            <span class='text'>Visit product on website</span>
           </a>"
         ;
       }

@@ -160,8 +160,8 @@ class Shipment extends \ADIOS\Core\Model {
         'price' => function($q) use ($summary) {
           $q->where([
             ['delivery_fee_calculation_method', '=', 1],	
-            ['value_to', '<=', $summary['priceTotal']],
-            ['value_to', '>=', $summary['priceTotal']]
+            ['price_from', '<=', $summary['priceTotal']],
+            ['price_to', '>=', $summary['priceTotal']]
           ]);
           $q->orWhere([
             ['delivery_fee_calculation_method', '=', 2],	
@@ -173,8 +173,8 @@ class Shipment extends \ADIOS\Core\Model {
       ->whereHas('price', function ($q) use ($summary){
         $q->where([
           ['delivery_fee_calculation_method', '=', 1],	
-          ['value_to', '<=', $summary['priceTotal']],
-          ['value_to', '>=', $summary['priceTotal']]
+          ['price_from', '<=', $summary['priceTotal']],
+          ['price_to', '>=', $summary['priceTotal']]
         ]);
         $q->orWhere([
           ['delivery_fee_calculation_method', '=', 2],	

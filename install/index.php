@@ -108,7 +108,7 @@ $languageToInstall = $_GET['language_to_install'];
 $slideshowImageSet = $_GET['slideshow_image_set'];
 
 $randomProductsCount = $_GET['random_products_count'] ?? 50;
-if ($randomProductsCount > 5000) $randomProductsCount = 5000;
+if ($randomProductsCount > 100000) $randomProductsCount = 100000;
 
 $partsToInstall = [];
 if (($_GET['product-catalog'] ?? "") == "yes") $partsToInstall[] = "product-catalog";
@@ -217,6 +217,7 @@ if (count($partsToInstall) == 0) {
 
     $websiteRenderer = new \Surikata\Core\Web\Loader($websiteRendererConfig);
     $adminPanel = new \Surikata\Core\AdminPanel\Loader($adminPanelConfig, ADIOS_MODE_FULL, $websiteRenderer);
+
     $adminPanel->install();
     $adminPanel->installDefaultUsers();
     $adminPanel->createMissingFolders();
@@ -262,6 +263,8 @@ if (count($partsToInstall) == 0) {
     $paymentServiceModel = new \ADIOS\Widgets\Shipping\Models\PaymentService($adminPanel);
     $shipmentModel = new \ADIOS\Widgets\Shipping\Models\Shipment($adminPanel);
     $shipmentPriceModel = new \ADIOS\Widgets\Shipping\Models\ShipmentPrice($adminPanel);
+
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // PART: delivery and payment services
@@ -485,9 +488,9 @@ if (count($partsToInstall) == 0) {
       ]);
       
       // produkty - vlastnosti produktov, ciselnik
-      $productFeatureModel->insertRow(["id" => 1, "order_index" => 1, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Lange", "name_lang_2" => "Dĺžka", "id_measurement_unit" => 1]);
-      $productFeatureModel->insertRow(["id" => 2, "order_index" => 2, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Breite", "name_lang_2" => "Šírka", "id_measurement_unit" => 1]);
-      $productFeatureModel->insertRow(["id" => 3, "order_index" => 3, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Hohe", "name_lang_2" => "Výška", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 1, "order_index" => 1, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Length", "name_lang_2" => "Dĺžka", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 2, "order_index" => 2, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Width", "name_lang_2" => "Šírka", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 3, "order_index" => 3, "value_type" => 1, "entry_method" => 5, "min" => 1, "min" => 10000, "name_lang_1" => "Height", "name_lang_2" => "Výška", "id_measurement_unit" => 1]);
       $productFeatureModel->insertRow(["id" => 4, "order_index" => 4, "value_type" => 1, "entry_method" => 5, "min" => 2, "min" => 5,     "name_lang_1" => "Achsen", "name_lang_2" => "Nápravy", "id_measurement_unit" => 1]);
       $productFeatureModel->insertRow(["id" => 5, "order_index" => 5, "value_type" => 1, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Gesamtgewicht", "name_lang_2" => "Celková hmotnosť", "id_measurement_unit" => 9]);
       $productFeatureModel->insertRow(["id" => 6, "order_index" => 6, "value_type" => 1, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Nutzlast ca.", "name_lang_2" => "Užitočné zaťaženie", "id_measurement_unit" => 9]);
@@ -496,14 +499,18 @@ if (count($partsToInstall) == 0) {
       $productFeaturesCount = $productFeatureModel->get()->count();
 
       // produkty - produkty
+      $adminPanel->db->start_transaction();
+
       RandomGenerator::generateRandomProducts(
         $randomProductsCount,
         $productModel,
         $productFeatureAssignmentModel
       );
 
-      $products = $productModel->get()->toArray();
-      $productsCount = $productModel->get()->count();
+      $adminPanel->db->commit();
+
+      $products = $productModel->getAll();//get()->toArray();
+      $productsCount = count($products);
 
       // produkty - galeria produktov
       $adminPanel->db->start_transaction();
@@ -581,9 +588,13 @@ if (count($partsToInstall) == 0) {
 
       // nakupny cennik
 
+      $adminPanel->db->start_transaction();
+
       for ($i = 1; $i <= $productsCount; $i++) {
         $productPriceModel->insertRandomRow(["id_product" => $i]);
       }
+
+      $adminPanel->db->commit();
 
     }
 
@@ -696,8 +707,8 @@ if (count($partsToInstall) == 0) {
           $customerWishlistModel->insertRow(["id_customer" => $idCustomer, "id_product" => 4]);
 
           // watchdog
-          $customerWatchdogModel->insertRow(["id_customer" => $idCustomer, "id_product" => 5]);
-          $customerWatchdogModel->insertRow(["id_customer" => $idCustomer, "id_product" => 8]);
+          $customerWatchdogModel->insertRow(["id_customer" => $idCustomer, "id_product" => 1]);
+          $customerWatchdogModel->insertRow(["id_customer" => $idCustomer, "id_product" => 2]);
         }
 
         $cnt++;

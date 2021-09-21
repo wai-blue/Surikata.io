@@ -2,36 +2,29 @@
 
 namespace Surikata\Plugins\WAI\Product {
   class Filter extends \Surikata\Core\Web\Plugin {
-    var $filterInfo = NULL;
-    var $brands = NULL;
-
-    public function getBrands() {
-      if ($this->brands === NULL) {
-        $this->brands = $this->adminPanel
-          ->getModel("Widgets/Products/Models/Brand")
-          ->get()
-          ->toArray()
-        ;
-      }
-
-      return $this->brands;
-    }
+    public static $filterInfo = NULL;
 
     public function getFilterInfo() {
-      if ($this->filterInfo === NULL) {
-        $idCategory = (int) $this->websiteRenderer->urlVariables["idProductCategory"] ?? 0;
+      if (self::$filterInfo === NULL) {
+        $idCategory = (int) $this->websiteRenderer->urlVariables["idCategory"] ?? 0;
+        $idBrand = (int) $this->websiteRenderer->urlVariables["idBrand"] ?? 0;
         $brands = $this->websiteRenderer->urlVariables["brands"] ?? "";
         $languageIndex = (int) $this->websiteRenderer->domain["languageIndex"];
 
+        $brandModel = new \ADIOS\Widgets\Products\Models\Brand($this->adminPanel);
         $productFeatureModel = new \ADIOS\Widgets\Products\Models\ProductFeature($this->adminPanel);
         $productFeatureAssignmentModel = new \ADIOS\Widgets\Products\Models\ProductFeatureAssignment($this->adminPanel);
         $productCategoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
 
-        $allFeatures = $productFeatureModel->getAll();
-        $allFeaturesAssignements = $productFeatureAssignmentModel->getAll();
-        $allCategories = $productCategoryModel->translateForWeb($productCategoryModel->getAllCached(), $languageIndex);
-
         $productCatalogPlugin = new \Surikata\Plugins\WAI\Product\Catalog($this->websiteRenderer);
+
+        $allBrands = $brandModel->getAllCached();
+        $allFeatures = $productFeatureModel->getAllCached();
+        $allFeaturesAssignments = $productFeatureAssignmentModel->getAllCached();
+        $allCategories = $productCategoryModel->translateForWeb(
+          $productCategoryModel->getAllCached(),
+          $languageIndex
+        );
 
         foreach ($allCategories as $key => $category) {
           $allCategories[$key]["url"] = $productCatalogPlugin->getWebPageUrl(
@@ -47,7 +40,7 @@ namespace Surikata\Plugins\WAI\Product {
           $directSubCategories = $productCategoryModel->extractDirectSubCategories($idCategory, $allCategories);
         }
 
-        foreach ($allFeaturesAssignements as $value) {
+        foreach ($allFeaturesAssignments as $value) {
           $allFeatures[$value['id_feature']]['minValue'] = min(
             $allFeatures[$value['id_feature']]['minValue'] ?? 0,
             (int) $value['value_number']
@@ -58,8 +51,30 @@ namespace Surikata\Plugins\WAI\Product {
           );
         }
 
-        $this->filterInfo = [
-          "allBrands" => $this->getBrands(),
+        $filteredBrands = [];
+
+        if (!empty($brands)) {
+          if (is_string($brands)) {
+            $filteredBrands = explode(" ", $brands);
+          } else if (is_array($brands)) {
+            $filteredBrands = $brands;
+          }
+        }
+
+        if ($idBrand > 0) {
+          $filteredBrands[] = $idBrand;
+          $filteredBrands = array_unique($filteredBrands);
+        }
+
+        foreach ($filteredBrands as $key => $value) {
+          $value = (int) $value;
+          if ($value <= 0) {
+            unset($filteredBrands[$key]);
+          }
+        }
+
+        self::$filterInfo = [
+          "allBrands" => $allBrands,
           "allCategories" => $allCategories,
           "allCategoriesAndSubCategories" => $allCategoriesAndSubCategories,
           "parentCategories" => $parentCategories,
@@ -67,18 +82,13 @@ namespace Surikata\Plugins\WAI\Product {
           "directSubCategories" => $directSubCategories,
           "allFeatures" => $allFeatures,
           "idCategory" => $idCategory,
+          "filteredBrands" => $filteredBrands,
         ];
 
-        if (!empty($brands)) {
-          if (is_string($brands)) {
-            $this->filterInfo['filteredBrands'] = explode(" ", $brands);
-          } else if (is_array($brands)) {
-            $this->filterInfo['filteredBrands'] = $brands;
-          }
-        }
+
       }
 
-      return $this->filterInfo;
+      return self::$filterInfo;
     }
 
     public function getTwigParams($pluginSettings) {
@@ -97,23 +107,23 @@ namespace ADIOS\Plugins\WAI\Product {
     public function getSettingsForWebsite() {
       return [
         "layout" => [
-          "title" => "Spôsob zobrazenia",
+          "title" => "Layout",
           "type" => "varchar",
           "enum_values" => [
-            "" => "Zvoľte spôsob zobrazenia filtra",
-            "sidebar" => "V bočnom paneli",
+            "" => "Choose layout",
+            "sidebar" => "Sidebar layout",
           ],
         ],
         "showProductCategories" => [
-          "title" => "Zobraziť kategórie",
+          "title" => "Show product categories",
           "type" => "boolean",
         ],
-        "zobrazit_filter" => [
-          "title" => "Zobraziť filter",
+        "showFeaturesFilter" => [
+          "title" => "Show features filter",
           "type" => "boolean",
         ],
-        "show_brands" => [
-          "title" => "Zobraziť výrobcov",
+        "showBrands" => [
+          "title" => "Show brands",
           "type" => "boolean",
         ],
       ];

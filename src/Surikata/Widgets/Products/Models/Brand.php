@@ -10,6 +10,8 @@ class Brand extends \ADIOS\Core\Model {
   var $formTitleForInserting = "New brand";
   var $formTitleForEditing = "Brand";
 
+  public static $allItemsCache = NULL;
+
   public function columns(array $columns = []) {
     return parent::columns([
       "name" => [

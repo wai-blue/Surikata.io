@@ -202,9 +202,9 @@ window.onpopstate = function (e) {
             }
           }
         } else if (dataFail.exception == 'ADIOS\\Widgets\\Orders\\Exceptions\\UnknownDeliveryService') {
-          $('.delivery > label').addClass('input-required');
+          $('.order-delivery > label').addClass('input-required');
         } else if (dataFail.exception == 'ADIOS\\Widgets\\Orders\\Exceptions\\UnknownPaymentService') {
-          $('.delivery > label').addClass('input-required');
+          $('.order-payments > label').addClass('input-required');
         } else if (dataFail.exception != '') {
 
           $('#unknownErrorDiv').fadeIn();

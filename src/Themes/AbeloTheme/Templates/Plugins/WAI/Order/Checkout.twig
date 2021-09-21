@@ -277,7 +277,7 @@
                                 {% if deliveryServices|length > 0 %}
                                   {% for deliveryService in deliveryServices %}
                                     <div id="method2" class="panel-collapse collapse show">
-                                      <div class="panel-body delivery">
+                                      <div class="panel-body order-delivery">
                                         <input 
                                           type="radio" 
                                           name="id_delivery_service" 
@@ -295,7 +295,7 @@
                                     </div>
                                   {% endfor %}
                                 {% else %}
-                                  <p>{{ translate("Delivery services are unavailable", "Order") }}</p>
+                                  <p class="input-required">{{ translate("Delivery services are not available for this country", "Order") }}</p>
                                 {% endif %}
                               </div>
                             </div>
@@ -312,7 +312,7 @@
                                 </div>
                                 {% for paymentMethod in paymentMethods %}
                                   <div id="method1" class="panel-collapse collapse show">
-                                    <div class="panel-body delivery">
+                                    <div class="panel-body order-payments">
                                       <input 
                                         required type="radio" 
                                         name="id_payment_service" 
@@ -424,7 +424,7 @@
                 {% if deliveryServices|length > 0 %}
                   {% for deliveryService in deliveryServices %}
                     <div id="method1" class="panel-collapse collapse show">
-                      <div class="panel-body delivery">
+                      <div class="panel-body order-delivery">
                         <input 
                           type="radio" 
                           name="id_delivery_service" 
@@ -442,7 +442,7 @@
                     </div>
                   {% endfor %}
                 {% else %}
-                  <p>{{ translate("Delivery services are unavailable", "Order") }}</p>
+                  <p class="input-required">{{ translate("Delivery services are not available for this country", "Order") }}</p>
                 {% endif %}
               </div>
             </div>
@@ -459,7 +459,7 @@
                 </div>
                 {% for paymentMethod in paymentMethods %}
                   <div id="method1" class="panel-collapse collapse show">
-                    <div class="panel-body delivery">
+                    <div class="panel-body order-payments">
                       <input 
                         required type="radio" 
                         name="id_payment_service" 

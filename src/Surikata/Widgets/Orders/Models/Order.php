@@ -370,7 +370,7 @@ class Order extends \ADIOS\Core\Model {
    * @throws \ADIOS\Widgets\Orders\Exceptions\PlaceOrderUnknownError
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownCustomer
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService
-   * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownShipment
+   * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownPaymentService
    */
   public function placeOrder($orderData, $customerUID = NULL, $cartContents = NULL, $checkRequiredFields = TRUE) {
     $idCustomer = 0;
@@ -474,42 +474,13 @@ class Order extends \ADIOS\Core\Model {
       $cartContents = $cartModel->getCartContents($customerUID);
     }
 
-    // REVIEW: cele $orderData je o udajoch z DB, cize polozky pola nepouzivaju_camel_case.
-    // Preco je tu zrazu deliveryServiceVCamelCase?
-    // if (!empty($orderData['deliveryService'])) {
-    //   $shipmentModel = 
-    //     new \ADIOS\Widgets\Shipping\Models\Shipment(
-    //       $this->adminPanel
-    //     )
-    //   ;
+    if (empty($orderData['id_delivery_service'])) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService;
+    }
 
-    //   $shipmentPriceModel = 
-    //     new \ADIOS\Widgets\Shipping\Models\ShipmentPrice(
-    //       $this->adminPanel
-    //     )
-    //   ;
-
-    //   // REVIEW: Upravit podla noveho stlpca Order.id_shipment
-    //   // Resp. otazka - v checkout formulari sa vlastne ma volit co? Shipment alebo DeliveryService?
-    //   // Mam za to, ze po novom je to shipment.
-    //   $shipment = 
-    //     $shipmentModel->getShipment(
-    //       $orderData['deliveryService'],
-    //       $orderData['paymentMethod']
-    //     )
-    //   ; 
-
-    //   if ($shipment === NULL) {
-    //     throw new \ADIOS\Widgets\Orders\Exceptions\UnknownShipment();
-    //   }
-
-    //   $deliveryPrice = 
-    //     ($shipmentPriceModel->getById($shipment['id']))['price']
-    //   ;
-    // } else {
-    //   //$deliveryPlugin = NULL;
-    //   $deliveryPrice = 0;
-    // }
+    if (empty($orderData['id_payment_service'])) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\UnknownPaymentService;
+    }
 
     if (empty($orderData['confirmation_time'])) {
       $confirmationTime = date("Y-m-d H:i:s");

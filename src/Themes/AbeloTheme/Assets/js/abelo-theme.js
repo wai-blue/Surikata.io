@@ -201,7 +201,9 @@ window.onpopstate = function (e) {
               $('#orderDataForm input[name=' + emptyFields[i] + ']').addClass('required-empty');
             }
           }
-        } else if (dataFail.exception == 'ADIOS\\Widgets\\Orders\\Exceptions\\UnknownShipment') {
+        } else if (dataFail.exception == 'ADIOS\\Widgets\\Orders\\Exceptions\\UnknownDeliveryService') {
+          $('.delivery > label').addClass('input-required');
+        } else if (dataFail.exception == 'ADIOS\\Widgets\\Orders\\Exceptions\\UnknownPaymentService') {
           $('.delivery > label').addClass('input-required');
         } else if (dataFail.exception != '') {
 

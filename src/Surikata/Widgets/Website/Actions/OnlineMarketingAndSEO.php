@@ -2,13 +2,13 @@
 
 namespace ADIOS\Actions\Website;
 
-class SEO extends \ADIOS\Core\Action {
+class OnlineMarketingAndSEO extends \ADIOS\Core\Action {
   public function render() {
-    $settings = $this->adios->config["settings"]["web"][$this->params['domain']]["online_marketing"];
+    $settings = $this->adios->config["settings"]["web"][$this->params['domainName']]["onlineMarketingAndSEO"];
 
     return $this->adios->renderAction("UI/SettingsPanel", [
-      "settings_group" => "web/{$this->params['domain']}/online_marketing",
-      "title" => "Website - {$this->params['domain']} - Online marketing",
+      "settings_group" => "web/{$this->params['domainName']}/onlineMarketingAndSEO",
+      "title" => "{$this->params['domainName']} » Online marketing and SEO",
       "template" => [
         "tabs" => [
           [

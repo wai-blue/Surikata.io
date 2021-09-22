@@ -23,6 +23,8 @@ class DB {
      */
     public $tables;
 
+    public $existingSqlTables = [];
+
     /**
      * Constructor.
      *

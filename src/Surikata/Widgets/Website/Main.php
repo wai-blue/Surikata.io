@@ -36,28 +36,28 @@ class Website extends \ADIOS\Core\Widget {
               "onclick" => "desktop_update('Website/{$domainInfo['name']}/Menu');",
             ],
             [
-              "title" => $this->translate("Profile"),
-              "onclick" => "window_render('Website/{$domain}/Profile');",
+              "title" => $this->translate("Company Info"),
+              "onclick" => "window_render('Website/{$domainInfo['name']}/CompanyInfo');",
             ],
             [
               "title" => $this->translate("Design"),
-              "onclick" => "window_render('Website/{$domain}/Design');",
+              "onclick" => "window_render('Website/{$domainInfo['name']}/Design');",
             ],
             [
               "title" => $this->translate("Online marketing"),
-              "onclick" => "window_render('Website/{$domain}/SEO');",
+              "onclick" => "window_render('Website/{$domainInfo['name']}/OnlineMarketingAndSEO');",
             ],
             [
               "title" => $this->translate("Legal disclaimers"),
-              "onclick" => "window_render('Website/{$domain}/LegalDisclaimers');",
+              "onclick" => "window_render('Website/{$domainInfo['name']}/LegalDisclaimers');",
             ],
             [
               "title" => "Emails",
-              "onclick" => "window_render('Website/{$domain}/Emails');",
+              "onclick" => "window_render('Website/{$domainInfo['name']}/Emails');",
             ],
             [
               "title" => "Translations",
-              "onclick" => "desktop_update('Website/{$domain}/Translations');",
+              "onclick" => "desktop_update('Website/{$domainInfo['name']}/Translations');",
             ],
           ],
         ];
@@ -94,23 +94,23 @@ class Website extends \ADIOS\Core\Widget {
       $this->adios->addRouting([
         '/^Website\/(.+)\/Design$/' => [
           "action" => 'Website/Design',
-          "params" => [ "domain" => '$1' ],
+          "params" => [ "domainName" => '$1' ],
         ],
-        '/^Website\/(.+)\/Profile$/' => [
-          "action" => 'Website/Profile',
-          "params" => [ "domain" => '$1' ],
+        '/^Website\/(.+)\/CompanyInfo$/' => [
+          "action" => 'Website/CompanyInfo',
+          "params" => [ "domainName" => '$1' ],
         ],
-        '/^Website\/(.+)\/SEO$/' => [
-          "action" => 'Website/SEO',
-          "params" => [ "domain" => '$1' ],
+        '/^Website\/(.+)\/OnlineMarketingAndSEO$/' => [
+          "action" => 'Website/OnlineMarketingAndSEO',
+          "params" => [ "domainName" => '$1' ],
         ],
         '/^Website\/(.+)\/LegalDisclaimers$/' => [
           "action" => 'Website/LegalDisclaimers',
-          "params" => [ "domain" => '$1' ],
+          "params" => [ "domainName" => '$1' ],
         ],
         '/^Website\/(.+)\/Emails$/' => [
           "action" => 'Website/Emails',
-          "params" => [ "domain" => '$1' ],
+          "params" => [ "domainName" => '$1' ],
         ],
         '/^Website\/Media$/' => [
           "action" => 'UI/FileBrowser',

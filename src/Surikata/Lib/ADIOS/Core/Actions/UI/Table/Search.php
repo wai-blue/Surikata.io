@@ -67,7 +67,7 @@ class Search extends \ADIOS\Core\Action {
 
     $content = "
       <div class='row'>
-        <div class='col-8'>
+        <div class='col-12 col-lg-8'>
           ".(new \ADIOS\Core\UI\Input\SettingsPanel(
             $this->adios,
             $this->uid."_settings_panel",
@@ -79,7 +79,7 @@ class Search extends \ADIOS\Core\Action {
             ]
           ))->render()."
         </div>
-        <div class='col-4'>
+        <div class='col-12 col-lg-4'>
           <div class='card shadow mb-4'>
             <a class='d-block card-header py-3'>
               <h6 class='m-0 font-weight-bold text-primary'>Saved searches</h6>

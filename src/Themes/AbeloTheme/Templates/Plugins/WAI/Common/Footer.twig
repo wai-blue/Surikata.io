@@ -64,9 +64,9 @@
           <div class="col">
             <div class="single-wedge">
               <div class="footer-logo text-medium">
-                <a href="{{ rootUrl }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ settings.profile.logo }}" alt="Logo" /></a>
-                <p class="mt-3">{{ settings.profile.storeName }}</p>
-                <p class="text-infor">{{ settings.profile.slogan }}</p>
+                <a href="{{ rootUrl }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ settings.companyInfo.logo }}" alt="Logo" /></a>
+                <p class="mt-3">{{ settings.companyInfo.storeName }}</p>
+                <p class="text-infor">{{ settings.companyInfo.slogan }}</p>
               </div>
             </div>
           </div>
@@ -79,23 +79,23 @@
                 <p class="add">
                   {% if showContactAddress %}
                     <span class="address">{{ translate("Address", "Common") }}:</span> 
-                    {{ settings.profile.sidlo_ulica_1 }} {{ settings.profile.sidlo_ulica_2 }}
-                    {{ settings.profile.sidlo_psc }} {{ settings.profile.sidlo_mesto }}
+                    {{ settings.companyInfo.sidlo_ulica_1 }} {{ settings.companyInfo.sidlo_ulica_2 }}
+                    {{ settings.companyInfo.sidlo_psc }} {{ settings.companyInfo.sidlo_mesto }}
                   {% endif %}
                 </p>
                 {% if showContactEmail %}
                   <p class="mail">
                     <span class="email">{{ translate("E-mail", "Common") }}:</span>
-                    <a href="mailto:{{ settings.profile.contactEmail }}">
-                      {{ settings.profile.contactEmail }}
+                    <a href="mailto:{{ settings.companyInfo.contactEmail }}">
+                      {{ settings.companyInfo.contactEmail }}
                     </a>
                   </p>
                 {% endif %}
                 {% if showContactPhoneNumber %}
                   <p class="phone">
                     <span class="call us">{{ translate("Phone", "Common") }}:</span>
-                    <a href="tel:{{ settings.profile.contactPhoneNumber }}">
-                      {{ settings.profile.contactPhoneNumber }}
+                    <a href="tel:{{ settings.companyInfo.contactPhoneNumber }}">
+                      {{ settings.companyInfo.contactPhoneNumber }}
                     </a>
                   </p>
                 {% endif %}
@@ -187,17 +187,17 @@
               <div class="footer-social-icon" style="float:none">
                 <div class="social-icon">
                   <ul>
-                    {% if settings.profile.urlFacebook != "" %}
-                      <li class="facebook"><a href="{{ settings.profile.urlFacebook }}"><i class="ion-social-facebook"></i></a></li>
+                    {% if settings.companyInfo.urlFacebook != "" %}
+                      <li class="facebook"><a href="{{ settings.companyInfo.urlFacebook }}"><i class="ion-social-facebook"></i></a></li>
                     {% endif %}
-                    {% if settings.profile.urlTwitter != "" %}
-                      <li class="twitter"><a href="{{ settings.profile.urlTwitter }}"><i class="ion-social-twitter"></i></a></li>
+                    {% if settings.companyInfo.urlTwitter != "" %}
+                      <li class="twitter"><a href="{{ settings.companyInfo.urlTwitter }}"><i class="ion-social-twitter"></i></a></li>
                     {% endif %}
-                    {% if settings.profile.urlYouTube != "" %}
-                      <li class="google"><a href="{{ settings.profile.urlYouTube }}"><i class="ion-social-youtube-outline"></i></a></li>
+                    {% if settings.companyInfo.urlYouTube != "" %}
+                      <li class="google"><a href="{{ settings.companyInfo.urlYouTube }}"><i class="ion-social-youtube-outline"></i></a></li>
                     {% endif %}
-                    {% if settings.profile.urlInstagram != "" %}
-                      <li class="instagram"><a href="{{ settings.profile.urlInstagram }}"><i class="ion-social-instagram-outline"></i></a></li>
+                    {% if settings.companyInfo.urlInstagram != "" %}
+                      <li class="instagram"><a href="{{ settings.companyInfo.urlInstagram }}"><i class="ion-social-instagram-outline"></i></a></li>
                     {% endif %}
                   </ul>
                 </div>
@@ -211,7 +211,7 @@
       <div class="container">
         <div class="row"> 
           <div class="col-md-12 text-center">
-            <p class="copy-text">{{ translate("Copyright ©") }} <a href=""> {{ currentYear }} {{ settings.profile.storeName }}</a>. {{ translate("All Rights Reserved", "Common") }}</p>
+            <p class="copy-text">{{ translate("Copyright ©") }} <a href=""> {{ currentYear }} {{ settings.companyInfo.storeName }}</a>. {{ translate("All Rights Reserved", "Common") }}</p>
           </div>
         </div>
       </div>

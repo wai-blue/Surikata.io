@@ -48,7 +48,7 @@ class Window extends \ADIOS\Core\UI\View {
 
     $html = "
       <span
-        class='adios_window'
+        class='adios ui Window adios_window'
         id='{$this->params['uid']}'
       >
         <div class='header'>

@@ -40,6 +40,11 @@
 .delivery img{
   width: auto;
 }
+.select-order select{
+  border: 1px solid #777777;
+  border-radius: 5px;
+  padding: 2px;
+}
 .product-flag {
   position: absolute;
   top: 5px;

@@ -103,9 +103,5 @@ class PaymentService extends \ADIOS\Core\Model {
 
     return $params;
   }
-  
-  public function getAll(string $keyBy = "id") {
-    return self::get()->toArray();
-  }
 
 }

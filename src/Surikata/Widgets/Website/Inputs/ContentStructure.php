@@ -4,7 +4,9 @@ namespace ADIOS\Widgets\Website\Inputs;
 
 class ContentStructure extends \ADIOS\Core\Input {
   public function render() {
-    $themeName = $this->adios->config['settings']['web'][$this->params['form_data']['domain']]['design']['theme'];
+    $domain = $this->params['form_data']['domain'];
+    $themeName = $this->adios->config['settings']['web'][$domain]['design']['theme'];
+
     $theme = $this->adios->widgets['Website']->themes[$themeName];
 
     $layouts = $theme->getLayouts();
@@ -38,7 +40,7 @@ class ContentStructure extends \ADIOS\Core\Input {
               'Website/ContentStructure/LayoutSelection',
               {
                 'contentStructure': {$this->uid}_data,
-                'domain': '{$this->params['form_data']['domain']}'
+                'domain': '{$domain}'
               },
               function(res) {
                 if (res) {
@@ -85,7 +87,7 @@ class ContentStructure extends \ADIOS\Core\Input {
                   {
                     'contentStructure': {$this->uid}_data,
                     'panelName': panelName,
-                    'domain': '{$this->params['form_data']['domain']}'
+                    'domain': '{$domain}'
                   },
                   function(res) {
                     if (res) {

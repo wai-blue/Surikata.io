@@ -2,13 +2,13 @@
 
 namespace ADIOS\Actions\Website;
 
-class Profile extends \ADIOS\Core\Action {
+class CompanyInfo extends \ADIOS\Core\Action {
   public function render() {
-    $settings = $this->adios->config["settings"]["web"][$this->params['domain']]["profile"];
+    $settings = $this->adios->config["settings"]["web"][$this->params['domainName']]["companyInfo"];
 
     return $this->adios->renderAction("UI/SettingsPanel", [
-      "settings_group" => "web/{$this->params['domain']}/profile",
-      "title" => "Website - {$this->params['domain']} - Profile",
+      "settings_group" => "web/{$this->params['domainName']}/companyInfo",
+      "title" => "{$this->params['domainName']} » Company Info",
       "template" => [
         "tabs" => [
           [

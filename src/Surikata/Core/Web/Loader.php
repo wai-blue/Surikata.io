@@ -78,7 +78,14 @@ class Loader extends \Cascada\Loader {
       $this->pages = $this->loadPublishedPages();
       $this->currentPage = NULL;
 
-      $this->adminPanel->webSettings = $this->loadSurikataSettings("web/{$this->config["domainToRender"]}");
+      $this->domain = [];
+      foreach ($this->adminPanel->config['widgets']['Website']['domains'] as $domainInfo) {
+        if ($domainInfo['name'] == $this->config["domainToRender"]) {
+          $this->domain = $domainInfo;
+        }
+      }
+
+      $this->adminPanel->webSettings = $this->loadSurikataSettings("web/{$this->domain['name']}");
 
       $this->themeName = $this->adminPanel->webSettings["design"]["theme"];
 
@@ -141,8 +148,6 @@ class Loader extends \Cascada\Loader {
         exit();
       };
 
-      $this->domain = $this->adminPanel->config['widgets']['Website']['domains'][$this->config["domainToRender"]];
-
       $this->initTwig();
 
       // priklad volania v Twig sablone:
@@ -180,7 +185,7 @@ class Loader extends \Cascada\Loader {
           $domains = $___CASCADAObject->adminPanel->config['widgets']['Website']['domains'];
           $domainToRender = $___CASCADAObject->config['domainToRender'];
 
-          $translationModel = new \ADIOS\Widgets\Website\Models\Translation($this->adminPanel);
+          $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($this->adminPanel);
 
           if (
             $context === NULL

@@ -1,5 +1,5 @@
 <?php
 
 namespace ADIOS\Widgets\Orders\Exceptions {
-  class UnknownShipment extends \Exception {}
+  class UnknownPaymentService extends \Exception {}
 }

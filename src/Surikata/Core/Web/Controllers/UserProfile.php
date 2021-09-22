@@ -57,10 +57,12 @@ class UserProfile extends \Surikata\Core\Web\Controller {
       $given_name = $_POST["given_name"] ?? "";
       $family_name = $_POST["family_name"] ?? "";
 
+      // REVIEW: $vsetkyPremenneVCamelCase
       $company_name = $_POST["company_name"] ?? "";
       $company_id = $_POST["company_id"] ?? "";
       $company_tax_id = $_POST["company_tax_id"] ?? "";
       $company_vat_id = $_POST["company_vat_id"] ?? "";
+      // REVIEW: $email sa nikde nepouziva, chyba/zamer/zbytocne?
       $email = $_POST["email"] ?? "";
 
       $address = [];

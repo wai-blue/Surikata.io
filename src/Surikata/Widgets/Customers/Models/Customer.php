@@ -60,7 +60,6 @@ class Customer extends \ADIOS\Core\Model {
       "company_id" => [
         "type" => "varchar",
         "title" => "Company ID",
-        "pattern" => '\d{8}',
         "show_column" => TRUE,
       ],
 
@@ -74,7 +73,6 @@ class Customer extends \ADIOS\Core\Model {
       "company_vat_id" => [
         "type" => "varchar",
         "title" => "Company VAT ID",
-        "pattern" => '(SK|CZ)\d{10}',
         "show_column" => FALSE,
       ],
 
@@ -341,10 +339,10 @@ class Customer extends \ADIOS\Core\Model {
             "rows" => [
               // "code",
               "email",
-              // "given_name",
-              // "family_name",
-              // "company_name",
-              // "company_id",
+              "given_name",
+              "family_name",
+              "company_name",
+              "company_id",
             ],
           ],
         ],
@@ -662,6 +660,9 @@ class Customer extends \ADIOS\Core\Model {
       throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error! Try refreshing the page.");
     }
 
+    // REVIEW: Vesmirny kod?
+    // Vid review nizsie, rovnaka situacia.
+
     $customer = $this
       ->where('id', '=', (int) $userLoggedInfo['id'])
     ;
@@ -683,12 +684,20 @@ class Customer extends \ADIOS\Core\Model {
       throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error! Try refreshing the page.");
     }
 
+    // REVIEW: Vesmirny kod?
+    // Tento robi to iste:
+    // $this
+    //   ->where('id', '=', (int) $userLoggedInfo['id'])
+    //   ->update($address);
+    // ;
+
     $customer = $this
       ->where('id', '=', (int) $userLoggedInfo['id'])
     ;
 
     $update = $customer->update($address);
 
+    // REVIEW: Chyba tu osetrenie chyboveho stavu
     return TRUE;
   }
 
@@ -711,7 +720,7 @@ class Customer extends \ADIOS\Core\Model {
       ->toArray()
     );
 
-   
+    // REVIEW: $customer je podla mna pole, nie integer. Tento if je teda nefunkcny.
     if ($customer > 0) {
       if ($customer["is_validated"]) {
         $this->sendNotificationForForgotPassword($customer);
@@ -728,9 +737,9 @@ class Customer extends \ADIOS\Core\Model {
   public function sendNotificationForCreateAccount($accountInfo) {
     $domain = $this->adios->websiteRenderer->currentPage['domain'];
 
-    $subject = $this->adios->config["settings"]["emails"][$domain]['after_registration_SUBJECT'];
-    $body = $this->adios->config["settings"]["emails"][$domain]['after_registration_BODY'];
-    $signature = $this->adios->config["settings"]["emails"][$domain]['signature'];
+    $subject = $this->adios->config["settings"]["web"][$domain]["emails"]['after_registration_SUBJECT'];
+    $body = $this->adios->config["settings"]["web"][$domain]["emails"]['after_registration_BODY'];
+    $signature = $this->adios->config["settings"]["web"][$domain]["emails"]['signature'];
 
     $accountValidationURL = (new \Surikata\Plugins\WAI\Customer\ValidationConfirmation($this->adios->websiteRenderer))
       ->getWebPageUrl(["email" => $accountInfo['email']])
@@ -761,9 +770,9 @@ class Customer extends \ADIOS\Core\Model {
   public function sendNotificationForForgotPassword($accountInfo) {
     $domain = $this->adios->websiteRenderer->currentPage['domain'];
 
-    $subject = $this->adios->config["settings"]["emails"][$domain]['forgot_password_SUBJECT'];
-    $body = $this->adios->config["settings"]["emails"][$domain]['forgot_password_BODY'];
-    $signature = $this->adios->config["settings"]["emails"][$domain]['signature'];
+    $subject = $this->adios->config["settings"]["web"][$domain]["emails"]['forgot_password_SUBJECT'];
+    $body = $this->adios->config["settings"]["web"][$domain]["emails"]['forgot_password_BODY'];
+    $signature = $this->adios->config["settings"]["web"][$domain]["emails"]['signature'];
 
     $passwordRecoveryUrl = (new \Surikata\Plugins\WAI\Customer\ForgotPassword($this->adios->websiteRenderer))
       ->getWebPageUrl(["email" => $accountInfo['email']])

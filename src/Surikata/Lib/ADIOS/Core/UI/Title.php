@@ -29,19 +29,21 @@ class Title extends \ADIOS\Core\UI\View {
       $center = trim($center);
 
       return "
-        ".(empty($center) ? "" : "
-          <div class='row mb-3'>
-            <div class='col-lg-12 p-0'>
-              <div class='h3 text-primary mb-0'>{$center}</div>
+        <div class='adios ui Title'>
+          ".(empty($center) ? "" : "
+            <div class='row mb-3'>
+              <div class='col-lg-12 p-0'>
+                <div class='h3 text-primary mb-0'>{$center}</div>
+              </div>
             </div>
-          </div>
-        ")."
-        <div class='row mb-3'>
-          <div class='col-lg-6 p-0'>
-            ".parent::render('left')."
-          </div>
-          <div class='col-lg-6 text-right'>
-            ".parent::render('right')."
+          ")."
+          <div class='row mb-3'>
+            <div class='col-lg-6 p-0'>
+              ".parent::render('left')."
+            </div>
+            <div class='col-lg-6 text-right'>
+              ".parent::render('right')."
+            </div>
           </div>
         </div>
       ";

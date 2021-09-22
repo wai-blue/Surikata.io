@@ -53,7 +53,11 @@
       <table>
         <tr>
           <td>
-            Faktúra č. {{ invoice.cislo }} - daňový doklad
+            {% if language == "sk" %}
+              Faktúra č. {{ invoice.cislo }} - daňový doklad
+            {% elseif language == "en" %}
+              Invoice no. {{ invoice.cislo }}
+            {% endif %}
           </td>
         </tr>
       </table>
@@ -64,7 +68,13 @@
       <div class='dcolumn'>
         <div class='content'>
           <div class='dodod_info'>
-            <span>Dodávateľ</span>
+            <span>
+              {% if language == "sk" %}
+                Dodávateľ
+              {% elseif language == "en" %}
+                Supplier
+              {% endif %}
+            </span>
             <div></div>
           </div>
           <div>
@@ -86,19 +96,49 @@
             <tr class='sep'><td colspan=4><div></div></td></tr>
 
             <tr class=''>
-              <td style='width:20%;'>IČO:</td>
+              <td style='width:20%;'>
+                {% if language == "sk" %}
+                  IČO:
+                {% elseif language == "en" %}
+                  Company ID
+                {% endif %}
+              </td>
               <td style='width:30%;'>{{ invoice.supplier_company_id }}</td>
-              <td style='width:20%;'>Telefón:</td>
+              <td style='width:20%;'>
+                {% if language == "sk" %}
+                  Telefón:
+                {% elseif language == "en" %}
+                  Phone:
+                {% endif %}
+              </td>
               <td style='width:30%;'>{{ invoice.supplier_phone }}</td>
             </tr>
             <tr class=''>
-              <td style='width:20%;'>DIČ:</td>
+              <td style='width:20%;'>
+                {% if language == "sk" %}
+                  DIČ:
+                {% elseif language == "en" %}
+                  TAX ID:
+                {% endif %}
+              </td>
               <td style='width:30%;'>{{ invoice.supplier_company_tax_id }}</td>
-              <td style='width:20%;'>Email:</td>
+              <td style='width:20%;'>
+                {% if language == "sk" %}
+                  Email:
+                {% elseif language == "en" %}
+                  Email:
+                {% endif %}
+              </td>
               <td style='width:30%;'>{{ invoice.supplier_email }}</td>
             </tr>
             <tr class=''>
-              <td style='width:20%;'>IČDPH:</td>
+              <td style='width:20%;'>
+                {% if language == "sk" %}
+                  IČDPH:
+                {% elseif language == "en" %}
+                  VAT ID:
+                {% endif %}
+              </td>
               <td style='width:30%;'>{{ invoice.supplier_company_vat_id }}</td>
               <td style='width:20%;'>Web:</td>
               <td style='width:30%;'>{{ invoice.supplier_www }}</td>
@@ -116,7 +156,13 @@
       <div class='dcolumn'>
         <div class='content odberatel'>
           <div class='dodod_info'>
-            <span>Odberateľ</span>
+            <span>
+              {% if language == "sk" %}
+                Odberateľ:
+              {% elseif language == "en" %}
+                Customer:
+              {% endif %}
+            </span>
             <div></div>
           </div>
 
@@ -140,19 +186,49 @@
             <tr class='sep'><td colspan=4><div></div></td></tr>
 
             <tr class=''>
-              <td style='width:20%;'>IČO:</td>
+              <td style='width:20%;'>
+                {% if language == "sk" %}
+                  IČO:
+                {% elseif language == "en" %}
+                  Company ID
+                {% endif %}
+              </td>
               <td style='width:30%;'>{{ invoice.customer_company_id }}</td>
-              <td style='width:20%;'>Telefón:</td>
+              <td style='width:20%;'>
+                {% if language == "sk" %}
+                  Telefón:
+                {% elseif language == "en" %}
+                  Phone:
+                {% endif %}
+              </td>
               <td style='width:30%;'>{{ invoice.customer_phone }}</td>
             </tr>
             <tr class=''>
-              <td style='width:20%;'>DIČ:</td>
+              <td style='width:20%;'>
+                {% if language == "sk" %}
+                  DIČ:
+                {% elseif language == "en" %}
+                  TAX ID:
+                {% endif %}
+              </td>
               <td style='width:30%;'>{{ invoice.customer_company_tax_id }}</td>
-              <td style='width:20%;'>Email:</td>
+              <td style='width:20%;'>
+                {% if language == "sk" %}
+                  Email:
+                {% elseif language == "en" %}
+                  Email:
+                {% endif %}
+              </td>
               <td style='width:30%;'>{{ invoice.customer_email }}</td>
             </tr>
             <tr class=''>
-              <td style='width:20%;'>IČDPH:</td>
+              <td style='width:20%;'>
+                {% if language == "sk" %}
+                  IČDPH:
+                {% elseif language == "en" %}
+                  VAT ID:
+                {% endif %}
+              </td>
               <td style='width:30%;'>{{ invoice.customer_company_vat_id }}</td>
               <td style='width:20%;'>Web:</td>
               <td style='width:30%;'>{{ invoice.customer_www }}</td>
@@ -164,45 +240,99 @@
         <div class='content'>
           <table class='w_swi_invoices_udaje' id='w_swi_invoices_udaje_ostatne'>
             <tr>
-              <td style='width:50%;'>Variabilný symbol:</td>
+              <td style='width:50%;'>
+                {% if language == "sk" %}
+                  Variabilný symbol:
+                {% elseif language == "en" %}
+                  Variable symbol:
+                {% endif %}
+              </td>
               <td style='width:50%;'><b>{{ invoice.variable_symbol }}</b></td>
             </tr>
             <tr>
-              <td style='width:50%;'>Špecifický symbol:</td>
+              <td style='width:50%;'>
+                {% if language == "sk" %}
+                  Špecifický symbol:
+                {% elseif language == "en" %}
+                  Specific symbol:
+                {% endif %}
+              </td>
               <td style='width:50%;'>{{ invoice.specific_symbol }}</td>
             </tr>
             <tr>
-              <td style='width:50%;'>Konštantný symbol:</td>
+              <td style='width:50%;'>
+                {% if language == "sk" %}
+                  Konštantný symbol:
+                {% elseif language == "en" %}
+                  Constant symbol:
+                {% endif %}
+              </td>
               <td style='width:50%;'>{{ invoice.constant_symbol }}</td>
             </tr>
 
             <tr class='sep'><td colspan=2><div></div></td></tr>
 
             <tr>
-              <td style='width:50%;'>Forma úhrady:</td>
+              <td style='width:50%;'>
+                {% if language == "sk" %}
+                  Forma úhrady:
+                {% elseif language == "en" %}
+                  Payment:
+                {% endif %}
+              </td>
               <td style='width:50%;'>{{ invoice.forma_uhrady }}</td>
             </tr>
             <tr>
-              <td style='width:50%;'>Číslo objednávky:</td>
+              <td style='width:50%;'>
+                {% if language == "sk" %}
+                  Číslo objednávky:
+                {% elseif language == "en" %}
+                  Order number:
+                {% endif %}
+              </td>
               <td style='width:50%;'>{{ invoice.order_number }}</td>
             </tr>
             <tr>
-              <td style='width:50%;'>Číslo dodacieho listu:</td>
+              <td style='width:50%;'>
+                {% if language == "sk" %}
+                  Číslo dodacieho listu:
+                {% elseif language == "en" %}
+                  Delivery note number:
+                {% endif %}
+              </td>
               <td style='width:50%;'>{{ invoice.cislo_dodacieho_listu }}</td>
             </tr>
 
             <tr class='sep'><td colspan=2><div></div></td></tr>
 
             <tr>
-              <td style='width:50%;'>Dátum dodania:</td>
+              <td style='width:50%;'>
+                {% if language == "sk" %}
+                  Dátum dodania:
+                {% elseif language == "en" %}
+                  Date of issue:
+                {% endif %}
+              </td>
               <td style='width:50%;'>{{ invoice.delivery_time|date(locale.dateFormat) }}</td>
             </tr>
             <tr>
-              <td style='width:50%;'>Dátum vystavenia:</td>
+              <td style='width:50%;'>
+                {% if language == "sk" %}
+                  Dátum vystavenia:
+                {% elseif language == "en" %}
+                  Date of delivery:
+                {% endif %}
+              </td>
               <td style='width:50%;'>{{ invoice.issue_time|date(locale.dateFormat) }}</td>
             </tr>
             <tr>
-              <td style='width:50%;'>Dátum splatnosti:</td>
+              <td style='width:50%;'>
+                {% if language == "sk" %}
+                  Dátum splatnosti:
+                {% elseif language == "en" %}
+                  Due date:
+                {% endif %}
+              </td>
               <td style='width:50%;'><b>{{ invoice.payment_due_time|date(locale.dateFormat) }}</b></td>
             </tr>
           </table>
@@ -217,14 +347,62 @@
         <table id='w_swi_invoices_template_items'>
           <thead>
             <tr class='header'>
-              <td style='width:26%;' class=''>Názov</td>
-              <td style='width:9%;' class='_num'>J.cena<br/>bez DPH</td>
-              <td style='width:9%;' class='_num'>DPH</td>
-              <td style='width:9%;' class='_num'>J.cena<br/>s DPH</td>
-              <td style='width:7%;' class='_num'>Množstvo</td>
-              <td style='width:5%; text-align:center;' class=''>MJ</td>
-              <td style='width:11%;' class='_num'>Spolu<br/>bez DPH</td>
-              <td style='width:11%;' class='_num'>Spolu<br/>s DPH</td>
+              <td style='width:26%;' class=''>
+                {% if language == "sk" %}
+                  Názov
+                {% elseif language == "en" %}
+                  Name
+                {% endif %}
+              </td>
+              <td style='width:9%;' class='_num'>
+                {% if language == "sk" %}
+                  J.cena<br/>bez DPH
+                {% elseif language == "en" %}
+                  Price<br/>excl. VAT
+                {% endif %}
+              </td>
+              <td style='width:9%;' class='_num'>
+                {% if language == "sk" %}
+                  DPH
+                {% elseif language == "en" %}
+                  VAT
+                {% endif %}
+              </td>
+              <td style='width:9%;' class='_num'>
+                {% if language == "sk" %}
+                  J.cena<br/>s DPH
+                {% elseif language == "en" %}
+                  Price<br/>incl. VAT
+                {% endif %}
+              </td>
+              <td style='width:7%;' class='_num'>
+                {% if language == "sk" %}
+                  Množstvo
+                {% elseif language == "en" %}
+                  Amount
+                {% endif %}
+              </td>
+              <td style='width:5%; text-align:center;' class=''>
+                {% if language == "sk" %}
+                  MJ
+                {% elseif language == "en" %}
+                  Unit
+                {% endif %}
+              </td>
+              <td style='width:11%;' class='_num'>
+                {% if language == "sk" %}
+                  Spolu<br/>bez DPH
+                {% elseif language == "en" %}
+                  Subtotal<br/>excl. VAT
+                {% endif %}
+              </td>
+              <td style='width:11%;' class='_num'>
+                {% if language == "sk" %}
+                  Spolu<br/>s DPH
+                {% elseif language == "en" %}
+                  Subtotal<br/>incl. VAT
+                {% endif %}
+              </td>
             </tr>
           </thead>
           <tbody>
@@ -258,7 +436,14 @@
 
             {% for sadzba in invoice.SADZBY_DPH %}
               <tr>
-                <td>Základ DPH {{ sadzba.sadzba }} %</td>
+                <td>
+                  {% if language == "sk" %}
+                    Základ DPH
+                  {% elseif language == "en" %}
+                    VAT
+                  {% endif %}
+                  {{ sadzba.sadzba }} %
+                </td>
                 <td class='_num'>
                   {{ sadzba.zaklad_celkom|number_format(2, ',', ' ') }} €
                 </td>
@@ -267,7 +452,11 @@
 
             <tr>
               <td class='fbigger'>
-                Spolu bez DPH
+                {% if language == "sk" %}
+                  Spolu bez DPH
+                {% elseif language == "en" %}
+                  Total excl. VAT
+                {% endif %}
               </td>
               <td class='_num fbigger'>
                 {{ invoice.SUMAR.suma_celkom_bez_dph|number_format(2, ',', ' ') }} €
@@ -278,7 +467,14 @@
             
             {% for sadzba in invoice.SADZBY_DPH %}
               <tr>
-                <td>DPH {{ sadzba.sadzba }} %</td>
+                <td>
+                  {% if language == "sk" %}
+                    DPH
+                  {% elseif language == "en" %}
+                    VAT
+                  {% endif %}
+                  {{ sadzba.sadzba }} %
+                </td>
                 <td class='_num'>
                   {{ sadzba.suma_celkom|number_format(2, ',', ' ') }} €
                 </td>
@@ -286,7 +482,13 @@
             {% endfor %}
 
             <tr>
-              <td>Spolu DPH</td>
+              <td>
+                {% if language == "sk" %}
+                  Spolu DPH
+                {% elseif language == "en" %}
+                  VAT Total
+                {% endif %}
+              </td>
               <td class='_num'>
                 {{ invoice.SUMAR.suma_celkom_dph|number_format(2, ',', ' ') }} €
               </td>
@@ -296,7 +498,13 @@
             
             <tr class='suma'>
               <td class='fbigger'>
-                <b>Spolu s DPH</b>
+                <b>
+                  {% if language == "sk" %}
+                    Spolu s DPH
+                  {% elseif language == "en" %}
+                    Total incl. VAT
+                  {% endif %}
+                </b>
               </td>
               <td class='_num fbigger'>
                 <b>{{ invoice.SUMAR.suma_celkom_s_dph|number_format(2, ',', ' ') }} €</b>
@@ -317,7 +525,11 @@
             <tr>
               <td style='width:50%;'>
                 <span class='podpis_info'>
-                  Pečiatka a podpis
+                  {% if language == "sk" %}
+                    Pečiatka a podpis
+                  {% elseif language == "en" %}
+                    Stamp and signature
+                  {% endif %}
                 </span>
               </td>
               <td style='width:50%;'>

@@ -15,6 +15,14 @@ class Invoice extends \ADIOS\Core\Model {
   const STATE_SENT   = 2;
   const STATE_PAID   = 3;
 
+  /* Invoice languages */
+  const LANGUAGE_SK = "sk";
+  const LANGUAGE_EN = "en";
+
+  const TEMPLATE_WITH_VAT       = 1;
+  const TEMPLATE_WITHOUT_VAT    = 2;
+  const TEMPLATE_FOREIGN_INV    = 3;
+
   var $sqlName = "invoices";
   var $lookupSqlValue = "{%TABLE%}.number";
   var $urlBase = "Invoices";
@@ -38,6 +46,16 @@ class Invoice extends \ADIOS\Core\Model {
       self::STATE_PAID   => 'Paid',
     ];
 
+    $this->enumInvoiceLanguages = [
+      self::LANGUAGE_SK   => 'Slovensky',
+      self::LANGUAGE_EN   => 'English',
+    ];
+
+    $this->enumInvoiceTemplates = [
+      self::TEMPLATE_WITH_VAT        => 'With Value Added Tax',
+      self::TEMPLATE_WITHOUT_VAT     => 'Without Value Added Tax',
+      self::TEMPLATE_FOREIGN_INV     => 'Foreign invoice',
+    ];
   }
 
   public function columns(array $columns = []) {
@@ -476,49 +494,27 @@ class Invoice extends \ADIOS\Core\Model {
     } else {
       $params['title'] = "Invoice nr. ".hsc($data['number']);
 
-      $btn_print_invoice_html = $this->adios->ui->button([
+      $btnPrintInvoiceHtml = $this->adios->ui->button([
         "text"    => "Print invoice",
-        "onclick" => "window.open(_APP_URL + '/Invoices/".(int) $data['id']."/PrintInvoice');",
+        "onclick" => "
+          var invoiceLanguage = $('#".$params["uid"]."_invoiceLanguage').val();
+          var invoiceTemplate = $('#".$params["uid"]."_invoiceTemplate').val();
+          window.open(_APP_URL + '/Invoices/".(int) $data['id']."/PrintInvoice?invoiceLanguage='+invoiceLanguage+'&invoiceTemplate='+invoiceTemplate);",
         "class"   => "btn-primary mb-2 w-100",
       ])->render();
 
-      // $btn_vytlacit_dodaci_list_html = $this->adios->ui->button([
-      //   "text"    => "Vytlačiť dodací list",
-      //   "onclick" => "window.open(_APP_URL + '/Invoices/".(int) $data['id']."/TlacitDodaciList');",
-      //   "class"   => "btn-primary mb-2 w-100",
-      // ])->render();
+      $btnSelectLanguageHtml = $this->adios->ui->Input([
+        "type"    => "varchar",
+        "enum_values" => $this->enumInvoiceLanguages,
+        "uid" => $params["uid"]."_invoiceLanguage",
+        "class"   => "mb-2 w-100",
+      ])->render();
 
-      $btn_prijat_hotovost_html = $this->adios->ui->button([
-        "text"    => "Prijať hotovosť",
-        "onclick" => "
-          let prijataHotovost = prompt('Prijatá hotovosť v EUR:');
-
-          if (prijataHotovost !== null) {
-            prijataHotovost = prijataHotovost.replace(' ', '').replace(',', '.');
-
-            if (isNaN(prijataHotovost)) {
-              alert('Nezadali ste sumu prijatej hotovosti.');
-            } else {
-              _ajax_read(
-                'Invoices/PrijatHotovost',
-                'id=".(int) $data['id']."&prijataHotovost='+encodeURIComponent(prijataHotovost),
-                function(res) {
-                  if (res != 'undefined' && typeof res != 'undefined') {
-                    if (isNaN(res)) {
-                      alert(res);
-                    } else {
-                      window_render(
-                        'ui/form',
-                        {'table': '{$this->gtp}_pokladna_pohyby', 'id': res}
-                      );
-                    }
-                  }
-                }
-              );
-            }
-          }
-        ",
-        "class"   => "btn-info mb-2 w-100",
+      $btnSelectTemplateHtml = $this->adios->ui->Input([
+        "type"    => "varchar",
+        "enum_values" => $this->enumInvoiceTemplates,
+        "uid" => $params["uid"]."_enumInvoiceTemplates",
+        "class"   => "mb-2 w-100",
       ])->render();
 
       $params["template"] = [
@@ -591,8 +587,12 @@ class Invoice extends \ADIOS\Core\Model {
           [
             "class" => "col-md-3 pr-0",
             "html" => "
-              {$btn_print_invoice_html}
-              <br/><br/>
+              {$btnSelectLanguageHtml}
+              {$btnSelectTemplateHtml}
+              {$btnPrintInvoiceHtml}
+              <br/>
+              <hr/>
+              <br/>
               <b>Customer</b><br/>
               ".hsc($data['customer_name'])."</br>
               ".hsc($data['customer_street_1'])."</br>
@@ -746,9 +746,11 @@ class Invoice extends \ADIOS\Core\Model {
 
     if ($this->disableNotifications) return;
 
-    $subject = $this->adios->config["settings"]["emails"]['after_regular_invoice_issue_SUBJECT'];
-    $body = $this->adios->config["settings"]["emails"]['after_regular_invoice_issue_BODY'];
-    $signature = $this->adios->config["settings"]["emails"]['signature'];
+    $domain = $invoiceData["ORDER"]["domain"] ?? "";
+
+    $subject = $this->adios->config["settings"]["web"][$domain]["emails"]['after_regular_invoice_issue_SUBJECT'];
+    $body = $this->adios->config["settings"]["web"][$domain]["emails"]['after_regular_invoice_issue_BODY'];
+    $signature = $this->adios->config["settings"]["web"][$domain]["emails"]['signature'];
 
     $invoiceHtml = print_r($invoiceData, TRUE);
 

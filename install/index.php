@@ -104,6 +104,7 @@ foreach (@scandir(__DIR__."/SampleData/images/slideshow") as $file) {
   }
 }
 
+$doInstall = ($_GET['do_install'] === "1");
 $languageToInstall = $_GET['language_to_install'];
 $slideshowImageSet = $_GET['slideshow_image_set'];
 
@@ -121,7 +122,7 @@ if (!in_array($themeName, $availableThemes)) {
   $themeName = reset($availableThemes);
 }
 
-if (count($partsToInstall) == 0) {
+if (!$doInstall) {
 
   $languageSelectOptions = "";
   foreach ($availableLanguages as $availableLanguage) {
@@ -146,6 +147,8 @@ if (count($partsToInstall) == 0) {
 
   echo "
     <form action='' method='GET'>
+      <input type='hidden' name='do_install' value='1' />
+
       <p>
         Whitch parts do you want to install?
       </p>
@@ -250,7 +253,7 @@ if (count($partsToInstall) == 0) {
     $websiteWebPageModel = new \ADIOS\Widgets\Website\Models\WebPage($adminPanel);
     $websiteWebRedirectModel = new \ADIOS\Widgets\Website\Models\WebRedirect($adminPanel);
     $unitModel = new \ADIOS\Widgets\Settings\Models\Unit($adminPanel);
-    $translationModel = new \ADIOS\Widgets\Website\Models\Translation($adminPanel);
+    $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($adminPanel);
     $newsModel = new \ADIOS\Plugins\WAI\News\Models\News($adminPanel);
 
     $slideshowModel = new \ADIOS\Plugins\WAI\Misc\Slideshow\Models\HomepageSlideshow($adminPanel);
@@ -313,14 +316,14 @@ if (count($partsToInstall) == 0) {
         "id" => 2, "id_shipment" => 2, "name" => "12",
         "weight_from" => 0, "weight_to" => 0,
         "price_from" => 0, "price_to" => 50,
-        "delivery_fee_calculation_method" => 1, "delivery_fee" => 3.95,
+        "delivery_fee_calculation_method" => 1, "delivery_fee" => 3.25,
         "payment_fee" => 2.10,
       ]);
       $shipmentPriceModel->insertRow([
         "id" => 3, "id_shipment" => 3, "name" => "13",
         "weight_from" => 0, "weight_to" => 0,
         "price_from" => 0, "price_to" => 50,
-        "delivery_fee_calculation_method" => 1, "delivery_fee" => 4.99,
+        "delivery_fee_calculation_method" => 1, "delivery_fee" => 3.25,
         "payment_fee" => 3.11,
       ]);
 
@@ -329,7 +332,7 @@ if (count($partsToInstall) == 0) {
         "id" => 9, "id_shipment" => 1, "name" => "14",
         "weight_from" => 0, "weight_to" => 0,
         "price_from" => 50, "price_to" => 100000,
-        "delivery_fee_calculation_method" => 1, "delivery_fee" => 3.33,
+        "delivery_fee_calculation_method" => 1, "delivery_fee" => 0.00,
         "payment_fee" => 4.44,
       ]);
       $shipmentPriceModel->insertRow([
@@ -343,7 +346,7 @@ if (count($partsToInstall) == 0) {
         "id" => 11, "id_shipment" => 3, "name" => "16",
         "weight_from" => 0, "weight_to" => 0,
         "price_from" => 50, "price_to" => 100000,
-        "delivery_fee_calculation_method" => 1, "delivery_fee" => 0.75,
+        "delivery_fee_calculation_method" => 1, "delivery_fee" => 0.00,
         "payment_fee" => 0.90,
       ]);
 
@@ -774,9 +777,9 @@ if (count($partsToInstall) == 0) {
             "phone_number"                 => $address['phone_number'],
             "email"                        => $address['email'],
 
-            "id_destination_country"       => $destinationCountriesIds[rand(0, count($destinationCountriesIds) - 1)],
-            "id_delivery_service"          => $deliveryServicesIds[rand(0, count($deliveryServicesIds) - 1)],
-            "id_payment_service"           => $paymentServicesIds[rand(0, count($paymentServicesIds) - 1)],
+            "id_destination_country"       => $destinationCountries[rand(0, count($destinationCountriesIds) - 1)]['id'],
+            "id_delivery_service"          => $deliveryServices[rand(0, count($deliveryServicesIds) - 1)]['id'],
+            "id_payment_service"           => $paymentServices[rand(0, count($paymentServicesIds) - 1)]['id'],
 
             "domain"                       => "EN",
             "general_terms_and_conditions" => 1,

@@ -18,7 +18,7 @@ $configEnv["domains"] = [
   ],
 ];
 
-define("WEBSITE_DOMAIN_TO_RENDER", "EN");
+define("WEBSITE_DOMAIN_TO_RENDER", "www.my-online-store.com");
 define("WEBSITE_REWRITE_BASE", REWRITE_BASE);
 
 ////////////////////////////////////////////////////////

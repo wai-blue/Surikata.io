@@ -506,7 +506,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         "action" => "UI/Table/Search",
         "params" => array_merge($urlParams, [
           "model" => $this->name,
-          "searchGroup" => $urlBase,
+          "searchGroup" => $this->tableTitle ?? $urlBase,
         ])
       ],
       '/^'.$urlBase.'\/Export\/CSV$/' => [

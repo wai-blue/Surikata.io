@@ -285,6 +285,23 @@
                             <div class="panel-group" id="accordion">
                               <div class="panel payment-accordion">
                                 <div class="panel-heading mb-2" id="method-one">
+                                  {% if destinationCountries|length > 0 %}
+                                    <div class="panel-heading mb-2" id="method-one">
+                                      <h4 class="panel-title">
+                                        <a>{{ translate("Shipping country", "Order") }}</a>
+                                      </h4>
+                                    </div>
+                                    <div class="select-order">
+                                      <select name="id_destination_country" onchange="AbeloThemeCart.updateCheckoutOverview()">
+                                        {% for destinationCountry in destinationCountries %}
+                                          <option 
+                                            value="{{ destinationCountry.id }}"
+                                            {% if selectedDestinationCountry.id == destinationCountry.id %} selected {% endif %}
+                                          >{{ destinationCountry.name }}</option>
+                                        {% endfor %}
+                                      </select>
+                                    </div>
+                                  {% endif %}
                                   <h4 class="panel-title">
                                     <a data-toggle="collapse" data-parent="#accordion" href="#method2">{{ translate("Shipping", "Order") }}</a>
                                   </h4>
@@ -292,16 +309,16 @@
                                 {% if deliveryServices|length > 0 %}
                                   {% for deliveryService in deliveryServices %}
                                     <div id="method2" class="panel-collapse collapse show">
-                                      <div class="panel-body delivery">
+                                      <div class="panel-body order-delivery">
                                         <input 
                                           type="radio" 
-                                          name="deliveryService" 
+                                          name="id_delivery_service" 
                                           id="deliveryService-{{ loop.index }}" 
                                           value="{{ deliveryService.id }}"
                                           {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
                                           onchange="AbeloThemeCart.updateCheckoutOverview()"
                                         >
-                                        <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
+                                        <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }} <b>{{ deliveryService.price|number_format(2, ",", " ") }} €</b></label>
                                         {% if deliveryService.logo %}
                                           <img class="order-img" src="./upload/{{ deliveryService.logo }}"/>
                                         {% endif %}
@@ -310,7 +327,7 @@
                                     </div>
                                   {% endfor %}
                                 {% else %}
-                                  <p>{{ translate("Delivery services are unavailable", "Order") }}</p>
+                                  <p class="input-required">{{ translate("Delivery services are not available for this country", "Order") }}</p>
                                 {% endif %}
                               </div>
                             </div>
@@ -327,16 +344,16 @@
                                 </div>
                                 {% for paymentMethod in paymentMethods %}
                                   <div id="method1" class="panel-collapse collapse show">
-                                    <div class="panel-body delivery">
+                                    <div class="panel-body order-payments">
                                       <input 
                                         required type="radio" 
-                                        name="paymentMethod" 
+                                        name="id_payment_service" 
                                         id="paymentMethod-{{ loop.index }}" 
                                         value="{{ paymentMethod.id }}" 
                                         {% if selectedPaymentMethod.id == paymentMethod.id %} checked="checked" {% endif %}
                                         onchange="AbeloThemeCart.updateCheckoutOverview()"
                                       >
-                                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
+                                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }} <b>{{ paymentMethod.price|number_format(2, ",", " ") }} €</b></label>
                                       {% if paymentMethod.logo %}
                                         <img class="order-img" src="{{ uploadedFileUrl }}/{{ paymentMethod.logo }}"/>
                                       {% endif %}
@@ -414,30 +431,51 @@
           <div class="payment-accordion element-mrg">
             <div class="panel-group" id="accordion">
               <div class="panel payment-accordion">
+                {% if destinationCountries|length > 0 %}
+                  <div class="panel-heading mb-2" id="method-one">
+                    <h4 class="panel-title">
+                      <a>{{ translate("Shipping country", "Order") }}</a>
+                    </h4>
+                  </div>
+                  <div class="select-order">
+                    <select name="id_destination_country" onchange="AbeloThemeCart.updateCheckoutOverview()">
+                      {% for destinationCountry in destinationCountries %}
+                        <option 
+                          value="{{ destinationCountry.id }}"
+                          {% if selectedDestinationCountry.id == destinationCountry.id %} selected {% endif %}
+                        >{{ destinationCountry.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                {% endif %}
                 <div class="panel-heading mb-2" id="method-one">
                   <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#accordion" href="#method1">{{ translate("Shipping", "Order") }}</a>
                   </h4>
                 </div>
-                {% for deliveryService in deliveryServices %}
-                  <div id="method1" class="panel-collapse collapse show">
-                    <div class="panel-body delivery">
-                      <input 
-                        type="radio" 
-                        name="deliveryService" 
-                        id="deliveryService-{{ loop.index }}" 
-                        value="{{ deliveryService.id }}"
-                        {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
-                        onchange="AbeloThemeCart.updateCheckoutOverview()"
-                      >
-                      <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }}</label>
-                      {% if deliveryService.logo %}
-                        <img class="order-img" src="./upload/{{ deliveryService.logo }}"/>
-                      {% endif %}
-                      <p data-method="{{ deliveryService.id }}" class="delivery-text">{{ deliveryService.description }}</p>
+                {% if deliveryServices|length > 0 %}
+                  {% for deliveryService in deliveryServices %}
+                    <div id="method1" class="panel-collapse collapse show">
+                      <div class="panel-body order-delivery">
+                        <input 
+                          type="radio" 
+                          name="id_delivery_service" 
+                          id="deliveryService-{{ loop.index }}" 
+                          value="{{ deliveryService.id }}"
+                          {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
+                          onchange="AbeloThemeCart.updateCheckoutOverview()"
+                        >
+                        <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }} <b>{{ deliveryService.price|number_format(2, ",", " ") }} €</b></label>
+                        {% if deliveryService.logo %}
+                          <img class="order-img" src="./upload/{{ deliveryService.logo }}"/>
+                        {% endif %}
+                        <p data-method="{{ deliveryService.id }}" class="delivery-text">{{ deliveryService.description }}</p>
+                      </div>
                     </div>
-                  </div>
-                {% endfor %}
+                  {% endfor %}
+                {% else %}
+                  <p class="input-required">{{ translate("Delivery services are not available for this country", "Order") }}</p>
+                {% endif %}
               </div>
             </div>
           </div>
@@ -453,16 +491,16 @@
                 </div>
                 {% for paymentMethod in paymentMethods %}
                   <div id="method1" class="panel-collapse collapse show">
-                    <div class="panel-body delivery">
+                    <div class="panel-body order-payments">
                       <input 
                         required type="radio" 
-                        name="paymentMethod" 
+                        name="id_payment_service" 
                         id="paymentMethod-{{ loop.index }}" 
-                          value="{{ paymentMethod.id }}" 
+                        value="{{ paymentMethod.id }}" 
                         {% if selectedPaymentMethod.id == paymentMethod.id %} checked="checked" {% endif %}
                         onchange="AbeloThemeCart.updateCheckoutOverview()"
                       >
-                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }}</label>
+                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }} <b>{{ paymentMethod.price|number_format(2, ",", " ") }} €</b></label>
                       {% if paymentMethod.logo %}
                         <img class="order-img" src="{{ uploadedFileUrl }}/{{ paymentMethod.logo }}"/>
                       {% endif %}

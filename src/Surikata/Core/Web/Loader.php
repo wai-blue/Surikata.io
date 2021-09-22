@@ -81,11 +81,11 @@ class Loader extends \Cascada\Loader {
       $this->domain = "";
       foreach ($this->adminPanel->config['widgets']['Website']['domains'] as $domainInfo) {
         if ($domainInfo['name'] == $this->config["domainToRender"]) {
-          $this->domain = $domainInfo['name'];
+          $this->domain = $domainInfo;
         }
       }
 
-      $this->adminPanel->webSettings = $this->loadSurikataSettings("web/{$this->domain}");
+      $this->adminPanel->webSettings = $this->loadSurikataSettings("web/{$this->domain['name']}");
 
       $this->themeName = $this->adminPanel->webSettings["design"]["theme"];
 

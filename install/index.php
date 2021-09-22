@@ -104,6 +104,7 @@ foreach (@scandir(__DIR__."/SampleData/images/slideshow") as $file) {
   }
 }
 
+$doInstall = ($_GET['do_install'] === "1");
 $languageToInstall = $_GET['language_to_install'];
 $slideshowImageSet = $_GET['slideshow_image_set'];
 
@@ -121,7 +122,7 @@ if (!in_array($themeName, $availableThemes)) {
   $themeName = reset($availableThemes);
 }
 
-if (count($partsToInstall) == 0) {
+if (!$doInstall) {
 
   $languageSelectOptions = "";
   foreach ($availableLanguages as $availableLanguage) {
@@ -146,6 +147,8 @@ if (count($partsToInstall) == 0) {
 
   echo "
     <form action='' method='GET'>
+      <input type='hidden' name='do_install' value='1' />
+
       <p>
         Whitch parts do you want to install?
       </p>

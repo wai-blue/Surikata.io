@@ -17,9 +17,9 @@ class FileBrowser extends \ADIOS\Core\Input {
     $rootDir = str_replace("\\", "/", $rootDir);
     $subDir = str_replace("\\", "/", $subDir);
 
-    $subDir = trim($subDir, "/");
+    $subDir = rtrim($subDir, "/");
 
-    $dir = trim("{$rootDir}/{$subDir}", "/");
+    $dir = rtrim("{$rootDir}/{$subDir}", "/");
 
     if (!is_dir($dir)) return "";
 
@@ -60,7 +60,7 @@ class FileBrowser extends \ADIOS\Core\Input {
           $faIcon = "pdf";
         }
 
-        $html .= "['F','".ads($file)."','".ads($faIcon)."'],\n";
+        $html .= "['F','".ads($file)."','".ads($faIcon)."','".round(filesize("{$dir}/{$file}"))."'],\n";
       }
     }
 
@@ -140,7 +140,8 @@ class FileBrowser extends \ADIOS\Core\Input {
                         res.fileName,
                         {{ level }} + 1,
                         'file',
-                        res.fileName
+                        res.fileName,
+                        Math.round(res.fileSize/1024/1024 * 100)/100
                       );
 
                       $('#{$this->uid}_dir_{{ dirId }}')
@@ -198,7 +199,8 @@ class FileBrowser extends \ADIOS\Core\Input {
                             folderName,
                             {{ level }} + 1,
                             'folder',
-                            folderName
+                            folderName,
+                            0
                           );
 
                           $('#{$this->uid}_dir_{{ dirId }}')
@@ -322,7 +324,7 @@ class FileBrowser extends \ADIOS\Core\Input {
             "uid" => "{{ btnUid }}",
             "fa_icon" => "{{ icon }}",
             "class" => "btn btn-file btn-sm btn-light btn-icon-split mb-1",
-            "textRaw" => "{{ text }}",
+            "textRaw" => "{{ text }} <div class='filesize'>{{ filesize }} MB</div>",
             "title" => "{{ file }}",
             "onclick" => "
               $('#{$this->uid}_filebrowser_wrapper .btn-success').addClass('btn-light').removeClass('btn-success');
@@ -330,6 +332,7 @@ class FileBrowser extends \ADIOS\Core\Input {
               $('#{$this->uid}').val('".(empty($this->params['subdir']) ? "" : "{$this->params['subdir']}/")."{{ subDir }}/{{ file }}').trigger('change');
             ",
           ])->render()."
+          
         </div>
       </div>
 
@@ -380,13 +383,15 @@ class FileBrowser extends \ADIOS\Core\Input {
           if (typeof tree != 'undefined') {
             for (var i in tree) {
               if (tree[i][0] == 'D') {
-                btnHtml += {$this->uid}_addButton(folder, btnFolderTemplate, dir, tree[i][1], level, 'folder', tree[i][1]);
+                btnHtml += {$this->uid}_addButton(folder, btnFolderTemplate, dir, tree[i][1], level, 'folder', tree[i][1], 0);
               }
             }
             for (var i in tree) {
               if (tree[i][0] == 'F') {
                 let text = tree[i][1];
                 let icon = (tree[i][2] ? 'file-' + tree[i][2] : 'file');
+                let filesize = Math.round(tree[i][3]/1024/1024 * 100)/100;
+
                 if (icon == 'file-image' && btnCnt < 100) {
                   text =
                     '<img ' +
@@ -395,7 +400,7 @@ class FileBrowser extends \ADIOS\Core\Input {
                     '/> '
                   ;
                 }
-                btnHtml += {$this->uid}_addButton(folder, btnFileTemplate, dir, tree[i][1], level, icon, text);
+                btnHtml += {$this->uid}_addButton(folder, btnFileTemplate, dir, tree[i][1], level, icon, text, filesize);
               }
             }
           }
@@ -429,13 +434,14 @@ class FileBrowser extends \ADIOS\Core\Input {
 
         }
 
-        function {$this->uid}_addButton(folder, btnTemplateHtml, subDir, file, level, icon, text) {
+        function {$this->uid}_addButton(folder, btnTemplateHtml, subDir, file, level, icon, text, filesize) {
           let btnHtml =
             btnTemplateHtml
             .replaceAll('{{ btnUid }}', subDir.replaceAll('/', '-') + '-' + file.replaceAll('/', '-'))
             .replaceAll('{{ subDir }}', subDir)
             .replaceAll('{{ file }}', file)
             .replaceAll('{{ text }}', text)
+            .replaceAll('{{ filesize }}', filesize)
             .replaceAll('{{ level }}', level)
             .replaceAll('{{ icon }}', 'fas fa-' + icon)
           ;
@@ -452,7 +458,7 @@ class FileBrowser extends \ADIOS\Core\Input {
           return  '".(empty($this->params['subdir']) ? "" : "{$this->params['subdir']}/")."' + folderPath;
         }
 
-        {$this->uid}_showDir('', '', 0);
+        {$this->uid}_showDir('', '{$rootDir}', 0);
       </script>
     ";
 

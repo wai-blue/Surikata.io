@@ -5,6 +5,7 @@ namespace Surikata\Plugins\WAI\Order {
     var $cartContents = NULL;
     var $shipping = NULL;
     var $selectedDestinationCountryId = NULL;
+    var $destinationCountries = NULL;
 
     public function getPaymentMethods($selectedDeliveryService) {
       $paymentMethods = [];
@@ -78,8 +79,9 @@ namespace Surikata\Plugins\WAI\Order {
         ;
       }
 
-      $destinationCountries = [];
-      $destinationCountries = $destinationCountryModel->getAll();
+      if ($this->destinationCountries === NULL) {
+        $this->destinationCountries = $destinationCountryModel->getAll();
+      }
 
       if (isset($this->websiteRenderer->urlVariables['orderData'])) {
         $orderData = $this->websiteRenderer->urlVariables['orderData'];
@@ -115,7 +117,7 @@ namespace Surikata\Plugins\WAI\Order {
           }
         }
       } else {
-        $this->selectedDestinationCountryId = reset($destinationCountries)['id'];
+        $this->selectedDestinationCountryId = reset($this->destinationCountries)['id'];
         $deliveryServices = $this->getDeliveryServices();
         $selectedDeliveryService = reset($deliveryServices);
         $paymentMethods = $this->getPaymentMethods($selectedDeliveryService);
@@ -147,7 +149,7 @@ namespace Surikata\Plugins\WAI\Order {
 
       $twigParams["deliveryServices"] = $deliveryServices;
       $twigParams['paymentMethods'] = $paymentMethods;
-      $twigParams["destinationCountries"] = $destinationCountries;
+      $twigParams["destinationCountries"] = $this->destinationCountries;
 
       $twigParams["selectedDeliveryService"] = $selectedDeliveryService;
       $twigParams["selectedPaymentMethod"] = $selectedPaymentMethod;

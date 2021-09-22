@@ -2798,9 +2798,15 @@ p {
   color: #266cfb;
 }
 .footer-area .footer-top .footer-blog-post {
-  width: 100%;
+  width: 50%;
   background: #ffffff;
   display: flex;
+  float: left;
+}
+@media only screen and (max-width: 576px) {
+  .footer-area .footer-top .footer-blog-post {
+    width: 100%;
+  }
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .footer-area .footer-top .footer-blog-post {

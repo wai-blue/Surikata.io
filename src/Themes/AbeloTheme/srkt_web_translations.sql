@@ -198,7 +198,7 @@ INSERT INTO `srkt_web_translations` (`domain`, `context`, `original`, `translate
 ('SK', 'WAI/Order/Checkout', 'I agree to the processing of personal data for the purpose of sending marketing information', 'Súhlasím so spracovaním osobných údajov pre marketingové účely'),
 ('SK', 'Common', 'Surikata', 'Surikata'),
 ('SK', 'Common', 'My account', 'Môj účet'),
-('SK', 'Common', 'Checkout', 'Kúpiť'),
+('SK', 'Common', 'Checkout', 'Košík'),
 ('SK', 'Common', 'Logout', 'Odhlásiť sa'),
 ('SK', 'Common', 'All categories', 'Všetky kategórie'),
 ('SK', 'Common', 'Search', 'Hľadať'),

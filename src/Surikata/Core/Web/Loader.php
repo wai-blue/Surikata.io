@@ -78,7 +78,7 @@ class Loader extends \Cascada\Loader {
       $this->pages = $this->loadPublishedPages();
       $this->currentPage = NULL;
 
-      $this->domain = "";
+      $this->domain = [];
       foreach ($this->adminPanel->config['widgets']['Website']['domains'] as $domainInfo) {
         if ($domainInfo['name'] == $this->config["domainToRender"]) {
           $this->domain = $domainInfo;

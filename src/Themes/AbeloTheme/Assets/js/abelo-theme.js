@@ -32,15 +32,18 @@ window.onpopstate = function (e) {
     SurikataProductCatalog.prototype.loadNextPage(
       _this,
       function (data) {
+
+        let scrollPosition = $(document).scrollTop();
         let url = new URL(window.location);
-        let div = $('<div></div>').html(data).hide();
+        let div = $('<div></div>').html(data);
   
         $('.tab-content').append(div);
         _this.setCatalogListType(_this.catalogListType);
-        div.slideDown();
 
         url.searchParams.set('page', _this.page);
         window.history.pushState({}, '', url);
+
+        $(document).scrollTop(scrollPosition);
       }
     );
 

@@ -3766,6 +3766,17 @@ offcanvas-menu > ul > li .menu-expand {
   border: 1px solid #e9e9e9;
   margin-top: 15px;
 }
+@media only screen and (max-width: 768px) {
+  .hero-side-category .category-toggle-wrap .category-toggle {
+    margin-top: 0;
+    line-height: 27px;
+  }
+}
+@media only screen and (max-width: 576px) {
+  .hero-side-category .category-toggle-wrap .category-toggle {
+    margin-top: 10px;
+  }
+}
 .hero-side-category .category-toggle-wrap .category-toggle i {
   display: inline-block;
   margin-right: 10px;

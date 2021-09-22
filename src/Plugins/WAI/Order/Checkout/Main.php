@@ -4,14 +4,14 @@ namespace Surikata\Plugins\WAI\Order {
   class Checkout extends \Surikata\Core\Web\Plugin {
     var $cartContents = NULL;
     var $shipping = NULL;
-    var $selectedDestinationCountry = NULL;
+    var $selectedDestinationCountryId = NULL;
 
     public function getPaymentMethods($selectedDeliveryService) {
       $paymentMethods = [];
       foreach ($this->shipping as $shipment) {
         if (
           $shipment['id_delivery_service'] == $selectedDeliveryService['id']
-          && $shipment['id_destination_country'] == $this->selectedDestinationCountry['id']
+          && $shipment['id_destination_country'] == $this->selectedDestinationCountryId
           ) {
           $paymentMethods[$shipment['id_payment_service']] = $shipment['payment'];
           $paymentMethods[$shipment['id_payment_service']]['price'] = 
@@ -29,7 +29,7 @@ namespace Surikata\Plugins\WAI\Order {
         $this->shipping[$index]['price'] = reset($shipment['price']);
         if (
           !array_key_exists($shipment['id_delivery_service'], $deliveryServices)
-          && $shipment['id_destination_country'] == $this->selectedDestinationCountry['id']
+          && $shipment['id_destination_country'] == $this->selectedDestinationCountryId
         ) {
           $deliveryServices[$shipment['id_delivery_service']] = $shipment['delivery'];
           $deliveryServices[$shipment['id_delivery_service']]['price'] = 
@@ -83,7 +83,7 @@ namespace Surikata\Plugins\WAI\Order {
 
       if (isset($this->websiteRenderer->urlVariables['orderData'])) {
         $orderData = $this->websiteRenderer->urlVariables['orderData'];
-        $this->selectedDestinationCountry = $destinationCountries[$orderData["id_destination_country"]];
+        $this->selectedDestinationCountryId = $orderData["id_destination_country"];
 
         $deliveryServices = $this->getDeliveryServices();
         $selectedDeliveryService = 
@@ -115,7 +115,7 @@ namespace Surikata\Plugins\WAI\Order {
           }
         }
       } else {
-        $this->selectedDestinationCountry = reset($destinationCountries);
+        $this->selectedDestinationCountryId = reset($destinationCountries)['id'];
         $deliveryServices = $this->getDeliveryServices();
         $selectedDeliveryService = reset($deliveryServices);
         $paymentMethods = $this->getPaymentMethods($selectedDeliveryService);
@@ -151,7 +151,7 @@ namespace Surikata\Plugins\WAI\Order {
 
       $twigParams["selectedDeliveryService"] = $selectedDeliveryService;
       $twigParams["selectedPaymentMethod"] = $selectedPaymentMethod;
-      $twigParams["selectedDestinationCountry"] = $this->selectedDestinationCountry;
+      $twigParams["selectedDestinationCountryId"] = $this->selectedDestinationCountryId;
 
       return $twigParams;
     }

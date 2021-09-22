@@ -296,7 +296,7 @@
                                         {% for destinationCountry in destinationCountries %}
                                           <option 
                                             value="{{ destinationCountry.id }}"
-                                            {% if selectedDestinationCountry.id == destinationCountry.id %} selected {% endif %}
+                                            {% if selectedDestinationCountryId == destinationCountry.id %} selected {% endif %}
                                           >{{ destinationCountry.name }}</option>
                                         {% endfor %}
                                       </select>
@@ -442,7 +442,7 @@
                       {% for destinationCountry in destinationCountries %}
                         <option 
                           value="{{ destinationCountry.id }}"
-                          {% if selectedDestinationCountry.id == destinationCountry.id %} selected {% endif %}
+                          {% if selectedDestinationCountryId == destinationCountry.id %} selected {% endif %}
                         >{{ destinationCountry.name }}</option>
                       {% endfor %}
                     </select>

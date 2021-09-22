@@ -126,17 +126,7 @@ class WebPage extends \ADIOS\Core\Model {
 
   public function formParams($data, $params) {
     if ($params['id'] == -1) {
-      $domains = $this->adios->config['widgets']['Website']['domains'];
-      $domainName = $params['domainName'];
-
-      $domain = "";
-      foreach ($domains as $tmpDomain => $tmpDomainInfo) {
-        if ($tmpDomainInfo['name'] == $domainName) {
-          $domain = $tmpDomain;
-        }
-      }
-
-      $params['default_values'] = ["domain" => $domain];
+      $params['default_values'] = ["domain" => $params['domainName']];
     }
 
     $params["template"] = [

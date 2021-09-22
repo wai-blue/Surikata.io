@@ -110,7 +110,7 @@
                     </a>
                     {% if sub.sub is iterable %}
                       <div
-                        class="py-0 pl-4 ml-4 mr-1 {% if _COOKIE.sidebarActiveMainItem == loop.parent.loop.index and _COOKIE.sidebarActiveSubItem == loop.index %} {% else %} collapse {% endif %}"
+                        class="sidebar-sub-sub {% if _COOKIE.sidebarActiveMainItem == loop.parent.loop.index and _COOKIE.sidebarActiveSubItem == loop.index %} {% else %} collapse {% endif %}"
                         id="sidebarSubSub{{ loop.parent.loop.index }}-{{ loop.index }}"
                       >
                         {% for subsub in sub.sub %}

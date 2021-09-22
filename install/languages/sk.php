@@ -202,7 +202,16 @@
 
       // Product catalog pages
       "{$domainName}|produkty|WithLeftSidebar|Katalóg produktov" => [
-        "sidebar" => ["WAI/Product/Filter", ["showProductCategories" => 1, "layout" => "sidebar", "showProductCategories" => 1, "showBrands" => 1]],
+        "sidebar" => [
+          "WAI/Product/Filter",
+          [
+            "showProductCategories" => 1,
+            "layout" => "sidebar",
+            "showProductCategories" => 1,
+            "showBrands" => 1,
+            "showFeaturesFilter" => 1,
+          ]
+        ],
         "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
         "section_2" => ["WAI/Product/Catalog", ["defaultItemsPerPage" => 6]],
       ],

@@ -494,7 +494,7 @@ class Invoice extends \ADIOS\Core\Model {
     } else {
       $params['title'] = "Invoice nr. ".hsc($data['number']);
 
-      $btn_print_invoice_html = $this->adios->ui->button([
+      $btnPrintInvoiceHtml = $this->adios->ui->button([
         "text"    => "Print invoice",
         "onclick" => "
           var invoiceLanguage = $('#".$params["uid"]."_invoiceLanguage').val();
@@ -503,57 +503,18 @@ class Invoice extends \ADIOS\Core\Model {
         "class"   => "btn-primary mb-2 w-100",
       ])->render();
 
-      $btn_select_language_html = $this->adios->ui->Input([
+      $btnSelectLanguageHtml = $this->adios->ui->Input([
         "type"    => "varchar",
         "enum_values" => $this->enumInvoiceLanguages,
         "uid" => $params["uid"]."_invoiceLanguage",
         "class"   => "mb-2 w-100",
       ])->render();
 
-      $btn_select_template_html = $this->adios->ui->Input([
+      $btnSelectTemplateHtml = $this->adios->ui->Input([
         "type"    => "varchar",
         "enum_values" => $this->enumInvoiceTemplates,
         "uid" => $params["uid"]."_enumInvoiceTemplates",
         "class"   => "mb-2 w-100",
-      ])->render();
-
-      // $btn_vytlacit_dodaci_list_html = $this->adios->ui->button([
-      //   "text"    => "Vytlačiť dodací list",
-      //   "onclick" => "window.open(_APP_URL + '/Invoices/".(int) $data['id']."/TlacitDodaciList');",
-      //   "class"   => "btn-primary mb-2 w-100",
-      // ])->render();
-
-      $btn_prijat_hotovost_html = $this->adios->ui->button([
-        "text"    => "Prijať hotovosť",
-        "onclick" => "
-          let prijataHotovost = prompt('Prijatá hotovosť v EUR:');
-
-          if (prijataHotovost !== null) {
-            prijataHotovost = prijataHotovost.replace(' ', '').replace(',', '.');
-
-            if (isNaN(prijataHotovost)) {
-              alert('Nezadali ste sumu prijatej hotovosti.');
-            } else {
-              _ajax_read(
-                'Invoices/PrijatHotovost',
-                'id=".(int) $data['id']."&prijataHotovost='+encodeURIComponent(prijataHotovost),
-                function(res) {
-                  if (res != 'undefined' && typeof res != 'undefined') {
-                    if (isNaN(res)) {
-                      alert(res);
-                    } else {
-                      window_render(
-                        'ui/form',
-                        {'table': '{$this->gtp}_pokladna_pohyby', 'id': res}
-                      );
-                    }
-                  }
-                }
-              );
-            }
-          }
-        ",
-        "class"   => "btn-info mb-2 w-100",
       ])->render();
 
       $params["template"] = [
@@ -626,9 +587,9 @@ class Invoice extends \ADIOS\Core\Model {
           [
             "class" => "col-md-3 pr-0",
             "html" => "
-              {$btn_select_language_html}
-              {$btn_select_template_html}
-              {$btn_print_invoice_html}
+              {$btnSelectLanguageHtml}
+              {$btnSelectTemplateHtml}
+              {$btnPrintInvoiceHtml}
               <br/>
               <hr/>
               <br/>

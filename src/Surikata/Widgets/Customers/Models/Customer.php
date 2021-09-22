@@ -662,6 +662,9 @@ class Customer extends \ADIOS\Core\Model {
       throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error! Try refreshing the page.");
     }
 
+    // REVIEW: Vesmirny kod?
+    // Vid review nizsie, rovnaka situacia.
+
     $customer = $this
       ->where('id', '=', (int) $userLoggedInfo['id'])
     ;
@@ -683,12 +686,20 @@ class Customer extends \ADIOS\Core\Model {
       throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error! Try refreshing the page.");
     }
 
+    // REVIEW: Vesmirny kod?
+    // Tento robi to iste:
+    // $this
+    //   ->where('id', '=', (int) $userLoggedInfo['id'])
+    //   ->update($address);
+    // ;
+
     $customer = $this
       ->where('id', '=', (int) $userLoggedInfo['id'])
     ;
 
     $update = $customer->update($address);
 
+    // REVIEW: Chyba tu osetrenie chyboveho stavu
     return TRUE;
   }
 
@@ -711,7 +722,7 @@ class Customer extends \ADIOS\Core\Model {
       ->toArray()
     );
 
-   
+    // REVIEW: $customer je podla mna pole, nie integer. Tento if je teda nefunkcny.
     if ($customer > 0) {
       if ($customer["is_validated"]) {
         $this->sendNotificationForForgotPassword($customer);

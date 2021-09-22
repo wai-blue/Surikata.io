@@ -45,6 +45,7 @@ class User extends \ADIOS\Core\Model {
         "action" => "UI/Form",
         "params" => [
           "model" => "Core/Models/User",
+          "myProfileView" => TRUE,
           "id" => $this->adios->userProfile['id'],
         ]
       ],
@@ -55,6 +56,26 @@ class User extends \ADIOS\Core\Model {
     $id = (int) $id;
     $user = self::find($id);
     return ($user === NULL ? [] : $user->toArray());
+  }
+
+  public function formParams($data, $params) {
+    if ($params["myProfileView"]) {
+      $params['show_delete_button'] = FALSE;
+      $params['template'] = [
+        "columns" => [
+          [
+            "rows" => [
+              "name",
+              "surname",
+              "password",
+              "email",
+            ],
+          ],
+        ],
+      ];
+    }
+    
+    return $params;
   }
 
 }

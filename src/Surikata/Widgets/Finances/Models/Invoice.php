@@ -746,9 +746,11 @@ class Invoice extends \ADIOS\Core\Model {
 
     if ($this->disableNotifications) return;
 
-    $subject = $this->adios->config["settings"]["emails"]['after_regular_invoice_issue_SUBJECT'];
-    $body = $this->adios->config["settings"]["emails"]['after_regular_invoice_issue_BODY'];
-    $signature = $this->adios->config["settings"]["emails"]['signature'];
+    $domain = $invoiceData["ORDER"]["domain"] ?? "";
+
+    $subject = $this->adios->config["settings"]["web"][$domain]["emails"]['after_regular_invoice_issue_SUBJECT'];
+    $body = $this->adios->config["settings"]["web"][$domain]["emails"]['after_regular_invoice_issue_BODY'];
+    $signature = $this->adios->config["settings"]["web"][$domain]["emails"]['signature'];
 
     $invoiceHtml = print_r($invoiceData, TRUE);
 

@@ -14,7 +14,7 @@ class Layout {
   }
 
   public function getPreviewHtml() {
-    return "getPreviewHtmlNotOverriden";
+    return "getPreviewHtmlShouldBeOverriden";
   }
 
 }

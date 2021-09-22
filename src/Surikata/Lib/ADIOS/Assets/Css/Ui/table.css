@@ -55,7 +55,7 @@
     .adios.ui.Table.Container .Header .Row.ColumnNames .Column {
       font-weight: bold;
       border-bottom: 1px solid var(--cl-main);
-      padding: 3px;
+      /* padding: 3px; */
       background: var(--cl-main);
       color: white;
     }
@@ -272,8 +272,16 @@
 
 /* Medium devices (tablets, less than 992px) */
 @media (max-width: 991.98px) {
+  .adios.ui.Table.Header .Row .Column {
+    padding: 10px;
+  }
+
   .adios.ui.Table.Container .Row .Column {
     padding: 10px;
+  }
+
+  .adios.ui.Table.Container .Row.ColumnFilters {
+    display: none;
   }
 
   .adios.ui.Table.Container .Column:nth-child(n+5) {

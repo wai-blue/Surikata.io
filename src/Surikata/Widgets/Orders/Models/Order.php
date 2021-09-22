@@ -647,9 +647,9 @@ class Order extends \ADIOS\Core\Model {
 
     $domain = $this->adios->websiteRenderer->currentPage['domain'];
 
-    $subject = $this->adios->config["settings"]["emails"][$domain]['after_order_confirmation_SUBJECT'];
-    $body = $this->adios->config["settings"]["emails"][$domain]['after_order_confirmation_BODY'];
-    $signature = $this->adios->config["settings"]["emails"][$domain]['signature'];
+    $subject = $this->adios->config["settings"]["web"][$domain]["emails"]['after_order_confirmation_SUBJECT'];
+    $body = $this->adios->config["settings"]["web"][$domain]["emails"]['after_order_confirmation_BODY'];
+    $signature = $this->adios->config["settings"]["web"][$domain]["emails"]['signature'];
 
     // Create variables from table orders without id_cols and arrays
     foreach ($orderData as $key => $col) {

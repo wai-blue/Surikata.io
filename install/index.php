@@ -250,7 +250,7 @@ if (count($partsToInstall) == 0) {
     $websiteWebPageModel = new \ADIOS\Widgets\Website\Models\WebPage($adminPanel);
     $websiteWebRedirectModel = new \ADIOS\Widgets\Website\Models\WebRedirect($adminPanel);
     $unitModel = new \ADIOS\Widgets\Settings\Models\Unit($adminPanel);
-    $translationModel = new \ADIOS\Widgets\Website\Models\Translation($adminPanel);
+    $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($adminPanel);
     $newsModel = new \ADIOS\Plugins\WAI\News\Models\News($adminPanel);
 
     $slideshowModel = new \ADIOS\Plugins\WAI\Misc\Slideshow\Models\HomepageSlideshow($adminPanel);

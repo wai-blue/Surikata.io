@@ -2,9 +2,9 @@
 
 namespace ADIOS\Widgets\Website\Models;
 
-class Translation extends \ADIOS\Core\Model {
+class WebTranslation extends \ADIOS\Core\Model {
   var $sqlName = "web_translations";
-  var $urlBase = "Website/Translations";
+  var $urlBase = "Website/{{ domainName }}/Translations";
   var $tableTitle = "Translations";
   var $formTitleForInserting = "New translation";
   var $formTitleForEditing = "Translation";
@@ -15,6 +15,7 @@ class Translation extends \ADIOS\Core\Model {
         "type" => "varchar",
         "title" => "Domain",
         "required" => TRUE,
+        "readonly" => TRUE,
         "show_column" => FALSE,
       ],
 
@@ -50,33 +51,20 @@ class Translation extends \ADIOS\Core\Model {
 
   public function indexes($indexes = []) {
     return parent::indexes([
-      "domain___context___original" => [
+      [
+        "type" => "index",
+        "columns" => ["domain"],
+      ],
+      [
         "type" => "index",
         "columns" => ["domain", "context", "original"],
       ],
     ]);
   }
 
-  public function routing(array $routing = []) {
-    return parent::routing([
-      '/^Website\/(.+)\/Translations$/' => [
-        "action" => "UI/Table",
-        "params" => [
-          "model" => $this->name,
-          "domain" => '$1',
-        ]
-      ],
-    ]);
-  }
-
   public function tableParams($params) {
-    $domain = $params['domain'];
-    $domains = $this->adios->config['widgets']['Website']['domains'];
-    if (!in_array($domain, array_keys($domains))) {
-      $domain = "";
-    }
-
-    $params["where"] = $this->getFullTableSQLName().".`domain` = '{$domain}'";
+    $params["title"] = "{$params['domainName']} &raquo; Translations";
+    $params["where"] = $this->getFullTableSQLName().".`domain` = '{$params['domainName']}'";
 
     return $params;
   }

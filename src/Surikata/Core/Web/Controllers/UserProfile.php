@@ -54,25 +54,22 @@ class UserProfile extends \Surikata\Core\Web\Controller {
     // Request to change customer password
     if (isset($_POST['changeBasicInformation']) && $_POST['changeBasicInformation'] == "1") {
       $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adminPanel);
-      $given_name = $_POST["given_name"] ?? "";
-      $family_name = $_POST["family_name"] ?? "";
+      $given_name = $_POST["givenName"] ?? "";
+      $family_name = $_POST["familyName"] ?? "";
 
-      // REVIEW: $vsetkyPremenneVCamelCase
-      $company_name = $_POST["company_name"] ?? "";
-      $company_id = $_POST["company_id"] ?? "";
-      $company_tax_id = $_POST["company_tax_id"] ?? "";
-      $company_vat_id = $_POST["company_vat_id"] ?? "";
-      // REVIEW: $email sa nikde nepouziva, chyba/zamer/zbytocne?
-      $email = $_POST["email"] ?? "";
+      $company_name = $_POST["companyName"] ?? "";
+      $company_id = $_POST["companyId"] ?? "";
+      $company_tax_id = $_POST["companyTaxId"] ?? "";
+      $company_vat_id = $_POST["companyVatId"] ?? "";
 
       $address = [];
-      $address["inv_given_name"] = $_POST["inv_given_name"] ?? "";
-      $address["inv_family_name"] = $_POST["inv_family_name"] ?? "";
-      $address["inv_company_name"] = $_POST["inv_company_name"] ?? "";
-      $address["inv_street_1"] = $_POST["inv_street_1"] ?? "";
-      $address["inv_street_2"] = $_POST["inv_street_2"] ?? "";
-      $address["inv_zip"] = $_POST["inv_zip"] ?? "";
-      $address["inv_city"] = $_POST["inv_city"] ?? "";
+      $address["inv_given_name"] = $_POST["invGivenName"] ?? "";
+      $address["inv_family_name"] = $_POST["invFamilyName"] ?? "";
+      $address["inv_company_name"] = $_POST["invCompanyName"] ?? "";
+      $address["inv_street_1"] = $_POST["invStreet_1"] ?? "";
+      $address["inv_street_2"] = $_POST["invStreet_2"] ?? "";
+      $address["inv_zip"] = $_POST["invZip"] ?? "";
+      $address["inv_city"] = $_POST["invCity"] ?? "";
 
       try {
         $customerModel->changeName(

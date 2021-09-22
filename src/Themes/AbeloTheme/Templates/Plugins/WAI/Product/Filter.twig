@@ -1,7 +1,7 @@
 <script>
   $(document).ready(function() {
-    if ($( window ).width() > 991) {
-      $("#productListFilter").addClass("show");
+    if ($( window ).width() < 991) {
+      $("#productListFilter").css("display", "none");
     }
     AbeloThemeProductCatalog.loadUrlParams('brands');
   })
@@ -11,8 +11,12 @@
 <div class="shop-sidebar-wrap">
   {% if showProductCategories %}
     <div class="sidebar-widget mb-30px">
-      <h3 class="sidebar-title"><span>{{ translate("Categories", "Product") }}</span></h3>
-      <div class="accordion" id="accordionExample">
+      <h3 class="sidebar-title">
+        <a href="#accordionProductCat" data-toggle="collapse">
+          <span>{{ translate("Categories", "Product") }}</span>
+        </a>
+      </h3>
+      <div class="accordion collapse show" id="accordionProductCat">
         {% for category in filterInfo.allCategoriesAndSubCategories %}
           {% if category.subCategory is not empty %}
             {% set activeCategory = "" %}
@@ -109,14 +113,96 @@
 
   <div class="filter-mobile">
     <h3 class="sidebar-title">
-      <a data-toggle="collapse" href="#productListFilter" role="button">
-        {{ translate("Filter", "Product") }}
+      <a href="#offcanvas-product-filter" class="offcanvas-toggle" role="button">
+        <i class="lnr lnr-chart-bars"></i>&nbsp;{{ translate("Filter", "Product") }}
       </a>
     </h3>
   </div>
 
+  <div id="offcanvas-product-filter" class="offcanvas offcanvas-mobile-menu">
+    <div class="inner customScroll">
+      <div class="head">
+        <span class="title">&nbsp;</span>
+        <button class="offcanvas-close">×</button>
+      </div>
+      <div class="offcanvas-menu">
+        {% if showFeaturesFilter %}
+          <h3 class="sidebar-title m-0"><span>{{ translate("Filter By", "Product") }}</span></h3>
+          <!-- Sidebar single item -->
+          <div class="sidebar-widget no-cba mt-20">
+            <h4 class="pro-sidebar-title">Colour</h4>
+            <div class="sidebar-widget-list">
+              <ul>
+                <li>
+                  <div class="sidebar-widget-list-left">
+                    <input type="checkbox" /> <a href="#">Grey<span>(2)</span> </a>
+                    <span class="checkmark grey"></span>
+                  </div>
+                </li>
+                <li>
+                  <div class="sidebar-widget-list-left">
+                    <input type="checkbox" value="" /> <a href="#">White<span>(4)</span></a>
+                    <span class="checkmark white"></span>
+                  </div>
+                </li>
+                <li>
+                  <div class="sidebar-widget-list-left">
+                    <input type="checkbox" value="" /> <a href="#">Black<span>(4)</span> </a>
+                    <span class="checkmark black"></span>
+                  </div>
+                </li>
+                <li>
+                  <div class="sidebar-widget-list-left">
+                    <input type="checkbox" value="" /> <a href="#">Camel<span>(4)</span> </a>
+                    <span class="checkmark camel"></span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        {% endif %}
+        {% if showBrands %}
+          <div class="sidebar-widget mt-30">
+            <h4 class="pro-sidebar-title">{{ translate("Brand", "Product") }}</h4>
+            <div class="sidebar-widget-list">
+              <ul>
+                {% for brand in filterInfo.allBrands %}
+                  <li>
+                    <div class="sidebar-widget-list-left">
+                      <input
+                          type="checkbox"
+                          name="ProductFilter_brand_{{ loop.index }}"
+                          id="ProductFilter_brand_{{ loop.index }}"
+                          value=""
+                          onchange="
+                              let div = $('#productCatalogDefaultContainerDiv');
+                              if ($(this).is(':checked')) {
+                              AbeloThemeProductCatalog.addValueToFilter('brands', {{ brand.id }}).update(div);
+                              } else {
+                              AbeloThemeProductCatalog.removeValueFromFilter('brands', {{ brand.id }}).update(div);
+                              }
+                              "
+                          data-id-brand="{{ brand.id }}"
+                          {% if brand.id in filterInfo.filteredBrands %} checked {% endif %}
+                      />
+                      <label for="ProductFilter_brand_{{ loop.index }}" class="filter-label">
+                        {{ brand.name }}
+                      </label>
+                      <span class="checkmark"></span>
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+      <!-- OffCanvas Filter End -->
+    </div>
+  </div>
+
   <!-- Sidebar single item -->
-  <div class="sidebar-widget-group mt-20 collapse" id="productListFilter">
+  <div class="sidebar-widget-group mt-20" id="productListFilter">
     {% if showFeaturesFilter %}
       <h3 class="sidebar-title m-0"><span>{{ translate("Filter By", "Product") }}</span></h3>
       <!-- Sidebar single item -->

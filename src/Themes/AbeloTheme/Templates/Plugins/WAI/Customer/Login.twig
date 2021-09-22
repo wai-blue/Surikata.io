@@ -35,7 +35,8 @@
                             type="button"
                             onclick="sendLoginForm('loginForm');"
                           ><span>Login</span></button>
-                          <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/ForgotPassword', 'getWebPageUrl') }}">
+                          {# <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/ForgotPassword', 'getWebPageUrl') }}"> #}
+                          <a href="{{ rootUrl }}/zabudnute-heslo">
                             {{ translate("Forgot password?", "Customer") }}
                           </a>
                         </div>

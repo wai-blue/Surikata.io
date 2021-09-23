@@ -889,6 +889,45 @@ class Order extends \ADIOS\Core\Model {
             {$btnOrderStateCanceled}
           </div>
         </div>
+        <div class='card shadow mb-2'>
+          <div class='card-header py-3'>
+            Order summary
+          </div>
+          <div class='card-body'>
+            <div class='table-responsive'>
+              <table class='table' width='100%' cellspacing='0'>
+                <tbody>
+                  <tr>
+                    <td>
+                      Total price excl. VAT
+                    </td>
+                    <td class='text-right'>
+                      ".number_format($data['SUMMARY']['price_total_excl_vat'], 2, ",", " ")."
+                      ".$this->adios->locale->currencySymbol()."
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Total price incl. VAT
+                    </td>
+                    <td class='text-right'>
+                      ".number_format($data['SUMMARY']['price_total_incl_vat'], 2, ",", " ")."
+                      ".$this->adios->locale->currencySymbol()."
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Total weight
+                    </td>
+                    <td class='text-right'>
+                      ".number_format($data['SUMMARY']['weight_total'], 2, ",", " ")." g
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       ";
 
       $params["titleRaw"] = $formTitle;
@@ -1048,12 +1087,16 @@ class Order extends \ADIOS\Core\Model {
       "));
 
       $order['SUMMARY'] = [
-        'price_total' => 0,
+        'price_total_excl_vat' => 0,
+        'price_total_incl_vat' => 0,
         'weight_total' => 0,
       ];
 
+      // REVIEW: preverit, ci tieto vzorce budu fungovat aj pre velke mnozstva
+      // produktov s cenami na 4 a viac des. miest
       foreach ($order['ITEMS'] as $item) {
-        $order['SUMMARY']['price_total'] += $item['quantity'] * $item['unit_price'];
+        $order['SUMMARY']['price_total_excl_vat'] += $item['quantity'] * $item['unit_price'];
+        $order['SUMMARY']['price_total_incl_vat'] += $item['quantity'] * $item['unit_price'] * (1 + $item['vat_percent'] / 100);
         $order['SUMMARY']['weight_total'] += $item['quantity'] * $item['product_weight'];
       }
 

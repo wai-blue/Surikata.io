@@ -427,7 +427,7 @@
       </div>
     </div>
 
-    <!-- SUMAR -->
+    <!-- SUMMARY -->
     <div style='padding-top:5mm;'>
       <div class='content'>
 
@@ -459,7 +459,7 @@
                 {% endif %}
               </td>
               <td class='_num fbigger'>
-                {{ invoice.SUMAR.suma_celkom_bez_dph|number_format(2, ',', ' ') }} €
+                {{ invoice.SUMMARY.price_total_excl_vat|number_format(2, ',', ' ') }} €
               </td>
             </tr>
             
@@ -490,7 +490,7 @@
                 {% endif %}
               </td>
               <td class='_num'>
-                {{ invoice.SUMAR.suma_celkom_dph|number_format(2, ',', ' ') }} €
+                {{ invoice.SUMMARY.vat_total|number_format(2, ',', ' ') }} €
               </td>
             </tr>
 
@@ -507,7 +507,7 @@
                 </b>
               </td>
               <td class='_num fbigger'>
-                <b>{{ invoice.SUMAR.suma_celkom_s_dph|number_format(2, ',', ' ') }} €</b>
+                <b>{{ invoice.SUMMARY.price_total_incl_vat|number_format(2, ',', ' ') }} €</b>
               </td>
             </tr>
           </table>

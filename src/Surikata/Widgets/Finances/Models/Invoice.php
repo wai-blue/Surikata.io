@@ -393,7 +393,7 @@ class Invoice extends \ADIOS\Core\Model {
 
       foreach ($invoice['ITEMS'] as $key => $item) {
         $tmpMnozstvo = $invoice['ITEMS'][$key]['quantity'];
-        $tmpSadzbaDPH = $invoice['ITEMS'][$key]['dph'];
+        $tmpSadzbaDPH = $invoice['ITEMS'][$key]['vat_percent'];
 
         $tmpJednotkovaCenaBezDPH = $invoice['ITEMS'][$key]['unit_price'];
         $tmpSumaBezDPH = round($tmpJednotkovaCenaBezDPH * $tmpMnozstvo, 2);
@@ -407,6 +407,7 @@ class Invoice extends \ADIOS\Core\Model {
 
         $invoice['ITEMS'][$key]['sadzba_dph'] = $tmpSadzbaDPH;
 
+        // REVIEW: poprekladat
         $invoice['ITEMS'][$key]['jednotkova_cena_bez_dph'] = $tmpJednotkovaCenaBezDPH;
         $invoice['ITEMS'][$key]['jednotkova_cena_dph'] = $tmpJednotkovaCenaDPH;
         $invoice['ITEMS'][$key]['jednotkova_cena_s_dph'] = $tmpJednotkovaCenaSDPH;
@@ -431,10 +432,10 @@ class Invoice extends \ADIOS\Core\Model {
         $sumaCelkomSDPH += $tmpSumaSDPH;
       }
 
-      $invoice['SUMAR'] = [
-        "suma_celkom_dph" => $sumaCelkomDPH,
-        "suma_celkom_bez_dph" => $sumaCelkomBezDPH,
-        "suma_celkom_s_dph" => $sumaCelkomSDPH,
+      $invoice['SUMMARY'] = [
+        "vat_total" => $sumaCelkomDPH,
+        "price_total_excl_vat" => $sumaCelkomBezDPH,
+        "price_total_incl_vat" => $sumaCelkomSDPH,
       ];
     }
 
@@ -587,19 +588,57 @@ class Invoice extends \ADIOS\Core\Model {
           [
             "class" => "col-md-3 pr-0",
             "html" => "
-              {$btnSelectLanguageHtml}
-              {$btnSelectTemplateHtml}
-              {$btnPrintInvoiceHtml}
-              <br/>
-              <hr/>
-              <br/>
-              <b>Customer</b><br/>
-              ".hsc($data['customer_name'])."</br>
-              ".hsc($data['customer_street_1'])."</br>
-              ".hsc($data['customer_zip'])." ".hsc($data['customer_city'])."</br>
-              </br>
-              <b>".number_format($data['SUMAR']['suma_celkom_bez_dph'], 2, ",", " ")." EUR excl. VAT</b><br/>
-              <b>".number_format($data['SUMAR']['suma_celkom_s_dph'], 2, ",", " ")." EUR incl. VAT</b><br/>
+              <div class='card shadow mb-2'>
+                <div class='card-header py-3'>
+                  Invoice summary
+                </div>
+                <div class='card-body'>
+                  <div class='table-responsive'>
+                    <table class='table' width='100%' cellspacing='0'>
+                      <tbody>
+                        <tr>
+                          <td>
+                            Customer
+                          </td>
+                          <td>
+                            ".hsc($data['customer_name'])."</br>
+                            ".hsc($data['customer_street_1'])."</br>
+                            ".hsc($data['customer_zip'])." ".hsc($data['customer_city'])."</br>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            Total price excl. VAT
+                          </td>
+                          <td class='text-right'>
+                            ".number_format($data['SUMMARY']['price_total_excl_vat'], 2, ",", " ")."
+                            ".$this->adios->locale->currencySymbol()."
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            Total price incl. VAT
+                          </td>
+                          <td class='text-right'>
+                            ".number_format($data['SUMMARY']['price_total_incl_vat'], 2, ",", " ")."
+                            ".$this->adios->locale->currencySymbol()."
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class='card shadow mb-2'>
+                <div class='card-header py-3'>
+                  Print invoice
+                </div>
+                <div class='card-body'>
+                  {$btnSelectLanguageHtml}
+                  {$btnSelectTemplateHtml}
+                  {$btnPrintInvoiceHtml}
+                </div>
+              </div>
             ",
           ],
         ],

@@ -4926,9 +4926,9 @@ offcanvas-menu > ul > li .menu-expand {
   margin: 25px 0 0;
 }
 .product-details-content .pro-details-policy li {
-  margin-bottom: 20px;
-  width: 32.33%;
-  line-height: 24px;
+  margin-bottom: 10px;
+  width: 85%;
+  line-height: 22px;
 }
 .product-details-content .pro-details-policy i {
   color: #266cfb;
@@ -7078,7 +7078,8 @@ offcanvas-menu > ul > li .menu-expand {
 }
 .contact-area .custom-row-2 .contact-info-wrap {
   background-color: #f3f3f3;
-  padding: 120px 70px 112px 90px;
+  padding: 45px;
+  height: 575px;
 }
 .contact-area .custom-row-2 .contact-info-wrap .single-contact-info {
   display: flex;
@@ -7144,26 +7145,17 @@ offcanvas-menu > ul > li .menu-expand {
 .contact-area .custom-row-2 .contact-info-wrap .contact-social .social-info a:hover {
   color: #266cfb;
 }
-@media only screen and (min-width: 992px) and (max-width: 1199px) {
+
+@media only screen and (max-width: 991px) {
   .contact-area .custom-row-2 .contact-info-wrap {
-    padding: 120px 20px 112px 40px;
-  }
-}
-@media only screen and (min-width: 768px) and (max-width: 991px) {
-  .contact-area .custom-row-2 .contact-info-wrap {
-    padding: 120px 20px 112px 30px;
-  }
-}
-@media only screen and (max-width: 767px) {
-  .contact-area .custom-row-2 .contact-info-wrap {
-    padding: 50px 30px 50px 30px;
+    height: auto;
   }
 }
 .contact-message .contact-form {
   background-color: #f3f3f3;
 }
 .contact-area .custom-row-2 .contact-form {
-  padding: 50px 110px 50px 110px;
+  padding: 50px;
 }
 .contact-area .custom-row-2 .contact-form .contact-title h2 {
   font-size: 24px;

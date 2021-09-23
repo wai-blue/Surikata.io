@@ -320,7 +320,7 @@
                                         >
                                         <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }} <b>{{ deliveryService.price|number_format(2, ",", " ") }} €</b></label>
                                         {% if deliveryService.logo %}
-                                          <img class="order-img" src="./upload/{{ deliveryService.logo }}"/>
+                                          <img class="order-img" src="{{ uploadedFileUrl }}/{{ deliveryService.logo }}"/>
                                         {% endif %}
                                         <p data-method="{{ deliveryService.id }}" class="delivery-text">{{ deliveryService.description }}</p>
                                       </div>

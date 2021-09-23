@@ -120,7 +120,7 @@
                             data-toggle="modal"
                             data-target="#quickViewModal"
                           >
-                            <i class="lnr lnr-magnifier"></i>
+                            <i class="lnr lnr-frame-expand"></i>
                           </a>
                         </li>
                         <!--<li>
@@ -148,18 +148,10 @@
                     </h2>
                     <div class="pricing-meta">
                       <ul>
-                        {% if (product.price.fullPrice != product.price.salePrice) %}
-                          <li class="old-price">
-                            {{ product.price.fullPrice|number_format(2, ",", " ") }} {{ locale.currencySymbol }}
-                          </li>
-                          <li class="current-price">
-                            {{ product.price.salePrice|number_format(2, ",", " ") }} {{ locale.currencySymbol }}
-                          </li>
-                        {% else %}
-                          <li class="current-price">
-                            {{ product.price.fullPrice|number_format(2, ",", " ") }} {{ locale.currencySymbol }}
-                          </li>
-                        {% endif%}
+                        {% if product.sale_price_cached != product.full_price_cached %}
+                          <li class="old-price">{{ product.full_price_cachede|number_format(2, ",", " ") }} €</li>
+                        {% endif %}
+                        <li class="current-price">{{ product.sale_price_cached|number_format(2, ",", " ") }} €</li>
                       </ul>
                     </div>
                   </div>

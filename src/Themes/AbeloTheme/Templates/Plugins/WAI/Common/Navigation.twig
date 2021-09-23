@@ -207,7 +207,7 @@
     searchInput = $("#"+searchInput);
     searchValue = searchInput.val();
     var url = "{{ rootUrl }}";
-    url += '/search?search='+searchValue;
+    url += '/hladat?search='+searchValue;
     window.location.href = url;
     return false;
   }
@@ -251,7 +251,7 @@
         '__renderOnlyPlugin': 'WAI/Misc/WebsiteSearch',
         '__output': 'json',
       }
-      $.getJSON('{{ rootUrl }}/websitesearch',
+      $.getJSON('',
         requestData
       ).done(function (data) {
         if (typeof success == 'function') {
@@ -296,7 +296,7 @@
         '__output': 'json',
       }
       console.log(requestData);
-      $.getJSON('{{ rootUrl }}/websitesearch',
+      $.getJSON('',
               requestData
       ).done(function (data) {
         if (typeof success == 'function') {

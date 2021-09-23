@@ -327,7 +327,7 @@ class Order extends \ADIOS\Core\Model {
 
   public function routing(array $routing = []) {
     return parent::routing([
-      '/^Orders\/([New|InvoiceIssued|Paid|Shipped|Canceled]+)$/' => [
+      '/^Orders\/([New|Invoiced|Paid|Shipped|Canceled]+)$/' => [
         "action" => "UI/Table",
         "params" => [
           "model" => "Widgets/Orders/Models/Order",
@@ -349,7 +349,7 @@ class Order extends \ADIOS\Core\Model {
         $params["title"] = "New orders";
         $params['where'] = "{$this->table}.state = (".self::STATE_NEW.")";
       break;
-      case "InvoiceIssued":
+      case "Invoiced":
         $params["title"] = "Invoiced orders";
         $params['where'] = "{$this->table}.state = (".self::STATE_INVOICED.")";
       break;

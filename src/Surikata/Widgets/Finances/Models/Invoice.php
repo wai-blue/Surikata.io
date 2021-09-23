@@ -308,11 +308,6 @@ class Invoice extends \ADIOS\Core\Model {
           "show_column" => TRUE,
         ],
 
-        "cislo_dodacieho_listu" => [
-          "type" => "varchar",
-          "title" => "Číslo dodacieho listu",
-        ],
-
         "notes" => [
           "type" => "varchar",
           "byte_size" => 255,
@@ -598,7 +593,6 @@ class Invoice extends \ADIOS\Core\Model {
                 ["html" => "<hr>"],
                 "payment_method",
                 "order_number",
-                "cislo_dodacieho_listu",
                 "notes",
                 "state",
               ],
@@ -717,7 +711,7 @@ class Invoice extends \ADIOS\Core\Model {
     // $data = [
     //   "HEADER" => [
     //     "variable_symbol", "constant_symbol", "specific_symbol"
-    //     "payment_method", "order_number", "cislo_dodacieho_listu", "notes",
+    //     "payment_method", "order_number", "notes",
     //   ],
     //   "TIMESTAMPS" => [
     //     "issue_time", "delivery_time", "payment_due_time"
@@ -816,10 +810,6 @@ class Invoice extends \ADIOS\Core\Model {
 
       "payment_method" => $data["HEADER"]["payment_method"],
       "order_number" => $data["HEADER"]["order_number"],
-      "cislo_dodacieho_listu" => (empty($data["HEADER"]["cislo_dodacieho_listu"])
-        ? "SQL:@number"
-        : $data["HEADER"]["cislo_dodacieho_listu"]
-      ),
       "notes" => $data["HEADER"]["notes"],
     ]);
 

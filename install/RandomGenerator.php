@@ -87,6 +87,7 @@ class RandomGenerator {
         "ean" => $tmpProduct[12],
         "image" => $tmpProduct[13],
         "vat_percent" => $tmpProduct[14],
+        "weight" => rand(500, 2500),
 
         "name_lang_1"        => $tmpProduct[3]." (lng-1)",
         "brief_lang_1"       => $tmpProduct[4]." (lng-1)",

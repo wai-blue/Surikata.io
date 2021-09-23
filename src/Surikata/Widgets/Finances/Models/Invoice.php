@@ -292,6 +292,22 @@ class Invoice extends \ADIOS\Core\Model {
           "title" => "Order number",
         ],
 
+        "price_total_excl_vat" => [
+          "type" => "float",
+          "title" => "Total price excl. VAT",
+          "unit" => $this->adios->locale->currencySymbol(),
+          "readonly" => TRUE,
+          "show_column" => TRUE,
+        ],
+
+        "price_total_incl_vat" => [
+          "type" => "float",
+          "title" => "Total price incl. VAT",
+          "unit" => $this->adios->locale->currencySymbol(),
+          "readonly" => TRUE,
+          "show_column" => TRUE,
+        ],
+
         "cislo_dodacieho_listu" => [
           "type" => "varchar",
           "title" => "Číslo dodacieho listu",
@@ -432,11 +448,7 @@ class Invoice extends \ADIOS\Core\Model {
         $sumaCelkomSDPH += $tmpSumaSDPH;
       }
 
-      $invoice['SUMMARY'] = [
-        "vat_total" => $sumaCelkomDPH,
-        "price_total_excl_vat" => $sumaCelkomBezDPH,
-        "price_total_incl_vat" => $sumaCelkomSDPH,
-      ];
+      $invoice['SUMMARY'] = $this->calculateSummaryInfo($invoice);
     }
 
     return $invoice;
@@ -475,6 +487,56 @@ class Invoice extends \ADIOS\Core\Model {
       return TRUE;
     }
   }
+
+  public function calculateSummaryInfo($invoice) {
+    $summary = [
+      "vat_total" => 0,
+      'price_total_excl_vat' => 0,
+      'price_total_incl_vat' => 0,
+    ];
+
+    $sumaCelkomBezDPH = 0;
+    $sumaCelkomSDPH = 0;
+    $sumaCelkomDPH = 0;
+
+    foreach ($invoice['ITEMS'] as $key => $item) {
+      $tmpJednotkovaCenaDPH = round($item['unit_price'] * ($item['vat_percent'] / 100), 2);
+      $tmpSumaBezDPH = round($item['unit_price'] * $item['quantity'], 2);
+      $tmpSumaDPH = round($tmpJednotkovaCenaDPH * $item['quantity'], 2);
+
+      $sumaCelkomDPH += $tmpSumaDPH;
+      $sumaCelkomBezDPH += $tmpSumaBezDPH;
+      $sumaCelkomSDPH += $tmpSumaBezDPH + $tmpSumaDPH;
+    }
+
+    $summary = [
+      "vat_total" => $sumaCelkomDPH,
+      "price_total_excl_vat" => $sumaCelkomBezDPH,
+      "price_total_incl_vat" => $sumaCelkomSDPH,
+    ];
+    
+
+    return $summary;
+
+  }
+
+  public function updateSummaryInfo($idInvoice, $summary) {
+    $this->updateRow([
+      'price_total_excl_vat' => $summary['price_total_excl_vat'],
+      'price_total_incl_vat' => $summary['price_total_incl_vat'],
+    ], $idInvoice);
+  }
+
+  public function onAfterSave($data, $returnValue) {
+    if ($data['id'] > 0) {
+      $invoice = $this->getById($data['id']);
+      $summary = $this->calculateSummaryInfo($invoice);
+      $this->updateSummaryInfo($data['id'], $summary);
+    }
+  }
+
+
+
 
   public function formParams($data, $params) {
     if ($data['id'] <= 0) {
@@ -775,6 +837,9 @@ class Invoice extends \ADIOS\Core\Model {
     }
 
     $issuedInvoiceData = $this->getById($idInvoice);
+
+    $summary = $this->calculateSummaryInfo($issuedInvoiceData);
+    $this->updateSummaryInfo($idInvoice, $summary);
 
     $this->sendNotificationForIssuedInvoice($issuedInvoiceData);
 

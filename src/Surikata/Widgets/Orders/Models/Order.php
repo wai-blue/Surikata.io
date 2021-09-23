@@ -226,14 +226,12 @@ class Order extends \ADIOS\Core\Model {
         "type" => "float",
         "title" => "Delivery fee",
         "unit" => $this->adios->locale->currencySymbol(),
-        "show_column" => TRUE,
       ],
 
       "payment_fee" => [
         "type" => "float",
         "title" => "Payment fee",
         "unit" => $this->adios->locale->currencySymbol(),
-        "show_column" => TRUE,
       ],
 
       "preferred_delivery_day" => [
@@ -264,7 +262,6 @@ class Order extends \ADIOS\Core\Model {
         "type" => "lookup",
         "title" => "Invoice",
         "model" => "Widgets/Finances/Models/Invoice",
-        "show_column" => TRUE,
       ],
 
       "phone_number" => [
@@ -305,6 +302,32 @@ class Order extends \ADIOS\Core\Model {
         "readonly" => TRUE,
         "show_column" => TRUE,
       ],
+
+      "price_total_excl_vat" => [
+        "type" => "float",
+        "title" => "Total price excl. VAT",
+        "unit" => $this->adios->locale->currencySymbol(),
+        "readonly" => TRUE,
+        "show_column" => TRUE,
+      ],
+
+      "price_total_incl_vat" => [
+        "type" => "float",
+        "title" => "Total price incl. VAT",
+        "unit" => $this->adios->locale->currencySymbol(),
+        "readonly" => TRUE,
+        "show_column" => TRUE,
+      ],
+
+      "weight_total" => [
+        "type" => "float",
+        "title" => "Total weight",
+        "unit" => "g",
+        "readonly" => TRUE,
+        "show_column" => TRUE,
+      ],
+
+      
     ]);
   }
 
@@ -375,8 +398,15 @@ class Order extends \ADIOS\Core\Model {
   }
 
   public function onBeforeSave($data) {
-
     return $data;
+  }
+
+  public function onAfterSave($data, $returnValue) {
+    if ($data['id'] > 0) {
+      $order = $this->getById($data['id']);
+      $summary = $this->calculateSummaryInfo($order);
+      $this->updateSummaryInfo($data['id'], $summary);
+    }
   }
 
   public function calculateOrderNumber($orderData) {
@@ -625,6 +655,9 @@ class Order extends \ADIOS\Core\Model {
       ],
       $idOrder
     );
+
+    $summary = $this->calculateSummaryInfo($placedOrderData);
+    $this->updateSummaryInfo($idOrder, $summary);
 
     $this->sendNotificationForPlacedOrder($placedOrderData);
 
@@ -902,7 +935,7 @@ class Order extends \ADIOS\Core\Model {
                       Total price excl. VAT
                     </td>
                     <td class='text-right'>
-                      ".number_format($data['SUMMARY']['price_total_excl_vat'], 2, ",", " ")."
+                      ".number_format($data['price_total_excl_vat'], 2, ",", " ")."
                       ".$this->adios->locale->currencySymbol()."
                     </td>
                   </tr>
@@ -911,7 +944,7 @@ class Order extends \ADIOS\Core\Model {
                       Total price incl. VAT
                     </td>
                     <td class='text-right'>
-                      ".number_format($data['SUMMARY']['price_total_incl_vat'], 2, ",", " ")."
+                      ".number_format($data['price_total_incl_vat'], 2, ",", " ")."
                       ".$this->adios->locale->currencySymbol()."
                     </td>
                   </tr>
@@ -920,7 +953,7 @@ class Order extends \ADIOS\Core\Model {
                       Total weight
                     </td>
                     <td class='text-right'>
-                      ".number_format($data['SUMMARY']['weight_total'], 2, ",", " ")." g
+                      ".number_format($data['weight_total'], 2, ",", " ")." g
                     </td>
                   </tr>
                 </tbody>
@@ -1086,19 +1119,7 @@ class Order extends \ADIOS\Core\Model {
         where f.id = ".(int) $order['id_invoice']."
       "));
 
-      $order['SUMMARY'] = [
-        'price_total_excl_vat' => 0,
-        'price_total_incl_vat' => 0,
-        'weight_total' => 0,
-      ];
-
-      // REVIEW: preverit, ci tieto vzorce budu fungovat aj pre velke mnozstva
-      // produktov s cenami na 4 a viac des. miest
-      foreach ($order['ITEMS'] as $item) {
-        $order['SUMMARY']['price_total_excl_vat'] += $item['quantity'] * $item['unit_price'];
-        $order['SUMMARY']['price_total_incl_vat'] += $item['quantity'] * $item['unit_price'] * (1 + $item['vat_percent'] / 100);
-        $order['SUMMARY']['weight_total'] += $item['quantity'] * $item['product_weight'];
-      }
+      $order['SUMMARY'] = $this->calculateSummaryInfo($order);
 
     }
 
@@ -1137,6 +1158,33 @@ class Order extends \ADIOS\Core\Model {
 
       return TRUE;
     }
+  }
+
+  public function calculateSummaryInfo($order) {
+    $summary = [
+      'price_total_excl_vat' => 0,
+      'price_total_incl_vat' => 0,
+      'weight_total' => 0,
+    ];
+
+    // REVIEW: preverit, ci tieto vzorce budu fungovat aj pre velke mnozstva
+    // produktov s cenami na 4 a viac des. miest
+    foreach ($order['ITEMS'] as $item) {
+      $summary['price_total_excl_vat'] += $item['quantity'] * $item['unit_price'];
+      $summary['price_total_incl_vat'] += $item['quantity'] * $item['unit_price'] * (1 + $item['vat_percent'] / 100);
+      $summary['weight_total'] += $item['quantity'] * $item['product_weight'];
+    }
+
+    return $summary;
+
+  }
+
+  public function updateSummaryInfo($idOrder, $summary) {
+    $this->updateRow([
+      'price_total_excl_vat' => $summary['price_total_excl_vat'],
+      'price_total_incl_vat' => $summary['price_total_incl_vat'],
+      'weight_total' => $summary['weight_total'],
+    ], $idOrder);
   }
 
   public function prepareInvoiceData($idOrder, $useDatesFromOrder = FALSE) {

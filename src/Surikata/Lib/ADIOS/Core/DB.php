@@ -68,8 +68,8 @@ class DB {
     /**
      * Connects the DB object to the database.
      *
-     * @throws \ADIOS\Core\DBException When connection string is not configured.
-     * @throws \ADIOS\Core\DBException When connection error occured.
+     * @throws \ADIOS\Core\Exceptions\DBException When connection string is not configured.
+     * @throws \ADIOS\Core\Exceptions\DBException When connection error occured.
      *
      * @return void
      */
@@ -155,8 +155,8 @@ class DB {
      *
      * @param string SQL query to run
      *
-     * @throws \ADIOS\Core\DBDuplicateEntryException When foreign key constrain block the query execution.
-     * @throws \ADIOS\Core\DBException In case of any other error.
+     * @throws \ADIOS\Core\Exceptions\DBDuplicateEntryException When foreign key constrain block the query execution.
+     * @throws \ADIOS\Core\Exceptions\DBException In case of any other error.
      *
      * @return object DB result object.
      */

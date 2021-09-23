@@ -355,10 +355,18 @@
                 {% endif %}
               </td>
               <td style='width:9%;' class='_num'>
-                {% if language == "sk" %}
-                  J.cena<br/>bez DPH
-                {% elseif language == "en" %}
-                  Price<br/>excl. template
+                {% if template == 1 %}
+                  {% if language == "sk" %}
+                    J.cena<br/>bez DPH
+                  {% elseif language == "en" %}
+                    Price<br/>excl. template
+                  {% endif %}
+                {% else %}
+                  {% if language == "sk" %}
+                    J.cena<br/>
+                  {% elseif language == "en" %}
+                    Price<br/>
+                  {% endif %}
                 {% endif %}
               </td>
               {% if template == 1 %}
@@ -394,10 +402,18 @@
                 {% endif %}
               </td>
               <td style='width:11%;' class='_num'>
-                {% if language == "sk" %}
-                  Spolu<br/>bez DPH
-                {% elseif language == "en" %}
-                  Subtotal<br/>excl. VAT
+                {% if template == 1 %}
+                  {% if language == "sk" %}
+                    Spolu<br/>bez DPH
+                  {% elseif language == "en" %}
+                    Subtotal<br/>excl. VAT
+                  {% endif %}
+                {% else %}
+                  {% if language == "sk" %}
+                    Spolu
+                  {% elseif language == "en" %}
+                    Subtotal
+                  {% endif %}
                 {% endif %}
               </td>
               {% if template == 1 %}
@@ -421,7 +437,7 @@
                 </td>
                 <td style='white-space:nowrap;width:9%;' class='_num'>{{ item.jednotkova_cena_bez_dph|number_format(2, ',', ' ') }} €</td>
                 {% if template == 1 %}
-                  <td style='white-space:nowrap;width:6%;' class='_num'>{{ item.sadzba_dph }} %</td>
+                  <td style='white-space:nowrap;width:6%;' class='_num'>{{ item.vat_percent }} %</td>
                 {% endif %}
                 {% if template == 1 %}
                   <td style='white-space:nowrap;width:9%;' class='_num'>{{ item.jednotkova_cena_s_dph|number_format(2, ',', ' ') }} €</td>
@@ -468,9 +484,9 @@
               <td class='fbigger'>
                 {% if template == 2 or template == 3 %} <b> {% endif %}
                   {% if language == "sk" %}
-                    Spolu bez DPH
+                    Spolu
                   {% elseif language == "en" %}
-                    Total excl. VAT
+                    Total
                   {% endif %}
                 {% if template == 2 or template == 3 %} </b> {% endif %}
               </td>

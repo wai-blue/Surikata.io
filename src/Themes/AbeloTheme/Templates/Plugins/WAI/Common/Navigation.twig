@@ -71,7 +71,7 @@
       <div class="row">
         <div class="col-md-3 d-flex">
           <div class="logo align-self-center">
-            <a href="{{ rootUrl }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ settings.profile.logo }}" alt="logo"/></a>
+            <a href="{{ rootUrl }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ settings.companyInfo.logo }}" alt="logo"/></a>
           </div>
         </div>
         <div class="col-md-9 align-self-center">
@@ -340,7 +340,7 @@
       <!-- Header Logo Start -->
       <div class="col">
         <div class="header-logo">
-          <a href="index.html"><img class="img-responsive" src="{{ rootUrl }}./upload/{{ settings.profile.logo }}" alt="logo.jpg" /></a>
+          <a href="index.html"><img class="img-responsive" src="{{ rootUrl }}./upload/{{ settings.companyInfo.logo }}" alt="logo.jpg" /></a>
         </div>
       </div>
       <!-- Header Logo End -->
@@ -569,17 +569,17 @@
     <!-- OffCanvas Menu End -->
     <div class="offcanvas-social mt-30px">
       <ul>
-        {% if settings.profile.urlFacebook != "" %}
-          <li><a href="{{ settings.profile.urlFacebook }}"><i class="ion-social-facebook"></i></a></li>
+        {% if settings.companyInfo.urlFacebook != "" %}
+          <li><a href="{{ settings.companyInfo.urlFacebook }}"><i class="ion-social-facebook"></i></a></li>
         {% endif %}
-        {% if settings.profile.urlTwitter != "" %}
-          <li><a href="{{ settings.profile.urlTwitter }}"><i class="ion-social-twitter"></i></a></li>
+        {% if settings.companyInfo.urlTwitter != "" %}
+          <li><a href="{{ settings.companyInfo.urlTwitter }}"><i class="ion-social-twitter"></i></a></li>
         {% endif %}
-        {% if settings.profile.urlYouTube != "" %}
-          <li><a href="{{ settings.profile.urlYouTube }}"><i class="ion-social-youtube"></i></a></li>
+        {% if settings.companyInfo.urlYouTube != "" %}
+          <li><a href="{{ settings.companyInfo.urlYouTube }}"><i class="ion-social-youtube"></i></a></li>
         {% endif %}
-        {% if settings.profile.urlInstagram != "" %}
-          <li><a href="{{ settings.profile.urlInstagram }}"><i class="ion-social-instagram"></i></a></li>
+        {% if settings.companyInfo.urlInstagram != "" %}
+          <li><a href="{{ settings.companyInfo.urlInstagram }}"><i class="ion-social-instagram"></i></a></li>
         {% endif %}
       </ul>
     </div>

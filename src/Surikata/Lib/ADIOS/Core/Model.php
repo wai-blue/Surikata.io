@@ -334,7 +334,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
    * Installs all upgrades of the model. Internaly stores current version and
    * compares it to list of available upgrades.
    *
-   * @throws \ADIOS\Core\DBException When an error occured during the upgrade.
+   * @throws \ADIOS\Core\Exceptions\DBException When an error occured during the upgrade.
    * @return void
    */
   public function installUpgrades() : void {
@@ -506,7 +506,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         "action" => "UI/Table/Search",
         "params" => array_merge($urlParams, [
           "model" => $this->name,
-          "searchGroup" => $urlBase,
+          "searchGroup" => $this->tableTitle ?? $urlBase,
         ])
       ],
       '/^'.$urlBase.'\/Export\/CSV$/' => [

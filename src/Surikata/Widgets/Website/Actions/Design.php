@@ -4,7 +4,7 @@ namespace ADIOS\Actions\Website;
 
 class Design extends \ADIOS\Core\Action {
   public function render() {
-    $settings = $this->adios->config["settings"]["web"][$this->params['domain']]["design"];
+    $settings = $this->adios->config["settings"]["web"][$this->params['domainName']]["design"];
 
     $themeEnumValues = [
       "" => "Choose your theme",
@@ -17,8 +17,8 @@ class Design extends \ADIOS\Core\Action {
     }
 
     return $this->adios->renderAction("UI/SettingsPanel", [
-      "settings_group" => "web/{$this->params['domain']}/design",
-      "title" => "Website - {$this->params['domain']} - Design",
+      "settings_group" => "web/{$this->params['domainName']}/design",
+      "title" => "{$this->params['domainName']} » Design",
       "template" => [
         "tabs" => [
           [

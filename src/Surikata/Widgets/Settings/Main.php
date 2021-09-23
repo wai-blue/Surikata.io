@@ -27,7 +27,7 @@ class Settings extends \ADIOS\Core\Widget {
           ],
           [
             "title" => "Users",
-            "onclick" => "desktop_update('Pouzivatelia');",
+            "onclick" => "desktop_update('Users');",
           ],
           //[
           //  "title" => "Imports",

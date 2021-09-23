@@ -46,6 +46,7 @@ class Upload extends \ADIOS\Core\Action {
         echo json_encode([
           'uploaded' => 1,
           'fileName' => $uploadedFilename,
+          'fileSize' => filesize($destinationFile),
           'url' => "{$this->adios->config['files_url']}/{$folderPath}/{$uploadedFilename}",
         ]);
       } else {

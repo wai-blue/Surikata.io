@@ -40,7 +40,8 @@
 .adios.ui.FileBrowser .folders .folder:nth-last-child(1) .btn-folder { height: 4em; }
 .adios.ui.FileBrowser .folders .folder:nth-last-child(1) .btn-file { height: 4em; }
 
-.adios.ui.FileBrowser .folders .folder:nth-last-child(1) .btn .text img { height: 100%; }
+.adios.ui.FileBrowser .folders .folder:nth-last-child(1) .btn .text img { height: calc(100% - 1em); }
+.adios.ui.FileBrowser .folders .folder:nth-last-child(1) .btn .text .filesize { font-size: 8pt; color: #888888; }
 
 .adios.ui.FileBrowser .folders .folder .operation-buttons { display: none; border-top: 1px solid #EEEEEE; margin-top: 1em; padding-top: 1em; }
 .adios.ui.FileBrowser .folders .folder .card-header .btn { display: none; }

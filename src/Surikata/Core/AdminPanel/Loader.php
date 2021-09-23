@@ -27,6 +27,8 @@ class Loader extends \ADIOS\Core\Loader {
     // parent::__construct
     parent::__construct($config, $mode);
 
+    $this->locale = new \Surikata\Core\AdminPanel\Locale($this);
+
     // override console to log DB errors
     // 2021-09-09 deprecated. Default ADIOS console is used.
     // $this->console = new \Surikata\Core\AdminPanel\Console($this);

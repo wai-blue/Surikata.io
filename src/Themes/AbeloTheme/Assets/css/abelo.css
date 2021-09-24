@@ -50,6 +50,9 @@
   top: 5px;
   margin-left: 5px;
 }
+.product-flag li {
+  padding: 5px;
+}
 .product-flag .new {
   background-color: #fcff54;
 }

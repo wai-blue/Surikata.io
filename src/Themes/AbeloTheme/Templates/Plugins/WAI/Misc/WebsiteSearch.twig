@@ -19,7 +19,9 @@
                             <img class="first-img" src="{{ uploadedFileUrl }}/{{ product.image }}" alt="{{ product.image }}" />
                           </a>
                           <ul class="product-flag">
-                            <li class="new">-{{ product.price.discountTotal|number_format(2, ",", " ") }}%</li>
+                            {% if (product.price.fullPrice != product.price.salePrice) %}
+                              <li class="new">-{{ product.price.discount|number_format(2, ",", " ") }}%</li>
+                            {% endif %}
                           </ul>
                         </div>
                       </div>

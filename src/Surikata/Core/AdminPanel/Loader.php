@@ -60,7 +60,7 @@ class Loader extends \ADIOS\Core\Loader {
    */
   public function checkPermissionsForAction($action, $params) {
     if ($action != "Desktop") {
-      if ($this->userProfile['id_role'] == self::USER_ROLE_SALES) {
+      if (!$this->hasUserRole(self::USER_ROLE_PRODUCT_MANAGER)) {
         if (strpos($params['model'], "Widgets/Products/Models") !== FALSE) {
           throw new \ADIOS\Core\Exceptions\NotEnoughPermissionsException("You don't have permissions to manage products.");
         }
@@ -93,6 +93,12 @@ class Loader extends \ADIOS\Core\Loader {
 
     $email->send();
 
+  }
+
+  public function setUserRole($role) {
+    if (!empty($this->userProfile)) {
+      $this->userProfile['id_role'] = $role;
+    }
   }
 
   public function hasUserRole($role) {

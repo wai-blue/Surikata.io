@@ -10,7 +10,7 @@ $configEnv["domainLanguages"] = [
 ];
 
 $configEnv["domains"] = [
-  "EN" => [
+  [
     "name" => "www.my-online-store.com",
     "description" => "My First Online Store",
     "rootUrl" => $_SERVER["HTTP_HOST"].REWRITE_BASE,

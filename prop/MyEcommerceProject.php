@@ -43,7 +43,7 @@ class AdminPanel extends \Surikata\Core\AdminPanel\Loader {
   /* You can force desired user role here. */
   /* Only for testing & development purposes. */
   public function onUserAuthorised() {
-    $this->setUserRole(\MyEcommerceProject\AdminPanel::USER_ROLE_PRODUCT_MANAGER);
+    // $this->setUserRole(\MyEcommerceProject\AdminPanel::USER_ROLE_PRODUCT_MANAGER);
   }
 
   /* You can register your own plugins folder here. */

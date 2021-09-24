@@ -348,7 +348,7 @@ INSERT INTO `srkt_web_translations` (`domain`, `context`, `original`, `translate
 ('eshop.liss.sk', 'Customer', 'Your account has been successfully verified.', 'Váš účet bol úspešne overený.'),
 ('eshop.liss.sk', 'Customer', 'Now you can sing in here', 'Teraz sa môžete prihlásiť'),
 ('eshop.liss.sk', 'Customer', 'Your account has been successfully created. To your email address', 'Váš účet bol úspešne vytvorený. Na vašu emailovú adresu'),
-('eshop.liss.sk', 'Customer', 'we''ve sent a link to verify your account. Please verify your account before logging in for the first time.', 'sme poslali odkaz na overenie vášho účtu. Prosím overte vašu emailovú adresu pred prvým prihlásením.'),
+('eshop.liss.sk', 'Customer', 'we have sent a link to verify your account. Please verify your account before logging in for the first time.', 'sme poslali odkaz na overenie vášho účtu. Prosím overte vašu emailovú adresu pred prvým prihlásením.'),
 ('eshop.liss.sk', 'Customer', 'Thank you for your trust.', 'Ďakujeme Vám za vašu dôveru.'),
 ('eshop.liss.sk', 'Customer', 'Invalid link for email confirmation', 'Neplatný odkaz pre overenie emailu.'),
 ('eshop.liss.sk', 'Customer', 'Password', 'Heslo'),

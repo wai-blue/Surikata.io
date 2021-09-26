@@ -39,6 +39,7 @@
                 <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/Login', 'getWebPageUrl') }}">{{ translate("Login") }}</a>
               {% endif %}
             </li>
+            <!--
             {% if languages|length > 1 %}
               <li class="pr-0" style="border-left: 1px solid #c6c6c6;">
                 <div class="dropdown">
@@ -60,6 +61,7 @@
                 </div>
               </li>
             {% endif %}
+            -->
           </ul>
         </div>
       </div>
@@ -207,7 +209,7 @@
     searchInput = $("#"+searchInput);
     searchValue = searchInput.val();
     var url = "{{ rootUrl }}";
-    url += '/search?search='+searchValue;
+    url += '/hladat?search='+searchValue;
     window.location.href = url;
     return false;
   }
@@ -251,7 +253,7 @@
         '__renderOnlyPlugin': 'WAI/Misc/WebsiteSearch',
         '__output': 'json',
       }
-      $.getJSON('{{ rootUrl }}/websitesearch',
+      $.getJSON('',
         requestData
       ).done(function (data) {
         if (typeof success == 'function') {
@@ -296,7 +298,7 @@
         '__output': 'json',
       }
       console.log(requestData);
-      $.getJSON('{{ rootUrl }}/websitesearch',
+      $.getJSON('',
               requestData
       ).done(function (data) {
         if (typeof success == 'function') {
@@ -332,6 +334,7 @@
     },
   });
 </script>
+
 <!-- Mobile Header Section Start -->
 <div class="mobile-header d-lg-none sticky-nav bg-header ptb-20px">
   <div class="container">
@@ -340,7 +343,7 @@
       <!-- Header Logo Start -->
       <div class="col">
         <div class="header-logo">
-          <a href="index.html"><img class="img-responsive" src="{{ rootUrl }}./upload/{{ settings.companyInfo.logo }}" alt="logo.jpg" /></a>
+          <a href="{{ rootUrl }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ settings.companyInfo.logo }}" alt="logo.jpg" /></a>
         </div>
       </div>
       <!-- Header Logo End -->
@@ -375,7 +378,7 @@
 <div class="mobile-search-area d-lg-none mb-15px">
   <div class="container">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-6 col-sm-12 order-md-last order-first">
         <div class="search-element media-body">
           <form class="d-flex" action="#">
             <input type="text" placeholder="{{ translate("Enter your search key", "Common") }}" />
@@ -383,14 +386,8 @@
           </form>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-<!-- Search Category End -->
-<div class="mobile-category-nav d-lg-none mb-15px">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
+
+      <div class="col-md-6 col-sm-12 order-md-first order-last">
 
          <!--=======  category menu  =======-->
         <div class="hero-side-category">

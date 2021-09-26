@@ -267,6 +267,8 @@ class Loader {
           $this->userLogged = FALSE;
         }
 
+        $this->onUserAuthorised();
+
         // user specific config
         // TODO: toto treba prekontrolovat, velmi pravdepodobne to nefunguje
         // if (is_array($this->config['user'][$this->userProfile['id']])) {
@@ -1109,6 +1111,10 @@ class Loader {
 
     $this->config['files_dir'] = str_replace("\\", "/", $this->config['files_dir']);
 
+  }
+
+  public function onUserAuthorised() {
+    // to be overriden
   }
 
   public function onBeforeConfigLoaded() {

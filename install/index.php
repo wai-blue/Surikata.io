@@ -285,9 +285,9 @@ if (!$doInstall) {
 
       // Delivery services
 
-      $deliveryServiceModel->insertRow(["id" => 1, "name" => "UPS", "description" => "Fast & Reliable Shipping", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => "WAI/Delivery/UPS"]);
+      $deliveryServiceModel->insertRow(["id" => 1, "name" => "UPS", "description" => "Fast & Reliable Shipping", "logo" => "ups.svg", "is_enabled" => TRUE, "connected_plugin" => "WAI/Delivery/UPS"]);
       $deliveryServiceModel->insertRow(["id" => 2, "name" => "DPD", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => "WAI/Delivery/DPD"]);
-      $deliveryServiceModel->insertRow(["id" => 3, "name" => "Slovenská pošta", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => ""]);
+      $deliveryServiceModel->insertRow(["id" => 3, "name" => "Slovenská pošta", "description" => "", "logo" => "posta.svg", "is_enabled" => TRUE, "connected_plugin" => ""]);
       $deliveryServiceModel->insertRow(["id" => 4, "name" => "Packeta", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => ""]);
 
       $deliveryServices = $deliveryServiceModel->getAll();
@@ -631,6 +631,19 @@ if (!$doInstall) {
         __DIR__."/SampleData/images/your-logo.png",
         "{$adminPanel->config['files_dir']}/your-logo.png",
       );
+
+      $imagesToCopy = [
+        "cardpay.jpg",
+        "tatrabanka.jpg",
+        "posta.svg",
+        "ups.svg",
+      ];
+      foreach ($imagesToCopy as $item) {
+        copy(
+          __DIR__."/SampleData/images/".$item,
+          "{$adminPanel->config['files_dir']}/".$item,
+        );
+      }
 
       require(__DIR__."/languages/{$languageToInstall}");
 

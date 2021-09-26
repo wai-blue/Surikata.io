@@ -18,7 +18,7 @@
                   <div class="login-register-form">
                     {% if user.loginFailed %}
                       <div class="notification mb-5">
-                        <p class="error">{{ translate("Failed to login.", "Customer") }}</p>
+                        <p class="error">{{ translate("Failed to login", "Customer") }}.</p>
                       </div>
                     {% endif %}
                     <form method="post" id="loginForm" onsubmit="return false;">
@@ -35,8 +35,9 @@
                             type="button"
                             onclick="sendLoginForm('loginForm');"
                           ><span>Login</span></button>
-                          <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/ForgotPassword', 'getWebPageUrl') }}">
-                            {{ translate("Forgot password?", "Customer") }}
+                          {# <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/ForgotPassword', 'getWebPageUrl') }}"> #}
+                          <a href="{{ rootUrl }}/zabudnute-heslo">
+                            {{ translate("Forgot password", "Customer") }}?
                           </a>
                         </div>
                       </div>

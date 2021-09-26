@@ -100,25 +100,25 @@
 
     $websiteCommonPanels[$domainName] = [
       "header" => [ "plugin" => "WAI/Common/Header" ],
-      "navigation" => [ "plugin" => "WAI/Common/Navigation", "settings" => [ "menuId" => 1, "homepageUrl" => "home", "showCategories" => true, ] ],
+      "navigation" => [ "plugin" => "WAI/Common/Navigation", "settings" => [ "menuId" => 1, "homepageUrl" => "uvod", "showCategories" => true, ] ],
       "footer" => [ 
         "plugin" => "WAI/Common/Footer", 
         "settings" => [ 
           "mainMenuId" => 1, 
           "secondaryMenuId" => 3, 
-          "mainMenuTitle" => "Pages", 
-          "secondaryMenuTitle" => "Generally",
+          "mainMenuTitle" => "Stránky",
+          "secondaryMenuTitle" => "Vaša firma",
           "showContactAddress" => 0,
           "showContactEmail" => 1,
           "showContactPhoneNumber" => 1,
-          "contactTitle" => "Contact Us",
+          "contactTitle" => "Kontaktujte nás",
           "showPayments" => 1,
           "showSocialMedia" => 1,
           "showSecondaryMenu" => 1,
           "showMainMenu" => 1,
           "showBlogs" => 1,
           "Newsletter" => 1,
-          "blogsTitle" => "Newest blogs"
+          "blogsTitle" => "Najnovšie blogy"
         ] 
       ],
     ];

@@ -37,24 +37,28 @@ class ShipmentPrice extends \ADIOS\Core\Model {
       "price_from" => [
         "type" => "float",
         "title" => $this->translate("Order price: From"),
+        "unit" => $this->adios->locale->currencySymbol(),
         "show_column" => TRUE
       ],
 
       "price_to" => [
         "type" => "float",
         "title" => $this->translate("Order price: To"),
+        "unit" => $this->adios->locale->currencySymbol(),
         "show_column" => TRUE
       ],
 
       "weight_from" => [
         "type" => "float",
         "title" => $this->translate("Order weight: From"),
+        "unit" => "g",
         "show_column" => TRUE
       ],
 
       "weight_to" => [
         "type" => "float",
         "title" => $this->translate("Order weight: To"),
+        "unit" => "g",
         "show_column" => TRUE
       ],
 
@@ -199,7 +203,7 @@ class ShipmentPrice extends \ADIOS\Core\Model {
     $idDestinationCountry = (int) ($orderData['id_destination_country'] ?? 0);
     $idDeliveryService = (int) ($orderData['id_delivery_service'] ?? 0);
     $idPaymentService = (int) ($orderData['id_payment_service'] ?? 0);
-    $priceTotal = (float) ($orderData['SUMMARY']['price_total'] ?? 0);
+    $priceTotalExclVAT = (float) ($orderData['SUMMARY']['price_total_excl_vat'] ?? 0);
     $weightTotal = (float) ($orderData['SUMMARY']['weight_total'] ?? 0);
 
     $deliveryFee = 0;
@@ -219,8 +223,8 @@ class ShipmentPrice extends \ADIOS\Core\Model {
         $this
         ->where('id_shipment', $shipment['id'])
         ->where('delivery_fee_calculation_method', self::DELIVERY_FEE_BY_ORDER_PRICE)
-        ->where('price_from', '<=', $priceTotal)
-        ->where('price_to', '>=', $priceTotal)
+        ->where('price_from', '<=', $priceTotalExclVAT)
+        ->where('price_to', '>=', $priceTotalExclVAT)
         ->get()
         ->toArray()
       );

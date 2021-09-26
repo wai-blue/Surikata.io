@@ -261,7 +261,7 @@ class Loader extends \Cascada\Loader {
       }
     } catch (
       \Illuminate\Database\QueryException
-      | \ADIOS\Core\DBException
+      | \ADIOS\Core\Exceptions\DBException
       $e
     ) {
       $errorHash = md5(date("YmdHis").$e->getMessage());

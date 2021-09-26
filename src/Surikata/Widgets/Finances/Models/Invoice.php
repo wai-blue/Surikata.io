@@ -292,9 +292,20 @@ class Invoice extends \ADIOS\Core\Model {
           "title" => "Order number",
         ],
 
-        "cislo_dodacieho_listu" => [
-          "type" => "varchar",
-          "title" => "Číslo dodacieho listu",
+        "price_total_excl_vat" => [
+          "type" => "float",
+          "title" => "Total price excl. VAT",
+          "unit" => $this->adios->locale->currencySymbol(),
+          "readonly" => TRUE,
+          "show_column" => TRUE,
+        ],
+
+        "price_total_incl_vat" => [
+          "type" => "float",
+          "title" => "Total price incl. VAT",
+          "unit" => $this->adios->locale->currencySymbol(),
+          "readonly" => TRUE,
+          "show_column" => TRUE,
         ],
 
         "notes" => [
@@ -393,7 +404,7 @@ class Invoice extends \ADIOS\Core\Model {
 
       foreach ($invoice['ITEMS'] as $key => $item) {
         $tmpMnozstvo = $invoice['ITEMS'][$key]['quantity'];
-        $tmpSadzbaDPH = $invoice['ITEMS'][$key]['dph'];
+        $tmpSadzbaDPH = $invoice['ITEMS'][$key]['vat_percent'];
 
         $tmpJednotkovaCenaBezDPH = $invoice['ITEMS'][$key]['unit_price'];
         $tmpSumaBezDPH = round($tmpJednotkovaCenaBezDPH * $tmpMnozstvo, 2);
@@ -407,6 +418,7 @@ class Invoice extends \ADIOS\Core\Model {
 
         $invoice['ITEMS'][$key]['sadzba_dph'] = $tmpSadzbaDPH;
 
+        // REVIEW: poprekladat
         $invoice['ITEMS'][$key]['jednotkova_cena_bez_dph'] = $tmpJednotkovaCenaBezDPH;
         $invoice['ITEMS'][$key]['jednotkova_cena_dph'] = $tmpJednotkovaCenaDPH;
         $invoice['ITEMS'][$key]['jednotkova_cena_s_dph'] = $tmpJednotkovaCenaSDPH;
@@ -431,11 +443,7 @@ class Invoice extends \ADIOS\Core\Model {
         $sumaCelkomSDPH += $tmpSumaSDPH;
       }
 
-      $invoice['SUMAR'] = [
-        "suma_celkom_dph" => $sumaCelkomDPH,
-        "suma_celkom_bez_dph" => $sumaCelkomBezDPH,
-        "suma_celkom_s_dph" => $sumaCelkomSDPH,
-      ];
+      $invoice['SUMMARY'] = $this->calculateSummaryInfo($invoice);
     }
 
     return $invoice;
@@ -474,6 +482,56 @@ class Invoice extends \ADIOS\Core\Model {
       return TRUE;
     }
   }
+
+  public function calculateSummaryInfo($invoice) {
+    $summary = [
+      "vat_total" => 0,
+      'price_total_excl_vat' => 0,
+      'price_total_incl_vat' => 0,
+    ];
+
+    $sumaCelkomBezDPH = 0;
+    $sumaCelkomSDPH = 0;
+    $sumaCelkomDPH = 0;
+
+    foreach ($invoice['ITEMS'] as $key => $item) {
+      $tmpJednotkovaCenaDPH = round($item['unit_price'] * ($item['vat_percent'] / 100), 2);
+      $tmpSumaBezDPH = round($item['unit_price'] * $item['quantity'], 2);
+      $tmpSumaDPH = round($tmpJednotkovaCenaDPH * $item['quantity'], 2);
+
+      $sumaCelkomDPH += $tmpSumaDPH;
+      $sumaCelkomBezDPH += $tmpSumaBezDPH;
+      $sumaCelkomSDPH += $tmpSumaBezDPH + $tmpSumaDPH;
+    }
+
+    $summary = [
+      "vat_total" => $sumaCelkomDPH,
+      "price_total_excl_vat" => $sumaCelkomBezDPH,
+      "price_total_incl_vat" => $sumaCelkomSDPH,
+    ];
+    
+
+    return $summary;
+
+  }
+
+  public function updateSummaryInfo($idInvoice, $summary) {
+    $this->updateRow([
+      'price_total_excl_vat' => $summary['price_total_excl_vat'],
+      'price_total_incl_vat' => $summary['price_total_incl_vat'],
+    ], $idInvoice);
+  }
+
+  public function onAfterSave($data, $returnValue) {
+    if ($data['id'] > 0) {
+      $invoice = $this->getById($data['id']);
+      $summary = $this->calculateSummaryInfo($invoice);
+      $this->updateSummaryInfo($data['id'], $summary);
+    }
+  }
+
+
+
 
   public function formParams($data, $params) {
     if ($data['id'] <= 0) {
@@ -535,7 +593,6 @@ class Invoice extends \ADIOS\Core\Model {
                 ["html" => "<hr>"],
                 "payment_method",
                 "order_number",
-                "cislo_dodacieho_listu",
                 "notes",
                 "state",
               ],
@@ -587,19 +644,57 @@ class Invoice extends \ADIOS\Core\Model {
           [
             "class" => "col-md-3 pr-0",
             "html" => "
-              {$btnSelectLanguageHtml}
-              {$btnSelectTemplateHtml}
-              {$btnPrintInvoiceHtml}
-              <br/>
-              <hr/>
-              <br/>
-              <b>Customer</b><br/>
-              ".hsc($data['customer_name'])."</br>
-              ".hsc($data['customer_street_1'])."</br>
-              ".hsc($data['customer_zip'])." ".hsc($data['customer_city'])."</br>
-              </br>
-              <b>".number_format($data['SUMAR']['suma_celkom_bez_dph'], 2, ",", " ")." EUR excl. VAT</b><br/>
-              <b>".number_format($data['SUMAR']['suma_celkom_s_dph'], 2, ",", " ")." EUR incl. VAT</b><br/>
+              <div class='card shadow mb-2'>
+                <div class='card-header py-3'>
+                  Invoice summary
+                </div>
+                <div class='card-body'>
+                  <div class='table-responsive'>
+                    <table class='table' width='100%' cellspacing='0'>
+                      <tbody>
+                        <tr>
+                          <td>
+                            Customer
+                          </td>
+                          <td>
+                            ".hsc($data['customer_name'])."</br>
+                            ".hsc($data['customer_street_1'])."</br>
+                            ".hsc($data['customer_zip'])." ".hsc($data['customer_city'])."</br>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            Total price excl. VAT
+                          </td>
+                          <td class='text-right'>
+                            ".number_format($data['SUMMARY']['price_total_excl_vat'], 2, ",", " ")."
+                            ".$this->adios->locale->currencySymbol()."
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            Total price incl. VAT
+                          </td>
+                          <td class='text-right'>
+                            ".number_format($data['SUMMARY']['price_total_incl_vat'], 2, ",", " ")."
+                            ".$this->adios->locale->currencySymbol()."
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class='card shadow mb-2'>
+                <div class='card-header py-3'>
+                  Print invoice
+                </div>
+                <div class='card-body'>
+                  {$btnSelectLanguageHtml}
+                  {$btnSelectTemplateHtml}
+                  {$btnPrintInvoiceHtml}
+                </div>
+              </div>
             ",
           ],
         ],
@@ -616,7 +711,7 @@ class Invoice extends \ADIOS\Core\Model {
     // $data = [
     //   "HEADER" => [
     //     "variable_symbol", "constant_symbol", "specific_symbol"
-    //     "payment_method", "order_number", "cislo_dodacieho_listu", "notes",
+    //     "payment_method", "order_number", "notes",
     //   ],
     //   "TIMESTAMPS" => [
     //     "issue_time", "delivery_time", "payment_due_time"
@@ -715,10 +810,6 @@ class Invoice extends \ADIOS\Core\Model {
 
       "payment_method" => $data["HEADER"]["payment_method"],
       "order_number" => $data["HEADER"]["order_number"],
-      "cislo_dodacieho_listu" => (empty($data["HEADER"]["cislo_dodacieho_listu"])
-        ? "SQL:@number"
-        : $data["HEADER"]["cislo_dodacieho_listu"]
-      ),
       "notes" => $data["HEADER"]["notes"],
     ]);
 
@@ -736,6 +827,9 @@ class Invoice extends \ADIOS\Core\Model {
     }
 
     $issuedInvoiceData = $this->getById($idInvoice);
+
+    $summary = $this->calculateSummaryInfo($issuedInvoiceData);
+    $this->updateSummaryInfo($idInvoice, $summary);
 
     $this->sendNotificationForIssuedInvoice($issuedInvoiceData);
 

@@ -23,6 +23,74 @@ class CompanyInfo extends \ADIOS\Core\Action {
                 ]),
               ],
               [
+                "title" => "Logo",
+                "input" => $this->adios->ui->Input([
+                  "type" => "image",
+                  "uid" => "{$this->uid}_logo",
+                  "value" => $settings['logo'],
+                ]),
+              ],
+            ],
+          ],
+
+          [
+            "title" => "Headquarter",
+            "items" => [
+              [
+                "title" => "Street, 1st line",
+                "input" => $this->adios->ui->Input([
+                  "type" => "varchar",
+                  "uid" => "{$this->uid}_headquarterStreet1",
+                  "value" => $settings['headquarterStreet1'],
+                ]),
+              ],
+              [
+                "title" => "Street, 2st line",
+                "input" => $this->adios->ui->Input([
+                  "type" => "varchar",
+                  "uid" => "{$this->uid}_headquarterStreet2",
+                  "value" => $settings['headquarterStreet2'],
+                ]),
+              ],
+              [
+                "title" => "ZIP",
+                "input" => $this->adios->ui->Input([
+                  "type" => "varchar",
+                  "uid" => "{$this->uid}_headquarterZIP",
+                  "value" => $settings['headquarterZIP'],
+                ]),
+              ],
+              [
+                "title" => "City",
+                "input" => $this->adios->ui->Input([
+                  "type" => "varchar",
+                  "uid" => "{$this->uid}_headquarterCity",
+                  "value" => $settings['headquarterCity'],
+                ]),
+              ],
+              [
+                "title" => "Region",
+                "input" => $this->adios->ui->Input([
+                  "type" => "varchar",
+                  "uid" => "{$this->uid}_headquarterRegion",
+                  "value" => $settings['headquarterRegion'],
+                ]),
+              ],
+              [
+                "title" => "Country",
+                "input" => $this->adios->ui->Input([
+                  "type" => "varchar",
+                  "uid" => "{$this->uid}_headquarterCountry",
+                  "value" => $settings['headquarterCountry'],
+                ]),
+              ],
+            ],
+          ],
+
+          [
+            "title" => "Contact information",
+            "items" => [
+              [
                 "title" => "Contact phone number",
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
@@ -38,16 +106,9 @@ class CompanyInfo extends \ADIOS\Core\Action {
                   "value" => $settings['contactEmail'],
                 ]),
               ],
-              [
-                "title" => "Logo",
-                "input" => $this->adios->ui->Input([
-                  "type" => "image",
-                  "uid" => "{$this->uid}_logo",
-                  "value" => $settings['logo'],
-                ]),
-              ],
             ],
           ],
+
           [
             "title" => "Social networks",
             "items" => [

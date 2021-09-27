@@ -890,7 +890,7 @@ class Loader {
         </div>
       ");
     } catch (\ADIOS\Core\Exceptions\NotEnoughPermissionsException $e) {
-      $actionHtml = $this->renderWarning($e->getMessage());
+      $actionHtml = $this->renderFatal($e->getMessage());
     } catch (\Exception $e) {
       $actionHtml = $this->renderHtmlWarning("
         <div style='text-align:center;font-size:5em;color:red'>
@@ -923,7 +923,7 @@ class Loader {
    * @throws \ADIOS\Core\NotEnoughPermissionsException When the signed user does not have enough permissions.
    * @return void
    */
-  public function checkPermissionsForAction($action, $params) {
+  public function checkPermissionsForAction($action, $params = NULL) {
     // to be overriden
   }
 
@@ -938,16 +938,31 @@ class Loader {
     }
   }
 
-  public function renderWarning($warning, $isHtml = TRUE) {
+  public function renderWarning($message, $isHtml = TRUE) {
     if ($this->isAjax()) {
       return json_encode([
         "result" => "WARNING",
-        "content" => $warning,
+        "content" => $message,
       ]);
     } else {
       return "
-        <div class='adios_warning shadow-lg p-3 mb-5' onclick='$(this).remove();'>
-          ".($isHtml ? $warning : hsc($warning))."
+        <div class='alert alert-warning' role='alert'>
+          ".($isHtml ? $message : hsc($message))."
+        </div>
+      ";
+    }
+  }
+
+  public function renderFatal($message, $isHtml = TRUE) {
+    if ($this->isAjax()) {
+      return json_encode([
+        "result" => "FATAL",
+        "content" => $message,
+      ]);
+    } else {
+      return "
+        <div class='alert alert-danger' role='alert'>
+          ".($isHtml ? $message : hsc($message))."
         </div>
       ";
     }

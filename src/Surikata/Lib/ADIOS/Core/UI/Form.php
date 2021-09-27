@@ -95,6 +95,7 @@ class Form extends \ADIOS\Core\UI\View
 
     $this->params['columns'] = $this->adios->db->tables[$this->params['table']];
 
+    $this->model->onFormBeforeInit($this);
     $this->params = $this->model->formParams($this->data, $this->params);
 
     unset($this->params['columns']['id']);
@@ -229,6 +230,8 @@ class Form extends \ADIOS\Core\UI\View
       }
       $this->add($this->adios->ui->Title($this->params['title_params']), 'title');
     }
+
+    $this->model->onFormAfterInit($this);
   }
 
   // renderRows

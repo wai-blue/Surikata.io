@@ -58,7 +58,7 @@ class Loader extends \ADIOS\Core\Loader {
    * @param  mixed $params
    * @return void
    */
-  public function checkPermissionsForAction($action, $params) {
+  public function checkPermissionsForAction($action, $params = NULL) {
     if ($action != "Desktop") {
       if (!$this->hasUserRole(self::USER_ROLE_PRODUCT_MANAGER)) {
         if (strpos($params['model'], "Widgets/Products/Models") !== FALSE) {

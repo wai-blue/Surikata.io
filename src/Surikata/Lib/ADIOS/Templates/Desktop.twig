@@ -55,10 +55,12 @@
             <img src="{{ config.brand.sidebar.icon }}" />
           </div>
         {% endif %}
-        <div class="sidebar-brand-text ml-3">
-          {{ config.brand.sidebar.title|raw }}
-          <div class="sidebar-brand-text-sub">{{ config.brand.sidebar.subtitle|raw }}</div>
-        </div>
+        {% if config.brand.sidebar.title != "" %}
+          <div class="sidebar-brand-text ml-3">
+            {{ config.brand.sidebar.title|raw }}
+            <div class="sidebar-brand-text-sub">{{ config.brand.sidebar.subtitle|raw }}</div>
+          </div>
+        {% endif %}
       </a>
 
       {% for shortcut in config.desktop.sidebarItems %}

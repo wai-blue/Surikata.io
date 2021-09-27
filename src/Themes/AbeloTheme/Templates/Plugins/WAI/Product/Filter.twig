@@ -33,9 +33,9 @@
                     class="sidebar-active"
                   {% endif %} 
                   data-toggle="collapse" 
-                  data-target="#collapse_{{category.id}}" 
-                  aria-expanded="false" 
-                  aria-controls="collapse_{{category.id}}" 
+                  data-target="#collapse_{{category.id}}"
+                  aria-expanded="false"
+                  aria-controls="collapse_{{category.id}}"
                   class="collapsed"
                 >
                   <span 
@@ -52,14 +52,14 @@
                 </a>
               </div>
               <div 
-                id="collapse_{{ category.id }}" 
+                id="collapse_{{ category.id }}"
                 {% if filterInfo.idCategory == category.id or filterInfo.idCategory == activeCategory %} 
                   class="collapse show" 
                 {% else %}
                   class="collapse" 
                 {% endif %}
                 aria-labelledby="heading_{{ category.id }}" 
-                data-parent="#accordionExample"
+                data-parent="#accordionProductCat"
               >
                 <div class="card-body">
                   <ul class="category-list">

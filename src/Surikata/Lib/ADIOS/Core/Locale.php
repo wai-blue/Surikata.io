@@ -34,6 +34,8 @@ class Locale {
   public function getAll(string $keyBy = "") {
     return [
       "dateFormat" => $this->dateFormat(),
+      "timeFormat" => $this->timeFormat(),
+      "datetimeFormat" => $this->datetimeFormat(),
       "currencySymbol" => $this->currencySymbol(),
     ];
   }

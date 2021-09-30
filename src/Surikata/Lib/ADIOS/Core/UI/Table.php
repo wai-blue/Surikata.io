@@ -113,7 +113,9 @@ class Table extends \ADIOS\Core\UI\View {
 
       $this->columns = $this->model->columns();
 
-      $this->params = $this->model->tableParams($this->params);
+      $this->model->onTableBeforeInit($this);
+
+      $this->params = $this->model->tableParams($this->params, $this);
 
       foreach ($this->userParams as $key => $value) {
         $this->params[$key] = $value;
@@ -166,6 +168,8 @@ class Table extends \ADIOS\Core\UI\View {
         $this->params['show_settings'] = false;
         $this->params['show_add_button'] = false;
       }
+
+      $this->model->onTableAfterInit($this);
 
       // where a having
 
@@ -246,7 +250,6 @@ class Table extends \ADIOS\Core\UI\View {
           $this->adios->ui->button([
             'fa_icon' => 'fas fa-angle-double-left',
             'class' => 'btn-light btn-circle btn-sm',
-            'title' => l('Prvá stránka'),
             'onclick' => "ui_table_show_page('{$this->params['uid']}', '1'); ",
             'disabled' => (1 == $this->params['page'] ? true : false)]
           ),
@@ -256,7 +259,6 @@ class Table extends \ADIOS\Core\UI\View {
           $this->adios->ui->button([
             'fa_icon' => 'fas fa-angle-left',
             'class' => 'btn-light btn-circle btn-sm',
-            'title' => l('Predošlá stránka'),
             'onclick' => "ui_table_show_page('{$this->params['uid']}', '".($this->params['page'] - 1)."'); ",
             'disabled' => (1 == $this->params['page'] ? true : false)
           ]),
@@ -275,7 +277,6 @@ class Table extends \ADIOS\Core\UI\View {
           $this->adios->ui->button([
             'fa_icon' => 'fas fa-angle-right',
             'class' => 'btn-light btn-circle btn-sm',
-            'title' => l('Nasledujúca stránka'),
             'onclick' => "ui_table_show_page('{$this->params['uid']}', '".($this->params['page'] + 1)."'); ",
             'disabled' => ($this->params['page'] == $page_count || 0 == $this->table_item_count ? true : false)
           ]),
@@ -285,7 +286,6 @@ class Table extends \ADIOS\Core\UI\View {
           $this->adios->ui->button([
             'fa_icon' => 'fas fa-angle-double-right',
             'class' => 'btn-light btn-circle btn-sm',
-            'title' => l('Posledná stránka'),
             'onclick' => "ui_table_show_page('{$this->params['uid']}', '".($page_count)."'); ",
             'disabled' => ($this->params['page'] == $page_count || 0 == $this->table_item_count ? true : false)
           ]),
@@ -531,7 +531,7 @@ class Table extends \ADIOS\Core\UI\View {
                     '
                   " : "")."
                 >
-                  ".hsc($col_def['title'])."
+                  ".nl2br(hsc($col_def['title']))."
                   ".('' == $col_def['unit'] ? '' : '['.hsc($col_def['unit']).']')."
                   <i class='fas fa-chevron-down order_desc'></i>
                   <i class='fas fa-chevron-up order_asc'></i>
@@ -708,6 +708,7 @@ class Table extends \ADIOS\Core\UI\View {
                 <div 
                   class='Row'
                   data-id='{$val['id']}'
+                  data-row-values-base64='".base64_encode(json_encode($val))."'
                   style='{$rowCss}'
                   onclick=\"
                     let _this = $(this);
@@ -716,6 +717,10 @@ class Table extends \ADIOS\Core\UI\View {
                       _this.closest('.data_tr').css('opacity', 1);
                     }, 300);
                     let id = ".(int) $val['id'].";
+
+                    let base64 = $(this).data('row-values-base64');
+                    let rowValues = JSON.parse(Base64.decode(base64));
+                    
                     {$params['onclick']}
                   \"
                 >

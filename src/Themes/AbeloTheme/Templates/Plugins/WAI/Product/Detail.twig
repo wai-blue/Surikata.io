@@ -1,4 +1,4 @@
- <!-- Shop details Area start -->
+<!-- Shop details Area start -->
 <section class="product-details-area">
   <div class="container">
     <div class="row">
@@ -71,7 +71,7 @@
           </div>
           <div class="pricing-meta">
             <ul>
-              {% if productInfo.priceInfo.fullPrice > 0 %}
+              {% if productInfo.priceInfo.fullPrice != productInfo.priceInfo.salePrice %}
                 <li class="old-price">€ {{ productInfo.priceInfo.fullPrice|number_format(2, ",", " ") }}</li>
               {% endif %}
               <li class="cuttent-price">{{ productInfo.priceInfo.salePrice|number_format(2, ",", " ") }} €</li>

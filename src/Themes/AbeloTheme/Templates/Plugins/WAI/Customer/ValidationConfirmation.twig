@@ -6,7 +6,7 @@
       </p>
     </div>
     <p>
-      Now you can sing in here
+      {{ translate("Now you can sing in here", "Customer") }}
       <a
         href="{{ rootUrl }}/{{ callPluginMethod('WAI/Customer/Login', 'getWebPageUrl') }}"
         >{{ translate("Login", "Customer") }}</a>

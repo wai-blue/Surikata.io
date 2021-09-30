@@ -104,7 +104,7 @@ class Desktop extends \ADIOS\Core\Action {
       "console" => $this->adios->console->getLogs(),
       "settingsMenuItems" => $settingsMenuItems,
       "develMenuItems" => $develMenuItems,
-      "desktopContentAction" => $this->adios->desktopContentAction,
+      "desktopContentAction" => $this->adios->desktopContentAction == "Desktop" ? "" : $this->adios->desktopContentAction,
       "desktopContentActionParams" => $this->adios->desktopContentActionParams,
     ];
   }

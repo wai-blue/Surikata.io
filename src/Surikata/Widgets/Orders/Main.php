@@ -19,7 +19,7 @@ class Orders extends \ADIOS\Core\Widget {
           ],
           [
             "title" => "Invoiced",
-            "onclick" => "desktop_update('Orders/InvoiceIssued');",
+            "onclick" => "desktop_update('Orders/Invoiced');",
             "style" => "border-left:5px solid {$orderModel->enumOrderStateColors[$orderModel::STATE_INVOICED]}",
           ],
           [

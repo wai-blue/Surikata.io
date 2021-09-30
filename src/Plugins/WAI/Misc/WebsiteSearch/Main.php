@@ -50,7 +50,8 @@ namespace Surikata\Plugins\WAI\Misc {
           $returnArray = $this->searchResults();
           break;
         case "log-query":
-          $returnArray = $this->logSearchQuery();
+          $this->logSearchQuery();
+          $returnArray = [];
           break;
       }
 
@@ -171,6 +172,7 @@ namespace Surikata\Plugins\WAI\Misc {
         $productsQuery = $productModel->getQuery();
         $productsQuery->select("*");
         $productsQuery = $this->setWhereOrClausule($productsQuery, "Product", "_".$languageIndex, $searchValue);
+        $productsQuery->skip(0)->take(40);
         $products = $productModel->fetchRows($productsQuery); // TODO: UPPERCASE LOOKUP
         if (count($products) > 0) {
           $returnArray[] = [
@@ -198,6 +200,7 @@ namespace Surikata\Plugins\WAI\Misc {
         $productCategoriesQuery->select("*");
 
         $productCategoriesQuery = $this->setWhereOrClausule($productCategoriesQuery, "ProductCategory", "_".$languageIndex, $searchValue);
+        $productCategoriesQuery->skip(0)->take(20);
 
         $categories = $productCategoryModel->fetchRows($productCategoriesQuery); // TODO: UPPERCASE LOOKUP
         if (count($categories) > 0) {
@@ -221,6 +224,7 @@ namespace Surikata\Plugins\WAI\Misc {
         $blogQuery->select("*");
 
         $blogQuery = $this->setWhereOrClausule($blogQuery, "Blog", "", $searchValue);
+        $blogQuery->skip(0)->take(40);
 
         $blogs = $blogModel->fetchRows($blogQuery); // TODO: UPPERCASE LOOKUP
         if (count($blogs) > 0) {

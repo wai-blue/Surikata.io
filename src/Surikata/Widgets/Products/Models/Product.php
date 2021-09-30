@@ -75,7 +75,7 @@ class Product extends \ADIOS\Core\Model {
         "weight" => [
           "type" => "float",
           "title" => $this->translate("Weight (per unit)"),
-          "unit" => "kg",
+          "unit" => "g",
           "show_column" => FALSE,
         ],
 

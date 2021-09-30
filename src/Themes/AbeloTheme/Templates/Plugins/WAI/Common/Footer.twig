@@ -61,7 +61,7 @@
     <div class="footer-top">
       <div class="container">
         <div class="row">
-          <div class="col">
+          <div class="col-6 col-md-6 col-lg-3">
             <div class="single-wedge">
               <div class="footer-logo text-medium">
                 <a href="{{ rootUrl }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ settings.companyInfo.logo }}" alt="Logo" /></a>
@@ -70,7 +70,7 @@
               </div>
             </div>
           </div>
-          <div class="col">
+          <div class="col-6 col-md-6 col-lg-3">
             <div class="single-wedge">
               {% if contactTitle %}
                 <p class="text-medium mb-3">{{ contactTitle }}</p>
@@ -103,7 +103,7 @@
             </div>
           </div>
           {% if showMainMenu %}
-            <div class="col">
+            <div class="col-6 col-md-6 col-lg-3">
               <div class="single-wedge">
                 <p class="text-medium mb-3">{{ mainMenuTitle }}</p>
                   <div class="footer-links">
@@ -117,7 +117,7 @@
             </div>
           {% endif %}
           {% if showSecondaryMenu %}
-            <div class="col">
+            <div class="col-6 col-md-6 col-lg-3">
               <div class="single-wedge">
                 <p class="text-medium mb-3">{{ secondaryMenuTitle }}</p>
                 <div class="footer-links">
@@ -131,34 +131,36 @@
             </div>
           {% endif %}
           {% if showBlogs %}
-            <div class="col-lg-4 col-sm-12">
+            <div class="col-lg-12 col-sm-12">
               <div class="single-wedge">
                 <p class="text-medium mb-3">{{ blogsTitle }}</p>
                 <div class="footer-blog-slider">
                   <div class="footer-blog-slider-wrapper slider-nav-style-3 ">
                     <!-- Single-item -->
                     {% for blog in blogs %}
-                      {% if loop.index % 2 != 0 %}
-                        <div class="single-slider-item">
-                      {% endif %}
-                      <div class="footer-blog-post d-flex mb-30px">
-                        <div class="footer-blog-post-top">
-                          <div class="post-thumbnail">
-                            <a href="{{ rootUrl }}/{{ blog.url }}">
-                              <img src="{{ uploadedFileUrl }}/{{ blog.image }}" alt="{{ blog.name }}">
-                            </a>
+                      {% if loop.index <= 2 %}
+                        {% if loop.index % 2 != 0 %}
+                          <div class="single-slider-item">
+                        {% endif %}
+                        <div class="footer-blog-post d-flex mb-30px">
+                          <div class="footer-blog-post-top">
+                            <div class="post-thumbnail">
+                              <a href="{{ rootUrl }}/{{ blog.url }}">
+                                <img src="{{ uploadedFileUrl }}/{{ blog.image }}" alt="{{ blog.name }}">
+                              </a>
+                            </div>
+                          </div>
+                          <div class="footer-blog-content">
+                            <p class="text-medium-2"><a href="{{ blog.url }}">{{ blog.name }}</a></p>
+                            <div class="footer-blog-meta">
+                              <span class="autor">{{ translate("Posted by", "Common") }} {{ blog.USER.name }}</span>
+                              <span class="date">{{ blog.created_at|date(locale.dateFormat) }}</span>
+                            </div>
                           </div>
                         </div>
-                        <div class="footer-blog-content">
-                          <p class="text-medium-2"><a href="{{ blog.url }}">{{ blog.name }}</a></p>
-                          <div class="footer-blog-meta">
-                            <span class="autor">{{ translate("Posted by", "Common") }} {{ blog.USER.name }}</span>
-                            <span class="date">{{ blog.created_at|date(locale.dateFormat) }}</span>
+                        {% if loop.index % 2 == 0 %}
                           </div>
-                        </div>
-                      </div>
-                      {% if loop.index % 2 == 0 %}
-                        </div>
+                        {% endif %}
                       {% endif %}
                     {% endfor %}
                     <!-- Single-item -->
@@ -174,7 +176,7 @@
       <div class="container">
         <div class="row text-center">
           {% if showPayments %}
-            <div class="col">
+            <div class="col-12 col-md-6">
               <div class="footer-paymet-warp">
                 <div class="payment-way">
                   <img src="{{ rootUrl }}/theme/assets/images/icons/payment.png" alt="payments" />
@@ -183,7 +185,7 @@
             </div>
           {% endif %}
           {% if showSocialMedia %}
-            <div class="col">
+            <div class="col-12 col-md-6">
               <div class="footer-social-icon" style="float:none">
                 <div class="social-icon">
                   <ul>
@@ -377,10 +379,10 @@
           <span aria-hidden="true"><i class="ion-ios-close-empty"></i></span>
         </button>
         <div class="row no-gutters">
-          <div class="col-sm-5">
+          <div class="d-md-none d-lg-block col-lg-5">
             <div class="background_bg h-100 AbeloModalImage" data-img-src="{{ rootUrl }}/theme/assets/images/popup_img.jpg"></div>
           </div>
-          <div class="col-sm-7">
+          <div class="col-md-12 col-lg-7">
             <div class="popup_content">
               <div class="popup-text">
                 <div class="heading_s1">
@@ -391,10 +393,10 @@
               <form method="post">
                 <div class="form-group">
                   <div class="row">
-                    <div class="col-6 btn-config">
+                    <div class="col-12 col-sm-6 btn-config">
                       <button type="button" class="btn btn-fill-out btn-block rounded-0 btn-confirm AbeloModalButton" title="">{{ translate("Confirm", "Common") }}</button>
                     </div>
-                    <div class="col-6">
+                    <div class="col-12 col-sm-6">
                       <button type="button" class="btn btn-fill-line btn-block rounded-0 btn-cancel AbeloModalButton" title=""
                               onclick="AbeloThemeCart.closeModals(['#onload-popup', '#quickViewModal']);">
                         {{ translate("Cancel", "Common") }}

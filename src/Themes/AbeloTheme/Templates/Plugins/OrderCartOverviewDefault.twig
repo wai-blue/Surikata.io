@@ -118,7 +118,7 @@
 				<div class="empty-text-contant text-center">
 					<i class="lnr lnr-cart"></i>
 					<h1>{{ translate("There are no more items in your cart") }}</h1>
-					<a class="empty-cart-btn" href="javascript:void(0);">
+					<a class="empty-cart-btn" href="{{ rootUrl }}/{{ callPluginMethod('WAI/Product/Catalog', 'getWebPageUrl') }}">
 						<i class="ion-ios-arrow-left"> </i> {{ translate("Continue shopping") }}
 					</a>
 				</div>

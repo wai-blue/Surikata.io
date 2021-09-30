@@ -699,41 +699,43 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     );
   }
 
-  public function tableParams($params) {
+  public function tableParams($params, $tableObject = NULL) {
     return $this->adios->dispatchEventToPlugins("onModelAfterTableParams", [
       "model" => $this,
       "params" => $params,
     ])["params"];
   }
 
-  public function tableRowCSSFormatter($data) {
+  public function tableRowCSSFormatter($data, $tableObject = NULL) {
     return $this->adios->dispatchEventToPlugins("onTableRowCSSFormatter", [
       "model" => $this,
       "data" => $data,
     ])["data"]["css"];
   }
 
-  public function tableCellCSSFormatter($data) {
+  public function tableCellCSSFormatter($data, $tableObject = NULL) {
     return $this->adios->dispatchEventToPlugins("onTableCellCSSFormatter", [
       "model" => $this,
       "data" => $data,
     ])["data"]["css"];
   }
 
-  public function tableCellHTMLFormatter($data) {
+  public function tableCellHTMLFormatter($data, $tableObject = NULL) {
     return $this->adios->dispatchEventToPlugins("onTableCellHTMLFormatter", [
       "model" => $this,
       "data" => $data,
     ])["data"]["html"];
   }
 
-  public function tableCellCSVFormatter($data) {
+  public function tableCellCSVFormatter($data, $tableObject = NULL) {
     return $this->adios->dispatchEventToPlugins("onTableCellCSVFormatter", [
       "model" => $this,
       "data" => $data,
     ])["data"]["csv"];
   }
 
+  public function onTableBeforeInit($tableObject) { }
+  public function onTableAfterInit($tableObject) { }
   public function onTableAfterDataLoaded($tableObject) { }
 
   public function tableFilterColumnSqlWhere($columnName, $filterValue, $column = NULL) {
@@ -1033,6 +1035,9 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
   //////////////////////////////////////////////////////////////////
   // UI/Form methods
+
+  public function onFormBeforeInit($formObject) { }
+  public function onFormAfterInit($formObject) { }
 
   public function formParams($data, $params) {
     return $this->adios->dispatchEventToPlugins("onModelAfterFormParams", [

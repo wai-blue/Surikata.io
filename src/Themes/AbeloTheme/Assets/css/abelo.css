@@ -50,6 +50,9 @@
   top: 5px;
   margin-left: 5px;
 }
+.product-flag li {
+  padding: 5px;
+}
 .product-flag .new {
   background-color: #fcff54;
 }
@@ -86,6 +89,16 @@
 .footer-logo {
   width: 70px;
   height: 70px;
+}
+@media only screen and (max-width: 991px) {
+  .footer-logo {
+    width: 100%;
+    height: auto;
+    margin: 0 !important;
+  }
+  .footer-logo img {
+    width: 90% !important;
+  }
 }
 .load-btn {
   font-size: 15px;
@@ -330,6 +343,11 @@
 .pro-details-cart {
   margin-left: 10px;
 }
+@media only screen and (max-width: 991px) {
+  .pro-details-cart {
+    margin-left: 0;
+  }
+}
 .quantity-unit {
   /*position: relative;*/
   padding: 15px;
@@ -546,6 +564,15 @@ ul .dots::before {
   background: #266cfb;
   color: #fff;
 }
+@media only screen and (max-width: 576px) {
+  .AbeloModalButton {
+    padding: 5px 30px;
+    min-height: 60px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+}
 .popup-text p {
   font-size: 20px;
   margin-bottom: 3rem;
@@ -556,6 +583,12 @@ ul .dots::before {
   width: 50%;
   border-end-end-radius: 0px;
   border-top-right-radius: 0px;
+}
+
+@media only screen and (max-width: 991px) {
+  .search-element input {
+    width: 100%;
+  }
 }
 
 .search-element button {
@@ -582,5 +615,26 @@ ul .dots::before {
 
 .error-input {
   border: 1px solid #ec1b1b !important;
+}
 
+.filter-mobile {
+  display: none;
+}
+.filter-mobile a {
+  font-size: 21px;
+  line-height: 1;
+  color: #272727;
+  margin-bottom: 15px;
+  position: relative;
+  display: inline-block;
+  background: #fff;
+  z-index: 2;
+  text-transform: capitalize !important;
+  font-weight: 400;
+}
+
+@media only screen and (max-width: 991px) {
+  .filter-mobile {
+    display: block;
+  }
 }

@@ -249,7 +249,10 @@ class Loader {
     }
 
     // validate template name
-    if (strpos($this->template, ".") !== FALSE) {
+    if (
+      strpos($this->template, "..\\") !== FALSE
+      || strpos($this->template, "../") !== FALSE
+    ) {
       throw new \Exception("CASCADA: Invalid template name {$this->template}.");
     }
 

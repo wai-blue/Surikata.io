@@ -100,25 +100,25 @@
 
     $websiteCommonPanels[$domainName] = [
       "header" => [ "plugin" => "WAI/Common/Header" ],
-      "navigation" => [ "plugin" => "WAI/Common/Navigation", "settings" => [ "menuId" => 1, "homepageUrl" => "home", "showCategories" => true, ] ],
+      "navigation" => [ "plugin" => "WAI/Common/Navigation", "settings" => [ "menuId" => 1, "homepageUrl" => "uvod", "showCategories" => true, ] ],
       "footer" => [ 
         "plugin" => "WAI/Common/Footer", 
         "settings" => [ 
           "mainMenuId" => 1, 
           "secondaryMenuId" => 3, 
-          "mainMenuTitle" => "Pages", 
-          "secondaryMenuTitle" => "Generally",
+          "mainMenuTitle" => "Stránky",
+          "secondaryMenuTitle" => "Vaša firma",
           "showContactAddress" => 0,
           "showContactEmail" => 1,
           "showContactPhoneNumber" => 1,
-          "contactTitle" => "Contact Us",
+          "contactTitle" => "Kontaktujte nás",
           "showPayments" => 1,
           "showSocialMedia" => 1,
           "showSecondaryMenu" => 1,
           "showMainMenu" => 1,
           "showBlogs" => 1,
           "Newsletter" => 1,
-          "blogsTitle" => "Newest blogs"
+          "blogsTitle" => "Najnovšie blogy"
         ] 
       ],
     ];
@@ -386,11 +386,11 @@
             "emails" => [
               "signature" => "<p>{$domainName} - <a href='http://{$domainName}' target='_blank'>{$domainName}</a></p>",
               "after_order_confirmation_SUBJECT" => "{$domainName} - objednávka č. {% number %}",
-              "after_order_confirmation_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/orderBody.html"),
+              "after_order_confirmation_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/orderBody_sk.html"),
               "after_registration_SUBJECT" => "{$domainName} - Overte Vašu emailovú adresu",
-              "after_registration_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/registrationBody.html"),
+              "after_registration_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/registrationBody_sk.html"),
               "forgot_password_SUBJECT" => "{$domainName} - Obnovenie hesla",
-              "forgot_password_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/forgotPasswordBody.html")
+              "forgot_password_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/forgotPasswordBody_sk.html")
             ],
           ],
         ],

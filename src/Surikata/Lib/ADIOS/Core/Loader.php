@@ -467,8 +467,9 @@ class Loader {
   // MISCELANEOUS
 
   public function translate($string, $context = "", $toLanguage = "", $dictionary = []) {
+
     if ($toLanguage == "") {
-      $toLanguage = $this->adios->config['language'] ?? "en";
+      $toLanguage = $this->adios->config['language'] ?? "sk";
     }
 
     if (
@@ -486,6 +487,7 @@ class Loader {
       } else {
         return $dictionary[$toLanguage][$string];
       }
+      
     }
   }
 

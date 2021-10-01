@@ -699,35 +699,35 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     );
   }
 
-  public function tableParams($params, $tableObject = NULL) {
+  public function tableParams($params) {
     return $this->adios->dispatchEventToPlugins("onModelAfterTableParams", [
       "model" => $this,
       "params" => $params,
     ])["params"];
   }
 
-  public function tableRowCSSFormatter($data, $tableObject = NULL) {
+  public function tableRowCSSFormatter($data) {
     return $this->adios->dispatchEventToPlugins("onTableRowCSSFormatter", [
       "model" => $this,
       "data" => $data,
     ])["data"]["css"];
   }
 
-  public function tableCellCSSFormatter($data, $tableObject = NULL) {
+  public function tableCellCSSFormatter($data) {
     return $this->adios->dispatchEventToPlugins("onTableCellCSSFormatter", [
       "model" => $this,
       "data" => $data,
     ])["data"]["css"];
   }
 
-  public function tableCellHTMLFormatter($data, $tableObject = NULL) {
+  public function tableCellHTMLFormatter($data) {
     return $this->adios->dispatchEventToPlugins("onTableCellHTMLFormatter", [
       "model" => $this,
       "data" => $data,
     ])["data"]["html"];
   }
 
-  public function tableCellCSVFormatter($data, $tableObject = NULL) {
+  public function tableCellCSVFormatter($data) {
     return $this->adios->dispatchEventToPlugins("onTableCellCSVFormatter", [
       "model" => $this,
       "data" => $data,

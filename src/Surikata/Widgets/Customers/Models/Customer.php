@@ -11,13 +11,30 @@ class Customer extends \ADIOS\Core\Model {
   public $lastCreatedAccountPassword = "";
 
   public function init() {
-    $this->languageDictionary["en"] = [
-      "Klienti" => "Customers",
-      "Všetci klienti" => "All customers",
-      "Blokovaní klienti" => "Blocked accounts",
-      "Neoverení klienti" => "Non-validated accounts",
-      "Veľkoobchodníci" => "Wholesale customers",
-      "Nový klient" => "New customer",
+    $this->languageDictionary["sk"] = [
+      "Category" => "Kategória",
+      "Customers" => "Zákazníci",
+      "Given name" => "Krstné meno",
+      "Family name" => "Priezvisko",
+      "Company name" => "Názov firmy",
+      "Company ID" => "IČO",
+      "Company Tax ID" => "DIČ",
+      "Company VAT ID" => "IČ DPH",
+      "Street, 1st line" => "Názov ulice, číslo domu",
+      "Street, 2nd line" => "Názov ulice, číslo domu",
+      "City" => "Mesto",
+      "ZIP" => "PSČ",
+      "Region" => "Okres",
+      "Country" => "Štát",
+      "Password" => "Heslo",
+      "Is wholesale customer" => "Veľkoobchodný zákazník",
+      "Account is validated" => "Účet je aktivovaný",
+      "Account is blocked" => "Účet je zablokovaný",
+      "Last login" => "Posledné prihlásenie",
+      "Consent for privacy" => "Súhlas s ochranou osobných údajov",
+      "Consent for newsletter" => "Súhlas so zasielaním noviniek",
+      "Billing: " => "Fakturácia: ",
+      "All" => "Všetci zákazníci"
     ];
 
     $this->tableTitle = $this->translate("Customers");
@@ -41,38 +58,38 @@ class Customer extends \ADIOS\Core\Model {
 
       "given_name" => [
         "type" => "varchar",
-        "title" => "Given name",
+        "title" => $this->translate("Given name"),
         "show_column" => TRUE,
       ],
 
       "family_name" => [
         "type" => "varchar",
-        "title" => "Family name",
+        "title" => $this->translate("Family name"),
         "show_column" => TRUE,
       ],
 
       "company_name" => [
         "type" => "varchar",
-        "title" => "Company name",
+        "title" => $this->translate("Company name"),
         "show_column" => TRUE,
       ],
 
       "company_id" => [
         "type" => "varchar",
-        "title" => "Company ID",
+        "title" => $this->translate("Company ID"),
         "show_column" => TRUE,
       ],
 
       "company_tax_id" => [
         "type" => "varchar",
-        "title" => "Company Tax ID",
+        "title" => $this->translate("Company Tax ID"),
         "pattern" => '\d{10}',
         "show_column" => FALSE,
       ],
 
       "company_vat_id" => [
         "type" => "varchar",
-        "title" => "Company VAT ID",
+        "title" => $this->translate("Company VAT ID"),
         "show_column" => FALSE,
       ],
 
@@ -81,51 +98,51 @@ class Customer extends \ADIOS\Core\Model {
 
       "inv_given_name" => [
         "type" => "varchar",
-        "title" => "Billing: Given Name",
+        "title" => $this->translate("Billing: ") . $this->translate("Given name"),
       ],
 
       "inv_family_name" => [
         "type" => "varchar",
-        "title" => "Billing: Family Name",
+        "title" => $this->translate("Billing: ") . $this->translate("Family name"),
         "show_column" => TRUE,
       ],
 
       "inv_company_name" => [
         "type" => "varchar",
-        "title" => "Billing: Company Name",
+        "title" => $this->translate("Billing: ") . $this->translate("Company name"),
         "show_column" => TRUE,
       ],
 
       "inv_street_1" => [
         "type" => "varchar",
-        "title" => "Billing: Street, 1st line",
+        "title" => $this->translate("Billing: ") . $this->translate("Street, 1st line"),
         "show_column" => TRUE,
       ],
 
       "inv_street_2" => [
         "type" => "varchar",
-        "title" => "Billing: Street, 2nd line",
+        "title" => $this->translate("Billing: ") . $this->translate("Street, 2nd line"),
       ],
 
       "inv_city" => [
         "type" => "varchar",
-        "title" => "Billing: City",
+        "title" => $this->translate("Billing: ") . $this->translate("City"),
         "show_column" => TRUE,
       ],
 
       "inv_zip" => [
         "type" => "varchar",
-        "title" => "Billing: ZIP",
+        "title" => $this->translate("Billing: ") . $this->translate("ZIP"),
       ],
 
       "inv_region" => [
         "type" => "varchar",
-        "title" => "Billing: Region",
+        "title" => $this->translate("Billing: ") . $this->translate("Region"),
       ],
 
       "inv_country" => [
         "type" => "varchar",
-        "title" => "Billing: Country",
+        "title" => $this->translate("Billing: ") . $this->translate("Country"),
       ],
 
 
@@ -134,40 +151,40 @@ class Customer extends \ADIOS\Core\Model {
 
       "password" => [
         "type" => "password",
-        "title" => "Password",
+        "title" => $this->translate("Password"),
         "pattern" => '[A-Za-z]{2}\d{3}[A-Za-z\d]{3}',
       ],
 
       "is_wholesale" => [
         "type" => "boolean",
-        "title" => "Is wholesale customer",
+        "title" => $this->translate("Is wholesale customer"),
       ],
 
       "is_validated" => [
         "type" => "boolean",
-        "title" => "Account is validated",
+        "title" => $this->translate("Account is validated"),
         "readonly" => TRUE,
       ],
 
       "is_blocked" => [
         "type" => "boolean",
-        "title" => "Account is blocked",
+        "title" => $this->translate("Account is blocked"),
       ],
 
       "last_login" => [
         "type" => "datetime",
-        "title" => "Last login",
+        "title" => $this->translate("Last login"),
         "readonly" => TRUE,
       ],
 
       "consent_privacy" => [
         "type" => "boolean",
-        "title" => "Consent for privacy",
+        "title" => $this->translate("Consent for privacy"),
       ],
 
       "consent_newsletter" => [
         "type" => "boolean",
-        "title" => "Consent for newsletter",
+        "title" => $this->translate("Consent for newsletter"),
       ],
 
     ]);

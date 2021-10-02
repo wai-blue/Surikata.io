@@ -5,15 +5,27 @@ namespace ADIOS\Widgets\Customers\Models;
 class SearchQuery extends \ADIOS\Core\Model {
   var $sqlName = "customers_search_queries";
   var $urlBase = "Customers/SearchedQueries";
-  var $tableTitle = "Searched queries";
-  var $formTitleForInserting = "New searched query";
-  var $formTitleForEditing = "Searched query";
+
+  public function init() {
+    $this->languageDictionary["sk"] = [
+     "Searched queries" => "Hľadané výrazy",
+     "New searched query" => "Nový hľadaný výraz",
+     "Searched query" => "Hľadaný výraz",
+     "Customer UID"  => "Zákaznícke UID",
+     "Target URL"  => "Cieľová URL",
+     "Search datetime" => "Dátum a čas vyhľadávania"
+    ];
+
+    $this->tableTitle = $this->translate("Searched queries");
+    $this->formTitleForInserting = $this->translate("New searched query");
+    $this->formTitleForEditing = $this->translate("Searched query");
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([
       "id_customer_uid" => [
         "type" => "lookup",
-        "title" => "Customer UID",
+        "title" => $this->translate("Customer UID"),
         "model" => "Widgets/Customers/Models/CustomerUID",
         "readonly" => TRUE,
         "show_column" => TRUE,
@@ -21,21 +33,21 @@ class SearchQuery extends \ADIOS\Core\Model {
 
       "query" => [
         "type" => "varchar",
-        "title" => "Searched query",
+        "title" => $this->translate("Searched query"),
         "readonly" => TRUE,
         "show_column" => TRUE,
       ],
 
       "target_url" => [
         "type" => "varchar",
-        "title" => "Target URL",
+        "title" => $this->translate("Target URL"),
         "readonly" => TRUE,
         "show_column" => TRUE,
       ],
 
       "search_datetime" => [
         "type" => "datetime",
-        "title" => "Search datetime",
+        "title" => $this->translate("Search datetime"),
         "readonly" => TRUE,
         "show_column" => TRUE,
       ],

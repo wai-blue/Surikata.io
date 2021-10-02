@@ -444,6 +444,9 @@
 <!-- Use the minified version files listed below for better performance and remove the files listed above -->
 <!-- <script src="assets/js/vendor/vendor.min.js"></script>
 <script src="assets/js/plugins/plugins.min.js"></script> -->
+<!-- GDPR consent -->
+<script src="{{ rootUrl }}/theme/assets/js/bootstrap-cookie-consent-settings.js"></script>
+
 <!-- Sweet Alert JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
 
@@ -452,5 +455,18 @@
 
 <!-- Abelo-theme js --> 
 <script src="{{ rootUrl }}/theme/assets/js/abelo-theme.js"></script>
+<script>
+  var props = {
+    contentURL: "{{ rootUrl }}/theme/assets/js/gdpr-consent.js",
+    cookieStorageDays: 183,
+    languages: ["en", "sk"],
+    __renderOnlyPlugin: "WAI\\Common\\GdprConsent",
+    __output: 'json',
+    postSelectionCallback: function() {
+      console.log(cookieSettings.getSettings());
+    },
+  }
+  var cookieSettings = new BootstrapCookieConsentSettings();
+</script>
 </body>
 </html>

@@ -2,6 +2,8 @@
 
 namespace Surikata\Core\Web\Controllers;
 
+use ADIOS\Widgets\Customers\Models\CustomerUID;
+
 class UserProfile extends \Surikata\Core\Web\Controller {
 
   var $loginFailed = FALSE;
@@ -47,9 +49,21 @@ class UserProfile extends \Surikata\Core\Web\Controller {
     }
   }
 
+  public function setCookieConsent($consentJson) {
+    $customerUid = $this->websiteRenderer->getCustomerUID();
+    $customerUidModel = new CustomerUID($this->adminPanel);
+    $customerUidModel->setCookieConsent($customerUid, $consentJson);
+  }
+
   // preRender
   public function preRender() {
     $this->websiteRenderer->userLogged = NULL;
+
+    // Request to set cookie consent
+    if (isset($_POST['setCookieConsent'])) {
+      $consent = isset($_POST["cookieConsent"]) ? $_POST["cookieConsent"] : "{'required':1}";
+      $this->setCookieConsent($consent);
+    }
 
     // Request to change customer password
     if (isset($_POST['changeBasicInformation']) && $_POST['changeBasicInformation'] == "1") {

@@ -6,80 +6,100 @@ class Merchant extends \ADIOS\Core\Model {
   var $sqlName = "merchants";
   var $lookupSqlValue = "concat({%TABLE%}.company_name)";
   var $urlBase = "Merchants";
-  var $tableTitle = "Merchants";
-  var $formTitleForInserting = "New merchant";
-  var $formTitleForEditing = "Merchant";
-  
+
+  public function init() {
+    $this->languageDictionary["sk"] = [
+      "Merchants" => "Obchodníci",
+      "New merchant" => "Nový obchodník",
+      "Merchant" => "Obchodník",
+      "Company name" => "Názov firmy",
+      "Company ID" => "IČO",
+      "Company TAX ID" => "DIČ",
+      "Company VAT ID" => "IČ DPH",
+      "Street, 1st line" => "Názov ulice, číslo domu",
+      "Street, 2nd line" => "Názov ulice, číslo domu",
+      "City" => "Mesto",
+      "ZIP" => "PSČ",
+      "Bank account IBAN" => "Bankový účet IBAN",
+      "Description" => "Popis",
+      "Phone number" => "Mobilné číslo"
+    ];
+
+    $this->tableTitle = $this->translate("Merchants");
+    $this->formTitleForInserting = $this->translate("New merchant");
+    $this->formTitleForEditing = $this->translate("Merchant");
+  }
+
   public function columns(array $columns = []) {
     return parent::columns([
       "company_name" => [
         "type" => "varchar",
-        "title" => "Company name",
+        "title" => $this->translate("Company name"),
       ],
 
       "street_1" => [
         "type" => "varchar",
-        "title" => "Street, 1st line",
+        "title" => $this->translate("Street, 1st line"),
       ],
 
       "street_2" => [
         "type" => "varchar",
-        "title" => "Street, 2nd line",
+        "title" => $this->translate("Street, 2nd line"),
       ],
 
       "city" => [
         "type" => "varchar",
-        "title" => "City",
+        "title" => $this->translate("City"),
       ],
 
       "zip" => [
         "type" => "varchar",
-        "title" => "ZIP",
+        "title" => $this->translate("ZIP"),
       ],
 
       "country" => [
         "type" => "varchar",
-        "title" => "Country",
+        "title" => $this->translate("Country"),
       ],
 
       "company_id" => [
         "type" => "varchar",
-        "title" => "Company ID",
+        "title" => $this->translate("Company ID"),
       ],
 
       "company_tax_id" => [
         "type" => "varchar",
-        "title" => "Company TAX ID",
+        "title" => $this->translate("Company TAX ID"),
       ],
 
       "company_vat_id" => [
         "type" => "varchar",
-        "title" => "Company VAT ID",
+        "title" => $this->translate("Company VAT ID"),
       ],
 
       "email" => [
         "type" => "varchar",
-        "title" => "E-mail",
+        "title" => $this->translate("E-mail"),
       ],
 
       "phone" => [
         "type" => "varchar",
-        "title" => "Phone number",
+        "title" => $this->translate("Phone number"),
       ],
 
       "www" => [
         "type" => "varchar",
-        "title" => "WWW",
+        "title" => $this->translate("WWW"),
       ],
 
       "iban" => [
         "type" => "varchar",
-        "title" => "Bank account IBAN",
+        "title" => $this->translate("Bank account IBAN"),
       ],
 
       "description" => [
         'type' => 'text',
-        'title' => "Description",
+        'title' => $this->translate("Description"),
         'show_column' => TRUE,
       ],
 
@@ -87,7 +107,7 @@ class Merchant extends \ADIOS\Core\Model {
         'type' => 'image',
         'title' => 'Logo',
         'show_column' => TRUE,
-        "subdir" => "merchant_logos"
+        "subdir" => $this->translate("merchant_logos")
       ],
 
     ]);

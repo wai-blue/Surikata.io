@@ -82,7 +82,8 @@ class Order extends \ADIOS\Core\Model {
       "Invoiced orders" => "Vyúčtované objednávky",
       "Paid orders" => "Zaplatené objednávky",
       "Shipped orders" => "Doručené objednávky",
-      "Canceled orders" => "Zrušené objednávky"
+      "Canceled orders" => "Zrušené objednávky",
+      "Issue invoice" => "Vystaviť faktúru"
     ];
 
     $this->tableTitle = $this->translate("Orders");
@@ -879,7 +880,7 @@ class Order extends \ADIOS\Core\Model {
     } else {
 
       $btnIssueInvoice = $this->adios->ui->button([
-        "text"    => "Issue invoice",
+        "text"    => $this->translate("Issue invoice"),
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
           _ajax_read('Orders/IssueInvoice', 'id_order=".(int) $data['id']."', function(res) {
@@ -896,7 +897,7 @@ class Order extends \ADIOS\Core\Model {
       ])->render();
 
       $btnShowInvoice = $this->adios->ui->button([
-        "text" =>  $this->translate("Show invoice nr. ").hsc($data['INVOICE']['number']),
+        "text" => $this->translate("Show invoice nr. ").hsc($data['INVOICE']['number']),
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
           window_render('Invoices/".(int) $data['INVOICE']['id']."/Edit', '', function(res) {

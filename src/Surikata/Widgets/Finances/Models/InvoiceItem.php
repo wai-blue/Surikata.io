@@ -5,28 +5,41 @@ namespace ADIOS\Widgets\Finances\Models;
 class InvoiceItem extends \ADIOS\Core\Model {
   var $sqlName = "invoices_items";
   var $urlBase = "Invoices/{{ id_invoice }}/Items";
-  var $tableTitle = "Items";
-  var $formTitleForInserting = "New invoice item";
-  var $formTitleForEditing = "Invoice item";
 
   public function columns(array $columns = []) {
+    $this->languageDictionary["sk"] = [
+      "Invoice" => "Faktúra",
+      "Item" => "Položka",
+      "VAT" => "DPH",
+      "Unit price" => "Jednotková cena",
+      "Quantity" => "Počet",
+      "Delivery unit" => "Dodacia jednotka",
+      "Items" => "Položky",
+      "New invoice item" => "Nová položka faktúry",
+      "Invoice item" => "Položka faktúry"
+    ];
+
+    $this->tableTitle = $this->translate("Items");
+    $this->formTitleForInserting = $this->translate("New invoice item");
+    $this->formTitleForEditing = $this->translate("Invoice item");
+
     return parent::columns([
       "id_invoice" => [
         "type" => "lookup",
-        "title" => "Invoice",
+        "title" => $this->translate("Invoice"),
         "model" => "Widgets/Finances/Models/Invoice",
         "readonly" => TRUE,
       ],
 
       "item" => [
         "type" => "varchar",
-        "title" => "Item",
+        "title" => $this->translate("Item"),
         "show_column" => TRUE,
       ],
 
       "quantity" => [
         "type" => "float",
-        "title" => "Množstvo",
+        "title" => $this->translate("Quantity"),
         "show_column" => TRUE,
       ],
 
@@ -38,14 +51,14 @@ class InvoiceItem extends \ADIOS\Core\Model {
 
       "unit_price" => [
         "type" => "float",
-        "title" => "Cena",
+        "title" => $this->translate("Unit price"),
         "unit" => $this->adios->locale->currencySymbol(),
         "show_column" => TRUE,
       ],
 
       "vat_percent" => [
         "type" => "int",
-        "title" => "VAT",
+        "title" => $this->translate("VAT"),
         "unit" => "%",
         "show_column" => TRUE,
       ],

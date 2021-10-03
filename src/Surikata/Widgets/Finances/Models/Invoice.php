@@ -26,35 +26,94 @@ class Invoice extends \ADIOS\Core\Model {
   var $sqlName = "invoices";
   var $lookupSqlValue = "{%TABLE%}.number";
   var $urlBase = "Invoices";
-  var $tableTitle = "Invoices";
-  var $formTitleForInserting = "New invoice";
-  var $formTitleForEditing = "Invoice nr. {{ number }}";
 
   var $disableNotifications = FALSE;
 
   public function init() {
+    $this->languageDictionary["sk"] = [
+      "Numeric series" => "Číselná série",
+      "Accounting Year" => "Účtovný rok",
+      "Serial number" => "Sériové číslo",
+      "Will be generated automaticaly" => "Budú generované automaticky",
+      "Number" => "Číslo",
+      "Order" => "Objednávka",
+      "Customer, " => "Zákazník, ",
+      "Customer" => "Zákazník",
+      "Client" => "Klient",
+      "Name on the Invoice"  => "meno na faktúre",
+      "Street, 1st line" => "Ulica, 1. riadok",
+      "Street, 2nd line" => "Ulica, 2. riadok",
+      "City" => "Mesto",
+      "ZIP" => "PČS",
+      "Country" => "Štát",
+      "Company ID" => "IČO",
+      "Company TAX ID" => "DIČ",
+      "Company VAT ID" => "IČ DPH",
+      "E-mail" => "Email",
+      "Phone number" => "Mobilné číslo",
+      "Web" => "Web",
+      "Bank account IBAN" => "Bankový účet IBAN",
+      "Name on the Invoice" => "Názov faktúry",
+      "Issued" => "Vystavená",
+      "Delivered" => "Doručená",
+      "Payment Due" => "Splatnosť platby",
+      "Variable symbol" => "Variabilný symbol",
+      "Specific symbol" => "Špecifický symbol",
+      "Constant symbol" => "Konštantný symbol",
+      "Order number" => "Číslo objednávky",
+      "Total price excl. VAT" => "Celková cena bez DPH",
+      "Total price incl. VAT" => "Celková cena s DPH",
+      "Notes" => "Poznámky",
+      "State" => "Stav",
+      "Bank transfer" => "Bankovým prevodom",
+      "In cash" => "V hotovosti",
+      "Cash on delivery" => "Dobierka",
+      "Payment card" => "Platobná karta",
+      "Invoices" => "Faktúry",
+      "New invoice" => "Nová faktúra",
+      "Invoice nr." => "Faktúra č.",
+      "Issued" => "Vydaná",
+      "Sent" => "Odoslaná",
+      "Paid" => "Zaplatená",
+      "With Value Added Tax" => "S daňou z pridanej hodnoty",
+      "Without Value Added Tax" => "Bez dane z pridanej hodnoty",
+      "Foreign invoice" => "Zahraničná faktúra",
+      "Supplier, " => "Dodávateľ, ",
+      "Print invoice" => "Vytľačiť faktúru",
+      "Slovak" => "Slovensky",
+      "English" => "Anglicky",
+      "Invoice summary" => "Zhrnutie faktúry",
+      "Supplier" => "Dodávateľ",
+      "Items" => "Položky",
+      "General" => "Všeobecné"
+    ];
+    
+    $this->tableTitle = $this->translate("Invoices");
+    $this->formTitleForInserting = $this->translate("New invoice");
+    $this->formTitleForEditing = $this->translate("Invoice nr.")." {{ number }}";
+
     $this->enumInvoicePaymentMethods = [
-      self::PAYMENT_METHOD_WIRE_TRANSFER => 'Bankovým prevodom',
-      self::PAYMENT_METHOD_CASH          => 'V hotovosti',
-      self::PAYMENT_METHOD_CHEQUE        => 'Dobierka',
-      self::PAYMENT_METHOD_CARD          => 'Platobná karta',
+      self::PAYMENT_METHOD_WIRE_TRANSFER => $this->translate("Bank transfer"),
+      self::PAYMENT_METHOD_CASH          => $this->translate("In cash"),
+      self::PAYMENT_METHOD_CHEQUE        => $this->translate("Cash on delivery"),
+      self::PAYMENT_METHOD_CARD          => $this->translate("Payment card"),
     ];
 
     $this->enumInvoiceStates = [
-      self::STATE_ISSUED => 'Issued',
-      self::STATE_SENT   => 'Sent',
-      self::STATE_PAID   => 'Paid',
+      self::STATE_ISSUED => $this->translate("Issued"),
+      self::STATE_SENT   => $this->translate("Sent"),
+      self::STATE_PAID   => $this->translate("Paid"),
     ];
 
     $this->enumInvoiceLanguages = [
-      self::LANGUAGE_SK   => 'Slovensky',
-      self::LANGUAGE_EN   => 'English',
+      self::LANGUAGE_SK   => $this->translate("Slovak"),
+      self::LANGUAGE_EN   => $this->translate("English"),
     ];
 
     $this->enumInvoiceTemplates = [
-      self::TEMPLATE_WITH_VAT        => 'With Value Added Tax',
-      self::TEMPLATE_WITHOUT_VAT     => 'Without Value Added Tax',
-      self::TEMPLATE_FOREIGN_INV     => 'Foreign invoice',
+      self::TEMPLATE_WITH_VAT        => $this->translate('With Value Added Tax'),
+      self::TEMPLATE_WITHOUT_VAT     => $this->translate('Without Value Added Tax'),
+      self::TEMPLATE_FOREIGN_INV     => $this->translate('Foreign invoice'),
     ];
   }
 
@@ -62,27 +121,27 @@ class Invoice extends \ADIOS\Core\Model {
     return parent::columns([
       "id_numeric_series" => [
         "type" => "lookup",
-        "title" => "Numeric series",
+        "title" => $this->translate("Numeric series"),
         "model" => "Widgets/Finances/Models/InvoiceNumericSeries",
       ],
 
       "accounting_year" => [
         "type" => "int",
-        "title" => "Accounting Year",
+        "title" => $this->translate("Accounting Year"),
         "readonly" => TRUE,
-        "description" => "Will be generated automaticaly",
+        "description" => $this->translate("Will be generated automaticaly"),
       ],
 
       "serial_number" => [
         "type" => "int",
-        "title" => "Serial number",
+        "title" => $this->translate("Serial number"),
         "readonly" => TRUE,
-        "description" => "Will be generated automaticaly",
+        "description" => $this->translate("Will be generated automaticaly"),
       ],
 
       "number" => [
         "type" => "varchar",
-        "title" => "Number",
+        "title" => $this->translate("Number"),
         "show_column" => TRUE,
       ],
 
@@ -95,7 +154,7 @@ class Invoice extends \ADIOS\Core\Model {
 
       "id_order" => [
         "type" => "lookup",
-        "title" => "Order",
+        "title" => $this->translate("Order"),
         "model" => "Widgets/Orders/Models/Order",
         "show_column" => FALSE,
       ],
@@ -104,155 +163,155 @@ class Invoice extends \ADIOS\Core\Model {
 
         "customer_name" => [
           "type" => "varchar",
-          "title" => "Customer, Name on the Invoice",
+          "title" => $this->translate("Customer, ").$this->translate("Name on the Invoice"),
           "show_column" => TRUE,
         ],
 
         "customer_street_1" => [
           "type" => "varchar",
-          "title" => "Customer, Street, 1st line",
+          "title" => $this->translate("Customer, ").$this->translate("Street, 1st line"),
         ],
 
         "customer_street_2" => [
           "type" => "varchar",
-          "title" => "Customer, Street, 2nd line",
+          "title" => $this->translate("Customer, ").$this->translate("Street, 2nd line"),
         ],
 
         "customer_city" => [
           "type" => "varchar",
-          "title" => "Customer, City",
+          "title" => $this->translate("Customer, ").$this->translate("City"),
         ],
 
         "customer_zip" => [
           "type" => "varchar",
-          "title" => "Customer, ZIP",
+          "title" => $this->translate("Customer, ").$this->translate("ZIP"),
         ],
 
         "customer_country" => [
           "type" => "varchar",
-          "title" => "Customer, Country",
+          "title" => $this->translate("Customer, ").$this->translate("Country"),
         ],
 
         "customer_company_id" => [
           "type" => "varchar",
-          "title" => "Customer, Company ID",
+          "title" => $this->translate("Customer, ").$this->translate("Company ID"),
           "show_column" => TRUE,
         ],
 
         "customer_company_tax_id" => [
           "type" => "varchar",
-          "title" => "Customer, Company TAX ID",
+          "title" => $this->translate("Customer, ").$this->translate("Company TAX ID"),
         ],
 
         "customer_company_vat_id" => [
           "type" => "varchar",
-          "title" => "Customer, Company VAT ID",
+          "title" => $this->translate("Customer, ").$this->translate("Company VAT ID"),
         ],
 
         "customer_email" => [
           "type" => "varchar",
-          "title" => "Customer, E-mail",
+          "title" => $this->translate("Customer, ").$this->translate("E-mail"),
         ],
 
         "customer_phone" => [
           "type" => "varchar",
-          "title" => "Customer, Phone number",
+          "title" => $this->translate("Customer, ").$this->translate("Phone number"),
         ],
 
         "customer_www" => [
           "type" => "varchar",
-          "title" => "Customer, Web",
+          "title" => $this->translate("Customer, ").$this->translate("Web"),
         ],
 
         "customer_iban" => [
           "type" => "varchar",
-          "title" => "Customer, Bank account IBAN",
+          "title" => $this->translate("Customer, ").$this->translate("Bank account IBAN"),
         ],
 
       // DODAVATEL
 
         "supplier_name" => [
           "type" => "varchar",
-          "title" => "Supplier, Name on the Invoice",
+          "title" => $this->translate("Supplier, ").$this->translate("Name on the Invoice"),
         ],
 
         "supplier_street_1" => [
           "type" => "varchar",
-          "title" => "Supplier, Street, 1st line",
+          "title" => $this->translate("Supplier, ").$this->translate("Street, 1st line"),
         ],
 
         "supplier_street_2" => [
           "type" => "varchar",
-          "title" => "Supplier, Street, 2nd line",
+          "title" => $this->translate("Supplier, ").$this->translate("Street, 2nd line"),
         ],
 
         "supplier_city" => [
           "type" => "varchar",
-          "title" => "Supplier, City",
+          "title" => $this->translate("Supplier, ").$this->translate("City"),
         ],
 
         "supplier_zip" => [
           "type" => "varchar",
-          "title" => "Supplier, ZIP",
+          "title" => $this->translate("Supplier, ").$this->translate("ZIP"),
         ],
 
         "supplier_country" => [
           "type" => "varchar",
-          "title" => "Supplier, Country",
+          "title" => $this->translate("Supplier, ").$this->translate("Country"),
         ],
 
         "supplier_company_id" => [
           "type" => "varchar",
-          "title" => "Supplier, Company ID",
+          "title" => $this->translate("Supplier, ").$this->translate("Company ID"),
         ],
 
         "supplier_company_tax_id" => [
           "type" => "varchar",
-          "title" => "Supplier, Company TAX ID",
+          "title" => $this->translate("Supplier, ").$this->translate("Company TAX ID"),
         ],
 
         "supplier_company_vat_id" => [
           "type" => "varchar",
-          "title" => "Supplier, Company VAT ID",
+          "title" => $this->translate("Supplier, ").$this->translate("Company VAT ID"),
         ],
 
         "supplier_email" => [
           "type" => "varchar",
-          "title" => "Supplier, E-mail",
+          "title" => $this->translate("Supplier, ").$this->translate("E-mail"),
         ],
 
         "supplier_phone" => [
           "type" => "varchar",
-          "title" => "Supplier, Phone number",
+          "title" => $this->translate("Supplier, ").$this->translate("Phone number"),
         ],
 
         "supplier_www" => [
           "type" => "varchar",
-          "title" => "Supplier, Web",
+          "title" => $this->translate("Supplier, ").$this->translate("Web"),
         ],
 
         "supplier_iban" => [
           "type" => "varchar",
-          "title" => "Supplier, Bank account IBAN",
+          "title" => $this->translate("Supplier, ").$this->translate("Bank account IBAN"),
         ],
 
       // DATUMY
 
         "issue_time" => [
           "type" => "datetime",
-          "title" => "Issued",
+          "title" => $this->translate("Issued"),
           "show_column" => TRUE,
         ],
 
         "delivery_time" => [
           "type" => "datetime",
-          "title" => "Delivered",
+          "title" => $this->translate("Delivered"),
           "show_column" => TRUE,
         ],
 
         "payment_due_time" => [
           "type" => "datetime",
-          "title" => "Payment Due",
+          "title" => $this->translate("Payment Due"),
           "show_column" => TRUE,
         ],
 
@@ -266,35 +325,35 @@ class Invoice extends \ADIOS\Core\Model {
 
         "variable_symbol" => [
           "type" => "varchar",
-          "title" => "Variable symbol",
+          "title" => $this->translate("Variable symbol"),
           "show_column" => TRUE,
         ],
 
         "specific_symbol" => [
           "type" => "varchar",
-          "title" => "Specific symbol",
+          "title" => $this->translate("Specific symbol"),
         ],
 
         "constant_symbol" => [
           "type" => "varchar",
-          "title" => "Constant symbol",
+          "title" => $this->translate("Constant symbol"),
         ],
 
         "payment_method" => [
           "type" => "int",
           "enum_values" => $this->enumInvoicePaymentMethods,
-          "title" => "Forma úhrady",
+          "title" => $this->translate("Forma úhrady"),
           "show_column" => FALSE,
         ],
 
         "order_number" => [
           "type" => "varchar",
-          "title" => "Order number",
+          "title" => $this->translate("Order number"),
         ],
 
         "price_total_excl_vat" => [
           "type" => "float",
-          "title" => "Total price excl. VAT",
+          "title" => $this->translate("Total price excl. VAT"),
           "unit" => $this->adios->locale->currencySymbol(),
           "readonly" => TRUE,
           "show_column" => TRUE,
@@ -302,7 +361,7 @@ class Invoice extends \ADIOS\Core\Model {
 
         "price_total_incl_vat" => [
           "type" => "float",
-          "title" => "Total price incl. VAT",
+          "title" => $this->translate("Total price incl. VAT"),
           "unit" => $this->adios->locale->currencySymbol(),
           "readonly" => TRUE,
           "show_column" => TRUE,
@@ -311,7 +370,7 @@ class Invoice extends \ADIOS\Core\Model {
         "notes" => [
           "type" => "varchar",
           "byte_size" => 255,
-          "title" => "Notes",
+          "title" => $this->translate("Notes"),
           "show_column" => TRUE,
         ],
 
@@ -319,7 +378,7 @@ class Invoice extends \ADIOS\Core\Model {
           "type" => "int",
           "byte_size" => 8,
           "enum_values" => $this->enumInvoiceStates,
-          "title" => "State",
+          "title" => $this->translate("State"),
           "show_column" => TRUE,
         ],
     ]);
@@ -553,7 +612,7 @@ class Invoice extends \ADIOS\Core\Model {
       $params['title'] = "Invoice nr. ".hsc($data['number']);
 
       $btnPrintInvoiceHtml = $this->adios->ui->button([
-        "text"    => "Print invoice",
+        "text"    => $this->translate("Print invoice"),
         "onclick" => "
           var invoiceLanguage = $('#".$params["uid"]."_invoiceLanguage').val();
           var invoiceTemplate = $('#".$params["uid"]."_invoiceTemplate').val();
@@ -580,7 +639,7 @@ class Invoice extends \ADIOS\Core\Model {
           [
             "class" => "col-md-9 pl-0",
             "tabs" => [
-              "General" => [
+              $this->translate("General") => [
                 "number",
                 "variable_symbol",
                 "constant_symbol",
@@ -596,14 +655,14 @@ class Invoice extends \ADIOS\Core\Model {
                 "notes",
                 "state",
               ],
-              "Items" => [
+              $this->translate("Items") => [
                 "action" => "UI/Table",
                 "params" => [
                   "model"      => "Widgets/Finances/Models/InvoiceItem",
                   "id_invoice" => (int) $data['id'],
                 ]
               ],
-              "Customer" => [
+              $this->translate("Customer") => [
                 "customer_name",
                 "customer_street_1",
                 "customer_street_2",
@@ -618,7 +677,7 @@ class Invoice extends \ADIOS\Core\Model {
                 "customer_www",
                 "customer_iban",
               ],
-              "Supplier" => [
+              $this->translate("Supplier") => [
                 "supplier_name",
                 "supplier_street_1",
                 "supplier_street_2",
@@ -646,7 +705,7 @@ class Invoice extends \ADIOS\Core\Model {
             "html" => "
               <div class='card shadow mb-2'>
                 <div class='card-header py-3'>
-                  Invoice summary
+                  ".$this->translate('Invoice summary')."
                 </div>
                 <div class='card-body'>
                   <div class='table-responsive'>
@@ -654,7 +713,7 @@ class Invoice extends \ADIOS\Core\Model {
                       <tbody>
                         <tr>
                           <td>
-                            Customer
+                            ".$this->translate('Customer')."
                           </td>
                           <td>
                             ".hsc($data['customer_name'])."</br>
@@ -664,7 +723,7 @@ class Invoice extends \ADIOS\Core\Model {
                         </tr>
                         <tr>
                           <td>
-                            Total price excl. VAT
+                            ".$this->translate('Total price excl. VAT')."
                           </td>
                           <td class='text-right'>
                             ".number_format($data['SUMMARY']['price_total_excl_vat'], 2, ",", " ")."
@@ -673,7 +732,7 @@ class Invoice extends \ADIOS\Core\Model {
                         </tr>
                         <tr>
                           <td>
-                            Total price incl. VAT
+                            ".$this->translate('Total price incl. VAT')."
                           </td>
                           <td class='text-right'>
                             ".number_format($data['SUMMARY']['price_total_incl_vat'], 2, ",", " ")."
@@ -687,7 +746,7 @@ class Invoice extends \ADIOS\Core\Model {
               </div>
               <div class='card shadow mb-2'>
                 <div class='card-header py-3'>
-                  Print invoice
+                  ".$this->translate('Print invoice')."
                 </div>
                 <div class='card-body'>
                   {$btnSelectLanguageHtml}

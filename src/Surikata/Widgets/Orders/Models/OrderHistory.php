@@ -7,6 +7,15 @@ use ADIOS\Core\Models\User;
 class OrderHistory extends \ADIOS\Core\Model {
   var $sqlName = "orders_history";
 
+  public function init() {
+    $this->languageDictionary["sk"] = [
+      "Order" => "Objednávka",
+      "State" => "Stav",
+      "Event time" => "Čas udalosti",
+      "User" => "Uživateľ"
+    ];
+  }
+
   public function columns(array $columns = []) {
     return parent::columns([
       "id_order" => [

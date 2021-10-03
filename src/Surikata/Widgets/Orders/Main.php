@@ -7,33 +7,42 @@ class Orders extends \ADIOS\Core\Widget {
     if ($this->adios->hasUserRole(\Surikata\Core\AdminPanel\Loader::USER_ROLE_SALES)) {
       $orderModel = new \ADIOS\Widgets\Orders\Models\Order($this->adios);
 
+      $this->languageDictionary["sk"] = [
+        "New" => "Nové",
+        "Invoiced" => "Vyúčtované",
+        "Paid" => "Zaplatené",
+        "Shipped" => "Doručené",
+        "Canceled" => "Zrušené",
+        "Orders" => "Objednávky"
+      ];
+
       $this->adios->config['desktop']['sidebarItems']['Orders'] = [
         "fa_icon" => "fas fa-shopping-basket",
-        "title" => "Orders",
+        "title" => $this->translate("Orders"),
         "onclick" => "desktop_update('Orders');",
         "sub" => [
           [
-            "title" => "New",
+            "title" => $this->translate("New"),
             "onclick" => "desktop_update('Orders/New');",
             "style" => "border-left:5px solid {$orderModel->enumOrderStateColors[$orderModel::STATE_NEW]}",
           ],
           [
-            "title" => "Invoiced",
+            "title" => $this->translate("Invoiced"),
             "onclick" => "desktop_update('Orders/Invoiced');",
             "style" => "border-left:5px solid {$orderModel->enumOrderStateColors[$orderModel::STATE_INVOICED]}",
           ],
           [
-            "title" => "Paid",
+            "title" => $this->translate("Paid"),
             "onclick" => "desktop_update('Orders/Paid');",
             "style" => "border-left:5px solid {$orderModel->enumOrderStateColors[$orderModel::STATE_PAID]}",
           ],
           [
-            "title" => "Shipped",
+            "title" => $this->translate("Shipped"),
             "onclick" => "desktop_update('Orders/Shipped');",
             "style" => "border-left:5px solid {$orderModel->enumOrderStateColors[$orderModel::STATE_SHIPPED]}",
           ],
           [
-            "title" => "Canceled",
+            "title" => $this->translate("Canceled"),
             "onclick" => "desktop_update('Orders/Canceled');",
             "style" => "border-left:5px solid {$orderModel->enumOrderStateColors[$orderModel::STATE_CANCELED]}",
           ],

@@ -61,7 +61,8 @@ class UserProfile extends \Surikata\Core\Web\Controller {
 
     // Request to set cookie consent
     if (isset($_POST['setCookieConsent'])) {
-      $consent = isset($_POST["cookieConsent"]) ? $_POST["cookieConsent"] : "{'required':1}";
+      $consent = @$_COOKIE['srkt-cookie-consent-settings'] ?? "{'necessary':true}";
+
       $this->setCookieConsent($consent);
     }
 

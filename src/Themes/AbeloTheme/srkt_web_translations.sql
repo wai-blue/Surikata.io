@@ -350,5 +350,22 @@ INSERT INTO `srkt_web_translations` (`domain`, `context`, `original`, `translate
 ('eshop.liss.sk', 'Customer', 'Your account has been successfully created. To your email address', 'Váš účet bol úspešne vytvorený. Na vašu emailovú adresu'),
 ('eshop.liss.sk', 'Customer', 'we have sent a link to verify your account. Please verify your account before logging in for the first time.', 'sme poslali odkaz na overenie vášho účtu. Prosím overte vašu emailovú adresu pred prvým prihlásením.'),
 ('eshop.liss.sk', 'Customer', 'Thank you for your trust.', 'Ďakujeme Vám za vašu dôveru.'),
-('eshop.liss.sk', 'Customer', 'Invalid link for email confirmation', 'Neplatný odkaz pre overenie emailu.')
+('eshop.liss.sk', 'Customer', 'Invalid link for email confirmation', 'Neplatný odkaz pre overenie emailu.'),
+('eshop.liss.sk', 'Cookies', 'Privacy Settings', 'Súhlas s používaním cookies'),
+('eshop.liss.sk', 'Cookies', 'Privacy content', 'Tieto internetové stránky používajú k poskytovaniu služieb, personalizácií reklám a analýze návštevnosti súbory cookie.'),
+('eshop.liss.sk', 'Cookies', 'More information', 'Ďalšie informácie'),
+('eshop.liss.sk', 'Cookies', 'My settings', 'Moje nastavenia'),
+('eshop.liss.sk', 'Cookies', 'Necessary', 'Potrebné'),
+('eshop.liss.sk', 'Cookies', 'Required to run the website', 'Cookies potrebné pre plnú funkčnosť Surikata Online Eshopu'),
+('eshop.liss.sk', 'Cookies', 'Analyses', 'Analytické'),
+('eshop.liss.sk', 'Cookies', 'Monitoring website usage and optimizing the user experience', 'Monitorujú používanie Eshopu a optimalizujú používateľské rozhranie'),
+('eshop.liss.sk', 'Cookies', 'Evaluation of marketing actions', 'Vyhodnocujú marketingové akcie'),
+('eshop.liss.sk', 'Cookies', 'Personalization', 'Personalizované'),
+('eshop.liss.sk', 'Cookies', 'Storage of your preferences from previous visits', 'Ukladajú Vaše nastavenia z predchádzajúcich návštev webu'),
+('eshop.liss.sk', 'Cookies', 'Collecting user feedback to improve our website', 'Zbierajú údaje používateľ kvôli zlepšeniu Eshopu'),
+('eshop.liss.sk', 'Cookies', 'Recording of your interests in order to provide customised content and offers', 'Zaznamenávajú vaše záujmy za účelom poskytovania prispôsobeného obsahu a ponúk'),
+('eshop.liss.sk', 'Cookies', 'I do not agree', 'Nesúhlasím'),
+('eshop.liss.sk', 'Cookies', 'Agree', 'Súhlasím'),
+('eshop.liss.sk', 'Cookies', 'Save selection', 'Uložiť nastavenia'),
+('eshop.liss.sk', 'Cookies', 'Agree to all', 'Súhlasím so všetkými Cookies')
 ;

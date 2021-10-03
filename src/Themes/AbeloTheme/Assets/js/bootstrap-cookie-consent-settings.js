@@ -154,7 +154,7 @@ function BootstrapCookieConsentSettings(props) {
     }
 
     function gatherOptions(setAllExceptNecessary) {
-        var $options = self.$modal.find("#bccs-options .bccs-option")
+        var $options = self.$modal.find("#cookies-options .bccs-option")
         var options = {}
         for (var i = 0; i < $options.length; i++) {
             var option = $options[i]

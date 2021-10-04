@@ -1338,7 +1338,11 @@ class DB {
           ) as sumtable
         ";
       } else {
-        $selectItems = array_merge(["{$table_name}.*"], $virtualColumns, $codeListColumns);
+        if ($count_rows) {
+          $selectItems = ["{$table_name}.*"];
+        } else {
+          $selectItems = array_merge(["{$table_name}.*"], $virtualColumns, $codeListColumns);
+        }
 
         $query = "
           select

@@ -13,15 +13,81 @@ class Product extends \ADIOS\Core\Model {
 
   public function init() {
     $this->languageDictionary["sk"] = [
-      //
+      "Product" => "Produkt",
+      "New product" => "Nový produkt",
+      "Products" => "Produkty",
+      "Custom price: You can enter your custom price" => "Vlastná cena: Môžete zadať vlastnú cenu",
+      "Price list: Margins and discounts from price list will be applied" => "",
+      "Plugin: Plugin will be called to calculate price" => "Cenník: Budú sa uplatňovať marže a zľavy z cenníka",
+      "Name" => "Názov",
+      "Short description" => "Krátky popis",
+      "Description" => "Popis",
+      "Gift" => "Darček",
+      "Product number" => "Číslo produktu",
+      "EAN" => "EAN",
+      "Weight (per unit)" => "Váha (na jednotku)",
+      "Which price will be displayed on the web?" => "Ktorá cena sa zobrazí na webe?",
+      "Custom sale price" => "Vlastná predajná cena",
+      "Custom full price" => "Vlastná plná cena",
+      "Calculated sale price" => "Vypočítaná predajná cena",
+      "WARNING: Final sale price of the product will be updated after save." => "UPOZORNENIE: Konečná predajná cena produktu bude aktualizovaná po uložení.",
+      "Delivery unit" => "Dodacia jednotka",
+      "Stock quantity" => "Množstvo skladom",
+      "Number of units of product available on stock and ready for immediate delivery." => "Počet jednotiek produktu dostupných na sklade a pripravených na okamžité dodanie.",
+      "Delivery day" => "Deň doručenia",
+      "Duration of delivery in days. '1' means that the product will be delivered in the next day after the order." => "Trvanie dodania v dňoch. „1“ znamená, že produkt bude doručený nasledujúci deň po objednávke.",
+      "Delivery time" => "Dodacia doba",
+      "Date and time of the delivery if the product is ordered before the order deadline. Leave empty for default value." => "Dátum a čas dodania, ak je produkt objednaný pred termínom objednávky. Predvolenú hodnotu nechajte prázdnu.",
+      "Extended warranty" => "Predĺžená záruka",
+      "month(s)" => "mesiac",
+      "VAT" => "DPH",
+      "Main product category" => "Hlavná kategória produktu",
+      "Main image" => "Hlavný obrázok",
+      "Product information PDF" => "Informácie o produkte PDF",
+      "On sale product" => "Produkt vo výpredaji",
+      "Sale out" => "Výpredaj",
+      "New product" => "Nový produkt",
+      "Recommended product" => "Odporúčaný produkt",
+      "Top product" => "TOP produkt",
+      "Used product" => "Použitý produkt",
+      "Unpacked product" => "Rozbalený produkt",
+      "Currently viewed" => "Aktuálne zobrazené",
+      "Count of sold products" => "Počet predaných produktov",
+      "Time of last buy" => "Čas posledného nákupu",
+      "Time of end of sale" => "Čas konca predaja",
+      "Order index" => "Index objednávky",
+      "Hide from list" => "Skryť zo zoznamu",
+      "Brand" => "Značka",
+      "English" => "Anglicky",
+      "Slovak" => "Slovensky",
+      "General" => "Všeobecné",
+      "Price" => "Cena",
+      "Full price calculated from price list" => "Celková cena vypočítaná z cenníka",
+      "Sale price calculated from price list" => "Predajná cena vypočítaná z cenníka",
+      "Full price calculated by plugin" => "Plná cena vypočítaná pomocou pluginu",
+      "Sale price calculated by plugin" => "Predajná cena vypočítaná pomocou pluginu",
+      "Stock & Delivery" => "Sklad a dodanie",
+      "Visibility" => "Viditeľnosť",
+      "Translations" => "Preklady",
+      "Filters" => "Filtre",
+      "Services" => "Služby",
+      "Additional categories" => "Ďalšie kategórie",
+      "Gallery" => "Galéria",
+      "Features" => "Vlastnosti",
+      "Extensions" => "Rozšírenia",
+      "Accessories" => "Príslušenstvo",
+      "Related" => "Súvisiace",
+      "Categories" => "Kategórie",
+      "Domain visibility" => "Viditeľnosť domény",
+      "If no domain is selected, product will be visible on all domains." => "Ak nevyberiete žiadnu doménu, produkt bude viditeľný na všetkých doménach."
     ];
 
     $this->tableTitle = $this->translate("Products");
 
     $this->enumValuesSalePriceCalculationMethod = [
-      self::PRICE_CALCULATION_METHOD_CUSTOM_PRICE => "Custom price: You can enter your custom price",
-      self::PRICE_CALCULATION_METHOD_PRICE_LIST => "Price list: Margins and discounts from price list will be applied",
-      self::PRICE_CALCULATION_METHOD_PLUGIN => "Plugin: Plugin will be called to calculate price",
+      self::PRICE_CALCULATION_METHOD_CUSTOM_PRICE => $this->translate("Custom price: You can enter your custom price"),
+      self::PRICE_CALCULATION_METHOD_PRICE_LIST => $this->translate("Price list: Margins and discounts from price list will be applied"),
+      self::PRICE_CALCULATION_METHOD_PLUGIN => $this->translate("Plugin: Plugin will be called to calculate price"),
     ];
   }
 
@@ -32,7 +98,7 @@ class Product extends \ADIOS\Core\Model {
     foreach ($domainLanguages as $languageIndex => $languageName) {
       $translatedColumns["name_lang_{$languageIndex}"] = [
         "type" => "varchar",
-        "title" => $this->translate("Name")." ({$languageName})",
+        "title" => $this->translate("Name")." (".$this->translate($languageName).")",
         "show_column" => ($languageIndex == 1),
         "is_searchable" => ($languageIndex == 1),
       ];
@@ -106,7 +172,7 @@ class Product extends \ADIOS\Core\Model {
         "sale_price_cached" => [
           "type" => "float",
           "title" => $this->translate("Calculated sale price"),
-          "description" => "WARNING: Final sale price of the product will be updated after save.",
+          "description" => $this->translate("WARNING: Final sale price of the product will be updated after save."),
           "readonly" => TRUE,
           "show_column" => FALSE,
         ],
@@ -114,7 +180,7 @@ class Product extends \ADIOS\Core\Model {
         "full_price_cached" => [
           "type" => "float",
           "title" => $this->translate("Calculated sale price"),
-          "description" => "WARNING: Final sale price of the product will be updated after save.",
+          "description" => $this->translate("WARNING: Final sale price of the product will be updated after save."),
           "readonly" => TRUE,
           "show_column" => FALSE,
         ],
@@ -128,38 +194,38 @@ class Product extends \ADIOS\Core\Model {
 
         "stock_quantity" => [
           "type" => "float",
-          "title" => "Stock quantity",
-          "Description" => "Number of units of product available on stock and ready for immediate delivery.",
+          "title" => $this->translate("Stock quantity"),
+          "Description" => $this->translate("Number of units of product available on stock and ready for immediate delivery."),
           "show_column" => TRUE,
         ],
 
         "delivery_day" => [
           "type" => "int",
-          "title" => "Delivery day",
-          "Description" => "Duration of delivery in days. '1' means that the product will be delivered in the next day after the order.",
+          "title" => $this->translate("Delivery day"),
+          "Description" => $this->translate("Duration of delivery in days. '1' means that the product will be delivered in the next day after the order."),
         ],
 
         "delivery_time" => [
           "type" => "time",
-          "title" => "Delivery time",
-          "Description" => "Date and time of the delivery if the product is ordered before the order deadline. Leave empty for default value.",
+          "title" => $this->translate("Delivery time"),
+          "Description" => $this->translate("Date and time of the delivery if the product is ordered before the order deadline. Leave empty for default value."),
         ],
 
         "order_deadline" => [
           "type" => "time",
-          "title" => "Order deadline",
-          "Description" => "Date and time of the delivery if the product is ordered before the order deadline. Leave empty for default value.",
+          "title" => $this->translate("Order deadline"),
+          "Description" => $this->translate("Date and time of the delivery if the product is ordered before the order deadline. Leave empty for default value."),
         ],
 
         "extended_warranty" => [
           "type" => "int",
-          "title" => "Extended warranty",
-          "unit" => "month(s)",
+          "title" => $this->translate("Extended warranty"),
+          "unit" => $this->translate("month(s)"),
         ],
 
         "vat_percent" => [
           "type" => "int",
-          "title" => "VAT",
+          "title" => $this->translate("VAT"),
           "unit" => "%",
           "show_column" => TRUE,
         ],
@@ -167,13 +233,13 @@ class Product extends \ADIOS\Core\Model {
         "id_category" => [
           "type" => "lookup",
           "model" => "Widgets/Products/Models/ProductCategory",
-          "title" => "Main product category",
+          "title" => $this->translate("Main product category"),
           "show_column" => TRUE,
         ],
 
         "id_brand" => [
           "type" => "lookup",
-          "model" => "Widgets/Products/Models/Brand",
+          "model" => $this->translate("Widgets/Products/Models/Brand"),
           "title" => $this->translate("Brand"),
           "show_column" => TRUE,
         ],
@@ -458,7 +524,7 @@ class Product extends \ADIOS\Core\Model {
 
   public function formParams($data, $params) {
     if ($data['id'] <= 0) {
-      $params['title'] = "New product";
+      $params['title'] = $this->translate("New product");
     } else {
       $params['title'] = "{$data['number']} {$data['name_lang_1']}";
       $params['subtitle'] = $this->translate("Product");
@@ -557,7 +623,7 @@ class Product extends \ADIOS\Core\Model {
       $this->translate("Price") => [
         "price_calculation_method",
         [
-          "title" => "Full price calculated from price list",
+          "title" => $this->translate("Full price calculated from price list"),
           "input" => "
             <input
               type='text'
@@ -569,7 +635,7 @@ class Product extends \ADIOS\Core\Model {
           ",
         ],
         [
-          "title" => "Sale price calculated from price list",
+          "title" => $this->translate("Sale price calculated from price list"),
           "input" => "
             <input
               type='text'
@@ -594,7 +660,7 @@ class Product extends \ADIOS\Core\Model {
           ",
         ],
         [
-          "title" => "Full price calculated by plugin",
+          "title" => $this->translate("Full price calculated by plugin"),
           "input" => "
             <input
               type='text'
@@ -606,7 +672,7 @@ class Product extends \ADIOS\Core\Model {
           ",
         ],
         [
-          "title" => "Sale price calculated by plugin",
+          "title" => $this->translate("Sale price calculated by plugin"),
           "input" => "
             <input
               type='text'
@@ -631,8 +697,8 @@ class Product extends \ADIOS\Core\Model {
       ],
       $this->translate("Visibility") => [
         [
-          "title" => "Domain visibility",
-          "description" => "If no domain is selected, product will be visible on all domains.",
+          "title" => $this->translate("Domain visibility"),
+          "description" => $this->translate("If no domain is selected, product will be visible on all domains."),
           "input" => (new \ADIOS\Core\UI\Input\CheckboxField(
             $this->adios,
             "{$params['uid']}_ProductDomainAssignment",
@@ -651,10 +717,10 @@ class Product extends \ADIOS\Core\Model {
         "is_hidden",
       ],
       $this->translate("Translations") => $tabTranslations,
-      "Categories" => [
+      $this->translate("Categories") => [
         "id_category",
         [
-          "title" => "Additional categories",
+          "title" => $this->translate("Additional categories"),
           "input" => (new \ADIOS\Core\UI\Input\ManyToMany(
             $this->adios,
             "{$params['uid']}_ProductCategoryAssignment",

@@ -6,18 +6,37 @@ class ProductFeature extends \ADIOS\Core\Model {
   var $sqlName = "products_features";
   var $urlBase = "Products/Features";
   var $tableTitle = "Product features";
-  var $formTitleForInserting = "New product feature";
-  var $formTitleForEditing = "Product feature";
 
   public static $allItemsCache = NULL;
 
   public function init() {
+    $this->languageDictionary["sk"] = [
+      "Name" => "Názov",
+      "Description" => "Popis",
+      "Icon" => "Ikonka",
+      "Type of value" => "Typ hodnoty",
+      "Measurement unit" => "Meracia jednotka",
+      "Entry method" => "Vstupná metóda",
+      "Minimum value" => "Minimálna hodnota",
+      "Maximum value" => "Maximálna hodnota",
+      "Order index" => "Index objednávky",
+      "General" => "Všeobecné",
+      "Translations" => "Preklady",
+      "New product feature" => "Nová funkcia produktu",
+      "Product feature" => "Funkcia produktu",
+      "Number" => "Číslo",
+      "Text" => "Text",
+      "Yes/No" => "Áno/Nie",
+    ];
+
+    $this->formTitleForInserting = $this->translate("New product feature");
+    $this->formTitleForEditing = $this->translate("Product feature");
 
     // TODO: cisla zamenit za konstanty
     $this->enumValuesValueType = [
-      1 => "Number",
-      2 => "Text",
-      3 => "Yes/No",
+      1 => $this->translate("Number"),
+      2 => $this->translate("Text"),
+      3 => $this->translate("Yes/No"),
     ];
 
     // TODO: cisla zamenit za konstanty
@@ -55,14 +74,14 @@ class ProductFeature extends \ADIOS\Core\Model {
       [
         "icon" => [
           'type' => 'image',
-          'title' => "Icon",
+          'title' => $this->translate("Icon"),
           'show_column' => TRUE,
           "subdir" => "feature_icons",
         ],
 
         "value_type" => [
           "type" => "int",
-          "title" => "Type of value",
+          "title" => $this->translate("Type of value"),
           "enum_values" => $this->enumValuesValueType,
           "show_column" => TRUE,
         ],
@@ -75,26 +94,26 @@ class ProductFeature extends \ADIOS\Core\Model {
 
         "entry_method" => [
           "type" => "int",
-          "title" => "Entry method",
+          "title" => $this->translate("Entry method"),
           "enum_values" => $this->enumValuesEntryMethod,
           "show_column" => TRUE,
         ],
 
         "min" => [
           "type" => "int",
-          "title" => "Minimum value",
+          "title" => $this->translate("Minimum value"),
           "show_column" => TRUE,
         ],
 
         "max" => [
           "type" => "int",
-          "title" => "Maximum value",
+          "title" => $this->translate("Maximum value"),
           "show_column" => TRUE,
         ],
 
         "order_index" => [
           "type" => "int",
-          "title" => "Order index",
+          "title" => $this->translate("Order index"),
           "show_column" => TRUE,
         ],
 

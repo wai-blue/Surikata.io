@@ -6,8 +6,25 @@ class ProductExtension extends \ADIOS\Core\Model {
   var $sqlName = "products_extensions";
   var $urlBase = "Products/{{ id_product }}/Extensions";
   var $tableTitle = "Product extensions";
-  var $formTitleForInserting = "New product extension";
-  var $formTitleForEditing = "Product extensions";
+
+  public function init() {
+    $this->languageDictionary["sk"] = [
+      "New product extension" => "Nové rozšírenie produktu",
+      "Product extensions" => "Rozšírenia produktu",
+      "Name" => "Názov",
+      "Description" => "Popis",
+      "Product" => "Produkt",
+      "Price" => "Cena",
+      "Image" => "Obrázok",
+      "Product extensions are not separate products. They can be used to extend the
+      product's detail page to sell special extensions to the product. The visitor
+      can check desired extensions at the product's detail page before adding
+      the product to the shopping cart." => "Rozšírenia produktu nie sú samostatné produkty ale sú špeciálne rozšírenia k produktu."
+    ];
+
+    $this->formTitleForInserting = $this->translate("New product extension");
+    $this->formTitleForEditing = $this->translate("Product extensions");
+  }
 
   public function columns(array $columns = []) {
     $translatedColumns = [];
@@ -34,7 +51,7 @@ class ProductExtension extends \ADIOS\Core\Model {
         "id_product" => [
           "type" => "lookup",
           "model" => "Widgets/Products/Models/Product",
-          "title" => "Product",
+          "title" => $this->translate("Product"),
           "readonly" => TRUE,
           "show_column" => FALSE,
         ],
@@ -55,7 +72,7 @@ class ProductExtension extends \ADIOS\Core\Model {
 
         "image" => [
           "type" => "image",
-          "title" => "Image",
+          "title" => $this->translate("Image"),
           "show_column" => TRUE,
           "subdir" => "products"
         ],
@@ -69,12 +86,12 @@ class ProductExtension extends \ADIOS\Core\Model {
     $params['show_controls'] = FALSE;
     $params['show_filter'] = FALSE;
     $params['title'] = " ";
-    $params['header'] = "
-      Product extensions are not separate products. They can be used to extend the
+    $params['header'] = $this->translate(
+      "Product extensions are not separate products. They can be used to extend the
       product's detail page to sell special extensions to the product. The visitor
       can check desired extensions at the product's detail page before adding
-      the product to the shopping cart.
-    ";
+      the product to the shopping cart."
+    );
 
     return $params;
   }

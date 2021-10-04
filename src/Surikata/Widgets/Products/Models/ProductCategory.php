@@ -6,11 +6,31 @@ class ProductCategory extends \ADIOS\Core\Model {
   var $sqlName = "products_categories";
   var $lookupSqlValue = "{%TABLE%}.name_lang_1";
   var $urlBase = "Products/Categories";
-  var $tableTitle = "Product categories";
-  var $formTitleForInserting = "New product category";
-  var $formTitleForEditing = "Product category";
 
   public static $allItemsCache = NULL;
+
+  public function init() {
+    $this->languageDictionary["sk"] = [
+      "Product categories" => "Kategórie produktov",
+      "New product category" => "Nová kategória produktov",
+      "Product category" => "Kategória produktu",
+      "Name" => "Názov",
+      "Description" => "Popis",
+      "Parent category" => "Rodičovská kategória",
+      "Order index" => "Index objednávky",
+      "Tree left index" => "Ľavý index stromu",
+      "Tree right index" => "Pravý index stromu",
+      "Image" => "Obrázok",
+      "Highlight category" => "Zvýraznite kategóriu",
+      "General" => "Všeobecné",
+      "Translations" => "Preklady",
+      "Miscelaneous" => "Rôzny",
+    ];
+
+    $this->tableTitle = $this->translate("Product categories");
+    $this->formTitleForInserting = $this->translate("New product category");
+    $this->formTitleForEditing = $this->translate("Product category");
+  }
 
   public function columns(array $columns = []) {
     $translatedColumns = [];
@@ -39,26 +59,26 @@ class ProductCategory extends \ADIOS\Core\Model {
           "type" => "lookup",
           "model" => "Widgets/Products/Models/ProductCategory",
           "order_column" => "order_index",
-          "title" => "Parent category",
+          "title" => $this->translate("Parent category"),
           "show_column" => true
         ],
 
         "order_index" => [
           "type" => "int",
-          "title" => "Order index",
+          "title" => $this->translate("Order index"),
           "show_column" => TRUE,
         ],
 
         "tree_left_index" => [
           "type" => "int",
-          "title" => "Tree left index",
+          "title" => $this->translate("Tree left index"),
           "readonly" => TRUE,
           "show_column" => FALSE,
         ],
 
         "tree_right_index" => [
           "type" => "int",
-          "title" => "Tree right index",
+          "title" => $this->translate("Tree right index"),
           "readonly" => TRUE,
           "show_column" => FALSE,
         ],
@@ -71,14 +91,14 @@ class ProductCategory extends \ADIOS\Core\Model {
 
         "image" => [
           "type" => "image",
-          "title" => "Image",
+          "title" => $this->translate("Image"),
           "required" => FALSE,
           "show_column" => TRUE,
         ],
 
         "is_highlighted" => [
           "type" => "boolean",
-          "title" => "Highlight category",
+          "title" => $this->translate("Highlight category"),
         ],
 
       ]

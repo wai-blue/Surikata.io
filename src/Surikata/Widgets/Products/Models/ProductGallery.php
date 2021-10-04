@@ -6,22 +6,32 @@ class ProductGallery extends \ADIOS\Core\Model {
   var $sqlName = "products_gallery";
   var $urlBase = "Products/{{ id_product }}/Gallery";
   var $tableTitle = "Product gallery";
-  var $formTitleForInserting = "Product gallery - New image";
-  var $formTitleForEditing = "Product gallery - Edit image";
+
+  public function init() {
+    $this->languageDictionary["sk"] = [
+      "Product gallery - New image" => "Galéria produktu - Nový obrázok",
+      "Product gallery - Edit image" => "Galéria produktu - Upraviť obrázok",
+      'Image' => "Obrázok",
+      "Product" => "Produkt"
+    ];
+
+    $this->formTitleForInserting = $this->translate("Product gallery - New image");
+    $this->formTitleForEditing = $this->translate("Product gallery - Edit image");
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([
       "id_product" => [
         "type" => "lookup",
         "model" => "Widgets/Products/Models/Product",
-        "title" => "Product",
+        "title" => $this->translate("Product"),
         "readonly" => TRUE,
         "show_column" => FALSE,
       ],
 
       "image" => [
         'type' => 'image',
-        'title' => 'Image',
+        'title' => $this->translate('Image'),
         'show_column' => TRUE,
         "required" => TRUE,
         "subdir" => "products"

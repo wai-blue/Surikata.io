@@ -6,17 +6,30 @@ class ProductFeatureAssignment extends \ADIOS\Core\Model {
   var $sqlName = "products_features_assignment";
   var $urlBase = "Produkty/{{ id_product }}/Features";
   var $tableTitle = "Product features";
-  var $formTitleForInserting = "New product feature";
-  var $formTitleForEditing = "Product feature";
 
   public static $allItemsCache = NULL;
+
+  public function init() {
+    $this->languageDictionary["sk"] = [
+      "New product feature" => "Nová funkcia produktu",
+      "Product feature" => "Funkcia produktu",
+      "Product" => "Produkt",
+      "Feature" => "Funkcia",
+      'Value: Text' => "Hodnota: text",
+      'Value: Number' => "Hodnota: Číslo",
+      'Value: Yes/No' => "Hodnota: Áno/Nie",
+    ];
+
+    $this->formTitleForInserting = $this->translate("New product feature");
+    $this->formTitleForEditing = $this->translate("Product feature");
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([
       "id_product" => [
         "type" => "lookup",
         "model" => "Widgets/Products/Models/Product",
-        "title" => "Product",
+        "title" => $this->translate("Product"),
         "readonly" => TRUE,
         "show_column" => FALSE,
       ],
@@ -24,26 +37,26 @@ class ProductFeatureAssignment extends \ADIOS\Core\Model {
       "id_feature" => [
         "type" => "lookup",
         "model" => "Widgets/Products/Models/ProductFeature",
-        "title" => "Feature",
+        "title" => $this->translate("Feature"),
         "required" => TRUE,
         "show_column" => TRUE,
       ],
 
       "value_text" => [
         'type' => 'text',
-        'title' => 'Value: Text',
+        'title' => $this->translate('Value: Text'),
         'show_column' => TRUE,
       ],
 
       "value_number" => [
         'type' => 'float',
-        'title' => 'Value: Number',
+        'title' => $this->translate('Value: Number'),
         'show_column' => TRUE,
       ],
 
       "value_boolean" => [
         'type' => 'boolean',
-        'title' => 'Value: Yes/No',
+        'title' => $this->translate('Value: Yes/No'),
         'show_column' => TRUE,
       ],
     ]);

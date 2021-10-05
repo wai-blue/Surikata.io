@@ -433,7 +433,7 @@
                   <td style='white-space:nowrap;width:9%;' class='_num'>{{ item.jednotkova_cena_s_dph|number_format(2, ',', ' ') }} €</td>
                 {% endif %}
                 <td style='white-space:nowrap;width:7%;' class='_num'><b>{{ item.quantity|number_format(2, ',', ' ') }}</b></td>
-                <td style='white-space:nowrap;width:5%; text-align:center;' class=''>{{ item.merna_jednotka }}</td>
+                <td style='white-space:nowrap;width:5%; text-align:center;' class=''>{{ item.DELIVERY_UNIT.unit }}</td>
                 <td style='white-space:nowrap;width:11%;' class='_num'>{{ item.suma_bez_dph|number_format(2, ',', ' ') }} €</td>
                 {% if template == 1 %}
                   <td style='white-space:nowrap;width:11%;' class='_num'>{{ item.suma_s_dph|number_format(2, ',', ' ') }} €</td>

@@ -3,6 +3,7 @@
 namespace ADIOS\Actions\Finances\Invoices;
 
 use ADIOS\Widgets\Finances\Models\Invoice;
+use ADIOS\Widgets\Settings\Models\Unit;
 
 class PrintInvoice extends \ADIOS\Core\Action {
   public static $hideDefaultDesktop = TRUE;
@@ -14,6 +15,11 @@ class PrintInvoice extends \ADIOS\Core\Action {
     // REVIEW: staci neskor, default template pocitat podla toho, ci customer je platca DPH
     $template = $this->params["invoiceTemplate"] ?? \ADIOS\Widgets\Finances\Models\Invoice::TEMPLATE_WITH_VAT;
     $invoice = (new Invoice($this->adios))->getById($this->params['id']);
+    foreach ($invoice["ITEMS"] as $key => $item) {
+      if (is_numeric($item["id_delivery_unit"])) {
+        $invoice["ITEMS"][$key]["DELIVERY_UNIT"] = (new Unit())->getById($item["id_delivery_unit"]);
+      }
+    }
     $invoice["payment_method_value"] = (new Invoice($this->adios))
       ->enumInvoicePaymentMethods[$invoice["payment_method"]]
     ;

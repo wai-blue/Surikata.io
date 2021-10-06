@@ -69,6 +69,10 @@ class View {
     if ('' != $params['class']) {
       $this->add_class($params['class']);
     }
+
+    $this->languageDictionary[$this->adios->config["language"]] =
+      $this->adios->loadLanguageDictionary(get_class($this))
+    ;
   }
   
   /**

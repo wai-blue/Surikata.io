@@ -9,14 +9,17 @@ class ShipmentPrice extends \ADIOS\Core\Model {
   var $sqlName = "shipping_prices";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
   var $urlBase = "DeliveryAndPayment/Prices/Method";
-  var $tableTitle = "Shipment prices";
-  var $formTitleForInserting = "New shipment price";
-  var $formTitleForEditing = "Shipment price";
 
-  var $shipmentPriceCalculationMethodEnumValues = [
-    self::DELIVERY_FEE_BY_ORDER_PRICE => "Total value of the order",
-    self::DELIVERY_FEE_BY_ORDER_WEIGHT => "Total weight of the order",
-  ];
+  public function init() {
+    $this->tableTitle = $this->translate("Shipment prices");
+    $this->formTitleForInserting = $this->translate("New shipment price");
+    $this->formTitleForEditing = $this->translate("Shipment price");
+
+    $this->shipmentPriceCalculationMethodEnumValues = [
+      self::DELIVERY_FEE_BY_ORDER_PRICE => $this->translate("Total value of the order"),
+      self::DELIVERY_FEE_BY_ORDER_WEIGHT => $this->translate("Total weight of the order"),
+    ];
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([

@@ -6,9 +6,12 @@ class DestinationCountry extends \ADIOS\Core\Model {
   var $sqlName = "shipping_destination_countries";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
   var $urlBase = "DeliveryAndPayment/Countries";
-  var $tableTitle = "Countries of destination";
-  var $formTitleForInserting = "New country of destination";
-  var $formTitleForEditing = "Country of destination";
+
+  public function init() {
+    $this->tableTitle = $this->translate("Countries of destination");
+    $this->formTitleForInserting = $this->translate("New country of destination");
+    $this->formTitleForEditing = $this->translate("Country of destination");
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([
@@ -22,7 +25,7 @@ class DestinationCountry extends \ADIOS\Core\Model {
       "short" => [
         "type" => 'varchar',
         "title" => $this->translate("Short"),
-        "description" => "E.g.: EN, US, SK, FR, ...",
+        "description" => $this->translate("E.g.: EN, US, SK, FR, ..."),
         "show_column" => TRUE,
         "required" => TRUE
       ],

@@ -843,7 +843,9 @@ class Loader {
     $actionClassName = $this->getActionClassName($action);
 
     try {
-      $this->checkPermissionsForAction($action, $params);
+      if ($actionClassName::$requiresUserAuthentication) {
+        $this->checkPermissionsForAction($action, $params);
+      }
 
       if ($this->actionExists($action)) {
         $actionReturn = (new $actionClassName($this, $params))->render($params);

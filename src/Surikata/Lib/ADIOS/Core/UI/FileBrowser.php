@@ -14,7 +14,6 @@ namespace ADIOS\Core\UI;
 /* pouziva \ADIOS\Core\UI\Input\FileBrowser */
 class FileBrowser extends \ADIOS\Core\UI\View {
   public function render(string $panel = "") {
-    $this->params['onchange'] = "{$this->uid}_close($(this).val());";
 
     $inputHtml = (new \ADIOS\Core\UI\Input\FileBrowser(
       $this->adios,
@@ -23,6 +22,10 @@ class FileBrowser extends \ADIOS\Core\UI\View {
     ))->render();
     
     if ($this->params['__IS_WINDOW__']) {
+      if (empty($this->params['onchange'])) {
+        $this->params['onchange'] = "{$this->uid}_close($(this).val());";
+      }
+
       $html = $this->adios->ui->Window(
         [
           'uid' => "{$this->uid}_window",

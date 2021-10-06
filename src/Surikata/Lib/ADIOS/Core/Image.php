@@ -27,10 +27,15 @@ $this->config['image']['configurations']['pdw_thumb_large'] = ['width' => 97, 'h
 $this->config['image']['configurations']['pdw_thumb_small'] = ['width' => 48, 'height' => 48];
 
 if (!isset($this->config['image']['configurations']['wa_list'])) {
-    $this->config['image']['configurations']['wa_list'] = ['height' => 50, 'background' => 'transparent', 'use_cache' => false, 'constrain_proportions' => true];
+  $this->config['image']['configurations']['wa_list'] = ['height' => 50, 'background' => 'transparent', 'use_cache' => false, 'constrain_proportions' => true];
 }
 if (!isset($this->config['image']['configurations']['input'])) {
-    $this->config['image']['configurations']['input'] = ['width' => 120, 'height' => 84, 'background' => 'transparent', 'use_cache' => false, 'constrain_proportions' => true, 'fill_empty_area' => true];
+  $this->config['image']['configurations']['input'] = [
+    'width' => 400,
+    'height' => 400,
+    'use_cache' => false,
+    'constrain_proportions' => true,
+  ];
 }
 
 $configurations = $this->config['image']['configurations'];

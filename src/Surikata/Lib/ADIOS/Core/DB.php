@@ -1267,14 +1267,14 @@ class DB {
           ";
         }
 
-        if ('int' == $col_definition['type'] && is_array($col_definition['code_list'])) {
+        if ('int' == $col_definition['type'] && is_array($col_definition['enum_values'])) {
           $tmp_sql = "case ({$table_name}.{$col_name}) ";
-          foreach ($col_definition['code_list'] as $tmp_key => $tmp_value) {
+          foreach ($col_definition['enum_values'] as $tmp_key => $tmp_value) {
             $tmp_sql .= "when {$tmp_key} then '{$tmp_value}' ";
           }
           $tmp_sql .= ' end';
 
-          $codeListColumns[] = "({$tmp_sql}) as {$col_name}, {$table_name}.{$col_name} as {$col_name}_raw";
+          $codeListColumns[] = "({$tmp_sql}) as {$col_name}, {$table_name}.{$col_name} as {$col_name}_enum_value";
         }
 
         if (('int' == $col_definition['type'] || 'varchar' == $col_definition['type']) && is_array($col_definition['enum_values'])) {
@@ -1338,7 +1338,11 @@ class DB {
           ) as sumtable
         ";
       } else {
-        $selectItems = array_merge(["{$table_name}.*"], $virtualColumns, $codeListColumns);
+        if ($count_rows && empty($where)) {
+          $selectItems = ["{$table_name}.*"];
+        } else {
+          $selectItems = array_merge(["{$table_name}.*"], $virtualColumns, $codeListColumns);
+        }
 
         $query = "
           select

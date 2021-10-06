@@ -550,13 +550,8 @@ class Input extends \ADIOS\Core\UI\View {
                         $('#{$this->params['uid']}').datepicker({
                           changeYear: true,
                           dateFormat: 'dd.mm.yy".('datetime' == $this->params['type'] ? ' H:i:s' : '')."',
-                          'buttonImage': '', //{$this->adios->config['adios_images_url']}/black/app/calendar-3.png',
                           'showOn': 'both',
-                          'buttonImageOnly': true,
                           'constrainInput': true,
-                          'dayNames': [ '".l('Nedeľa')."', '".l('Pondelok')."', '".l('Utorok')."', '".l('Streda')."', '".l('Štvrtok')."', '".l('Piatok')."', '".l('Sobota')."' ],
-                          'dayNamesMin': [ '".l('Ne', '', ['context' => 'days'])."', '".l('Po', '', ['context' => 'days'])."', '".l('Ut', '', ['context' => 'days'])."', '".l('St', '', ['context' => 'days'])."', '".l('Št', '', ['context' => 'days'])."', '".l('Pi', '', ['context' => 'days'])."', '".l('So', '', ['context' => 'days'])."' ],
-                          'monthNames' : [ '".l('Január')."', '".l('Február')."', '".l('Marec')."', '".l('Apríl')."', '".l('Máj')."', '".l('Jún')."', '".l('Júl')."', '".l('August')."', '".l('September')."', '".l('Október')."', '".l('November')."', '".l('December')."' ],
                           'nextText': '',
                           'prevText': '',
                           'defaultDate': '{$this->params['default_date_value']}',
@@ -619,18 +614,21 @@ class Input extends \ADIOS\Core\UI\View {
           $img_src_base = "{$this->adios->config['url']}/Image?cfg=input&f=";
 
           if ('' != $this->params['value']) {
-              $img_src = "{$this->adios->config['url']}/Image?cfg=input&f=".urlencode($this->params['value']);
+            $img_src = "{$this->adios->config['url']}/Image?cfg=input&f=".urlencode($this->params['value']);
           } else {
-              $img_src = "{$this->adios->config['url']}/adios/assets/images/empty.png";
+            $img_src = "{$this->adios->config['url']}/adios/assets/images/empty.png";
           }
 
           $html = "
-            <img
-              src='{$img_src}'
-              id='{$this->params['uid']}_image'
-              class='adios ui Input image_input_img'
-              onclick='$(\"#{$this->params['uid']}_browser\").show(100);'
-            />
+            <div class='adios ui Input ui_input_type_image'>
+              <img
+                src='{$img_src}'
+                id='{$this->params['uid']}_image'
+                class='adios ui Input'
+                onclick='$(\"#{$this->params['uid']}_browser\").show(100);'
+              />
+              <div class='image_path'>".hsc($this->params['value'])."</div>
+            </div>
 
             <div
               id='{$this->params['uid']}_browser'

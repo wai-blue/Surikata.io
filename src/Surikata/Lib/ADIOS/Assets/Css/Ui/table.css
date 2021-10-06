@@ -166,6 +166,7 @@
 
       .adios.ui.Table.Container .Content .Row .Column {
         white-space: nowrap;
+        margin-right: 5px;
       }
 
       .adios.ui.Table.Container .Content .Row .Column:hover {

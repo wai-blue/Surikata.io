@@ -800,11 +800,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             }
         }
 
-        if (('int' == $type && _count($column['enum_values'])) || 'varchar' == $type || 'text' == $type || 'color' == $type || 'file' == $type || 'image' == $type || 'enum' == $type || 'password' == $type) {
+        if ($type == 'int' && _count($column['enum_values'])) {
+            $return = " {$columnName}_enum_value like '%".$this->adios->db->escape(trim($s))."%'";
+        } else if (in_array($type, ['varchar', 'text', 'color', 'file', 'image', 'enum', 'password'])) {
             $return = " {$columnName} like '%".$this->adios->db->escape(trim($s))."%'";
-        }
-
-        if ('lookup' == $type) {
+        } else if ($type == 'lookup') {
             $return = " {$columnName}_lookup_sql_value like '%".$this->adios->db->escape(trim($s))."%'";
         }
 

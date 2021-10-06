@@ -19,15 +19,15 @@ class RenameFolder extends \ADIOS\Core\Action {
     $newFolderName = $this->params['newFolderName'];
 
     foreach (explode("/", $folder) as $tmp) {
-      if ($tmp == "..") return "Invalid folder path.";
+      if ($tmp == "..") return "Invalid folder path. {$folder}";
     }
 
-    $dir = $this->adios->config['files_dir'];
+    $dir = realpath($this->adios->config['files_dir']);
 
     if (!empty($dir) && rename("{$dir}/{$folder}", "{$dir}/".dirname($folder)."/{$newFolderName}")) {
       return "1"; // "1 = {$dir}/{$folder}, {$dir}/".dirname($folder)."/{$newFolderName}";
     } else {
-      return "Failed to rename folder: {$folder}.";
+      return "Failed to rename folder {$dir}/{$folder} to {$newFolderName}.";
     }
   }
 }

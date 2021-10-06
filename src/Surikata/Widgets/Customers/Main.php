@@ -4,15 +4,6 @@ namespace ADIOS\Widgets;
 
 class Customers extends \ADIOS\Core\Widget {
   public function init() {
-    $this->languageDictionary["sk"] = [
-      "Categories" => "Kategórie",
-      "Customers" => "Zákazníci",
-      "Analytics" => "Štatistiky",
-      "Vouchers" => "Poukážky",
-      "Shopping Carts" => "Nákupné košíky",
-      "Searched queries" => "Hľadané výrazy"
-    ];
-
     if ($this->adios->hasUserRole(\Surikata\Core\AdminPanel\Loader::USER_ROLE_SALES)) {
       $this->adios->config['desktop']['sidebarItems']['Customers'] = [
         "fa_icon" => "fas fa-user",

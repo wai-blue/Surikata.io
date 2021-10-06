@@ -16,14 +16,6 @@ class Newsletter extends \ADIOS\Core\Model {
       $this->enumDomains = [$domain => $domain];
     }
 
-    $this->languageDictionary["sk"] = [
-      "Domain" => "Doména",
-      "Created at" => "Vytvorený",
-      "Newsletter Subscribers" => "Odberatelia noviniek",
-      "Newsletter edit subscriber" => "Upraviť odberateľa noviniek",
-      "Newsletter new subscriber" => "Nový odberateľ noviniek"
-    ];
-
     $this->tableTitle = $this->translate("Newsletter Subscribers");
     $this->formTitleForInserting = $this->translate("Newsletter new subscriber");
     $this->formTitleForEditing = $this->translate("Newsletter edit subscriber");

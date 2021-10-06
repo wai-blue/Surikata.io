@@ -11,12 +11,6 @@ class CustomerCategory extends \ADIOS\Core\Model {
   var $formTitleForEditing = "Customer category";
 
   public function init() {
-    $this->languageDictionary["sk"] = [
-      "Short code" => "Kód kategórie",
-      "Full category name" => "Celý názov kategórie",
-      "Customer categories" => "Kategórie zákazníkov"
-    ];
-
     $this->tableTitle = $this->translate("Customer categories");
   }
 

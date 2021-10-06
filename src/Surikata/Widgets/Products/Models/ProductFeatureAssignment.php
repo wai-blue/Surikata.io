@@ -10,16 +10,6 @@ class ProductFeatureAssignment extends \ADIOS\Core\Model {
   public static $allItemsCache = NULL;
 
   public function init() {
-    $this->languageDictionary["sk"] = [
-      "New product feature" => "Nová funkcia produktu",
-      "Product feature" => "Funkcia produktu",
-      "Product" => "Produkt",
-      "Feature" => "Funkcia",
-      'Value: Text' => "Hodnota: text",
-      'Value: Number' => "Hodnota: Číslo",
-      'Value: Yes/No' => "Hodnota: Áno/Nie",
-    ];
-
     $this->formTitleForInserting = $this->translate("New product feature");
     $this->formTitleForEditing = $this->translate("Product feature");
   }

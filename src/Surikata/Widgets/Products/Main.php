@@ -4,17 +4,6 @@ namespace ADIOS\Widgets;
 
 class Products extends \ADIOS\Core\Widget {
   public function init() {
-    $this->languageDictionary["sk"] = [
-      "Categories" => "Kategórie",
-      "View as tree" => "Zobraziť ako strom",
-      "Prices" => "Ceny",
-      "Settings" => "Nastavenia",
-      "Features" => "Funckie",
-      "Brands" => "Značky",
-      "Services" => "Služby",
-      "Products" => "Produkty"
-    ];
-
     if ($this->adios->hasUserRole(\Surikata\Core\AdminPanel\Loader::USER_ROLE_PRODUCT_MANAGER)) {
       $this->adios->config['desktop']['sidebarItems']['Products'] = [
         "fa_icon" => "fas fa-pizza-slice",

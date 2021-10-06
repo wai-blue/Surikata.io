@@ -137,6 +137,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
       $this->adios = &$adiosOrAttributes;
 
+      $this->languageDictionary[$this->adios->config["language"]] =
+        $this->adios->loadLanguageDictionary($this->name)
+      ;
+
       if ($eloquentQuery === NULL) {
         $this->eloquentQuery = $this->select('id');
       } else {

@@ -7,15 +7,6 @@ class Orders extends \ADIOS\Core\Widget {
     if ($this->adios->hasUserRole(\Surikata\Core\AdminPanel\Loader::USER_ROLE_SALES)) {
       $orderModel = new \ADIOS\Widgets\Orders\Models\Order($this->adios);
 
-      $this->languageDictionary["sk"] = [
-        "New" => "Nové",
-        "Invoiced" => "Vyúčtované",
-        "Paid" => "Zaplatené",
-        "Shipped" => "Doručené",
-        "Canceled" => "Zrušené",
-        "Orders" => "Objednávky"
-      ];
-
       $this->adios->config['desktop']['sidebarItems']['Orders'] = [
         "fa_icon" => "fas fa-shopping-basket",
         "title" => $this->translate("Orders"),

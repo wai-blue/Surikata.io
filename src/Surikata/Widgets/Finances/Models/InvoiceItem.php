@@ -7,18 +7,6 @@ class InvoiceItem extends \ADIOS\Core\Model {
   var $urlBase = "Invoices/{{ id_invoice }}/Items";
 
   public function columns(array $columns = []) {
-    $this->languageDictionary["sk"] = [
-      "Invoice" => "Faktúra",
-      "Item" => "Položka",
-      "VAT" => "DPH",
-      "Unit price" => "Jednotková cena",
-      "Quantity" => "Počet",
-      "Delivery unit" => "Dodacia jednotka",
-      "Items" => "Položky",
-      "New invoice item" => "Nová položka faktúry",
-      "Invoice item" => "Položka faktúry"
-    ];
-
     $this->tableTitle = $this->translate("Items");
     $this->formTitleForInserting = $this->translate("New invoice item");
     $this->formTitleForEditing = $this->translate("Invoice item");

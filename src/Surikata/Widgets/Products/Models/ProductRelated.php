@@ -8,13 +8,6 @@ class ProductRelated extends \ADIOS\Core\Model {
   var $tableTitle = "Related products";
 
   public function init() {
-    $this->languageDictionary["sk"] = [
-      "New related product" => "Nový súvisiaci produkt",
-      "Related product" => "Súvisiaci produkt",
-      "Original product" => "Pôvodný produkt",
-      "Related product" => "Súvisiaci produkt",
-    ];
-
     $this->formTitleForInserting = $this->translate("New related product");
     $this->formTitleForEditing = $this->translate("Related product");
   }

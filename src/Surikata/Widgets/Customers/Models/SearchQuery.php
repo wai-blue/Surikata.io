@@ -7,15 +7,6 @@ class SearchQuery extends \ADIOS\Core\Model {
   var $urlBase = "Customers/SearchedQueries";
 
   public function init() {
-    $this->languageDictionary["sk"] = [
-     "Searched queries" => "Hľadané výrazy",
-     "New searched query" => "Nový hľadaný výraz",
-     "Searched query" => "Hľadaný výraz",
-     "Customer UID"  => "Zákaznícke UID",
-     "Target URL"  => "Cieľová URL",
-     "Search datetime" => "Dátum a čas vyhľadávania"
-    ];
-
     $this->tableTitle = $this->translate("Searched queries");
     $this->formTitleForInserting = $this->translate("New searched query");
     $this->formTitleForEditing = $this->translate("Searched query");

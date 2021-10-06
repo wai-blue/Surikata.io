@@ -8,13 +8,6 @@ class ProductGallery extends \ADIOS\Core\Model {
   var $tableTitle = "Product gallery";
 
   public function init() {
-    $this->languageDictionary["sk"] = [
-      "Product gallery - New image" => "Galéria produktu - Nový obrázok",
-      "Product gallery - Edit image" => "Galéria produktu - Upraviť obrázok",
-      'Image' => "Obrázok",
-      "Product" => "Produkt"
-    ];
-
     $this->formTitleForInserting = $this->translate("Product gallery - New image");
     $this->formTitleForEditing = $this->translate("Product gallery - Edit image");
   }

@@ -33,6 +33,11 @@ class Widget {
       $this->params = [];
     }
 
+    // preklady
+    $this->languageDictionary[$this->adios->config["language"]] =
+      $this->adios->loadLanguageDictionary("Widgets-".$this->name)
+    ;
+
     // inicializacia widgetu
     $this->init();
 
@@ -46,6 +51,7 @@ class Widget {
     $this->adios->dispatchEventToPlugins("onWidgetModelsLoaded", [
       "widget" => $this,
     ]);
+
   }
 
   public function init() {

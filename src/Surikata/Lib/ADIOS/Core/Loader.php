@@ -464,7 +464,24 @@ class Loader {
   }
 
   //////////////////////////////////////////////////////////////////////////////
-  // MISCELANEOUS
+  // TRANSLATIONS
+
+  public function loadLanguageDictionary($context, $language = "") {
+    $dictionary = [];
+
+    if (empty($language)) {
+      $language = $this->config['language'];
+    }
+
+    if (strlen($language) == 2 && !empty($context)) {
+      $languageFile = "{$this->config['dir']}/Lang/{$language}/".strtr($context, "./\\", "---").".php";
+      if (file_exists($languageFile)) {
+        include($languageFile);
+      }
+    }
+
+    return $dictionary;
+  }
 
   public function translate($string, $context = "", $toLanguage = "", $dictionary = []) {
 
@@ -490,6 +507,9 @@ class Loader {
       
     }
   }
+
+  //////////////////////////////////////////////////////////////////////////////
+  // MISCELANEOUS
 
   public function renderAssets() {
     $cachingTime = 3600;

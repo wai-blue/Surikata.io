@@ -7,14 +7,6 @@ class ContactForm extends \ADIOS\Core\Model {
   var $urlBase = "CRM/ContactForm";
 
   public function init() {
-    $this->languageDictionary["sk"] = [
-      "Phone number" => "Mobilné číslo",
-      "Message" => "Správa",
-      "Received" => "Prijaté",
-      "Recipient" => "Príjemca",
-      "Messages from contact form" => "Správy z kontaktného formulára",
-      "Message from contact form" => "Správa z kontaktného formulára"
-    ];
 
     $this->tableTitle = $this->translate("Messages from contact form");
     $this->formTitleForInserting = $this->translate("Message from contact form");

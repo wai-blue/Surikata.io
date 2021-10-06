@@ -6,13 +6,6 @@ class Finances extends \ADIOS\Core\Widget {
   public function init() {
     // TODO: ked budeme robit dobropisy, nastudovat toto https://www.superfaktura.sk/blog/dobropis-vzor-a-niekolko-pravidiel/
 
-    $this->languageDictionary["sk"] = [
-      "Invoices" => "Faktúry",
-      "Merchant profiles" => "Profily obchodníkov",
-      "Numeric series" => "Číselná séria",
-      "Settings" => "Nastavenia"
-    ];
-    
     if ($this->adios->hasUserRole(\Surikata\Core\AdminPanel\Loader::USER_ROLE_SALES)) {
       $this->adios->config['desktop']['sidebarItems']['Finances'] = [
         "fa_icon" => "fas fa-file-invoice-dollar",

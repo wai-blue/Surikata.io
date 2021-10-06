@@ -8,15 +8,6 @@ class InvoiceNumericSeries extends \ADIOS\Core\Model {
   var $urlBase = "Invoices/NumericSeries";
 
   public function init() {
-    $this->languageDictionary["sk"] = [
-      "Invoice numeric series" => "Číselná séria faktúr",
-      "New invoice numeric series" => "Nová číselná séria faktúr",
-      "Invoice numeric series" => "Číselná séria faktúr",
-      "Series name" => "Názov série",
-      "Series pattern" => "Vzor série",
-      "Merchant" => "Obchodník"
-    ];
-
     $this->tableTitle = $this->translate("Invoice numeric series");
     $this->formTitleForInserting = $this->translate("New invoice numeric series");
     $this->formTitleForEditing = $this->translate("Invoice numeric series");

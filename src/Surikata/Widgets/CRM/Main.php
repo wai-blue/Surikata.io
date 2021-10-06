@@ -4,11 +4,6 @@ namespace ADIOS\Widgets;
 
 class CRM extends \ADIOS\Core\Widget {
   public function init() {
-    $this->languageDictionary["sk"] = [
-      "Contact form" => "Kontaktný formulár",
-      "Newsletter" => "Odber noviniek"
-    ];
-
     if ($this->adios->hasUserRole(\Surikata\Core\AdminPanel\Loader::USER_ROLE_SALES)) {
       $this->adios->config['desktop']['sidebarItems']['CRM'] = [
         "fa_icon" => "fas fa-award",

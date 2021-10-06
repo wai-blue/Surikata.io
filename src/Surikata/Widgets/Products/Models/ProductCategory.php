@@ -10,23 +10,6 @@ class ProductCategory extends \ADIOS\Core\Model {
   public static $allItemsCache = NULL;
 
   public function init() {
-    $this->languageDictionary["sk"] = [
-      "Product categories" => "Kategórie produktov",
-      "New product category" => "Nová kategória produktov",
-      "Product category" => "Kategória produktu",
-      "Name" => "Názov",
-      "Description" => "Popis",
-      "Parent category" => "Rodičovská kategória",
-      "Order index" => "Index objednávky",
-      "Tree left index" => "Ľavý index stromu",
-      "Tree right index" => "Pravý index stromu",
-      "Image" => "Obrázok",
-      "Highlight category" => "Zvýraznite kategóriu",
-      "General" => "Všeobecné",
-      "Translations" => "Preklady",
-      "Miscelaneous" => "Rôzny",
-    ];
-
     $this->tableTitle = $this->translate("Product categories");
     $this->formTitleForInserting = $this->translate("New product category");
     $this->formTitleForEditing = $this->translate("Product category");

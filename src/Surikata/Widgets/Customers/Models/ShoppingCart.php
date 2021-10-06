@@ -9,16 +9,6 @@ class ShoppingCart extends \ADIOS\Core\Model {
   var $lookupSqlValue = "{%TABLE%}.id";
 
   public function init() {
-    $this->languageDictionary["sk"] = [
-      "Shopping carts" => "Nákupné košíky",
-      "New shopping cart" => "Nový nákupný košík",
-      "Shopping cart" => "Nákupný košík",
-      "Header" => "Hlavička",
-      "Items" => "Položky",
-      "Customer UID" => "Zákacnícke UID",
-      "Order" => "Objednávka"
-    ];
-
     $this->tableTitle = $this->translate("Shopping carts");
     $this->formTitleForInserting = $this->translate("New shopping cart");
     $this->formTitleForEditing = $this->translate("Shopping cart");

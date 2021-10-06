@@ -10,25 +10,6 @@ class ProductFeature extends \ADIOS\Core\Model {
   public static $allItemsCache = NULL;
 
   public function init() {
-    $this->languageDictionary["sk"] = [
-      "Name" => "Názov",
-      "Description" => "Popis",
-      "Icon" => "Ikonka",
-      "Type of value" => "Typ hodnoty",
-      "Measurement unit" => "Meracia jednotka",
-      "Entry method" => "Vstupná metóda",
-      "Minimum value" => "Minimálna hodnota",
-      "Maximum value" => "Maximálna hodnota",
-      "Order index" => "Index objednávky",
-      "General" => "Všeobecné",
-      "Translations" => "Preklady",
-      "New product feature" => "Nová funkcia produktu",
-      "Product feature" => "Funkcia produktu",
-      "Number" => "Číslo",
-      "Text" => "Text",
-      "Yes/No" => "Áno/Nie",
-    ];
-
     $this->formTitleForInserting = $this->translate("New product feature");
     $this->formTitleForEditing = $this->translate("Product feature");
 

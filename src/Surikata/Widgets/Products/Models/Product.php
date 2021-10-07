@@ -960,13 +960,15 @@ class Product extends \ADIOS\Core\Model {
 
   public function getPriceInfoForSingleProduct($productOrIdProduct, $calculationMethod = NULL, $useCache = TRUE) {
     $priceInfo = [];
-    
+
     if (is_array($productOrIdProduct)) {
       $product = $productOrIdProduct;
       $idProduct = $productOrIdProduct['id'];
-    } else {
+    } else if (is_numeric($productOrIdProduct)) {
       $idProduct = $productOrIdProduct;
       $product = $this->getById($idProduct);
+    } else {
+      return NULL;
     }
 
     if ($calculationMethod === NULL) {

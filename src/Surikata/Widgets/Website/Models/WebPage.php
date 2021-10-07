@@ -8,16 +8,17 @@ class WebPage extends \ADIOS\Core\Model {
 
   var $sqlName = "web_pages";
   var $urlBase = "Website/{{ domainName }}/Pages";
-  var $tableTitle = "Website pages";
-  var $formTitleForInserting = "Website - {{ domain }} - New Page";
-  var $formTitleForEditing = "Website - {{ domain }} - Edit Page";
   var $lookupSqlValue = "{%TABLE%}.url";
 
 
   public function init() {
+    $this->tableTitle = $this->translate("Website pages");
+    $this->formTitleForInserting = $this->translate("Website") ." - {{ domain }} - ". $this->translate("New Page");
+    $this->formTitleForEditing = $this->translate("Website") ." - {{ domain }} - ". $this->translate("Edit Page");
+
     $this->enumWebPageVisibilityOptions = [
-      self::WEBPAGE_VISIBILITY_PUBLIC => "Public",
-      self::WEBPAGE_VISIBILITY_PRIVATE => "Only for signed-in visitors",
+      self::WEBPAGE_VISIBILITY_PUBLIC => $this->translate("Public"),
+      self::WEBPAGE_VISIBILITY_PRIVATE => $this->translate("Only for signed-in visitors"),
     ];
   }
 
@@ -27,26 +28,26 @@ class WebPage extends \ADIOS\Core\Model {
     return parent::columns([
       "domain" => [
         "type" => "varchar",
-        "title" => "Domain",
+        "title" => $this->translate("Domain"),
         "required" => TRUE,
         "readonly" => TRUE,
       ],
 
       "name" => [
         "type" => "varchar",
-        "title" => "Name",
+        "title" => $this->translate("Name"),
         "required" => TRUE,
         "show_column" => TRUE,
-        "description" => "Your webpage name. Example: 'homepage', 'list of products'.",
+        "description" => $this->translate("Your webpage name. Example: 'homepage', 'list of products'."),
       ],
 
       "url" => [
         "type" => "varchar",
-        "title" => "URL address",
+        "title" => $this->translate("URL address"),
         // "required" => TRUE,
         // "pattern" => "[a-zA-Z0-9\\/.]+",
         "show_column" => TRUE,
-        "description" => "If you left this input blank, the URL of this page will be determined by the plugins used.",
+        "description" => $this->translate("If you left this input blank, the URL of this page will be determined by the plugins used."),
         // "description" => "Vložte tú časť adresy, ktorá nasleduje za {$tmp_domena}. Príklad: vseobecne-obchodne-podmienky, alebo pravidla-nakupovania",
         "input" => [
           "style" => "font-size:1.5em",
@@ -55,52 +56,52 @@ class WebPage extends \ADIOS\Core\Model {
 
       "content_structure" => [
         "type" => "text",
-        "title" => "Layout structure and plugin configuratin",
+        "title" => $this->translate("Layout structure and plugin configuratin"),
         "input" => "Widgets/Website/Inputs/ContentStructure",
-        "description" => "More detailed settings are available by clicking on the selected panel.",
+        "description" => $this->translate("More detailed settings are available by clicking on the selected panel."),
         "show_column" => FALSE,
       ],
 
       "visibility" => [
         "type" => "int",
         "enum_values" => $this->enumWebPageVisibilityOptions,
-        "title" => "Visibility",
+        "title" => $this->translate("Visibility"),
         "show_column" => TRUE,
       ],
 
       "publish_always" => [
         "type" => "boolean",
-        "title" => "Publish without time limitations",
+        "title" => $this->translate("Publish without time limitations"),
         "show_column" => TRUE,
       ],
 
       "publish_from" => [
         "type" => "date",
-        "title" => "Publish from",
+        "title" => $this->translate("Publish from"),
       ],
 
       "publish_to" => [
         "type" => "date",
-        "title" => "Publish until",
+        "title" => $this->translate("Publish until"),
         "show_column" => TRUE,
       ],
 
       "seo_title" => [
         "type" => "varchar",
-        "title" => "SEO Title",
-        "description" => "Used in <title> tag.",
+        "title" => $this->translate("SEO Title"),
+        "description" => $this->translate("Used in <title> tag."),
       ],
 
       "seo_keywords" => [
         "type" => "varchar",
-        "title" => "Meta Keyword",
-        "description" => "Used in <meta keywords> tag.",
+        "title" => $this->translate("Meta Keyword"),
+        "description" => $this->translate("Used in <meta keywords> tag."),
       ],
 
       "seo_description" => [
         "type" => "varchar",
-        "title" => "Meta Description",
-        "description" => "Used in <meta description> tag.",
+        "title" => $this->translate("Meta Description"),
+        "description" => $this->translate("Used in <meta description> tag."),
       ],
     ]);
   }
@@ -115,7 +116,7 @@ class WebPage extends \ADIOS\Core\Model {
   }
 
   public function tableParams($params) {
-    $params["title"] = "{$params['domainName']} &raquo; Pages";
+    $params["title"] = "{$params['domainName']} &raquo; " . $this->translate("Pages");
     $params['where'] = "`domain` = '".$this->adios->db->escape($params['domainName'])."'";
 
     return $this->adios->dispatchEventToPlugins("onModelAfterTableParams", [
@@ -153,7 +154,7 @@ class WebPage extends \ADIOS\Core\Model {
               "seo_keywords",
               "seo_description",
             ],
-            "Visibility and publishing" => [
+            $this->translate("Visibility and publishing") => [
               "visibility",
               "publish_always",
               "publish_from",

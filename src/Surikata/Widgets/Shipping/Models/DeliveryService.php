@@ -6,15 +6,16 @@ class DeliveryService extends \ADIOS\Core\Model {
   var $sqlName = "shipping_delivery_services";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
   var $urlBase = "DeliveryAndPayment/DeliveryServices";
-  var $tableTitle = "Delivery services";
-  var $formTitleForInserting = "New delivery service";
-  var $formTitleForEditing = "Delivery service";
 
   var $deliveryPluginsEnumValues = [];
 
   public function init() {
+    $this->tableTitle = $this->translate("Delivery services");
+    $this->formTitleForInserting = $this->translate("New delivery service");
+    $this->formTitleForEditing = $this->translate("Delivery service");
+
     $this->deliveryPluginsEnumValues = [
-      "" => "-- Select a plugin --",
+      "" => $this->translate("-- Select a plugin --"),
     ];
 
     foreach ($this->adios->websiteRenderer->getDeliveryPlugins() as $deliveryPlugin) {

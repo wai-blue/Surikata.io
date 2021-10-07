@@ -13,5 +13,9 @@ $dictionary = [
   "Select a plugin which will be used to process the delivery." => "Vyberte plugin, ktorý sa použije pre doručovaciu službu.",
   "Manage delivery services here. Insert only record for each contract with your delivery service provider." => "Tu môžete spravovať doručovacie služby.",
   "General" => "Všeobecné",
-  "Enable / Disable" => "Povoliť / Zakázať"
+  "Enable / Disable" => "Povoliť / Zakázať",
+  "Delivery services" => "Doručovacie služby",
+  "New delivery service" => "Nová doručovacia služba",
+  "Delivery service" => "Doručovacia služba",
+  "-- Select a plugin --" => "-- Vyberte plugin --"
 ];

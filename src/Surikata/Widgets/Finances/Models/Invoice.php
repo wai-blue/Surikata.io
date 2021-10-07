@@ -557,7 +557,7 @@ class Invoice extends \ADIOS\Core\Model {
         "text"    => $this->translate("Print invoice"),
         "onclick" => "
           var invoiceLanguage = $('#".$params["uid"]."_invoiceLanguage').val();
-          var invoiceTemplate = $('#".$params["uid"]."_invoiceTemplate').val();
+          var invoiceTemplate = $('#".$params["uid"]."_enumInvoiceTemplates').val();
           window.open(_APP_URL + '/Invoices/".(int) $data['id']."/PrintInvoice?invoiceLanguage='+invoiceLanguage+'&invoiceTemplate='+invoiceTemplate);",
         "class"   => "btn-primary mb-2 w-100",
       ])->render();

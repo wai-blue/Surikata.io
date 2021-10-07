@@ -6,15 +6,16 @@ class PaymentService extends \ADIOS\Core\Model {
   var $sqlName = "shipping_payment_services";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
   var $urlBase = "DeliveryAndPayment/PaymentServices";
-  var $tableTitle = "Payment services";
-  var $formTitleForInserting = "New payment service";
-  var $formTitleForEditing = "Payment service";
 
   var $paymentPluginsEnumValues = [];
 
   public function init() {
+    $this->tableTitle = $this->translate("Payment services");
+    $this->formTitleForInserting = $this->translate("New payment service");
+    $this->formTitleForEditing = $this->translate("Payment service");
+
     $this->paymentPluginsEnumValues = [
-      "" => "-- Select a payment plugin --",
+      "" => $this->translate("-- Select a payment plugin --"),
     ];
 
     foreach ($this->adios->websiteRenderer->getPaymentPlugins() as $paymentPlugin) {
@@ -49,7 +50,7 @@ class PaymentService extends \ADIOS\Core\Model {
       "is_enabled" => [
         "type" => 'boolean',
         "title" => $this->translate("Enabled"),
-        "description" => "Only enabled delivery services will be available at the checkout.",
+        "description" => $this->translate("Only enabled delivery services will be available at the checkout."),
         "show_column" => TRUE,
       ],
 

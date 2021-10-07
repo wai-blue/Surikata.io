@@ -232,21 +232,23 @@ class Loader {
 
       if ($mode == ADIOS_MODE_FULL) {
 
+        // load available languages
+        $this->config['available_languages'] = ["en"];
+        foreach (scandir("{$this->config["dir"]}/Lang") as $tmpLang) {
+          if (!in_array($tmpLang, [".", ".."]) && is_dir("{$this->config["dir"]}/Lang/{$tmpLang}")) {
+            $this->config['available_languages'][] = $tmpLang;
+          }
+        }
+
         // set language
         if (!empty($_SESSION[_ADIOS_ID]['language'])) {
           $this->config['language'] = $_SESSION[_ADIOS_ID]['language'];
         }
 
-        if (!empty($_REQUEST['language'])) {
-          $this->config['language'] = $_REQUEST['language'];
-          $_SESSION[_ADIOS_ID]['language'] = $_REQUEST['language'];
-          setcookie(_ADIOS_ID.'-language', $_REQUEST['language'], time() + (3600 * 365));
-        } else if (
-          $_SESSION[_ADIOS_ID]['userProfile']['id'] ?? 0 <= 0
-          && !empty($_COOKIE[_ADIOS_ID.'-language'])
-        ) {
-          $this->config['language'] = $_COOKIE[_ADIOS_ID.'-language'];
-          $_SESSION[_ADIOS_ID]['language'] = $_COOKIE[_ADIOS_ID.'-language'];
+        if (is_array($this->adios->config['available_languages'])) {
+          if (!in_array($this->params['language'], $this->adios->config['available_languages'])) {
+            $this->config['language'] = reset($this->adios->config['available_languages']);
+          }
         }
 
         // user authentication
@@ -470,7 +472,7 @@ class Loader {
     $dictionary = [];
 
     if (empty($language)) {
-      $language = $this->config['language'];
+      $language = $this->config['language'] ?? "";
     }
 
     if (strlen($language) == 2 && !empty($context)) {
@@ -485,8 +487,12 @@ class Loader {
 
   public function translate($string, $context = "", $toLanguage = "", $dictionary = []) {
 
-    if ($toLanguage == "") {
-      $toLanguage = $this->adios->config['language'] ?? "sk";
+    if (empty($toLanguage)) {
+      $toLanguage = $this->config['language'] ?? "";
+    }
+
+    if (empty($toLanguage)) {
+      return $string;
     }
 
     if (
@@ -1137,10 +1143,6 @@ class Loader {
     $this->config['widgets'] = $this->config['widgets'] ?? [];
     $this->config['protocol'] = (strtoupper($_SERVER['HTTPS'] ?? "") == "ON" ? "https" : "http");
     $this->config['timezone'] = $this->config['timezone'] ?? 'Europe/Bratislava';
-    $this->config['language'] = $this->config['language'] ?? (is_array($this->config['available_languages'])
-      ? reset($this->config['available_languages'])
-      : "sk"
-    );
 
     $this->config['files_dir'] = $this->config['files_dir'] ?? "{$this->config['dir']}/upload";
     $this->config['files_url'] = $this->config['files_url'] ?? "{$this->config['url']}/upload";

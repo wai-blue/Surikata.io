@@ -155,6 +155,31 @@
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
 
+            <!-- Language selection -->
+            {% if config.available_languages|length > 0 %}
+              <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle " href="javascript:void(0)" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class='btn btn-light btn-sm fas fa-language'></i>
+                </a>
+                <div class="dropdown-menu shadow animated--grow-in" aria-labelledby="languageDropdown">
+                  {% for lang in config.available_languages %}
+                    <a
+                      href="javascript:void(0);"
+                      onclick="
+                        _ajax_read('Desktop/Ajax/SetLanguage', {'language': '{{ lang }}'}, function(res) {
+                          location.reload()
+                        });
+                      ";
+                      class="dropdown-item"
+                    >
+                      <i class="{{ item.fa_icon }} fa-sm fa-fw mr-2 text-gray-400"></i>
+                      {{ lang|upper }}
+                    </a>
+                  {% endfor %}
+                </div>
+              </li>
+            {% endif %}
+
             <!-- Nav Item - User Information -->
             {% if user.id > 0 %}
               <li class="nav-item dropdown no-arrow">

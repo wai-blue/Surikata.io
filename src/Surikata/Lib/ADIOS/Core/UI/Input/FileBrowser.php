@@ -11,6 +11,9 @@
 namespace ADIOS\Core\UI\Input;
 
 class FileBrowser extends \ADIOS\Core\Input {
+  const MODE_SELECT = "select";
+  const MODE_BROWSE = "browse";
+
   var $folderTreeHtmlItems = [];
 
   public function renderFolderTree($rootDir, $subDir = "", $level = 0) {
@@ -37,7 +40,7 @@ class FileBrowser extends \ADIOS\Core\Input {
 
       if (is_dir("{$dir}/{$file}")) {
         $html .= "['D','".ads($file)."'],\n";
-        $this->renderFolderTree($rootDir, "{$subDir}/{$file}", $level + 1);
+        $this->renderFolderTree($rootDir, trim("{$subDir}/{$file}", "/"), $level + 1);
 
       }
     }
@@ -71,11 +74,20 @@ class FileBrowser extends \ADIOS\Core\Input {
 
   public function render() {
     // $params = $this->params;
+    $mode = $this->params["mode"] ?? self::MODE_BROWSE;
 
     $rootDir = $this->adios->config['files_dir'].(empty($this->params['subdir']) ? "" : "/{$this->params['subdir']}");
     $rootUrl = $this->adios->config['files_url'].(empty($this->params['subdir']) ? "" : "/{$this->params['subdir']}");
 
     $this->renderFolderTree($rootDir);
+
+    if ($mode == self::MODE_SELECT) {
+      $btnFileOnclick = "
+        $('#{$this->uid}_filebrowser_wrapper .btn-success').addClass('btn-light').removeClass('btn-success');
+        $(this).removeClass('btn-light').addClass('btn-success');
+        $('#{$this->uid}').val('".(empty($this->params['subdir']) ? "" : "{$this->params['subdir']}/")."{{ subDir }}/{{ file }}').trigger('change');
+      ";
+    }
 
     $html = "
       <input
@@ -326,11 +338,7 @@ class FileBrowser extends \ADIOS\Core\Input {
             "class" => "btn btn-file btn-sm btn-light btn-icon-split mb-1",
             "textRaw" => "{{ text }} <div class='filesize'>{{ filesize }} MB</div>",
             "title" => "{{ file }}",
-            "onclick" => "
-              $('#{$this->uid}_filebrowser_wrapper .btn-success').addClass('btn-light').removeClass('btn-success');
-              $(this).removeClass('btn-light').addClass('btn-success');
-              $('#{$this->uid}').val('".(empty($this->params['subdir']) ? "" : "{$this->params['subdir']}/")."{{ subDir }}/{{ file }}').trigger('change');
-            ",
+            "onclick" => $btnFileOnclick,
           ])->render()."
           
         </div>
@@ -452,13 +460,13 @@ class FileBrowser extends \ADIOS\Core\Input {
         function {$this->uid}_getCurrentFolderPath() {
           let wrapper = $('#{$this->uid}_filebrowser_wrapper');
           let folderPath = '';
-          wrapper.find('.dir-name:visible').each(function() {
+          wrapper.find('.dir-name:visible').slice(1).each(function() {
             folderPath += (folderPath == '' ? '' : '/') + $(this).text();
           });
           return  '".(empty($this->params['subdir']) ? "" : "{$this->params['subdir']}/")."' + folderPath;
         }
 
-        {$this->uid}_showDir('', '{$rootDir}', 0);
+        {$this->uid}_showDir('', 'Files And Media".(empty($this->params['subdir']) ? "" : "/".ads($this->params['subdir']))."', 0);
       </script>
     ";
 

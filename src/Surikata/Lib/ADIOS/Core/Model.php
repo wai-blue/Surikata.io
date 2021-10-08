@@ -137,6 +137,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
       $this->adios = &$adiosOrAttributes;
 
+      $this->languageDictionary[$this->adios->config["language"]] =
+        $this->adios->loadLanguageDictionary($this->name)
+      ;
+
       if ($eloquentQuery === NULL) {
         $this->eloquentQuery = $this->select('id');
       } else {
@@ -632,15 +636,15 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   }
 
   public function insertRow($data) {
-    return $this->adios->db->insert_row($this->table, $data);
+    return $this->adios->db->insert_row($this->table, $data, FALSE, FALSE, $this);
   }
 
   public function insertRandomRow($data = [], $dictionary = []) {
-    return $this->adios->db->insert_random_row($this->table, $data, $dictionary);
+    return $this->adios->db->insert_random_row($this->table, $data, $dictionary, $this);
   }
 
   public function updateRow($data, $id) {
-    return $this->adios->db->update_row_part($this->table, $data, $id);
+    return $this->adios->db->update_row_part($this->table, $data, $id, FALSE, $this);
   }
 
   public function deleteRow($id) {
@@ -699,35 +703,35 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     );
   }
 
-  public function tableParams($params, $tableObject = NULL) {
+  public function tableParams($params) {
     return $this->adios->dispatchEventToPlugins("onModelAfterTableParams", [
       "model" => $this,
       "params" => $params,
     ])["params"];
   }
 
-  public function tableRowCSSFormatter($data, $tableObject = NULL) {
+  public function tableRowCSSFormatter($data) {
     return $this->adios->dispatchEventToPlugins("onTableRowCSSFormatter", [
       "model" => $this,
       "data" => $data,
     ])["data"]["css"];
   }
 
-  public function tableCellCSSFormatter($data, $tableObject = NULL) {
+  public function tableCellCSSFormatter($data) {
     return $this->adios->dispatchEventToPlugins("onTableCellCSSFormatter", [
       "model" => $this,
       "data" => $data,
     ])["data"]["css"];
   }
 
-  public function tableCellHTMLFormatter($data, $tableObject = NULL) {
+  public function tableCellHTMLFormatter($data) {
     return $this->adios->dispatchEventToPlugins("onTableCellHTMLFormatter", [
       "model" => $this,
       "data" => $data,
     ])["data"]["html"];
   }
 
-  public function tableCellCSVFormatter($data, $tableObject = NULL) {
+  public function tableCellCSVFormatter($data) {
     return $this->adios->dispatchEventToPlugins("onTableCellCSVFormatter", [
       "model" => $this,
       "data" => $data,
@@ -796,11 +800,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             }
         }
 
-        if (('int' == $type && _count($column['enum_values'])) || 'varchar' == $type || 'text' == $type || 'color' == $type || 'file' == $type || 'image' == $type || 'enum' == $type || 'password' == $type) {
+        if ($type == 'int' && _count($column['enum_values'])) {
+            $return = " {$columnName}_enum_value like '%".$this->adios->db->escape(trim($s))."%'";
+        } else if (in_array($type, ['varchar', 'text', 'color', 'file', 'image', 'enum', 'password'])) {
             $return = " {$columnName} like '%".$this->adios->db->escape(trim($s))."%'";
-        }
-
-        if ('lookup' == $type) {
+        } else if ($type == 'lookup') {
             $return = " {$columnName}_lookup_sql_value like '%".$this->adios->db->escape(trim($s))."%'";
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-require(__DIR__.'/../Init.php');
+require(__DIR__.'/../../Init.php');
 
 $adminPanel = new \MyEcommerceProject\AdminPanel(
   $adminPanelConfig,

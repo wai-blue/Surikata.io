@@ -232,21 +232,23 @@ class Loader {
 
       if ($mode == ADIOS_MODE_FULL) {
 
+        // load available languages
+        $this->config['available_languages'] = ["en"];
+        foreach (scandir("{$this->config["dir"]}/Lang") as $tmpLang) {
+          if (!in_array($tmpLang, [".", ".."]) && is_dir("{$this->config["dir"]}/Lang/{$tmpLang}")) {
+            $this->config['available_languages'][] = $tmpLang;
+          }
+        }
+
         // set language
         if (!empty($_SESSION[_ADIOS_ID]['language'])) {
           $this->config['language'] = $_SESSION[_ADIOS_ID]['language'];
         }
 
-        if (!empty($_REQUEST['language'])) {
-          $this->config['language'] = $_REQUEST['language'];
-          $_SESSION[_ADIOS_ID]['language'] = $_REQUEST['language'];
-          setcookie(_ADIOS_ID.'-language', $_REQUEST['language'], time() + (3600 * 365));
-        } else if (
-          $_SESSION[_ADIOS_ID]['userProfile']['id'] ?? 0 <= 0
-          && !empty($_COOKIE[_ADIOS_ID.'-language'])
-        ) {
-          $this->config['language'] = $_COOKIE[_ADIOS_ID.'-language'];
-          $_SESSION[_ADIOS_ID]['language'] = $_COOKIE[_ADIOS_ID.'-language'];
+        if (is_array($this->adios->config['available_languages'])) {
+          if (!in_array($this->params['language'], $this->adios->config['available_languages'])) {
+            $this->config['language'] = reset($this->adios->config['available_languages']);
+          }
         }
 
         // user authentication
@@ -464,11 +466,33 @@ class Loader {
   }
 
   //////////////////////////////////////////////////////////////////////////////
-  // MISCELANEOUS
+  // TRANSLATIONS
+
+  public function loadLanguageDictionary($context, $language = "") {
+    $dictionary = [];
+
+    if (empty($language)) {
+      $language = $this->config['language'] ?? "";
+    }
+
+    if (strlen($language) == 2 && !empty($context)) {
+      $languageFile = "{$this->config['dir']}/Lang/{$language}/".strtr($context, "./\\", "---").".php";
+      if (file_exists($languageFile)) {
+        include($languageFile);
+      }
+    }
+
+    return $dictionary;
+  }
 
   public function translate($string, $context = "", $toLanguage = "", $dictionary = []) {
-    if ($toLanguage == "") {
-      $toLanguage = $this->adios->config['language'] ?? "en";
+
+    if (empty($toLanguage)) {
+      $toLanguage = $this->config['language'] ?? "";
+    }
+
+    if (empty($toLanguage)) {
+      return $string;
     }
 
     if (
@@ -486,8 +510,12 @@ class Loader {
       } else {
         return $dictionary[$toLanguage][$string];
       }
+      
     }
   }
+
+  //////////////////////////////////////////////////////////////////////////////
+  // MISCELANEOUS
 
   public function renderAssets() {
     $cachingTime = 3600;
@@ -843,7 +871,9 @@ class Loader {
     $actionClassName = $this->getActionClassName($action);
 
     try {
-      $this->checkPermissionsForAction($action, $params);
+      if ($actionClassName::$requiresUserAuthentication) {
+        $this->checkPermissionsForAction($action, $params);
+      }
 
       if ($this->actionExists($action)) {
         $actionReturn = (new $actionClassName($this, $params))->render($params);
@@ -868,43 +898,10 @@ class Loader {
         $actionHtml = $tmp->render($params);
       }
 
-    } catch (
-      \Illuminate\Database\QueryException
-      | \ADIOS\Core\Exceptions\DBException
-      $e
-    ) {
-      $errorMessage = $e->getMessage();
-      $errorHash = md5(date("YmdHis").$errorMessage);
-      $this->console->error("{$errorHash}\t{$errorMessage}\t{$this->db->last_query}\t{$this->db->db_error}");
-      $actionHtml = $this->renderHtmlWarning("
-        <div style='text-align:center;font-size:5em;color:red'>
-          🥴
-        </div>
-        <div style='margin-top:1em;margin-bottom:1em;'>
-          Oops! Something went wrong with the database.
-          See logs for more information or contact the support.<br/>
-        </div>
-        <div style='color:red;margin-bottom:1em;white-space:pre;font-family:courier;font-size:0.8em;overflow:auto;'>{$errorMessage}</div>
-        <div style='color:gray'>
-          {$errorHash}
-        </div>
-      ");
     } catch (\ADIOS\Core\Exceptions\NotEnoughPermissionsException $e) {
       $actionHtml = $this->renderFatal($e->getMessage());
     } catch (\Exception $e) {
-      $actionHtml = $this->renderHtmlWarning("
-        <div style='text-align:center;font-size:5em;color:red'>
-          🥴
-        </div>
-        <div style='margin-top:1em;margin-bottom:1em;'>
-          Oops! Something went wrong.
-          See logs for more information or contact the support.<br/>
-        </div>
-        <div style='color:red;margin-bottom:1em;white-space:pre;font-family:courier;font-size:0.8em;overflow:auto;'>".$e->getMessage()."</div>
-        <div style='color:gray'>
-          ".get_class($e)."
-        </div>
-      ");
+      $actionHtml = $this->renderExceptionWarningHtml($e);
     }
 
     return $actionHtml;
@@ -966,6 +963,86 @@ class Loader {
         </div>
       ";
     }
+  }
+
+  public function renderExceptionWarningHtml($exception) {
+    
+    switch (get_class($exception)) {
+      case 'Illuminate\Database\QueryException':
+      case 'ADIOS\Core\Exceptions\DBException':
+        $errorMessage = $exception->getMessage();
+        $errorHash = md5(date("YmdHis").$errorMessage);
+        $this->console->error("{$errorHash}\t{$errorMessage}\t{$this->db->last_query}\t{$this->db->db_error}");
+        $html = "
+          <div style='text-align:center;font-size:5em;color:red'>
+            🥴
+          </div>
+          <div style='margin-top:1em;margin-bottom:1em;'>
+            Oops! Something went wrong with the database.
+            See logs for more information or contact the support.<br/>
+          </div>
+          <div style='color:red;margin-bottom:1em;white-space:pre;font-family:courier;font-size:0.8em;overflow:auto;'>{$errorMessage}</div>
+          <div style='color:gray'>
+            {$errorHash}
+          </div>
+        ";
+      break;
+      case 'ADIOS\Core\Exceptions\DBDuplicateEntryException':
+        list($dbError, $dbQuery, $initiatingModelName) = json_decode($exception->getMessage(), TRUE);
+
+        $initiatingModel = $this->getModel($initiatingModelName);
+        $columns = $initiatingModel->columns();
+        $indexes = $initiatingModel->indexes();
+
+        preg_match("/Duplicate entry '(.*?)' for key '(.*?)'/", $dbError, $m);
+        $invalidIndex = $m[2];
+        $invalidColumns = [];
+        foreach ($indexes[$invalidIndex]['columns'] as $columnName) {
+          $invalidColumns[] = $columns[$columnName]["title"];
+        }
+
+        $html = "
+          <div style='text-align:center;font-size:5em;color:red'>
+            <i class='fas fa-copy'></i>
+          </div>
+          <div style='margin-top:1em;margin-bottom:3em;text-align:center;color:red;'>
+            You are trying to save a record that is already existing.<br/>
+            <br/>
+            <b>".join(", ", $invalidColumns)."</b>
+          </div>
+          <a href='javascript:void(0);' onclick='$(this).next(\"div\").slideDown();'>
+            Show more information
+          </a>
+          <div style='display:none'>
+            <div style='color:red;margin-bottom:1em;font-family:courier;font-size:8pt;max-height:10em;overflow:auto;'>
+              {$dbError}<br/>
+              {$dbQuery}<br/>
+              {$initiatingModelName}<Br/>
+            </div>
+            <div style='color:gray'>
+              ".get_class($exception)."
+            </div>
+          </div>
+        ";
+      break;
+      default:
+        $html = "
+          <div style='text-align:center;font-size:5em;color:red'>
+            🥴
+          </div>
+          <div style='margin-top:1em;margin-bottom:1em;'>
+            Oops! Something went wrong.
+            See logs for more information or contact the support.<br/>
+          </div>
+          <div style='color:red;margin-bottom:1em;white-space:pre;font-family:courier;font-size:0.8em;overflow:auto;'>".$exception->getMessage()."</div>
+          <div style='color:gray'>
+            ".get_class($exception)."
+          </div>
+        ";
+      break;
+    }
+
+    return $this->renderHtmlWarning($html);
   }
 
   public function renderHtmlWarning($warning) {
@@ -1113,10 +1190,6 @@ class Loader {
     $this->config['widgets'] = $this->config['widgets'] ?? [];
     $this->config['protocol'] = (strtoupper($_SERVER['HTTPS'] ?? "") == "ON" ? "https" : "http");
     $this->config['timezone'] = $this->config['timezone'] ?? 'Europe/Bratislava';
-    $this->config['language'] = $this->config['language'] ?? (is_array($this->config['available_languages'])
-      ? reset($this->config['available_languages'])
-      : "sk"
-    );
 
     $this->config['files_dir'] = $this->config['files_dir'] ?? "{$this->config['dir']}/upload";
     $this->config['files_url'] = $this->config['files_url'] ?? "{$this->config['url']}/upload";

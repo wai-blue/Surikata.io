@@ -34,6 +34,21 @@
 .adios.ui.Input.ui_input_type_hour:hover, .adios.ui.Input.ui_input_type_minute:hover, .adios.ui.Input.ui_input_type_second:hover {opacity:1}
 .adios.ui.Input.ui_input_type_hour:focus, .adios.ui.Input.ui_input_type_minute:focus, .adios.ui.Input.ui_input_type_second:focus {opacity:1}
 
+.adios.ui.Input.ui_input_type_image img {
+  max-width: 50%;
+  max-height: 200px;
+  border: solid 1px #cccccc;
+  cursor: pointer;
+  padding: 1em;
+  display: block;
+}
+.adios.ui.Input.ui_input_type_image img:hover { background: #FAFAFA; }
+.adios.ui.Input.ui_input_type_image .image_path { font-style: italic; }
+
+
+
+
+
 .adios.ui.Input.checkbox-field input[type=checkbox] {
   display: inline-block;
   width: auto;
@@ -45,8 +60,7 @@
   color: var(--cl-main);
 }
 
-.adios.ui.Input.image_input_img {max-width:200px;max-height:200px;border:solid 1px #cccccc;cursor:pointer;padding:1em;}
-.adios.ui.Input.image_input_img:hover { background: #FAFAFA; }
+
 .adios.ui.Input.file_info_div {display:inline-block;width:170px;margin-left:10px;margin-top:33px;display:none;}
 .adios.ui.Input.file_operations_div {opacity:0;transition:opacity 0.3s;}
 .adios.ui.Input.file_operations_div.visible, .adios.ui.Input.file_operations_div:hover {opacity:1;}
@@ -74,7 +88,7 @@
 }
 
 textarea.adios.ui.Input {margin-bottom:0px;height:100px;}
-.ui-datepicker-trigger {height:16px;position:absolute;right:9px;top:0px;opacity:0.5;cursor:pointer;}
+.ui-datepicker {z-index:999999 !important;}
 
 .adios.ui.Input.lookup_controls { margin-top: 5px; }
 

@@ -6,20 +6,22 @@ class DeliveryService extends \ADIOS\Core\Model {
   var $sqlName = "shipping_delivery_services";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
   var $urlBase = "DeliveryAndPayment/DeliveryServices";
-  var $tableTitle = "Delivery services";
-  var $formTitleForInserting = "New delivery service";
-  var $formTitleForEditing = "Delivery service";
 
   var $deliveryPluginsEnumValues = [];
 
   public function init() {
+    $this->tableTitle = $this->translate("Delivery services");
+    $this->formTitleForInserting = $this->translate("New delivery service");
+    $this->formTitleForEditing = $this->translate("Delivery service");
+
     $this->deliveryPluginsEnumValues = [
-      "" => "-- Select a plugin --",
+      "" => $this->translate("-- Select a plugin --"),
     ];
 
     foreach ($this->adios->websiteRenderer->getDeliveryPlugins() as $deliveryPlugin) {
       $this->deliveryPluginsEnumValues[$deliveryPlugin->name] = $deliveryPlugin->name;
     }
+
   }
 
   public function columns(array $columns = []) {
@@ -49,7 +51,7 @@ class DeliveryService extends \ADIOS\Core\Model {
       "is_enabled" => [
         "type" => 'boolean',
         "title" => $this->translate("Enabled"),
-        "description" => "Only enabled delivery services will be available at the checkout.",
+        "description" => $this->translate("Only enabled delivery services will be available at the checkout."),
         "show_column" => TRUE,
       ],
 
@@ -85,12 +87,12 @@ class DeliveryService extends \ADIOS\Core\Model {
       "columns" => [
         [
           "tabs" => [
-            "General" => [
+            $this->translate("General") => [
               "name",
               "description",
               "logo",
             ],
-            "Enable / Disable" => [
+            $this->translate("Enable / Disable") => [
               "is_enabled",
             ],
             "Plugin" => [

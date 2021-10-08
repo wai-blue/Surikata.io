@@ -35,15 +35,15 @@ class Table extends \ADIOS\Core\UI\View {
 
       // defaultne parametre
       $params = parent::params_merge([
-        'table' => '',
-        'column_settings' => [],
-        'order' => ('' != $params['table'] ? "{$params['table']}.id desc" : ''),
         'title' => '',
         'tag' => '',
         'page' => 1,
+
         'where' => '',
         'having' => '',
-        'group' => '',
+        'group_by' => '',
+        'order_by' => ('' != $params['table'] ? "{$params['table']}.id desc" : ''),
+
         'onclick' => '',
         'show_title' => true,
         'show_paging' => true,
@@ -184,6 +184,7 @@ class Table extends \ADIOS\Core\UI\View {
       }
 
       $order_by = $this->params['order_by'];
+      $group_by = $this->params['group_by'];
 
       if ($this->params['show_paging']) {
         // ak sa zobrazuje sumarny/statisticky riadok,
@@ -196,7 +197,7 @@ class Table extends \ADIOS\Core\UI\View {
           $this->table_item_count = $this->adios->db->count_all_rows($this->params['table'], [
             'where' => $where,
             'having' => $having,
-            'group' => $this->params['group'],
+            'group' => $group_by,
           ]);
 
           if (_count($this->tmp_column_settings)) {
@@ -220,6 +221,7 @@ class Table extends \ADIOS\Core\UI\View {
         'where' => $where,
         'having' => $having,
         'order' => $order_by,
+        'group' => $group_by,
       ];
 
       if (is_numeric($limit_1)) $get_all_rows_params['limit_start'] = $limit_1;

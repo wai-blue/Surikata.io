@@ -16,23 +16,24 @@ class Order extends \ADIOS\Core\Model {
   var $sqlName = "orders";
   var $lookupSqlValue = "{%TABLE%}.number";
   var $urlBase = "Orders";
-  var $tableTitle = "Orders";
-  var $formTitleForInserting = "New order";
-  var $formTitleForEditing = "Order # {{ number }}";
-  var $formAddButtonText = "Create new order";
-  var $formSaveButtonText = "Update order";
 
   var $disableNotifications = FALSE;
 
   public function init() {
 
+    $this->tableTitle = $this->translate("Orders");
+    $this->formTitleForInserting = $this->translate("New order");
+    $this->formTitleForEditing = $this->translate("Order") ."# {{ number }}";
+    $this->formAddButtonText = $this->translate("Create new order");
+    $this->formSaveButtonText = $this->translate("Update order");
+
     $this->enumOrderStates = [
-      self::STATE_NEW      => 'New',
-      self::STATE_INVOICED => 'Invoiced',
-      self::STATE_PAID     => 'Paid',
-      self::STATE_SHIPPED  => 'Shipped',
-      self::STATE_RECEIVED => 'Received',
-      self::STATE_CANCELED => 'Canceled',
+      self::STATE_NEW      => $this->translate('New'),
+      self::STATE_INVOICED => $this->translate('Invoiced'),
+      self::STATE_PAID     => $this->translate('Paid'),
+      self::STATE_SHIPPED  => $this->translate('Shipped'),
+      self::STATE_RECEIVED => $this->translate('Received'),
+      self::STATE_CANCELED => $this->translate('Canceled'),
     ];
 
     $this->enumOrderStateColors = [
@@ -50,31 +51,31 @@ class Order extends \ADIOS\Core\Model {
     return parent::columns([
       "accounting_year" => [
         "type" => "int",
-        "title" => "Accounting Year",
+        "title" => $this->translate("Accounting Year"),
         "readonly" => TRUE,
-        "description" => "Will be generated automaticaly",
+        "description" => $this->translate("Will be generated automaticaly"),
       ],
 
       "serial_number" => [
         "type" => "int",
-        "title" => "Serial number",
+        "title" => $this->translate("Serial number"),
         "readonly" => TRUE,
-        "description" => "Will be generated automaticaly",
+        "description" => $this->translate("Will be generated automaticaly"),
       ],
 
       "number" => [
         "type" => "varchar",
-        "title" => "Number",
+        "title" => $this->translate("Number"),
         "pattern" => '\d{10}',
         "css_class" => "flex-2",
         "readonly" => TRUE,
-        "description" => "Will be generated automaticaly",
+        "description" => $this->translate("Will be generated automaticaly"),
         "show_column" => TRUE,
       ],
 
       "id_customer" => [
         "type" => "lookup",
-        "title" => "Customer",
+        "title" => $this->translate("Customer"),
         "model" => "Widgets/Customers/Models/Customer",
         "css_class" => "flex-3",
         "show_column" => TRUE,
@@ -82,7 +83,7 @@ class Order extends \ADIOS\Core\Model {
 
       "id_customer_uid" => [
         "type" => "lookup",
-        "title" => "Customer",
+        "title" => $this->translate("Customer"),
         "model" => "Widgets/Customers/Models/CustomerUID",
         "show_column" => FALSE,
       ],
@@ -91,111 +92,111 @@ class Order extends \ADIOS\Core\Model {
 
       "del_given_name" => [
         "type" => "varchar",
-        "title" => "Delivery: Given Name",
+        "title" => $this->translate("Delivery: ").$this->translate("Given name"),
       ],
 
       "del_family_name" => [
         "type" => "varchar",
-        "title" => "Delivery: Family Name",
+        "title" => $this->translate("Delivery: "). $this->translate("Family name"),
       ],
 
       "del_company_name" => [
         "type" => "varchar",
-        "title" => "Delivery: Company Name",
+        "title" => $this->translate("Delivery: ").$this->translate("Company name"),
       ],
 
       "del_street_1" => [
         "type" => "varchar",
-        "title" => "Delivery: Street, 1st line",
+        "title" => $this->translate("Delivery: ").$this->translate("Street, 1st line"),
       ],
 
       "del_street_2" => [
         "type" => "varchar",
-        "title" => "Delivery: Street, 2nd line",
+        "title" => $this->translate("Delivery: ").$this->translate("Street, 2nd line"),
       ],
 
       "del_floor" => [
         "type" => "varchar",
-        "title" => "Delivery: Floor",
+        "title" => $this->translate("Delivery: ").$this->translate("Floor"),
       ],
 
       "del_city" => [
         "type" => "varchar",
-        "title" => "Delivery: City",
+        "title" => $this->translate("Delivery: ").$this->translate("City"),
         "show_column" => TRUE,
       ],
 
       "del_zip" => [
         "type" => "varchar",
-        "title" => "Delivery: ZIP",
+        "title" => $this->translate("Delivery: ").$this->translate("ZIP"),
       ],
 
       "del_region" => [
         "type" => "varchar",
-        "title" => "Delivery: Region",
+        "title" => $this->translate("Delivery: ").$this->translate("Region"),
       ],
 
       "del_country" => [
         "type" => "varchar",
-        "title" => "Delivery: Country",
+        "title" => $this->translate("Delivery: ").$this->translate("Country"),
       ],
 
 
 
       "inv_given_name" => [
         "type" => "varchar",
-        "title" => "Invoice: Given Name",
+        "title" => $this->translate("Invoice: ").$this->translate("Given name"),
         "show_column" => TRUE,
       ],
 
       "inv_family_name" => [
         "type" => "varchar",
-        "title" => "Invoice: Family Name",
+        "title" => $this->translate("Invoice: ").$this->translate("Family name"),
         "show_column" => TRUE,
       ],
 
       "inv_company_name" => [
         "type" => "varchar",
-        "title" => "Invoice: Company Name",
+        "title" => $this->translate("Invoice: ").$this->translate("Company name"),
         "show_column" => TRUE,
       ],
 
       "inv_street_1" => [
         "type" => "varchar",
-        "title" => "Invoice: Street, 1st line",
+        "title" => $this->translate("Invoice: ").$this->translate("Street, 1st line"),
       ],
 
       "inv_street_2" => [
         "type" => "varchar",
-        "title" => "Invoice: Street, 2nd line",
+        "title" => $this->translate("Invoice: ").$this->translate("Street, 2nd line"),
       ],
 
       "inv_city" => [
         "type" => "varchar",
-        "title" => "Invoice: City",
+        "title" => $this->translate("Invoice: ").$this->translate("City"),
         "show_column" => TRUE,
       ],
 
       "inv_zip" => [
         "type" => "varchar",
-        "title" => "Invoice: ZIP",
+        "title" => $this->translate("Invoice: ").$this->translate("ZIP"),
       ],
 
       "inv_region" => [
         "type" => "varchar",
-        "title" => "Invoice: Region",
+        "title" => $this->translate("Invoice: ").$this->translate("Region"),
       ],
 
       "inv_country" => [
         "type" => "varchar",
-        "title" => "Invoice: Country",
+        "title" => $this->translate("Invoice: ").$this->translate("Country"),
       ],
 
 
 
       "confirmation_time" => [
         "type" => "datetime",
-        "title" => "Confirmed",
+        "title" => $this->translate("Confirmed"),
         "show_column" => true
       ],
 
@@ -203,94 +204,94 @@ class Order extends \ADIOS\Core\Model {
 
       "id_delivery_service" => [
         "type" => "lookup",
-        "title" => "Delivery service",
+        "title" => $this->translate("Delivery service"),
         "model" => "Widgets/Shipping/Models/DeliveryService",
         "show_column" => TRUE,
       ],
 
       "id_payment_service" => [
         "type" => "lookup",
-        "title" => "Payment service",
+        "title" => $this->translate("Payment service"),
         "model" => "Widgets/Shipping/Models/PaymentService",
         "show_column" => TRUE,
       ],
 
       "id_destination_country" => [
         "type" => "lookup",
-        "title" => "Destination country",
+        "title" => $this->translate("Destination country"),
         "model" => "Widgets/Shipping/Models/DestinationCountry",
         "show_column" => TRUE,
       ],
 
       "delivery_fee" => [
         "type" => "float",
-        "title" => "Delivery fee",
+        "title" => $this->translate("Delivery fee"),
         "unit" => $this->adios->locale->currencySymbol(),
       ],
 
       "payment_fee" => [
         "type" => "float",
-        "title" => "Payment fee",
+        "title" => $this->translate("Payment fee"),
         "unit" => $this->adios->locale->currencySymbol(),
       ],
 
       "preferred_delivery_day" => [
         "type" => "date",
-        "title" => "Preferred delivery day",
+        "title" => $this->translate("Preferred delivery day"),
       ],
 
 
 
       "number_customer" => [
         "type" => "varchar",
-        "title" => "Customer`s order number",
+        "title" => $this->translate("Customer`s order number"),
       ],
 
       "notes" => [
         "type" => "text",
-        "title" => "Notes",
+        "title" => $this->translate("Notes"),
       ],
 
       "state" => [
         "type" => "int",
         "enum_values" => $this->enumOrderStates,
-        "title" => "State",
+        "title" => $this->translate("State"),
         "show_column" => true
       ],
 
       "id_invoice" => [
         "type" => "lookup",
-        "title" => "Invoice",
+        "title" => $this->translate("Invoice"),
         "model" => "Widgets/Finances/Models/Invoice",
       ],
 
       "phone_number" => [
         "type" => "varchar",
-        "title" => "Contact: Phone number",
+        "title" => $this->translate("Contact: Phone number"),
       ],
 
       "email" => [
         "type" => "varchar",
-        "title" => "Contact: Email",
+        "title" => $this->translate("Contact: Email"),
       ],
 
       "company_id" => [
         "type" => "varchar",
-        "title" => "Company ID",
+        "title" => $this->translate("Company ID"),
         "pattern" => '\d{8}',
         "show_column" => TRUE,
       ],
 
       "company_tax_id" => [
         "type" => "varchar",
-        "title" => "Company Tax ID",
+        "title" => $this->translate("Company Tax ID"),
         "pattern" => '\d{10}',
         "show_column" => FALSE,
       ],
 
       "company_vat_id" => [
         "type" => "varchar",
-        "title" => "Company VAT ID",
+        "title" => $this->translate("Company VAT ID"),
         "pattern" => '(SK|CZ)\d{10}',
         "show_column" => FALSE,
       ],
@@ -298,14 +299,14 @@ class Order extends \ADIOS\Core\Model {
 
       "domain" => [
         "type" => "varchar",
-        "title" => "Domain",
+        "title" => $this->translate("Domain"),
         "readonly" => TRUE,
         "show_column" => TRUE,
       ],
 
       "price_total_excl_vat" => [
         "type" => "float",
-        "title" => "Total price excl. VAT",
+        "title" => $this->translate("Total price excl. VAT"),
         "unit" => $this->adios->locale->currencySymbol(),
         "readonly" => TRUE,
         "show_column" => TRUE,
@@ -313,7 +314,7 @@ class Order extends \ADIOS\Core\Model {
 
       "price_total_incl_vat" => [
         "type" => "float",
-        "title" => "Total price incl. VAT",
+        "title" => $this->translate("Total price incl. VAT"),
         "unit" => $this->adios->locale->currencySymbol(),
         "readonly" => TRUE,
         "show_column" => TRUE,
@@ -321,7 +322,7 @@ class Order extends \ADIOS\Core\Model {
 
       "weight_total" => [
         "type" => "float",
-        "title" => "Total weight",
+        "title" => $this->translate("Total weight"),
         "unit" => "g",
         "readonly" => TRUE,
         "show_column" => TRUE,
@@ -369,27 +370,27 @@ class Order extends \ADIOS\Core\Model {
   public function tableParams($params) {
     switch ($params['filter_type']) {
       case "New":
-        $params["title"] = "New orders";
+        $params["title"] =  $this->translate("New orders");
         $params['where'] = "{$this->table}.state = (".self::STATE_NEW.")";
       break;
       case "Invoiced":
-        $params["title"] = "Invoiced orders";
+        $params["title"] =  $this->translate("Invoiced orders");
         $params['where'] = "{$this->table}.state = (".self::STATE_INVOICED.")";
       break;
       case "Paid":
-        $params["title"] = "Paid orders";
+        $params["title"] =  $this->translate("Paid orders");
         $params['where'] = "{$this->table}.state = (".self::STATE_PAID.")";
       break;
       case "Shipped":
-        $params["title"] = "Shipped orders";
+        $params["title"] =  $this->translate("Shipped orders");
         $params['where'] = "{$this->table}.state = (".self::STATE_SHIPPED.")";
       break;
       case "Canceled":
-        $params["title"] = "Canceled orders";
+        $params["title"] =  $this->translate("Canceled orders");
         $params['where'] = "{$this->table}.state = (".self::STATE_CANCELED.")";
       break;
       default:
-        $params["title"] = "All orders";
+        $params["title"] = $this->translate("All orders");
       break;
     }
     $params['order_by'] = "number DESC";
@@ -814,7 +815,7 @@ class Order extends \ADIOS\Core\Model {
     } else {
 
       $btnIssueInvoice = $this->adios->ui->button([
-        "text"    => "Issue invoice",
+        "text"    => $this->translate("Issue invoice"),
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
           _ajax_read('Orders/IssueInvoice', 'id_order=".(int) $data['id']."', function(res) {
@@ -831,7 +832,7 @@ class Order extends \ADIOS\Core\Model {
       ])->render();
 
       $btnShowInvoice = $this->adios->ui->button([
-        "text" => "Show invoice nr. ".hsc($data['INVOICE']['number']),
+        "text" => $this->translate("Show invoice nr. ").hsc($data['INVOICE']['number']),
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
           window_render('Invoices/".(int) $data['INVOICE']['id']."/Edit', '', function(res) {
@@ -844,7 +845,7 @@ class Order extends \ADIOS\Core\Model {
       ])->render();
 
       $btnOrderStatePaid = $this->adios->ui->button([
-        "text" => "Set as paid",
+        "text" => $this->translate("Set as paid"),
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
           _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_PAID."', function(res) {
@@ -862,7 +863,7 @@ class Order extends \ADIOS\Core\Model {
       ])->render();
 
       $btnOrderStateShipped = $this->adios->ui->button([
-        "text" => "Set as shipped",
+        "text" =>  $this->translate("Set as shipped"),
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
           _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_SHIPPED."', function(res) {
@@ -881,7 +882,7 @@ class Order extends \ADIOS\Core\Model {
 
 
       $btnOrderStateCanceled = $this->adios->ui->button([
-        "text" => "Set as canceled",
+        "text" =>  $this->translate("Set as canceled"),
         "onclick" => "
           let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
           _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_CANCELED."', function(res) {
@@ -908,7 +909,7 @@ class Order extends \ADIOS\Core\Model {
       $sidebarHtml .= "
         <div class='card shadow mb-2'>
           <div class='card-header py-3'>
-            Order is
+            ".$this->translate('Order is')."
             <span
               class='badge badge-adios'
               style='background-color: {$this->enumOrderStateColors[$data['state']]};'
@@ -924,7 +925,7 @@ class Order extends \ADIOS\Core\Model {
         </div>
         <div class='card shadow mb-2'>
           <div class='card-header py-3'>
-            Order summary
+            ".$this->translate('Order summary')."
           </div>
           <div class='card-body'>
             <div class='table-responsive'>
@@ -932,7 +933,7 @@ class Order extends \ADIOS\Core\Model {
                 <tbody>
                   <tr>
                     <td>
-                      Total price excl. VAT
+                      ".$this->translate('Total price excl. VAT')."
                     </td>
                     <td class='text-right'>
                       ".number_format($data['price_total_excl_vat'], 2, ",", " ")."
@@ -941,7 +942,7 @@ class Order extends \ADIOS\Core\Model {
                   </tr>
                   <tr>
                     <td>
-                      Total price incl. VAT
+                      ".$this->translate('Total price incl. VAT')."
                     </td>
                     <td class='text-right'>
                       ".number_format($data['price_total_incl_vat'], 2, ",", " ")."
@@ -950,7 +951,7 @@ class Order extends \ADIOS\Core\Model {
                   </tr>
                   <tr>
                     <td>
-                      Total weight
+                      ".$this->translate('Total weight')."
                     </td>
                     <td class='text-right'>
                       ".number_format($data['weight_total'], 2, ",", " ")." g
@@ -969,7 +970,7 @@ class Order extends \ADIOS\Core\Model {
           [
             "class" => "col-md-9",
             "tabs" => [
-              "General" => [
+              $this->translate("General") => [
                 "serial_number",
                 "number",
                 "id_customer",
@@ -980,7 +981,7 @@ class Order extends \ADIOS\Core\Model {
                 "notes",
                 "domain",
                 [
-                  "title" => "State",
+                  "title" => $this->translate("State"),
                   "input" => "
                     <div
                       class='badge badge-adios'
@@ -991,7 +992,7 @@ class Order extends \ADIOS\Core\Model {
                   "
                 ],
               ],
-              "Billing" => [
+              $this->translate("Billing") => [
                 "inv_given_name",
                 "inv_family_name",
                 "inv_company_name",
@@ -1002,7 +1003,7 @@ class Order extends \ADIOS\Core\Model {
                 "inv_region",
                 "inv_country",
               ],
-              "Delivery" => [
+              $this->translate("Delivery") => [
                 "required_delivery_time",
                 "id_delivery_service",
                 "id_payment_service",
@@ -1020,14 +1021,14 @@ class Order extends \ADIOS\Core\Model {
                 "del_region",
                 "del_country",
               ],
-              "Items" => [
+              $this->translate("Items") => [
                 "action" => "UI/Table",
                 "params" => [
                   "model"    => "Widgets/Orders/Models/OrderItem",
                   "id_order" => (int) $data['id'],
                 ]
               ],
-              "History" => [
+              $this->translate("History") => [
                 "action" => "UI/Table",
                 "params" => [
                   "model"    => "Widgets/Orders/Models/OrderHistory",

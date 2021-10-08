@@ -4,10 +4,6 @@ namespace ADIOS\Widgets;
 
 class Customers extends \ADIOS\Core\Widget {
   public function init() {
-    $this->languageDictionary["en"] = [
-      "Klienti" => "Customers",
-    ];
-
     if ($this->adios->hasUserRole(\Surikata\Core\AdminPanel\Loader::USER_ROLE_SALES)) {
       $this->adios->config['desktop']['sidebarItems']['Customers'] = [
         "fa_icon" => "fas fa-user",
@@ -36,18 +32,18 @@ class Customers extends \ADIOS\Core\Widget {
             "onclick" => "desktop_update('Customers/Categories');",            
           ],
           [
-            "title" => "Vouchers",
+            "title" => $this->translate("Vouchers"),
             "onclick" => "desktop_update('Customers/Vouchers');",
           ],
           [
             "title" => $this->translate("Analytics"),
             "sub" => [
               [
-                "title" => "Shopping Carts",
+                "title" => $this->translate("Shopping Carts"),
                 "onclick" => "desktop_update('Customers/ShoppingCarts');",
               ],
               [
-                "title" => "Searched queries",
+                "title" => $this->translate("Searched queries"),
                 "onclick" => "desktop_update('Customers/SearchedQueries');",
               ],
             ],

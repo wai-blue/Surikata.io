@@ -6,15 +6,18 @@ class ProductRelated extends \ADIOS\Core\Model {
   var $sqlName = "products_related";
   var $urlBase = "Products/{{ id_product }}/Related";
   var $tableTitle = "Related products";
-  var $formTitleForInserting = "New related product";
-  var $formTitleForEditing = "Related product";
+
+  public function init() {
+    $this->formTitleForInserting = $this->translate("New related product");
+    $this->formTitleForEditing = $this->translate("Related product");
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([
       "id_product" => [
         "type" => "lookup",
         "model" => "Widgets/Products/Models/Product",
-        "title" => "Original product",
+        "title" => $this->translate("Original product"),
         "readonly" => TRUE,
         "show_column" => FALSE,
       ],
@@ -22,7 +25,7 @@ class ProductRelated extends \ADIOS\Core\Model {
       "id_related" => [
         "type" => "lookup",
         "model" => "Widgets/Products/Models/Product",
-        "title" => "Related product",
+        "title" => $this->translate("Related product"),
         "show_column" => TRUE,
       ],
     ]);

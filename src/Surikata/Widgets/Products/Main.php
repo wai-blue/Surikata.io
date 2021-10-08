@@ -4,13 +4,10 @@ namespace ADIOS\Widgets;
 
 class Products extends \ADIOS\Core\Widget {
   public function init() {
-    $this->languageDictionary["en"] = [
-    ];
-
     if ($this->adios->hasUserRole(\Surikata\Core\AdminPanel\Loader::USER_ROLE_PRODUCT_MANAGER)) {
       $this->adios->config['desktop']['sidebarItems']['Products'] = [
         "fa_icon" => "fas fa-pizza-slice",
-        "title" => "Products",
+        "title" => $this->translate("Products"),
         "onclick" => "desktop_update('Products');",
         "sub" => [
           [

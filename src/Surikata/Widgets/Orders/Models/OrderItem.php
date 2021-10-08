@@ -6,14 +6,17 @@ class OrderItem extends \ADIOS\Core\Model {
   var $sqlName = "orders_items";
   var $urlBase = "Orders/{{ id_order }}/Items";
   var $tableTitle = " ";
-  var $formTitleForInserting = "New order item";
-  var $formTitleForEditing = "Order items";
+
+  public function init() {
+    $this->formTitleForInserting = $this->translate("New order item");
+    $this->formTitleForEditing = $this->translate("Order items");
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([
       "id_order" => [
         "type" => "lookup",
-        "title" => "Order",
+        "title" => $this->translate("Order"),
         "model" => "Widgets/Orders/Models/Order",
         "show_column" => FALSE,
         "readonly" => TRUE,
@@ -22,7 +25,7 @@ class OrderItem extends \ADIOS\Core\Model {
 
       "id_product" => [
         "type" => "lookup",
-        "title" => "Product",
+        "title" => $this->translate("Product"),
         "model" => "Widgets/Products/Models/Product",
         "required" => TRUE,
         "show_column" => TRUE,
@@ -30,7 +33,7 @@ class OrderItem extends \ADIOS\Core\Model {
 
       "quantity" => [
         "type" => "float",
-        "title" => "Quantity",
+        "title" => $this->translate("Quantity"),
         "required" => TRUE,
         "show_column" => TRUE,
       ],
@@ -44,7 +47,7 @@ class OrderItem extends \ADIOS\Core\Model {
 
       "unit_price" => [
         "type" => "float",
-        "title" => "Unit price",
+        "title" => $this->translate("Unit price"),
         "unit" => $this->adios->locale->currencySymbol(),
         "required" => TRUE,
         "show_column" => TRUE,
@@ -52,7 +55,7 @@ class OrderItem extends \ADIOS\Core\Model {
 
       "vat_percent" => [
         "type" => "int",
-        "title" => "VAT",
+        "title" => $this->translate("VAT"),
         "unit" => "%",
         "show_column" => TRUE,
       ],

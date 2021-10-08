@@ -6,22 +6,26 @@ class ShoppingCart extends \ADIOS\Core\Model {
   var $sqlName = "shopping_carts";
   var $urlBase = "Customers/ShoppingCarts";
   var $tableTitle = "Shopping carts";
-  var $formTitleForInserting = "Shopping cart";
-  var $formTitleForEditing = "Shopping cart";
   var $lookupSqlValue = "{%TABLE%}.id";
+
+  public function init() {
+    $this->tableTitle = $this->translate("Shopping carts");
+    $this->formTitleForInserting = $this->translate("New shopping cart");
+    $this->formTitleForEditing = $this->translate("Shopping cart");
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([
       "id_customer_uid" => [
         "type" => "lookup",
-        "title" => "Customer UID",
+        "title" => $this->translate("Customer UID"),
         "model" => "Widgets/Customers/Models/CustomerUID",
         "show_column" => TRUE,
       ],
 
       "id_order" => [
         "type" => "lookup",
-        "title" => "Order",
+        "title" => $this->translate("Order"),
         "model" => "Widgets/Orders/Models/Order",
         "show_column" => TRUE,
       ],
@@ -34,11 +38,11 @@ class ShoppingCart extends \ADIOS\Core\Model {
       "columns" => [
         [
           "tabs" => [
-            "Header" => [
+            $this->translate("Header") => [
               "id_customer_uid",
               "id_order",
             ],
-            "Items" => [
+            $this->translate("Items") => [
               "action" => "UI/Table",
               "params" => [
                 "model"               => "Widgets/Customers/Models/ShoppingCartItem",

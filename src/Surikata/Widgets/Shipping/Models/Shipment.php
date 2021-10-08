@@ -6,9 +6,12 @@ class Shipment extends \ADIOS\Core\Model {
   var $sqlName = "shipping_shipments";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
   var $urlBase = "DeliveryAndPayment/Prices";
-  var $tableTitle = "Shipments";
-  var $formTitleForInserting = "New shipment";
-  var $formTitleForEditing = "Shipment";
+
+  public function init() {
+    $this->tableTitle = $this->translate("Shipments");
+    $this->formTitleForInserting = $this->translate("New shipment");
+    $this->formTitleForEditing = $this->translate("Shipment");
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([
@@ -91,27 +94,27 @@ class Shipment extends \ADIOS\Core\Model {
       "columns" => [
         [
           "tabs" => [
-            "Delivery / Payment / Destination Country" => [
+            $this->translate("Delivery / Payment / Destination Country") => [
               "id_delivery_service",
               "id_payment_service",
               "id_destination_country",
             ],
-            "Shipment" => [
+            $this->translate("Shipment") => [
               "name",
               "description",
               "logo",
             ],
-            "Enable / Disable" => [
+            $this->translate("Enable / Disable") => [
               "is_enabled",
             ],
-            "Prices" => [
+            $this->translate("Prices") => [
               "action" => "UI/Table",
               "params" => [
                 "model"    => "Widgets/Shipping/Models/ShipmentPrice",
                 "id_shipment" => (int) $data['id'],
               ]
             ],
-            "Miscelaneous" => [
+            $this->translate("Miscelaneous") => [
               "order_index",
             ],
           ],

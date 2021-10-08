@@ -10,19 +10,23 @@ class CustomerCategory extends \ADIOS\Core\Model {
   var $formTitleForInserting = "New customer category";
   var $formTitleForEditing = "Customer category";
 
+  public function init() {
+    $this->tableTitle = $this->translate("Customer categories");
+  }
+
   public function columns(array $columns = []) {
     return parent::columns([
 
       "code" => [
         "type" => "varchar",
-        "title" => "Short code",
+        "title" => $this->translate("Short code"),
         "required" => TRUE,
         "show_column" => TRUE,
       ],
 
       "name" => [
         "type" => "varchar",
-        "title" => "Full category name",
+        "title" => $this->translate("Full category name"),
         "required" => TRUE,
         "show_column" => TRUE,
       ],

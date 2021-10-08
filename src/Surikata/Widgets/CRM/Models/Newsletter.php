@@ -8,9 +8,6 @@ use ADIOS\Widgets\CRM\Exceptions\EmailIsInvalid;
 class Newsletter extends \ADIOS\Core\Model {
   var $sqlName = "newsletter";
   var $urlBase = "CRM/Newsletter";
-  var $tableTitle = "Newsletter Subscribers";
-  var $formTitleForEditing = "Newsletter new subscriber";
-  var $formTitleForInserting = "Newsletter edit subscriber";
 
   public function init() {
 
@@ -18,6 +15,10 @@ class Newsletter extends \ADIOS\Core\Model {
     foreach (array_keys($this->adios->config['widgets']['Website']['domains']) as $domain) {
       $this->enumDomains = [$domain => $domain];
     }
+
+    $this->tableTitle = $this->translate("Newsletter Subscribers");
+    $this->formTitleForInserting = $this->translate("Newsletter new subscriber");
+    $this->formTitleForEditing = $this->translate("Newsletter edit subscriber");
 
   }
   public function columns(array $columns = []) {

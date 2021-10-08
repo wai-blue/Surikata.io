@@ -5,8 +5,12 @@ namespace ADIOS\Widgets\CRM\Models;
 class ContactForm extends \ADIOS\Core\Model {
   var $sqlName = "contact_form";
   var $urlBase = "CRM/ContactForm";
-  var $tableTitle = "Messages from contact form";
-  var $formTitleForEditing = "Message from contact form";
+
+  public function init() {
+
+    $this->tableTitle = $this->translate("Messages from contact form");
+    $this->formTitleForInserting = $this->translate("Message from contact form");
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([

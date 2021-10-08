@@ -7,15 +7,9 @@ class ProductAccessory extends \ADIOS\Core\Model {
   var $urlBase = "Products/{{ id_product }}/Accessories";
 
   public function init() {
-    $this->languageDictionary["en"] = [
-      "Produkt" => "Product",
-      "Príslušenstvo" => "Accessory",
-      "Príslušenstvo produktu" => "Product accessories",
-    ];
-
-    $this->tableTitle = $this->translate("Príslušenstvo produktu");
-    $this->formTitleForInserting = $this->translate("Príslušenstvo produktu");
-    $this->formTitleForEditing = $this->translate("Príslušenstvo produktu");
+    $this->tableTitle = $this->translate("Product accessories");
+    $this->formTitleForInserting = $this->translate("Product accessories");
+    $this->formTitleForEditing = $this->translate("Product accessories");
 
   }
 
@@ -24,7 +18,7 @@ class ProductAccessory extends \ADIOS\Core\Model {
       "id_product" => [
         "type" => "lookup",
         "model" => "Widgets/Products/Models/Product",
-        "title" => $this->translate("Produkt"),
+        "title" => $this->translate("Product"),
         "readonly" => TRUE,
         "show_column" => FALSE,
       ],
@@ -32,7 +26,7 @@ class ProductAccessory extends \ADIOS\Core\Model {
       "id_accessory" => [
         "type" => "lookup",
         "model" => "Widgets/Products/Models/Product",
-        "title" => $this->translate("Príslušenstvo"),
+        "title" => $this->translate("Accessory"),
         "show_column" => TRUE,
       ],
     ]);
@@ -44,11 +38,11 @@ class ProductAccessory extends \ADIOS\Core\Model {
     $params['show_controls'] = FALSE;
     $params['show_filter'] = FALSE;
     $params['title'] = " ";
-    $params['header'] = "
-      Product accessories are separate products with their identification number but
+    $params['header'] = $this->translate(
+      "Product accessories are separate products with their identification number but
       are closely related to this product. Accessories can be offered in the product's
-      detail page as separate links to another products.
-    ";
+      detail page as separate links to another products."
+    );
 
     return $params;
   }

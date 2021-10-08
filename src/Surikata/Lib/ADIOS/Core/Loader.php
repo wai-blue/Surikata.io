@@ -995,7 +995,6 @@ class Loader {
         $indexes = $initiatingModel->indexes();
 
         preg_match("/Duplicate entry '(.*?)' for key '(.*?)'/", $dbError, $m);
-        $invalidValue = $m[1];
         $invalidIndex = $m[2];
         $invalidColumns = [];
         foreach ($indexes[$invalidIndex]['columns'] as $columnName) {
@@ -1009,7 +1008,6 @@ class Loader {
           <div style='margin-top:1em;margin-bottom:3em;text-align:center;color:red;'>
             You are trying to save a record that is already existing.<br/>
             <br/>
-            <b>".hsc($invalidValue)."</b><br/>
             <b>".join(", ", $invalidColumns)."</b>
           </div>
           <a href='javascript:void(0);' onclick='$(this).next(\"div\").slideDown();'>

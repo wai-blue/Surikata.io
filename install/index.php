@@ -574,21 +574,6 @@ if (!$doInstall) {
         }
       }
 
-      // produkty - vlastnosti produktov, priradenie
-      $adminPanel->db->start_transaction();
-
-      foreach ($products as $product) {
-        for ($i = 1; $i <= 3; $i++) {
-          $productFeatureAssignmentModel->insertRow([
-            "id_product" => $product['id'],
-            "id_feature" => rand(1, $productFeaturesCount),
-            "value_number" => rand(900, 9999) / rand(900, 1000),
-          ]);
-        }
-      }
-
-      $adminPanel->db->commit();
-
       // nakupny cennik
 
       $adminPanel->db->start_transaction();

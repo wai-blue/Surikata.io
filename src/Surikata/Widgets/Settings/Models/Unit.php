@@ -5,40 +5,43 @@ namespace ADIOS\Widgets\Settings\Models;
 class Unit extends \ADIOS\Core\Model {
   var $sqlName = "units";
   var $urlBase = "Settings/Units";
-  var $tableTitle = "Units";
-  var $formTitleForInserting = "New unit";
-  var $formTitleForEditing = "Unit";
   var $lookupSqlValue = "if({%TABLE%}.name is null, {%TABLE%}.unit, concat({%TABLE%}.unit, ' (', {%TABLE%}.name, ')'))";
+
+  public function init() {
+    $this->tableTitle = $this->translate("Units");
+    $this->formTitleForInserting = $this->translate("New unit");
+    $this->formTitleForEditing = $this->translate("Unit");
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([
       "unit" => [
         "type" => "varchar",
-        "title" => "Unit",
-        "description" => "E.g.: mm, kg, l, btl, pkg, ...",
+        "title" => $this->translate("Unit"),
+        "description" => $this->translate("E.g.: mm, kg, l, btl, pkg, ..."),
         "show_column" => TRUE,
         "required" => TRUE,
       ],
 
       "name" => [
         "type" => "varchar",
-        "title" => "Unit name",
-        "description" => "E.g.: milimetres, kilogramms, litres, bottles, packages, ...",
+        "title" => $this->translate("Unit name"),
+        "description" => $this->translate("E.g.: milimetres, kilogramms, litres, bottles, packages, ..."),
         "show_column" => TRUE,
         "required" => TRUE,
       ],
 
       "is_for_products" => [
         "type" => "boolean",
-        "title" => "Is for products",
-        "description" => "If checked, this unit will be available as a delivery unit for product.",
+        "title" => $this->translate("Is for products"),
+        "description" => $this->translate("If checked, this unit will be available as a delivery unit for product."),
         "show_column" => TRUE,
       ],
 
       "is_for_features" => [
         "type" => "boolean",
-        "title" => "Is for features",
-        "description" => "If checked, this unit will be available as a unit for a product feature.",
+        "title" => $this->translate("Is for features"),
+        "description" => $this->translate("If checked, this unit will be available as a unit for a product feature."),
         "show_column" => TRUE,
       ],
     ]);

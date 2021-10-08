@@ -7,28 +7,28 @@ class Maintenance extends \ADIOS\Core\Widget {
     if ($this->adios->hasUserRole(\Surikata\Core\AdminPanel\Loader::USER_ROLE_ADMINISTRATOR)) {
       $this->adios->config['desktop']['sidebarItems']['Maintenance'] = [
         "fa_icon" => "fas fa-cog",
-        "title" => "Maintenance",
+        "title" => $this->translate("Maintenance"),
         "sub" => [
           [
-            "title" => "Logs",
+            "title" => $this->translate("Logs"),
             "onclick" => "desktop_update('Maintenance/LogViewer', {'severity': 'info'});",
             "sub" => [
               [
-                "title" => "Info",
+                "title" => $this->translate("Info"),
                 "onclick" => "desktop_update('Maintenance/LogViewer', {'severity': 'info'});",
               ],
               [
-                "title" => "Warnings",
+                "title" => $this->translate("Warnings"),
                 "onclick" => "desktop_update('Maintenance/LogViewer', {'severity': 'warning'});",
               ],
               [
-                "title" => "Errors",
+                "title" => $this->translate("Errors"),
                 "onclick" => "desktop_update('Maintenance/LogViewer', {'severity': 'error'});",
               ],
             ],
           ],
           [
-            "title" => "Maintenance mode",
+            "title" => $this->translate("Maintenance mode"),
             "onclick" => "window_render('Maintenance/MaintenanceMode');",
           ],
         ],

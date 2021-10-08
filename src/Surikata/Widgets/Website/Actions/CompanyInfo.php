@@ -12,10 +12,10 @@ class CompanyInfo extends \ADIOS\Core\Action {
       "template" => [
         "tabs" => [
           [
-            "title" => "General",
+            "title" => $this->translate("General"),
             "items" => [
               [
-                "title" => "Slogan",
+                "title" => $this->translate("Slogan"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_slogan",
@@ -34,10 +34,10 @@ class CompanyInfo extends \ADIOS\Core\Action {
           ],
 
           [
-            "title" => "Headquarter",
+            "title" => $this->translate("Headquarter"),
             "items" => [
               [
-                "title" => "Street, 1st line",
+                "title" => $this->translate("Street, 1st line"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_headquarterStreet1",
@@ -45,7 +45,7 @@ class CompanyInfo extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Street, 2st line",
+                "title" => $this->translate("Street, 2st line"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_headquarterStreet2",
@@ -53,7 +53,7 @@ class CompanyInfo extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "ZIP",
+                "title" => $this->translate("ZIP"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_headquarterZIP",
@@ -61,7 +61,7 @@ class CompanyInfo extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "City",
+                "title" => $this->translate("City"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_headquarterCity",
@@ -69,7 +69,7 @@ class CompanyInfo extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Region",
+                "title" => $this->translate("Region"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_headquarterRegion",
@@ -77,7 +77,7 @@ class CompanyInfo extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Country",
+                "title" => $this->translate("Country"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_headquarterCountry",
@@ -88,10 +88,10 @@ class CompanyInfo extends \ADIOS\Core\Action {
           ],
 
           [
-            "title" => "Contact information",
+            "title" => $this->translate("Contact information"),
             "items" => [
               [
-                "title" => "Contact phone number",
+                "title" => $this->translate("Contact phone number"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_contactPhoneNumber",
@@ -99,7 +99,7 @@ class CompanyInfo extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Contact email",
+                "title" => $this->translate("Contact email"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_contactEmail",
@@ -110,10 +110,10 @@ class CompanyInfo extends \ADIOS\Core\Action {
           ],
 
           [
-            "title" => "Social networks",
+            "title" => $this->translate("Social networks"),
             "items" => [
               [
-                "title" => "Facebook page URL",
+                "title" => $this->translate("Facebook page URL"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_urlFacebook",
@@ -121,7 +121,7 @@ class CompanyInfo extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Twitter URL",
+                "title" => $this->translate("Twitter URL"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_urlTwitter",
@@ -129,7 +129,7 @@ class CompanyInfo extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Instagram profile URL",
+                "title" => $this->translate("Instagram profile URL"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_urlInstagram",
@@ -137,7 +137,7 @@ class CompanyInfo extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "YouTube channel URL",
+                "title" => $this->translate("YouTube channel URL"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_urlYouTube",

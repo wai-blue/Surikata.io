@@ -470,7 +470,7 @@ class FileBrowser extends \ADIOS\Core\Input {
           return  '".(empty($this->params['subdir']) ? "" : "{$this->params['subdir']}/")."' + folderPath;
         }
 
-        {$this->uid}_showDir('', '{$rootDir}', 0);
+        {$this->uid}_showDir('', 'Files And Media".(empty($this->params['subdir']) ? "" : "/".ads($this->params['subdir']))."', 0);
       </script>
     ";
 

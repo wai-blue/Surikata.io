@@ -6,7 +6,7 @@ class Maintenance extends \ADIOS\Core\Widget {
   public function init() {
     if ($this->adios->hasUserRole(\Surikata\Core\AdminPanel\Loader::USER_ROLE_ADMINISTRATOR)) {
       $this->adios->config['desktop']['sidebarItems']['Maintenance'] = [
-        "fa_icon" => "fas fa-cog",
+        "fa_icon" => "fas fa-wrench",
         "title" => $this->translate("Maintenance"),
         "sub" => [
           [

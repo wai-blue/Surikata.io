@@ -14,7 +14,7 @@ namespace ADIOS\Core;
  * Various handy helper functions
  */
 class HelperFunctions {
-  var $loadUrlError = '';
+  static $loadUrlError = '';
   
   /**
    * Minifies HTML

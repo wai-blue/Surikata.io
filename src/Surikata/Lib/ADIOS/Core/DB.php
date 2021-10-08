@@ -174,12 +174,9 @@ class DB {
         $errorNo = $this->get_error_no();
 
         if (in_array($errorNo, $foreginKeyErrorCodes)) {
-          $message = "Operation blocked by foreign key constraint.\n";
-          if ($initiatingModel instanceof \ADIOS\Core\Model) {
-            $message .= $initiatingModel->name;
-          }
-
-          throw new \ADIOS\Core\Exceptions\DBDuplicateEntryException("{$message} ERROR: {$this->connection->error} QUERY: {$query}");
+          throw new \ADIOS\Core\Exceptions\DBDuplicateEntryException(
+            json_encode([$this->connection->error, $query, $initiatingModel->name])
+          );
         } else {
           throw new \ADIOS\Core\Exceptions\DBException($this->get_error().", QUERY: {$query}");
         }
@@ -201,15 +198,11 @@ class DB {
      * @see query
      * @see fetch_array
      */
-    public function multi_query($query, $separator = ";;\n", $disable_ob_mode = false, $force_blocked = false)
-    {
-        $query = str_replace("\r\n", "\n", $query);
-        $script = explode($separator, $query);
-        foreach ($script as $key => $value) {
-            if ($value) {
-                $this->query(trim($value).';', $disable_ob_mode, $force_blocked);
-            }
-        }
+    public function multi_query($query, $separator = ";;\n", $initiatingModel = NULL) {
+      $query = str_replace("\r\n", "\n", $query);
+      foreach (explode($separator, $query) as $value) {
+        $this->query(trim($value).';', $initiatingModel);
+      }
     }
 
     /**
@@ -746,7 +739,7 @@ class DB {
      *
      * @see insert_row_query
      */
-    public function insert_row($table_name, $data, $only_sql_command = false, $dumping_data = false) {
+    public function insert_row($table_name, $data, $only_sql_command = false, $dumping_data = false, $initiatingModel = NULL) {
       global $_FILES;
 
       $allowed = true;
@@ -760,14 +753,14 @@ class DB {
       if ($only_sql_command) {
         return $sql."\n";
       } else {
-        $this->multi_query($sql);
+        $this->multi_query($sql, ";;\n", $initiatingModel);
         $inserted_id = $this->insert_id();
 
         return $inserted_id;
       }
     }
 
-    public function insert_random_row($table_name, $data = [], $dictionary = []) {
+    public function insert_random_row($table_name, $data = [], $dictionary = [], $initiatingModel = NULL) {
       if (is_array($this->tables[$table_name])) {
         foreach ($this->tables[$table_name] as $col_name => $col_definition) {
           if ($col_name != "id" && !isset($data[$col_name])) {
@@ -836,7 +829,7 @@ class DB {
         }
       }
       
-      return $this->insert_row($table_name, $data);
+      return $this->insert_row($table_name, $data, FALSE, FALSE, $initiatingModel);
     }
 
 //
@@ -911,28 +904,15 @@ class DB {
      * @see update_row_query
      * @see update_row_part
      */
-    public function update_row($table_name, $data, $id, $only_sql_command = false)
-    {
-        $my_data = $data;
+    public function update_row($table_name, $data, $id, $only_sql_command = false, $initiatingModel = NULL) {
+      $sql = $this->update_row_query($table_name, $data, $id, TRUE);
 
-        if (_count($this->tables[$table_name])) {
-            foreach ($this->tables[$table_name] as $col_name => $col_definition) {
-                if (!$col_definition['virtual'] && '%%table_params%%' != $col_name && 'rights' != $col_name) {
-                    $my_data_perms_callback[$col_name] = '';
-                }
-            }
-        }
-
-        $sql = $this->update_row_query($table_name, $my_data, $id, $whole_row = true);
-
-        if ($only_sql_command) {
-            return $sql;
-        } else {
-
-            $this->query($sql);
-
-            return true;
-        }
+      if ($only_sql_command) {
+        return $sql;
+      } else {
+        $this->query($sql, $initiatingModel);
+        return true;
+      }
     }
 
     /**
@@ -947,22 +927,13 @@ class DB {
      * @see update_row_query
      * @see update_row
      */
-    public function update_row_part($table_name, $data, $id, $only_sql_command = FALSE) {
-      $my_data = $data;
-
+    public function update_row_part($table_name, $data, $id, $only_sql_command = FALSE, $initiatingModel = NULL) {
       $sql = $this->update_row_query($table_name, $data, $id, FALSE);
 
       if ($only_sql_command) {
         return $sql;
       } else {
-        $this->query($sql);
-        // $error = $this->get_error();
-
-        // if ('' != $error) {
-        //   $this->db_rights_callback_return['error'] = $error;
-        //   return false;
-        // }
-
+        $this->query($sql, $initiatingModel);
         return $id;
       }
     }

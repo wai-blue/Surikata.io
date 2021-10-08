@@ -50,9 +50,13 @@ class FileBrowser extends \ADIOS\Core\UI\View {
         ]
       )->render();
     } else {
-      $html = $this->adios->ui->Title([
-        'center' => $this->params['title'] ?? "File browser",
-      ])->render();
+      $html = "";
+
+      if (!empty($this->params['title'])) {
+        $html .= $this->adios->ui->Title([
+          'center' => $this->params['title'],
+        ])->render();
+      }
 
       $html .= $inputHtml;
     }

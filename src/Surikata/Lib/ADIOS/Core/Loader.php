@@ -898,43 +898,10 @@ class Loader {
         $actionHtml = $tmp->render($params);
       }
 
-    } catch (
-      \Illuminate\Database\QueryException
-      | \ADIOS\Core\Exceptions\DBException
-      $e
-    ) {
-      $errorMessage = $e->getMessage();
-      $errorHash = md5(date("YmdHis").$errorMessage);
-      $this->console->error("{$errorHash}\t{$errorMessage}\t{$this->db->last_query}\t{$this->db->db_error}");
-      $actionHtml = $this->renderHtmlWarning("
-        <div style='text-align:center;font-size:5em;color:red'>
-          🥴
-        </div>
-        <div style='margin-top:1em;margin-bottom:1em;'>
-          Oops! Something went wrong with the database.
-          See logs for more information or contact the support.<br/>
-        </div>
-        <div style='color:red;margin-bottom:1em;white-space:pre;font-family:courier;font-size:0.8em;overflow:auto;'>{$errorMessage}</div>
-        <div style='color:gray'>
-          {$errorHash}
-        </div>
-      ");
     } catch (\ADIOS\Core\Exceptions\NotEnoughPermissionsException $e) {
       $actionHtml = $this->renderFatal($e->getMessage());
     } catch (\Exception $e) {
-      $actionHtml = $this->renderHtmlWarning("
-        <div style='text-align:center;font-size:5em;color:red'>
-          🥴
-        </div>
-        <div style='margin-top:1em;margin-bottom:1em;'>
-          Oops! Something went wrong.
-          See logs for more information or contact the support.<br/>
-        </div>
-        <div style='color:red;margin-bottom:1em;white-space:pre;font-family:courier;font-size:0.8em;overflow:auto;'>".$e->getMessage()."</div>
-        <div style='color:gray'>
-          ".get_class($e)."
-        </div>
-      ");
+      $actionHtml = $this->renderExceptionWarningHtml($e);
     }
 
     return $actionHtml;
@@ -996,6 +963,88 @@ class Loader {
         </div>
       ";
     }
+  }
+
+  public function renderExceptionWarningHtml($exception) {
+    
+    switch (get_class($exception)) {
+      case 'Illuminate\Database\QueryException':
+      case 'ADIOS\Core\Exceptions\DBException':
+        $errorMessage = $exception->getMessage();
+        $errorHash = md5(date("YmdHis").$errorMessage);
+        $this->console->error("{$errorHash}\t{$errorMessage}\t{$this->db->last_query}\t{$this->db->db_error}");
+        $html = "
+          <div style='text-align:center;font-size:5em;color:red'>
+            🥴
+          </div>
+          <div style='margin-top:1em;margin-bottom:1em;'>
+            Oops! Something went wrong with the database.
+            See logs for more information or contact the support.<br/>
+          </div>
+          <div style='color:red;margin-bottom:1em;white-space:pre;font-family:courier;font-size:0.8em;overflow:auto;'>{$errorMessage}</div>
+          <div style='color:gray'>
+            {$errorHash}
+          </div>
+        ";
+      break;
+      case 'ADIOS\Core\Exceptions\DBDuplicateEntryException':
+        list($dbError, $dbQuery, $initiatingModelName) = json_decode($exception->getMessage(), TRUE);
+
+        $initiatingModel = $this->getModel($initiatingModelName);
+        $columns = $initiatingModel->columns();
+        $indexes = $initiatingModel->indexes();
+
+        preg_match("/Duplicate entry '(.*?)' for key '(.*?)'/", $dbError, $m);
+        $invalidValue = $m[1];
+        $invalidIndex = $m[2];
+        $invalidColumns = [];
+        foreach ($indexes[$invalidIndex]['columns'] as $columnName) {
+          $invalidColumns[] = $columns[$columnName]["title"];
+        }
+
+        $html = "
+          <div style='text-align:center;font-size:5em;color:red'>
+            <i class='fas fa-copy'></i>
+          </div>
+          <div style='margin-top:1em;margin-bottom:3em;text-align:center;color:red;'>
+            You are trying to save a record that is already existing.<br/>
+            <br/>
+            <b>".hsc($invalidValue)."</b><br/>
+            <b>".join(", ", $invalidColumns)."</b>
+          </div>
+          <a href='javascript:void(0);' onclick='$(this).next(\"div\").slideDown();'>
+            Show more information
+          </a>
+          <div style='display:none'>
+            <div style='color:red;margin-bottom:1em;font-family:courier;font-size:8pt;max-height:10em;overflow:auto;'>
+              {$dbError}<br/>
+              {$dbQuery}<br/>
+              {$initiatingModelName}<Br/>
+            </div>
+            <div style='color:gray'>
+              ".get_class($exception)."
+            </div>
+          </div>
+        ";
+      break;
+      default:
+        $html = "
+          <div style='text-align:center;font-size:5em;color:red'>
+            🥴
+          </div>
+          <div style='margin-top:1em;margin-bottom:1em;'>
+            Oops! Something went wrong.
+            See logs for more information or contact the support.<br/>
+          </div>
+          <div style='color:red;margin-bottom:1em;white-space:pre;font-family:courier;font-size:0.8em;overflow:auto;'>".$exception->getMessage()."</div>
+          <div style='color:gray'>
+            ".get_class($exception)."
+          </div>
+        ";
+      break;
+    }
+
+    return $this->renderHtmlWarning($html);
   }
 
   public function renderHtmlWarning($warning) {

@@ -636,15 +636,15 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   }
 
   public function insertRow($data) {
-    return $this->adios->db->insert_row($this->table, $data);
+    return $this->adios->db->insert_row($this->table, $data, FALSE, FALSE, $this);
   }
 
   public function insertRandomRow($data = [], $dictionary = []) {
-    return $this->adios->db->insert_random_row($this->table, $data, $dictionary);
+    return $this->adios->db->insert_random_row($this->table, $data, $dictionary, $this);
   }
 
   public function updateRow($data, $id) {
-    return $this->adios->db->update_row_part($this->table, $data, $id);
+    return $this->adios->db->update_row_part($this->table, $data, $id, FALSE, $this);
   }
 
   public function deleteRow($id) {

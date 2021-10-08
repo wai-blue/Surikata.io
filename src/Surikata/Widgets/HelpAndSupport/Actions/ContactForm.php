@@ -1,8 +1,8 @@
 <?php
 
-namespace ADIOS\Actions\Overview;
+namespace ADIOS\Actions\HelpAndSupport;
 
-class ContactDeveloper extends \ADIOS\Core\Action {
+class ContactForm extends \ADIOS\Core\Action {
   public function render() {
     $uid = $this->params['uid'];
 

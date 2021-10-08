@@ -2,7 +2,7 @@
 
 $dictionary = [
   "Blogs" => "Blogy",
-  "Title" => "Nadpis",
+  "Title" => "Názov",
   "Content" => "Obsah",
   "Image" => "Obrázok",
   "Created at" => "Vytvorený v",

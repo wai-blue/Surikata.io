@@ -50,6 +50,13 @@ class Action {
    */
   public static $webSAPIEnabled = TRUE;
 
+  /**
+   * Full name of the model.
+   *
+   * @var mixed
+   */
+  var $name = "";
+
   function __construct(&$adios, $params = []) {
     $this->adios = &$adios;
     $this->params = $params;
@@ -61,8 +68,13 @@ class Action {
       $this->params = [];
     }
 
-    $this->init();
+    $this->name = str_replace("\\", "/", str_replace("ADIOS\\", "", get_class($this)));
 
+    $this->languageDictionary[$this->adios->config["language"]] =
+      $this->adios->loadLanguageDictionary($this->name)
+    ;
+
+    $this->init();
   }
 
   public function init() {

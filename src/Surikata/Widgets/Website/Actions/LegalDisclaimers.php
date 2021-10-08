@@ -8,7 +8,7 @@ class LegalDisclaimers extends \ADIOS\Core\Action {
 
     return $this->adios->renderAction("UI/SettingsPanel", [
       "settings_group" => "web/{$this->params['domainName']}/legalDisclaimers",
-      "title" => "{$this->params['domainName']} » Legal disclaimers",
+      "title" => "{$this->params['domainName']} » ".$this->translate("Legal disclaimers"),
       "template" => [
         "tabs" => [
           [
@@ -58,7 +58,7 @@ class LegalDisclaimers extends \ADIOS\Core\Action {
           ],
 
           [
-            "title" => "Return policy",
+            "title" => $this->translate("Return policy"),
             "items" => [
               [
                 "input" => $this->adios->ui->Input([

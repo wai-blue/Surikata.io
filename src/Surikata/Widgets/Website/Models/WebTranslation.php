@@ -5,15 +5,18 @@ namespace ADIOS\Widgets\Website\Models;
 class WebTranslation extends \ADIOS\Core\Model {
   var $sqlName = "web_translations";
   var $urlBase = "Website/{{ domainName }}/Translations";
-  var $tableTitle = "Translations";
-  var $formTitleForInserting = "New translation";
-  var $formTitleForEditing = "Translation";
+
+  public function init() {
+    $this->tableTitle = $this->translate("Translations");
+    $this->formTitleForInserting = $this->translate("New translation");
+    $this->formTitleForEditing = $this->translate("Translation");
+  }
 
   public function columns($columns = []) {
     return parent::columns([
       "domain" => [
         "type" => "varchar",
-        "title" => "Domain",
+        "title" => $this->translate("Domain"),
         "required" => TRUE,
         "readonly" => TRUE,
         "show_column" => FALSE,
@@ -21,13 +24,13 @@ class WebTranslation extends \ADIOS\Core\Model {
 
       "context" => [
         "type" => "varchar",
-        "title" => "Context",
+        "title" => $this->translate("Context"),
         "show_column" => TRUE,
       ],
 
       "original" => [
         "type" => "varchar",
-        "title" => "Original string",
+        "title" => $this->translate("Original string"),
         "show_column" => TRUE,
         "required" => TRUE,
       ],
@@ -42,7 +45,7 @@ class WebTranslation extends \ADIOS\Core\Model {
 
       "translated" => [
         "type" => "text",
-        "title" => "Translated string",
+        "title" => $this->translate("Translated string"),
         "show_column" => TRUE,
         "required" => TRUE,
       ],
@@ -63,7 +66,7 @@ class WebTranslation extends \ADIOS\Core\Model {
   }
 
   public function tableParams($params) {
-    $params["title"] = "{$params['domainName']} &raquo; Translations";
+    $params["title"] = "{$params['domainName']} &raquo; ".$this->translate("Translations");
     $params["where"] = $this->getFullTableSQLName().".`domain` = '{$params['domainName']}'";
 
     return $params;

@@ -52,11 +52,11 @@ class Website extends \ADIOS\Core\Widget {
               "onclick" => "window_render('Website/{$domainInfo['name']}/LegalDisclaimers');",
             ],
             [
-              "title" => "Emails",
+              "title" => $this->translate("Emails"),
               "onclick" => "window_render('Website/{$domainInfo['name']}/Emails');",
             ],
             [
-              "title" => "Translations",
+              "title" => $this->translate("Translations"),
               "onclick" => "desktop_update('Website/{$domainInfo['name']}/Translations');",
             ],
           ],

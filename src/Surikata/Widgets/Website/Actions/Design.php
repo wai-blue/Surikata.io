@@ -7,7 +7,7 @@ class Design extends \ADIOS\Core\Action {
     $settings = $this->adios->config["settings"]["web"][$this->params['domainName']]["design"];
 
     $themeEnumValues = [
-      "" => "Choose your theme",
+      "" => $this->translate("Choose your theme"),
     ];
     foreach ($this->adios->websiteRenderer->themeFolders as $themeFolder) {
       foreach (scandir($themeFolder) as $file) {
@@ -18,14 +18,14 @@ class Design extends \ADIOS\Core\Action {
 
     return $this->adios->renderAction("UI/SettingsPanel", [
       "settings_group" => "web/{$this->params['domainName']}/design",
-      "title" => "{$this->params['domainName']} » Design",
+      "title" => "{$this->params['domainName']} » ".$this->translate("Design"),
       "template" => [
         "tabs" => [
           [
-            "title" => "Theme",
+            "title" => $this->translate("Theme"),
             "items" => [
               [
-                "title" => "Choose theme",
+                "title" => $this->translate("Choose theme"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_theme",
@@ -37,19 +37,19 @@ class Design extends \ADIOS\Core\Action {
           ],
 
           [
-            "title" => "Colors: Main theme colors",
+            "title" => $this->translate("Colors: ").$this->translate("Main theme colors"),
             "items" => [
               [
-                "title" => "Main color",
+                "title" => $this->translate("Main color"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_themeMainColor",
                   "value" => $settings['themeMainColor'],
                 ]),
-                "description" => "Some themes may not support coloring.",
+                "description" => $this->translate("Some themes may not support coloring."),
               ],
               [
-                "title" => "Second color",
+                "title" => $this->translate("Second color"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_themeSecondColor",
@@ -57,7 +57,7 @@ class Design extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Third color",
+                "title" => $this->translate("Third color"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_themeThirdColor",
@@ -65,7 +65,7 @@ class Design extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Grey color",
+                "title" => $this->translate("Grey color"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_themeGreyColor",
@@ -73,7 +73,7 @@ class Design extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Light grey color",
+                "title" => $this->translate("Light grey color"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_themeLightGreyColor",
@@ -84,10 +84,10 @@ class Design extends \ADIOS\Core\Action {
           ],
 
           [
-            "title" => "Colors: Main body background",
+            "title" => $this->translate("Colors: ").$this->translate("Main body background"),
             "items" => [
               [
-                "title" => "Colors: Main body background",
+                "title" => $this->translate("Colors: ").$this->translate("Main body background"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_bodyBgColor",
@@ -95,7 +95,7 @@ class Design extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Colors: Main body regular text",
+                "title" => $this->translate("Colors: ").$this->translate("Main body regular text"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_bodyTextColor",
@@ -103,7 +103,7 @@ class Design extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Colors: Main body hyperlinks",
+                "title" => $this->translate("Colors: ").$this->translate("Main body hyperlinks"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_bodyLinkColor",
@@ -111,7 +111,7 @@ class Design extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Colors: Main body headings",
+                "title" => $this->translate("Colors: ").$this->translate("Main body headings"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_bodyHeadingColor",
@@ -122,19 +122,19 @@ class Design extends \ADIOS\Core\Action {
           ],
 
           [
-            "title" => "Colors: Header",
+            "title" => $this->translate("Colors: ").$this->translate("Header"),
             "items" => [
               [
-                "title" => "Colors: Header background",
+                "title" => $this->translate("Colors: ").$this->translate("Header background"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_headerBgColor",
                   "value" => $settings['headerBgColor'],
                 ]),
-                "description" => "Niektoré šablóny nemusia podporovať voliteľnosť farieb.",
+                "description" => $this->translate("Some templates may not support color selectivity."),
               ],
               [
-                "title" => "Colors: Header regular text",
+                "title" => $this->translate("Colors: ").$this->translate("Header regular text"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_headerTextColor",
@@ -142,7 +142,7 @@ class Design extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Colors: Header hyperlinks",
+                "title" => $this->translate("Colors: ").$this->translate("Header hyperlinks"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_headerLinkColor",
@@ -150,7 +150,7 @@ class Design extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Colors: Header headings",
+                "title" => $this->translate("Colors: ").$this->translate("Header headings"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_headerHeadingColor",
@@ -161,19 +161,19 @@ class Design extends \ADIOS\Core\Action {
           ],
 
           [
-            "title" => "Colors: Footer",
+            "title" => $this->translate("Colors: ").$this->translate("Footer"),
             "items" => [
               [
-                "title" => "Colors: Footer background",
+                "title" => $this->translate("Colors: ").$this->translate("Footer background"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_footerBgColor",
                   "value" => $settings['footerBgColor'],
                 ]),
-                "description" => "Niektoré šablóny nemusia podporovať voliteľnosť farieb.",
+                "description" => $this->translate("Some particles may not support color selectivity."),
               ],
               [
-                "title" => "Colors: Footer regular text",
+                "title" => $this->translate("Colors: ").$this->translate("Footer regular text"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_footerTextColor",
@@ -181,7 +181,7 @@ class Design extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Colors: Footer hyperlinks",
+                "title" => $this->translate("Colors: ").$this->translate("Footer hyperlinks"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_footerLinkColor",
@@ -189,7 +189,7 @@ class Design extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Colors: Footer headings",
+                "title" => $this->translate("Colors: ").$this->translate("Footer headings"),
                 "input" => $this->adios->ui->Input([
                   "type" => "color",
                   "uid" => "{$this->uid}_footerHeadingColor",
@@ -200,16 +200,16 @@ class Design extends \ADIOS\Core\Action {
           ],
 
           [
-            "title" => "Custom CSS",
+            "title" => $this->translate("Custom CSS"),
             "items" => [
               [
-                "title" => "Custom CSS statements",
+                "title" => $this->translate("Custom CSS statements"),
                 "input" => $this->adios->ui->Input([
                   "type" => "text",
                   "uid" => "{$this->uid}_custom_css",
                   "value" => $settings['custom_css'],
                 ]),
-                "description" => "Only for experienced users. CSS knowledge is required. Supported CSS statements may vary in different templates.",
+                "description" => $this->translate("Only for experienced users. CSS knowledge is required. Supported CSS statements may vary in different templates."),
               ],
             ],
           ],

@@ -41,7 +41,7 @@ class FileBrowser extends \ADIOS\Core\UI\View {
           ",
           'header' => [
             $this->adios->ui->Button([
-              "text" => "Close",
+              "text" => $this->translate("Close"),
               "type" => "close",
               "onclick" => "{$this->uid}_close();",
             ]),

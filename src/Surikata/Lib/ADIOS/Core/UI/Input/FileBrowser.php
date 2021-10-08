@@ -73,6 +73,10 @@ class FileBrowser extends \ADIOS\Core\Input {
   }
 
   public function render() {
+    $this->languageDictionary[$this->adios->config["language"]] =
+      $this->adios->loadLanguageDictionary(get_class($this))
+    ;
+
     // $params = $this->params;
     $mode = $this->params["mode"] ?? self::MODE_BROWSE;
 
@@ -182,7 +186,7 @@ class FileBrowser extends \ADIOS\Core\Input {
               ".$this->adios->ui->Button([
                 "fa_icon" => "fas fa-folder-plus",
                 "class" => "btn-new btn btn-sm btn-light btn-icon-split",
-                "text" => "Create folder",
+                "text" => $this->translate("Create folder"),
                 "onclick" => "
                   let folderName = prompt('The name of the new folder');
                   if (folderName) {
@@ -229,7 +233,7 @@ class FileBrowser extends \ADIOS\Core\Input {
               ".$this->adios->ui->Button([
                 "fa_icon" => "fas fa-file-upload",
                 "class" => "btn-new btn btn-sm btn-light btn-icon-split",
-                "text" => "Upload file",
+                "text" => $this->translate("Upload file"),
                 "onclick" => "$('#{$this->uid}_{{ dirId }}_file_input').click();",
               ])->render()."
 

@@ -6,23 +6,26 @@ class Brand extends \ADIOS\Core\Model {
   var $sqlName = "brands";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
   var $urlBase = "Brands";
-  var $tableTitle = "Brands";
-  var $formTitleForInserting = "New brand";
-  var $formTitleForEditing = "Brand";
 
   public static $allItemsCache = NULL;
+
+  public function init() {
+    $this->tableTitle = $this->translate("Brands");
+    $this->formTitleForInserting = $this->translate("New brand");
+    $this->formTitleForEditing = $this->translate("Brand");
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([
       "name" => [
         'type' => 'varchar',
-        'title' => "Brand or manufacturer name",
+        'title' => $this->translate("Brand or manufacturer name"),
         'show_column' => TRUE,
       ],
 
       "description" => [
         'type' => 'text',
-        'title' => "Short description",
+        'title' =>  $this->translate("Short description"),
         'show_column' => TRUE,
       ],
 

@@ -55,5 +55,6 @@ $dictionary = [
   "Invoice summary" => "Zhrnutie faktúry",
   "Supplier" => "Dodávateľ",
   "Items" => "Položky",
-  "General" => "Všeobecné"
+  "General" => "Všeobecné",
+  "Header" => "Hlavička"
 ];

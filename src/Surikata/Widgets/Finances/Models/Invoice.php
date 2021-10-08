@@ -536,13 +536,13 @@ class Invoice extends \ADIOS\Core\Model {
 
   public function formParams($data, $params) {
     if ($data['id'] <= 0) {
-      $params['title'] = "New invoice";
+      $params['title'] = $this->translate("New invoice");
 
       $params["template"] = [
         "columns" => [
           [
             "tabs" => [
-              "Header" => [
+              $this->translate("Header") => [
                 "id_customer",
               ],
             ],

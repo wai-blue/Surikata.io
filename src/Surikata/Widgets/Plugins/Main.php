@@ -8,7 +8,7 @@ class Plugins extends \ADIOS\Core\Widget {
       foreach ($this->adios->getPlugins() as $pluginName => $pluginObject) {
         if ($this->adios->actionExists("Plugins/{$pluginName}/Main")) {
           $pluginSettingsMenu[] = [
-            "title" => $pluginObject->niceName,
+            "title" => $this->translate($pluginObject->niceName),
             "onclick" => "desktop_update('Plugins/{$pluginName}/Main');",
           ];
         }
@@ -16,7 +16,7 @@ class Plugins extends \ADIOS\Core\Widget {
 
       $this->adios->config['desktop']['sidebarItems']['Plugins'] = [
         "fa_icon" => "fas fa-puzzle-piece",
-        "title" => "Plugins",
+        "title" => $this->translate("Plugins"),
         "onclick" => "desktop_render('Plugins/Overview');",
         "sub" => $pluginSettingsMenu,
       ];

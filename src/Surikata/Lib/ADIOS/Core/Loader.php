@@ -477,6 +477,7 @@ class Loader {
 
     if (strlen($language) == 2 && !empty($context)) {
       $languageFile = "{$this->config['dir']}/Lang/{$language}/".strtr($context, "./\\", "---").".php";
+
       if (file_exists($languageFile)) {
         include($languageFile);
       }

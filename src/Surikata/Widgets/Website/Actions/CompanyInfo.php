@@ -8,7 +8,7 @@ class CompanyInfo extends \ADIOS\Core\Action {
 
     return $this->adios->renderAction("UI/SettingsPanel", [
       "settings_group" => "web/{$this->params['domainName']}/companyInfo",
-      "title" => "{$this->params['domainName']} » Company Info",
+      "title" => "{$this->params['domainName']} » ".$this->translate("Company Info"),
       "template" => [
         "tabs" => [
           [

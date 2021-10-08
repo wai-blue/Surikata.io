@@ -12,9 +12,10 @@ $dictionary = [
   "Order index" => "Index objednávky",
   "General" => "Všeobecné",
   "Translations" => "Preklady",
-  "New product feature" => "Nová funkcia produktu",
-  "Product feature" => "Funkcia produktu",
+  "New product feature" => "Nová vlastnosť produktu",
+  "Product feature" => "Vlastnosť produktu",
   "Number" => "Číslo",
   "Text" => "Text",
   "Yes/No" => "Áno/Nie",
+  "Product features" => "Vlastnosti produktu"
 ];

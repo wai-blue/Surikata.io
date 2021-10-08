@@ -655,3 +655,11 @@ h4.modal-title {
 .bccs-option ul {
   color: #9d9c9c;
 }
+#bccs-buttonDoNotAgree {
+  height: 100%;
+}
+@media only screen and (max-width: 991px) {
+  #bccs-buttonDoNotAgree {
+    height: auto;
+  }
+}

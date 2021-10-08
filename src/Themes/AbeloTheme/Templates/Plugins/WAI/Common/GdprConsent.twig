@@ -56,11 +56,17 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button id="bccs-buttonDoNotAgree" type="button"
-              class="btn btn-link btn-fill-out btn-block rounded-0 btn-confirm text-decoration-none">
-        {{ translate("I do not agree", "Cookies") }}
-      </button>
-      <button id="bccs-buttonAgree" type="button" class="btn btn-fill-out btn-block rounded-0 btn-confirm AbeloModalButton">{{ translate("Agree", "Cookies") }}</button>
+      <div class="row" style="width: 100%;">
+        <div class="col-12 col-md-6">
+          <button id="bccs-buttonDoNotAgree" type="button"
+                  class="btn btn-link btn-fill-out btn-block rounded-0 btn-confirm text-decoration-none">
+            {{ translate("I do not agree", "Cookies") }}
+          </button>
+        </div>
+        <div class="col-12 col-md-6">
+          <button id="bccs-buttonAgree" type="button" class="btn btn-fill-out btn-block rounded-0 btn-confirm AbeloModalButton">{{ translate("Agree", "Cookies") }}</button>
+        </div>
+      </div>
       <button id="bccs-buttonSave" type="button" class="btn btn-outline-dark">
         {{ translate("Save selection", "Cookies") }}
       </button>

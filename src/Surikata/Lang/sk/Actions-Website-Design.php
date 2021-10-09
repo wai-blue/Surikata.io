@@ -28,5 +28,6 @@ $dictionary = [
   "Footer headings" => "Nadpisy v hlavičke",
   "Custom CSS" => "Vlastné CSS",
   "Custom CSS statements" => "Vlastné CSS",
+  "Design" => "Dizajn",
   "Only for experienced users. CSS knowledge is required. Supported CSS statements may vary in different templates." => "Len pre skúsených používateľov. Vyžaduje sa znalosť CSS. Podporované príkazy CSS sa môžu v rôznych šablónach líšiť.",
 ];

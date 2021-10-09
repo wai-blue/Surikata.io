@@ -29,7 +29,7 @@ class Miscellaneous extends \ADIOS\Core\Action {
                 "description" =>
                   $this->translate("Date format to be used in the administration panel.")."<br/>".
                   $this->translate("Use notation compatible with PHP's date() function.")."<br/>".
-                  $this->translate("List of available options is"). " <a href='https://www.php.net/manual/en/datetime.format.php' target=_blank>here 🡕</a>."
+                  $this->translate("List of available options is"). " <a href='https://www.php.net/manual/en/datetime.format.php' target=_blank>".$this->translate("here")."</a>."
                 ,
                 "input" => $this->adios->ui->Input([
                   "type" => "int",

@@ -15,5 +15,6 @@ $dictionary = [
   "Shopping cart" => "Nákupný vozík",
   "Days to abandon shopping cart" => "Počet dní do zrušenia nákupného košíka",
   "Number of days after which the shopping cart will be treated as abanoned." => "Počet dní, po ktorých bude nákupný košík považovaný za zrušený.",
-  "day(s)" => "dni"
+  "day(s)" => "dni",
+  "here" => "tu"
 ];

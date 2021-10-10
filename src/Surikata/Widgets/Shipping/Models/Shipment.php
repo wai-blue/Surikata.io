@@ -8,7 +8,7 @@ class Shipment extends \ADIOS\Core\Model {
   var $urlBase = "DeliveryAndPayment/Prices";
 
   public function init() {
-    $this->tableTitle = $this->translate("Shipments");
+    $this->tableTitle = $this->translate("Shipment prices");
     $this->formTitleForInserting = $this->translate("New shipment");
     $this->formTitleForEditing = $this->translate("Shipment");
   }

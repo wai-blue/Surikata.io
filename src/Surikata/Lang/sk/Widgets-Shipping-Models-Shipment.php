@@ -2,6 +2,7 @@
 
 $dictionary = [
   "Shipments" => "Zásielky",
+  "Shipment prices" => "Ceny za dopravu a platbu",
   "New shipment" => "Nová zásielka",
   "Shipment" => "Zásielka",
   "Delivery service" => "Doručovacia služba",

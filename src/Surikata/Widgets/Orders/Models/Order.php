@@ -548,11 +548,11 @@ class Order extends \ADIOS\Core\Model {
       $cartContents = $cartModel->getCartContents($customerUID);
     }
 
-    if (empty($orderData['id_delivery_service'])) {
+    if (empty($orderData['id_delivery_service']) && $checkRequiredFields) {
       throw new \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService;
     }
 
-    if (empty($orderData['id_payment_service'])) {
+    if (empty($orderData['id_payment_service']) && $checkRequiredFields) {
       throw new \ADIOS\Widgets\Orders\Exceptions\UnknownPaymentService;
     }
 

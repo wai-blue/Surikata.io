@@ -638,3 +638,28 @@ ul .dots::before {
     display: block;
   }
 }
+
+h4.modal-title {
+  font-size: 20px;
+  font-weight: normal;
+}
+.bccs-body-text p {
+  font-size: 16px;
+}
+.bccs-option {
+  margin-top: 10px;
+}
+.bccs-option label{
+  font-size: 16px;
+}
+.bccs-option ul {
+  color: #9d9c9c;
+}
+#bccs-buttonDoNotAgree {
+  height: 100%;
+}
+@media only screen and (max-width: 991px) {
+  #bccs-buttonDoNotAgree {
+    height: auto;
+  }
+}

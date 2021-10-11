@@ -55,7 +55,7 @@ class Plugin {
 
   public function manifest() {
     return [
-      "faIcon" => "fas fa-puzzle-piece",
+      // "faIcon" => "fas fa-puzzle-piece",
       "logo" => "",
       "title" => $this->niceName ?? $this->name,
       "description" => "",

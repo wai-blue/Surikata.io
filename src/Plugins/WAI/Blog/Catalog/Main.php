@@ -86,10 +86,17 @@ namespace ADIOS\Plugins\WAI\Blog {
       ];
     }
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-blog",
+        "title" => "Blogs",
+      ];
+    }
+
     public function getSettingsForWebsite() {
       return [
         "itemsPerPage" => [
-          "title"   => "Počet blogov na stranu",
+          "title"   => "Blogs per page",
           "type"    => "int",
         ],
         "showAuthor" => [

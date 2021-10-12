@@ -8,5 +8,6 @@ $dictionary = [
   "Features" => "Funckie",
   "Brands" => "Značky",
   "Services" => "Služby",
-  "Products" => "Produkty"
+  "Products" => "Produkty",
+  "Stock states" => "Dostupnosti na sklade",
 ];

@@ -20,6 +20,7 @@ $dictionary = [
   "Calculated sale price" => "Vypočítaná predajná cena",
   "WARNING: Final sale price of the product will be updated after save." => "UPOZORNENIE: Konečná predajná cena produktu bude aktualizovaná po uložení.",
   "Delivery unit" => "Dodacia jednotka",
+  "Current state in the stock" => "Aktuálna dostupnosť na sklade",
   "Stock quantity" => "Množstvo skladom",
   "Number of units of product available on stock and ready for immediate delivery." => "Počet jednotiek produktu dostupných na sklade a pripravených na okamžité dodanie.",
   "Delivery day" => "Deň doručenia",

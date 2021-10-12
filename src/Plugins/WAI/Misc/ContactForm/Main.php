@@ -65,6 +65,7 @@ namespace Surikata\Plugins\WAI\Misc {
 
       $status = $contactFormModel->insertRow([
         "email" => $email,
+        "name" => $name,
         "phone_number" => $phone_number,
         "message" => "Name: ". $name."<br>\n".$message,
         "received" => date('Y-m-d H:i:s'),

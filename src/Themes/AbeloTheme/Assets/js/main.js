@@ -990,3 +990,52 @@ function subscribeNewsletter(formId) {
     });
   });
 }
+
+var Cookie = {
+  set: function (name, value, days) {
+    var expires = ""
+    if (days) {
+      var date = new Date()
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000))
+      expires = "; expires=" + date.toUTCString()
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; Path=/; SameSite=Strict;"
+  },
+  get: function (name) {
+    var nameEQ = name + "="
+    var ca = document.cookie.split(';')
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i]
+      while (c.charAt(0) === ' ') {
+        c = c.substring(1, c.length)
+      }
+      if (c.indexOf(nameEQ) === 0) {
+        return c.substring(nameEQ.length, c.length)
+      }
+    }
+    return undefined
+  }
+}
+var cookieName = "srkt-cookie-consent-settings";
+var props = {
+  contentURL: "{{ rootUrl }}/theme/assets/js/gdpr-consent.js",
+  cookieStorageDays: 183,
+  cookieName: cookieName,
+  languages: ["en", "sk"],
+  __renderOnlyPlugin: "WAI\\Common\\GdprConsent",
+  __output: 'json',
+  postSelectionCallback: function() {
+
+    var cookieConsent = {}
+    cookieConsent.setCookieConsent = "true";
+    cookieConsent.cookie = Cookie.get(cookieName);
+    $.ajax({
+      url: '',
+      data: cookieConsent,
+      method: "POST",
+    });
+    //$.getJSON('', cookieConsent);
+    console.log(cookieSettings.getSettings());
+  },
+}
+var cookieSettings = new BootstrapCookieConsentSettings(props);

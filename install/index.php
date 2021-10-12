@@ -245,6 +245,7 @@ if (!$doInstall) {
     $productFeatureModel = new \ADIOS\Widgets\Products\Models\ProductFeature($adminPanel);
     $productFeatureAssignmentModel = new \ADIOS\Widgets\Products\Models\ProductFeatureAssignment($adminPanel);
     $productPriceModel = new \ADIOS\Widgets\Products\Models\ProductPrice($adminPanel);
+    $productStockStateModel = new \ADIOS\Widgets\Products\Models\ProductStockState($adminPanel);
     $shoppingCartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($adminPanel);
     $invoiceModel = new \ADIOS\Widgets\Finances\Models\Invoice($adminPanel);
     $orderModel = new \ADIOS\Widgets\Orders\Models\Order($adminPanel);
@@ -500,6 +501,11 @@ if (!$doInstall) {
       $productFeatureModel->insertRow(["id" => 7, "order_index" => 7, "value_type" => 2, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Rader", "name_lang_2" => "Kolesá", "id_measurement_unit" => 1]);
 
       $productFeaturesCount = $productFeatureModel->get()->count();
+
+      // produkty - stavy na sklade
+      $productStockStateModel->insertRow(["id" => 1, "name_lang_1" => "Available in stock"]);
+      $productStockStateModel->insertRow(["id" => 2, "name_lang_1" => "Currently unavailable"]);
+      $productStockStateModel->insertRow(["id" => 3, "name_lang_1" => "Available upon request"]);
 
       // produkty - produkty
       $adminPanel->db->start_transaction();

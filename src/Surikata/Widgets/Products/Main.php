@@ -53,7 +53,11 @@ class Products extends \ADIOS\Core\Widget {
                 "title" => $this->translate("Services"),
                 "onclick" => "desktop_update('Services');",
               ],
-            ],
+               [
+                "title" => $this->translate("Stock states"),
+                "onclick" => "desktop_update('Products/StockStates');",
+              ],
+           ],
           ],
         ],
       ];

@@ -20,6 +20,12 @@ class ContactForm extends \ADIOS\Core\Model {
         "readonly" => TRUE,
         "show_column" => TRUE,
       ],
+      "name" => [
+        "type" => "varchar",
+        "title" => $this->translate("Name"),
+        "readonly" => TRUE,
+        "show_column" => TRUE,
+      ],
 
       "phone_number" => [
         "type" => "varchar",

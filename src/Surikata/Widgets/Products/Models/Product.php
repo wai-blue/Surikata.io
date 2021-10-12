@@ -122,6 +122,14 @@ class Product extends \ADIOS\Core\Model {
           "model" => "Widgets/Settings/Models/Unit",
         ],
 
+        "id_stock_state" => [
+          "type" => "lookup",
+          "input_style" => "select",
+          "model" => "Widgets/Products/Models/ProductStockState",
+          "title" => $this->translate("Current state in the stock"),
+          "show_column" => TRUE,
+        ],
+
         "stock_quantity" => [
           "type" => "float",
           "title" => $this->translate("Stock quantity"),
@@ -619,6 +627,7 @@ class Product extends \ADIOS\Core\Model {
         // "sale_price_calculated",
       ],
       $this->translate("Stock & Delivery") => [
+        "id_stock_state",
         "stock_quantity",
         "id_delivery_unit",
         "delivery_day",

@@ -5,21 +5,7 @@ define("REWRITE_BASE", "/mysurikata/");
 ////////////////////////////////////////////////////////
 // Website Domains
 
-$configEnv["domainLanguages"] = [
-  1 => "English",
-];
-
-$configEnv["domains"] = [
-  [
-    "name" => "www.my-online-store.com",
-    "description" => "My First Online Store",
-    "rootUrl" => $_SERVER["HTTP_HOST"].REWRITE_BASE,
-    "languageIndex" => 1,
-  ],
-];
-
-define("WEBSITE_DOMAIN_TO_RENDER", "www.my-online-store.com");
-define("WEBSITE_REWRITE_BASE", REWRITE_BASE);
+require __DIR__."/ConfigEnvDomains.php";
 
 ////////////////////////////////////////////////////////
 // Locale

@@ -22,5 +22,6 @@
 
 /vendor/*
 
+/ConfigEnvDomains.php
 /ConfigEnv.php
 /composer.lock

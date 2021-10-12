@@ -25,7 +25,7 @@ class Customer extends \ADIOS\Core\Model {
 
       "email" => [
         "type" => "varchar",
-        "title" => "Email",
+        "title" => $this->translate("Email"),
         "css_class" => "flex-2",
         "show_column" => TRUE,
       ],
@@ -353,7 +353,7 @@ class Customer extends \ADIOS\Core\Model {
           [
             "class" => "col-md-9 pl-0",
             "tabs" => [
-              "General" => [
+              $this->translate("General") => [
                 // ["html" => '<i class="fas fa-tachometer-alt" style="color:#2d4a8a;font-size:5em"></i>'],
                 // "code",
                 "email",
@@ -366,7 +366,7 @@ class Customer extends \ADIOS\Core\Model {
                 "is_wholesale",
                 "id_category",
               ],
-              "Billing" => [
+              $this->translate("Billing") => [
                 "inv_given_name",
                 "inv_family_name",
                 "inv_company_name",
@@ -377,20 +377,20 @@ class Customer extends \ADIOS\Core\Model {
                 "inv_region",
                 "inv_country",
               ],
-              "Delivery addresses" => [
+              $this->translate("Delivery addresses") => [
                 "action" => "UI/Table",
                 "params" => [
                   "model" => "Widgets/Customers/Models/CustomerAddress",
                   "id_customer" => $data['id'],
                 ]
               ],
-              "Account" => [
+              $this->translate("Account") => [
                 "is_blocked",
                 "password",
                 "is_validated",
                 "last_login",
               ],
-              "Consents" => [
+              $this->translate("Consents") => [
                 "consent_privacy",
                 "consent_newsletter",
               ],
@@ -400,22 +400,22 @@ class Customer extends \ADIOS\Core\Model {
             "class" => "col-md-3 pr-0",
             "content" => [
               $this->adios->ui->Button([
-                "text" => "Orders",
+                "text" => $this->translate("Orders"),
                 "onclick" => "window_render('Customers/{$data['id']}/Orders');",
                 "class" => "btn-info mb-2 w-100 text-left",
               ]),
               $this->adios->ui->Button([
-                "text" => "Invoices",
+                "text" => $this->translate("Invoices"),
                 "onclick" => "window_render('Customers/{$data['id']}/Invoices');",
                 "class" => "btn-info mb-4 w-100 text-left",
               ]),
               $this->adios->ui->Button([
-                "text" => "Wishlist",
+                "text" => $this->translate("Wishlist"),
                 "onclick" => "window_render('Customers/{$data['id']}/Wishlist');",
                 "class" => "btn-light mb-2 w-100 text-left",
               ]),
               $this->adios->ui->Button([
-                "text" => "Watchdog",
+                "text" => $this->translate("Watchdog"),
                 "onclick" => "window_render('Customers/{$data['id']}/Watchdog');",
                 "class" => "btn-light mb-4 w-100 text-left",
               ]),

@@ -5,9 +5,12 @@ namespace ADIOS\Widgets\Products\Models;
 class ProductPrice extends \ADIOS\Core\Model {
   var $sqlName = "product_prices";
   var $urlBase = "Products/Prices";
-  var $tableTitle = "Product price";
-  var $formTitleForInserting = "New product price";
-  var $formTitleForEditing = "Product price";
+
+  public function init() {
+    $this->tableTitle = $this->translate("Product price");
+    $this->formTitleForInserting = $this->translate("New product price");
+    $this->formTitleForEditing = $this->translate("Product price");
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([

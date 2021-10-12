@@ -113,7 +113,7 @@ class ProductCategory extends \ADIOS\Core\Model {
 
     if ($data['id'] > 0) {
       $params['title'] = $data['name_lang_1'];
-      $params['subtitle'] = "Product category";
+      $params['subtitle'] = $this->translate("Product category");
     }
 
     $params['columns']['id_parent']['readonly'] = $params['id_parent'] > 0;

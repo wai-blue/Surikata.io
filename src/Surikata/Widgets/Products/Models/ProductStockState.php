@@ -13,6 +13,7 @@ class ProductStockState extends \ADIOS\Core\Model {
   public function columns(array $columns = []) {
     $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
 
+    $translatedColumns = [];
     foreach ($domainLanguages as $languageIndex => $languageName) {
       $translatedColumns["name_lang_{$languageIndex}"] = [
         "type" => "varchar",

@@ -77,7 +77,7 @@ class WebRedirect extends \ADIOS\Core\Model {
   }
 
   public function onAfterSave($data, $returnValue) {
-    $this->adios->widgets['Website']->rebuildSitemap($data['domain']);
+    $this->adios->widgets['Website']->rebuildSitemapForAllDomains();
     return parent::onAfterSave($data, $returnValue);
   }
 

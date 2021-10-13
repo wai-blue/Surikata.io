@@ -23,7 +23,9 @@ class User extends \ADIOS\Core\Model {
   public function __construct($adios) {
     $this->sqlName = "{$adios->config['system_table_prefix']}_users";
     parent::__construct($adios);
+  }
 
+  public function init() {
     $this->tableTitle = $this->translate("Users");
   }
 

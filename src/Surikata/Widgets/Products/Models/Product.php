@@ -81,38 +81,66 @@ class Product extends \ADIOS\Core\Model {
           "enum_values" => $this->enumValuesSalePriceCalculationMethod,
         ],
 
-        "sale_price_custom" => [
+        "full_price_excl_vat_custom" => [
           "type" => "float",
           "sql_data_type" => "decimal",
           "decimals" => 4,
-          "title" => $this->translate("Custom sale price"),
-          "unit" => $this->adios->locale->currencySymbol(),
-          "show_column" => FALSE,
-        ],
-
-        "full_price_custom" => [
-          "type" => "float",
-          "sql_data_type" => "decimal",
-          "decimals" => 4,
-          "title" => $this->translate("Custom full price"),
-          "unit" => $this->adios->locale->currencySymbol(),
-          "show_column" => FALSE,
-        ],
-
-        "sale_price_cached" => [
-          "type" => "float",
-          "title" => $this->translate("Calculated sale price"),
-          "description" => $this->translate("WARNING: Final sale price of the product will be updated after save."),
+          "title" => $this->translate("Original price excl. VAT"),
+          "unit" => $this->adios->locale->currencySymbol()." excl. VAT",
           "readonly" => TRUE,
           "show_column" => FALSE,
         ],
 
-        "full_price_cached" => [
+        "full_price_incl_vat_custom" => [
           "type" => "float",
-          "title" => $this->translate("Calculated sale price"),
-          "description" => $this->translate("WARNING: Final sale price of the product will be updated after save."),
+          "sql_data_type" => "decimal",
+          "decimals" => 4,
+          "title" => $this->translate("Original price incl. VAT"),
+          "unit" => $this->adios->locale->currencySymbol()." incl. VAT",
+          "show_column" => FALSE,
+        ],
+
+        "sale_price_excl_vat_custom" => [
+          "type" => "float",
+          "sql_data_type" => "decimal",
+          "decimals" => 4,
+          "title" => $this->translate("Sale price excl. VAT"),
+          "unit" => $this->adios->locale->currencySymbol()." excl. VAT",
           "readonly" => TRUE,
           "show_column" => FALSE,
+        ],
+
+        "sale_price_incl_vat_custom" => [
+          "type" => "float",
+          "sql_data_type" => "decimal",
+          "decimals" => 4,
+          "title" => $this->translate("Sale price incl. VAT"),
+          "unit" => $this->adios->locale->currencySymbol()." incl. VAT",
+          "show_column" => FALSE,
+        ],
+
+        "sale_price_excl_vat_cached" => [
+          "type" => "float",
+          "sql_data_type" => "decimal",
+          "decimals" => 4,
+        ],
+
+        "full_price_excl_vat_cached" => [
+          "type" => "float",
+          "sql_data_type" => "decimal",
+          "decimals" => 4,
+        ],
+
+        "sale_price_incl_vat_cached" => [
+          "type" => "float",
+          "sql_data_type" => "decimal",
+          "decimals" => 4,
+        ],
+
+        "full_price_incl_vat_cached" => [
+          "type" => "float",
+          "sql_data_type" => "decimal",
+          "decimals" => 4,
         ],
 
         "id_delivery_unit" => [
@@ -504,6 +532,11 @@ class Product extends \ADIOS\Core\Model {
 
     $params["columns"]["price_calculation_method"]["onchange"] = "{$params['uid']}_price_calculation_method_onchange();";
 
+    $params["columns"]["full_price_excl_vat_custom"]["onchange"] = "{$params['uid']}_price_input_onchange($(this));";
+    $params["columns"]["full_price_incl_vat_custom"]["onchange"] = "{$params['uid']}_price_input_onchange($(this));";
+    $params["columns"]["sale_price_excl_vat_custom"]["onchange"] = "{$params['uid']}_price_input_onchange($(this));";
+    $params["columns"]["sale_price_incl_vat_custom"]["onchange"] = "{$params['uid']}_price_input_onchange($(this));";
+
     $params["javascript"] = "
       function {$params['uid']}_price_calculation_method_onchange(el) {
         let input = $('#{$params['uid']}_price_calculation_method');
@@ -514,16 +547,20 @@ class Product extends \ADIOS\Core\Model {
         let rowPriceListOpen = rowSalePricePriceList.next('.subrow');
         let rowFullPricePlugin = rowPriceListOpen.next('.subrow');
         let rowSalePricePlugin = rowFullPricePlugin.next('.subrow');
-        let rowFullPriceCustom = rowSalePricePlugin.next('.subrow');
-        let rowSalePriceCustom = rowFullPriceCustom.next('.subrow');
+        let rowFullPriceExclVATCustom = rowSalePricePlugin.next('.subrow');
+        let rowFullPriceInclVATCustom = rowFullPriceExclVATCustom.next('.subrow');
+        let rowSalePriceExclVATCustom = rowFullPriceInclVATCustom.next('.subrow');
+        let rowSalePriceInclVATCustom = rowSalePriceExclVATCustom.next('.subrow');
 
         rowFullPricePriceList.hide();
         rowSalePricePriceList.hide();
         rowPriceListOpen.hide();
         rowFullPricePlugin.hide();
         rowSalePricePlugin.hide();
-        rowFullPriceCustom.hide();
-        rowSalePriceCustom.hide();
+        rowFullPriceExclVATCustom.hide();
+        rowSalePriceExclVATCustom.hide();
+        rowFullPriceInclVATCustom.hide();
+        rowSalePriceInclVATCustom.hide();
 
         if (value == ".self::PRICE_CALCULATION_METHOD_PRICE_LIST.") {
           rowFullPricePriceList.show();
@@ -533,9 +570,59 @@ class Product extends \ADIOS\Core\Model {
           rowFullPricePlugin.show();
           rowSalePricePlugin.show();
         } else if (value == ".self::PRICE_CALCULATION_METHOD_CUSTOM_PRICE.") {
-          rowFullPriceCustom.show();
-          rowSalePriceCustom.show();
+          rowFullPriceExclVATCustom.show();
+          rowSalePriceExclVATCustom.show();
+          rowFullPriceInclVATCustom.show();
+          rowSalePriceInclVATCustom.show();
         }
+      }
+
+      function {$params['uid']}_price_input_animate_change(input) {
+        input.animate({ backgroundColor: '#fffaca' }, 300);
+      }
+
+      function {$params['uid']}_price_input_onchange(changedInput) {
+        let fullPriceExclVATInput = $('#{$params['uid']}_full_price_excl_vat_custom')
+        let fullPriceInclVATInput = $('#{$params['uid']}_full_price_incl_vat_custom')
+        let salePriceExclVATInput = $('#{$params['uid']}_sale_price_excl_vat_custom')
+        let salePriceInclVATInput = $('#{$params['uid']}_sale_price_incl_vat_custom')
+        let VATPercentInput = $('#{$params['uid']}_vat_percent')
+
+        let fullPriceExclVAT = parseFloat(fullPriceExclVATInput.val());
+        let salePriceExclVAT = parseFloat(salePriceExclVATInput.val());
+        let fullPriceInclVAT = parseFloat(fullPriceInclVATInput.val());
+        let salePriceInclVAT = parseFloat(salePriceInclVATInput.val());
+        let VATPercent = parseFloat(VATPercentInput.val());
+
+        if (isNaN(fullPriceExclVAT)) fullPriceExclVAT = 0;
+        if (isNaN(salePriceExclVAT)) salePriceExclVAT = 0;
+        if (isNaN(fullPriceInclVAT)) fullPriceInclVAT = 0;
+        if (isNaN(salePriceInclVAT)) salePriceInclVAT = 0;
+        if (isNaN(VATPercent)) VATPercent = 0;
+
+        switch (changedInput.attr('id')) {
+          case '{$params['uid']}_full_price_excl_vat_custom':
+            fullPriceInclVAT = fullPriceExclVAT * (1 + VATPercent / 100);
+            {$params['uid']}_price_input_animate_change(fullPriceInclVATInput);
+          break;
+          case '{$params['uid']}_full_price_incl_vat_custom':
+            fullPriceExclVAT = fullPriceInclVAT / (1 + VATPercent / 100);
+            {$params['uid']}_price_input_animate_change(fullPriceExclVATInput);
+          break;
+          case '{$params['uid']}_sale_price_excl_vat_custom':
+            salePriceInclVAT = salePriceExclVAT * (1 + VATPercent / 100);
+            {$params['uid']}_price_input_animate_change(salePriceInclVATInput);
+          break;
+          case '{$params['uid']}_sale_price_incl_vat_custom':
+            salePriceExclVAT = salePriceInclVAT / (1 + VATPercent / 100);
+            {$params['uid']}_price_input_animate_change(salePriceExclVATInput);
+          break;
+        }
+
+        fullPriceExclVATInput.val(Math.round(fullPriceExclVAT*10000)/10000);
+        fullPriceInclVATInput.val(Math.round(fullPriceInclVAT*10000)/10000);
+        salePriceExclVATInput.val(Math.round(salePriceExclVAT*10000)/10000);
+        salePriceInclVATInput.val(Math.round(salePriceInclVAT*10000)/10000);
       }
 
       {$params['uid']}_price_calculation_method_onchange();
@@ -579,9 +666,19 @@ class Product extends \ADIOS\Core\Model {
               type='text'
               class='adios ui Input ui_input_type_float'
               disabled
-              value='".number_format($priceInfoPriceList["salePrice"], 4, ".", " ")."'
+              value='".number_format($priceInfoPriceList["salePriceExclVAT"], 4, ".", " ")."'
+            />
+            ".$this->translate("excl. VAT")."
+            ".$this->adios->locale->currencySymbol()."
+
+            <input
+              type='text'
+              class='adios ui Input ui_input_type_float'
+              disabled
+              value='".number_format($priceInfoPriceList["salePriceInclVAT"], 4, ".", " ")."'
             />
             ".$this->adios->locale->currencySymbol()."
+            ".$this->translate("incl. VAT")."
           ",
         ],
         [
@@ -616,15 +713,25 @@ class Product extends \ADIOS\Core\Model {
               type='text'
               class='adios ui Input ui_input_type_float'
               disabled
-              value='".number_format($priceInfoPlugin["salePrice"], 4, ".", " ")."'
+              value='".number_format($priceInfoPlugin["salePriceExclVAT"], 4, ".", " ")."'
             />
+            ".$this->translate("excl. VAT")."
+            ".$this->adios->locale->currencySymbol()."
+
+            <input
+              type='text'
+              class='adios ui Input ui_input_type_float'
+              disabled
+              value='".number_format($priceInfoPlugin["salePriceInclVAT"], 4, ".", " ")."'
+            />
+            ".$this->translate("incl. VAT")."
             ".$this->adios->locale->currencySymbol()."
           ",
         ],
-        "full_price_custom",
-        "sale_price_custom",
-        // "full_price_cached",
-        // "sale_price_calculated",
+        "full_price_excl_vat_custom",
+        "full_price_incl_vat_custom",
+        "sale_price_excl_vat_custom",
+        "sale_price_incl_vat_custom",
       ],
       $this->translate("Stock & Delivery") => [
         "id_stock_state",
@@ -795,8 +902,10 @@ class Product extends \ADIOS\Core\Model {
     $this
       ->where('id', $idProduct)
       ->update([
-        "full_price_cached" => $tmp['fullPrice'],
-        "sale_price_cached" => $tmp['salePrice'],
+        "full_price_excl_vat_cached" => $tmp['fullPriceExclVAT'],
+        "full_price_incl_vat_cached" => $tmp['fullPriceInclVAT'],
+        "sale_price_excl_vat_cached" => $tmp['salePriceExclVAT'],
+        "sale_price_incl_vat_cached" => $tmp['salePriceInclVAT'],
       ]
     );
   }
@@ -809,6 +918,20 @@ class Product extends \ADIOS\Core\Model {
     }
     $this->commit();
   }
+
+  // public function onBeforeSave($data) {
+  //   $data['full_price_excl_vat_custom'] = $this->adios->locale->roundPrice($data['full_price_excl_vat_custom']);
+  //   $data['full_price_incl_vat_custom'] = $this->adios->locale->roundPrice($data['full_price_incl_vat_custom']);
+  //   $data['sale_price_excl_vat_custom'] = $this->adios->locale->roundPrice($data['sale_price_excl_vat_custom']);
+  //   $data['sale_price_incl_vat_custom'] = $this->adios->locale->roundPrice($data['sale_price_incl_vat_custom']);
+
+  //   $data['full_price_excl_vat_cached'] = $this->adios->locale->roundPrice($data['full_price_excl_vat_cached']);
+  //   $data['full_price_incl_vat_cached'] = $this->adios->locale->roundPrice($data['full_price_incl_vat_cached']);
+  //   $data['sale_price_excl_vat_cached'] = $this->adios->locale->roundPrice($data['sale_price_excl_vat_cached']);
+  //   $data['sale_price_incl_vat_cached'] = $this->adios->locale->roundPrice($data['sale_price_incl_vat_cached']);
+
+  //   return $data;
+  // }
 
   public function onAfterSave($data, $returnValue) {
     $this->adios->widgets['Website']->rebuildSitemapForAllDomains();
@@ -894,12 +1017,25 @@ class Product extends \ADIOS\Core\Model {
   ////////////////////////////////////////////////////////////////
   // METHODS FOR DATA PROCESSING OF A SINGLE PRODUCT
 
-  public function getDetailedInfoForSingleProduct($idProduct) {
-    $product = $this->unifyProductInformationForSingleProduct(
-      reset($this->getForDetail()->where('id', $idProduct)->get()->toArray())
-    );
+  public function getDetailedInfoForSingleProduct($idProductOrProduct) {
+    if (is_numeric($idProductOrProduct)) {
+      $product = reset($this->getForDetail()->where('id', $idProductOrProduct)->get()->toArray());
+    } else {
+      $product = $idProductOrProduct;
+    }
 
+    $product = $this->unifyProductInformationForSingleProduct($product);
     $product['PRICE'] = $this->getPriceInfoForSingleProduct($product);
+
+    $product['PRICES_FOR_INVOICE'] = reset(
+      \ADIOS\Widgets\Finances::calculatePricesForInvoice([
+        [
+          'unit_price' => $product['sale_price_excl_vat_cached'],
+          'quantity' => 1,
+          'vat_percent' => $product['vat_percent']
+        ]
+      ])
+    )['PRICES_FOR_INVOICE'];
 
     return $product;
 
@@ -990,8 +1126,10 @@ class Product extends \ADIOS\Core\Model {
       case self::PRICE_CALCULATION_METHOD_PRICE_LIST:
         if ($useCache) {
           $priceInfo = [
-            "salePrice" => $product['sale_price_cached'],
-            "fullPrice" => $product['full_price_cached'],
+            "fullPriceExclVAT" => $product['full_price_excl_vat_cached'],
+            "fullPriceInclVAT" => $product['full_price_incl_vat_cached'],
+            "salePriceExclVAT" => $product['sale_price_excl_vat_cached'],
+            "salePriceInclVAT" => $product['sale_price_incl_vat_cached'],
           ];
         } else {
           $purchasePrice = (float) $product['PRICELIST']['purchase_price'] ?? 0;
@@ -1031,9 +1169,13 @@ class Product extends \ADIOS\Core\Model {
             $salePrice = $salePrice * (1 - $discount['discount_percentage'] / 100);
           }
 
+          $fullPrice = ($recommendedPrice == 0 ? $priceWithoutDiscounts : $recommendedPrice);
+
           $priceInfo = [
-            "salePrice" => $salePrice,
-            "fullPrice" => ($recommendedPrice == 0 ? $priceWithoutDiscounts : $recommendedPrice),
+            "fullPriceExclVAT" => $fullPrice,
+            "fullPriceInclVAT" => $fullPrice * (1 + $product['vat_percent'] / 100),
+            "salePriceExclVAT" => $salePrice,
+            "salePriceInclVAT" => $salePrice * (1 + $product['vat_percent'] / 100),
           ];
         }
       break;
@@ -1049,8 +1191,10 @@ class Product extends \ADIOS\Core\Model {
       case self::PRICE_CALCULATION_METHOD_CUSTOM_PRICE:
       default:
         $priceInfo = [
-          "salePrice" => $product['sale_price_custom'],
-          "fullPrice" => $product['full_price_custom'],
+          "fullPriceExclVAT" => $product['full_price_excl_vat_custom'],
+          "fullPriceInclVAT" => $product['full_price_incl_vat_custom'],
+          "salePriceExclVAT" => $product['sale_price_excl_vat_custom'],
+          "salePriceInclVAT" => $product['sale_price_incl_vat_custom'],
         ];
       break;
 

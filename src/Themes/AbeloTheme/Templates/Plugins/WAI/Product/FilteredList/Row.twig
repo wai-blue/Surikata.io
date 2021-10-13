@@ -56,7 +56,7 @@
 											<ul class="product-flag">
 												<li class="new">
 													{% if filterType == 'on_sale' %}
-														<span>- {{ product.price.discountTotal|number_format(2, ",", " ") }}%</span>
+														<span>- {{ product.price.discountTotal|number_format(2, ",", " ") }} %</span>
 													{% elseif filterType == 'news' %}
 														<span>{{ translate("New", "Product") }}</span>
 													{% elseif filterType == 'top' %}
@@ -74,8 +74,8 @@
 												<h2><a href="{{ rootUrl }}/{{ product.url }}" class="product-link">{{ product.TRANSLATIONS.name }}</a></h2>
 												<div class="pricing-meta">
 													<ul>
-														<li class="old-price">{{ product.price.fullPrice|number_format(2, ",", " ") }} €</li>
-														<li class="current-price">{{ product.price.salePrice|number_format(2, ",", " ") }} €</li>
+														<li class="old-price">{{ product.price.fullPrice|formatPrice }} €</li>
+														<li class="current-price">{{ product.price.salePrice|formatPrice }} €</li>
 													</ul>
 												</div>
 											</div>

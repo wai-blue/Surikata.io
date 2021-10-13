@@ -15,7 +15,7 @@
         <div class="content">
           <a href="{{ item.PRODUCT.url }}" class="title">{{ item.PRODUCT.name_lang_1 }}</a>
           <span class="quantity-price">{{ item.quantity|number_format(2, ",", " ") }} x
-          <span class="amount">{{ item.unit_price|number_format(2, ",", " ") }} €</span></span>
+          <span class="amount">{{ item.unit_price|formatPrice }} €</span></span>
           <a
             href="javascript:void(0)"
             onclick="BasicThemeCart.removeProduct({{ item.PRODUCT.id }});"
@@ -31,7 +31,7 @@
     <div class="sub-total">
       <strong>Subtotal :</strong>
         <div id="cartTotal">
-          <p>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</p>
+          <p>{{ cartContents.summary.priceTotal|formatPrice }} €</p>
         </div>
     </div>
     <div class="buttons">

@@ -90,10 +90,6 @@ namespace Surikata\Plugins\WAI\Product {
           ;
         }
 
-        $this->productInfo['priceInfo'] = $productModel
-          ->getPriceInfoForSingleProduct((int) $this->websiteRenderer->urlVariables['idProduct'])
-        ;
-
         $this->productInfo['breadcrumbs'] = $productCategoryModel
           ->breadcrumbs((int) $this->productInfo['id_category'], $allCategories)
         ;

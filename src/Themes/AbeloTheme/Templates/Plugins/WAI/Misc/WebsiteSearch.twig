@@ -21,7 +21,7 @@
                             </a>
                             <ul class="product-flag">
                               {% if (product.price.fullPrice != product.price.salePrice) %}
-                                <li class="new">-{{ product.price.discount|number_format(2, ",", " ") }}%</li>
+                                <li class="new">-{{ product.price.discount|formatPrice }}%</li>
                               {% endif %}
                             </ul>
                           </div>
@@ -40,8 +40,8 @@
                             <div class="align-self-center">
                               <div class="pricing-meta">
                                 <ul>
-                                  <li class="old-price">{{ product.price.fullPrice|number_format(2, ",", " ") }} €</li>
-                                  <li class="current-price">{{ product.price.salePrice|number_format(2, ",", " ") }} €</li>
+                                  <li class="old-price">{{ product.price.fullPrice|formatPrice }} €</li>
+                                  <li class="current-price">{{ product.price.salePrice|formatPrice }} €</li>
                                 </ul>
                               </div>
                               <div class="cart-btn" style="text-align: center;">

@@ -217,6 +217,15 @@ class Loader extends \Cascada\Loader {
         }
       ));
 
+      $this->twig->addFilter(new \Twig\TwigFilter(
+        'formatPrice',
+        function ($string) {
+          global $___CASCADAObject;
+
+          return $___CASCADAObject->adminPanel->locale->formatPrice($string);
+        }
+      ));
+
       $this->setRouter(new \Cascada\Router($this->getSiteMap()));
     }
 

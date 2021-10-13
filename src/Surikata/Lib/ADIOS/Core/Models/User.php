@@ -20,11 +20,13 @@ class User extends \ADIOS\Core\Model {
   var $urlBase = "Users";
   var $lookupSqlValue = "concat({%TABLE%}.name, ' ', {%TABLE%}.surname)";
 
-  public function __construct($adios) {
-    $this->sqlName = "{$adios->config['system_table_prefix']}_users";
-    parent::__construct($adios);
+  public function __construct($adiosOrAttributes) {
+    $this->sqlName = "{$adiosOrAttributes->config['system_table_prefix']}_users";
+    parent::__construct($adiosOrAttributes);
 
-    $this->tableTitle = $this->translate("Users");
+    if (is_object($adiosOrAttributes)) {
+      $this->tableTitle = $this->translate("Users");
+    }
   }
 
   public function columns(array $columns = []) {

@@ -49,7 +49,8 @@
                             <a href="{{ item.PRODUCT.url }}">{{ item.PRODUCT.TRANSLATIONS.name }}</a>
                           </div>
                           <div class="col-12 col-lg-4 product-price-cart">
-                            <div class="cart-text-mobile">price / {{ item.PRODUCT.unit.unit }}:&nbsp;</div><span class="amount">{{ item.unit_price|number_format(2, ",", " ") }} {{ locale.currencySymbol }}</span>
+                            <div class="cart-text-mobile">price / {{ item.PRODUCT.unit.unit }}:&nbsp;</div>
+                            <span class="amount">{{ item.PRICES_FOR_INVOICE.unitPriceInclVAT|formatPrice }} {{ locale.currencySymbol }}</span>
                           </div>
                         </div>
                       </div>
@@ -79,7 +80,8 @@
                       <div class="col-12 col-lg-3 product-subtotal product-subtotal_{{ item.PRODUCT.id }}">
                         <div class="row">
                           <div class="col-9 col-lg-10">
-                            <div class="cart-text-mobile">{{ translate("Price", "Order") }}:&nbsp;</div>{{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} {{ locale.currencySymbol }}
+                            <div class="cart-text-mobile">{{ translate("Price", "Order") }}:&nbsp;</div>
+                            {{ item.PRICES_FOR_INVOICE.totalPriceInclVAT|formatPrice }} {{ locale.currencySymbol }}
                           </div>
                           <div class="col-3 col-lg-2 product-remove">
                             <a
@@ -144,7 +146,10 @@
                 <div class="title-wrap">
                   <h4 class="cart-bottom-title section-bg-gary-cart">{{ translate("Cart Total", "Order") }}</h4>
                 </div>
-                <h4 class="grand-totall-title mt-3">{{ translate("Grand Total", "Order") }} <span id="priceTotal">{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} {{ locale.currencySymbol }}</span></h4>
+                <h4 class="grand-totall-title mt-3">
+                  {{ translate("Grand Total", "Order") }}
+                  <span id="priceInclVAT">{{ cartContents.summary.priceInclVAT|formatPrice }} {{ locale.currencySymbol }}</span>
+                </h4>
                 <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Order/Checkout', 'getWebPageUrl') }}">{{ translate("Proceed to Checkout", "Order") }}</a>
               </div>
             </div>

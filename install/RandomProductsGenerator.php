@@ -1,7 +1,7 @@
 <?php
 
 
-class RandomGenerator {
+class RandomProductsGenerator {
 
   public static function generateEAN($number) {
     $code = '200' . str_pad($number, 9, '0');

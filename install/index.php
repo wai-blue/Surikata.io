@@ -42,7 +42,11 @@
 
 $installationStart = microtime(TRUE);
 
-include("RandomGenerator.php");
+include("RandomProductsGenerator.php");
+include("WebsiteContentGenerator.php");
+
+$configEnvDomainLanguagesPHP = '$configEnv["domainLanguages"] = [1 => "English", 2 => "Slovensky", 3 => "Česky"];';
+file_put_contents(__DIR__."/../ConfigEnvDomains.php", '<?php '.$configEnvDomainLanguagesPHP);
 
 function _loadCsvIntoArray($file, $separator = ',', $enclosure = '#') {
   $lines = [];
@@ -105,8 +109,21 @@ foreach (@scandir(__DIR__."/SampleData/images/slideshow") as $file) {
 }
 
 $doInstall = ($_GET['do_install'] === "1");
-$languageToInstall = $_GET['language_to_install'];
+// $languageToInstall = $_GET['language_to_install'];
 $slideshowImageSet = $_GET['slideshow_image_set'];
+
+$domainsToInstall = [];
+for ($i = 1; $i <= 3; $i++) {
+  if (!empty($_GET["domain_{$i}_description"])) {
+    $domainsToInstall[$i] = [
+      "name" => \ADIOS\Core\HelperFunctions::str2url($_GET["domain_{$i}_description"]),
+      "description" => $_GET["domain_{$i}_description"],
+      "slug" => $_GET["domain_{$i}_slug"],
+      "themeName" => $_GET["domain_{$i}_theme_name"],
+      "languageIndex" => $i,
+    ];
+  }
+}
 
 $randomProductsCount = $_GET['random_products_count'] ?? 50;
 if ($randomProductsCount > 100000) $randomProductsCount = 100000;
@@ -117,18 +134,48 @@ if (($_GET['delivery-and-payment-services'] ?? "") == "yes") $partsToInstall[] =
 if (($_GET['customers'] ?? "") == "yes") $partsToInstall[] = "customers";
 if (($_GET['orders'] ?? "") == "yes") $partsToInstall[] = "orders";
 
-$themeName = $_GET['theme'] ?? "";
-if (!in_array($themeName, $availableThemes)) {
-  $themeName = reset($availableThemes);
-}
+// $themeName = $_GET['theme'] ?? "";
+// if (!in_array($themeName, $availableThemes)) {
+//   $themeName = reset($availableThemes);
+// }
 
 if (!$doInstall) {
 
-  $languageSelectOptions = "";
-  foreach ($availableLanguages as $availableLanguage) {
-    $languageSelectOptions .= "
-      <option value='{$availableLanguage}'>{$availableLanguage}</option>
+  // $languageSelectOptions = "";
+  // foreach ($availableLanguages as $availableLanguage) {
+  //   $languageSelectOptions .= "
+  //     <option value='{$availableLanguage}'>{$availableLanguage}</option>
+  //   ";
+  // }
+
+  function _getDomainDescriptionInput($languageIndex, $value = "") {
+    return "
+      <input
+        name='domain_{$languageIndex}_description'
+        value='{$value}'
+        style='width:300px'
+      >
     ";
+  }
+
+  function _getDomainSlugInput($languageIndex, $value = "") {
+    return "
+      <input
+        name='domain_{$languageIndex}_slug'
+        value='{$value}'
+        style='width:150px'
+      >
+    ";
+  }
+
+  function _getDomainThemeSelect($languageIndex, $availableThemes) {
+    $html = "<select name='domain_{$languageIndex}_theme_name'>";
+    foreach ($availableThemes as $availableTheme) {
+      $html .= "<option value='{$availableTheme}'>{$availableTheme}</option>";
+    }
+    $html .= "</select>";
+
+    return $html;
   }
 
   $slideshowImageSetSelectOptions = "";
@@ -163,11 +210,26 @@ if (!$doInstall) {
         </tr>
         <tr>
           <td><input type='checkbox' name='product-catalog' id='product-catalog' value='yes' checked></td>
-          <td><label for='product-catalog'>Sample product product catalog</label></td>
+          <td>
+            <label for='product-catalog'>Sample product product catalog</label>
+          </td>
+          <td>
+            <select name='random_products_count'>
+              <option value='10' selected>10 random products</option>
+              <option value='100'>100 random products</option>
+              <option value='1000'>1000 random products</option>
+              <option value='5000'>5000 random products</option>
+            </select>
+          </td>
         </tr>
         <tr>
           <td><input type='checkbox' name='customers' id='customers' value='yes' checked></td>
-          <td><label for='customers'>Sample set of customers (each customer will get a password '0000')</label></td>
+          <td>
+            <label for='customers'>Sample set of customers</label>
+          </td>
+          <td>
+            Each customer will get a password '0000'.
+          </td>
         </tr>
         <tr>
           <td><input type='checkbox' name='delivery-and-payment-services' id='delivery-and-payment-services' value='yes' checked></td>
@@ -179,37 +241,57 @@ if (!$doInstall) {
         </tr>
       </table>
       <p>
-        Select a language for the website content:
+        Configure domains to install:
       </p>
-      <select name='language_to_install'>
+      <table>
+        <tr>
+          <td><b>Slug</b></td>
+          <td><b>Domain description</b></td>
+          <td><b>Language</b></td>
+          <td><b>Theme</b></td>
+        </tr>
+        <tr>
+          <td>"._getDomainSlugInput(1, "en")."</td>
+          <td>"._getDomainDescriptionInput(1, "English version")."</td>
+          <td>{$configEnv["domainLanguages"][1]}</td>
+          <td>"._getDomainThemeSelect(1, $availableThemes)."</td>
+        </tr>
+        <tr>
+          <td>"._getDomainSlugInput(2, "sk")."</td>
+          <td>"._getDomainDescriptionInput(2, "Slovenská verzia")."</td>
+          <td>{$configEnv["domainLanguages"][2]}</td>
+          <td>"._getDomainThemeSelect(2, $availableThemes)."</td>
+        </tr>
+        <tr>
+          <td>"._getDomainSlugInput(3)."</td>
+          <td>"._getDomainDescriptionInput(3)."</td>
+          <td>{$configEnv["domainLanguages"][3]}</td>
+          <td>"._getDomainThemeSelect(3, $availableThemes)."</td>
+        </tr>
+      </table>
+      <p style='color:#888888'>
+        It is also possible to create more domains using the same language and with different design or
+        product catalog filtered for a specific brand.
+      </p>
+      <!-- <select name='language_to_install'>
         {$languageSelectOptions}
-      </select>
+      </select> -->
       <p>
         Select an image set for the homepage slideshow:
       </p>
       <select name='slideshow_image_set'>
         {$slideshowImageSetSelectOptions}
       </select>
-      <p>
-        Number of random products to be generated:
-      </p>
-      <select name='random_products_count'>
-        <option value='0'>0</option>
-        <option value='10' selected>10</option>
-        <option value='100'>100</option>
-        <option value='1000'>1000</option>
-        <option value='5000'>5000</option>
-      </select>
-      <p>
+      <!-- <p>
         Select a theme to use:
       </p>
       <select name='theme'>
         {$themeSelectOptions}
-      </select>
-      <p>
+      </select> -->
+      <!-- <p>
         Select a color scheme:<br/>
       </p>
-      <div style='color:#888888'>[To be done]</div>
+      <div style='color:#888888'>[To be done]</div> -->
       <br/>
       <input type='submit' class='btn' value='Hurray! Create Surikata e-shop now.' />
     </form>
@@ -218,14 +300,15 @@ if (!$doInstall) {
 
   try {
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Initialization
+
     $websiteRenderer = new \Surikata\Core\Web\Loader($websiteRendererConfig);
     $adminPanel = new \Surikata\Core\AdminPanel\Loader($adminPanelConfig, ADIOS_MODE_FULL, $websiteRenderer);
 
     $adminPanel->install();
     $adminPanel->installDefaultUsers();
     $adminPanel->createMissingFolders();
-
-    $themeObject = $adminPanel->widgets['Website']->themes[$themeName];
 
     $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($adminPanel);
     $customerCategoryModel = new \ADIOS\Widgets\Customers\Models\CustomerCategory($adminPanel);
@@ -249,18 +332,8 @@ if (!$doInstall) {
     $shoppingCartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($adminPanel);
     $invoiceModel = new \ADIOS\Widgets\Finances\Models\Invoice($adminPanel);
     $orderModel = new \ADIOS\Widgets\Orders\Models\Order($adminPanel);
-    $websiteMenuModel = new \ADIOS\Widgets\Website\Models\WebMenu($adminPanel);
-    $websiteMenuItemModel = new \ADIOS\Widgets\Website\Models\WebMenuItem($adminPanel);
-    $websiteWebPageModel = new \ADIOS\Widgets\Website\Models\WebPage($adminPanel);
-    $websiteWebRedirectModel = new \ADIOS\Widgets\Website\Models\WebRedirect($adminPanel);
     $unitModel = new \ADIOS\Widgets\Settings\Models\Unit($adminPanel);
     $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($adminPanel);
-    $newsModel = new \ADIOS\Plugins\WAI\News\Models\News($adminPanel);
-
-    $slideshowModel = new \ADIOS\Plugins\WAI\Misc\Slideshow\Models\HomepageSlideshow($adminPanel);
-    $blogCatalogModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\Blog($adminPanel);
-    $blogTagModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\BlogTag($adminPanel);
-    $blogTagAssignmentModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\BlogTagAssignment($adminPanel);
 
     $deliveryServiceModel = new \ADIOS\Widgets\Shipping\Models\DeliveryService($adminPanel);
     $destinationCountryModel = new \ADIOS\Widgets\Shipping\Models\DestinationCountry($adminPanel);
@@ -268,6 +341,39 @@ if (!$doInstall) {
     $shipmentModel = new \ADIOS\Widgets\Shipping\Models\Shipment($adminPanel);
     $shipmentPriceModel = new \ADIOS\Widgets\Shipping\Models\ShipmentPrice($adminPanel);
 
+    // ConfigEnvDomains.php
+    $configEnvDomainsPHP = "<?php\r\n";
+    $configEnvDomainsPHP .= "\r\n";
+    $configEnvDomainsPHP .= $configEnvDomainLanguagesPHP."\r\n";
+    $configEnvDomainsPHP .= "\r\n";
+    $configEnvDomainsPHP .= '$configEnv["domains"] = ['."\r\n";
+    foreach ($domainsToInstall as $key => $domain) {
+      $configEnvDomainsPHP .= "  [\r\n";
+      $configEnvDomainsPHP .= "    'name' => '{$domain['name']}',\r\n";
+      $configEnvDomainsPHP .= "    'description' => '{$domain['description']}',\r\n";
+      $configEnvDomainsPHP .= "    'slug' => '{$domain['slug']}',\r\n";
+      $configEnvDomainsPHP .= "    'rootUrl' => \$_SERVER['HTTP_HOST'].REWRITE_BASE.'{$domain['slug']}',\r\n";
+      $configEnvDomainsPHP .= "    'languageIndex' => {$key},\r\n";
+      $configEnvDomainsPHP .= "  ],\r\n";
+    }
+    $configEnvDomainsPHP .= "];\r\n";
+    $configEnvDomainsPHP .= "\r\n";
+
+    $configEnvDomainsPHP .= trim('
+$slug = reset(explode("/", str_replace(REWRITE_BASE, "", $_SERVER["REQUEST_URI"])));
+
+$domainToRender = reset($configEnv["domains"]);
+foreach ($configEnv["domains"] as $domain) {
+  if ($domain["slug"] == $slug) {
+    $domainToRender = $domain;
+  }
+}
+
+define("WEBSITE_DOMAIN_TO_RENDER", $domainToRender["name"]);
+define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]);
+    ');
+
+    file_put_contents(__DIR__."/../ConfigEnvDomains.php", $configEnvDomainsPHP);
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -510,7 +616,7 @@ if (!$doInstall) {
       // produkty - produkty
       $adminPanel->db->start_transaction();
 
-      RandomGenerator::generateRandomProducts(
+      RandomProductsGenerator::generateRandomProducts(
         $randomProductsCount,
         $productModel,
         $productFeatureAssignmentModel
@@ -591,63 +697,6 @@ if (!$doInstall) {
       $adminPanel->db->commit();
 
     }
-
-      ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      // PART: website content
-
-      mkdir("../upload/blogs/");
-      mkdir("../upload/products/");
-      mkdir("../upload/slideshow/");
-
-      for ($i = 1; $i <= 7; $i++) {
-        copy(
-          __DIR__."/SampleData/images/category_{$i}.png",
-          "{$adminPanel->config['files_dir']}/blogs/category_{$i}.png",
-        );
-      }
-    for ($i = 1; $i <= 10; $i++) {
-        copy(
-          __DIR__."/SampleData/images/product_{$i}.jpg",
-          "{$adminPanel->config['files_dir']}/products/product_{$i}.jpg",
-        );
-      }
-      for ($i = 1; $i <= 3; $i++) {
-        copy(
-          __DIR__."/SampleData/images/slideshow/{$slideshowImageSet}/{$i}.jpg",
-          "{$adminPanel->config['files_dir']}/slideshow/{$i}.jpg",
-        );
-      }
-
-      copy(
-        __DIR__."/SampleData/images/your-logo.png",
-        "{$adminPanel->config['files_dir']}/your-logo.png",
-      );
-
-      $imagesToCopy = [
-        "cardpay.jpg",
-        "tatrabanka.jpg",
-        "posta.svg",
-        "ups.svg",
-      ];
-      foreach ($imagesToCopy as $item) {
-        copy(
-          __DIR__."/SampleData/images/".$item,
-          "{$adminPanel->config['files_dir']}/".$item,
-        );
-      }
-
-      require(__DIR__."/languages/{$languageToInstall}");
-
-      $adminPanel->saveConfig(
-        [
-          "model" => $productModel->name,
-          "search" => base64_encode(json_encode([
-            "is_recommended" => 1,
-          ]))
-        ],
-        "UI/Table/savedSearches/Products/Recommended products/"
-      );
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // PART: customers
@@ -800,7 +849,18 @@ if (!$doInstall) {
       }
     }
 
-    $themeObject->onAfterInstall();
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // PART: website content
+
+    $wsg = new WebsiteContentGenerator(
+      $adminPanel,
+      $slideshowImageSet,
+      $domainsToInstall,
+    );
+    $wsg->copyAssets();
+    foreach ($domainsToInstall as $domainIndex => $domain) {
+      $wsg->generateWebsiteContent($domainIndex, $domain["themeName"]);
+    }
 
   } catch (\Exception $e) {
     echo "
@@ -834,8 +894,8 @@ if (!$doInstall) {
         ⚠ WARNING: You should delete the <i>install</i> folder now.
       </div>
       <table>
-        <tr><td>Theme</td><td>{$themeName}</td></tr>
-        <tr><td>Content language</td><td>{$languageToInstall}</td></tr>
+        <!-- <tr><td>Theme</td><td>{$themeName}</td></tr> -->
+        <!-- <tr><td>Content language</td><td>{$languageToInstall}</td></tr> -->
         <tr><td>Slideshow image set</td><td>{$slideshowImageSet}</td></tr>
         <tr><td>Sample set of products</td><td>".(in_array("product-catalog", $partsToInstall) ? "yes" : "no")."</td></tr>
         <tr><td>Random products count</td><td>{$randomProductsCount}</td></tr>

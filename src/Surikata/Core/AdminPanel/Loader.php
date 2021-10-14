@@ -37,9 +37,7 @@ class Loader extends \ADIOS\Core\Loader {
       $this->twig->addFilter(new \Twig\TwigFilter(
         'formatPrice',
         function ($string) {
-          global $___ADIOSObject;
-
-          return $___ADIOSObject->locale->formatPrice($string);
+          return $this->locale->formatPrice($string);
         }
       ));
     }

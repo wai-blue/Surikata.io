@@ -1236,6 +1236,16 @@ class Product extends \ADIOS\Core\Model {
   public function addPriceInfoForListOfProducts($products, $useCache = TRUE) {
     foreach ($products as $key => $product) {
       $products[$key]['PRICE'] = $this->getPriceInfoForSingleProduct($product, NULL, $useCache);
+
+      $products[$key]['PRICES_FOR_INVOICE'] = reset(
+        \ADIOS\Widgets\Finances::calculatePricesForInvoice([
+          [
+            'unit_price' => $product['sale_price_excl_vat_cached'],
+            'quantity' => 1,
+            'vat_percent' => $product['vat_percent']
+          ]
+        ])
+      )['PRICES_FOR_INVOICE'];
     }
 
     return $products;

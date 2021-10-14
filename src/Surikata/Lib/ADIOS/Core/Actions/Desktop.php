@@ -65,17 +65,17 @@ class Desktop extends \ADIOS\Core\Action {
       ",
     ];
 
-    if (
-      is_array($this->adios->config['available_languages'])
-        && count($this->adios->config['available_languages']) > 1
-    ) {
-      foreach ($this->adios->config['available_languages'] as $val) {
-        $settingsMenuItems[] = [
-          "text" => strtoupper($val),
-          "onclick" => "window.location.href=\"?language={$val}",
-        ];
-      }
-    }
+    // if (
+    //   is_array($this->adios->config['available_languages'])
+    //     && count($this->adios->config['available_languages']) > 1
+    // ) {
+    //   foreach ($this->adios->config['available_languages'] as $val) {
+    //     $settingsMenuItems[] = [
+    //       "text" => strtoupper($val),
+    //       "onclick" => "window.location.href=\"?language={$val}",
+    //     ];
+    //   }
+    // }
 
     // $settingsMenuItems[] = [
     //   "fa_icon" => "fas fa-cogs",

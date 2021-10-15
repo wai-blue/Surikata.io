@@ -276,7 +276,10 @@
                         <div class="your-order-middle">
                           <ul>
                           {% for item in cartContents.items %}
-                            <li><span class="order-middle-left">{{ item.PRODUCT.TRANSLATIONS.name }} X {{ item.quantity }}</span> <span class="order-price">{{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} €</span></li>
+                            <li>
+                              <span class="order-middle-left">{{ item.PRODUCT.TRANSLATIONS.name }} X {{ item.quantity }}</span>
+                              <span class="order-price">{{ item.PRICES_FOR_INVOICE.totalPriceInclVAT|formatPrice }} €</span>
+                            </li>
                           {% endfor %}
                           </ul>
                         </div>
@@ -318,7 +321,7 @@
                                           {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
                                           onchange="AbeloThemeCart.updateCheckoutOverview()"
                                         >
-                                        <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }} <b>{{ deliveryService.price|number_format(2, ",", " ") }} €</b></label>
+                                        <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }} <b>{{ deliveryService.price|formatPrice }} €</b></label>
                                         {% if deliveryService.logo %}
                                           <img class="order-img" src="{{ uploadedFileUrl }}/{{ deliveryService.logo }}"/>
                                         {% endif %}
@@ -353,7 +356,7 @@
                                         {% if selectedPaymentMethod.id == paymentMethod.id %} checked="checked" {% endif %}
                                         onchange="AbeloThemeCart.updateCheckoutOverview()"
                                       >
-                                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }} <b>{{ paymentMethod.price|number_format(2, ",", " ") }} €</b></label>
+                                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }} <b>{{ paymentMethod.price|formatPrice }} €</b></label>
                                       {% if paymentMethod.logo %}
                                         <img class="order-img" src="{{ uploadedFileUrl }}/{{ paymentMethod.logo }}"/>
                                       {% endif %}
@@ -368,15 +371,15 @@
                         <div class="your-order-total">
                           <ul>
                             <li class="subTotal">{{ translate("Subtotal", "Order") }}</li>
-                            <li class="subTotal">{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+                            <li class="subTotal">{{ cartContents.summary.priceInclVAT|formatPrice }} €</li>
                           </ul>
                           <ul>
                             <li class="subTotal">{{ translate("Shipping", "Order") }}</li>
-                            <li class="subTotal">{{ deliveryPrice|number_format(2, ",", " ") }} €</li>
+                            <li class="subTotal">{{ deliveryPrice|formatPrice }} €</li>
                           </ul>
                           <ul>
                             <li class="order-total">{{ translate("Total", "Order") }}</li>
-                            <li>{{ totalPriceWithDelivery|number_format(2, ",", " ") }} €</li>
+                            <li>{{ totalPriceWithDelivery|formatPrice }} €</li>
                           </ul>
                         </div>
                       </div>
@@ -423,7 +426,10 @@
         <div class="your-order-middle">
           <ul>
           {% for item in cartContents.items %}
-            <li><span class="order-middle-left">{{ item.PRODUCT.TRANSLATIONS.name }} X {{ item.quantity }}</span> <span class="order-price">{{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} €</span></li>
+            <li>
+              <span class="order-middle-left">{{ item.PRODUCT.TRANSLATIONS.name }} X {{ item.quantity }}</span>
+              <span class="order-price">{{ item.PRICES_FOR_INVOICE.totalPriceInclVAT|formatPrice }} €</span>
+            </li>
           {% endfor %}
           </ul>
         </div>
@@ -465,7 +471,7 @@
                           {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
                           onchange="AbeloThemeCart.updateCheckoutOverview()"
                         >
-                        <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }} <b>{{ deliveryService.price|number_format(2, ",", " ") }} €</b></label>
+                        <label for="deliveryService-{{ loop.index }}">{{ deliveryService.name }} <b>{{ deliveryService.price|formatPrice }} €</b></label>
                         {% if deliveryService.logo %}
                           <img class="order-img" src="./upload/{{ deliveryService.logo }}"/>
                         {% endif %}
@@ -500,7 +506,7 @@
                         {% if selectedPaymentMethod.id == paymentMethod.id %} checked="checked" {% endif %}
                         onchange="AbeloThemeCart.updateCheckoutOverview()"
                       >
-                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }} <b>{{ paymentMethod.price|number_format(2, ",", " ") }} €</b></label>
+                      <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.name }} <b>{{ paymentMethod.price|formatPrice }} €</b></label>
                       {% if paymentMethod.logo %}
                         <img class="order-img" src="{{ uploadedFileUrl }}/{{ paymentMethod.logo }}"/>
                       {% endif %}
@@ -515,15 +521,15 @@
         <div class="your-order-total">
           <ul>
             <li class="subTotal">{{ translate("Subtotal", "Order") }}</li>
-            <li class="subTotal">{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</li>
+            <li class="subTotal">{{ cartContents.summary.priceInclVAT|formatPrice }} €</li>
           </ul>
           <ul>
             <li class="subTotal">{{ translate("Shipping", "Order") }}</li>
-            <li class="subTotal">{{ deliveryPrice|number_format(2, ",", " ") }} €</li>
+            <li class="subTotal">{{ deliveryPrice|formatPrice }} €</li>
           </ul>
           <ul>
             <li class="order-total">{{ translate("Total", "Order") }}</li>
-            <li>{{ totalPriceWithDelivery|number_format(2, ",", " ") }} €</li>
+            <li>{{ totalPriceWithDelivery|formatPrice }} €</li>
           </ul>
         </div>
       </div>

@@ -47,7 +47,7 @@
                 <ul class="product-flag">
                   <li class="new">
                     {% if filterType == 'on_sale' %}
-                      <span>- {{ product.price.discountTotal|number_format(2, ",", " ") }}%</span>
+                      <span>- {{ product.price.discountTotal|number_format(2, ",", " ") }} %</span>
                     {% elseif filterType == 'news' %}
                       <span>{{ translate("New", "Product") }}</span>
                     {% elseif filterType == 'top' %}
@@ -64,10 +64,10 @@
                 <p>{{ product.TRANSLATIONS.brief }}</p>
                 <div class="pricing-meta">
                   <ul>
-                    {% if product.sale_price_cached != product.full_price_cached %}
-                      <li class="old-price">{{ product.full_price_cachede|number_format(2, ",", " ") }} €</li>
+                    {% if product.sale_price_incl_vat_cached != product.full_price_incl_vat_cached %}
+                      <li class="old-price">{{ product.full_price_incl_vat_cached|formatPrice }} €</li>
                     {% endif %}
-                    <li class="current-price">{{ product.sale_price_cached|number_format(2, ",", " ") }} €</li>
+                    <li class="current-price">{{ product.sale_price_incl_vat_cached|formatPrice }} €</li>
                   </ul>
                 </div>
               </div>

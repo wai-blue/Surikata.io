@@ -5,5 +5,5 @@ $dictionary = [
   "Open new tab" => "Otvoriť novú kartu",
   "Restart" => "Reštartovať",
   "Show console" => "Otvoriť konzolu",
-  "Examples of UI" => "Príklady UI"
+  "Examples of UI" => "Príklady UI",
 ];

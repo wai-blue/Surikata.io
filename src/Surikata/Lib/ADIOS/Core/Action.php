@@ -135,6 +135,7 @@ class Action {
     $twigParams["config"] = $this->adios->config;
     $twigParams["user"] = $this->adios->userProfile;
     $twigParams["locale"] = $this->adios->locale->getAll();
+    $twigParams["languageDictionary"] = $this->languageDictionary;
     $twigParams['userNotifications'] = $this->adios->userNotifications->getAsHtml();
 
     try {

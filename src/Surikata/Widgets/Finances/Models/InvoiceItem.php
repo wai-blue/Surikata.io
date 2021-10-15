@@ -39,7 +39,9 @@ class InvoiceItem extends \ADIOS\Core\Model {
 
       "unit_price" => [
         "type" => "float",
-        "title" => $this->translate("Unit price"),
+        "sql_data_type" => "decimal",
+        "decimals" => 4,
+        "title" => $this->translate("Unit price excl. VAT"),
         "unit" => $this->adios->locale->currencySymbol(),
         "show_column" => TRUE,
       ],

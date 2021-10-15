@@ -9,8 +9,10 @@
           </a>
           <div class="content">
             <a href="{{ item.PRODUCT.url }}" class="title">{{ item.PRODUCT.TRANSLATIONS.name }}</a>
-            <span class="quantity-price">{{ item.quantity|number_format(2, ",", " ") }} x 
-            <span class="amount">{{ item.unit_price|number_format(2, ",", " ") }} {{ locale.currencySymbol }}</span></span>
+            <span class="quantity-price">
+              {{ item.quantity }} x 
+              <span class="amount">{{ item.PRICES_FOR_INVOICE.unitPriceInclVAT|formatPrice }} {{ locale.currencySymbol }}</span>
+            </span>
             <a 
               href="javascript:void(0)" 
               onclick="AbeloThemeCart.removeProduct({{ item.PRODUCT.id }});"
@@ -25,7 +27,7 @@
       <div class="sub-total">
         <strong>{{ translate("Subtotal") }} :</strong>
           <div id="cartTotal">
-            <p>{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} {{ locale.currencySymbol }}</p>
+            <p>{{ cartContents.summary.priceInclVAT|formatPrice }} {{ locale.currencySymbol }}</p>
           </div>
       </div>
       <div class="buttons">

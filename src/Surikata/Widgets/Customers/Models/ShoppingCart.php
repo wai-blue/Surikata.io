@@ -91,19 +91,28 @@ class ShoppingCart extends \ADIOS\Core\Model {
     $items = $cartItemModel->getByCartId($idCart);
 
     // calculate total price
-    $priceTotal = 0;
-    $weightTotal = 0;
+    $priceExclVAT = 0;
+    $priceInclVAT = 0;
+    $weight = 0;
 
-    foreach ($items as $item) {
-      $priceTotal += $item['quantity'] * $item['unit_price'];
-      $weightTotal += $item['quantity'] * $item['PRODUCT']['weight'];
+    foreach ($items as $key => $item) {
+      $items[$key]['vat_percent'] = $item['PRODUCT']['vat_percent'];
+    }
+    
+    $items = \ADIOS\Widgets\Finances::calculatePricesForInvoice($items);
+
+    foreach ($items as $key => $item) {
+      $priceExclVAT += $items[$key]['PRICES_FOR_INVOICE']['totalPriceExclVAT'];
+      $priceInclVAT += $items[$key]['PRICES_FOR_INVOICE']['totalPriceInclVAT'];
+      $weight += $item['quantity'] * $item['PRODUCT']['weight'];
     }
 
     return [
       'items' => $items,
       'summary' => [
-        'priceTotal' => $priceTotal,
-        'weightTotal' => $weightTotal
+        'priceExclVAT' => $priceExclVAT,
+        'priceInclVAT' => $priceInclVAT,
+        'weight' => $weight,
       ],
     ];
   }
@@ -143,13 +152,13 @@ class ShoppingCart extends \ADIOS\Core\Model {
         "id_shopping_cart" => $idCart,
         "id_product" => $idProduct,
         "quantity" => $qty,
-        "unit_price" => $product['salePrice'],
+        "unit_price" => $product['salePriceExclVAT'],
         "added_on" => date("Y-m-d H:i:s"),
       ]);
     } else {
       $item->update([
         "quantity" => max(0, $item->get()->first()->quantity + $qty),
-        "unit_price" => $product['salePrice'],
+        "unit_price" => $product['salePriceExclVAT'],
         "updated_on" => date("Y-m-d H:i:s"),
       ]);
     }
@@ -172,7 +181,7 @@ class ShoppingCart extends \ADIOS\Core\Model {
 
     $item->update([
       "quantity" => $qty,
-      "unit_price" => $product['salePrice'],
+      "unit_price" => $product['salePriceExclVAT'],
       "updated_on" => date("Y-m-d H:i:s"),
     ]);
 

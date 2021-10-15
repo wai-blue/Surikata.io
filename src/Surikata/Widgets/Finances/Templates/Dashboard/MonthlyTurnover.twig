@@ -1,6 +1,6 @@
 <div class="card shadow mb-2">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">Monthly turnover for {{ currentYear }}</h6>
+    <h6 class="m-0 font-weight-bold text-primary">{{ translate("Monthly turnover for") }} {{ currentYear }}</h6>
   </div>
   <div class="card-body">
 
@@ -11,7 +11,7 @@
       var data = {
         labels: labels,
         datasets: [{
-          label: 'Monthly turnover for  {{ currentYear }}',
+          label: "{{ translate('Monthly turnover for') }} {{ currentYear }}",
           data: {{ data|raw }},
           fill: false,
           borderColor: 'rgb(75, 192, 192)',

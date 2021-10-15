@@ -20,21 +20,15 @@ class ProductPrice extends \ADIOS\Core\Model {
 
       "purchase_price" => [
         "type" => "float",
-        "title" => $this->translate("Purchase price"),
+        "title" => $this->translate("Purchase price excl. VAT"),
         "unit" => $this->adios->locale->currencySymbol(),
         "show_column" => TRUE,
       ],
 
       "recommended_price" => [
         "type" => "float",
-        "title" => $this->translate("Recommended price"),
+        "title" => $this->translate("Recommended price excl. VAT"),
         "unit" => $this->adios->locale->currencySymbol(),
-        "show_column" => TRUE,
-      ],
-
-      "is_including_vat" => [
-        "type" => "boolean",
-        "title" => $this->translate("Including VAT"),
         "show_column" => TRUE,
       ],
     ]);

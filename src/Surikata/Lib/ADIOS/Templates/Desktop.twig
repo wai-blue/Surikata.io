@@ -196,14 +196,14 @@
                   {% for item in settingsMenuItems %}
                     <a class="dropdown-item" href="javascript:void(0)" onclick="{{ item.onclick|raw }}">
                       <i class="{{ item.fa_icon }} fa-sm fa-fw mr-2 text-gray-400"></i>
-                      {{ l(item.text) }}
+                      {{ item.text }}
                     </a>
                   {% endfor %}
                   <div class="dropdown-divider"></div>
                   {% for item in develMenuItems %}
                     <a class="dropdown-item" href="javascript:void(0)" onclick="{{ item.onclick|raw }}">
                       <i class="{{ item.fa_icon }} fa-sm fa-fw mr-2 text-gray-400"></i>
-                      {{ l(item.text) }}
+                      {{ item.text }}
                     </a>
                   {% endfor %}
                   <div class="dropdown-divider"></div>

@@ -22,15 +22,15 @@
 									{% for item in cartContents.items %}
 										<tr>
 											<td class="product-thumbnail">
-												<a  href="{{ item.product.url }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ item.product.image }}" alt="{{ item.product.TRANSLATIONS.name }}" /></a>
+												<a  href="{{ item.PRODUCT.url }}"><img class="img-responsive" src="{{ uploadedFileUrl }}/{{ item.PRODUCT.image }}" alt="{{ item.PRODUCT.TRANSLATIONS.name }}" /></a>
 											</td>
-											<td class="product-name"><a href="{{ item.product.url }}">{{ item.product.TRANSLATIONS.name }}</a></td>
-											<td class="product-price-cart"><span class="amount">{{ item.unit_price|number_format(2, ",", " ") }} €</span></td>
+											<td class="product-name"><a href="{{ item.PRODUCT.url }}">{{ item.PRODUCT.TRANSLATIONS.name }}</a></td>
+											<td class="product-price-cart"><span class="amount">{{ item.PRODUCT.PRICE.salePriceInclVAT|formatPrice }} €</span></td>
 											<td class="product-quantity">
 												<div class="cart-plus-minus">
 													<input
 														onchange="AbeloThemeCart.updateProductQty(
-															{{ item.product.id }},
+															{{ item.PRODUCT.id }},
 															this.value,
 															function(data) {
 																AbeloThemeCart.updateDetailedOverview();
@@ -43,7 +43,7 @@
 													/>
 												</div>
 											</td>
-											<td class="product-subtotal_{{ item.product.id }}"> {{ (item.unit_price * item.quantity)|number_format(2, ",", " ") }} €</td>
+											<td class="product-subtotal_{{ item.PRODUCT.id }}"> {{ (item.PRODUCT.PRICE.salePriceInclVAT * item.quantity)|formatPrice }} €</td>
 											<td class="product-remove">
 												<!--<a
 													href="javascript:void(0)"
@@ -52,7 +52,7 @@
 													href="javascript:void(0)"
 													onclick="
 														AbeloThemeCart.removeProduct(
-															{{ item.product.id }},
+															{{ item.PRODUCT.id }},
 															function(data) {
 																AbeloThemeCart.updateDetailedOverview();
 															}
@@ -106,7 +106,7 @@
 								<div class="title-wrap">
 									<h4 class="cart-bottom-title section-bg-gary-cart">{{ translate("Cart Total") }}</h4>
 								</div>
-								<h4 class="grand-totall-title mt-3">{{ translate("Grand Total") }} <span id="priceTotal">{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }} €</span></h4>
+								<h4 class="grand-totall-title mt-3">{{ translate("Grand Total") }} <span id="priceInclVAT">{{ cartContents.summary.priceInclVAT|formatPrice }} €</span></h4>
 								<a href="{{ rootUrl }}/{{ callPluginMethod('OrderCheckoutDefault', 'getWebPageUrl') }}">{{ translate("Proceed to Checkout") }}</a>
 							</div>
 						</div>

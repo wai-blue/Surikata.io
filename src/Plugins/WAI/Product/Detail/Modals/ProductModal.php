@@ -12,7 +12,7 @@ class ProductModal
 
   public function renderDefaultModal($product) {
 
-    $priceString = number_format($product['sale_price_cached'], 2, ",", " ");;
+    $priceString = number_format($product['sale_price_incl_vat_cached'], 2, ",", " ");;
     $params["uploaded_file_url"] = $this->adios->adminPanel->config["upload_url"];
     $params["rootUrl"] = $this->adios->adminPanel->websiteRenderer->rootUrl;
     $params["product"] = $product;

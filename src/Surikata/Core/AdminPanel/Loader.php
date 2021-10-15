@@ -33,6 +33,15 @@ class Loader extends \ADIOS\Core\Loader {
     // 2021-09-09 deprecated. Default ADIOS console is used.
     // $this->console = new \Surikata\Core\AdminPanel\Console($this);
 
+    if (is_object($this->twig)) {
+      $this->twig->addFilter(new \Twig\TwigFilter(
+        'formatPrice',
+        function ($string) {
+          return $this->locale->formatPrice($string);
+        }
+      ));
+    }
+
     if (is_object($this->websiteRenderer)) {
       try {
         $this->websiteRenderer->pages = $this->websiteRenderer->loadPublishedPages();

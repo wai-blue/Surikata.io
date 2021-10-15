@@ -2,51 +2,51 @@
 <head>
   <style>
 
-    #w_swi_invoices_template * {font-family:sans-serif; font-size:8pt;}
+    #w_swi_orders_template * {font-family:sans-serif; font-size:8pt;}
 
-    #w_swi_invoices_template .fbigger {font-size:11pt;}
+    #w_swi_orders_template .fbigger {font-size:11pt;}
 
-    #w_swi_invoices_template table {width:100%; border-collapse:collapse;}
-    #w_swi_invoices_template table td {vertical-align:top;}
+    #w_swi_orders_template table {width:100%; border-collapse:collapse;}
+    #w_swi_orders_template table td {vertical-align:top;}
 
-    #w_swi_invoices_template .dtop td {padding:0 2pt 8pt 2pt;}
-    #w_swi_invoices_template .dtop td, #w_swi_invoices_template .dtop td * {font-size:16pt;}
-    #w_swi_invoices_template .dmain {border:0.2mm solid #000;}
-    #w_swi_invoices_template .dcolumn {width:50%; float:left;}
-    #w_swi_invoices_template .content {padding:4pt;}
-    #w_swi_invoices_template .odberatel {border:0.5mm solid #000;}
-    #w_swi_invoices_template .dodavatel_popis {padding-top:4pt; text-align:left}
+    #w_swi_orders_template .dtop td {padding:0 2pt 8pt 2pt;}
+    #w_swi_orders_template .dtop td, #w_swi_orders_template .dtop td * {font-size:16pt;}
+    #w_swi_orders_template .dmain {border:0.2mm solid #000;}
+    #w_swi_orders_template .dcolumn {width:50%; float:left;}
+    #w_swi_orders_template .content {padding:4pt;}
+    #w_swi_orders_template .odberatel {border:0.5mm solid #000;}
+    #w_swi_orders_template .dodavatel_popis {padding-top:4pt; text-align:left}
 
-    #w_swi_invoices_template .dodod_info {color: #777; text-transform:uppercase; padding-bottom:2mm; text-align:left;}
-    #w_swi_invoices_template .dodod_info span {border-bottom:0.2mm solid #777; font-size:8pt; font-style:italic;}
+    #w_swi_orders_template .dodod_info {color: #777; text-transform:uppercase; padding-bottom:2mm; text-align:left;}
+    #w_swi_orders_template .dodod_info span {border-bottom:0.2mm solid #777; font-size:8pt; font-style:italic;}
 
-    #w_swi_invoices_template .invoice_info {padding:16pt 2pt 6pt 2pt; text-align:left;}
+    #w_swi_orders_template .order_info {padding:16pt 2pt 6pt 2pt; text-align:left;}
 
-    #w_swi_invoices_template table.w_swi_invoices_udaje tr.sep td {width:100%; height:4pt;}
-    #w_swi_invoices_template table.w_swi_invoices_udaje td {padding:0.8pt; vertical-align:middle;}
+    #w_swi_orders_template table.w_swi_orders_udaje tr.sep td {width:100%; height:4pt;}
+    #w_swi_orders_template table.w_swi_orders_udaje td {padding:0.8pt; vertical-align:middle;}
 
-    #w_swi_invoices_template table#w_swi_invoices_template_items td {padding:0.8pt; vertical-align:middle;}
-    #w_swi_invoices_template table#w_swi_invoices_template_items tr.header td {font-weight:bold; font-style:italic;}
-    #w_swi_invoices_template table#w_swi_invoices_template_items tr.sep td {width:100%; height:4pt;}
+    #w_swi_orders_template table#w_swi_orders_template_items td {padding:0.8pt; vertical-align:middle;}
+    #w_swi_orders_template table#w_swi_orders_template_items tr.header td {font-weight:bold; font-style:italic;}
+    #w_swi_orders_template table#w_swi_orders_template_items tr.sep td {width:100%; height:4pt;}
 
-    #w_swi_invoices_template #w_swi_invoices_template_sumar {width:40%; float:right;}
-    #w_swi_invoices_template #w_swi_invoices_template_sumar table td {padding:0.8pt; vertical-align:middle; font-size:9pt;}
-    #w_swi_invoices_template #w_swi_invoices_template_sumar table tr.sep td {width:100%; height:10pt;}
-    #w_swi_invoices_template #w_swi_invoices_template_sumar table tr.suma td {border-top:0.2mm solid #777; padding-top:1mm;}
+    #w_swi_orders_template #w_swi_orders_template_sumar {width:40%; float:right;}
+    #w_swi_orders_template #w_swi_orders_template_sumar table td {padding:0.8pt; vertical-align:middle; font-size:9pt;}
+    #w_swi_orders_template #w_swi_orders_template_sumar table tr.sep td {width:100%; height:10pt;}
+    #w_swi_orders_template #w_swi_orders_template_sumar table tr.suma td {border-top:0.2mm solid #777; padding-top:1mm;}
 
-    #w_swi_invoices_template .podpisy {}
-    #w_swi_invoices_template .podpisy table td {text-align:center;}
-    #w_swi_invoices_template .podpisy .podpis_info {border-top:0.2mm dotted #777;}
+    #w_swi_orders_template .podpisy {}
+    #w_swi_orders_template .podpisy table td {text-align:center;}
+    #w_swi_orders_template .podpisy .podpis_info {border-top:0.2mm dotted #777;}
 
     ._num {text-align:right;}
 
-    #w_swi_invoices_template_footer td {color:#777; font-size:6pt; }
+    #w_swi_orders_template_footer td {color:#777; font-size:6pt; }
   </style>
 </head>
 
-<body onload='window.print();'>
-
-  <div id='w_swi_invoices_template'>
+<body onload='xwindow.print();'>
+{{ dump(order) }}
+  <div id='w_swi_orders_template'>
 
     <!-- TOP -->
     <div class='dtop'>
@@ -54,9 +54,9 @@
         <tr>
           <td>
             {% if language == "sk" %}
-              Faktúra č. {{ invoice.number }} - daňový doklad
+              Objednávka č. {{ order.number }} - daňový doklad
             {% elseif language == "en" %}
-              Invoice no. {{ invoice.number }}
+              Order no. {{ order.number }}
             {% endif %}
           </td>
         </tr>
@@ -79,18 +79,18 @@
           </div>
           <div>
 
-          <table class='w_swi_invoices_udaje' id='w_swi_invoices_udaje_odberatel'>
+          <table class='w_swi_orders_udaje' id='w_swi_orders_udaje_odberatel'>
             <tr>
-              <td colspan=4 style='width:100%;' class='fbigger'><b>{{ invoice.supplier_name }}</b></td>
+              <td colspan=4 style='width:100%;' class='fbigger'><b>{{ order.supplier_name }}</b></td>
             </tr>
             <tr>
-              <td colspan=4 style='width:100%;'>{{ invoice.supplier_street_1 }}</td>
+              <td colspan=4 style='width:100%;'>{{ order.supplier_street_1 }}</td>
             </tr>
             <tr>
-              <td colspan=4 style='width:100%;'>{{ invoice.supplier_zip }} {{ invoice.supplier_city }}</td>
+              <td colspan=4 style='width:100%;'>{{ order.supplier_zip }} {{ order.supplier_city }}</td>
             </tr>
             <tr>
-              <td colspan=4 style='width:100%;'>{{ invoice.supplier_country }}</td>
+              <td colspan=4 style='width:100%;'>{{ order.supplier_country }}</td>
             </tr>
 
             <tr class='sep'><td colspan=4><div></div></td></tr>
@@ -103,7 +103,7 @@
                   Company ID
                 {% endif %}
               </td>
-              <td style='width:30%;'>{{ invoice.supplier_company_id }}</td>
+              <td style='width:30%;'>{{ order.supplier_company_id }}</td>
               <td style='width:20%;'>
                 {% if language == "sk" %}
                   Telefón:
@@ -111,7 +111,7 @@
                   Phone:
                 {% endif %}
               </td>
-              <td style='width:30%;'>{{ invoice.supplier_phone }}</td>
+              <td style='width:30%;'>{{ order.supplier_phone }}</td>
             </tr>
             <tr class=''>
               <td style='width:20%;'>
@@ -121,7 +121,7 @@
                   TAX ID:
                 {% endif %}
               </td>
-              <td style='width:30%;'>{{ invoice.supplier_company_tax_id }}</td>
+              <td style='width:30%;'>{{ order.supplier_company_tax_id }}</td>
               <td style='width:20%;'>
                 {% if language == "sk" %}
                   Email:
@@ -129,7 +129,7 @@
                   Email:
                 {% endif %}
               </td>
-              <td style='width:30%;'>{{ invoice.supplier_email }}</td>
+              <td style='width:30%;'>{{ order.supplier_email }}</td>
             </tr>
             <tr class=''>
               <td style='width:20%;'>
@@ -139,15 +139,15 @@
                   VAT ID:
                 {% endif %}
               </td>
-              <td style='width:30%;'>{{ invoice.supplier_company_vat_id }}</td>
+              <td style='width:30%;'>{{ order.supplier_company_vat_id }}</td>
               <td style='width:20%;'>Web:</td>
-              <td style='width:30%;'>{{ invoice.supplier_www }}</td>
+              <td style='width:30%;'>{{ order.supplier_www }}</td>
             </tr>
           </table>
 
           </div>
           <div class='dodavatel_popis'>
-            {{ invoice.identita_strucny_popis }}
+            {{ order.identita_strucny_popis }}
           </div>
         </div>
       </div>
@@ -166,21 +166,21 @@
             <div></div>
           </div>
 
-          <table class='w_swi_invoices_udaje' id='w_swi_invoices_udaje_odberatel'>
+          <table class='w_swi_orders_udaje' id='w_swi_orders_udaje_odberatel'>
             <tr>
-              <td colspan=4 style='width:100%;' class='fbigger'><b>{{ invoice.customer_name }}</b></td>
+              <td colspan=4 style='width:100%;' class='fbigger'><b>{{ order.customer_name }}</b></td>
             </tr>
             <tr>
-              <td colspan=4 style='width:100%;'>{{ invoice.customer_street_1 }}</td>
+              <td colspan=4 style='width:100%;'>{{ order.customer_street_1 }}</td>
             </tr>
             <tr>
-              <td colspan=4 style='width:100%;'>{{ invoice.customer_street_2 }}</td>
+              <td colspan=4 style='width:100%;'>{{ order.customer_street_2 }}</td>
             </tr>
             <tr>
-              <td colspan=4 style='width:100%;'>{{ invoice.customer_zip }} {{ invoice.customer_city }}</td>
+              <td colspan=4 style='width:100%;'>{{ order.customer_zip }} {{ order.customer_city }}</td>
             </tr>
             <tr>
-              <td colspan=4 style='width:100%;'>{{ invoice.customer_country }}</td>
+              <td colspan=4 style='width:100%;'>{{ order.customer_country }}</td>
             </tr>
 
             <tr class='sep'><td colspan=4><div></div></td></tr>
@@ -193,7 +193,7 @@
                   Company ID
                 {% endif %}
               </td>
-              <td style='width:30%;'>{{ invoice.customer_company_id }}</td>
+              <td style='width:30%;'>{{ order.customer_company_id }}</td>
               <td style='width:20%;'>
                 {% if language == "sk" %}
                   Telefón:
@@ -201,7 +201,7 @@
                   Phone:
                 {% endif %}
               </td>
-              <td style='width:30%;'>{{ invoice.customer_phone }}</td>
+              <td style='width:30%;'>{{ order.customer_phone }}</td>
             </tr>
             <tr class=''>
               <td style='width:20%;'>
@@ -211,7 +211,7 @@
                   TAX ID:
                 {% endif %}
               </td>
-              <td style='width:30%;'>{{ invoice.customer_company_tax_id }}</td>
+              <td style='width:30%;'>{{ order.customer_company_tax_id }}</td>
               <td style='width:20%;'>
                 {% if language == "sk" %}
                   Email:
@@ -219,7 +219,7 @@
                   Email:
                 {% endif %}
               </td>
-              <td style='width:30%;'>{{ invoice.customer_email }}</td>
+              <td style='width:30%;'>{{ order.customer_email }}</td>
             </tr>
             <tr class=''>
               <td style='width:20%;'>
@@ -229,16 +229,16 @@
                   VAT ID:
                 {% endif %}
               </td>
-              <td style='width:30%;'>{{ invoice.customer_company_vat_id }}</td>
+              <td style='width:30%;'>{{ order.customer_company_vat_id }}</td>
               <td style='width:20%;'>Web:</td>
-              <td style='width:30%;'>{{ invoice.customer_www }}</td>
+              <td style='width:30%;'>{{ order.customer_www }}</td>
             </tr>
           </table>
 
 
         </div>
         <div class='content'>
-          <table class='w_swi_invoices_udaje' id='w_swi_invoices_udaje_ostatne'>
+          <table class='w_swi_orders_udaje' id='w_swi_orders_udaje_ostatne'>
             <tr>
               <td style='width:50%;'>
                 {% if language == "sk" %}
@@ -247,7 +247,7 @@
                   Variable symbol:
                 {% endif %}
               </td>
-              <td style='width:50%;'><b>{{ invoice.variable_symbol }}</b></td>
+              <td style='width:50%;'><b>{{ order.variable_symbol }}</b></td>
             </tr>
             <tr>
               <td style='width:50%;'>
@@ -257,7 +257,7 @@
                   Specific symbol:
                 {% endif %}
               </td>
-              <td style='width:50%;'>{{ invoice.specific_symbol }}</td>
+              <td style='width:50%;'>{{ order.specific_symbol }}</td>
             </tr>
             <tr>
               <td style='width:50%;'>
@@ -267,7 +267,7 @@
                   Constant symbol:
                 {% endif %}
               </td>
-              <td style='width:50%;'>{{ invoice.constant_symbol }}</td>
+              <td style='width:50%;'>{{ order.constant_symbol }}</td>
             </tr>
 
             <tr class='sep'><td colspan=2><div></div></td></tr>
@@ -280,7 +280,7 @@
                   Payment:
                 {% endif %}
               </td>
-              <td style='width:50%;'>{{ invoice.payment_method_value }}</td>
+              <td style='width:50%;'>{{ order.payment_method_value }}</td>
             </tr>
             <tr>
               <td style='width:50%;'>
@@ -290,7 +290,7 @@
                   Order number:
                 {% endif %}
               </td>
-              <td style='width:50%;'>{{ invoice.order_number }}</td>
+              <td style='width:50%;'>{{ order.order_number }}</td>
             </tr>
 
             <tr class='sep'><td colspan=2><div></div></td></tr>
@@ -303,7 +303,7 @@
                   Date of issue:
                 {% endif %}
               </td>
-              <td style='width:50%;'>{{ invoice.delivery_time|date(locale.dateFormat) }}</td>
+              <td style='width:50%;'>{{ order.delivery_time|date(locale.dateFormat) }}</td>
             </tr>
             <tr>
               <td style='width:50%;'>
@@ -313,7 +313,7 @@
                   Date of delivery:
                 {% endif %}
               </td>
-              <td style='width:50%;'>{{ invoice.issue_time|date(locale.dateFormat) }}</td>
+              <td style='width:50%;'>{{ order.issue_time|date(locale.dateFormat) }}</td>
             </tr>
             <tr>
               <td style='width:50%;'>
@@ -323,7 +323,7 @@
                   Due date:
                 {% endif %}
               </td>
-              <td style='width:50%;'><b>{{ invoice.payment_due_time|date(locale.dateFormat) }}</b></td>
+              <td style='width:50%;'><b>{{ order.payment_due_time|date(locale.dateFormat) }}</b></td>
             </tr>
           </table>
         </div>
@@ -334,7 +334,7 @@
     <!-- ITEMS -->
     <div class='dmain'>
       <div class='content'>
-        <table id='w_swi_invoices_template_items'>
+        <table id='w_swi_orders_template_items'>
           <thead>
             <tr class='header'>
               <td style='width:26%;' class=''>
@@ -420,23 +420,23 @@
           <tbody>
             <tr class='sep'><td colspan=10><div></div></td></tr>
 
-            {% for item in invoice.ITEMS %}
+            {% for item in order.ITEMS %}
               <tr>
                 <td style='width:26%;' class=''>
                   {{ item.item }}
                 </td>
-                <td style='white-space:nowrap;width:9%;' class='_num'>{{ item.PRICES_FOR_INVOICE.unitPriceExclVAT|formatPrice }} €</td>
+                <td style='white-space:nowrap;width:9%;' class='_num'>{{ item.PRICES_FOR_Order.unitPriceExclVAT|formatPrice }} €</td>
                 {% if template == 1 %}
                   <td style='white-space:nowrap;width:6%;' class='_num'>{{ item.vat_percent }} %</td>
                 {% endif %}
                 {% if template == 1 %}
-                  <td style='white-space:nowrap;width:9%;' class='_num'>{{ item.PRICES_FOR_INVOICE.unitPriceInclVAT|formatPrice }} €</td>
+                  <td style='white-space:nowrap;width:9%;' class='_num'>{{ item.PRICES_FOR_Order.unitPriceInclVAT|formatPrice }} €</td>
                 {% endif %}
                 <td style='white-space:nowrap;width:7%;' class='_num'><b>{{ item.quantity }}</b></td>
                 <td style='white-space:nowrap;width:5%; text-align:center;' class=''>{{ item.DELIVERY_UNIT.unit }}</td>
-                <td style='white-space:nowrap;width:11%;' class='_num'>{{ item.PRICES_FOR_INVOICE.totalPriceExclVAT|formatPrice }} €</td>
+                <td style='white-space:nowrap;width:11%;' class='_num'>{{ item.PRICES_FOR_Order.totalPriceExclVAT|formatPrice }} €</td>
                 {% if template == 1 %}
-                  <td style='white-space:nowrap;width:11%;' class='_num'>{{ item.PRICES_FOR_INVOICE.totalPriceInclVAT|formatPrice }} €</td>
+                  <td style='white-space:nowrap;width:11%;' class='_num'>{{ item.PRICES_FOR_Order.totalPriceInclVAT|formatPrice }} €</td>
                 {% endif %}
               </tr>
             {% endfor %}
@@ -449,11 +449,11 @@
     <div style='padding-top:5mm;'>
       <div class='content'>
 
-        <div id='w_swi_invoices_template_sumar'>
+        <div id='w_swi_orders_template_sumar'>
           <table>
 
             {% if template == 1 %}
-              {% for sadzba in invoice.SADZBY_DPH %}
+              {% for sadzba in order.SADZBY_DPH %}
                 <tr>
                   <td>
                     {% if language == "sk" %}
@@ -482,7 +482,7 @@
               </td>
               <td class='_num fbigger'>
                 {% if template == 2 or template == 3 %} <b> {% endif %}
-                  {{ invoice.SUMMARY.price_total_excl_vat|number_format(2, ',', ' ') }} €
+                  {{ order.SUMMARY.price_total_excl_vat|number_format(2, ',', ' ') }} €
                 {% if template == 2 or template == 3 %} </b> {% endif %}
               </td>
             </tr>
@@ -490,7 +490,7 @@
             <tr class='sep'><td colspan=2><div></div></td></tr>
 
             {% if template == 1 %}
-              {% for sadzba in invoice.SADZBY_DPH %}
+              {% for sadzba in order.SADZBY_DPH %}
                 <tr>
                   <td>
                     {% if language == "sk" %}
@@ -516,7 +516,7 @@
                   {% endif %}
                 </td>
                 <td class='_num'>
-                  {{ invoice.SUMMARY.vat_total|number_format(2, ',', ' ') }} €
+                  {{ order.SUMMARY.vat_total|number_format(2, ',', ' ') }} €
                 </td>
               </tr>
             {% endif %}
@@ -535,7 +535,7 @@
                   </b>
                 </td>
                 <td class='_num fbigger'>
-                  <b>{{ invoice.SUMMARY.price_total_incl_vat|number_format(2, ',', ' ') }} €</b>
+                  <b>{{ order.SUMMARY.price_total_incl_vat|number_format(2, ',', ' ') }} €</b>
                 </td>
               </tr>
             {% endif %}

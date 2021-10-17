@@ -1,11 +1,7 @@
-<div class="container">
+<div class="container simple-text">
   <div class="row">
-    <div class="col-12">
-      {% if heading %}
-        <h{{ headingLevel }}>{{ heading }}</h{{ headingLevel }}>
-      {% endif %}
-      {{ content|raw }}
-    </div>
-  <div>
+    {% if heading %}
+      <h{{ headingLevel }}>{{ heading }}</h{{ headingLevel }}>
+    {% endif %}
+    {{ include(template_from_string(content)) }}
 </div>
-

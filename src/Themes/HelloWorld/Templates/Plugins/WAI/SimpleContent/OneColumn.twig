@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <p>WAI/SimpleContent/OneCloumn plugin renders the content here.</p>
+
+      {% if heading %}
+        <h{{ headingLevel }}>{{ heading }}</h{{ headingLevel }}>
+      {% endif %}
+      {{ include(template_from_string(content)) }}
+    </div>
+  <div>
+</div>
+

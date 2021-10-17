@@ -168,10 +168,10 @@ if (!$doInstall) {
     ";
   }
 
-  function _getDomainThemeSelect($languageIndex, $availableThemes) {
+  function _getDomainThemeSelect($languageIndex, $availableThemes, $theme = "") {
     $html = "<select name='domain_{$languageIndex}_theme_name'>";
     foreach ($availableThemes as $availableTheme) {
-      $html .= "<option value='{$availableTheme}'>{$availableTheme}</option>";
+      $html .= "<option value='{$availableTheme}' ".($theme == $availableTheme ? "selected" : "").">{$availableTheme}</option>";
     }
     $html .= "</select>";
 
@@ -263,10 +263,16 @@ if (!$doInstall) {
           <td>"._getDomainThemeSelect(2, $availableThemes)."</td>
         </tr>
         <tr>
-          <td>"._getDomainSlugInput(3)."</td>
-          <td>"._getDomainDescriptionInput(3)."</td>
+          <td>"._getDomainSlugInput(3, "hello-world")."</td>
+          <td>"._getDomainDescriptionInput(3, "Developer`s Hello World example")."</td>
+          <td>{$configEnv["domainLanguages"][1]}</td>
+          <td>"._getDomainThemeSelect(3, $availableThemes, "HelloWorld")."</td>
+        </tr>
+        <tr>
+          <td>"._getDomainSlugInput(4, "")."</td>
+          <td>"._getDomainDescriptionInput(4, "")."</td>
           <td>{$configEnv["domainLanguages"][3]}</td>
-          <td>"._getDomainThemeSelect(3, $availableThemes)."</td>
+          <td>"._getDomainThemeSelect(4, $availableThemes)."</td>
         </tr>
       </table>
       <p style='color:#888888'>

@@ -17,5 +17,6 @@ $dictionary = [
   "Number" => "Číslo",
   "Text" => "Text",
   "Yes/No" => "Áno/Nie",
-  "Product features" => "Vlastnosti produktu"
+  "Product features" => "Vlastnosti produktu",
+  "No translations available." => "Žiadne preklady k dispozícii"
 ];

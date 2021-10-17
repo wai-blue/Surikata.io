@@ -34,7 +34,7 @@ class Overview extends \ADIOS\Core\Action {
           <div class='col-lg-3 col-md-6 col-sm-12'>
             <div class='card shadow mb-2'>
               <div class='card-header py-3'>
-                <h6 class='m-0 font-weight-bold text-primary'>".hsc($manifest['title'])."</h6>
+                <h6 class='m-0 font-weight-bold text-primary'>".$this->translate(hsc($manifest['title']))."</h6>
               </div>
               <div class='card-body text-center'>
                 <div style='height:130px'>
@@ -44,7 +44,7 @@ class Overview extends \ADIOS\Core\Action {
                   href='javascript:void(0)'
                   class='btn btn-light'
                   onclick='desktop_render(\"Plugins/{$pluginName}/Main\");'
-                >".hsc($manifest['title'])."</a>
+                >".$this->translate(hsc($manifest['title']))."</a>
               </div>
             </div>
           </div>

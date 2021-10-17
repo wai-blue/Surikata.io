@@ -527,7 +527,7 @@ class Product extends \ADIOS\Core\Model {
     }
 
     if (count($tabTranslations) == 0) {
-      $tabTranslations[] = ["html" => "No translations available."];
+      $tabTranslations[] = ["html" => $this->translate("No translations available.")];
     }
 
     $params["columns"]["price_calculation_method"]["onchange"] = "{$params['uid']}_price_calculation_method_onchange();";

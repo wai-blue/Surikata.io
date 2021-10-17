@@ -15,4 +15,5 @@ $dictionary = [
   "General" => "Všeobecné",
   "Translations" => "Preklady",
   "Miscelaneous" => "Rôzne",
+  "No translations available." => "Žiadne preklady k dispozícii"
 ];

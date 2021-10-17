@@ -71,5 +71,6 @@ $dictionary = [
   "Related" => "Súvisiace",
   "Categories" => "Kategórie",
   "Domain visibility" => "Viditeľnosť domény",
-  "If no domain is selected, product will be visible on all domains." => "Ak nevyberiete žiadnu doménu, produkt bude viditeľný na všetkých doménach."
+  "If no domain is selected, product will be visible on all domains." => "Ak nevyberiete žiadnu doménu, produkt bude viditeľný na všetkých doménach.",
+  "No translations available." => "Žiadne preklady k dispozícii"
 ];

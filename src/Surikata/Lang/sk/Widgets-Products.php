@@ -11,5 +11,6 @@ $dictionary = [
   "Products" => "Produkty",
   "Stock states" => "Dostupnosti na sklade",
   "Margins" => "Marže",
-  "Discounts" => "Zľavy"
+  "Discounts" => "Zľavy",
+  "No translations available." => "Žiadne preklady k dispozícii"
 ];

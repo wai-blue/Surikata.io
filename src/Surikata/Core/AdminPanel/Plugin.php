@@ -6,6 +6,27 @@ class Plugin extends \ADIOS\Core\Plugin {
 
   var $niceName = ".";
 
+  public array $languageDictionary;
+
+  public function init() {
+    $this->languageDictionary["sk"] =
+      $this->adios->loadLanguageDictionary($this->name, "sk")
+    ;
+  }
+
+  /**
+   * translate
+   *
+   * @internal
+   * @param  mixed $string
+   * @param  mixed $context
+   * @param  mixed $toLanguage
+   * @return void
+   */
+  public function translate($string, $context = "", $toLanguage = "") {
+    return $this->adios->translate($string, $context, $toLanguage, $this->languageDictionary);
+  }
+
   /**
    * Converts $urlPattern string with variables in it to a structured
    * definition of sitemap used in getSitemap() method.

@@ -203,7 +203,7 @@ namespace ADIOS\Plugins\WAI\Product {
         $event["params"]["template"]["columns"][1]["rows"][2]["html"] .= "
           <a class='btn btn-icon-split btn-light' target='_blank' href='{$this->adios->websiteRenderer->rootUrl}/{$productUrl}'>
             <span class='icon'><i class='fa fa-link'></i></span>
-            <span class='text'>Visit product on website</span>
+            <span class='text'>" . $this->translate("Visit product on website") . "</span>
           </a>"
         ;
       }

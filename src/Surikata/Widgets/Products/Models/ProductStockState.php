@@ -5,10 +5,13 @@ namespace ADIOS\Widgets\Products\Models;
 class ProductStockState extends \ADIOS\Core\Model {
   var $sqlName = "products_stock_states";
   var $urlBase = "Products/StockStates";
-  var $tableTitle = "Product stock state";
-  var $formTitleForInserting = "New product stock state";
-  var $formTitleForEditing = "Product stock state";
   var $lookupSqlValue = "{%TABLE%}.name_lang_1";
+
+  public function init() {
+    $this->tableTitle = $this->translate("Product stock state");
+    $this->formTitleForInserting = $this->translate("New product stock state");
+    $this->formTitleForEditing = $this->translate("Product stock state");
+  }
 
   public function columns(array $columns = []) {
     $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];

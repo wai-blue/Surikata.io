@@ -28,6 +28,10 @@ class Input {
     $this->uid = (empty($uid) ? $this->adios->getUid() : $uid);
     $this->params = $params;
     $this->value = $this->params['value'];
+
+    $this->languageDictionary[$this->adios->config["language"]] =
+      $this->adios->loadLanguageDictionary(get_class($this))
+    ;
   }
 
   /**

@@ -19,7 +19,7 @@ class Tree extends \ADIOS\Core\Input {
       "dropdown" => [
         [
           "fa_icon" => "fas fa-pencil-alt",
-          "text" => "Edit",
+          "text" => $this->translate("Edit"),
           "onclick" => "
             let li = $(this).closest('li');
             let btn = $(this).closest('.dropdown').find(' > .btn');
@@ -37,7 +37,7 @@ class Tree extends \ADIOS\Core\Input {
         ],
         [
           "fa_icon" => "fas fa-level-up-alt",
-          "text" => "Move level up",
+          "text" => $this->translate("Move level up"),
           "onclick" => "
             var src = $(this).closest('li');
             var ul = src.closest('ul');
@@ -53,7 +53,7 @@ class Tree extends \ADIOS\Core\Input {
         ],
         [
           "fa_icon" => "fas fa-level-down-alt",
-          "text" => "Move level down",
+          "text" => $this->translate("Move level down"),
           "onclick" => "
             var src = $(this).closest('li');
             var ul = src.next('li').find('> ul');
@@ -67,7 +67,7 @@ class Tree extends \ADIOS\Core\Input {
         ],
         [
           "fa_icon" => "fas fa-trash",
-          "text" => "Select for deletion",
+          "text" => $this->translate("Select for deletion"),
           "onclick" => "
             let li = $(this).closest('li');
             li.addClass('to-delete');
@@ -79,7 +79,7 @@ class Tree extends \ADIOS\Core\Input {
         ],
         [
           "fa_icon" => "fas fa-trash-restore",
-          "text" => "Unselect from deletion",
+          "text" => $this->translate("Unselect from deletion"),
           "onclick" => "
             let li = $(this).closest('li');
             li.removeClass('to-delete');
@@ -123,7 +123,7 @@ class Tree extends \ADIOS\Core\Input {
         <li>
           ".$this->adios->ui->button([
             "fa_icon" => "fas fa-plus",
-            "text" => "Add",
+            "text" => $this->translate("Add"),
             "class" => "item btn btn-sm btn-light btn-icon-split my-1",
             "onclick" => "
               let ul = $(this).closest('ul');

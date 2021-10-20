@@ -7,7 +7,21 @@
     <canvas id="myChart2"></canvas>
 
     <script>
-      var labels = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+      var labels = [
+        "{{ translate('jan') }}", 
+        "{{ translate('feb') }}", 
+        "{{ translate('mar') }}", 
+        "{{ translate('apr') }}", 
+        "{{ translate('may') }}", 
+        "{{ translate('jun') }}", 
+        "{{ translate('jul') }}", 
+        "{{ translate('aug') }}", 
+        "{{ translate('sep') }}", 
+        "{{ translate('oct') }}", 
+        "{{ translate('nov') }}", 
+        "{{ translate('dec') }}"
+      ];
+
       var data = {
         labels: labels,
         datasets: [{

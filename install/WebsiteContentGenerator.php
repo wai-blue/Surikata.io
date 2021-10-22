@@ -204,197 +204,225 @@ class WebsiteContentGenerator {
       ],
     ];
 
-    $webPages = [
-      "{$domainName}|uvod|WithoutSidebar|Úvod" => [
-        "section_1" => ["WAI/Misc/Slideshow", ["speed" => 1000]],
-        "section_2" => [
-          "WAI/SimpleContent/OneColumn",
-          [
-            "heading" => "Vitajte",
-            "headingLevel" => 1,
-            "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
+    if ($domainSlug == "hello-world") {
+      $webPages = [
+        "{$domainName}|home|WithoutSidebar|Home" => [
+          "section_1" => [
+            "WAI/SimpleContent/OneColumn",
+            [
+              "heading" => "Hello World!",
+              "content" => "
+                <p>Welcome to Surikata.io.</p>
+                <p>
+                  <a href='one-column'>One Column</a>
+                </p>
+              ",
+            ]
           ],
         ],
-        "section_3" => ["WAI/SimpleContent/H2", ["heading" => "Odporúčame pre vás"]],
-        "section_4" => [
-          "WAI/Product/FilteredList",
-          [
-            "filterType" => "recommended",
-            "layout" => "tiles",
-            "product_count" => 6,
+        "{$domainName}|one-column|WithoutSidebar|One Column" => [
+          "section_1" => [
+            "WAI/SimpleContent/OneColumn",
+            [
+              "heading" => "Hello World!",
+              "content" => file_get_contents(__DIR__."/SampleData/PageTexts/o-nas.html"),
+            ]
           ],
         ],
-        "section_5" => [
-          "WAI/SimpleContent/TwoColumns",
-          [
-            "column1Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
-            "column1Width" => 4,
-            "column2Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-2.html"),
-            "column2Width" => 8,
-            "column2CSSClasses" => "text-right",
+      ];
+    } else {
+      $webPages = [
+        "{$domainName}|uvod|WithoutSidebar|Úvod" => [
+          "section_1" => ["WAI/Misc/Slideshow", ["speed" => 1000]],
+          "section_2" => [
+            "WAI/SimpleContent/OneColumn",
+            [
+              "heading" => "Vitajte",
+              "headingLevel" => 1,
+              "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
+            ],
           ],
-        ],
-        "section_6" => ["WAI/SimpleContent/H2", ["heading" => "Zľava"]],
-        "section_7" => [
-          "WAI/Product/FilteredList",
-          [
-            "filterType" => "on_sale",
-            "layout" => "tiles",
-            "product_count" => 6,
+          "section_3" => ["WAI/SimpleContent/H2", ["heading" => "Odporúčame pre vás"]],
+          "section_4" => [
+            "WAI/Product/FilteredList",
+            [
+              "filterType" => "recommended",
+              "layout" => "tiles",
+              "product_count" => 6,
+            ],
           ],
-        ],
-        "section_8" => [
-          "WAI/SimpleContent/TwoColumns",
-          [
-            "column1Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-2.html"),
-            "column1Width" => 8,
-            "column2Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
-            "column2Width" => 4,
-            "column2CSSClasses" => "text-right",
+          "section_5" => [
+            "WAI/SimpleContent/TwoColumns",
+            [
+              "column1Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
+              "column1Width" => 4,
+              "column2Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-2.html"),
+              "column2Width" => 8,
+              "column2CSSClasses" => "text-right",
+            ],
           ],
-        ]
-      ],
-      "{$domainName}|o-nas|WithoutSidebar|O nás" => [
-        "section_1" => [
-          "WAI/SimpleContent/OneColumn",
-          [
-            "heading" => "O nás",
-            "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/o-nas.html"),
+          "section_6" => ["WAI/SimpleContent/H2", ["heading" => "Zľava"]],
+          "section_7" => [
+            "WAI/Product/FilteredList",
+            [
+              "filterType" => "on_sale",
+              "layout" => "tiles",
+              "product_count" => 6,
+            ],
+          ],
+          "section_8" => [
+            "WAI/SimpleContent/TwoColumns",
+            [
+              "column1Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-2.html"),
+              "column1Width" => 8,
+              "column2Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
+              "column2Width" => 4,
+              "column2CSSClasses" => "text-right",
+            ],
           ]
         ],
-        "section_2" => [
-          "WAI/SimpleContent/OneColumn",
-          [
-            "heading" => "Vitajte",
-            "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/o-nas.html"),
-          ]
+        "{$domainName}|o-nas|WithoutSidebar|O nás" => [
+          "section_1" => [
+            "WAI/SimpleContent/OneColumn",
+            [
+              "heading" => "O nás",
+              "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/o-nas.html"),
+            ]
+          ],
+          "section_2" => [
+            "WAI/SimpleContent/OneColumn",
+            [
+              "heading" => "Vitajte",
+              "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/o-nas.html"),
+            ]
+          ],
         ],
-      ],
-      "{$domainName}|kontakt|WithoutSidebar|Kontakt" => [
-        "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
-        "section_2" => [
-          "WAI/SimpleContent/OneColumn",
-          [
-            "heading" => "",
-            "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/kontakt_sk.html"),
-          ]
+        "{$domainName}|kontakt|WithoutSidebar|Kontakt" => [
+          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+          "section_2" => [
+            "WAI/SimpleContent/OneColumn",
+            [
+              "heading" => "",
+              "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/kontakt_sk.html"),
+            ]
+          ],
         ],
-      ],
 
-      // Product catalog pages
-      "{$domainName}|produkty|WithLeftSidebar|Katalóg produktov" => [
-        "sidebar" => [
-          "WAI/Product/Filter",
-          [
-            "showProductCategories" => 1,
-            "layout" => "sidebar",
-            "showProductCategories" => 1,
-            "showBrands" => 1,
-            "showFeaturesFilter" => 1,
-          ]
+        // Product catalog pages
+        "{$domainName}|produkty|WithLeftSidebar|Katalóg produktov" => [
+          "sidebar" => [
+            "WAI/Product/Filter",
+            [
+              "showProductCategories" => 1,
+              "layout" => "sidebar",
+              "showProductCategories" => 1,
+              "showBrands" => 1,
+              "showFeaturesFilter" => 1,
+            ]
+          ],
+          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+          "section_2" => ["WAI/Product/Catalog", ["defaultItemsPerPage" => 6]],
         ],
-        "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
-        "section_2" => ["WAI/Product/Catalog", ["defaultItemsPerPage" => 6]],
-      ],
-      "{$domainName}|akcie-a-zlavy|WithoutSidebar|Akcie a zľavy" => [
-        "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
-        "section_2" => ["WAI/SimpleContent/H2", ["heading" => "Zľava"]],
-        "section_3" => [
-          "WAI/Product/FilteredList",
-          [
-            "filterType" => "on_sale",
-            "layout" => "tiles",
-            "product_count" => 99,
+        "{$domainName}|akcie-a-zlavy|WithoutSidebar|Akcie a zľavy" => [
+          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+          "section_2" => ["WAI/SimpleContent/H2", ["heading" => "Zľava"]],
+          "section_3" => [
+            "WAI/Product/FilteredList",
+            [
+              "filterType" => "on_sale",
+              "layout" => "tiles",
+              "product_count" => 99,
+            ],
+          ],
+          "section_4" => ["WAI/SimpleContent/H2", ["heading" => "Výpredaj"]],
+          "section_5" => [
+            "WAI/Product/FilteredList",
+            [
+              "filterType" => "sale_out",
+              "layout" => "tiles",
+              "product_count" => 99,
+            ],
           ],
         ],
-        "section_4" => ["WAI/SimpleContent/H2", ["heading" => "Výpredaj"]],
-        "section_5" => [
-          "WAI/Product/FilteredList",
-          [
-            "filterType" => "sale_out",
-            "layout" => "tiles",
-            "product_count" => 99,
+        "{$domainName}||WithoutSidebar|Detail produktu" => [
+          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+          "section_2" => ["WAI/Product/Detail", ["show_similar_products" => 1, "show_accessories" => 1, "showAuthor" => 1]],
+        ],
+
+        // Shopping cart, checkout and order confirmation
+        "{$domainName}|kosik|WithoutSidebar|Nákupný košík" => [
+          "section_1" => "WAI/Order/CartOverview",
+        ],
+        "{$domainName}|objednat|WithoutSidebar|Vytvorenie objednávky" => [
+          "section_1" => "WAI/Order/Checkout",
+        ],
+        "{$domainName}||WithoutSidebar|Potvrdenie objednávky" => [
+          "section_1" => "WAI/Order/Confirmation"
+        ],
+
+        // My account pages
+        "{$domainName}|prihlasit-sa|WithoutSidebar|Môj účet - prihlásenie" => [
+          "section_1" => ["WAI/Customer/Login", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]],
+        ],
+        "{$domainName}|moj-ucet|WithoutSidebar|Môj účet" => [
+          "section_1" => "WAI/Customer/Home",
+        ],
+        "{$domainName}|moj-ucet/objednavky|WithoutSidebar|Môj účet - objednávky" => [
+          "section_1" => "WAI/Customer/OrderList",
+        ],
+        "{$domainName}|zabudnute-heslo|WithoutSidebar|Môj účet - resetovanie hesla" => [
+          "section_1" => "WAI/Customer/ForgotPassword"
+        ],
+        "{$domainName}|registracia|WithoutSidebar|Môj účet - registrácia" => [
+          "section_1" => ["WAI/Customer/Registration", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]]
+        ],
+        "{$domainName}|potvrdenie-registracie|WithoutSidebar|Môj účet - potvrdenie registrácie" => [
+          "section_1" => "WAI/Customer/RegistrationConfirmation"
+        ],
+        "{$domainName}||WithoutSidebar|Môj účet - validácia registrácie" => [
+          "section_1" => "WAI/Customer/ValidationConfirmation"
+        ],
+
+        // Blogs
+        "{$domainName}|blogy|WithLeftSidebar|Blogy" => [
+          "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
+          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+          "section_2" => ["WAI/Blog/Catalog", ['itemsPerPage' => 3, "showAuthor" => 1]],
+        ],
+        "{$domainName}||WithLeftSidebar|Blog" => [
+          "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
+          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
+          "section_2" => "WAI/Blog/Detail",
+        ],
+
+        // Miscelaneous pages
+        "{$domainName}|hladat|WithoutSidebar|Hľadať" => [
+          "section_1" => [
+            "WAI/Misc/WebsiteSearch",
+            [
+              "heading" => "Hľadať",
+              "numberOfResults" => 10,
+              "searchInProducts" => "name_lang,brief_lang,description_lang",
+              "searchInProductCategories" => "name_lang",
+              "searchInBlogs" => "name,content",
+            ]
           ],
         ],
-      ],
-      "{$domainName}||WithoutSidebar|Detail produktu" => [
-        "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
-        "section_2" => ["WAI/Product/Detail", ["show_similar_products" => 1, "show_accessories" => 1, "showAuthor" => 1]],
-      ],
-
-      // Shopping cart, checkout and order confirmation
-      "{$domainName}|kosik|WithoutSidebar|Nákupný košík" => [
-        "section_1" => "WAI/Order/CartOverview",
-      ],
-      "{$domainName}|objednat|WithoutSidebar|Vytvorenie objednávky" => [
-        "section_1" => "WAI/Order/Checkout",
-      ],
-      "{$domainName}||WithoutSidebar|Potvrdenie objednávky" => [
-        "section_1" => "WAI/Order/Confirmation"
-      ],
-
-      // My account pages
-      "{$domainName}|prihlasit-sa|WithoutSidebar|Môj účet - prihlásenie" => [
-        "section_1" => ["WAI/Customer/Login", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]],
-      ],
-      "{$domainName}|moj-ucet|WithoutSidebar|Môj účet" => [
-        "section_1" => "WAI/Customer/Home",
-      ],
-      "{$domainName}|moj-ucet/objednavky|WithoutSidebar|Môj účet - objednávky" => [
-        "section_1" => "WAI/Customer/OrderList",
-      ],
-      "{$domainName}|zabudnute-heslo|WithoutSidebar|Môj účet - resetovanie hesla" => [
-        "section_1" => "WAI/Customer/ForgotPassword"
-      ],
-      "{$domainName}|registracia|WithoutSidebar|Môj účet - registrácia" => [
-        "section_1" => ["WAI/Customer/Registration", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]]
-      ],
-      "{$domainName}|potvrdenie-registracie|WithoutSidebar|Môj účet - potvrdenie registrácie" => [
-        "section_1" => "WAI/Customer/RegistrationConfirmation"
-      ],
-      "{$domainName}||WithoutSidebar|Môj účet - validácia registrácie" => [
-        "section_1" => "WAI/Customer/ValidationConfirmation"
-      ],
-
-      // Blogs
-      "{$domainName}|blogy|WithLeftSidebar|Blogy" => [
-        "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
-        "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
-        "section_2" => ["WAI/Blog/Catalog", ['itemsPerPage' => 3, "showAuthor" => 1]],
-      ],
-      "{$domainName}||WithLeftSidebar|Blog" => [
-        "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
-        "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
-        "section_2" => "WAI/Blog/Detail",
-      ],
-
-      // Miscelaneous pages
-      "{$domainName}|hladat|WithoutSidebar|Hľadať" => [
-        "section_1" => [
-          "WAI/Misc/WebsiteSearch",
-          [
-            "heading" => "Hľadať",
-            "numberOfResults" => 10,
-            "searchInProducts" => "name_lang,brief_lang,description_lang",
-            "searchInProductCategories" => "name_lang",
-            "searchInBlogs" => "name,content",
+        "{$domainName}|ochrana-osobnych-udajov|WithoutSidebar|Zásady ochrany osobných údajov" => [
+          "section_1" => [
+            "WAI/SimpleContent/OneColumn",
+            [
+              "heading" => "Hello",
+              "content" => file_get_contents(__DIR__."/SampleData/PageTexts/o-nas.html"),
+            ]
           ]
         ],
-      ],
-      "{$domainName}|ochrana-osobnych-udajov|WithoutSidebar|Zásady ochrany osobných údajov" => [
-        "section_1" => [
-          "WAI/SimpleContent/OneColumn",
-          [
-            "heading" => "Hello",
-            "content" => file_get_contents(__DIR__."/SampleData/PageTexts/o-nas.html"),
-          ]
-        ]
-      ],
-      "{$domainName}|novinky|WithLeftSidebar|Novinky" => [
-        "sidebar" => ["WAI/News", ["contentType" => "sidebar"]],
-        "section_1" => ["WAI/News", ["contentType" => "listOrDetail"]],
-      ],
-    ];
+        "{$domainName}|novinky|WithLeftSidebar|Novinky" => [
+          "sidebar" => ["WAI/News", ["contentType" => "sidebar"]],
+          "section_1" => ["WAI/News", ["contentType" => "listOrDetail"]],
+        ],
+      ];
+    }
 
     foreach ($webPages as $webPageData => $webPagePanels) {
       list($tmpDomain, $tmpUrl, $tmpLayout, $tmpTitle) = explode("|", $webPageData);
@@ -435,12 +463,21 @@ class WebsiteContentGenerator {
     //   ]);
     // }
 
-    $websiteWebRedirectModel->insertRow([
-      "domain" => $domainName,
-      "from_url" => "",
-      "to_url" => "//".$_SERVER['HTTP_HOST'].REWRITE_BASE.$domainSlug."/uvod",
-      "type" => 302,
-    ]);
+    if ($domainSlug == "hello-world") {
+      $websiteWebRedirectModel->insertRow([
+        "domain" => $domainName,
+        "from_url" => "",
+        "to_url" => "//".$_SERVER['HTTP_HOST'].REWRITE_BASE.$domainSlug."/home",
+        "type" => 302,
+      ]);
+    } else {
+      $websiteWebRedirectModel->insertRow([
+        "domain" => $domainName,
+        "from_url" => "",
+        "to_url" => "//".$_SERVER['HTTP_HOST'].REWRITE_BASE.$domainSlug."/uvod",
+        "type" => 302,
+      ]);
+    }
 
     $this->adminPanel->widgets["Website"]->rebuildSitemap($domainName);
 

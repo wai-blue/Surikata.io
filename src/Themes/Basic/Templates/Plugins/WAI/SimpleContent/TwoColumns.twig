@@ -1,10 +1,10 @@
 <div class="container">
   <div class="row">
     <div class="col-lg-{{ column1Width }} {{ column1CSSClasses }}">
-      {{ column1Content|raw }}
+      {{ include(template_from_string(column1Content)) }}
     </div>
     <div class="col-lg-{{ column2Width }} {{ column2CSSClasses }}">
-      {{ column2Content|raw }}
+      {{ include(template_from_string(column2Content)) }}
     </div>
   </div>
 </div>

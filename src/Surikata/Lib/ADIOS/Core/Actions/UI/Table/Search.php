@@ -51,12 +51,12 @@ class Search extends \ADIOS\Core\Action {
           }
         }
       }
-      
+
       if (!in_array($colDef["type"], $unsearchableColumnTypes)) {
         $tabs[$model->name]["items"][] = [
           "title" => $colDef['title'],
           "input" => $this->adios->ui->Input([
-            "model" => $this->params['model'],
+            "model" => $colDef['model'] ?? $this->params['model'],
             "type" => $colDef["type"],
             "input_style" => "select",
             "uid" => "{$this->uid}_{$colName}",

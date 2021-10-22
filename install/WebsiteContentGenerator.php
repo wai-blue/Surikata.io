@@ -214,7 +214,17 @@ class WebsiteContentGenerator {
               "content" => "
                 <p>Welcome to Surikata.io.</p>
                 <p>
-                  <a href='one-column'>One Column</a>
+                  Hello developer!<br/>
+                  <br/>
+                  Welcome to your first project built on Surikata.io. You are now reading the home page of a very simple
+                  HelloWorld theme. Read carefully these tutorials if you want to become a real Surikata.io master.<br/>
+                  <br/>
+                  We wish you good luck and happy programming.<br/>
+                  <br/>
+                  Surikata.io team.
+                </p>
+                <p>
+                  <a href='one-column'>Click here</a> to open a sample page using the WAI/SimpleContent/OneColumn plugin.
                 </p>
               ",
             ]

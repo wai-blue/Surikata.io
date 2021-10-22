@@ -9,21 +9,47 @@ class WebsiteContentGenerator {
     $this->domainsToInstall = $domainsToInstall;
   }
 
-  public function translate($str) {
-    switch ($this->domainCurrentlyGenerated["languageIndex"]) {
-      case 1:
-        return "Home";
-      break;
-      case 2:
-        return "Úvod";
-      break;
-      case 3:
-        return "Wilkommen";
-      break;
-      default:
-        return "???";
-      break;
+  public function translate($string) {
+    // A domain is linked to the "language index".
+    // A "language index" can represent any language.
+    // Default installation uses following languages:
+    //   LanguageIndex = 1 => English
+    //   LanguageIndex = 2 => Slovensky
+    //   LanguageIndex = 3 => Cesky
+
+    $languageIndex = $this->domainCurrentlyGenerated["languageIndex"];
+
+    // languageIndex == 1 is not translated
+    if ($languageIndex == 1) {
+      return $string;
     }
+
+    if (empty($string)) {
+      return "";
+    }
+
+    if (empty($languageIndex)) {
+      $this->adminPanel->console->warning("Translate: Destination language not set.");
+      return $string;
+    }
+
+    if (empty($this->dictionary[$languageIndex])) {
+      require(__DIR__."/content/lang/{$languageIndex}.php");
+      $this->dictionary[$languageIndex] = $dictionary;
+    }
+
+    if (empty($this->dictionary[$languageIndex])) {
+      $this->adminPanel->console->warning("Translate: Dictionary for `{$languageIndex}` is empty.");
+      return $string;
+    }
+
+    if (empty($this->dictionary[$languageIndex][$string])) {
+      $this->adminPanel->console->warning("Translate: `{$string}` is not translated to `{$languageIndex}`.");
+      return $string;
+    }
+
+    return $this->dictionary[$languageIndex][$string];
+
   }
 
   public function webPageSimpleText($url, $title) {
@@ -43,27 +69,32 @@ class WebsiteContentGenerator {
     mkdir(__DIR__."/../upload/products/");
     mkdir(__DIR__."/../upload/slideshow/");
 
+    copy(
+      __DIR__."/content/images/favicon.png",
+      "{$this->adminPanel->config['files_dir']}/favicon.png"
+    );
+
     for ($i = 1; $i <= 7; $i++) {
       copy(
-        __DIR__."/SampleData/images/category_{$i}.png",
-        "{$this->adminPanel->config['files_dir']}/blogs/category_{$i}.png",
+        __DIR__."/content/images/category_{$i}.png",
+        "{$this->adminPanel->config['files_dir']}/blogs/{$i}.png",
       );
     }
     for ($i = 1; $i <= 10; $i++) {
       copy(
-        __DIR__."/SampleData/images/product_{$i}.jpg",
-        "{$this->adminPanel->config['files_dir']}/products/product_{$i}.jpg",
+        __DIR__."/content/images/product_{$i}.jpg",
+        "{$this->adminPanel->config['files_dir']}/products/{$i}.jpg",
       );
     }
     for ($i = 1; $i <= 3; $i++) {
       copy(
-        __DIR__."/SampleData/images/slideshow/{$this->slideshowImageSet}/{$i}.jpg",
+        __DIR__."/content/images/slideshow/{$this->slideshowImageSet}/{$i}.jpg",
         "{$this->adminPanel->config['files_dir']}/slideshow/{$i}.jpg",
       );
     }
 
     copy(
-      __DIR__."/SampleData/images/your-logo.png",
+      __DIR__."/content/images/your-logo.png",
       "{$this->adminPanel->config['files_dir']}/your-logo.png",
     );
 
@@ -75,11 +106,28 @@ class WebsiteContentGenerator {
     ];
     foreach ($imagesToCopy as $item) {
       copy(
-        __DIR__."/SampleData/images/".$item,
+        __DIR__."/content/images/".$item,
         "{$this->adminPanel->config['files_dir']}/".$item,
       );
     }
 
+  }
+
+  public function generateMenuItems($idMenu, $items, $idParent = 0) {
+    $websiteMenuItemModel = new \ADIOS\Widgets\Website\Models\WebMenuItem($this->adminPanel);
+    foreach ($items as $item) {
+      $idItem = $websiteMenuItemModel->insertRow([
+        "id_menu" => $idMenu,
+        "id_parent" => $idParent,
+        "title" => $this->translate($item["title"]),
+        "url" => $this->translate($item["url"]),
+        "expand_product_categories" => $item["expand_product_categories"] ?? FALSE,
+      ]);
+
+      if (is_array($item["sub"])) {
+        $this->generateMenuItems($idMenu, $item["sub"], $idItem);
+      }
+    }
   }
 
   public function generateWebsiteContent($domainIndex, $themeName) {
@@ -87,6 +135,7 @@ class WebsiteContentGenerator {
     $domainName = $this->domainCurrentlyGenerated['name'];
     $domainSlug = $this->domainCurrentlyGenerated['slug'];
     $themeObject = $this->adminPanel->widgets['Website']->themes[$themeName];
+    $sampleContentDir = __DIR__."/SampleData";
     $idOffset = $domainIndex * 100;
 
     $blogCatalogModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\Blog($this->adminPanel);
@@ -99,114 +148,117 @@ class WebsiteContentGenerator {
     $websiteWebPageModel = new \ADIOS\Widgets\Website\Models\WebPage($this->adminPanel);
     $websiteWebRedirectModel = new \ADIOS\Widgets\Website\Models\WebRedirect($this->adminPanel);
 
-    // Blogs
-    $blogCatalogModel->insertRow(["id" => $idOffset + 1, "name" => "Ako vznikol vesmír?", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex1.html"), "image" => "blogs/category_7.png", "created_at" => date("Y-m-d"), "id_user" => 1]);
-    $blogCatalogModel->insertRow(["id" => $idOffset + 2, "name" => "Blog?", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex2.html"), "image" => "blogs/category_3.png", "created_at" => date("Y-m-d", strtotime("19.5.2000")),  "id_user" => 2]);
-    $blogCatalogModel->insertRow(["id" => $idOffset + 3, "name" => "Lorem Ipsum", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex2.html"), "image" => "blogs/category_6.png", "created_at" => date("Y-m-d", strtotime("19.5.2000")), "id_user" => 1]);
-    $blogCatalogModel->insertRow(["id" => $idOffset + 4, "name" => "Ahoj Blog", "content" => file_get_contents(__DIR__."/SampleData/PageTexts/kontakty.html"), "perex" => file_get_contents(__DIR__."/SampleData/PageTexts/blogs/perex1.html"), "image" => "blogs/category_1.png", "created_at" => date("Y-m-d", strtotime("8.8.2000")), "id_user" => 3]);
-
-    // Blogs tags
-    $blogTagModel->insertRow(["id" => $idOffset + 1, "name" => "Žltý ({$domainIndex})", "description" => "Žltá farba"]);
-    $blogTagModel->insertRow(["id" => $idOffset + 2, "name" => "Modrý ({$domainIndex})", "description" => "Modrá farba"]);
-    $blogTagModel->insertRow(["id" => $idOffset + 3, "name" => "Červený ({$domainIndex})", "description" => "Červená farba"]);
-
-    // Blogs tags assignment
-    $blogTagAssignmentModel->insertRow(["id_tag" => $idOffset + 1, "id_blog" => $idOffset + 1]);
-    $blogTagAssignmentModel->insertRow(["id_tag" => $idOffset + 2, "id_blog" => $idOffset + 1]);
-    $blogTagAssignmentModel->insertRow(["id_tag" => $idOffset + 3, "id_blog" => $idOffset + 1]);
-    $blogTagAssignmentModel->insertRow(["id_tag" => $idOffset + 2, "id_blog" => $idOffset + 2]);
-    $blogTagAssignmentModel->insertRow(["id_tag" => $idOffset + 1, "id_blog" => $idOffset + 3]);
-    $blogTagAssignmentModel->insertRow(["id_tag" => $idOffset + 3, "id_blog" => $idOffset + 4]);
-    $blogTagAssignmentModel->insertRow(["id_tag" => $idOffset + 2, "id_blog" => $idOffset + 4]);
-
-    // Slideshow
-
-    $slideshowModel->insertRow([
-      "domain" => $domainName,
-      "heading" => "Vitajte",
-      "description" => "Všetko pre váš online nákup",
-      "image" => "slideshow/1.jpg",
-      "button_url" => "produkty",
-      "button_text" => "Začať nakupovať",
-    ]);
-    $slideshowModel->insertRow([
-      "domain" => $domainName,
-      "heading" => "Aktuálne zľavy",
-      "description" => "Využite naše aktuálne zľavy",
-      "image" => "slideshow/2.jpg",
-      "button_url" => "akcie-a-zlavy",
-      "button_text" => "Zobraziť akcie a zľavy",
-    ]);
-    $slideshowModel->insertRow([
-      "domain" => $domainName,
-      "heading" => "Top sortiment",
-      "description" => "Ponúkame najkvalitnejší sortiment",
-      "image" => "slideshow/3.jpg",
-    ]);
-
-    // News
-
-    $newsModel->insertRow([
-      "title" => "Prvá novinka",
-      "content" => "Skutočne prvá novinka na Surikate Online Store",
-      "perex" => "Krátky popis stručnej novinky",
-      "domain" => $domainName,
-      "image" => "",
-      "show_from" => "20.6.2021",
-    ]);
-
-    $newsModel->insertRow([
-      "title" => "Druhá novinka",
-      "content" => "Surikata rastie - druhá novinka",
-      "perex" => "Popis druhej novinky pre rastúcu Surikatu",
-      "domain" => $domainName,
-      "image" => "",
-      "show_from" => "22.6.2021",
-    ]);
-
     // web - menu
+    $menus = [
+      "header" => [
+        "title" => "Header Menu",
+        "items" => [
+          [
+            "title" => "Home",
+            "url" => "home",
+            "sub" => [
+              [
+                "title" => "About us",
+                "url" => "about-us",
+                "sub" => [],
+              ],
+            ],
+          ],
+          [
+            "title" => "Products",
+            "url" => "products",
+            "expand_product_categories" => TRUE,
+            // "sub" => [
+            //   [
+            //     "title" => "We recommend",
+            //     "url" => "we-recommend",
+            //     "sub" => [],
+            //   ],
+            // ],
+          ],
+          [
+            "title" => "Blog",
+            "url" => "blog",
+            "sub" => [],
+          ],
+          [
+            "title" => "Contact",
+            "url" => "contact",
+            "sub" => [],
+          ],
+        ],
+      ],
+      "footer" => [
+        "title" => "Footer Menu",
+        "items" => [
+          [
+            "title" => "About us",
+            "url" => "about-us",
+            "sub" => [],
+          ],
+          [
+            "title" => "Contact",
+            "url" => "contact",
+            "sub" => [],
+          ],
+        ],
+      ],
+    ];
 
-    $websiteMenuModel->insertRow(["id" => $idOffset + 1, "domain" => $domainName, "name" => "Menu v hlavičke ({$domainName})"]);
-    $websiteMenuModel->insertRow(["id" => $idOffset + 2, "domain" => $domainName, "name" => "Menu v päte stránky ({$domainName})"]);
+    $i = 1;
+    foreach ($menus as $menuName => $menu) {
+      $idMenu = $websiteMenuModel->insertRow([
+        "id" => $idOffset + $i,
+        "domain" => $domainName,
+        "name" => $this->translate($menu["title"]),
+      ]);
 
-    // web - menu items
-    $tmpHomepageID = $websiteMenuItemModel->insertRow(["id_menu" => $idOffset + 1, "id_parent" => 0, "title" => $this->translate("Úvod"), "url" => "uvod"]);
-    $websiteMenuItemModel->insertRow(["id_menu" => $idOffset + 1, "id_parent" => $tmpHomepageID, "title" => "O nás", "url" => "o-nas"]);
-    $tmpProduktyID = $websiteMenuItemModel->insertRow(["id_menu" => $idOffset + 1, "id_parent" => 0, "title" => "Produkty", "url" => "produkty"]);
-    $websiteMenuItemModel->insertRow(["id_menu" => $idOffset + 1, "id_parent" => $tmpProduktyID, "title" => "Akcie a zľavy", "url" => "akcie-a-zlavy"]);
-    $websiteMenuItemModel->insertRow(["id_menu" => $idOffset + 1, "id_parent" => 0, "title" => "Blog", "url" => "blogy"]);
-    $websiteMenuItemModel->insertRow(["id_menu" => $idOffset + 1, "id_parent" => 0, "title" => "Kontakt", "url" => "kontakt"]);
+      $this->generateMenuItems($idMenu, $menu["items"]);
+
+      $menus[$menuName]["id"] = $idMenu;
+
+      $i++;
+    }
 
     // web - stranky
 
     $websiteCommonPanels[$domainName] = [
-      "header" => [ "plugin" => "WAI/Common/Header" ],
-      "navigation" => [ "plugin" => "WAI/Common/Navigation", "settings" => [ "menuId" => $idOffset + 1, "homepageUrl" => "uvod", "showCategories" => true, ] ],
+      "header" => [
+        "plugin" => "WAI/Common/Header"
+      ],
+      "navigation" => [
+        "plugin" => "WAI/Common/Navigation",
+        "settings" => [
+          "menuId" => $menus["header"]["id"],
+          "homepageUrl" => $this->translate("home"),
+          "showCategories" => TRUE,
+        ],
+      ],
       "footer" => [ 
         "plugin" => "WAI/Common/Footer", 
         "settings" => [ 
-          "mainMenuId" => $idOffset + 1, 
-          "secondaryMenuId" => $idOffset + 3, 
-          "mainMenuTitle" => "Stránky",
-          "secondaryMenuTitle" => "Vaša firma",
+          "mainMenuId" => $menus["header"]["id"],
+          "secondaryMenuId" => $menus["footer"]["id"],
+          "mainMenuTitle" => $this->translate("Pages"),
+          "secondaryMenuTitle" => $this->translate("Our Company"),
           "showContactAddress" => 0,
           "showContactEmail" => 1,
           "showContactPhoneNumber" => 1,
-          "contactTitle" => "Kontaktujte nás",
+          "contactTitle" => $this->translate("Contact us"),
           "showPayments" => 1,
           "showSocialMedia" => 1,
           "showSecondaryMenu" => 1,
           "showMainMenu" => 1,
           "showBlogs" => 1,
           "Newsletter" => 1,
-          "blogsTitle" => "Najnovšie blogy"
+          "blogsTitle" => $this->translate("Recent blogs"),
         ] 
       ],
     ];
 
     if ($domainSlug == "hello-world") {
       $webPages = [
-        "{$domainName}|home|WithoutSidebar|Home" => [
+        "home|WithoutSidebar|Home" => [
           "section_1" => [
             "WAI/SimpleContent/OneColumn",
             [
@@ -230,7 +282,7 @@ class WebsiteContentGenerator {
             ]
           ],
         ],
-        "{$domainName}|one-column|WithoutSidebar|One Column" => [
+        "one-column|WithoutSidebar|One Column" => [
           "section_1" => [
             "WAI/SimpleContent/OneColumn",
             [
@@ -242,17 +294,24 @@ class WebsiteContentGenerator {
       ];
     } else {
       $webPages = [
-        "{$domainName}|uvod|WithoutSidebar|Úvod" => [
+
+        // home
+        "home|WithoutSidebar|Home" => [
           "section_1" => ["WAI/Misc/Slideshow", ["speed" => 1000]],
           "section_2" => [
             "WAI/SimpleContent/OneColumn",
             [
-              "heading" => "Vitajte",
+              "heading" => $this->translate("Welcome"),
               "headingLevel" => 1,
               "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
             ],
           ],
-          "section_3" => ["WAI/SimpleContent/H2", ["heading" => "Odporúčame pre vás"]],
+          "section_3" => [
+            "WAI/SimpleContent/H2",
+            [
+              "heading" => $this->translate("We recommend"),
+            ],
+          ],
           "section_4" => [
             "WAI/Product/FilteredList",
             [
@@ -271,7 +330,12 @@ class WebsiteContentGenerator {
               "column2CSSClasses" => "text-right",
             ],
           ],
-          "section_6" => ["WAI/SimpleContent/H2", ["heading" => "Zľava"]],
+          "section_6" => [
+            "WAI/SimpleContent/H2",
+            [
+              "heading" => $this->translate("Discount"),
+            ],
+          ],
           "section_7" => [
             "WAI/Product/FilteredList",
             [
@@ -291,23 +355,25 @@ class WebsiteContentGenerator {
             ],
           ]
         ],
-        "{$domainName}|o-nas|WithoutSidebar|O nás" => [
+
+        // about-us
+        "about-us|WithoutSidebar|About us" => [
           "section_1" => [
             "WAI/SimpleContent/OneColumn",
             [
-              "heading" => "O nás",
+              "heading" => $this->translate("About us"),
               "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/o-nas.html"),
             ]
           ],
           "section_2" => [
             "WAI/SimpleContent/OneColumn",
             [
-              "heading" => "Vitajte",
+              "heading" => $this->translate("Welcome"),
               "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/o-nas.html"),
             ]
           ],
         ],
-        "{$domainName}|kontakt|WithoutSidebar|Kontakt" => [
+        "contact|WithoutSidebar|Contact" => [
           "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
           "section_2" => [
             "WAI/SimpleContent/OneColumn",
@@ -318,8 +384,22 @@ class WebsiteContentGenerator {
           ],
         ],
 
-        // Product catalog pages
-        "{$domainName}|produkty|WithLeftSidebar|Katalóg produktov" => [
+        // search
+        "search|WithoutSidebar|Search" => [
+          "section_1" => [
+            "WAI/Misc/WebsiteSearch",
+            [
+              "heading" => $this->translate("Search"),
+              "numberOfResults" => 10,
+              "searchInProducts" => "name_lang,brief_lang,description_lang",
+              "searchInProductCategories" => "name_lang",
+              "searchInBlogs" => "name,content",
+            ]
+          ],
+        ],
+
+        // products
+        "products|WithLeftSidebar|Products" => [
           "sidebar" => [
             "WAI/Product/Filter",
             [
@@ -333,9 +413,15 @@ class WebsiteContentGenerator {
           "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
           "section_2" => ["WAI/Product/Catalog", ["defaultItemsPerPage" => 6]],
         ],
-        "{$domainName}|akcie-a-zlavy|WithoutSidebar|Akcie a zľavy" => [
+
+        "we-recommend|WithoutSidebar|We recommend" => [
           "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
-          "section_2" => ["WAI/SimpleContent/H2", ["heading" => "Zľava"]],
+          "section_2" => [
+            "WAI/SimpleContent/H2",
+            [
+              "heading" => $this->translate("Discounts")
+            ]
+          ],
           "section_3" => [
             "WAI/Product/FilteredList",
             [
@@ -344,7 +430,12 @@ class WebsiteContentGenerator {
               "product_count" => 99,
             ],
           ],
-          "section_4" => ["WAI/SimpleContent/H2", ["heading" => "Výpredaj"]],
+          "section_4" => [
+            "WAI/SimpleContent/H2",
+            [
+              "heading" => $this->translate("Sale out"),
+            ]
+          ],
           "section_5" => [
             "WAI/Product/FilteredList",
             [
@@ -354,88 +445,151 @@ class WebsiteContentGenerator {
             ],
           ],
         ],
-        "{$domainName}||WithoutSidebar|Detail produktu" => [
-          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
-          "section_2" => ["WAI/Product/Detail", ["show_similar_products" => 1, "show_accessories" => 1, "showAuthor" => 1]],
+
+        // product detail
+        "|WithoutSidebar|Product detail" => [
+          "section_1" => [
+            "WAI/Common/Breadcrumb",
+            [
+              "showHomePage" => 1,
+            ],
+          ],
+          "section_2" => [
+            "WAI/Product/Detail",
+            [
+              "show_similar_products" => 1,
+              "show_accessories" => 1,
+              "showAuthor" => 1,
+            ],
+          ],
         ],
 
-        // Shopping cart, checkout and order confirmation
-        "{$domainName}|kosik|WithoutSidebar|Nákupný košík" => [
+        // shopping cart
+        "cart|WithoutSidebar|Cart" => [
           "section_1" => "WAI/Order/CartOverview",
         ],
-        "{$domainName}|objednat|WithoutSidebar|Vytvorenie objednávky" => [
+
+        // checkout
+        "checkout|WithoutSidebar|Checkout" => [
           "section_1" => "WAI/Order/Checkout",
         ],
-        "{$domainName}||WithoutSidebar|Potvrdenie objednávky" => [
+
+        // order-confirmed
+        "|WithoutSidebar|Order confirmed" => [
           "section_1" => "WAI/Order/Confirmation"
         ],
 
-        // My account pages
-        "{$domainName}|prihlasit-sa|WithoutSidebar|Môj účet - prihlásenie" => [
-          "section_1" => ["WAI/Customer/Login", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]],
+        // create-account
+        "create-account|WithoutSidebar|Create Account" => [
+          "section_1" => [
+            "WAI/Customer/Registration", [
+              "showPrivacyTerms" => 1,
+              "privacyTermsUrl" => "privacy-terms",
+            ],
+          ],
         ],
-        "{$domainName}|moj-ucet|WithoutSidebar|Môj účet" => [
-          "section_1" => "WAI/Customer/Home",
-        ],
-        "{$domainName}|moj-ucet/objednavky|WithoutSidebar|Môj účet - objednávky" => [
-          "section_1" => "WAI/Customer/OrderList",
-        ],
-        "{$domainName}|zabudnute-heslo|WithoutSidebar|Môj účet - resetovanie hesla" => [
-          "section_1" => "WAI/Customer/ForgotPassword"
-        ],
-        "{$domainName}|registracia|WithoutSidebar|Môj účet - registrácia" => [
-          "section_1" => ["WAI/Customer/Registration", ["showPrivacyTerms" => 1, "privacyTermsUrl" => "privacy-terms"]]
-        ],
-        "{$domainName}|potvrdenie-registracie|WithoutSidebar|Môj účet - potvrdenie registrácie" => [
+
+        // create-account/confirmation
+        "create-account/confirmation|WithoutSidebar|Create Account - Confirmation" => [
           "section_1" => "WAI/Customer/RegistrationConfirmation"
         ],
-        "{$domainName}||WithoutSidebar|Môj účet - validácia registrácie" => [
+
+        // my-account/validation
+        "|WithoutSidebar|My account - Validation" => [
           "section_1" => "WAI/Customer/ValidationConfirmation"
         ],
 
-        // Blogs
-        "{$domainName}|blogy|WithLeftSidebar|Blogy" => [
-          "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
-          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
-          "section_2" => ["WAI/Blog/Catalog", ['itemsPerPage' => 3, "showAuthor" => 1]],
-        ],
-        "{$domainName}||WithLeftSidebar|Blog" => [
-          "sidebar" => ["WAI/Blog/Sidebar", ["showRecent" => 1, "showArchive" => 1, "showAdvertising" => 1]],
-          "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
-          "section_2" => "WAI/Blog/Detail",
+        // reset-password
+        "reset-password|WithoutSidebar|Reset Password" => [
+          "section_1" => "WAI/Customer/ForgotPassword"
         ],
 
-        // Miscelaneous pages
-        "{$domainName}|hladat|WithoutSidebar|Hľadať" => [
+        // my-account
+        "my-account|WithoutSidebar|My Account" => [
+          "section_1" => "WAI/Customer/Home",
+        ],
+
+        // my-account/orders
+        "my-account/orders|WithoutSidebar|My Account - Orders" => [
+          "section_1" => "WAI/Customer/OrderList",
+        ],
+
+        // login
+        "sign-in|WithoutSidebar|My Account - Sign in" => [
           "section_1" => [
-            "WAI/Misc/WebsiteSearch",
+            "WAI/Customer/Login",
             [
-              "heading" => "Hľadať",
-              "numberOfResults" => 10,
-              "searchInProducts" => "name_lang,brief_lang,description_lang",
-              "searchInProductCategories" => "name_lang",
-              "searchInBlogs" => "name,content",
-            ]
+              "showPrivacyTerms" => 1,
+              "privacyTermsUrl" => "privacy-terms",
+            ],
           ],
         ],
-        "{$domainName}|ochrana-osobnych-udajov|WithoutSidebar|Zásady ochrany osobných údajov" => [
+
+        // privacy-terms
+        "privacy-terms|WithoutSidebar|Privacy Terms" => [
           "section_1" => [
             "WAI/SimpleContent/OneColumn",
             [
-              "heading" => "Hello",
+              "heading" => $this->translate("We value your privacy"),
               "content" => file_get_contents(__DIR__."/SampleData/PageTexts/o-nas.html"),
             ]
           ]
         ],
-        "{$domainName}|novinky|WithLeftSidebar|Novinky" => [
+
+        // news
+        "news|WithLeftSidebar|News" => [
           "sidebar" => ["WAI/News", ["contentType" => "sidebar"]],
           "section_1" => ["WAI/News", ["contentType" => "listOrDetail"]],
         ],
+
+        // blogs - list
+        "blog|WithLeftSidebar|Blog" => [
+          "sidebar" => [
+            "WAI/Blog/Sidebar", [
+              "showRecent" => 1,
+              "showArchive" => 1,
+              "showAdvertising" => 1,
+            ],
+          ],
+          "section_1" => [
+            "WAI/Common/Breadcrumb",
+            [
+              "showHomePage" => 1,
+            ],
+          ],
+          "section_2" => [
+            "WAI/Blog/Catalog",
+            [
+              "itemsPerPage" => 3,
+              "showAuthor" => 1,
+            ],
+          ],
+        ],
+
+        // blog - detail
+        "|WithLeftSidebar|Blog" => [
+          "sidebar" => [
+            "WAI/Blog/Sidebar",
+            [
+              "showRecent" => 1,
+              "showArchive" => 1,
+              "showAdvertising" => 1,
+            ],
+          ],
+          "section_1" => [
+            "WAI/Common/Breadcrumb",
+            [
+              "showHomePage" => 1,
+            ],
+          ],
+          "section_2" => "WAI/Blog/Detail",
+        ],
+
       ];
     }
 
     foreach ($webPages as $webPageData => $webPagePanels) {
-      list($tmpDomain, $tmpUrl, $tmpLayout, $tmpTitle) = explode("|", $webPageData);
+      list($tmpUrl, $tmpLayout, $tmpTitle) = explode("|", $webPageData);
       $tmpPanels = [];
       foreach ($webPagePanels as $tmpPanelName => $value) {
         $tmpPanels[$tmpPanelName] = [];
@@ -451,43 +605,25 @@ class WebsiteContentGenerator {
       }
 
       $websiteWebPageModel->insertRow([
-        "domain" => $tmpDomain,
-        "name" => $tmpTitle,
-        "seo_title" => $tmpTitle,
-        "seo_description" => $tmpTitle,
-        "url" => $tmpUrl,
+        "domain" => $domainName,
+        "name" => $this->translate($tmpTitle),
+        "seo_title" => $this->translate($tmpTitle),
+        "seo_description" => $this->translate($tmpTitle),
+        "url" => $this->translate($tmpUrl),
         "publish_always" => 1,
         "content_structure" => json_encode([
           "layout" => $tmpLayout,
-          "panels" => array_merge($websiteCommonPanels[$tmpDomain], $tmpPanels),
+          "panels" => array_merge($websiteCommonPanels[$domainName], $tmpPanels),
         ]),
       ]);
     }
 
-    // if ($domainIndex === 1) {
-    //   $websiteWebRedirectModel->insertRow([
-    //     "domain" => $domainName,
-    //     "from_url" => "",
-    //     "to_url" => "//".$_SERVER['HTTP_HOST'].REWRITE_BASE.$domainSlug."/uvod",
-    //     "type" => 302,
-    //   ]);
-    // }
-
-    if ($domainSlug == "hello-world") {
-      $websiteWebRedirectModel->insertRow([
-        "domain" => $domainName,
-        "from_url" => "",
-        "to_url" => "//".$_SERVER['HTTP_HOST'].REWRITE_BASE.$domainSlug."/home",
-        "type" => 302,
-      ]);
-    } else {
-      $websiteWebRedirectModel->insertRow([
-        "domain" => $domainName,
-        "from_url" => "",
-        "to_url" => "//".$_SERVER['HTTP_HOST'].REWRITE_BASE.$domainSlug."/uvod",
-        "type" => 302,
-      ]);
-    }
+    $websiteWebRedirectModel->insertRow([
+      "domain" => $domainName,
+      "from_url" => "",
+      "to_url" => "//".$_SERVER['HTTP_HOST'].REWRITE_BASE.$domainSlug."/".$this->translate("home"),
+      "type" => 302,
+    ]);
 
     $this->adminPanel->widgets["Website"]->rebuildSitemap($domainName);
 
@@ -531,16 +667,65 @@ class WebsiteContentGenerator {
             ],
           ],
         ],
-        // "plugins" => [
-        //   "WAI/Export/MoneyS3" => [
-        //     "outputFileProducts" => "tmp/money_s3_products.xml",
-        //     "outputFileOrders" => "tmp/money_s3_orders.xml",
-        //   ],
-        // ],
       ]
     ]);
 
     $themeObject->onAfterInstall();
 
-  }
+    /////////////////////////////////////////////////////////////////
+
+    // Blogs
+    $i = 1;
+    foreach (scandir($sampleContentDir) as $file) {
+      if (in_array($file, [".", ".."])) continue;
+
+      $tmpContent = file_get_contents("{$sampleContentDir}/{$file}");
+
+      $blogCatalogModel->insertRow([
+        "id" => $idOffset + $i,
+        "name" => pathinfo($file, PATHINFO_FILENAME),
+        "content" => $tmpContent,
+        "perex" => mb_substr($tmpContent, 0, 50),
+        "image" => "blogs/{$i}.png",
+        "created_at" => date("Y-m-d"),
+        "id_user" => 1,
+      ]);
+
+      $i++;
+    }
+
+    // Slideshow
+
+    $slideshowModel->insertRow([
+      "domain" => $domainName,
+      "heading" => $this->translate("Welcome"),
+      "description" => $this->translate("Your best online store"),
+      "image" => "slideshow/1.jpg",
+      "button_url" => "produkty",
+      "button_text" => $this->translate("Start shopping"),
+    ]);
+    $slideshowModel->insertRow([
+      "domain" => $domainName,
+      "heading" => $this->translate("Discounts"),
+      "description" => $this->translate("We have something special for your"),
+      "image" => "slideshow/2.jpg",
+      "button_url" => $this->translate("discounts"),
+      "button_text" => $this->translate("Show discounts"),
+    ]);
+    $slideshowModel->insertRow([
+      "domain" => $domainName,
+      "heading" => $this->translate("Check our luxury products"),
+      "description" => $this->translate("We sell only most-rated and reliable products"),
+      "image" => "slideshow/3.jpg",
+    ]);
+
+    // News
+
+    $newsModel->insertRow([
+      "title" => $this->translate("Welcome to our online store"),
+      "perex" => $this->translate("We built our online store using Surikata.io."),
+      "content" => $this->translate("We built our online store using Surikata.io."),
+      "domain" => $domainName,
+    ]);
+ }
 }

@@ -359,6 +359,7 @@ class Loader extends \Cascada\Loader {
    * */
   public function loadPublishedPages() {
     $tmp = (new \ADIOS\Widgets\Website\Models\WebPage($this->adminPanel))
+      ->where('domain', $this->config["domainToRender"])
       ->where('publish_always', '1')
       ->orWhere(function($q) {
         $q

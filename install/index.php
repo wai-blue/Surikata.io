@@ -66,6 +66,12 @@ if (!is_file("../vendor/autoload.php")) {
   echo "
     <div style='color:red'>
       Sorry, it looks like you did not run 'composer install'.
+      <br/>
+      Install required libraries:
+      <ul>
+        <li>run <i>composer install</i> in project's root folder</li>
+        <li>rerun this installer again</li>
+      </ul>
     </div>
   ";
   exit();
@@ -74,7 +80,14 @@ if (!is_file("../vendor/autoload.php")) {
 if (!is_file("../ConfigEnv.php")) {
   echo "
     <div style='color:red'>
-      Sorry, it looks like you do not have ConfigEnv.php configured.
+      Sorry, it looks like you do not have your ConfigEnv.php configured.<br/>
+      <br/>
+      Configure your environment:
+      <ul>
+        <li>copy <i>ConfigEnv.php.tmp</i> to <i>ConfigEnv.php</i></li>
+        <li>modify it based on your environment</li>
+        <li>rerun this installer again</li>
+      </ul>
     </div>
   ";
   exit();
@@ -120,7 +133,7 @@ for ($i = 1; $i <= 3; $i++) {
       "description" => $_GET["domain_{$i}_description"],
       "slug" => $_GET["domain_{$i}_slug"],
       "themeName" => $_GET["domain_{$i}_theme_name"],
-      "languageIndex" => $i,
+      "languageIndex" => $_GET["domain_{$i}_language_index"],
     ];
   }
 }
@@ -148,28 +161,44 @@ if (!$doInstall) {
   //   ";
   // }
 
-  function _getDomainDescriptionInput($languageIndex, $value = "") {
+  function _getDomainDescriptionInput($domainIndex, $value = "") {
     return "
       <input
-        name='domain_{$languageIndex}_description'
+        name='domain_{$domainIndex}_description'
         value='{$value}'
         style='width:300px'
       >
     ";
   }
 
-  function _getDomainSlugInput($languageIndex, $value = "") {
+  function _getDomainSlugInput($domainIndex, $value = "") {
     return "
       <input
-        name='domain_{$languageIndex}_slug'
+        name='domain_{$domainIndex}_slug'
         value='{$value}'
         style='width:150px'
       >
     ";
   }
 
-  function _getDomainThemeSelect($languageIndex, $availableThemes, $theme = "") {
-    $html = "<select name='domain_{$languageIndex}_theme_name'>";
+  function _getDomainLanguageIndexInput($domainIndex, $value = "") {
+    $languages = [
+      1 => "English",
+      2 => "Slovensky",
+      3 => "Česky",
+    ];
+
+    $html = "<select name='domain_{$domainIndex}_language_index'>";
+    foreach ($languages as $languageIndex => $language) {
+      $html .= "<option value='{$languageIndex}' ".($value == $languageIndex ? "selected" : "").">{$language}</option>";
+    }
+    $html .= "</select>";
+
+    return $html;
+  }
+
+  function _getDomainThemeSelect($domainIndex, $availableThemes, $theme = "") {
+    $html = "<select name='domain_{$domainIndex}_theme_name'>";
     foreach ($availableThemes as $availableTheme) {
       $html .= "<option value='{$availableTheme}' ".($theme == $availableTheme ? "selected" : "").">{$availableTheme}</option>";
     }
@@ -253,25 +282,25 @@ if (!$doInstall) {
         <tr>
           <td>"._getDomainSlugInput(1, "hello-world")."</td>
           <td>"._getDomainDescriptionInput(1, "Developer`s Hello World example")."</td>
-          <td>{$configEnv["domainLanguages"][1]}</td>
+          <td>"._getDomainLanguageIndexInput(1, 1)."</td>
           <td>"._getDomainThemeSelect(1, $availableThemes, "HelloWorld")."</td>
         </tr>
         <tr>
           <td>"._getDomainSlugInput(2, "en")."</td>
           <td>"._getDomainDescriptionInput(2, "English version")."</td>
-          <td>{$configEnv["domainLanguages"][1]}</td>
+          <td>"._getDomainLanguageIndexInput(2, 1)."</td>
           <td>"._getDomainThemeSelect(2, $availableThemes)."</td>
         </tr>
         <tr>
           <td>"._getDomainSlugInput(3, "sk")."</td>
           <td>"._getDomainDescriptionInput(3, "Slovenská verzia")."</td>
-          <td>{$configEnv["domainLanguages"][2]}</td>
+          <td>"._getDomainLanguageIndexInput(3, 2)."</td>
           <td>"._getDomainThemeSelect(3, $availableThemes)."</td>
         </tr>
         <tr>
           <td>"._getDomainSlugInput(4, "")."</td>
           <td>"._getDomainDescriptionInput(4, "")."</td>
-          <td>{$configEnv["domainLanguages"][3]}</td>
+          <td>"._getDomainLanguageIndexInput(4, 3)."</td>
           <td>"._getDomainThemeSelect(4, $availableThemes)."</td>
         </tr>
       </table>
@@ -359,7 +388,7 @@ if (!$doInstall) {
       $configEnvDomainsPHP .= "    'description' => '{$domain['description']}',\r\n";
       $configEnvDomainsPHP .= "    'slug' => '{$domain['slug']}',\r\n";
       $configEnvDomainsPHP .= "    'rootUrl' => \$_SERVER['HTTP_HOST'].REWRITE_BASE.'{$domain['slug']}',\r\n";
-      $configEnvDomainsPHP .= "    'languageIndex' => {$key},\r\n";
+      $configEnvDomainsPHP .= "    'languageIndex' => {$domain['languageIndex']},\r\n";
       $configEnvDomainsPHP .= "  ],\r\n";
     }
     $configEnvDomainsPHP .= "];\r\n";
@@ -376,7 +405,7 @@ foreach ($configEnv["domains"] as $domain) {
 }
 
 define("WEBSITE_DOMAIN_TO_RENDER", $domainToRender["name"]);
-define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]);
+define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
     ');
 
     file_put_contents(__DIR__."/../ConfigEnvDomains.php", $configEnvDomainsPHP);
@@ -836,9 +865,9 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]);
             "phone_number"                 => $address['phone_number'],
             "email"                        => $address['email'],
 
-            "id_destination_country"       => $destinationCountries[rand(0, count($destinationCountriesIds) - 1)]['id'],
-            "id_delivery_service"          => $deliveryServices[rand(0, count($deliveryServicesIds) - 1)]['id'],
-            "id_payment_service"           => $paymentServices[rand(0, count($paymentServicesIds) - 1)]['id'],
+            "id_destination_country"       => $destinationCountriesIds[rand(0, count($destinationCountriesIds) - 1)],
+            "id_delivery_service"          => $deliveryServicesIds[rand(0, count($deliveryServicesIds) - 1)],
+            "id_payment_service"           => $paymentServicesIds[rand(0, count($paymentServicesIds) - 1)],
 
             "domain"                       => "EN",
             "general_terms_and_conditions" => 1,
@@ -876,6 +905,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]);
       </div>
     ";
     var_dump($e->getTrace());
+    $adminPanel->console->error(get_class($e).": ".$e->getMessage());
   }
 
   $infos = $adminPanel->console->getInfos();
@@ -909,15 +939,16 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]);
         <tr><td>Sample set of delivery and payment services</td><td>".(in_array("delivery-and-payment-services", $partsToInstall) ? "yes" : "no")."</td></tr>
         <tr><td>Sample set of orders</td><td>".(in_array("orders", $partsToInstall) ? "yes" : "no")."</td></tr>
       </table>
-      <a href='../admin' class='btn' target=_blank>Open administration panel</a><br/>
-      Login: administrator<br/>
-      Password: administrator<br/>
       <br/>
-      <a href='..' class='btn' target=_blank>Go to your e-shop</a>
       ".(count($warnings) > 0 ? "
         <h2>Warnings</h2>
         <div style='color:orange'>".$adminPanel->console->convertLogsToHtml($warnings)."</div>
       " : "")."
+      <br/>
+      <!-- <a href='..' class='btn' target=_blank>Go to your e-shop</a> -->
+      <a href='../admin' class='btn' target=_blank>Open administration panel</a><br/>
+      Login: administrator<br/>
+      Password: administrator<br/>
     ";
   }
 

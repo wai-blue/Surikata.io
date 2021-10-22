@@ -29,4 +29,4 @@ foreach ($configEnv["domains"] as $domain) {
 }
 
 define("WEBSITE_DOMAIN_TO_RENDER", $domainToRender["name"]);
-define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]);
+define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");

@@ -36,7 +36,7 @@ class RandomProductsGenerator {
       $features = [rand(1000,1200), rand(1200,1250), rand(250,300), rand(1,3), rand(75,120)*10, rand(50,100)*10, "155 R13"];
       $number = "RND.".rand(10, 99).".".rand(1000, 9999).".".$i;
       $ean = self::generateEAN($number);
-      $image = "products/product_{$productImgNum}.jpg";
+      $image = "products/{$productImgNum}.jpg";
       $vat = 20;
       $productsData[$i] = [
         /* 0 */ $idCategory,

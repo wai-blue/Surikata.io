@@ -13,6 +13,15 @@
 ini_set("display_errors", 1);
 ini_set("error_reporting", E_ALL ^ E_NOTICE ^ E_WARNING);
 
+if (
+  strpos($_SERVER["SCRIPT_NAME"], "install/index.php") === FALSE
+  && !file_exists(__DIR__."/ConfigEnv.php")
+) {
+  echo "It looks like you did not run the installer yet.<br/>";
+  echo "<a href='install'>Open the installer</a>";
+  exit;
+}
+
 // load configs
 require_once("ConfigEnv.php");
 require_once("ConfigApp.php");

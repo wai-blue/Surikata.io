@@ -250,7 +250,7 @@
                 </div>
               </section>
 
-              <button class="submit check_out" type="button" onclick="BasicThemeCart.showShippingAddress()">Ship to a different address?</button>
+              <button class="submit check_out" type="button" onclick="ThemeBasicCart.showShippingAddress()">Ship to a different address?</button>
               <section class="creditly-wrapper wrapper collapse" id="diffShippingAddress">
                 <h4>Ship to a different address</h4>
                 <input class="checkout-toggle" type="hidden" name="differentDeliveryAddress" id="differentDeliveryAddressCheckbox" value="0"/>
@@ -382,7 +382,7 @@
                                   id="deliveryService-{{ loop.index }}" 
                                   value="{{ deliveryService.id }}" 
                                   {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
-                                  onchange="BasicThemeCart.updateCheckoutOverview()"
+                                  onchange="ThemeBasicCart.updateCheckoutOverview()"
                                 >
                                 <label class="form-check-label" for="deliveryService-{{ loop.index }}">{{ deliveryService.delivery_name }}</label>
                                 <p data-method="{{ deliveryService.id }}" class="delivery-text">{{ deliveryService.description }}</p>
@@ -406,7 +406,7 @@
                                       id="paymentMethod-{{ loop.index }}" 
                                       value="{{ paymentMethod.id_payment_service }}" 
                                       {% if selectedPaymentMethod.id_payment_service == paymentMethod.id_payment_service %} checked="checked" {% endif %}
-                                      onchange="BasicThemeCart.updateCheckoutOverview()"
+                                      onchange="ThemeBasicCart.updateCheckoutOverview()"
                                     >
                                     <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.payment_service_name }}</label>
                                     <p data-method="{{ paymentMethod.id_payment_service }}" class="payment-text">{{ paymentMethod.payment_description }}</p>
@@ -437,7 +437,7 @@
                     <a
                       class="btn-hover"
                       href="javascript:void(0)"
-                      onclick="BasicThemeCart.placeOrder()"
+                      onclick="ThemeBasicCart.placeOrder()"
                     >Place Order</a>
                   </div>
                 </div>
@@ -496,7 +496,7 @@
                   id="deliveryService-{{ loop.index }}" 
                   value="{{ deliveryService.id }}" 
                   {% if selectedDeliveryService.id == deliveryService.id %} checked="checked" {% endif %}
-                  onchange="BasicThemeCart.updateCheckoutOverview()"
+                  onchange="ThemeBasicCart.updateCheckoutOverview()"
                 >
                 <label class="form-check-label" for="deliveryService-{{ loop.index }}">{{ deliveryService.delivery_name }}</label>
                 <p data-method="{{ deliveryService.id }}" class="delivery-text">{{ deliveryService.description }}</p>
@@ -517,7 +517,7 @@
                         id="paymentMethod-{{ loop.index }}" 
                         value="{{ paymentMethod.id_payment_service }}" 
                         {% if selectedPaymentMethod.id_payment_service == paymentMethod.id_payment_service %} checked="checked" {% endif %}
-                        onchange="BasicThemeCart.updateCheckoutOverview()"
+                        onchange="ThemeBasicCart.updateCheckoutOverview()"
                       >
                       <label for="paymentMethod-{{ loop.index }}">{{ paymentMethod.payment_service_name }}</label>
                       <p data-method="{{ paymentMethod.id_payment_service }}" class="payment-text">{{ paymentMethod.payment_description }}</p>
@@ -548,7 +548,7 @@
       <a
         class="btn-hover"
         href="javascript:void(0)"
-        onclick="BasicThemeCart.placeOrder()"
+        onclick="ThemeBasicCart.placeOrder()"
       >Place Order</a>
     </div>
   </div>

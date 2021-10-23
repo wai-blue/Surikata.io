@@ -58,7 +58,7 @@ class WebsiteContentGenerator {
         "WAI/SimpleContent/OneColumn",
         [
           "heading" => $title,
-          "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/{$url}.html"),
+          "content" => file_get_contents(__DIR__."/../content/PageTexts/{$url}.html"),
         ]
       ],
     ];
@@ -135,7 +135,7 @@ class WebsiteContentGenerator {
     $domainName = $this->domainCurrentlyGenerated['name'];
     $domainSlug = $this->domainCurrentlyGenerated['slug'];
     $themeObject = $this->adminPanel->widgets['Website']->themes[$themeName];
-    $sampleContentDir = __DIR__."/SampleData";
+    $sampleContentDir = __DIR__."/content";
     $idOffset = $domainIndex * 100;
 
     $blogCatalogModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\Blog($this->adminPanel);
@@ -287,7 +287,7 @@ class WebsiteContentGenerator {
             "WAI/SimpleContent/OneColumn",
             [
               "heading" => "Hello World!",
-              "content" => file_get_contents(__DIR__."/SampleData/PageTexts/o-nas.html"),
+              "content" => file_get_contents(__DIR__."/content/PageTexts/o-nas.html"),
             ]
           ],
         ],
@@ -303,7 +303,7 @@ class WebsiteContentGenerator {
             [
               "heading" => $this->translate("Welcome"),
               "headingLevel" => 1,
-              "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
+              "content" => file_get_contents(__DIR__."/../content/PageTexts/lorem-ipsum-1.html"),
             ],
           ],
           "section_3" => [
@@ -323,9 +323,9 @@ class WebsiteContentGenerator {
           "section_5" => [
             "WAI/SimpleContent/TwoColumns",
             [
-              "column1Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
+              "column1Content" => file_get_contents(__DIR__."/../content/PageTexts/lorem-ipsum-1.html"),
               "column1Width" => 4,
-              "column2Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-2.html"),
+              "column2Content" => file_get_contents(__DIR__."/../content/PageTexts/lorem-ipsum-2.html"),
               "column2Width" => 8,
               "column2CSSClasses" => "text-right",
             ],
@@ -347,9 +347,9 @@ class WebsiteContentGenerator {
           "section_8" => [
             "WAI/SimpleContent/TwoColumns",
             [
-              "column1Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-2.html"),
+              "column1Content" => file_get_contents(__DIR__."/../content/PageTexts/lorem-ipsum-2.html"),
               "column1Width" => 8,
-              "column2Content" => file_get_contents(__DIR__."/../SampleData/PageTexts/lorem-ipsum-1.html"),
+              "column2Content" => file_get_contents(__DIR__."/../content/PageTexts/lorem-ipsum-1.html"),
               "column2Width" => 4,
               "column2CSSClasses" => "text-right",
             ],
@@ -362,14 +362,14 @@ class WebsiteContentGenerator {
             "WAI/SimpleContent/OneColumn",
             [
               "heading" => $this->translate("About us"),
-              "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/o-nas.html"),
+              "content" => file_get_contents(__DIR__."/../content/PageTexts/o-nas.html"),
             ]
           ],
           "section_2" => [
             "WAI/SimpleContent/OneColumn",
             [
               "heading" => $this->translate("Welcome"),
-              "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/o-nas.html"),
+              "content" => file_get_contents(__DIR__."/../content/PageTexts/o-nas.html"),
             ]
           ],
         ],
@@ -379,7 +379,7 @@ class WebsiteContentGenerator {
             "WAI/SimpleContent/OneColumn",
             [
               "heading" => "",
-              "content" => file_get_contents(__DIR__."/../SampleData/PageTexts/kontakt_sk.html"),
+              "content" => file_get_contents(__DIR__."/../content/PageTexts/kontakt_sk.html"),
             ]
           ],
         ],
@@ -531,7 +531,7 @@ class WebsiteContentGenerator {
             "WAI/SimpleContent/OneColumn",
             [
               "heading" => $this->translate("We value your privacy"),
-              "content" => file_get_contents(__DIR__."/SampleData/PageTexts/o-nas.html"),
+              "content" => file_get_contents(__DIR__."/content/PageTexts/o-nas.html"),
             ]
           ]
         ],
@@ -659,11 +659,11 @@ class WebsiteContentGenerator {
             "emails" => [
               "signature" => "<p>{$domainName} - <a href='http://{$domainName}' target='_blank'>{$domainName}</a></p>",
               "after_order_confirmation_SUBJECT" => "{$domainName} - objednávka č. {% number %}",
-              "after_order_confirmation_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/orderBody_sk.html"),
+              "after_order_confirmation_BODY" => file_get_contents(__DIR__."/../content/PageTexts/emails/orderBody_sk.html"),
               "after_registration_SUBJECT" => "{$domainName} - Overte Vašu emailovú adresu",
-              "after_registration_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/registrationBody_sk.html"),
+              "after_registration_BODY" => file_get_contents(__DIR__."/../content/PageTexts/emails/registrationBody_sk.html"),
               "forgot_password_SUBJECT" => "{$domainName} - Obnovenie hesla",
-              "forgot_password_BODY" => file_get_contents(__DIR__."/../SampleData/PageTexts/emails/forgotPasswordBody_sk.html")
+              "forgot_password_BODY" => file_get_contents(__DIR__."/../content/PageTexts/emails/forgotPasswordBody_sk.html")
             ],
           ],
         ],

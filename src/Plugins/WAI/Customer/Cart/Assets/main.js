@@ -1,8 +1,8 @@
-function SurikataCart() {
+function PluginWAICustomerCart() {
   //
 }
 
-SurikataCart.prototype.addProduct = function (idProduct, qty, success) {
+PluginWAICustomerCart.prototype.addProduct = function (idProduct, qty, success) {
   let _this = this;
 
   Surikata.renderPluginJSON(
@@ -21,7 +21,7 @@ SurikataCart.prototype.addProduct = function (idProduct, qty, success) {
   );
 }
 
-SurikataCart.prototype.removeProduct = function (idProduct, success) {
+PluginWAICustomerCart.prototype.removeProduct = function (idProduct, success) {
   let _this = this;
 
   Surikata.renderPluginJSON(
@@ -39,7 +39,7 @@ SurikataCart.prototype.removeProduct = function (idProduct, success) {
   );
 }
 
-SurikataCart.prototype.updateProductQty = function (idProduct, qty, success) {
+PluginWAICustomerCart.prototype.updateProductQty = function (idProduct, qty, success) {
   let _this = this;
 
   Surikata.renderPluginJSON(
@@ -62,7 +62,7 @@ SurikataCart.prototype.updateProductQty = function (idProduct, qty, success) {
   
 }
 
-SurikataCart.prototype.updateProductPrices = function () {
+PluginWAICustomerCart.prototype.updateProductPrices = function () {
   let _this = this;
   Surikata.renderPlugin(
     'WAI/Order/CartOverview',
@@ -76,13 +76,13 @@ SurikataCart.prototype.updateProductPrices = function () {
   );
 }
 
-SurikataCart.prototype.serializeOrderData = function () {
+PluginWAICustomerCart.prototype.serializeOrderData = function () {
   return {
     'orderData': Surikata.serializeForm('#orderDataForm'),
   };
 }
 
-SurikataCart.prototype.placeOrder = function (success, fail) {
+PluginWAICustomerCart.prototype.placeOrder = function (success, fail) {
   let data = this.serializeOrderData();
   data['cartAction'] = 'placeOrder';
 

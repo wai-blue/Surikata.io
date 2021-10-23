@@ -65,7 +65,7 @@ set_time_limit(60*10);
 if (!is_file("../vendor/autoload.php")) {
   echo "
     <div style='color:red'>
-      Sorry, it looks like you did not run 'composer install'.
+      Sorry, it looks like you did not run 'composer install'.<br/>
       <br/>
       Install required libraries:
       <ul>
@@ -95,6 +95,23 @@ if (!is_file("../ConfigEnv.php")) {
 
 require("../Init.php");
 
+if (empty(REWRITE_BASE) || empty(DB_LOGIN) || empty(DB_NAME)) {
+  echo "
+    <div style='color:red'>
+      Sorry, it looks like you did not configure necessary parameters.<br/>
+      <br/>
+      Check following configurations in your ConfigEnv.php file:
+      <ul>
+        <li>REWRITE_BASE</li>
+        <li>DB_LOGIN</li>
+        <li>DB_NAME</li>
+        <li>rerun this installer again</li>
+      </ul>
+    </div>
+  ";
+  exit();
+}
+
 session_start();
 
 $availableThemes = [];
@@ -115,7 +132,7 @@ foreach (@scandir(__DIR__."/languages") as $file) {
 }
 
 $availableSlideshowImageSets = [];
-foreach (@scandir(__DIR__."/SampleData/images/slideshow") as $file) {
+foreach (@scandir(__DIR__."/content/images/slideshow") as $file) {
   if (!in_array($file, [".", ".."])) {
     $availableSlideshowImageSets[] = $file;
   }
@@ -395,7 +412,8 @@ if (!$doInstall) {
     $configEnvDomainsPHP .= "\r\n";
 
     $configEnvDomainsPHP .= trim('
-$slug = reset(explode("/", str_replace(REWRITE_BASE, "", $_SERVER["REQUEST_URI"])));
+$re = "/^".str_replace("/", "\\/", REWRITE_BASE)."/";
+$slug = reset(explode("/", preg_replace($re, "", $_SERVER["REQUEST_URI"])));
 
 $domainToRender = reset($configEnv["domains"]);
 foreach ($configEnv["domains"] as $domain) {
@@ -751,7 +769,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       // customers
       // .csv file generated with the help of https://www.fakeaddressgenerator.com
-      $customers = _loadCsvIntoArray(__DIR__."/SampleData/Customers.csv");
+      $customers = _loadCsvIntoArray(__DIR__."/content/Customers.csv");
 
       $cnt = 1;
       for ($i = 0; $i < 10; $i++) {

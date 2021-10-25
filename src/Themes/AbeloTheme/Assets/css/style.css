@@ -6215,7 +6215,7 @@ offcanvas-menu > ul > li .menu-expand {
   font-size: 25px;
   font-weight: 700;
   margin: 0 20px;
-  text-transform: capitalize;
+  text-transform: none;
   transition: all 0.3s ease 0s;
   color: #272727;
 }
@@ -7441,7 +7441,7 @@ offcanvas-menu > ul > li .menu-expand {
   position: absolute;
   top: 0;
   right: 0;
-  text-transform: capitalize;
+  text-transform: none;
   font-size: 0;
   font-weight: 700;
   font-size: 14px;

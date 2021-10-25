@@ -226,4 +226,16 @@ class Loader extends \ADIOS\Core\Loader {
       }
     }
   }
+  
+  /**
+   * Checks whether required folders have proper permissions
+   *
+   * @throws \Exception When failed to create at least one folder.
+   *
+   * @return void
+   */
+  public function checkFoldersPermissions() {
+    // TODO:
+    // throw new \Exception('Wrong access permissions for folder "' . $value. '"');
+  }
 }

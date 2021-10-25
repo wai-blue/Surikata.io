@@ -1236,41 +1236,41 @@ class DB {
               `{$lookupTable}` as `{$lookupTableAlias}`
               on `{$lookupTableAlias}`.`id` = `{$table_name}`.`{$col_name}`
           ";
-        }
 
-        if ('int' == $col_definition['type'] && is_array($col_definition['enum_values'])) {
-          $tmp_sql = "case ({$table_name}.{$col_name}) ";
-          foreach ($col_definition['enum_values'] as $tmp_key => $tmp_value) {
-            $tmp_sql .= "when {$tmp_key} then '{$tmp_value}' ";
-          }
-          $tmp_sql .= ' end';
-
-          $codeListColumns[] = "({$tmp_sql}) as {$col_name}, {$table_name}.{$col_name} as {$col_name}_enum_value";
-        }
-
-        if (('int' == $col_definition['type'] || 'varchar' == $col_definition['type']) && is_array($col_definition['enum_values'])) {
+        } else if (('int' == $col_definition['type'] || 'varchar' == $col_definition['type']) && is_array($col_definition['enum_values'])) {
           if ($col_definition['virtual']) {
-            $tmp_sql = "case ({$col_definition['sql']}) ";
+            $tmp_sql = "case (`{$col_definition['sql']}`) ";
           } else {
-            $tmp_sql = "case ({$table_name}.{$col_name}) ";
+            $tmp_sql = "case (`{$table_name}`.`{$col_name}`) ";
           }
+
           foreach ($col_definition['enum_values'] as $tmp_key => $tmp_value) {
-            $tmp_sql .= "when '{$tmp_key}' then '{$tmp_value}' ";
+            if ($tmp_key === NULL) {
+              $tmp_sql .= "when {$tmp_key} then '".$this->escape($tmp_value)."' ";
+            } else if (is_numeric($tmp_key)) {
+              $tmp_sql .= "when ".((int) $tmp_key)." then '".$this->escape($tmp_value)."' ";
+            } else {
+              $tmp_sql .= "when '".$this->escape((string) $tmp_key)."' then '".$this->escape($tmp_value)."' ";
+            }
           }
-          $tmp_sql .= ' end';
+
+          $tmp_sql .= " end";
 
           $codeListColumns[] = "({$tmp_sql}) as {$col_name}_enum_value";
+
           if ($col_definition['virtual']) {
             $codeListColumns[] = "({$col_definition['sql']}) as {$col_name}";
           } else {
             $codeListColumns[] = "{$table_name}.{$col_name} as {$col_name}";
           }
+
         } else if (
           !$this->tables[$table_name][$col_name]['virtual']
           && 'none' != $this->tables[$table_name][$col_name]['type']
         ) {
           $summaryColumnsSubselect .= "{$table_name}.{$col_name}";
         }
+
       }
 
       if ('' != $where) {

@@ -15,7 +15,7 @@ class Website extends \ADIOS\Core\Widget {
     }
 
     if ($this->adios->hasUserRole(\Surikata\Core\AdminPanel\Loader::USER_ROLE_ONLINE_MARKETING)) {
-      $domains = $this->adios->config['widgets']['Website']['domains'];
+      $domains = $this->adios->config['widgets']['Website']['domains'] ?? [];
 
       $sub = [];
       foreach ($domains as $domain => $domainInfo) {

@@ -29,7 +29,7 @@ class Desktop extends \ADIOS\Core\Action {
 
     $settingsMenuItems[] = [
       "fa_icon" => "fas fa-user",
-      "text" => "My profile",
+      "text" => $this->translate("My profile"),
       "onclick" => "
         window_render(
           'MyProfile',
@@ -45,13 +45,13 @@ class Desktop extends \ADIOS\Core\Action {
 
     $settingsMenuItems[] = [
       "fa_icon" => "fas fa-window-restore",
-      "text" => "Open new tab",
+      "text" => $this->translate("Open new tab"),
       "onclick" => "window.open('{$this->adios->config['url']}');",
     ];
 
     $settingsMenuItems[] = [
       "fa_icon" => "fas fa-bolt",
-      "text" => "Restart",
+      "text" => $this->translate("Restart"),
       "onclick" => "
         if (window.location.href.indexOf('restart=1') == '-1') {
           if (window.location.href.indexOf('?') == -1) {
@@ -65,17 +65,17 @@ class Desktop extends \ADIOS\Core\Action {
       ",
     ];
 
-    if (
-      is_array($this->adios->config['available_languages'])
-        && count($this->adios->config['available_languages']) > 1
-    ) {
-      foreach ($this->adios->config['available_languages'] as $val) {
-        $settingsMenuItems[] = [
-          "text" => strtoupper($val),
-          "onclick" => "window.location.href=\"?language={$val}",
-        ];
-      }
-    }
+    // if (
+    //   is_array($this->adios->config['available_languages'])
+    //     && count($this->adios->config['available_languages']) > 1
+    // ) {
+    //   foreach ($this->adios->config['available_languages'] as $val) {
+    //     $settingsMenuItems[] = [
+    //       "text" => strtoupper($val),
+    //       "onclick" => "window.location.href=\"?language={$val}",
+    //     ];
+    //   }
+    // }
 
     // $settingsMenuItems[] = [
     //   "fa_icon" => "fas fa-cogs",
@@ -89,12 +89,12 @@ class Desktop extends \ADIOS\Core\Action {
 
     if ($this->adios->config['devel_mode']) {
       $develMenuItems[] = [
-        "text" => "Show console",
+        "text" => $this->translate("Show console"),
         "fa_icon" => "fas fa-terminal",
         "onclick" => "desktop_show_console();",
       ];
       $develMenuItems[] = [
-        "text" => "Examples of UI",
+        "text" => $this->translate("Examples of UI"),
         "fa_icon" => "fas fa-hammer",
         "onclick" => "desktop_render('SkinSamples');",
       ];

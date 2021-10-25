@@ -768,7 +768,7 @@ class Table extends \ADIOS\Core\UI\View {
               <div class='adios ui Table Footer'>
                 <div class='Row'>
                   <div class='Column count'>
-                    {$this->table_item_count} items total
+                    {$this->table_item_count} ".$this->translate("items total")."
                   </div>
                   <div class='Column paging'>
                     ".parent::render('paging')."

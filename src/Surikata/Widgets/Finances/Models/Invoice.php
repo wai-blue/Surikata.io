@@ -399,50 +399,52 @@ class Invoice extends \ADIOS\Core\Model {
         where p.id_invoice = {$invoice['id']}
       ");
 
-      $sumaCelkomBezDPH = 0;
-      $sumaCelkomSDPH = 0;
-      $sumaCelkomDPH = 0;
+      $invoice['ITEMS'] = \ADIOS\Widgets\Finances::calculatePricesForInvoice($invoice['ITEMS']);
 
-      foreach ($invoice['ITEMS'] as $key => $item) {
-        $tmpMnozstvo = $invoice['ITEMS'][$key]['quantity'];
-        $tmpSadzbaDPH = $invoice['ITEMS'][$key]['vat_percent'];
+      // $sumaCelkomBezDPH = 0;
+      // $sumaCelkomSDPH = 0;
+      // $sumaCelkomDPH = 0;
 
-        $tmpJednotkovaCenaBezDPH = $invoice['ITEMS'][$key]['unit_price'];
-        $tmpSumaBezDPH = round($tmpJednotkovaCenaBezDPH * $tmpMnozstvo, 2);
+      // foreach ($invoice['ITEMS'] as $key => $item) {
+      //   $tmpMnozstvo = $invoice['ITEMS'][$key]['quantity'];
+      //   $tmpSadzbaDPH = $invoice['ITEMS'][$key]['vat_percent'];
 
-        $tmpJednotkovaCenaDPH = round($tmpJednotkovaCenaBezDPH * ($tmpSadzbaDPH / 100), 2);
-        $tmpSumaDPH = round($tmpJednotkovaCenaDPH * $tmpMnozstvo, 2);
+      //   $tmpJednotkovaCenaBezDPH = $invoice['ITEMS'][$key]['unit_price'];
+      //   $tmpSumaBezDPH = round($tmpJednotkovaCenaBezDPH * $tmpMnozstvo, 2);
 
-        $tmpJednotkovaCenaSDPH = $tmpJednotkovaCenaBezDPH + $tmpJednotkovaCenaDPH;
-        $tmpSumaSDPH = $tmpSumaBezDPH + $tmpSumaDPH;
+      //   $tmpJednotkovaCenaDPH = round($tmpJednotkovaCenaBezDPH * ($tmpSadzbaDPH / 100), 2);
+      //   $tmpSumaDPH = round($tmpJednotkovaCenaDPH * $tmpMnozstvo, 2);
+
+      //   $tmpJednotkovaCenaSDPH = $tmpJednotkovaCenaBezDPH + $tmpJednotkovaCenaDPH;
+      //   $tmpSumaSDPH = $tmpSumaBezDPH + $tmpSumaDPH;
 
 
-        $invoice['ITEMS'][$key]['sadzba_dph'] = $tmpSadzbaDPH;
+      //   $invoice['ITEMS'][$key]['sadzba_dph'] = $tmpSadzbaDPH;
 
-        // REVIEW: poprekladat
-        $invoice['ITEMS'][$key]['jednotkova_cena_bez_dph'] = $tmpJednotkovaCenaBezDPH;
-        $invoice['ITEMS'][$key]['jednotkova_cena_dph'] = $tmpJednotkovaCenaDPH;
-        $invoice['ITEMS'][$key]['jednotkova_cena_s_dph'] = $tmpJednotkovaCenaSDPH;
+      //   // REVIEW: poprekladat
+      //   $invoice['ITEMS'][$key]['jednotkova_cena_bez_dph'] = $tmpJednotkovaCenaBezDPH;
+      //   $invoice['ITEMS'][$key]['jednotkova_cena_dph'] = $tmpJednotkovaCenaDPH;
+      //   $invoice['ITEMS'][$key]['jednotkova_cena_s_dph'] = $tmpJednotkovaCenaSDPH;
 
-        $invoice['ITEMS'][$key]['suma_bez_dph'] = $tmpSumaBezDPH;
-        $invoice['ITEMS'][$key]['suma_dph'] = $tmpSumaDPH;
-        $invoice['ITEMS'][$key]['suma_s_dph'] = $tmpSumaSDPH;
+      //   $invoice['ITEMS'][$key]['suma_bez_dph'] = $tmpSumaBezDPH;
+      //   $invoice['ITEMS'][$key]['suma_dph'] = $tmpSumaDPH;
+      //   $invoice['ITEMS'][$key]['suma_s_dph'] = $tmpSumaSDPH;
 
-        if (!is_array($invoice['SADZBY_DPH'][$tmpSadzbaDPH])) {
-          $invoice['SADZBY_DPH'][$tmpSadzbaDPH] = [
-            "sadzba" => $tmpSadzbaDPH,
-            "zaklad_celkom" => 0,
-            "suma_celkom" => 0,
-          ];
-        }
+      //   if (!is_array($invoice['SADZBY_DPH'][$tmpSadzbaDPH])) {
+      //     $invoice['SADZBY_DPH'][$tmpSadzbaDPH] = [
+      //       "sadzba" => $tmpSadzbaDPH,
+      //       "zaklad_celkom" => 0,
+      //       "suma_celkom" => 0,
+      //     ];
+      //   }
 
-        $invoice['SADZBY_DPH'][$tmpSadzbaDPH]['zaklad_celkom'] += $invoice['ITEMS'][$key]['suma_bez_dph'];
-        $invoice['SADZBY_DPH'][$tmpSadzbaDPH]['suma_celkom'] += $tmpSumaDPH;
+      //   $invoice['SADZBY_DPH'][$tmpSadzbaDPH]['zaklad_celkom'] += $invoice['ITEMS'][$key]['suma_bez_dph'];
+      //   $invoice['SADZBY_DPH'][$tmpSadzbaDPH]['suma_celkom'] += $tmpSumaDPH;
 
-        $sumaCelkomDPH += $tmpSumaDPH;
-        $sumaCelkomBezDPH += $tmpSumaBezDPH;
-        $sumaCelkomSDPH += $tmpSumaSDPH;
-      }
+      //   $sumaCelkomDPH += $tmpSumaDPH;
+      //   $sumaCelkomBezDPH += $tmpSumaBezDPH;
+      //   $sumaCelkomSDPH += $tmpSumaSDPH;
+      // }
 
       $invoice['SUMMARY'] = $this->calculateSummaryInfo($invoice);
     }
@@ -491,26 +493,13 @@ class Invoice extends \ADIOS\Core\Model {
       'price_total_incl_vat' => 0,
     ];
 
-    $sumaCelkomBezDPH = 0;
-    $sumaCelkomSDPH = 0;
-    $sumaCelkomDPH = 0;
+    $invoice['ITEMS'] = \ADIOS\Widgets\Finances::calculatePricesForInvoice($invoice['ITEMS']);
 
-    foreach ($invoice['ITEMS'] as $key => $item) {
-      $tmpJednotkovaCenaDPH = round($item['unit_price'] * ($item['vat_percent'] / 100), 2);
-      $tmpSumaBezDPH = round($item['unit_price'] * $item['quantity'], 2);
-      $tmpSumaDPH = round($tmpJednotkovaCenaDPH * $item['quantity'], 2);
-
-      $sumaCelkomDPH += $tmpSumaDPH;
-      $sumaCelkomBezDPH += $tmpSumaBezDPH;
-      $sumaCelkomSDPH += $tmpSumaBezDPH + $tmpSumaDPH;
+    foreach ($invoice['ITEMS'] as $item) {
+      $summary['vat_total'] += $item['PRICES_FOR_INVOICE']['totalVAT'];
+      $summary['price_total_excl_vat'] += $item['PRICES_FOR_INVOICE']['totalPriceExclVAT'];
+      $summary['price_total_incl_vat'] += $item['PRICES_FOR_INVOICE']['totalPriceInclVAT'];
     }
-
-    $summary = [
-      "vat_total" => $sumaCelkomDPH,
-      "price_total_excl_vat" => $sumaCelkomBezDPH,
-      "price_total_incl_vat" => $sumaCelkomSDPH,
-    ];
-    
 
     return $summary;
 
@@ -536,13 +525,13 @@ class Invoice extends \ADIOS\Core\Model {
 
   public function formParams($data, $params) {
     if ($data['id'] <= 0) {
-      $params['title'] = "New invoice";
+      $params['title'] = $this->translate("New invoice");
 
       $params["template"] = [
         "columns" => [
           [
             "tabs" => [
-              "Header" => [
+              $this->translate("Header") => [
                 "id_customer",
               ],
             ],

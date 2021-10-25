@@ -41,7 +41,7 @@ class FileBrowser extends \ADIOS\Core\UI\View {
           ",
           'header' => [
             $this->adios->ui->Button([
-              "text" => "Close",
+              "text" => $this->translate("Close"),
               "type" => "close",
               "onclick" => "{$this->uid}_close();",
             ]),
@@ -54,7 +54,7 @@ class FileBrowser extends \ADIOS\Core\UI\View {
 
       if (!empty($this->params['title'])) {
         $html .= $this->adios->ui->Title([
-          'center' => $this->params['title'],
+          'center' => $this->translate($this->params['title']),
         ])->render();
       }
 

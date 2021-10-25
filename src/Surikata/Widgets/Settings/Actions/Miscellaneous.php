@@ -9,15 +9,15 @@ class Miscellaneous extends \ADIOS\Core\Action {
 
     return $this->adios->renderAction("UI/SettingsPanel", [
       "settings_group" => "miscellaneous",
-      "title" => "Miscellaneous settings",
+      "title" => $this->translate("Miscellaneous settings"),
       "template" => [
         "tabs" => [
           [
-            "title" => "Locale",
+            "title" => $this->translate("Locale"),
             "items" => [
               [
-                "title" => "Currency symbol",
-                "description" => "Symbol of the currency displayed in the administration panel.",
+                "title" => $this->translate("Currency symbol"),
+                "description" => $this->translate("Symbol of the currency displayed in the administration panel."),
                 "input" => $this->adios->ui->Input([
                   "type" => "int",
                   "uid" => "{$this->uid}_localeCurrencySymbol",
@@ -25,11 +25,11 @@ class Miscellaneous extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Date format",
+                "title" => $this->translate("Date format"),
                 "description" =>
-                  "Date format to be used in the administration panel."."<br/>".
-                  "Use notation compatible with PHP's date() function."."<br/>".
-                  "List of avaialable options is <a href='https://www.php.net/manual/en/datetime.format.php' target=_blank>here 🡕</a>."
+                  $this->translate("Date format to be used in the administration panel.")."<br/>".
+                  $this->translate("Use notation compatible with PHP's date() function.")."<br/>".
+                  $this->translate("List of available options is"). " <a href='https://www.php.net/manual/en/datetime.format.php' target=_blank>".$this->translate("here")."</a>."
                 ,
                 "input" => $this->adios->ui->Input([
                   "type" => "int",
@@ -38,10 +38,10 @@ class Miscellaneous extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Time format",
+                "title" => $this->translate("Time format"),
                 "description" =>
-                  "Time format to be used in the administration panel."."<br/>".
-                  "Same rules as for date format apply."."<br/>"
+                  $this->translate("Time format to be used in the administration panel.")."<br/>".
+                  $this->translate("Same rules as for date format apply.")."<br/>"
                 ,
                 "input" => $this->adios->ui->Input([
                   "type" => "int",
@@ -52,16 +52,16 @@ class Miscellaneous extends \ADIOS\Core\Action {
             ],
           ],
           [
-            "title" => "Shopping cart",
+            "title" => $this->translate("Shopping cart"),
             "items" => [
               [
-                "title" => "Days to abandon shopping cart",
-                "description" => "Number of days after which the shopping cart will be treated as abanoned.",
+                "title" => $this->translate("Days to abandon shopping cart"),
+                "description" => $this->translate("Number of days after which the shopping cart will be treated as abanoned."),
                 "input" => $this->adios->ui->Input([
                   "type" => "int",
                   "uid" => "{$this->uid}_shoppingCartDaysToAbandon",
                   "value" => $settings['shoppingCartDaysToAbandon'],
-                  "unit" => "day(s)",
+                  "unit" => $this->translate("day(s)"),
                 ]),
               ],
             ],

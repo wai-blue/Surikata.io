@@ -596,7 +596,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     if ($withLookups) {
       $items = $this->getWithLookups(NULL, $keyBy, $processLookups);
     } else {
-      $items = $this->pdoPrepareExecuteAndFetch("select * from :table", []);
+      $items = $this->pdoPrepareExecuteAndFetch("select * from :table", [], $keyBy);
     }
 
     if ($this->getExtendedData([]) !== NULL) {
@@ -662,10 +662,20 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     return $q->execute($variables);
   }
 
-  public function pdoPrepareExecuteAndFetch(string $query, array $variables) {
+  public function pdoPrepareExecuteAndFetch(string $query, array $variables, string $keyBy = "") {
     $q = $this->pdo->prepare(str_replace(":table", $this->getFullTableSQLName(), $query));
     $q->execute($variables);
-    return $q->fetchAll(\PDO::FETCH_ASSOC);
+
+    $rows = [];
+    while ($row = $q->fetch(\PDO::FETCH_ASSOC)) {
+      if (empty($keyBy)) {
+        $rows[] = $row;
+      } else {
+        $rows[$row[$keyBy]] = $row;
+      }
+    }
+
+    return $rows;
   }
 
   //////////////////////////////////////////////////////////////////

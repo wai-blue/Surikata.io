@@ -158,7 +158,7 @@ namespace Surikata\Plugins\WAI\Order {
       );
 
       $twigParams['totalPriceWithDelivery'] = 
-        floatval($this->cartContents["summary"]["priceTotal"]) 
+        floatval($this->cartContents["summary"]["priceInclVAT"]) 
           + 
         floatval($twigParams['deliveryPrice'])
       ;

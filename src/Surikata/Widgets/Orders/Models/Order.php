@@ -23,7 +23,7 @@ class Order extends \ADIOS\Core\Model {
 
     $this->tableTitle = $this->translate("Orders");
     $this->formTitleForInserting = $this->translate("New order");
-    $this->formTitleForEditing = $this->translate("Order") ."# {{ number }}";
+    //$this->formTitleForEditing = $this->translate("Order") ."# {{ number }}";
     $this->formAddButtonText = $this->translate("Create new order");
     $this->formSaveButtonText = $this->translate("Update order");
 
@@ -358,8 +358,8 @@ class Order extends \ADIOS\Core\Model {
           "filter_type" => '$1',
         ]
       ],
-      '/^Orders\/(\d+)\/Tlacit$/' => [
-        "action" => "Orders/Tlacit",
+      '/^Orders\/(\d+)\/PrintOrder$/' => [
+        "action" => "Orders/PrintOrder",
         "params" => [
           "id" => '$1',
         ]
@@ -548,11 +548,11 @@ class Order extends \ADIOS\Core\Model {
       $cartContents = $cartModel->getCartContents($customerUID);
     }
 
-    if (empty($orderData['id_delivery_service'])) {
+    if (empty($orderData['id_delivery_service']) && $checkRequiredFields) {
       throw new \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService;
     }
 
-    if (empty($orderData['id_payment_service'])) {
+    if (empty($orderData['id_payment_service']) && $checkRequiredFields) {
       throw new \ADIOS\Widgets\Orders\Exceptions\UnknownPaymentService;
     }
 
@@ -656,6 +656,9 @@ class Order extends \ADIOS\Core\Model {
       ],
       $idOrder
     );
+
+    $placedOrderData["delivery_fee"] = $fees["deliveryFee"];
+    $placedOrderData["payment_fee"] = $fees["paymentFee"];
 
     $summary = $this->calculateSummaryInfo($placedOrderData);
     $this->updateSummaryInfo($idOrder, $summary);
@@ -814,6 +817,13 @@ class Order extends \ADIOS\Core\Model {
       $params['save_action'] = "Orders/PlaceOrder";
     } else {
 
+      $btnPrintOrderHtml = $this->adios->ui->button([
+        "text"    => $this->translate("Print order"),
+        "onclick" => "
+          window.open(_APP_URL + '/Orders/".(int) $data['id']."/PrintOrder');",
+        "class"   => "btn-primary mb-2 w-100",
+      ])->render();
+
       $btnIssueInvoice = $this->adios->ui->button([
         "text"    => $this->translate("Issue invoice"),
         "onclick" => "
@@ -899,7 +909,7 @@ class Order extends \ADIOS\Core\Model {
         "style" => "border-left: 10px solid {$this->enumOrderStateColors[self::STATE_CANCELED]}",
       ])->render();
 
-      $formTitle = "Order&nbsp;#&nbsp;".hsc($data["number"]);
+      $formTitle = $this->translate("Order")."&nbsp;#&nbsp;".hsc($data["number"]);
 
       $sidebarHtml = $this->adios->dispatchEventToPlugins("onOrderDetailSidebarButtons", [
         "model" => $this,
@@ -1041,6 +1051,7 @@ class Order extends \ADIOS\Core\Model {
             "class" => "col-md-3",
             "html" => "
               <div style='margin-bottom:2em'>
+               {$btnPrintOrderHtml}
                 ".($data['INVOICE']['id'] <= 0 ? $btnIssueInvoice : $btnShowInvoice)."
               </div>
               {$sidebarHtml}
@@ -1170,11 +1181,23 @@ class Order extends \ADIOS\Core\Model {
 
     // REVIEW: preverit, ci tieto vzorce budu fungovat aj pre velke mnozstva
     // produktov s cenami na 4 a viac des. miest
+    $order['ITEMS'] = \ADIOS\Widgets\Finances::calculatePricesForInvoice($order['ITEMS']);
+
     foreach ($order['ITEMS'] as $item) {
-      $summary['price_total_excl_vat'] += $item['quantity'] * $item['unit_price'];
-      $summary['price_total_incl_vat'] += $item['quantity'] * $item['unit_price'] * (1 + $item['vat_percent'] / 100);
+      $summary['price_total_excl_vat'] += $item['PRICES_FOR_INVOICE']['totalPriceExclVAT'];
+      $summary['price_total_incl_vat'] += $item['PRICES_FOR_INVOICE']['totalPriceInclVAT'];
       $summary['weight_total'] += $item['quantity'] * $item['product_weight'];
     }
+
+    $deliveryFeeInclVat = $order['delivery_fee'];
+    $deliveryFeeExclVat = $order['delivery_fee'] * (1 + 20 / 100); // TODO: 20% VAT hardcoded, musi ist do nastaveni
+    $paymentFeeInclVat = $order['payment_fee'];
+    $paymentFeeExclVat = $order['payment_fee'] * (1 + 20 / 100); // TODO: 20% VAT hardcoded, musi ist do nastaveni
+
+    $summary['price_total_excl_vat'] += $deliveryFeeExclVat;
+    $summary['price_total_excl_vat'] += $paymentFeeExclVat;
+    $summary['price_total_incl_vat'] += $deliveryFeeInclVat;
+    $summary['price_total_incl_vat'] += $paymentFeeInclVat;
 
     return $summary;
 
@@ -1199,6 +1222,24 @@ class Order extends \ADIOS\Core\Model {
         "id_delivery_unit" => $item["id_delivery_unit"],
         "unit_price" => $item["unit_price"],
         "vat_percent" => $item["vat_percent"],
+      ];
+    }
+
+    if ($order['delivery_fee'] > 0) {
+      $invoiceItems[] = [
+        "item" => $this->translate("Shipping"),
+        "quantity" => 1,
+        "unit_price" => $order["delivery_fee"] / (1 + 20 / 100), // TODO: VAT 20% hardcoded
+        "vat_percent" => 20, // TODO: VAT 20% hardcoded
+      ];
+    }
+
+    if ($order['payment_fee'] > 0) {
+      $invoiceItems[] = [
+        "item" => $this->translate("Payment"),
+        "quantity" => 1,
+        "unit_price" => $order["payment_fee"] / (1 + 20 / 100), // TODO: VAT 20% hardcoded
+        "vat_percent" => 20, // TODO: VAT 20% hardcoded
       ];
     }
 

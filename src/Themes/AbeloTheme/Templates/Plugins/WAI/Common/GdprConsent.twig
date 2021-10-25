@@ -1,0 +1,76 @@
+<div class="modal-dialog modal-lg shadow" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{ translate("Privacy Settings", "Cookies") }}</h4>
+      <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>x</span></button>
+    </div>
+    <div class="modal-body">
+      <div class="bccs-body-text">
+        <!-- @formatter:off -->
+        <p>
+          {{ translate("Privacy content", "Cookies") }}
+          <a href="{{ rootUrl }}/ochrana-osobnych-udajov">{{ translate("More information", "Cookies") }}</a>
+        </p>
+        <!-- @formatter:on -->
+      </div>
+      <p class="d-flex justify-content-end">
+        <a href="#cookies-options" data-toggle="collapse">{{ translate("My settings", "Cookies") }}</a>
+      </p>
+      <div id="cookies-options" class="collapse">
+        <div class="bccs-option" data-name="necessary">
+          <div class="form-check mb-1">
+            <input type="checkbox" checked disabled class="form-check-input" id="bccs-checkboxNecessary">
+            <label class="form-check-label" for="bccs-checkboxNecessary">
+              <b>{{ translate("Necessary", "Cookies") }}</b>
+            </label>
+          </div>
+          <ul>
+            <li>{{ translate("Required to run the website", "Cookies") }}</li>
+          </ul>
+        </div>
+        <div class="bccs-option" data-name="analyses">
+          <div class="form-check mb-1">
+            <input type="checkbox" checked class="form-check-input" id="bccs-checkboxAnalyses">
+            <label class="form-check-label" for="bccs-checkboxAnalyses">
+              <b>{{ translate("Analyses", "Cookies") }}</b>
+            </label>
+          </div>
+          <ul>
+            <li>{{ translate("Monitoring website usage and optimizing the user experience", "Cookies") }}</li>
+            <li>{{ translate("Evaluation of marketing actions", "Cookies") }}</li>
+          </ul>
+        </div>
+        <div class="bccs-option" data-name="personalization">
+          <div class="form-check mb-1">
+            <input type="checkbox" checked class="form-check-input" id="bccs-checkboxPersonalization">
+            <label class="form-check-label" for="bccs-checkboxPersonalization">
+              <b>{{ translate("Personalization", "Cookies") }}</b>
+            </label>
+          </div>
+          <ul>
+            <li>{{ translate("Storage of your preferences from previous visits", "Cookies") }}</li>
+            <li>{{ translate("Collecting user feedback to improve our website", "Cookies") }}</li>
+            <li>{{ translate("Recording of your interests in order to provide customised content and offers", "Cookies") }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="row" style="width: 100%;">
+        <div class="col-12 col-md-6">
+          <button id="bccs-buttonDoNotAgree" type="button"
+                  class="btn btn-link btn-fill-out btn-block rounded-0 btn-confirm text-decoration-none">
+            {{ translate("I do not agree", "Cookies") }}
+          </button>
+        </div>
+        <div class="col-12 col-md-6">
+          <button id="bccs-buttonAgree" type="button" class="btn btn-fill-out btn-block rounded-0 btn-confirm AbeloModalButton">{{ translate("Agree", "Cookies") }}</button>
+        </div>
+      </div>
+      <button id="bccs-buttonSave" type="button" class="btn btn-outline-dark">
+        {{ translate("Save selection", "Cookies") }}
+      </button>
+      <button id="bccs-buttonAgreeAll" type="button" class="btn btn-primary">{{ translate("Agree to all", "Cookies") }}</button>
+    </div>
+  </div>
+</div>

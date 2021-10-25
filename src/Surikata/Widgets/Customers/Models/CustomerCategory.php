@@ -6,12 +6,11 @@ class CustomerCategory extends \ADIOS\Core\Model {
   var $sqlName = "customers_categories";
   var $lookupSqlValue = "concat({%TABLE%}.name, ' [', {%TABLE%}.code, ']')";
   var $urlBase = "Customers/Categories";
-  var $tableTitle = "Customer categories";
-  var $formTitleForInserting = "New customer category";
-  var $formTitleForEditing = "Customer category";
 
   public function init() {
     $this->tableTitle = $this->translate("Customer categories");
+    $this->formTitleForInserting = $this->translate("New customer category");
+    $this->formTitleForEditing = $this->translate("Customer category");
   }
 
   public function columns(array $columns = []) {

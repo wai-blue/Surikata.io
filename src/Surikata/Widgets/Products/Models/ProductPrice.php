@@ -5,9 +5,12 @@ namespace ADIOS\Widgets\Products\Models;
 class ProductPrice extends \ADIOS\Core\Model {
   var $sqlName = "product_prices";
   var $urlBase = "Products/Prices";
-  var $tableTitle = "Product price";
-  var $formTitleForInserting = "New product price";
-  var $formTitleForEditing = "Product price";
+
+  public function init() {
+    $this->tableTitle = $this->translate("Product price");
+    $this->formTitleForInserting = $this->translate("New product price");
+    $this->formTitleForEditing = $this->translate("Product price");
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([
@@ -20,21 +23,15 @@ class ProductPrice extends \ADIOS\Core\Model {
 
       "purchase_price" => [
         "type" => "float",
-        "title" => $this->translate("Purchase price"),
+        "title" => $this->translate("Purchase price excl. VAT"),
         "unit" => $this->adios->locale->currencySymbol(),
         "show_column" => TRUE,
       ],
 
       "recommended_price" => [
         "type" => "float",
-        "title" => $this->translate("Recommended price"),
+        "title" => $this->translate("Recommended price excl. VAT"),
         "unit" => $this->adios->locale->currencySymbol(),
-        "show_column" => TRUE,
-      ],
-
-      "is_including_vat" => [
-        "type" => "boolean",
-        "title" => $this->translate("Including VAT"),
         "show_column" => TRUE,
       ],
     ]);

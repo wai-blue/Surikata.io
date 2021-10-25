@@ -5,13 +5,13 @@ namespace ADIOS\Widgets\Products\Models;
 class ProductFeature extends \ADIOS\Core\Model {
   var $sqlName = "products_features";
   var $urlBase = "Products/Features";
-  var $tableTitle = "Product features";
 
   public static $allItemsCache = NULL;
 
   public function init() {
     $this->formTitleForInserting = $this->translate("New product feature");
     $this->formTitleForEditing = $this->translate("Product feature");
+    $this->tableTitle = $this->translate("Product features");
 
     // TODO: cisla zamenit za konstanty
     $this->enumValuesValueType = [
@@ -161,7 +161,7 @@ class ProductFeature extends \ADIOS\Core\Model {
     }
 
     if (count($tabTranslations) == 0) {
-      $tabTranslations[] = ["html" => "No translations available."];
+      $tabTranslations[] = ["html" => $this->translate("No translations available.")];
     }
 
     $params["template"] = [

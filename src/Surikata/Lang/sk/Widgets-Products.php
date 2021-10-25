@@ -5,8 +5,12 @@ $dictionary = [
   "View as tree" => "Zobraziť ako strom",
   "Prices" => "Ceny",
   "Settings" => "Nastavenia",
-  "Features" => "Funckie",
+  "Features" => "Vlastnosti",
   "Brands" => "Značky",
   "Services" => "Služby",
-  "Products" => "Produkty"
+  "Products" => "Produkty",
+  "Stock states" => "Dostupnosti na sklade",
+  "Margins" => "Marže",
+  "Discounts" => "Zľavy",
+  "No translations available." => "Žiadne preklady k dispozícii"
 ];

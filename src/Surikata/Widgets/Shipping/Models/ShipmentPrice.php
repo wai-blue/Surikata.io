@@ -210,7 +210,7 @@ class ShipmentPrice extends \ADIOS\Core\Model {
     $idDestinationCountry = (int) ($orderData['id_destination_country'] ?? 0);
     $idDeliveryService = (int) ($orderData['id_delivery_service'] ?? 0);
     $idPaymentService = (int) ($orderData['id_payment_service'] ?? 0);
-    $priceTotalExclVAT = (float) ($orderData['SUMMARY']['price_total_excl_vat'] ?? 0);
+    $priceTotalInclVAT = (float) ($orderData['SUMMARY']['price_total_incl_vat'] ?? 0);
     $weightTotal = (float) ($orderData['SUMMARY']['weight_total'] ?? 0);
 
     $deliveryFee = 0;
@@ -230,8 +230,8 @@ class ShipmentPrice extends \ADIOS\Core\Model {
         $this
         ->where('id_shipment', $shipment['id'])
         ->where('delivery_fee_calculation_method', self::DELIVERY_FEE_BY_ORDER_PRICE)
-        ->where('price_from', '<=', $priceTotalExclVAT)
-        ->where('price_to', '>', $priceTotalExclVAT)
+        ->where('price_from', '<=', $priceTotalInclVAT)
+        ->where('price_to', '>=', $priceTotalInclVAT)
         ->get()
         ->toArray()
       );

@@ -314,20 +314,20 @@ class Loader {
         ));
         $this->twig->addExtension(new \Twig\Extension\StringLoaderExtension());
         $this->twig->addExtension(new \Twig\Extension\DebugExtension());
-        $this->twig->addFunction(new \Twig\TwigFunction('l', function ($str) {
-          return l($str);
-        }));
+        $this->twig->addFunction(new \Twig\TwigFunction(
+          'translate',
+          function($string) {
+            return $this->translate($string, "", "", $this->actionObject->languageDictionary);
+          }
+        ));
         $this->twig->addFunction(new \Twig\TwigFunction('adiosUI', function ($uid, $componentName, $componentParams) {
-          global $___ADIOSObject;
-
           if (!is_array($componentParams)) {
             $componentParams = array();
           }
-          return $___ADIOSObject->ui->create("{$componentName}#{$uid}", $componentParams)->render();
+          return $this->ui->create("{$componentName}#{$uid}", $componentParams)->render();
         }));
         $this->twig->addFunction(new \Twig\TwigFunction('adiosAction', function ($action, $params = []) {
-          global $___ADIOSObject;
-          return $___ADIOSObject->renderAction($action, $params);
+          return $this->renderAction($action, $params);
         }));
 
         // inicializacia UI wrappera
@@ -477,6 +477,7 @@ class Loader {
 
     if (strlen($language) == 2 && !empty($context)) {
       $languageFile = "{$this->config['dir']}/Lang/{$language}/".strtr($context, "./\\", "---").".php";
+
       if (file_exists($languageFile)) {
         include($languageFile);
       }
@@ -876,7 +877,8 @@ class Loader {
       }
 
       if ($this->actionExists($action)) {
-        $actionReturn = (new $actionClassName($this, $params))->render($params);
+        $this->actionObject = new $actionClassName($this, $params);
+        $actionReturn = $this->actionObject->render($params);
 
         if ($actionReturn === NULL) {
           // akcia nic nereturnovala, iba robila echo

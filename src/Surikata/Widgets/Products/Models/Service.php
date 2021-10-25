@@ -6,9 +6,12 @@ class Service extends \ADIOS\Core\Model {
   var $sqlName = "services";
   var $lookupSqlValue = "{%TABLE%}.name_lang_1";
   var $urlBase = "Services";
-  var $tableTitle = "Services";
-  var $formTitleForInserting = "New service";
-  var $formTitleForEditing = "Service";
+
+  public function init() {
+    $this->tableTitle = $this->translate("Services");
+    $this->formTitleForInserting = $this->translate("New service");
+    $this->formTitleForEditing = $this->translate("Service");
+  }
 
   public function columns(array $columns = []) {
     $translatedColumns = [];
@@ -35,7 +38,7 @@ class Service extends \ADIOS\Core\Model {
       [
         "pictogram" => [
           'type' => 'image',
-          'title' => 'Pictogram',
+          'title' => $this->translate('Pictogram'),
           'show_column' => TRUE,
           "subdir" => "pictograms"
         ],
@@ -69,7 +72,7 @@ class Service extends \ADIOS\Core\Model {
     }
 
     if (count($tabTranslations) == 0) {
-      $tabTranslations[] = ["html" => "No translations available."];
+      $tabTranslations[] = ["html" => $this->translate("No translations available.")];
     }
 
     $params["template"] = [

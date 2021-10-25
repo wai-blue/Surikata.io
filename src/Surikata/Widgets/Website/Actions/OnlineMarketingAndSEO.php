@@ -8,37 +8,37 @@ class OnlineMarketingAndSEO extends \ADIOS\Core\Action {
 
     return $this->adios->renderAction("UI/SettingsPanel", [
       "settings_group" => "web/{$this->params['domainName']}/onlineMarketingAndSEO",
-      "title" => "{$this->params['domainName']} » Online marketing and SEO",
+      "title" => "{$this->params['domainName']} » ".$this->translate("Online marketing and SEO"),
       "template" => [
         "tabs" => [
           [
-            "title" => "Basic SEO parameters",
+            "title" => $this->translate("Basic SEO parameters"),
             "items" => [
               [
-                "title" => "Keywords",
+                "title" => $this->translate("Keywords"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_keywords",
                   "value" => $settings['keywords'],
                 ]),
-                "description" => "Bude použité, ak aktívna stránka nebude mať nastavenú vlastnú hodnotu.",
+                "description" => $this->translate("It will be used if the active page does not have a minimum value set."),
               ],
               [
-                "title" => "Description",
+                "title" => $this->translate("Description"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_description",
                   "value" => $settings['description'],
                 ]),
-                "description" => "Bude použité, ak aktívna stránka nebude mať nastavenú vlastnú hodnotu.",
+                "description" => $this->translate("It will be used if the active page does not have a minimum value set."),
               ],
             ],
           ],
           [
-            "title" => "Google Analytics",
+            "title" => $this->translate("Google Analytics"),
             "items" => [
               [
-                "title" => "Google Analytics",
+                "title" => $this->translate("Google Analytics"),
                 "input" => $this->adios->ui->Input([
                   "type" => "text",
                   "uid" => "{$this->uid}_googleAnalytics",
@@ -48,10 +48,10 @@ class OnlineMarketingAndSEO extends \ADIOS\Core\Action {
             ],
           ],
           [
-            "title" => "Google Tag Manager",
+            "title" => $this->translate("Google Tag Manager"),
             "items" => [
               [
-                "title" => "Google Tag Manager",
+                "title" => $this->translate("Google Tag Manager"),
                 "input" => $this->adios->ui->Input([
                   "type" => "text",
                   "uid" => "{$this->uid}_googleTagManager",
@@ -61,10 +61,10 @@ class OnlineMarketingAndSEO extends \ADIOS\Core\Action {
             ],
           ],
           [
-            "title" => "Facebook Pixel",
+            "title" => $this->translate("Facebook Pixel"),
             "items" => [
               [
-                "title" => "Facebook Pixel",
+                "title" => $this->translate("Facebook Pixel"),
                 "input" => $this->adios->ui->Input([
                   "type" => "text",
                   "uid" => "{$this->uid}_facebookPixel",

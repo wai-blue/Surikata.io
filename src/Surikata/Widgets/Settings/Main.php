@@ -7,22 +7,22 @@ class Settings extends \ADIOS\Core\Widget {
     if ($this->adios->hasUserRole(\Surikata\Core\AdminPanel\Loader::USER_ROLE_ADMINISTRATOR)) {
       $this->adios->config['desktop']['sidebarItems']['Settings'] = [
         "fa_icon" => "fas fa-cog",
-        "title" => "Settings",
+        "title" => $this->translate("Settings"),
         "sub" => [
           // [
           //   "title" => "Merchant profile",
           //   "onclick" => "window_render('Settings/MerchantProfile');",
           // ],
           [
-            "title" => "Units",
+            "title" => $this->translate("Units"),
             "onclick" => "desktop_update('Settings/Units');",
           ],
           [
-            "title" => "Users",
+            "title" => $this->translate("Users"),
             "onclick" => "desktop_update('Users');",
           ],
           [
-            "title" => "Miscellaneous",
+            "title" => $this->translate("Miscellaneous"),
             "onclick" => "window_render('Settings/Miscellaneous');",
           ],
           //[

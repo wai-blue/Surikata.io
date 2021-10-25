@@ -4,22 +4,25 @@ namespace ADIOS\Plugins\WAI\Blog\Catalog\Models;
 
 class Blog extends \ADIOS\Core\Model {
   var $sqlName = "blogs";
-  var $tableTitle = "Blogs";
   var $urlBase = "Website/Blog";
   var $lookupSqlValue = "{%TABLE%}.name";
+
+  public function init() {
+    $this->tableTitle = $this->translate("Blogs");
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([
       "name" => [
         "type" => "varchar",
-        "title" => "Title",
+        "title" => $this->translate("Title"),
         "required" => TRUE,
         "show_column" => TRUE,
       ],
 
       "content" => [
         "type" => "text",
-        "title" => "Content",
+        "title" => $this->translate("Content"),
         "interface" => "formatted_text",
         "required" => TRUE,
         "show_column" => TRUE,
@@ -35,20 +38,20 @@ class Blog extends \ADIOS\Core\Model {
 
       "image" => [
         "type" => "image",
-        "title" => "Image",
+        "title" => $this->translate("Image"),
         "required" => TRUE,
         "show_column" => TRUE,
       ],
 
       "created_at" => [
         "type" => "date",
-        "title" => "Created at",
+        "title" => $this->translate("Created at"),
         "show_column" => TRUE,
       ],
 
       "id_user" => [
         "type" => "lookup",
-        "title" => "Author",
+        "title" => $this->translate("Author"),
         "model" => "Core/Models/User",
         "show_column" => TRUE,
       ],
@@ -71,7 +74,7 @@ class Blog extends \ADIOS\Core\Model {
       "columns" => [
         [
           "tabs" => [
-            "General" => [
+            $this->translate("General") => [
               "name",
               "content",
               "perex",

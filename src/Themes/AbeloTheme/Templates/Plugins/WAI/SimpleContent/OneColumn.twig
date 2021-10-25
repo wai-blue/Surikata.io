@@ -3,7 +3,5 @@
     {% if heading %}
       <h{{ headingLevel }}>{{ heading }}</h{{ headingLevel }}>
     {% endif %}
-    <p>
-      {{ content|raw }}
-    </p>
+    {{ include(template_from_string(content)) }}
 </div>

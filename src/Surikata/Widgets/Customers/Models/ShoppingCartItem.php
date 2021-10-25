@@ -42,7 +42,9 @@ class ShoppingCartItem extends \ADIOS\Core\Model {
 
       "unit_price" => [
         "type" => "float",
-        "title" => $this->translate("Unit price"),
+        "sql_data_type" => "decimal",
+        "decimals" => 4,
+        "title" => $this->translate("Unit price excl. VAT"),
         "unit" => $this->adios->locale->currencySymbol(),
         "required" => TRUE,
         "show_column" => TRUE,
@@ -82,10 +84,6 @@ class ShoppingCartItem extends \ADIOS\Core\Model {
     return $this->hasOne(\ADIOS\Widgets\Products\Models\Product::class, "id", "id_product");
   }
 
-  public function productUnit() {
-    return $this->with('product.unit');
-  }
-
   public function tableParams($params) {
     $params["where"] = "{$this->table}.id_shopping_cart = ".(int) $params['id_shopping_cart'];
     $params["show_controls"] = FALSE;
@@ -98,14 +96,17 @@ class ShoppingCartItem extends \ADIOS\Core\Model {
   }
 
   public function getByCartId($idCart) {
-    $items = $this->productUnit()
+    $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adios);
+
+    $items = $this
+      ->with('product.unit')
       ->where('id_shopping_cart', '=', $idCart)
       ->get()
       ->toArray()
     ;
 
     foreach (array_keys($items) as $key) {
-      $items[$key]['PRODUCT'] = $items[$key]['product'];
+      $items[$key]['PRODUCT'] = $productModel->getDetailedInfoForSingleProduct($items[$key]['product']);
       unset($items[$key]['product']);
     }
 

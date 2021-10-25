@@ -5,9 +5,12 @@ namespace ADIOS\Widgets\Products\Models;
 class ProductMargin extends \ADIOS\Core\Model {
   var $sqlName = "product_price_margins";
   var $urlBase = "Products/Prices/Margins";
-  var $tableTitle = "Product price margins";
-  var $formTitleForEditing = "Product price margin";
-  var $formTitleForInserting = "New product price margin";
+
+  public function init() {
+    $this->tableTitle = $this->translate("Product price margins");
+    $this->formTitleForEditing = $this->translate("Product price margin");
+    $this->formTitleForInserting = $this->translate("New product price margin");
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([
@@ -69,25 +72,25 @@ class ProductMargin extends \ADIOS\Core\Model {
       "columns" => [
         [
           "tabs" => [
-            "Product" => [
+            $this->translate("Product") => [
               "id_product",
             ],
-            "Product category" => [
+            $this->translate("Product category") => [
               "id_product_category",
             ],
-            "Customer" => [
+            $this->translate("Customer") => [
               "id_customer",
             ],
-            "Customer category" => [
+            $this->translate("Customer category") => [
               "id_customer_category",
             ],
-            "Brand" => [
+            $this->translate("Brand") => [
               "id_brand",
             ],
-            "Supplier" => [
+            $this->translate("Supplier") => [
               "id_supplier",
             ],
-            "Margin [%]" => [
+            $this->translate("Margin")." [%]" => [
               "margin",
             ],
           ],

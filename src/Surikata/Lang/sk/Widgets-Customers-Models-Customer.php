@@ -23,5 +23,14 @@ $dictionary = [
   "Consent for privacy" => "Súhlas s ochranou osobných údajov",
   "Consent for newsletter" => "Súhlas so zasielaním noviniek",
   "Billing: " => "Fakturácia: ",
-  "All" => "Všetci zákazníci"
+  "All" => "Všetci zákazníci",
+  "General" => "Všeobecné",
+  "Billing" => "Fakturácia",
+  "Delivery addresses" => "Adresa doručenia",
+  "Account" => "Účet",
+  "Consents" => "Súhlasy",
+  "Customer" => "Zákazník",
+  "Email" => "E-mail",
+  "Orders" => "Objednávky",
+  "Invoices" => "Faktúry"
 ];

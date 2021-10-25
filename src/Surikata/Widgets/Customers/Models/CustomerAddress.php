@@ -7,9 +7,6 @@ use ADIOS\Widgets\Customers\Exceptions\UnknownAccount;
 class CustomerAddress extends \ADIOS\Core\Model {
   var $sqlName = "customers_addresses";
   var $urlBase = "Customers/{{ id_customer }}/Addresses";
-  var $tableTitle = "Customer addresses";
-  var $formTitleForInserting = "New customer address";
-  var $formTitleForEditing = "Customer address";
   var $lookupSqlValue = "
     concat(
       ifnull({%TABLE%}.del_given_name, ''), ' ',
@@ -19,11 +16,17 @@ class CustomerAddress extends \ADIOS\Core\Model {
     )
   ";
 
+  public function init() {
+    $this->tableTitle = $this->translate("Customer addresses");
+    $this->formTitleForInserting = $this->translate("New customer address");
+    $this->formTitleForEditing = $this->translate("Customer address");
+  }
+
   public function columns(array $columns = []) {
     return parent::columns([
       "id_customer" => [
         "type" => "lookup",
-        "title" => "Customer",
+        "title" => $this->translate("Customer"),
         "model" => "Widgets/Customers/Models/Customer",
         "readonly" => TRUE,
         "required" => TRUE,
@@ -31,76 +34,74 @@ class CustomerAddress extends \ADIOS\Core\Model {
 
       "hash" => [
         "type" => "varchar",
-        "title" => "Hash",
+        "title" => $this->translate("Hash"),
       ],
-
-
 
       "del_given_name" => [
         "type" => "varchar",
-        "title" => "Given Name",
+        "title" => $this->translate("Given name"),
       ],
 
       "del_family_name" => [
         "type" => "varchar",
-        "title" => "Family Name",
+        "title" => $this->translate("Family name"),
         "show_column" => TRUE,
       ],
 
       "del_company_name" => [
         "type" => "varchar",
-        "title" => "Company Name",
+        "title" => $this->translate("Company name"),
         "show_column" => TRUE,
       ],
 
       "del_street_1" => [
         "type" => "varchar",
-        "title" => "Street, 1st line",
+        "title" => $this->translate("Street, 1st line"),
         "show_column" => TRUE,
       ],
 
       "del_street_2" => [
         "type" => "varchar",
-        "title" => "Street, 2nd line",
+        "title" => $this->translate("Street, 2nd line"),
       ],
 
       "del_floor" => [
         "type" => "varchar",
-        "title" => "Floor",
+        "title" => $this->translate("Floor"),
       ],
 
       "del_city" => [
         "type" => "varchar",
-        "title" => "City",
+        "title" => $this->translate("City"),
         "show_column" => TRUE,
       ],
 
       "del_zip" => [
         "type" => "varchar",
-        "title" => "ZIP",
+        "title" => $this->translate("ZIP"),
       ],
 
       "del_region" => [
         "type" => "varchar",
-        "title" => "Region",
+        "title" => $this->translate("Region"),
       ],
 
       "del_country" => [
         "type" => "varchar",
-        "title" => "Country",
+        "title" => $this->translate("Country"),
       ],
 
 
 
       "phone_number" => [
         "type" => "varchar",
-        "title" => "Contact: Phone number",
+        "title" => $this->translate("Contact: ").$this->translate("Phone number"),
         "show_column" => TRUE,
       ],
 
       "email" => [
         "type" => "varchar",
-        "title" => "Contact: Email",
+        "title" => $this->translate("Contact: ").$this->translate("Email"),
         "show_column" => TRUE,
       ],
     ]);
@@ -122,12 +123,12 @@ class CustomerAddress extends \ADIOS\Core\Model {
       "columns" => [
         [
           "tabs" => [
-            "Customer" => [
+            $this->translate("Customer") => [
               "id_customer",
               "phone_number",
               "email",
             ],
-            "Delivery address" => [
+            $this->translate("Delivery address") => [
               "del_given_name",
               "del_family_name",
               "del_company_name",

@@ -6,7 +6,7 @@ class LogViewer extends \ADIOS\Core\Action {
   public function preRender() {
     $logSeverity = $this->params['severity'];
     if (!in_array($logSeverity, ["info", "warning", "error"])) {
-      $logSeverity = "info";
+      $logSeverity = $this->translate("info");
     }
 
     $logFile = "{$this->adios->config['log_dir']}/".date("Y")."/".date("m")."/".date("d")."/{$logSeverity}.log";
@@ -16,7 +16,7 @@ class LogViewer extends \ADIOS\Core\Action {
       $logLines = [];
     }
     return [
-      "severity" => $logSeverity,
+      "severity" => $this->translate($logSeverity),
       "logLines" => array_reverse($logLines),
     ];
   }

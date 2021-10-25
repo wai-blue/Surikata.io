@@ -11,26 +11,26 @@ class ContactForm extends \ADIOS\Core\Action {
         <div class='col-12 col-md-6'>
           <div class='card shadow-sm mb-2'>
             <div class='card-header py-3'>
-              <h6 class='m-0 font-weight-bold text-primary'>Your message</h6>
+              <h6 class='m-0 font-weight-bold text-primary'>".$this->translate("Your message")."</h6>
             </div>
             <div class='card-body text-justify'>
               <textarea
                 id='{$uid}_message'
                 style='width:100%;height:200px;display:block;'
-                placeholder='Leave us a message.'
+                placeholder='".$this->translate("Leave us a message.")."'
               ></textarea>
             </div>
           </div>
           
           <div class='card shadow-sm mb-2'>
             <div class='card-header py-3'>
-              <h6 class='m-0 font-weight-bold text-primary'>Your contact email address</h6>
+              <h6 class='m-0 font-weight-bold text-primary'>".$this->translate("Your contact email address")."</h6>
             </div>
             <div class='card-body text-justify'>
               <input
                 id='{$uid}_reply_to'
                 style='width:100%;display:block;'
-                placeholder='Where can we reach you?'
+                placeholder='".$this->translate("Where can we reach you?")."'
                 value='".ads($this->adios->config['smtp_from'])."'
               />
             </div>
@@ -43,7 +43,7 @@ class ContactForm extends \ADIOS\Core\Action {
             class='btn btn-info btn-icon-split'
           >
             <span class='icon'><i class='fas fa-share'></i></span>
-            <span class='text'>Send the message</span>
+            <span class='text'>".$this->translate("Send the message")."</span>
           </a>
         </div>
         <div class='col-6 d-none d-md-block text-center'>
@@ -54,7 +54,7 @@ class ContactForm extends \ADIOS\Core\Action {
 
     return $this->adios->ui->Window([
       "uid" => "{$this->uid}_window",
-      "title" => "Contact the developer",
+      "title" => $this->translate("Contact the developer"),
       "subtitle" => $this->translate("Ask for help, report a bug or request new feature"),
       "content" => $html,
     ])->render();

@@ -8,26 +8,26 @@ class MaintenanceMode extends \ADIOS\Core\Action {
 
     return $this->adios->renderAction("UI/SettingsPanel", [
       "settings_group" => "web/maintenance",
-      "title" => "Maintenance Mode",
+      "title" => $this->translate("Maintenance Mode"),
       "template" => [
         "items" => [
           [
-            "title" => "Activate maintenance mode",
+            "title" => $this->translate("Activate maintenance mode"),
             "input" => $this->adios->ui->Input([
               "type" => "boolean",
               "uid" => "{$this->uid}_activated",
               "value" => $settings['activated'],
             ]),
-            "description" => "When checked, a maintenance message will be displayed to your visitors.",
+            "description" => $this->translate("When checked, a maintenance message will be displayed to your visitors."),
           ],
           [
-            "title" => "Additional information",
+            "title" => $this->translate("Additional information"),
             "input" => $this->adios->ui->Input([
               "type" => "varchar",
               "uid" => "{$this->uid}_additionalInfo",
               "value" => $settings['additionalInfo'],
             ]),
-            "description" => "Enter the message that will be displayed to your visitors while the maintenance mode is activated.",
+            "description" => $this->translate("Enter the message that will be displayed to your visitors while the maintenance mode is activated."),
           ],
         ],
       ],

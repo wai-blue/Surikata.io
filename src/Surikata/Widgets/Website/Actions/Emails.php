@@ -8,41 +8,41 @@ class Emails extends \ADIOS\Core\Action {
 
     return $this->adios->renderAction("UI/SettingsPanel", [
       "settings_group" => "web/{$this->params['domainName']}/emails",
-      "title" => "{$this->params['domainName']} » Emails",
+      "title" => "{$this->params['domainName']} » ".$this->translate("Emails"),
       "template" => [
         "tabs" => [
           [
-            "title" => "General",
+            "title" => $this->translate("General"),
             "items" => [
               [
-                "title" => "Signature",
+                "title" => $this->translate("Signature"),
                 "input" => $this->adios->ui->Input([
                   "type" => "text",
                   "uid" => "{$this->uid}_signature",
                   "value" => $settings['signature'],
                   "interface" => "formatted_text",
                 ]),
-                "description" => "Signature will be appended to the bottom of each email.",
+                "description" => $this->translate("Signature will be appended to the bottom of each email."),
               ],
             ],
           ],
           [
-            "title" => "Customer accounts",
+            "title" => $this->translate("Customer accounts"),
             "items" => [
               [
-                "title" => "After creation of customer's account (after registration) - subject",
+                "title" => $this->translate("After creation of customer's account (after registration) - subject"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_after_registration_SUBJECT",
                   "value" => $settings['after_registration_SUBJECT'],
                 ]),
                 "description" => "
-                  Available email variables:</br>
+                  ".$this->translate("Available email variables").":</br>
                   {% email %}
                 "
               ],
               [
-                "title" => "After creation of customer's account (after registration) - body",
+                "title" => $this->translate("After creation of customer's account (after registration) - body"),
                 "input" => $this->adios->ui->Input([
                   "type" => "text",
                   "uid" => "{$this->uid}_after_registration_BODY",
@@ -50,33 +50,33 @@ class Emails extends \ADIOS\Core\Action {
                   "interface" => "formatted_text",
                 ]),
                 "description" => "
-                  Email will be sent when a visitor creates the account.</br>
-                  Available email variables:</br>
+                  ".$this->translate("Email will be sent when a visitor creates the account.")."</br>
+                  ".$this->translate("Available email variables").":</br>
                   {% givenName %}, {% familyName %}, {% password %}, {% validationUrl %} 
                 ",
               ],
               [
-                "title" => "After verification of customer's account - subject",
+                "title" => $this->translate("After verification of customer's account - subject"),
                 "input" => $this->adios->ui->Input([
                   "type" => "text",
                   "uid" => "{$this->uid}_po_overeni_uctu_PREDMET",
                   "value" => $settings['po_overeni_uctu_PREDMET'],
                   "interface" => "formatted_text",
                 ]),
-                "description" => "Email will be sent when a visitor verifies his account.",
+                "description" => $this->translate("Email will be sent when a visitor verifies his account."),
               ],
               [
-                "title" => "After verification of customer's account - body",
+                "title" => $this->translate("After verification of customer's account - body"),
                 "input" => $this->adios->ui->Input([
                   "type" => "text",
                   "uid" => "{$this->uid}_po_overeni_uctu_TEXT",
                   "value" => $settings['po_overeni_uctu_TEXT'],
                   "interface" => "formatted_text",
                 ]),
-                "description" => "Email will be sent when a visitor verifies his account.",
+                "description" => $this->translate("Email will be sent when a visitor verifies his account."),
               ],
               [
-                "title" => "Forgotten password - SUBJECT",
+                "title" => $this->translate("Forgotten password - SUBJECT"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_forgotten_password_SUBJECT",
@@ -84,34 +84,34 @@ class Emails extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Forgotten password - BODY",
+                "title" => $this->translate("Forgotten password - BODY"),
                 "input" => $this->adios->ui->Input([
                   "type" => "text",
                   "uid" => "{$this->uid}_forgotten_password_BODY",
                   "value" => $settings['forgotten_password_BODY'],
                   "interface" => "formatted_text",
                 ]),
-                "description" => "Mail sa pošle, keď zákazník vyplní formulár so žiadosťou o obnovenie hesla.",
+                "description" => $this->translate("Mail will be sent when a customer fills out a password reset form."),
               ],
             ],
           ],
           [
-            "title" => "Orders",
+            "title" => $this->translate("Orders"),
             "items" => [
               [
-                "title" => "After order confirmation - SUBJECT",
+                "title" => $this->translate("After order confirmation - SUBJECT"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_after_order_confirmation_SUBJECT",
                   "value" => $settings['after_order_confirmation_SUBJECT'],
                 ]),
                 "description" => "
-                  Available email variables:</br>
+                  ".$this->translate("Available email variables").":</br>
                   {% number %}
                 "
               ],
               [
-                "title" => "After order confirmation - BODY",
+                "title" => $this->translate("After order confirmation - BODY"),
                 "input" => $this->adios->ui->Input([
                   "type" => "text",
                   "uid" => "{$this->uid}_after_order_confirmation_BODY",
@@ -119,8 +119,8 @@ class Emails extends \ADIOS\Core\Action {
                   "interface" => "formatted_text",
                 ]),
                 "description" => "
-                  Mail will be sent when customer confirms the order.</br>
-                  Available email variables:</br>
+                  ".$this->translate("Mail will be sent when customer confirms the order.")."</br>
+                  ".$this->translate("Available email variables").":</br>
                   {% serialNumber %}, {% number %}, {% numberCustomer %}, </br>
                   {% notes %}, {% state %}, {% phoneNumber %}, {% email %}, </br>
                   {% delGivenName %}, {% delFamilyName %}, {% delCompanyName %}, {% delStreet1 %}, {% delStreet2 %}, </br>
@@ -131,32 +131,32 @@ class Emails extends \ADIOS\Core\Action {
                 ",
               ],
               [
-                "title" => "After order payment",
+                "title" => $this->translate("After order payment"),
                 "input" => $this->adios->ui->Input([
                   "type" => "text",
                   "uid" => "{$this->uid}_after_order_payment",
                   "value" => $settings['after_order_payment'],
                   "interface" => "formatted_text",
                 ]),
-                "description" => "Mail will be sent when the customer pays the order.",
+                "description" => $this->translate("Mail will be sent when the customer pays the order."),
               ],
               [
-                "title" => "After order shipping",
+                "title" => $this->translate("After order shipping"),
                 "input" => $this->adios->ui->Input([
                   "type" => "text",
                   "uid" => "{$this->uid}_after_order_shipping",
                   "value" => $settings['after_order_shipping'],
                   "interface" => "formatted_text",
                 ]),
-                "description" => "Mail will be sent when the order will be shipped out.",
+                "description" => $this->translate("Mail will be sent when the order will be shipped out."),
               ],
             ],
           ],
           [
-            "title" => "Invoices",
+            "title" => $this->translate("Invoices"),
             "items" => [
               [
-                "title" => "After advance invoice issue - SUBJECT",
+                "title" => $this->translate("After advance invoice issue - SUBJECT"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_after_advance_invoice_issue_SUBJECT",
@@ -164,17 +164,17 @@ class Emails extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "After advance invoice issue - BODY",
+                "title" => $this->translate("After advance invoice issue - BODY"),
                 "input" => $this->adios->ui->Input([
                   "type" => "text",
                   "uid" => "{$this->uid}_after_advance_invoice_issue_BODY",
                   "value" => $settings['after_advance_invoice_issue_BODY'],
                   "interface" => "formatted_text",
                 ]),
-                "description" => "Mail will be sent when the advance invoice will be issued.",
+                "description" => $this->translate("Mail will be sent when the advance invoice will be issued."),
               ],
               [
-                "title" => "After regular invoice issue - SUBJECT",
+                "title" => $this->translate("After regular invoice issue - SUBJECT"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_after_regular_invoice_issue_SUJBECT",
@@ -182,19 +182,19 @@ class Emails extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "After regular invoice issue - BODY",
+                "title" => $this->translate("After regular invoice issue - BODY"),
                 "input" => $this->adios->ui->Input([
                   "type" => "text",
                   "uid" => "{$this->uid}_after_regular_invoice_issue_BODY",
                   "value" => $settings['after_regular_invoice_issue_BODY'],
                   "interface" => "formatted_text",
                 ]),
-                "description" => "Mail will be sent when the regular invoice will be issued.",
+                "description" => $this->translate("Mail will be sent when the regular invoice will be issued."),
               ],
             ],
           ],
           [
-            "title" => "Odosielací účet SMTP",
+            "title" => $this->translate("SMTP sending account"),
             "items" => [
               [
                 "title" => "SMTP host",
@@ -203,24 +203,24 @@ class Emails extends \ADIOS\Core\Action {
                   "uid" => "{$this->uid}_smtp_host",
                   "value" => $settings['smtp_host'],
                 ]),
-                "description" => "Príklad: mail.mojadomena.sk",
+                "description" => $this->translate("Example: mail.mydomain.en"),
               ],
               [
-                "title" => "SMTP port",
+                "title" => $this->translate("SMTP port"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_smtp_port",
                   "value" => $settings['smtp_port'],
                 ]),
                 "description" => "
-                  Príklad: 465
+                  ".$this->translate("Example: 465")."
                   <div style='color:red'>
-                    UPOZORNENIE: Pre odosielanie pošty je podporované iba zabezpečené pripojenie TLS alebo SSL.
+                    ".$this->translate("WARNING: Only secure TLS or SSL connections are supported for sending mail.")."
                   </div>
                 ",
               ],
               [
-                "title" => "SMTP protocol",
+                "title" => $this->translate("SMTP protocol"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_smtp_protocol",
@@ -232,16 +232,16 @@ class Emails extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "SMTP username",
+                "title" => $this->translate("SMTP username"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_smtp_username",
                   "value" => $settings['smtp_username'],
                 ]),
-                "description" => "Príklad: info@mojadomena.sk",
+                "description" => $this->translate("Example: info@mydomain.en"),
               ],
               [
-                "title" => "SMTP password",
+                "title" => $this->translate("SMTP password"),
                 "input" => $this->adios->ui->Input([
                   "type" => "password",
                   "uid" => "{$this->uid}_smtp_password",
@@ -249,13 +249,13 @@ class Emails extends \ADIOS\Core\Action {
                 ]),
               ],
               [
-                "title" => "Sender address",
+                "title" => $this->translate("Sender address"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
                   "uid" => "{$this->uid}_sender_address",
                   "value" => $settings['sender_address'],
                 ]),
-                "description" => "Mala by byť totožná s adresou SMTP.",
+                "description" => $this->translate("It should be the same as the SMTP address."),
               ],
             ],
           ],

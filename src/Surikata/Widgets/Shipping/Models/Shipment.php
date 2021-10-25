@@ -163,26 +163,26 @@ class Shipment extends \ADIOS\Core\Model {
         'price' => function($q) use ($summary) {
           $q->where([
             ['delivery_fee_calculation_method', '=', 1],	
-            ['price_from', '<=', $summary['priceTotal']],
-            ['price_to', '>=', $summary['priceTotal']]
+            ['price_from', '<=', $summary['priceInclVAT']],
+            ['price_to', '>=', $summary['priceInclVAT']]
           ]);
           $q->orWhere([
             ['delivery_fee_calculation_method', '=', 2],	
-            ['weight_from', '<=', $summary['weightTotal']],
-            ['weight_to', '>=', $summary['weightTotal']]
+            ['weight_from', '<=', $summary['weight']],
+            ['weight_to', '>=', $summary['weight']]
           ]);
         }
       ])
       ->whereHas('price', function ($q) use ($summary){
         $q->where([
           ['delivery_fee_calculation_method', '=', 1],	
-          ['price_from', '<=', $summary['priceTotal']],
-          ['price_to', '>=', $summary['priceTotal']]
+          ['price_from', '<=', $summary['priceInclVAT']],
+          ['price_to', '>=', $summary['priceInclVAT']]
         ]);
         $q->orWhere([
           ['delivery_fee_calculation_method', '=', 2],	
-          ['weight_from', '<=', $summary['weightTotal']],
-          ['weight_to', '>=', $summary['weightTotal']]
+          ['weight_from', '<=', $summary['weight']],
+          ['weight_to', '>=', $summary['weight']]
         ]);
       })
       ->where('is_enabled', 1)

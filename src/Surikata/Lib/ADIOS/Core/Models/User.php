@@ -18,24 +18,27 @@ namespace ADIOS\Core\Models;
 class User extends \ADIOS\Core\Model {
   var $sqlName = "";
   var $urlBase = "Users";
-  var $tableTitle = "Users";
   var $lookupSqlValue = "concat({%TABLE%}.name, ' ', {%TABLE%}.surname)";
 
-  public function __construct($adios) {
-    $this->sqlName = "{$adios->config['system_table_prefix']}_users";
-    parent::__construct($adios);
+  public function __construct($adiosOrAttributes) {
+    $this->sqlName = "{$adiosOrAttributes->config['system_table_prefix']}_users";
+    parent::__construct($adiosOrAttributes);
+
+    if (is_object($adiosOrAttributes)) {
+      $this->tableTitle = $this->translate("Users");
+    }
   }
 
   public function columns(array $columns = []) {
     return parent::columns([
-      'name' => ['type' => 'varchar', 'title' => 'Given name', 'show_column' => true],
-      'surname' => ['type' => 'varchar', 'title' => 'Family name', 'show_column' => true],
-      'login' => ['type' => 'varchar', 'title' => 'Login'],
-      'password' => ['type' => 'password', 'title' => 'Password'],
-      'email' => ['type' => 'varchar', 'title' => 'Email'],
-      'id_role' => ['type' => 'lookup', 'title' => 'Role', 'model' => "Core/Models/UserRole", 'show_column' => true, 'input_style' => 'select'],
-      'photo' => ['type' => 'image', 'title' => 'Photo', 'only_upload' => 'yes', 'subdir' => 'users/'],
-      'active' => ['type' => 'boolean', 'title' => 'Active', 'show_column' => true],
+      'name' => ['type' => 'varchar', 'title' => $this->translate('Given name'), 'show_column' => true],
+      'surname' => ['type' => 'varchar', 'title' => $this->translate('Family name'), 'show_column' => true],
+      'login' => ['type' => 'varchar', 'title' => $this->translate('Login')],
+      'password' => ['type' => 'password', 'title' => $this->translate('Password')],
+      'email' => ['type' => 'varchar', 'title' => $this->translate('Email')],
+      'id_role' => ['type' => 'lookup', 'title' => $this->translate('Role'), 'model' => "Core/Models/UserRole", 'show_column' => true, 'input_style' => 'select'],
+      'photo' => ['type' => 'image', 'title' => $this->translate('Photo'), 'only_upload' => 'yes', 'subdir' => 'users/'],
+      'active' => ['type' => 'boolean', 'title' => $this->translate('Active'), 'show_column' => true],
     ]);
   }
 

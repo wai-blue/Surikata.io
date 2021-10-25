@@ -156,9 +156,8 @@ class Loader extends \Cascada\Loader {
       $this->twig->addFunction(new \Twig\TwigFunction(
         'callSurikataMethod',
         function ($function, $params = []) {
-          global $___CASCADAObject;
           return call_user_func_array(
-            [$___CASCADAObject, $function],
+            [$this, $function],
             [$params]
           );
         }
@@ -169,9 +168,8 @@ class Loader extends \Cascada\Loader {
       $this->twig->addFunction(new \Twig\TwigFunction(
         'callPluginMethod',
         function ($pluginName, $function, $params = []) {
-          global $___CASCADAObject;
           return call_user_func_array(
-            [$___CASCADAObject->getPlugin($pluginName), $function],
+            [$this->getPlugin($pluginName), $function],
             [$params]
           );
         }
@@ -180,27 +178,25 @@ class Loader extends \Cascada\Loader {
       $this->twig->addFunction(new \Twig\TwigFunction(
         'translate',
         function ($original, $context = NULL) {
-          global $___CASCADAObject;
-
-          $domains = $___CASCADAObject->adminPanel->config['widgets']['Website']['domains'];
-          $domainToRender = $___CASCADAObject->config['domainToRender'];
+          $domains = $this->adminPanel->config['widgets']['Website']['domains'];
+          $domainToRender = $this->config['domainToRender'];
 
           $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($this->adminPanel);
 
           if (
             $context === NULL
-            && $___CASCADAObject->currentRenderedPlugin !== NULL
+            && $this->currentRenderedPlugin !== NULL
           ) {
-            $context = $___CASCADAObject->currentRenderedPlugin->name;
+            $context = $this->currentRenderedPlugin->name;
           }
 
           $context = (string) $context;
 
-          if ($___CASCADAObject->translationCache === NULL) {
-            $___CASCADAObject->translationCache = $translationModel->loadCache();
+          if ($this->translationCache === NULL) {
+            $this->translationCache = $translationModel->loadCache();
           }
 
-          if (!isset($___CASCADAObject->translationCache[$domainToRender][$context][$original])) {
+          if (!isset($this->translationCache[$domainToRender][$context][$original])) {
             $translationModel->insertRow([
               "domain" => $domainToRender,
               "context" => $context,
@@ -208,12 +204,28 @@ class Loader extends \Cascada\Loader {
               "translated" => "",
             ]);
 
-             $___CASCADAObject->translationCache[$domainToRender][$context][$original] = $original;
+             $this->translationCache[$domainToRender][$context][$original] = $original;
           } else {
-            $translatedText = $___CASCADAObject->translationCache[$domainToRender][$context][$original];
+            $translatedText = $this->translationCache[$domainToRender][$context][$original];
           }
 
           return empty($translatedText) ? $original : $translatedText;
+        }
+      ));
+
+      $this->twig->addFunction(new \Twig\TwigFunction(
+        'insertTemplateSnippets',
+        function ($snippetName) {
+          // TODO: prejst vsetky pluginy a od kazdeho si vypytat $snippetName
+          return "[insertTemplateSnippets: {$snippetName}]";
+        }
+      ));
+      
+
+      $this->twig->addFilter(new \Twig\TwigFilter(
+        'formatPrice',
+        function ($string) {
+          return $this->adminPanel->locale->formatPrice($string);
         }
       ));
 
@@ -356,6 +368,7 @@ class Loader extends \Cascada\Loader {
    * */
   public function loadPublishedPages() {
     $tmp = (new \ADIOS\Widgets\Website\Models\WebPage($this->adminPanel))
+      ->where('domain', $this->config["domainToRender"])
       ->where('publish_always', '1')
       ->orWhere(function($q) {
         $q

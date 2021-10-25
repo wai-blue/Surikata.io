@@ -26,6 +26,19 @@ class CustomerUID extends \ADIOS\Core\Model {
         "title" => "UID",
         "show_column" => TRUE,
       ],
+
+      "cookie_consent" => [
+        "type" => "varchar",
+        "title" => "Cookie consent",
+        "show_column" => TRUE,
+        "readonly" => TRUE,
+      ],
+      "cookie_date" => [
+        "type" => "datetime",
+        "title" => "Cookie consent date",
+        "show_column" => TRUE,
+        "readonly" => TRUE,
+      ],
     ]);
   }
 
@@ -42,6 +55,14 @@ class CustomerUID extends \ADIOS\Core\Model {
     $params["default_values"] = ["id_customer" => $params["id_customer"]];
 
     return $params;
+  }
+
+  public function setCookieConsent($uid, $consent) {
+    $cookie = [];
+    $cookie["cookie_consent"] = $consent;
+    $cookie["cookie_date"] = date("Y-m-d H:i:s");
+
+    self::where('uid', $uid)->update($cookie);
   }
 
   public function getByCustomerUID($customerUID) {

@@ -36,16 +36,16 @@
     </div>
     <div class="col-md-6 single-right-left simpleCart_shelfItem">
       <h3>{{ productInfo["name_lang_"~languageIndex] }}</h3>
-      {% if productInfo.priceInfo.fullPrice > 0 %}
-        <p><span class="item_price">{{ productInfo.priceInfo.salePrice|number_format(2, ",", " ") }} €</span>
-          <del>€ {{ productInfo.priceInfo.fullPrice|number_format(2, ",", " ") }}</del>
+      {% if productInfo.PRICE.fullPriceInclVAT > 0 %}
+        <p><span class="item_price">{{ productInfo.PRICE.salePriceInclVAT|number_format(2, ",", " ") }} €</span>
+          <del>€ {{ productInfo.PRICE.fullPriceInclVAT|number_format(2, ",", " ") }}</del>
         </p>
       {% else %}
-        <p><span class="item_price">{{ productInfo.priceInfo.salePrice|number_format(2, ",", " ") }} €</span>
+        <p><span class="item_price">{{ productInfo.PRICE.salePriceInclVAT|number_format(2, ",", " ") }} €</span>
         </p>
       {% endif %}
-      {% if productInfo.priceInfo.discountTotal > 0 %}
-        <span class="item_price discount-flag">{{ productInfo.priceInfo.discountTotal|number_format(2, ",", " ") }} %</span>
+      {% if productInfo.PRICE.discountTotal > 0 %}
+        <span class="item_price discount-flag">{{ productInfo.PRICE.discountTotal|number_format(2, ",", " ") }} %</span>
       {% endif %}
       <div class="rating1">
         <ul class="stars">
@@ -80,7 +80,7 @@
           <a class="add-to-cart"
              href="javascript:void(0)"
              onclick="
-               BasicThemeCart.addProduct(
+               ThemeBasicCart.addProduct(
                  {{ productInfo.id }},
                  $('.cart-plus-minus > input[name=qtybutton]').val(),
                  function(data) {
@@ -178,7 +178,7 @@
                           <div class="cart-btn">
                             <a
                               href="javascript:void(0)"
-                              onclick="BasicThemeCart.addProduct({{ product.id }}, 1);"
+                              onclick="ThemeBasicCart.addProduct({{ product.id }}, 1);"
                               class="add-to-curt"
                               title="Add to cart">
                               Add to cart</a>
@@ -246,7 +246,7 @@
                       <div class="shoe single-item hvr-outline-out">
                         <a
                           href="javascript:void(0)"
-                          onclick="BasicThemeCart.addProduct({{ product.id }}, 1);"
+                          onclick="ThemeBasicCart.addProduct({{ product.id }}, 1);"
                           class="similar-add-to-cart"
                           title="Add to cart"
                         >

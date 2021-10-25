@@ -71,12 +71,12 @@
           </div>
           <div class="pricing-meta">
             <ul>
-              {% if productInfo.priceInfo.fullPrice != productInfo.priceInfo.salePrice %}
-                <li class="old-price">€ {{ productInfo.priceInfo.fullPrice|number_format(2, ",", " ") }}</li>
+              {% if productInfo.PRICE.fullPriceInclVAT != productInfo.PRICE.salePriceInclVAT %}
+                <li class="old-price">€ {{ productInfo.PRICE.fullPriceInclVAT|formatPrice }}</li>
               {% endif %}
-              <li class="cuttent-price">{{ productInfo.priceInfo.salePrice|number_format(2, ",", " ") }} €</li>
-              {% if productInfo.priceInfo.discountTotal > 0 %}
-                <li class="discount-flag">- {{ productInfo.priceInfo.discountTotal|number_format(2, ",", " ") }} %</li>
+              <li class="cuttent-price">{{ productInfo.PRICES_FOR_INVOICE.unitPriceInclVAT|formatPrice }} €</li>
+              {% if productInfo.PRICE.discountTotal > 0 %}
+                <li class="discount-flag">- {{ productInfo.PRICE.discountTotal|number_format(2, ",", " ") }} %</li>
               {% endif %}
             </ul>
           </div>
@@ -111,7 +111,8 @@
                     }
                   );
                 "
-              >  {{ translate("Add To Cart", "Product") }}</a>
+              >{{ translate("Add To Cart", "Product") }}</a>
+              {{ insertTemplateSnippets("advanced-buttons-for-product-detail") }}
             </div>
           </div>
           <!--<div class="pro-details-wish-com">
@@ -360,9 +361,9 @@
                       <div class="pricing-meta">
                         <ul>
                           {% if product.PRICE.fullPrice != product.PRICE.salePrice %}
-                            <li class="old-price">{{ product.PRICE.fullPrice|number_format(2, ",", " ") }} €</li>
+                            <li class="old-price">{{ product.PRICE.fullPrice|formatPrice }} €</li>
                           {% endif %}
-                          <li class="current-price">{{ product.PRICE.fullPrice|number_format(2, ",", " ") }} €</li>
+                          <li class="current-price">{{ product.PRICES_FOR_INVOICE.unitPriceInclVAT|formatPrice }} €</li>
                         </ul>
                       </div>
                     </div>
@@ -450,9 +451,9 @@
                       <div class="pricing-meta">
                         <ul>
                           {% if product.PRICE.fullPrice != product.PRICE.salePrice %}
-                            <li class="old-price">{{ product.PRICE.fullPrice|number_format(2, ",", " ") }} €</li>
+                            <li class="old-price">{{ product.PRICE.fullPrice|formatPrice }} €</li>
                           {% endif %}
-                          <li class="current-price">{{ product.PRICE.salePrice|number_format(2, ",", " ") }} €</li>
+                          <li class="current-price">{{ product.PRICES_FOR_INVOICE.unitPriceInclVAT|formatPrice }} €</li>
                         </ul>
                       </div>
                     </div>

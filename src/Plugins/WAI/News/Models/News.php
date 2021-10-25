@@ -4,29 +4,32 @@ namespace ADIOS\Plugins\WAI\News\Models;
 
 class News extends \ADIOS\Core\Model {
   var $sqlName = "news";
-  var $tableTitle = "News";
   var $urlBase = "Website/News";
   var $lookupSqlValue = "{%TABLE%}.title";
+
+  public function init() {
+    $this->tableTitle = $this->translate("News");
+  }
 
   public function columns($columns = []) {
     return parent::columns([
       "title" => [
         "type" => "varchar",
-        "title" => "Title",
+        "title" => $this->translate("Title"),
         "required" => TRUE,
         "show_column" => TRUE,
       ],
 
       "content" => [
         "type" => "text",
-        "title" => "Content",
+        "title" => $this->translate("Content"),
         "interface" => "formatted_text",
         "show_column" => TRUE,
       ],
 
       "image" => [
         "type" => "image",
-        "title" => "Image",
+        "title" => $this->translate("Image"),
         "required" => TRUE,
         "show_column" => TRUE,
       ],
@@ -40,14 +43,14 @@ class News extends \ADIOS\Core\Model {
 
       "domain" => [
         "type" => "varchar",
-        "title" => "Domain",
+        "title" => $this->translate("Domain"),
         "required" => FALSE,
         "show_column" => TRUE,
       ],
 
       "show_from" => [
         "type" => "date",
-        "title" => "Show from",
+        "title" => $this->translate("Show from"),
         "show_column" => TRUE,
       ],
     ]);

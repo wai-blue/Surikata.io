@@ -23,7 +23,7 @@ class Order extends \ADIOS\Core\Model {
 
     $this->tableTitle = $this->translate("Orders");
     $this->formTitleForInserting = $this->translate("New order");
-    $this->formTitleForEditing = $this->translate("Order") ."# {{ number }}";
+    //$this->formTitleForEditing = $this->translate("Order") ."# {{ number }}";
     $this->formAddButtonText = $this->translate("Create new order");
     $this->formSaveButtonText = $this->translate("Update order");
 
@@ -909,7 +909,7 @@ class Order extends \ADIOS\Core\Model {
         "style" => "border-left: 10px solid {$this->enumOrderStateColors[self::STATE_CANCELED]}",
       ])->render();
 
-      $formTitle = "Order&nbsp;#&nbsp;".hsc($data["number"]);
+      $formTitle = $this->translate("Order")."&nbsp;#&nbsp;".hsc($data["number"]);
 
       $sidebarHtml = $this->adios->dispatchEventToPlugins("onOrderDetailSidebarButtons", [
         "model" => $this,

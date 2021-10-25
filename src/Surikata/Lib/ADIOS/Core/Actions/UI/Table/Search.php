@@ -24,7 +24,7 @@ class Search extends \ADIOS\Core\Action {
 
     $tabs = [];
     $tabs[$model->name] = [];
-    $tabs[$model->name]["title"] = $model->shortName;
+    $tabs[$model->name]["title"] = $model->tableTitle;
     $tabs[$model->name]["items"] = [];
 
     foreach ($model->columns() as $colName => $colDef) {
@@ -34,7 +34,7 @@ class Search extends \ADIOS\Core\Action {
         $lookupModelName = $colDef['model'];
         $lookupModel = $this->adios->getModel($lookupModelName);
         $tabs[$lookupModel->name] = [];
-        $tabs[$lookupModel->name]["title"] = $lookupModel->shortName;
+        $tabs[$lookupModel->name]["title"] = $lookupModel->tableTitle;
 
         foreach ($lookupModel->columns() as $lookupColName => $lookupColDef) {
           if (!($colDef["is_searchable"] ?? TRUE)) continue;
@@ -82,7 +82,7 @@ class Search extends \ADIOS\Core\Action {
         <div class='col-12 col-lg-4'>
           <div class='card shadow mb-4'>
             <a class='d-block card-header py-3'>
-              <h6 class='m-0 font-weight-bold text-primary'>Saved searches</h6>
+              <h6 class='m-0 font-weight-bold text-primary'>".$this->translate("Saved searches")."</h6>
             </a>
             <div>
               <div class='card-body'>
@@ -186,7 +186,7 @@ class Search extends \ADIOS\Core\Action {
 
     $window = $this->adios->ui->Window([
       'uid' => "{$this->uid}_window",
-      'title' => "Search in: ".hsc($searchGroup),
+      'title' => $this->translate("Search in").": ".hsc($searchGroup),
       'content' => $content,
     ]);
 
@@ -197,11 +197,11 @@ class Search extends \ADIOS\Core\Action {
       ]),
       $this->adios->ui->button([
         'type' => 'save',
-        'text' => 'Apply',
+        'text' => $this->translate('Apply'),
         'onclick' => "{$this->uid}_search();",
       ]),
       $this->adios->ui->button([
-        'text' => 'Save this search',
+        'text' => $this->translate('Save this search'),
         'onclick' => "{$this->uid}_save_search();",
         'class' => 'btn-light btn-icon-split float-right',
         'fa_icon' => 'fas fa-save',

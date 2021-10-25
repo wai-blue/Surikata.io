@@ -1,6 +1,6 @@
 <?php
 
-define("REWRITE_BASE", "/mysurikata/");
+define("REWRITE_BASE", ""); // Example value: "/" or "/devel/mysurikata/"
 
 ////////////////////////////////////////////////////////
 // Website Domains

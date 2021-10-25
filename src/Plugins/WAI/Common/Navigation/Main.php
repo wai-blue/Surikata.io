@@ -32,8 +32,14 @@ namespace Surikata\Plugins\WAI\Common {
               ->get()
               ->toArray()
             ;
+
+            $productCategories = $productCategoryModel->translateForWeb(
+              $productCategories,
+              $languageIndex
+            );
+
             foreach ($productCategories as $key => $value) {
-              $productCategories[$key]["title"] = $value["name_lang_{$languageIndex}"];
+              $productCategories[$key]["title"] = $value["TRANSLATIONS"]["name"];
               $productCategories[$key]["url"] = $productCatalogPlugin->getWebPageUrl(
                 $productCatalogPlugin->convertCategoryToUrlVariables($value)
               );

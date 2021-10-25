@@ -120,11 +120,11 @@ $adminPanelConfig['widgets']['Website']['domainLanguages'] = $configEnv["domainL
 ////////////////////////////////////////////////////////
 
 $websiteRendererConfig = [
-  "domainToRender" => WEBSITE_DOMAIN_TO_RENDER,
+  "domainToRender" => defined("WEBSITE_DOMAIN_TO_RENDER") ? WEBSITE_DOMAIN_TO_RENDER : "",
   "minifyOutputHtml" => $configEnv['minifyOutputHtml'] ?? FALSE,
   "validateOutputHtml" => $configEnv['validateOutputHtml'] ?? FALSE,
 
-  "rewriteBase" => WEBSITE_REWRITE_BASE,
+  "rewriteBase" => defined("WEBSITE_REWRITE_BASE") ? WEBSITE_REWRITE_BASE : "/",
   "twigCacheDir" => TWIG_CACHE_DIR,
   "twigDebugEnabled" => TRUE,
   "connection" => [

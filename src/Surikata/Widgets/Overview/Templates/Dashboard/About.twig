@@ -1,0 +1,87 @@
+<div class="col-md-6">
+  <div style="text-align:center;margin-top:2em;color:var(--cl-main);user-select: none;">
+    <div style="margin:2em">
+      <img
+        src="{{ config.url }}/surikata/assets/images/Surikata_logo_farebne_znak.png"
+        style="max-width: 100%"
+      >
+    </div>
+  </div>
+
+  <div class="card shadow mb-2">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">{{ translate("Did you know?") }}</h6>
+    </div>
+    <div class="card-body text-justify">
+      <a href="https://en.wikipedia.org/wiki/Meerkat" target=_blank>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Meerkat_%28Suricata_suricatta%29_Tswalu.jpg/330px-Meerkat_%28Suricata_suricatta%29_Tswalu.jpg"
+          style="width:6em;float:left;margin:0 1em 1em 0"
+        >
+      </a>
+      {{ translate("The") }} <b> {{ translate("meerkat") }}</b> <i>{{ translate("Suricata suricatta") }}</i> {{ translate("or") }} <b> {{ translate("suricate") }}</b>  {{ translate("is a small mongoose found in southern Africa.") }}
+      {{ translate("It is characterised by a broad head, large eyes, a pointed snout, long legs, a thin tapering tail, and a brindled coat pattern. The head-and-body length is around 24–35 cm (9.4–13.8 in), and the weight is typically between 0.62 and 0.97 kg (1.4 and 2.1 lb). The coat is light grey to yellowish brown with alternate, poorly defined light and dark bands on the back. Meerkats have foreclaws adapted for digging and have the ability to thermoregulate to survive in their harsh, dry habitat. Three subspecies are recognised.") }}<br/>
+      <br/>
+      {{ translate("Learn more at") }} <a href="https://en.wikipedia.org/wiki/Meerkat" target=_blank>{{ translate("Wikipedia") }}</a>.
+      </p>
+    </div>
+  </div>
+
+  <div class="card shadow mb-2">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">{{ translate("Feedback") }}</h6>
+    </div>
+    <div class="card-body text-justify">
+      {{ translate("Need help? Found a bug? Want new features?") }}<br/>
+      <br/>
+      <a href='javascript:void(0)' onclick='window_render("HelpAndSupport/ContactForm");' class='btn btn-info btn-icon-split'>
+        <span class='icon'><i class='fas fa-bolt'></i></span>
+        <span class='text'>{{ translate("Ask for help, report a bug or request new feature") }}</span>
+      </a>
+      </p>
+    </div>
+  </div>
+
+  <div class="card shadow mb-2">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">{{ translate("About your Surikata") }}</h6>
+    </div>
+    <div class="card-body text-justify">
+      <table class="table table-striped table-borderless table-sm" cellspacing="0">
+        <tr>
+          <td class="align-middle">{{ translate("License") }}</td>
+          <td class="align-middle">{{ translate("valid from") }} {{ license.validFrom }}</td>
+        </tr>
+        <tr>
+          <td class="align-middle">{{ translate("Version") }}</td>
+          <td class="align-middle">{{ version }}</td>
+        </tr>
+        <tr>
+          <td class="align-middle">{{ translate("Plugins") }}</td>
+          <td class="align-middle">{{ translate("Customers, CRM, Orders, Finances, Products, Prices, Website") }}</td>
+        </tr>
+        <tr>
+          <td class="align-middle">{{ translate("Stores") }}</td>
+          <td class="align-middle">{{ config.widgets.Website.domains|length }}</td>
+        </tr>
+        <tr>
+          <td class="align-middle">{{ translate("Products") }}</td>
+          <td class="align-middle">{{ stats.productCount }}</td>
+        </tr>
+        <tr>
+          <td class="align-middle">{{ translate("Support") }}</td>
+          <td class="align-middle">{{ translate("available at") }} support@surikata.io</td>
+        </tr>
+      </table>
+      <br/>
+      <a
+        href="https://www.surikata.io"
+        target=_blank
+      ><img
+        src="{{ config.url }}/surikata/assets/images/surikata_web_pic_w800.png"
+        style="width:80px;"
+      ></a>
+    </div>
+  </div>
+
+</div>

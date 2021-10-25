@@ -64,7 +64,7 @@ class SavedSearchesOverview extends \ADIOS\Core\Action {
         ";
       }
     } else {
-      $savedSearchesHtml = "You have no saved searches yet.";
+      $savedSearchesHtml = $this->translate("You have no saved searches yet.");
     }
 
     return $savedSearchesHtml;

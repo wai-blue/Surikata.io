@@ -94,8 +94,8 @@ window.onpopstate = function (e) {
   
   ////////////////////////////////////////
   // AbeloThemeCart
-  function AbeloThemeCart() { SurikataCart.call(this); }
-  AbeloThemeCart.prototype = Object.create(SurikataCart.prototype);
+  function AbeloThemeCart() { PluginWAICustomerCart.call(this); }
+  AbeloThemeCart.prototype = Object.create(PluginWAICustomerCart.prototype);
 
   AbeloThemeCart.prototype.updatePrice = function (data) {
     var spolu = (data.itemUpdated['quantity'] * data.itemUpdated['unit_price']).toFixed(2).toString();
@@ -182,7 +182,7 @@ window.onpopstate = function (e) {
     $('#orderDataForm input').removeClass('required-empty');
     $('#orderDataForm label').removeClass('required-empty');
   
-    SurikataCart.prototype.placeOrder(
+    PluginWAICustomerCart.prototype.placeOrder(
       function (dataSuccess) {
         if (dataSuccess.status == 'OK') {
           window.location.href = dataSuccess.orderConfirmationUrl;

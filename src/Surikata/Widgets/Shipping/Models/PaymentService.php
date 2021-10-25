@@ -86,15 +86,15 @@ class PaymentService extends \ADIOS\Core\Model {
       "columns" => [
         [
           "tabs" => [
-            "General" => [
+            $this->translate("General") => [
               "name",
               "description",
               "logo",
             ],
-            "Enable / Disable" => [
+            $this->translate("Enable / Disable") => [
               "is_enabled",
             ],
-            "Plugin" => [
+            $this->translate("Plugin") => [
               "connected_plugin",
             ],
           ]

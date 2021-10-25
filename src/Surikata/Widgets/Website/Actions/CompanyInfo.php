@@ -28,6 +28,7 @@ class CompanyInfo extends \ADIOS\Core\Action {
                   "type" => "image",
                   "uid" => "{$this->uid}_logo",
                   "value" => $settings['logo'],
+                  "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),
                 ]),
               ],
             ],

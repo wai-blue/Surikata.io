@@ -77,6 +77,7 @@ class ProductCategory extends \ADIOS\Core\Model {
           "title" => $this->translate("Image"),
           "required" => FALSE,
           "show_column" => TRUE,
+          "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),
         ],
 
         "is_highlighted" => [

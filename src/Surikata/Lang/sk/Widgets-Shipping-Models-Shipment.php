@@ -19,5 +19,6 @@ $dictionary = [
   "Shipment" => "Zásielka",
   "Enable / Disable" => "Povoliť / Zakázať",
   "Prices" => "Ceny",
-  "Miscelaneous" => "Rôzny"
+  "Miscelaneous" => "Rôzny",
+  "Supported image extensions: jpg, gif, png, jpeg" => "Podporovaný formát obrázku: jpg, gif, png, jpeg."
 ];

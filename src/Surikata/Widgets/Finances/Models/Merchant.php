@@ -89,6 +89,7 @@ class Merchant extends \ADIOS\Core\Model {
       "logo" => [
         'type' => 'image',
         'title' => 'Logo',
+        "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),
         'show_column' => TRUE,
         "subdir" => $this->translate("merchant_logos")
       ],

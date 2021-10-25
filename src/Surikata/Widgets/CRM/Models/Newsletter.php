@@ -12,7 +12,9 @@ class Newsletter extends \ADIOS\Core\Model {
   public function init() {
 
     $this->enumDomains = [];
-    foreach (array_keys($this->adios->config['widgets']['Website']['domains']) as $domain) {
+    $domains = $this->adios->config['widgets']['Website']['domains'] ?? [];
+
+    foreach (array_keys($domains) as $domain) {
       $this->enumDomains = [$domain => $domain];
     }
 

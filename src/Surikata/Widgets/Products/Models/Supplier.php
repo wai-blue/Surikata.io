@@ -6,27 +6,31 @@ class Supplier extends \ADIOS\Core\Model {
   var $sqlName = "suppliers";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
   var $urlBase = "Suppliers";
-  var $tableTitle = "Suppliers";
-  var $formTitleForInserting = "New supplier";
-  var $formTitleForEditing = "Supplier";
+
+  public function init() {
+    $this->tableTitle = $this->translate("Suppliers");
+    $this->formTitleForInserting = $this->translate("New supplier");
+    $this->formTitleForEditing = $this->translate("Supplier");
+  }
   
   public function columns(array $columns = []) {
     return parent::columns([
       "name" => [
         'type' => 'varchar',
-        'title' => "Supplier name",
+        'title' => $this->translate("Supplier name"),
         'show_column' => TRUE,
       ],
 
       "description" => [
         'type' => 'text',
-        'title' => "Description",
+        'title' => $this->translate("Description"),
         'show_column' => TRUE,
       ],
 
       "logo" => [
         'type' => 'image',
         'title' => 'Logo',
+        "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),
         'show_column' => TRUE,
         "subdir" => "brands"
       ],

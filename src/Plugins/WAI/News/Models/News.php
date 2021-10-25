@@ -32,6 +32,7 @@ class News extends \ADIOS\Core\Model {
         "title" => $this->translate("Image"),
         "required" => TRUE,
         "show_column" => TRUE,
+        "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),
       ],
 
       "perex" => [

@@ -213,6 +213,7 @@ class Product extends \ADIOS\Core\Model {
         "image" => [
           'type' => 'image',
           'title' => $this->translate("Main image"),
+          "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),
           'show_column' => TRUE,
           "subdir" => "products"
         ],

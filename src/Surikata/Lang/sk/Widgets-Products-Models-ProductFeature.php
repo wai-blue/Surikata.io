@@ -18,5 +18,6 @@ $dictionary = [
   "Text" => "Text",
   "Yes/No" => "Áno/Nie",
   "Product features" => "Vlastnosti produktu",
-  "No translations available." => "Žiadne preklady k dispozícii"
+  "No translations available." => "Žiadne preklady k dispozícii",
+  "Supported image extensions: jpg, gif, png, jpeg" => "Podporovaný formát obrázku: jpg, gif, png, jpeg."
 ];

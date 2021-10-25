@@ -25,6 +25,7 @@ class ProductGallery extends \ADIOS\Core\Model {
       "image" => [
         'type' => 'image',
         'title' => $this->translate('Image'),
+        "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),
         'show_column' => TRUE,
         "required" => TRUE,
         "subdir" => "products"

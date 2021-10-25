@@ -39,6 +39,7 @@ class Service extends \ADIOS\Core\Model {
         "pictogram" => [
           'type' => 'image',
           'title' => $this->translate('Pictogram'),
+          "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),
           'show_column' => TRUE,
           "subdir" => "pictograms"
         ],

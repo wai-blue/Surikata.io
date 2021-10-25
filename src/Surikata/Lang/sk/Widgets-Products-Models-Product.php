@@ -72,5 +72,6 @@ $dictionary = [
   "Categories" => "Kategórie",
   "Domain visibility" => "Viditeľnosť domény",
   "If no domain is selected, product will be visible on all domains." => "Ak nevyberiete žiadnu doménu, produkt bude viditeľný na všetkých doménach.",
-  "No translations available." => "Žiadne preklady k dispozícii"
+  "No translations available." => "Žiadne preklady k dispozícii",
+  "Supported image extensions: jpg, gif, png, jpeg" => "Podporovaný formát obrázku: jpg, gif, png, jpeg."
 ];

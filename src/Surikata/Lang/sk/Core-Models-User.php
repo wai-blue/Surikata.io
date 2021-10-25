@@ -9,5 +9,6 @@ $dictionary = [
   "Email" => "E-mail",
   "Role" => "Rola",
   "Photo" => "Fotka",
-  "Active" => "Aktívny"
+  "Active" => "Aktívny",
+  "Supported image extensions: jpg, gif, png, jpeg" => "Podporovaný formát obrázku: jpg, gif, png, jpeg."
 ];

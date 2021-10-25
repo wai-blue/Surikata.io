@@ -17,6 +17,7 @@ class DPDVydajneMiesto extends \ADIOS\Core\Model {
 
       "logo" => [
         'type' => 'image',
+        "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),
         'title' => 'Logo',
         'show_column' => TRUE,
       ],

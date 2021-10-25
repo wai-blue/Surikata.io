@@ -37,7 +37,7 @@ class User extends \ADIOS\Core\Model {
       'password' => ['type' => 'password', 'title' => $this->translate('Password')],
       'email' => ['type' => 'varchar', 'title' => $this->translate('Email')],
       'id_role' => ['type' => 'lookup', 'title' => $this->translate('Role'), 'model' => "Core/Models/UserRole", 'show_column' => true, 'input_style' => 'select'],
-      'photo' => ['type' => 'image', 'title' => $this->translate('Photo'), 'only_upload' => 'yes', 'subdir' => 'users/'],
+      'photo' => ['type' => 'image', 'title' => $this->translate('Photo'), 'only_upload' => 'yes', 'subdir' => 'users/', "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),],
       'active' => ['type' => 'boolean', 'title' => $this->translate('Active'), 'show_column' => true],
     ]);
   }

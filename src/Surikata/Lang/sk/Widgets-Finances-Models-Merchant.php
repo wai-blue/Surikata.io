@@ -14,5 +14,6 @@ $dictionary = [
   "ZIP" => "PSČ",
   "Bank account IBAN" => "Bankový účet IBAN",
   "Description" => "Popis",
-  "Phone number" => "Mobilné číslo"
+  "Phone number" => "Mobilné číslo",
+  "Supported image extensions: jpg, gif, png, jpeg" => "Podporovaný formát obrázku: jpg, gif, png, jpeg."
 ];

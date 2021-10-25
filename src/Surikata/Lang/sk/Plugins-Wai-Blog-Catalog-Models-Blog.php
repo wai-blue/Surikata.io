@@ -8,5 +8,6 @@ $dictionary = [
   "Created at" => "Vytvorený v",
   "Author" => "Autor",
   "General" => "Všeobecné",
-  "Tags" => "Tagy"
+  "Tags" => "Tagy",
+  "Supported image extensions: jpg, gif, png, jpeg" => "Podporovaný formát obrázku: jpg, gif, png, jpeg." ,
 ];

@@ -60,7 +60,8 @@ class ProductExtension extends \ADIOS\Core\Model {
           "type" => "image",
           "title" => $this->translate("Image"),
           "show_column" => TRUE,
-          "subdir" => "products"
+          "subdir" => "products",
+          "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),
         ],
       ]
     ));

@@ -56,6 +56,7 @@ class ProductFeature extends \ADIOS\Core\Model {
         "icon" => [
           'type' => 'image',
           'title' => $this->translate("Icon"),
+          "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),
           'show_column' => TRUE,
           "subdir" => "feature_icons",
         ],

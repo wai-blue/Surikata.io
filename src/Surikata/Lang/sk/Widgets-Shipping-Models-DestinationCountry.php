@@ -9,5 +9,5 @@ $dictionary = [
   "E.g.: EN, US, SK, FR, ..." => "Napr. EN, US, SK, FR, ...",
   "Flag" => "Vlajka",
   "Enabled" => "Povolené",
-  "Order index" => "Index objednávky"
+  "Order index" => "V poradí"
 ];

@@ -29,11 +29,11 @@ class Products extends \ADIOS\Core\Widget {
             "onclick" => "desktop_update('Products/Prices');",
             "sub" => [
               [
-                "title" => "Margins",
+                "title" =>  $this->translate("Margins"),
                 "onclick" => "window_render('Products/Prices/Margins');",
               ],
               [
-                "title" => "Discounts",
+                "title" =>  $this->translate("Discounts"),
                 "onclick" => "desktop_update('Products/Prices/Discounts');",
               ],
             ],

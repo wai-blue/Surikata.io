@@ -42,6 +42,21 @@ namespace Surikata\Plugins\WAI\Order {
       return $deliveryServices;
     }
 
+    public function getActualDeliveryPrice($deliveryServices, $selectedDeliveryServiceId, $selectedPaymentMethod) {
+      $selectedDeliveryService =
+        $deliveryServices[$selectedDeliveryServiceId];
+
+      foreach ($this->shipping as $index => $shipment) {
+        if (
+          $shipment["id_delivery_service"] == $selectedDeliveryService["id"]
+          && $shipment["id_payment_service"] == $selectedPaymentMethod["id"]
+        ) {
+          $deliveryServices[$selectedDeliveryServiceId]["price"] = $shipment["price"]["delivery_fee"];
+        }
+      }
+      return $deliveryServices;
+    }
+
     public function getTwigParams($pluginSettings) {
       $twigParams = $pluginSettings;
 
@@ -98,6 +113,9 @@ namespace Surikata\Plugins\WAI\Order {
           $paymentMethods[$orderData["id_payment_service"]] 
           ?? reset($paymentMethods)
         ;
+
+        $deliveryServices =
+          $this->getActualDeliveryPrice($deliveryServices, $orderData["id_delivery_service"], $selectedPaymentMethod);
 
         if (!empty($orderData['voucher'])) {
           $voucherModel = new \ADIOS\Widgets\Customers\Models\Voucher($this->adminPanel);

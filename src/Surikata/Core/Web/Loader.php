@@ -213,6 +213,15 @@ class Loader extends \Cascada\Loader {
         }
       ));
 
+      $this->twig->addFunction(new \Twig\TwigFunction(
+        'insertTemplateSnippets',
+        function ($snippetName) {
+          // TODO: prejst vsetky pluginy a od kazdeho si vypytat $snippetName
+          return "[insertTemplateSnippets: {$snippetName}]";
+        }
+      ));
+      
+
       $this->twig->addFilter(new \Twig\TwigFilter(
         'formatPrice',
         function ($string) {
@@ -359,6 +368,7 @@ class Loader extends \Cascada\Loader {
    * */
   public function loadPublishedPages() {
     $tmp = (new \ADIOS\Widgets\Website\Models\WebPage($this->adminPanel))
+      ->where('domain', $this->config["domainToRender"])
       ->where('publish_always', '1')
       ->orWhere(function($q) {
         $q

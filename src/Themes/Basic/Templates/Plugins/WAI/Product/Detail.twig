@@ -80,7 +80,7 @@
           <a class="add-to-cart"
              href="javascript:void(0)"
              onclick="
-               BasicThemeCart.addProduct(
+               ThemeBasicCart.addProduct(
                  {{ productInfo.id }},
                  $('.cart-plus-minus > input[name=qtybutton]').val(),
                  function(data) {
@@ -178,7 +178,7 @@
                           <div class="cart-btn">
                             <a
                               href="javascript:void(0)"
-                              onclick="BasicThemeCart.addProduct({{ product.id }}, 1);"
+                              onclick="ThemeBasicCart.addProduct({{ product.id }}, 1);"
                               class="add-to-curt"
                               title="Add to cart">
                               Add to cart</a>
@@ -246,7 +246,7 @@
                       <div class="shoe single-item hvr-outline-out">
                         <a
                           href="javascript:void(0)"
-                          onclick="BasicThemeCart.addProduct({{ product.id }}, 1);"
+                          onclick="ThemeBasicCart.addProduct({{ product.id }}, 1);"
                           class="similar-add-to-cart"
                           title="Add to cart"
                         >

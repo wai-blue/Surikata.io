@@ -11,6 +11,14 @@
   <title>{{ config.brand.title }}</title>
   <script src='{{ config.url }}/adios/cache.js'></script>
   <link rel=stylesheet type='text/css' href='{{ config.url }}/adios/cache.css' rel="stylesheet">
+  <script>
+    var _APP_URL = '{{ config.url }}';
+    var _DEVEL_MODE = {% if config.devel_mode %} true {% else %} false {% endif %};
+
+    if (_DEVEL_MODE) {
+      setTimeout(desktop_console_update, 300);
+    }
+  </script>
 </head>
 
 <body id="page-top">
@@ -275,15 +283,6 @@
   </div>
 
   {{ widgets_js|raw }}
-
-  <script>
-    var _APP_URL = '{{ config.url }}';
-    var _DEVEL_MODE = {% if config.devel_mode %} true {% else %} false {% endif %};
-
-    if (_DEVEL_MODE) {
-      setTimeout(desktop_console_update, 300);
-    }
-  </script>
 
 </body>
 

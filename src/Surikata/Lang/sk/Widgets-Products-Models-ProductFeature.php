@@ -9,7 +9,7 @@ $dictionary = [
   "Entry method" => "Vstupná metóda",
   "Minimum value" => "Minimálna hodnota",
   "Maximum value" => "Maximálna hodnota",
-  "Order index" => "Index objednávky",
+  "Order index" => "V poradí",
   "General" => "Všeobecné",
   "Translations" => "Preklady",
   "New product feature" => "Nová vlastnosť produktu",
@@ -17,5 +17,6 @@ $dictionary = [
   "Number" => "Číslo",
   "Text" => "Text",
   "Yes/No" => "Áno/Nie",
-  "Product features" => "Vlastnosti produktu"
+  "Product features" => "Vlastnosti produktu",
+  "No translations available." => "Žiadne preklady k dispozícii"
 ];

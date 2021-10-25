@@ -161,7 +161,7 @@ class ProductFeature extends \ADIOS\Core\Model {
     }
 
     if (count($tabTranslations) == 0) {
-      $tabTranslations[] = ["html" => "No translations available."];
+      $tabTranslations[] = ["html" => $this->translate("No translations available.")];
     }
 
     $params["template"] = [

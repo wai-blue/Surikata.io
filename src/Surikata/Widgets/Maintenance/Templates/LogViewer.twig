@@ -1,4 +1,4 @@
-<h1>LogViewer: {{ severity }}</h1>
+<h1>{{ translate("LogViewer") }}: {{ severity }}</h1>
 <pre style='background:#202020;color:white;padding:1em;height:calc(100vh - 300px);overflow:auto'>{{ logLines|join('') }}</pre>
 <a
   class='btn btn-light'
@@ -8,4 +8,4 @@
       location.reload();
     });
   '
->Clear log</a>
+>{{ translate("Clear log") }}</a>

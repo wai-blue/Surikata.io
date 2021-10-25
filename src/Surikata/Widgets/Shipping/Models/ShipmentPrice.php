@@ -6,9 +6,11 @@ class ShipmentPrice extends \ADIOS\Core\Model {
   const DELIVERY_FEE_BY_ORDER_PRICE = 1;
   const DELIVERY_FEE_BY_ORDER_WEIGHT = 2;
 
+  public static $allItemsCache = NULL;
+
   var $sqlName = "shipping_prices";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
-  var $urlBase = "DeliveryAndPayment/Prices/Method";
+  var $urlBase = "DeliveryAndPayment/Prices/{{ id_shipment }}/Methods";
 
   public function init() {
     $this->tableTitle = $this->translate("Shipment prices");
@@ -39,28 +41,28 @@ class ShipmentPrice extends \ADIOS\Core\Model {
 
       "price_from" => [
         "type" => "float",
-        "title" => $this->translate("Order price: From"),
+        "title" => $this->translate("Order price: From") . " >=",
         "unit" => $this->adios->locale->currencySymbol(),
         "show_column" => TRUE
       ],
 
       "price_to" => [
         "type" => "float",
-        "title" => $this->translate("Order price: To"),
+        "title" => $this->translate("Order price: To") . " <",
         "unit" => $this->adios->locale->currencySymbol(),
         "show_column" => TRUE
       ],
 
       "weight_from" => [
         "type" => "float",
-        "title" => $this->translate("Order weight: From"),
+        "title" => $this->translate("Order weight: From") . " >=",
         "unit" => "g",
         "show_column" => TRUE
       ],
 
       "weight_to" => [
         "type" => "float",
-        "title" => $this->translate("Order weight: To"),
+        "title" => $this->translate("Order weight: To") . " <",
         "unit" => "g",
         "show_column" => TRUE
       ],
@@ -122,6 +124,8 @@ class ShipmentPrice extends \ADIOS\Core\Model {
   }
 
   public function formParams($data, $params) {
+
+    $params['default_values'] = ['id_shipment' => (int) $params['id_shipment']];
     $params['columns']['id_shipment']['onchange'] = "
       {$params['uid']}_generate_unique_name();
     ";
@@ -238,7 +242,7 @@ class ShipmentPrice extends \ADIOS\Core\Model {
           ->where('id_shipment', $shipment['id'])
           ->where('delivery_fee_calculation_method', self::DELIVERY_FEE_BY_ORDER_WEIGHT)
           ->where('weight_from', '<=', $weightTotal)
-          ->where('weight_to', '>=', $weightTotal)
+          ->where('weight_to', '>', $weightTotal)
           ->get()
           ->toArray()
         );
@@ -256,13 +260,5 @@ class ShipmentPrice extends \ADIOS\Core\Model {
     ];
   }
 
-  public function getById(int $idShipment) {
-    return reset(
-      $this
-      ->where('id_shipment', $idShipment)
-      ->get()
-      ->toArray()
-    );
-  }
 
 }

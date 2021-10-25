@@ -2,7 +2,7 @@
   <span class="title">
     Cart
   </span>
-  <button class="offcanvas-close" onclick="BasicThemeCart.showMiniCart()">×</button>
+  <button class="offcanvas-close" onclick="ThemeBasicCart.showMiniCart()">×</button>
 </div>
 
 {% if cartContents.items is iterable and cartContents.items|length > 0 %}
@@ -18,7 +18,7 @@
           <span class="amount">{{ item.unit_price|formatPrice }} €</span></span>
           <a
             href="javascript:void(0)"
-            onclick="BasicThemeCart.removeProduct({{ item.PRODUCT.id }});"
+            onclick="ThemeBasicCart.removeProduct({{ item.PRODUCT.id }});"
             class="remove"
           >
             <i class="fas fa-trash-alt"></i>

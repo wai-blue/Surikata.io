@@ -72,12 +72,7 @@ class ProductExtension extends \ADIOS\Core\Model {
     $params['show_controls'] = FALSE;
     $params['show_filter'] = FALSE;
     $params['title'] = " ";
-    $params['header'] = $this->translate(
-      "Product extensions are not separate products. They can be used to extend the
-      product's detail page to sell special extensions to the product. The visitor
-      can check desired extensions at the product's detail page before adding
-      the product to the shopping cart."
-    );
+    $params['header'] = $this->translate("Product extensions are not separate products. They can be used to extend the product's detail page to sell special extensions to the product. The visitor can check desired extensions at the product's detail page before adding the product to the shopping cart.");
 
     return $params;
   }

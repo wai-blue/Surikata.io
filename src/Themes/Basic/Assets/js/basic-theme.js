@@ -89,11 +89,12 @@ window.onpopstate = function (e) {
   var BasicThemeProductCatalog = new BasicThemeProductCatalog();
   
   ////////////////////////////////////////
-  // BasicThemeCart
-  function BasicThemeCart() { SurikataCart.call(this); }
-  BasicThemeCart.prototype = Object.create(SurikataCart.prototype);
+  // ThemeBasicCart
 
-  BasicThemeCart.prototype.updatePrice = function (data) {
+  function ThemeBasicCart() { PluginWAICustomerCart.call(this); }
+  ThemeBasicCart.prototype = Object.create(PluginWAICustomerCart.prototype);
+
+  ThemeBasicCart.prototype.updatePrice = function (data) {
     var spolu = (data.itemUpdated['quantity'] * data.itemUpdated['unit_price']).toFixed(2).toString();
     var spolu_text = spolu.replace(".", ",");
 
@@ -103,7 +104,7 @@ window.onpopstate = function (e) {
     $('#priceTotal').text(total_price);
   }
 
-  /*BasicThemeCart.prototype.updateNavigationCart = function(product) {
+  /*ThemeBasicCart.prototype.updateNavigationCart = function(product) {
     let cartTotal = $('#cartTotal .amount').text();
     let newCartTotal = (parseFloat(cartTotal) - parseFloat(product.itemRemoved[0]['unit_price'] * product.itemRemoved[0]['quantity'])).toFixed(2);
 
@@ -111,11 +112,11 @@ window.onpopstate = function (e) {
       $('#cartTotal .amount').text(newCartTotal);
       $('.minicart-product-list #cartProduct_' + product.itemRemoved[0]['id_product']).hide();
     } else {
-      BasicThemeCart.emptyNavigationCart();
+      ThemeBasicCart.emptyNavigationCart();
     }
   }*/
 
-  BasicThemeCart.prototype.updateHeaderOverview = function (html) {
+  ThemeBasicCart.prototype.updateHeaderOverview = function (html) {
     $('#minicart').html(html);
 
     let count = $('#navigationCart li').length;
@@ -125,7 +126,7 @@ window.onpopstate = function (e) {
     })
   }
 
-  BasicThemeCart.prototype.updateDetailedOverview = function() {
+  ThemeBasicCart.prototype.updateDetailedOverview = function() {
     Surikata.renderPlugin(
       'WAI/Order/CartOverview',
       {},
@@ -137,7 +138,7 @@ window.onpopstate = function (e) {
     );
   }
   
-  BasicThemeCart.prototype.updateCheckoutOverview = function() {
+  ThemeBasicCart.prototype.updateCheckoutOverview = function() {
     let data = this.serializeOrderData();
     data['renderOnly'] = 'orderOverview';
   
@@ -153,7 +154,7 @@ window.onpopstate = function (e) {
     );
   }
 
-  BasicThemeCart.prototype.showMiniCart = function() {
+  ThemeBasicCart.prototype.showMiniCart = function() {
     var miniCart = $("#minicart");
 
     // Refresh cart items (HERE)
@@ -166,11 +167,11 @@ window.onpopstate = function (e) {
     }
   }
   
-  BasicThemeCart.prototype.placeOrder = function() {
+  ThemeBasicCart.prototype.placeOrder = function() {
     $('#orderDataForm input').removeClass('required-empty');
     $('#orderDataForm label').removeClass('required-empty');
 
-    SurikataCart.prototype.placeOrder(
+    PluginWAICustomerCart.prototype.placeOrder(
       function (dataSuccess) {
         if (dataSuccess.status == 'OK') {
           window.location.href = dataSuccess.orderConfirmationUrl;
@@ -200,7 +201,7 @@ window.onpopstate = function (e) {
     );
   }
 
-  BasicThemeCart.prototype.showShippingAddress = function() {
+  ThemeBasicCart.prototype.showShippingAddress = function() {
     var address = $("#diffShippingAddress");
 
     var input = $("input[name='differentDeliveryAddress']");
@@ -215,7 +216,7 @@ window.onpopstate = function (e) {
     }
   }
 
-  var BasicThemeCart = new BasicThemeCart();
+  var ThemeBasicCart = new ThemeBasicCart();
   
   ////////////////////////////////////////
   // BasicThemePopup

@@ -34,12 +34,12 @@
                         <input
                           onchange="
                             validateProductQty(this);
-                            BasicThemeCart.updateProductQty(
+                            ThemeBasicCart.updateProductQty(
                               {{ item.PRODUCT.id }},
                               this.value,
                               function(data) {
                                 console.log(data);
-                                BasicThemeCart.updatePrice(data);
+                                ThemeBasicCart.updatePrice(data);
                               }
                             )
                           "
@@ -60,11 +60,11 @@
                     <a
                       href="javascript:void(0)"
                       onclick="
-                        BasicThemeCart.removeProduct(
-                      {{ item.PRODUCT.id }},
-                        function(data) {
-                        BasicThemeCart.updateDetailedOverview();
-                        }
+                        ThemeBasicCart.removeProduct(
+                          {{ item.PRODUCT.id }},
+                          function(data) {
+                            ThemeBasicCart.updateDetailedOverview();
+                          }
                         );
                         "
                     ><i class="fa fa-times"></i></a>
@@ -83,10 +83,10 @@
             <div class="cart-clear">
               <!--<button>Update Shopping Cart</button>-->
               <a href="javascript:void(0)" onclick="
-                BasicThemeCart.removeProduct(
+                ThemeBasicCart.removeProduct(
                   0,
                   function(data) {
-                    BasicThemeCart.updateDetailedOverview();
+                    ThemeBasicCart.updateDetailedOverview();
                   }
                 )
                 ;

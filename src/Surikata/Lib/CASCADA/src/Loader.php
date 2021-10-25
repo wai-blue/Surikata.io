@@ -37,6 +37,13 @@ class Loader {
     $this->themeDir = $config['themeDir'] ?? "";
     $this->twigTemplatesSubDir = $config["twigTemplatesSubDir"] ?? "Templates";
 
+    if (
+      substr($this->rewriteBase, 0, 1) != "/"
+      || substr($this->rewriteBase, -1) != "/"
+    ) {
+      throw new \Exception("RewriteBase must start and end with a slash (/).");
+    }
+
     // extract pageUrl
     if ($this->rewriteBase == "/") {
       $this->pageUrl = $_SERVER['REQUEST_URI'];

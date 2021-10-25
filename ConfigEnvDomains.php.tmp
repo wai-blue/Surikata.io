@@ -19,7 +19,8 @@ $configEnv["domains"] = [
   ],
 ];
 
-$slug = reset(explode("/", str_replace(REWRITE_BASE, "", $_SERVER["REQUEST_URI"])));
+$re = "/^".str_replace("/", "\\/", REWRITE_BASE)."/";
+$slug = reset(explode("/", preg_replace($re, "", $_SERVER["REQUEST_URI"])));
 
 $domainToRender = reset($configEnv["domains"]);
 foreach ($configEnv["domains"] as $domain) {
@@ -29,4 +30,4 @@ foreach ($configEnv["domains"] as $domain) {
 }
 
 define("WEBSITE_DOMAIN_TO_RENDER", $domainToRender["name"]);
-define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]);
+define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");

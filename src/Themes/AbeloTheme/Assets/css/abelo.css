@@ -87,7 +87,7 @@
   line-height: 20px;
   height: 22px;
   font-size: 11px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   text-align: center;
   z-index: 4;
   border-radius: 5px;
@@ -236,7 +236,7 @@
   font-size: 15px;
   color: var(--footer-heading-color);
   font-weight: 600;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
 }
 .shop-sidebar-wrap .sidebar-widget-tag li {
   line-height: 1;
@@ -255,7 +255,7 @@
   border-radius: 30px;
   background: #fff;
   margin: 4px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   cursor: pointer;
 }
 .shop-sidebar-wrap .sidebar-widget-tag li label:hover {
@@ -639,7 +639,7 @@ ul .dots::before {
   display: inline-block;
   background: #fff;
   z-index: 2;
-  text-transform: capitalize !important;
+  /* text-transform: capitalize !important; */
   font-weight: 400;
 }
 

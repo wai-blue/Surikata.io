@@ -1194,6 +1194,7 @@ class DB {
       $summaryColumns = [];
       $virtualColumns = [];
       $codeListColumns = [];
+      $lookupColumns = [];
       $summaryColumnsSubselect = [];
       $leftJoins = [];
 
@@ -1236,6 +1237,10 @@ class DB {
               `{$lookupTable}` as `{$lookupTableAlias}`
               on `{$lookupTableAlias}`.`id` = `{$table_name}`.`{$col_name}`
           ";
+
+          foreach (array_keys($lookupModel->columns()) as $lookupColumnName) {
+            $lookupColumns[] = "`{$lookupTableAlias}`.`{$lookupColumnName}` as LOOKUP___{$col_name}___{$lookupColumnName}";
+          }
 
         } else if (('int' == $col_definition['type'] || 'varchar' == $col_definition['type']) && is_array($col_definition['enum_values'])) {
           if ($col_definition['virtual']) {
@@ -1312,12 +1317,12 @@ class DB {
         if ($count_rows && empty($where)) {
           $selectItems = ["{$table_name}.*"];
         } else {
-          $selectItems = array_merge(["{$table_name}.*"], $virtualColumns, $codeListColumns);
+          $selectItems = array_merge(["{$table_name}.*"], $virtualColumns, $codeListColumns, $lookupColumns);
         }
 
         $query = "
           select
-            ".join(", ", $selectItems)."
+            ".join(",\n            ", $selectItems)."
           from $table_name
           ".join(" ", $leftJoins)."
           $where

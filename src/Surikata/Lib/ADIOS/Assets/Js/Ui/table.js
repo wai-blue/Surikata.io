@@ -1,3 +1,5 @@
+  var ui_table_params = {};
+ 
 
   function ui_table_settings_click(uid){
 
@@ -61,11 +63,9 @@
 
       params.refresh = 1;
 
-      // if (is_ajax) {
-        _ajax_update(action, params, uid);
-      // } else {
-      //   desktop_render(action, params);
-      // }
+      ui_table_params[uid] = params;
+
+      _ajax_update(action, params, uid);
     }
   };
 

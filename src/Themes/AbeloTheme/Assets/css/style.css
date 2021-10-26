@@ -409,7 +409,7 @@ p {
 .section-title h2 {
   margin: 0;
   position: relative;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   font-weight: 500;
   line-height: 1;
   display: inline-block;
@@ -656,7 +656,7 @@ p {
   line-height: 17px;
   position: relative;
   color: #47494a;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   margin-top: 6px;
   margin-right: 50px;
   margin-left: 100px;
@@ -768,7 +768,7 @@ p {
   display: block;
   overflow: hidden;
   line-height: 24px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   word-wrap: break-word;
   background: #fff;
   color: #272727;
@@ -913,7 +913,7 @@ p {
   font-size: 14px;
   color: #272727;
   background: transparent;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   line-height: 24px;
   height: 24px;
   position: relative;
@@ -963,7 +963,7 @@ p {
 .header-menu .header-horizontal-menu li.menu-dropdown ul.main-sub-menu li a {
   color: #47494a;
   font-weight: 400;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
 }
 .header-menu .header-horizontal-menu li.menu-dropdown ul.main-sub-menu li a i {
   position: absolute;
@@ -1043,7 +1043,7 @@ p {
 .header-menu .header-horizontal-menu li.menu-dropdown ul.mega-menu-wrap li li.mega-menu-title a {
   font-size: 16px;
   color: #2b2d2f;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   font-family: "SofiaPro-SemiBold";
 }
 .header-menu .header-horizontal-menu li.menu-dropdown ul.mega-menu-wrap li li.mega-menu-title a:hover {
@@ -1058,7 +1058,7 @@ p {
 .header-menu .header-horizontal-menu li.menu-dropdown ul.mega-menu-wrap li li a {
   color: #47494a;
   font-weight: 400;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   margin: 3px 0;
 }
 .header-menu .header-horizontal-menu li.menu-dropdown ul.mega-menu-wrap li li a:hover {
@@ -1114,7 +1114,7 @@ p {
 .header-menu .header-horizontal-menu li.menu-dropdown ul.mega-menu-wrap.mega-menu-wrap-2 li .custom-single-item h4 a {
   font-size: 16px;
   color: #2b2d2f;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   font-family: "SofiaPro-SemiBold";
 }
 .header-menu .header-horizontal-menu li.menu-dropdown ul.mega-menu-wrap.mega-menu-wrap-2 li .custom-single-item h4 a:hover {
@@ -1124,7 +1124,7 @@ p {
   font-size: 15px;
   font-weight: 400;
   color: #69696c;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   line-height: 24px;
   padding: 0 50px 0 0;
 }
@@ -1282,7 +1282,7 @@ p {
   font-size: 14px;
   color: #272727;
   background: transparent;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   line-height: 24px;
   height: 24px;
   position: relative;
@@ -1332,7 +1332,7 @@ p {
 .header-menu-3 .header-horizontal-menu li.menu-dropdown ul.main-sub-menu li a {
   color: #47494a;
   font-weight: 400;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
 }
 .header-menu-3 .header-horizontal-menu li.menu-dropdown ul.main-sub-menu li a i {
   position: absolute;
@@ -1412,7 +1412,7 @@ p {
 .header-menu-3 .header-horizontal-menu li.menu-dropdown ul.mega-menu-wrap li li.mega-menu-title a {
   font-size: 16px;
   color: #2b2d2f;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   font-family: "SofiaPro-SemiBold";
 }
 .header-menu-3 .header-horizontal-menu li.menu-dropdown ul.mega-menu-wrap li li.mega-menu-title a:hover {
@@ -1427,7 +1427,7 @@ p {
 .header-menu-3 .header-horizontal-menu li.menu-dropdown ul.mega-menu-wrap li li a {
   color: #47494a;
   font-weight: 400;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   margin: 3px 0;
 }
 .header-menu-3 .header-horizontal-menu li.menu-dropdown ul.mega-menu-wrap li li a:hover {
@@ -1483,7 +1483,7 @@ p {
 .header-menu-3 .header-horizontal-menu li.menu-dropdown ul.mega-menu-wrap.mega-menu-wrap-2 li .custom-single-item h4 a {
   font-size: 16px;
   color: #2b2d2f;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   font-family: "SofiaPro-SemiBold";
 }
 .header-menu-3 .header-horizontal-menu li.menu-dropdown ul.mega-menu-wrap.mega-menu-wrap-2 li .custom-single-item h4 a:hover {
@@ -1493,7 +1493,7 @@ p {
   font-size: 15px;
   font-weight: 400;
   color: #69696c;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   line-height: 18px;
   padding: 0 50px 0 0;
 }
@@ -1958,7 +1958,7 @@ p {
   color: #272727;
   font-size: 14px;
   font-weight: 700;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   line-height: 24px;
   margin-bottom: 5px;
 }
@@ -2041,7 +2041,7 @@ p {
 }
 .popular-categories-area .popular-category-slider-wrapper .category-discript h4 {
   font-size: 15px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   color: #272727;
   display: block;
   line-height: 1;
@@ -2055,7 +2055,7 @@ p {
   font-size: 13px;
   line-height: 24px;
   display: block;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
 }
 .popular-categories-area .popular-category-slider-wrapper .category-discript a:hover {
   color: #266cfb;
@@ -2161,7 +2161,7 @@ p {
   line-height: 20px;
   height: 22px;
   font-size: 12px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   text-align: center;
   z-index: 4;
   border-radius: 5px;
@@ -2210,7 +2210,7 @@ p {
   font-weight: 400;
   font-size: 14px;
   color: #272727;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
 }
 .list-product .product-decs h2 a:hover {
   color: #266cfb;
@@ -2252,7 +2252,7 @@ p {
   height: 20px;
   font-size: 12px;
   font-weight: 700;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   text-align: center;
   z-index: 4;
   margin-left: 2px;
@@ -2292,7 +2292,7 @@ p {
   padding: 0;
   font-size: 16px;
   text-align: center;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
 }
 .list-product .add-to-link a:hover {
   background: #266cfb;
@@ -2341,7 +2341,7 @@ p {
 }
 .feature-tab-area .nav-tabs li a {
   margin: 0;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   position: relative;
   padding-bottom: 20px;
   display: inline-block;
@@ -2411,7 +2411,7 @@ p {
 }
 .hot-deal-slider-wrapper .list-product .in-stock {
   font-size: 13px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   color: #9d9c9c;
   line-height: 1;
   display: block;
@@ -2786,7 +2786,7 @@ p {
   line-height: 24px;
   padding: 0;
   display: block;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   color: var(--footer-link-color);
   margin-bottom: 0;
   display: block;
@@ -2848,7 +2848,7 @@ p {
   line-height: 1;
   color: #272727;
   font-weight: 600;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   position: relative;
   display: block;
   margin-bottom: 10px;
@@ -2894,7 +2894,7 @@ p {
   font-size: 18px;
   color: #272727;
   margin: 0 20px 0 0;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   display: inline-block;
   font-weight: 600;
   vertical-align: bottom;
@@ -3195,7 +3195,7 @@ body.offcanvas-open {
   position: relative;
 }
 .offcanvas .inner .offcanvas-menu ul li .sub-menu li a {
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
 }
 .offcanvas .inner .offcanvas-menu ul li .menu-expand {
   position: absolute;
@@ -4007,7 +4007,7 @@ offcanvas-menu > ul > li .menu-expand {
   float: left;
   color: #888;
   font-weight: 400;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   margin-left: 50px;
 }
 @media only screen and (max-width: 575px) {
@@ -4039,7 +4039,7 @@ offcanvas-menu > ul > li .menu-expand {
   float: left;
   color: #888;
   font-weight: 400;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   width: 25%;
 }
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
@@ -4149,7 +4149,7 @@ offcanvas-menu > ul > li .menu-expand {
 }
 .shop-list-wrap .list-product .box-inner .in-stock {
   font-size: 14px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   color: #888;
   line-height: 1;
   display: block;
@@ -4207,7 +4207,7 @@ offcanvas-menu > ul > li .menu-expand {
 .shop-list-wrap .list-product .box-inner .add-to-link li a {
   display: block;
   text-align: center;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   font-size: 14px;
   border: none;
   margin-left: 10px;
@@ -4343,7 +4343,7 @@ offcanvas-menu > ul > li .menu-expand {
   display: inline-block;
   background: #fff;
   z-index: 2;
-  text-transform: capitalize !important;
+  /* text-transform: capitalize !important; */
   font-weight: 400;
 }
 .shop-sidebar-wrap h3:after {
@@ -4368,7 +4368,7 @@ offcanvas-menu > ul > li .menu-expand {
   color: #777;
   display: block;
   font-size: 14px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   margin: 0;
   padding: 0;
   border: none;
@@ -4403,7 +4403,7 @@ offcanvas-menu > ul > li .menu-expand {
   color: #69696c;
   display: block;
   font-size: 13px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   line-height: 35px;
   margin: 0;
   padding: 0;
@@ -4503,7 +4503,7 @@ offcanvas-menu > ul > li .menu-expand {
   margin-bottom: 30px;
   margin-top: 10px;
   line-height: 24px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   font-weight: 400;
 }
 .shop-sidebar-wrap .sidebar-widget-group .price-slider-amount {
@@ -4548,7 +4548,7 @@ offcanvas-menu > ul > li .menu-expand {
   border-radius: 30px;
   background: #fff;
   margin: 4px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
 }
 .shop-sidebar-wrap .sidebar-widget-tag li a:hover {
   background-color: #266cfb;
@@ -4661,7 +4661,7 @@ offcanvas-menu > ul > li .menu-expand {
 .product-details-content h2 {
   color: #47494a;
   font-size: 24px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   line-height: 1;
   font-weight: 400;
   margin: 0 0 25px 0;
@@ -4755,7 +4755,7 @@ offcanvas-menu > ul > li .menu-expand {
   background: #2b2d2f;
   vertical-align: 4px;
   border-radius: 5px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   margin-left: 5px;
 }
 .product-details-content .pro-details-list {
@@ -4978,7 +4978,7 @@ offcanvas-menu > ul > li .menu-expand {
 .description-review-topbar.nav a {
   background: transparent;
   border: 0;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   line-height: 24px;
   color: #888;
   padding: 0 0 15px 0;
@@ -6132,7 +6132,7 @@ offcanvas-menu > ul > li .menu-expand {
   font-size: 13px;
   line-height: 15px;
   color: #1d1d1d;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   letter-spacing: 0.5px;
 }
 .compare-table .table tbody tr td.product-image-title .title {
@@ -6215,7 +6215,7 @@ offcanvas-menu > ul > li .menu-expand {
   font-size: 25px;
   font-weight: 700;
   margin: 0 20px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   transition: all 0.3s ease 0s;
   color: #272727;
 }
@@ -6369,7 +6369,7 @@ offcanvas-menu > ul > li .menu-expand {
 .single-my-account .myaccount-info-wrapper .billing-info label {
   color: #888;
   font-size: 14px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
 }
 .single-my-account .myaccount-info-wrapper .billing-info input {
   background: transparent none repeat scroll 0 0;
@@ -6454,7 +6454,7 @@ offcanvas-menu > ul > li .menu-expand {
   color: #888;
   font-size: 14px;
   margin: 0;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   line-height: 24px;
 }
 .single-my-account .myaccount-info-wrapper .entries-wrapper .entries-edit-delete a {
@@ -6815,7 +6815,7 @@ offcanvas-menu > ul > li .menu-expand {
 .blog-post-content-inner .read-more-btn {
   color: #272727;
   font-size: 14px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   line-height: 1;
   position: relative;
   display: inline-block;
@@ -6934,7 +6934,7 @@ offcanvas-menu > ul > li .menu-expand {
   font-family: "Open Sans", sans-serif;
   font-size: 24px;
   color: #272727;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   line-height: 16px;
   font-weight: 600;
   margin: 0 0 40px;
@@ -7006,7 +7006,7 @@ offcanvas-menu > ul > li .menu-expand {
   font-family: "Open Sans", sans-serif;
   font-size: 24px;
   color: #272727;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   line-height: 16px;
   font-weight: 600;
   margin: 0 0 10px;
@@ -7342,7 +7342,7 @@ offcanvas-menu > ul > li .menu-expand {
 }
 .best-sell-area .product-inner .product-decs .in-stock {
   font-size: 13px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   color: #9d9c9c;
   line-height: 1;
   display: block;
@@ -7441,7 +7441,7 @@ offcanvas-menu > ul > li .menu-expand {
   position: absolute;
   top: 0;
   right: 0;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   font-size: 0;
   font-weight: 700;
   font-size: 14px;
@@ -7500,7 +7500,7 @@ offcanvas-menu > ul > li .menu-expand {
   font-weight: 700;
   margin: 10px 0;
   display: inline-block;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
 }
 .blank-page-area .page-not-found a:hover {
   color: #266cfb;

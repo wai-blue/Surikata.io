@@ -305,51 +305,6 @@ class Table extends \ADIOS\Core\UI\View {
         $this->params['add_button_params']['text'] = $this->model->addButtonText;
       }
 
-      if (_count($this->search)) {
-        $tmpSearchHtml = "";
-
-        foreach ($this->search as $searchColName => $searchValue) {
-          if (!empty($searchValue)) {
-            if (strpos($searchColName, "LOOKUP___") === 0) {
-              list($tmp, $tmpSrcColName, $tmpLookupColName) = explode("___", $searchColName);
-              $tmpSrcColumn = $this->model->columns()[$tmpSrcColName];
-              $tmpLookupModel = $this->adios->getModel($tmpSrcColumn['model']);
-              $tmpColumn = $tmpLookupModel->columns()[$tmpLookupColName];
-              $tmpTitle = $tmpLookupModel->tableTitle." / ".$tmpColumn["title"];
-            } else {
-              $tmpColumn = $this->columns[$searchColName];
-              $tmpTitle = $tmpColumn['title'];
-            }
-
-            $tmpSearchHtml .= "
-              ".hsc($tmpTitle)."
-              = ".hsc($searchValue)."
-            ";
-          }
-        }
-        $this->add(
-          "
-            <div class='card shadow mb-4'>
-              <a class='card-header py-3'>
-                <h6 class='m-0 font-weight-bold text-primary'>Search is activated</h6>
-              </a>
-              <div>
-                <div class='card-body'>
-                  <div class='mb-2'>
-                    {$tmpSearchHtml}
-                  </div>
-                  ".$this->adios->ui->Button([
-                    "type" => "close",
-                    "text" => "Clear filter (Show all records)",
-                    "onclick" => "desktop_update('{$this->adios->requestedAction}');",
-                  ])->render()."
-                </div>
-              </div>
-            </div>
-          ",
-          "title"
-        );
-      }
     }
 
 
@@ -463,6 +418,70 @@ class Table extends \ADIOS\Core\UI\View {
               'left' => $titleButtons,
               'center' => $this->params['title'],
             ])->render();
+          }
+
+          if (_count($this->search)) {
+            $tmpSearchHtml = "";
+            $tmpColumns = $this->model->columns();
+
+            foreach ($this->search as $searchColName => $searchValue) {
+              if (!empty($searchValue)) {
+                $tmpColumn = $this->columns[$searchColName];
+
+                if (strpos($searchColName, "LOOKUP___") === 0) {
+                  list($tmp, $tmpSrcColName, $tmpLookupColName) = explode("___", $searchColName);
+                  $tmpSrcColumn = $tmpColumns[$tmpSrcColName];
+                  $tmpLookupModel = $this->adios->getModel($tmpSrcColumn["model"]);
+                  $tmpColumn = $tmpLookupModel->columns()[$tmpLookupColName];
+                  $tmpTitle = $tmpLookupModel->tableTitle." / ".$tmpColumn["title"];
+                } else if ($tmpColumn["type"] == "lookup" && is_numeric($searchValue)) {
+                  $tmpLookupModel = $this->adios->getModel($tmpColumn["model"]);
+
+                  $tmpQuery = $tmpLookupModel->lookupSqlQuery(
+                    NULL,
+                    NULL,
+                    [],
+                    [],
+                    "id = {$searchValue}" // having
+                  );
+
+                  $tmp = reset($this->adios->db->get_all_rows_query($tmpQuery));
+
+                  $tmpTitle = $tmpColumn['title'];
+                  $searchValue = $tmp['input_lookup_value'];
+                } else {
+                  $tmpTitle = $tmpColumn['title'];
+                }
+
+                $tmpSearchHtml .= "
+                  ".hsc($tmpTitle)."
+                  = ".hsc($searchValue)."
+                ";
+              }
+            }
+
+            $html .= "
+              <div class='card shadow mb-4'>
+                <a class='card-header py-3'>
+                  <h6 class='m-0 font-weight-bold text-primary'>
+                    <i class='fas fa-filter mr-2'></i>
+                    ".$this->translate("Records are filtered")."
+                  </h6>
+                </a>
+                <div>
+                  <div class='card-body'>
+                    <div class='mb-2'>
+                      {$tmpSearchHtml}
+                    </div>
+                    ".$this->adios->ui->Button([
+                      "type" => "close",
+                      "text" => $this->translate("Clear filter"),
+                      "onclick" => "desktop_update('{$this->adios->requestedAction}');",
+                    ])->render()."
+                  </div>
+                </div>
+              </div>
+            ";
           }
 
           if (!empty($this->params['header'])) {

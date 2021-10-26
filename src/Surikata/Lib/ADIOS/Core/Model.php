@@ -759,256 +759,265 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
     $type = $column['type'];
     $s = explode(',', $filterValue);
-    if (('int' == $type && _count($column['enum_values'])) || 'varchar' == $type || 'text' == $type || 'color' == $type || 'file' == $type || 'image' == $type || 'enum' == $type || 'password' == $type || 'lookup' == $type) {
-        $w = explode(' ', $filterValue);
+    if (
+      ($type == 'int' && _count($column['enum_values']))
+      || in_array($type, ['varchar', 'text', 'color', 'file', 'image', 'enum', 'password', 'lookup'])
+    ) {
+      $w = explode(' ', $filterValue);
     } else {
-        $w = $filterValue;
+      $w = $filterValue;
     }
 
-    if ('' != trim($column['sql']) && 'lookup' != $type) {
-        if (!('int' == $type && _count($column['enum_values']))) {
-            $columnName = '('.$column['sql'].')';
-        }
+    if ($column['virtual']) {
+      if ($type == 'int' && _count($column['enum_values'])) {
+        //
+      } else {
+        $columnName = '('.$column['sql'].')';
+      }
     }
 
     $return = 'false';
 
     // trochu komplikovanejsia kontrola, ale znamena, ze vyhladavany retazec sa pouzije len ak uz nie je delitelny podla ciarok, alebo medzier
-    // pripadne tato kontrola eplati ak je na zaciatku =
+    // pripadne tato kontrola neplati ak je na zaciatku =
 
     if (
-        '=' == $filterValue[0]
+      '=' == $filterValue[0]
       || (is_array($s) && 1 == count($s) && is_array($w) && 1 == count($w))
       || (is_array($s) && 1 == count($s) && !is_array($w) && '' != $w)
     ) {
-        $s = reset($s);
+      $s = reset($s);
 
-        if ('=' == $filterValue[0]) {
-            $s = substr($filterValue, 1);
+      if ('=' == $filterValue[0]) {
+        $s = substr($filterValue, 1);
+      }
+
+      if ('!=' == substr($s, 0, 2)) {
+        $not = true;
+        $s = substr($s, 2);
+      }
+
+      // queryies pre typy
+
+      if ('bool' == $type) {
+        if ('Y' == $s) {
+          $return = "`{$columnName}` = '".$this->adios->db->escape(trim($s))."' ";
+        } else {
+          $return = "(`{$columnName}` != 'Y' OR `{$columnName}` is null) ";
+        }
+      }
+
+      if ('boolean' == $type) {
+        if ('0' == $s) {
+          $return = "(`{$columnName}` = '".$this->adios->db->escape(trim($s))."' or `{$columnName}` is null) ";
+        } else {
+          $return = "`{$columnName}` != '0'";
+        }
+      }
+
+      if ($type == 'int' && _count($column['enum_values'])) {
+        $return = " `{$columnName}_enum_value` like '%".$this->adios->db->escape(trim($s))."%'";
+      } else if (in_array($type, ['varchar', 'text', 'color', 'file', 'image', 'enum', 'password'])) {
+        $return = " `{$columnName}` like '%".$this->adios->db->escape(trim($s))."%'";
+      } else if ($type == 'lookup') {
+        if (is_numeric($s)) {
+          $return = " `{$columnName}` = ".$this->adios->db->escape($s)."";
+        } else {
+          $return = " `{$columnName}_lookup_sql_value` like '%".$this->adios->db->escape(trim($s))."%'";
+        }
+      }
+
+      if ('float' == $type || ('int' == $type && !_count($column['enum_values']))) {
+        $s = trim(str_replace(',', '.', $s));
+        $s = str_replace(' ', '', $s);
+
+        if (is_numeric($s)) {
+          $return = "({$columnName}=$s)";
+        } elseif ('-' != $s[0] && strpos($s, '-')) {
+          list($from, $to) = explode('-', $s);
+          $return = "({$columnName}>=".(trim($from) + 0)." and {$columnName}<=".(trim($to) + 0).')';
+        } elseif (preg_match('/^([\>\<=\!]{1,2})?([0-9\.\-]+)$/', $s, $m)) {
+          $operator = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? trim($m[1]) : '=');
+          $operand = trim($m[2]) + 0;
+          $return = "{$columnName} {$operator} {$operand}";
+        } else {
+          $return = 'FALSE';
+        }
+      }
+
+      if ('date' == $type) {
+        $s = str_replace(' ', '', $s);
+        $s = str_replace(',', '.', $s);
+
+        $return = 'false';
+
+        // ak je do filtru zadany znak '-', vyfiltruje nezadane datumy
+        if ($s === '-') {
+          $return = "({$columnName} IS NULL OR {$columnName} = '0000-00-00' OR {$columnName} = '')";
         }
 
-        if ('!=' == substr($s, 0, 2)) {
-            $not = true;
-            $s = substr($s, 2);
+        if (preg_match('/^([\>\<=\!]{1,2})?([0-9\.\-]+)$/', $s, $m)) {
+          $operator = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[1] : '=');
+          if (strtotime($m[2]) > 0) {
+            $to = date('Y-m-d', strtotime($m[2]));
+            $return = "{$columnName} {$operator} '{$to}'";
+          } else {
+            //
+          }
+        }
+        if (preg_match('/^([\>\<=\!]{1,2})([0-9\.\-]+)([\>\<=\!]{1,2})([0-9\.\-]+)$/', $s, $m)) {
+          $operator_1 = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[1] : '=');
+          $date_1 = date('Y-m-d', strtotime($m[2]));
+          $operator_2 = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[3] : '=');
+          $date_2 = date('Y-m-d', strtotime($m[4]));
+          if (strtotime($m[2]) > 0 && strtotime($m[4]) > 0) {
+            $return = "({$columnName} {$operator_1} '{$date_1}') and ({$columnName} {$operator_2} '{$date_2}')";
+          } else {
+            //
+          }
+        }
+        if (preg_match('/^([0-9\.\-]+)-([0-9\.\-]+)$/', $s, $m)) {
+          $date_1 = date('Y-m-d', strtotime($m[1]));
+          $date_2 = date('Y-m-d', strtotime($m[2]));
+          if (strtotime($m[1]) > 0 && strtotime($m[2]) > 0) {
+            $return = "({$columnName} >= '{$date_1}') and ({$columnName} <= '{$date_2}')";
+          } else {
+            //
+          }
+        }
+        if (preg_match('/^([0-9]+)\.([0-9]+)$/', $s, $m)) {
+          $month = $m[1];
+          $year = $m[2];
+          $return = "(month({$columnName}) = '{$month}') and (year({$columnName}) = '{$year}')";
+        }
+        if (preg_match('/^([\>\<=\!]{1,2})?([0-9]+)$/', $s, $m)) {
+          $operator = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[1] : '=');
+          $year = $m[2];
+          $return = "(year({$columnName}) {$operator} '{$year}')";
+        }
+      }
+
+      if ('datetime' == $type || 'timestamp' == $type) {
+        $s = str_replace(' ', '', $s);
+        $s = str_replace(',', '.', $s);
+
+        $return = 'false';
+
+        // ak je do filtru zadany znak '-', vyfiltruje nezadane datumy
+        if ($s === '-') {
+          $return = "({$columnName} IS NULL OR {$columnName} = '0000-00-00 00:00:00' OR {$columnName} = '')";
         }
 
-        // queryies pre typy
-
-        if ('bool' == $type) {
-            if ('Y' == $s) {
-                $return = "{$columnName} = '".$this->adios->db->escape(trim($s))."' ";
-            } else {
-                $return = "({$columnName} != 'Y' OR {$columnName} is null) ";
-            }
+        if (preg_match('/^([\>\<=\!]{1,2})?([0-9\.\-]+)$/', $s, $m)) {
+          $operator = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[1] : '=');
+          if (strtotime($m[2]) > 0) {
+            $to = date('Y-m-d', strtotime($m[2]));
+            $return = "date({$columnName}) {$operator} '{$to}'";
+          } else {
+            //
+          }
         }
-
-        if ('boolean' == $type) {
-            if ('0' == $s) {
-                $return = "({$columnName} = '".$this->adios->db->escape(trim($s))."'  or {$columnName} is null) ";
-            } else {
-                $return = "{$columnName} != '0'";
-            }
+        if (preg_match('/^([\>\<=\!]{1,2})([0-9\.\-]+)([\>\<=\!]{1,2})([0-9\.\-]+)$/', $s, $m)) {
+          $operator_1 = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[1] : '=');
+          $date_1 = date('Y-m-d', strtotime($m[2]));
+          $operator_2 = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[3] : '=');
+          $date_2 = date('Y-m-d', strtotime($m[4]));
+          if (strtotime($m[2]) > 0 && strtotime($m[4]) > 0) {
+            $return = "(date({$columnName}) {$operator_1} '{$date_1}') and (date({$columnName}) {$operator_2} '{$date_2}')";
+          } else {
+            //
+          }
         }
-
-        if ($type == 'int' && _count($column['enum_values'])) {
-            $return = " {$columnName}_enum_value like '%".$this->adios->db->escape(trim($s))."%'";
-        } else if (in_array($type, ['varchar', 'text', 'color', 'file', 'image', 'enum', 'password'])) {
-            $return = " {$columnName} like '%".$this->adios->db->escape(trim($s))."%'";
-        } else if ($type == 'lookup') {
-            $return = " {$columnName}_lookup_sql_value like '%".$this->adios->db->escape(trim($s))."%'";
+        if (preg_match('/^([0-9\.\-]+)-([0-9\.\-]+)$/', $s, $m)) {
+          $date_1 = date('Y-m-d', strtotime($m[1]));
+          $date_2 = date('Y-m-d', strtotime($m[2]));
+          if (strtotime($m[1]) > 0 && strtotime($m[2]) > 0) {
+            $return = "(date({$columnName}) >= '{$date_1}') and (date({$columnName}) <= '{$date_2}')";
+          } else {
+            //
+          }
         }
-
-        if ('float' == $type || ('int' == $type && !_count($column['enum_values']))) {
-            $s = trim(str_replace(',', '.', $s));
-            $s = str_replace(' ', '', $s);
-
-            if (is_numeric($s)) {
-                $return = "({$columnName}=$s)";
-            } elseif ('-' != $s[0] && strpos($s, '-')) {
-                list($from, $to) = explode('-', $s);
-                $return = "({$columnName}>=".(trim($from) + 0)." and {$columnName}<=".(trim($to) + 0).')';
-            } elseif (preg_match('/^([\>\<=\!]{1,2})?([0-9\.\-]+)$/', $s, $m)) {
-                $operator = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? trim($m[1]) : '=');
-                $operand = trim($m[2]) + 0;
-                $return = "{$columnName} {$operator} {$operand}";
-            } else {
-                $return = 'FALSE';
-            }
+        if (preg_match('/^([0-9]+)\.([0-9]+)$/', $s, $m)) {
+          $month = $m[1];
+          $year = $m[2];
+          $return = "(month({$columnName}) = '{$month}') and (year({$columnName}) = '{$year}')";
         }
-
-        if ('date' == $type) {
-            $s = str_replace(' ', '', $s);
-            $s = str_replace(',', '.', $s);
-
-            $return = 'false';
-
-            // ak je do filtru zadany znak '-', vyfiltruje nezadane datumy
-            if ($s === '-') {
-                $return = "({$columnName} IS NULL OR {$columnName} = '0000-00-00' OR {$columnName} = '')";
-            }
-
-            if (preg_match('/^([\>\<=\!]{1,2})?([0-9\.\-]+)$/', $s, $m)) {
-                $operator = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[1] : '=');
-                if (strtotime($m[2]) > 0) {
-                    $to = date('Y-m-d', strtotime($m[2]));
-                    $return = "{$columnName} {$operator} '{$to}'";
-                } else {
-                  //
-                }
-            }
-            if (preg_match('/^([\>\<=\!]{1,2})([0-9\.\-]+)([\>\<=\!]{1,2})([0-9\.\-]+)$/', $s, $m)) {
-                $operator_1 = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[1] : '=');
-                $date_1 = date('Y-m-d', strtotime($m[2]));
-                $operator_2 = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[3] : '=');
-                $date_2 = date('Y-m-d', strtotime($m[4]));
-                if (strtotime($m[2]) > 0 && strtotime($m[4]) > 0) {
-                    $return = "({$columnName} {$operator_1} '{$date_1}') and ({$columnName} {$operator_2} '{$date_2}')";
-                } else {
-                  //
-                }
-            }
-            if (preg_match('/^([0-9\.\-]+)-([0-9\.\-]+)$/', $s, $m)) {
-                $date_1 = date('Y-m-d', strtotime($m[1]));
-                $date_2 = date('Y-m-d', strtotime($m[2]));
-                if (strtotime($m[1]) > 0 && strtotime($m[2]) > 0) {
-                    $return = "({$columnName} >= '{$date_1}') and ({$columnName} <= '{$date_2}')";
-                } else {
-                  //
-                }
-            }
-            if (preg_match('/^([0-9]+)\.([0-9]+)$/', $s, $m)) {
-                $month = $m[1];
-                $year = $m[2];
-                $return = "(month({$columnName}) = '{$month}') and (year({$columnName}) = '{$year}')";
-            }
-            if (preg_match('/^([\>\<=\!]{1,2})?([0-9]+)$/', $s, $m)) {
-                $operator = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[1] : '=');
-                $year = $m[2];
-                $return = "(year({$columnName}) {$operator} '{$year}')";
-            }
+        if (preg_match('/^([\>\<=\!]{1,2})?([0-9]+)$/', $s, $m)) {
+          $operator = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[1] : '=');
+          $year = $m[2];
+          $return = "(year({$columnName}) {$operator} '{$year}')";
         }
+      }
 
-        if ('datetime' == $type || 'timestamp' == $type) {
-            $s = str_replace(' ', '', $s);
-            $s = str_replace(',', '.', $s);
+      if ('time' == $type) {
+          $return = 'false';
+          $s = str_replace(' ', '', $s);
 
-            $return = 'false';
+          // ak je do filtru zadany znak '-', vyfiltruje nezadane datumy
+          if ($s === '-') {
+              $return = "({$columnName} IS NULL OR {$columnName} = '00:00:00' OR {$columnName} = '')";
+          }
 
-            // ak je do filtru zadany znak '-', vyfiltruje nezadane datumy
-            if ($s === '-') {
-                $return = "({$columnName} IS NULL OR {$columnName} = '0000-00-00 00:00:00' OR {$columnName} = '')";
-            }
+          if (preg_match('/^([\>\<=\!]{1,2})?([0-9\.\:]+)$/', $s, $m)) {
+              $operator = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[1] : '=');
+              if (strtotime('01.01.2000 '.$m[2]) > 0) {
+                  $to = date('H:i:s', strtotime('01.01.2000 '.$m[2]));
+                  $return = "{$columnName} {$operator} '{$to}'";
+              } else {
+                //
+              }
+          }
+          if (preg_match('/^([0-9\:]+)-([0-9\:]+)$/', $s, $m)) {
+              $date_1 = date('H:i:s', strtotime('01.01.2000 '.$m[1]));
+              $date_2 = date('H:i:s', strtotime('01.01.2000 '.$m[2]));
+              if (strtotime('01.01.2000 '.$m[1]) > 0 && strtotime('01.01.2000 '.$m[2]) > 0) {
+                  $return = "({$columnName} >= '{$date_1}') and ({$columnName} <= '{$date_2}')";
+              } else {
+                //
+              }
+          }
+          if (preg_match('/^([0-9]+)$/', $s, $m)) {
+              $hour = $m[1];
+              $return = "(hour({$columnName}) = '{$hour}')";
+          }
+      }
 
-            if (preg_match('/^([\>\<=\!]{1,2})?([0-9\.\-]+)$/', $s, $m)) {
-                $operator = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[1] : '=');
-                if (strtotime($m[2]) > 0) {
-                    $to = date('Y-m-d', strtotime($m[2]));
-                    $return = "date({$columnName}) {$operator} '{$to}'";
-                } else {
-                  //
-                }
-            }
-            if (preg_match('/^([\>\<=\!]{1,2})([0-9\.\-]+)([\>\<=\!]{1,2})([0-9\.\-]+)$/', $s, $m)) {
-                $operator_1 = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[1] : '=');
-                $date_1 = date('Y-m-d', strtotime($m[2]));
-                $operator_2 = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[3] : '=');
-                $date_2 = date('Y-m-d', strtotime($m[4]));
-                if (strtotime($m[2]) > 0 && strtotime($m[4]) > 0) {
-                    $return = "(date({$columnName}) {$operator_1} '{$date_1}') and (date({$columnName}) {$operator_2} '{$date_2}')";
-                } else {
-                  //
-                }
-            }
-            if (preg_match('/^([0-9\.\-]+)-([0-9\.\-]+)$/', $s, $m)) {
-                $date_1 = date('Y-m-d', strtotime($m[1]));
-                $date_2 = date('Y-m-d', strtotime($m[2]));
-                if (strtotime($m[1]) > 0 && strtotime($m[2]) > 0) {
-                    $return = "(date({$columnName}) >= '{$date_1}') and (date({$columnName}) <= '{$date_2}')";
-                } else {
-                  //
-                }
-            }
-            if (preg_match('/^([0-9]+)\.([0-9]+)$/', $s, $m)) {
-                $month = $m[1];
-                $year = $m[2];
-                $return = "(month({$columnName}) = '{$month}') and (year({$columnName}) = '{$year}')";
-            }
-            if (preg_match('/^([\>\<=\!]{1,2})?([0-9]+)$/', $s, $m)) {
-                $operator = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[1] : '=');
-                $year = $m[2];
-                $return = "(year({$columnName}) {$operator} '{$year}')";
-            }
+      if ('year' == $type) {
+        $return = 'false';
+
+        if (preg_match('/^([\>\<=\!]{1,2})?([0-9]+)$/', $s, $m)) {
+          $operator = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[1] : '=');
+          if (is_numeric($m[2])) {
+            $return = "{$columnName} {$operator} '$m[2]'";
+          } else {
+            //
+          }
         }
-
-        if ('time' == $type) {
-            $return = 'false';
-            $s = str_replace(' ', '', $s);
-
-            // ak je do filtru zadany znak '-', vyfiltruje nezadane datumy
-            if ($s === '-') {
-                $return = "({$columnName} IS NULL OR {$columnName} = '00:00:00' OR {$columnName} = '')";
-            }
-
-            if (preg_match('/^([\>\<=\!]{1,2})?([0-9\.\:]+)$/', $s, $m)) {
-                $operator = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[1] : '=');
-                if (strtotime('01.01.2000 '.$m[2]) > 0) {
-                    $to = date('H:i:s', strtotime('01.01.2000 '.$m[2]));
-                    $return = "{$columnName} {$operator} '{$to}'";
-                } else {
-                  //
-                }
-            }
-            if (preg_match('/^([0-9\:]+)-([0-9\:]+)$/', $s, $m)) {
-                $date_1 = date('H:i:s', strtotime('01.01.2000 '.$m[1]));
-                $date_2 = date('H:i:s', strtotime('01.01.2000 '.$m[2]));
-                if (strtotime('01.01.2000 '.$m[1]) > 0 && strtotime('01.01.2000 '.$m[2]) > 0) {
-                    $return = "({$columnName} >= '{$date_1}') and ({$columnName} <= '{$date_2}')";
-                } else {
-                  //
-                }
-            }
-            if (preg_match('/^([0-9]+)$/', $s, $m)) {
-                $hour = $m[1];
-                $return = "(hour({$columnName}) = '{$hour}')";
-            }
+        if (preg_match('/^([0-9\:]+)-([0-9\:]+)$/', $s, $m)) {
+          if (is_numeric($m[1]) && is_numeric($m[2])) {
+            $return = "({$columnName} >= '{$m[1]}') and ({$columnName} <= '{$m[2]}')";
+          } else {
+            //
+          }
         }
-
-        if ('year' == $type) {
-            $return = 'false';
-
-            if (preg_match('/^([\>\<=\!]{1,2})?([0-9]+)$/', $s, $m)) {
-                $operator = (in_array($m[1], ['=', '!=', '<>', '>', '<', '>=', '<=']) ? $m[1] : '=');
-                if (is_numeric($m[2])) {
-                    $return = "{$columnName} {$operator} '$m[2]'";
-                } else {
-                  //
-                }
-            }
-            if (preg_match('/^([0-9\:]+)-([0-9\:]+)$/', $s, $m)) {
-                if (is_numeric($m[1]) && is_numeric($m[2])) {
-                    $return = "({$columnName} >= '{$m[1]}') and ({$columnName} <= '{$m[2]}')";
-                } else {
-                  //
-                }
-            }
-            if (preg_match('/^([0-9]+)$/', $s, $m)) {
-                $return = "({$columnName} = '{$m[1]}')";
-            }
+        if (preg_match('/^([0-9]+)$/', $s, $m)) {
+          $return = "({$columnName} = '{$m[1]}')";
         }
+      }
 
-        if ($not) {
-            $return = " not( {$return} ) ";
-        }
+      if ($not) {
+          $return = " not( {$return} ) ";
+      }
     } elseif (is_array($s) && count($s) > 1) {
-        foreach ($s as $val) {
-            $wheres[] = $this->tableFilterColumnSqlWhere($columnName, $val, $column);
-        }
-        $return = implode(' or ', $wheres);
+      foreach ($s as $val) {
+        $wheres[] = $this->tableFilterColumnSqlWhere($columnName, $val, $column);
+      }
+      $return = implode(' or ', $wheres);
     } elseif (is_array($w) && count($w) > 1) {
-        foreach ($w as $val) {
-            $wheres[] = $this->tableFilterColumnSqlWhere($columnName, $val, $column);
-        }
-        $return = implode(' and ', $wheres);
+      foreach ($w as $val) {
+        $wheres[] = $this->tableFilterColumnSqlWhere($columnName, $val, $column);
+      }
+      $return = implode(' and ', $wheres);
     }
 
     return $return;

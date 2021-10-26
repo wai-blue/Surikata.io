@@ -18,5 +18,6 @@ $dictionary = [
   "Manage payment services here. Insert only record for each contract with your payment service provider." => "Tu môžete spravovať platobné služby. Vložiť iba záznam pre každú zmluvu s poskytovateľom platobných služieb.",
   "General" => "Všeobecné",
   "Enable / Disable" => "Povoliť / Zakázať",
-  "Plugin" => "Plugin"
+  "Plugin" => "Plugin",
+  "Supported image extensions: jpg, gif, png, jpeg." => "Podporovaný formát obrázku: jpg, gif, png, jpeg."
 ];

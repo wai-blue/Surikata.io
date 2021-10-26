@@ -9,5 +9,6 @@ $dictionary = [
   "E.g.: EN, US, SK, FR, ..." => "Napr. EN, US, SK, FR, ...",
   "Flag" => "Vlajka",
   "Enabled" => "Povolené",
-  "Order index" => "V poradí"
+  "Order index" => "V poradí",
+  "Supported image extensions: jpg, gif, png, jpeg." => "Podporovaný formát obrázku: jpg, gif, png, jpeg."
 ];

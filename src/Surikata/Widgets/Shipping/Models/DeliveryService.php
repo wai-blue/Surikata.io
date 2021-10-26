@@ -44,7 +44,10 @@ class DeliveryService extends \ADIOS\Core\Model {
       "logo" => [
         "type" => 'image',
         "title" => $this->translate("Logo"),
-        "description" => $this->translate("Optional. Some design themes may display the logo on the web."),
+        "description" => 
+          $this->translate("Optional. Some design themes may display the logo on the web.")
+          ."\n".$this->translate("Supported image extensions: jpg, gif, png, jpeg.")
+        ,
         "show_column" => TRUE,
       ],
 

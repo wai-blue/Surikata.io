@@ -19,15 +19,14 @@ class CSV extends \ADIOS\Core\Action {
   public function render() {
     $model = $this->adios->getModel($this->params['model']);
     $columns = $model->columns();
+    $tableParams = json_decode(base64_decode($this->params['tableParams']), TRUE);
 
-    $data = $this->adios->db->get_all_rows($model->getFullTableSQLName(), []);
-
-    $uiTable = new \ADIOS\Core\UI\Table($this->adios, [
-      "model" => $this->params['model'],
-    ]);
+    $uiTable = new \ADIOS\Core\UI\Table($this->adios, $tableParams);
+    $data = $uiTable->data;
+    $firstRow = reset($data);
 
     $firstLine = "";
-    foreach (reset($data) as $colName => $colValue) {
+    foreach (array_keys($firstRow) as $colName) {
       if (isset($columns[$colName])) {
         $firstLine .= '"'.str_replace('"', '""', $columns[$colName]['title']).'";';
       }

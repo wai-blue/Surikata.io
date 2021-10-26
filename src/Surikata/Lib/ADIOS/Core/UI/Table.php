@@ -17,6 +17,8 @@ class Table extends \ADIOS\Core\UI\View {
     var $columns = [];
     var $columnsFilter = [];
 
+    var $data = [];
+
     public function __construct(&$adios, $params = null) {
 
       $this->adios = &$adios;
@@ -171,76 +173,7 @@ class Table extends \ADIOS\Core\UI\View {
 
       $this->model->onTableAfterInit($this);
 
-      // where a having
-
-      $where = '('.('' == $this->params['where'] ? 'TRUE' : $this->params['where']).')';
-
-      $having = (empty($this->params['having']) ? 'TRUE' : $this->params['having']);
-      if (_count($this->columnsFilter)) {
-        $having .= " and ".$this->model->tableFilterSqlWhere($this->columnsFilter);
-      }
-      if (_count($this->search)) {
-        $having .= " and ".$this->model->tableFilterSqlWhere($this->search);
-      }
-
-      $order_by = $this->params['order_by'];
-      $group_by = $this->params['group_by'];
-
-      if ($this->params['show_paging']) {
-        // ak sa zobrazuje sumarny/statisticky riadok,
-        // tak namiesto countu vybera statisticke udaje, pricom je pre id nastavene selectovanie count(id)
-
-        if (!empty($this->params['table'])) {
-          $this->tmp_column_settings = $this->adios->db->tables[$this->params['table']];
-          $this->adios->db->tables[$this->params['table']] = $this->columns;
-
-          $this->table_item_count = $this->adios->db->count_all_rows($this->params['table'], [
-            'where' => $where,
-            'having' => $having,
-            'group' => $group_by,
-          ]);
-
-          if (_count($this->tmp_column_settings)) {
-            $this->adios->db->tables[$this->params['table']] = $this->tmp_column_settings;
-          }
-        }
-
-      }
-
-      if ($this->params['show_paging']) {
-        if ($this->params['page'] * $this->params['items_per_page'] > $this->table_item_count) {
-          $this->params['page'] = floor($this->table_item_count / $this->params['items_per_page']) + 1;
-        }
-        $limit_1 = ($this->params['show_paging'] ? max(0, ($this->params['page'] - 1) * $this->params['items_per_page']) : '');
-        $limit_2 = ($this->params['show_paging'] ? $this->params['items_per_page'] : '');
-      } else {
-        $this->table_item_count = 0;
-      }
-
-      $get_all_rows_params = [
-        'where' => $where,
-        'having' => $having,
-        'order' => $order_by,
-        'group' => $group_by,
-      ];
-
-      if (is_numeric($limit_1)) $get_all_rows_params['limit_start'] = $limit_1;
-      if (is_numeric($limit_2)) $get_all_rows_params['limit_end'] = $limit_2;
-
-      if ('' != $this->params['table']) {
-        $this->tmp_column_settings = $this->adios->db->tables[$this->params['table']];
-        $this->adios->db->tables[$this->params['table']] = $this->columns;
-        $this->table_data = $this->adios->db->get_all_rows($this->params['table'], $get_all_rows_params);
-        if (_count($this->tmp_column_settings)) {
-          $this->adios->db->tables[$this->params['table']] = $this->tmp_column_settings;
-        }
-      }
-
-      if (!$this->params['show_paging']) {
-        $this->table_item_count = count($this->table_data);
-      }
-
-      $this->model->onTableAfterDataLoaded($this);
+      $this->loadData();
 
       // strankovanie
 
@@ -308,7 +241,78 @@ class Table extends \ADIOS\Core\UI\View {
     }
 
 
+    public function loadData() {
+      // where a having
 
+      $where = '('.('' == $this->params['where'] ? 'TRUE' : $this->params['where']).')';
+
+      $having = (empty($this->params['having']) ? 'TRUE' : $this->params['having']);
+      if (_count($this->columnsFilter)) {
+        $having .= " and ".$this->model->tableFilterSqlWhere($this->columnsFilter);
+      }
+      if (_count($this->search)) {
+        $having .= " and ".$this->model->tableFilterSqlWhere($this->search);
+      }
+
+      $order_by = $this->params['order_by'];
+      $group_by = $this->params['group_by'];
+
+      if ($this->params['show_paging']) {
+        // ak sa zobrazuje sumarny/statisticky riadok,
+        // tak namiesto countu vybera statisticke udaje, pricom je pre id nastavene selectovanie count(id)
+
+        if (!empty($this->params['table'])) {
+          $this->tmp_column_settings = $this->adios->db->tables[$this->params['table']];
+          $this->adios->db->tables[$this->params['table']] = $this->columns;
+
+          $this->table_item_count = $this->adios->db->count_all_rows($this->params['table'], [
+            'where' => $where,
+            'having' => $having,
+            'group' => $group_by,
+          ]);
+
+          if (_count($this->tmp_column_settings)) {
+            $this->adios->db->tables[$this->params['table']] = $this->tmp_column_settings;
+          }
+        }
+
+      }
+
+      if ($this->params['show_paging']) {
+        if ($this->params['page'] * $this->params['items_per_page'] > $this->table_item_count) {
+          $this->params['page'] = floor($this->table_item_count / $this->params['items_per_page']) + 1;
+        }
+        $limit_1 = ($this->params['show_paging'] ? max(0, ($this->params['page'] - 1) * $this->params['items_per_page']) : '');
+        $limit_2 = ($this->params['show_paging'] ? $this->params['items_per_page'] : '');
+      } else {
+        $this->table_item_count = 0;
+      }
+
+      $get_all_rows_params = [
+        'where' => $where,
+        'having' => $having,
+        'order' => $order_by,
+        'group' => $group_by,
+      ];
+
+      if (is_numeric($limit_1)) $get_all_rows_params['limit_start'] = $limit_1;
+      if (is_numeric($limit_2)) $get_all_rows_params['limit_end'] = $limit_2;
+
+      if ('' != $this->params['table']) {
+        $this->tmp_column_settings = $this->adios->db->tables[$this->params['table']];
+        $this->adios->db->tables[$this->params['table']] = $this->columns;
+        $this->data = $this->adios->db->get_all_rows($this->params['table'], $get_all_rows_params);
+        if (_count($this->tmp_column_settings)) {
+          $this->adios->db->tables[$this->params['table']] = $this->tmp_column_settings;
+        }
+      }
+
+      if (!$this->params['show_paging']) {
+        $this->table_item_count = count($this->data);
+      }
+
+      $this->model->onTableAfterDataLoaded($this);
+    }
 
 
 
@@ -374,6 +378,12 @@ class Table extends \ADIOS\Core\UI\View {
         }
 
         if (!$this->params['refresh']) {
+          $html .= "
+            <script>
+              ui_table_params['{$this->uid}'] = JSON.parse(Base64.decode('".base64_encode(json_encode($this->params))."'));
+            </script>
+          ";
+
           if ($this->params['show_title']) {
 
             $moreActionsButtonItems = [];
@@ -394,7 +404,12 @@ class Table extends \ADIOS\Core\UI\View {
               $moreActionsButtonItems[] = [
                 "fa_icon" => "fas fa-file-export",
                 "text" => $this->translate("Export to CSV"),
-                "onclick" => "window.open('{$this->adios->config['url']}/{$exportCsvAction}');",
+                "onclick" => "
+                  let tmpTableParams = Base64.encode(JSON.stringify(ui_table_params['{$this->uid}']));
+                  window.open(
+                    '{$this->adios->config['url']}/{$exportCsvAction}?tableParams=' + tmpTableParams
+                  );
+                ",
               ];
             }
 
@@ -689,12 +704,12 @@ class Table extends \ADIOS\Core\UI\View {
           }
 
           $html .= "</div>"; // adios ui Table Header
-          $html .= "<div class='adios ui Table Content ".(_count($this->table_data) == 0 ? "empty" : "")."'>";
+          $html .= "<div class='adios ui Table Content ".(_count($this->data) == 0 ? "empty" : "")."'>";
 
           // zaznamy tabulky
-          if (_count($this->table_data)) {
+          if (_count($this->data)) {
 
-            foreach ($this->table_data as $val) {
+            foreach ($this->data as $val) {
               // if (empty($params['onclick'])) {
               //   if ('desktop' == $params['form_type']) {
               //     $params['onclick'] = "

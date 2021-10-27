@@ -74,7 +74,7 @@ class Widget {
       foreach (scandir($dir) as $file) {
         if (is_file("{$dir}/{$file}")) {
           $tmpModelName = str_replace(".php", "", $file);
-          $this->adios->models[] = "Widgets/{$this->name}/Models/{$tmpModelName}";
+          $this->adios->registerModel("Widgets/{$this->name}/Models/{$tmpModelName}");
         }
       }
     }

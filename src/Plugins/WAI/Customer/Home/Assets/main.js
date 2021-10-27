@@ -1,6 +1,6 @@
-function SurikataCustomer() { }
+function PluginWAICustomerHome() { }
 
-SurikataCustomer.prototype.createAccount = function (success, fail) {
+PluginWAICustomerHome.prototype.createAccount = function (success, fail) {
   let data = Surikata.serializeForm('#registrationForm');
   data['createAccount'] = true;
 
@@ -12,7 +12,7 @@ SurikataCustomer.prototype.createAccount = function (success, fail) {
   );
 }
 
-SurikataCustomer.prototype.addAddress = function (success, fail) {
+PluginWAICustomerHome.prototype.addAddress = function (success, fail) {
   let data = Surikata.serializeForm('#addAddressForm');
   data['createAddress'] = true;
   data['customerAction'] = "editAddress";
@@ -25,7 +25,7 @@ SurikataCustomer.prototype.addAddress = function (success, fail) {
   );
 }
 
-SurikataCustomer.prototype.removeAddress = function (data, success, fail) {
+PluginWAICustomerHome.prototype.removeAddress = function (data, success, fail) {
   Surikata.renderPluginJSON(
     'WAI/Customer/Home',
     data,
@@ -34,7 +34,7 @@ SurikataCustomer.prototype.removeAddress = function (data, success, fail) {
   );
 }
 
-SurikataCustomer.prototype.forgotPassword = function (success, fail) {
+PluginWAICustomerHome.prototype.forgotPassword = function (success, fail) {
   let data = Surikata.serializeForm('#forgotPasswordForm');
 
   Surikata.renderPluginJSON(

@@ -34,6 +34,8 @@ class General extends \Surikata\Core\Web\Controller {
         $templateFile = "{$this->websiteRenderer->themeDir}/Templates/Plugins/{$pluginName}.twig";
 
         if (is_file($templateFile)) {
+          $renderParams["system"]["availableVariables"] = array_keys($renderParams);
+
           $html = $this->websiteRenderer->twig
             ->render("Templates/Plugins/{$pluginName}.twig", $renderParams)
           ;

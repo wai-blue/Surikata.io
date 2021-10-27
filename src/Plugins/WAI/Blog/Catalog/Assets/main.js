@@ -1,8 +1,8 @@
-function SurikataBlogCatalog() {
+function PluginWAIBlogCatalog() {
   this.filter = {};
 }
 
-SurikataBlogCatalog.prototype.loadUrlParams = function (varName) {
+PluginWAIBlogCatalog.prototype.loadUrlParams = function (varName) {
   // Do if url contain varName
   if (window.location.href.indexOf(varName)> -1) {
     let url = new URL(window.location.href);
@@ -11,12 +11,12 @@ SurikataBlogCatalog.prototype.loadUrlParams = function (varName) {
   }
 }
 
-SurikataBlogCatalog.prototype.setFilter = function (varName, varValue) {
+PluginWAIBlogCatalog.prototype.setFilter = function (varName, varValue) {
   this.filter[varName] = varValue;
   return this;
 }
 
-SurikataBlogCatalog.prototype.addValueToFilter = function (varName, varValue) {
+PluginWAIBlogCatalog.prototype.addValueToFilter = function (varName, varValue) {
   if (typeof this.filter[varName] == 'undefined') {
     this.filter[varName] = [];
   }
@@ -26,7 +26,7 @@ SurikataBlogCatalog.prototype.addValueToFilter = function (varName, varValue) {
   return this;
 }
 
-SurikataBlogCatalog.prototype.removeValueFromFilter = function (varName, varValue) {
+PluginWAIBlogCatalog.prototype.removeValueFromFilter = function (varName, varValue) {
   let newVar = [];
   for (i = 0; i < this.filter[varName].length; i++) {
     if (this.filter[varName][i] != varValue) {
@@ -37,7 +37,7 @@ SurikataBlogCatalog.prototype.removeValueFromFilter = function (varName, varValu
   return this;
 }
 
-SurikataBlogCatalog.prototype.getURL = function (url) {
+PluginWAIBlogCatalog.prototype.getURL = function (url) {
   let currentUrl = new URL(window.location);
   let urlObject = null;
 
@@ -64,7 +64,7 @@ SurikataBlogCatalog.prototype.getURL = function (url) {
   return urlObject;
 }
 
-SurikataBlogCatalog.prototype.update = function (updateDiv, url) {
+PluginWAIBlogCatalog.prototype.update = function (updateDiv, url) {
   let _this = this;
   let pluginParams = null;
 

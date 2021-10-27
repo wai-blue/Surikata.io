@@ -165,11 +165,11 @@ class Loader {
 
       // inicializacia core modelov
 
-      $this->models[] = "Core/Models/Config";
-      $this->models[] = "Core/Models/Translate";
-      $this->models[] = "Core/Models/User";
-      $this->models[] = "Core/Models/UserRole";
-      $this->models[] = "Core/Models/Token";
+      $this->registerModel("Core/Models/Config");
+      $this->registerModel("Core/Models/Translate");
+      $this->registerModel("Core/Models/User");
+      $this->registerModel("Core/Models/UserRole");
+      $this->registerModel("Core/Models/Token");
 
       // inicializacia pluginov - aj pre FULL aj pre LITE mod
 
@@ -387,6 +387,12 @@ class Loader {
 
   //////////////////////////////////////////////////////////////////////////////
   // MODELS
+
+  public function registerModel($modelName) {
+    if (!in_array($modelName, $this->models)) {
+      $this->models[] = $modelName;
+    }
+  }
 
   public function getModelClassName($modelName) {
     return "\\ADIOS\\".str_replace("/", "\\", $modelName);

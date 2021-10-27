@@ -1,7 +1,0 @@
-<div class="container simple-text">
-  <div class="row">
-    {% if heading %}
-      <h{{ headingLevel }}>{{ heading }}</h{{ headingLevel }}>
-    {% endif %}
-    {{ include(template_from_string(content)) }}
-</div>

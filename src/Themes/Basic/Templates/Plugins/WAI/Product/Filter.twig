@@ -43,12 +43,12 @@
                           class="sidebar-active"
                         {% endif %}
                         onclick="
-                          BasicThemeProductCatalog.setFilter('idCategory', {{ subCategory.id }});
-                          BasicThemeProductCatalog.update(
+                          ThemeBasicProductCatalog.setFilter('idCategory', {{ subCategory.id }});
+                          ThemeBasicProductCatalog.update(
                             $('#productCatalogDefaultContainerDiv'),
                             '{{ rewriteBase }}{{ subCategory.url }}'
                           );
-                          BasicThemeBreadcrumb.update($('#breadcrumbDiv'));
+                          ThemeBasicBreadcrumb.update($('#breadcrumbDiv'));
                           $(this).addClass('sidebar-active');
                           ">{{ subCategory.TRANSLATIONS.name }}
                       </a>
@@ -123,9 +123,9 @@
               onchange="
                 let div = $('#productCatalogDefaultContainerDiv');
                 if ($(this).is(':checked')) {
-                BasicThemeProductCatalog.addValueToFilter('brands', {{ brand.id }}).update(div);
+                ThemeBasicProductCatalog.addValueToFilter('brands', {{ brand.id }}).update(div);
                 } else {
-                BasicThemeProductCatalog.removeValueFromFilter('brands', {{ brand.id }}).update(div);
+                ThemeBasicProductCatalog.removeValueFromFilter('brands', {{ brand.id }}).update(div);
                 }
                 "
               data-id-brand="{{ brand.id }}"

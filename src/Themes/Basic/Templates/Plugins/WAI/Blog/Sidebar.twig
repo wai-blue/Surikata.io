@@ -70,10 +70,10 @@
                 onclick="
                   let div = $('#blogCatalogDefaultContainerDiv');
                   if ($(this).is(':checked')) {
-                  BasicThemeBlogCatalog.addValueToFilter('tags', '{{ singleTag.url }}').update(div);
+                  ThemeBasicBlogCatalog.addValueToFilter('tags', '{{ singleTag.url }}').update(div);
                   $('#singleTag_{{ singleTag.id }}_label').addClass('active-tag');
                   } else {
-                  BasicThemeBlogCatalog.removeValueFromFilter('tags', '{{ singleTag.url }}').update(div);
+                  ThemeBasicBlogCatalog.removeValueFromFilter('tags', '{{ singleTag.url }}').update(div);
                   $('#singleTag_{{ singleTag.id }}_label').removeClass('active-tag');
                   }
                   "
@@ -92,6 +92,6 @@
 
 <script>
   $(document).ready(function() {
-    AbeloThemeBlogCatalog.loadUrlParams('tags');
+    ThemeAbeloBlogCatalog.loadUrlParams('tags');
   })
 </script>

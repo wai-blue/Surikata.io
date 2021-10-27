@@ -11,6 +11,13 @@
 !/data/.htaccess
 
 /prop/*
+!/prop/.htaccess
+!/prop/README.md
+!/prop/Init.php
+!/prop/MyEcommerceProject.php
+!/prop/Plugins/*
+!/prop/Themes/*
+
 /vendor/*
 
 /ConfigEnvDomains.php

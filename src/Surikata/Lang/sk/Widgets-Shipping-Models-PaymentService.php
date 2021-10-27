@@ -19,5 +19,6 @@ $dictionary = [
   "General" => "Všeobecné",
   "Enable / Disable" => "Povoliť / Zakázať",
   "Plugin" => "Plugin",
-  "Supported image extensions: jpg, gif, png, jpeg." => "Podporovaný formát obrázku: jpg, gif, png, jpeg."
+  "Supported image extensions: jpg, gif, png, jpeg." => "Podporovaný formát obrázku: jpg, gif, png, jpeg.",
+  "Recommended resolution: 50x50px." => "Odporúčaný rozmer: 50x50px."
 ];

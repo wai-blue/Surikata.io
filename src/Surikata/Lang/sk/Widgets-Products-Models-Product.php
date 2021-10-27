@@ -73,5 +73,6 @@ $dictionary = [
   "Domain visibility" => "Viditeľnosť domény",
   "If no domain is selected, product will be visible on all domains." => "Ak nevyberiete žiadnu doménu, produkt bude viditeľný na všetkých doménach.",
   "No translations available." => "Žiadne preklady k dispozícii",
-  "Supported image extensions: jpg, gif, png, jpeg" => "Podporovaný formát obrázku: jpg, gif, png, jpeg."
+  "Supported image extensions: jpg, gif, png, jpeg." => "Podporovaný formát obrázku: jpg, gif, png, jpeg.",
+  "Recommended resolution: 550x415px." => "Odporúčaný rozmer: 550x415px."
 ];

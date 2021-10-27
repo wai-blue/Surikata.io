@@ -45,7 +45,8 @@ class PaymentService extends \ADIOS\Core\Model {
         "title" => $this->translate("Logo"),
         "description" => 
           $this->translate("Optional. Some design themes may display the logo on the web.")
-          ."\n".$this->translate("Supported image extensions: jpg, gif, png, jpeg.")
+          ." ".$this->translate("Supported image extensions: jpg, gif, png, jpeg.")
+          ." ".$this->translate("Recommended resolution: 50x50px.")
         ,
         "show_column" => TRUE,
       ],

@@ -18,5 +18,6 @@ $dictionary = [
   "New delivery service" => "Nová doručovacia služba",
   "Delivery service" => "Doručovacia služba",
   "-- Select a plugin --" => "-- Vyberte plugin --",
-  "Supported image extensions: jpg, gif, png, jpeg." => "Podporovaný formát obrázku: jpg, gif, png, jpeg."
+  "Supported image extensions: jpg, gif, png, jpeg." => "Podporovaný formát obrázku: jpg, gif, png, jpeg.",
+  "Recommended resolution: 50x50px." => "Odporúčaný rozmer: 50x50px."
 ];

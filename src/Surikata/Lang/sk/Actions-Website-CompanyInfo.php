@@ -19,5 +19,5 @@ $dictionary = [
   "Twitter URL" => "Odkaz na Twitter",
   "Instagram profile URL" => "Odkaz na instagramový profil",
   "YouTube channel URL" => "Odkaz na Youtube kanál",
-  "Supported image extensions: jpg, gif, png, jpeg" => "Podporovaný formát obrázku: jpg, gif, png, jpeg." ,
+  "Supported image extensions: jpg, gif, png, jpeg." => "Podporovaný formát obrázku: jpg, gif, png, jpeg." ,
 ];

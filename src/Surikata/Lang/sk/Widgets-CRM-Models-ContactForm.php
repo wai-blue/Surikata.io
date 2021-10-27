@@ -7,4 +7,5 @@ $dictionary = [
   "Recipient" => "Príjemca",
   "Messages from contact form" => "Správy z kontaktného formulára",
   "Message from contact form" => "Správa z kontaktného formulára",
+  "Name" => "Meno"
 ];

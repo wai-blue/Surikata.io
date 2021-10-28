@@ -582,7 +582,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       // produkty - vyrobcovia
       $brandModel->insertRow(["name" => "Mercedes"]);
-      $brandModel->insertRow(["name" => "Hyunday"]);
+      $brandModel->insertRow(["name" => "Hyundai"]);
       $brandModel->insertRow(["name" => "Lenovo"]);
       $brandModel->insertRow(["name" => "Yves Rocher"]);
       $brandModel->insertRow(["name" => "Milsy"]);

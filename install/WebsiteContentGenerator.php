@@ -659,11 +659,11 @@ class WebsiteContentGenerator {
             "emails" => [
               "signature" => "<p>{$domainName} - <a href='http://{$domainName}' target='_blank'>{$domainName}</a></p>",
               "after_order_confirmation_SUBJECT" => "{$domainName} - objednávka č. {% number %}",
-              "after_order_confirmation_BODY" => file_get_contents(__DIR__."/../content/PageTexts/emails/orderBody_sk.html"),
+              "after_order_confirmation_BODY" => file_get_contents(__DIR__."/content/PageTexts/emails/orderBody_sk.html"),
               "after_registration_SUBJECT" => "{$domainName} - Overte Vašu emailovú adresu",
-              "after_registration_BODY" => file_get_contents(__DIR__."/../content/PageTexts/emails/registrationBody_sk.html"),
+              "after_registration_BODY" => file_get_contents(__DIR__."/content/PageTexts/emails/registrationBody_sk.html"),
               "forgot_password_SUBJECT" => "{$domainName} - Obnovenie hesla",
-              "forgot_password_BODY" => file_get_contents(__DIR__."/../content/PageTexts/emails/forgotPasswordBody_sk.html")
+              "forgot_password_BODY" => file_get_contents(__DIR__."/content/PageTexts/emails/forgotPasswordBody_sk.html")
             ],
           ],
         ],

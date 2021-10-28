@@ -13,6 +13,13 @@ class Blog extends \ADIOS\Core\Model {
 
   public function columns(array $columns = []) {
     return parent::columns([
+      "domain" => [
+        "type" => "varchar",
+        "title" => $this->translate("Domain"),
+        "required" => TRUE,
+        "show_column" => TRUE,
+      ],
+
       "name" => [
         "type" => "varchar",
         "title" => $this->translate("Title"),
@@ -76,6 +83,7 @@ class Blog extends \ADIOS\Core\Model {
         [
           "tabs" => [
             $this->translate("General") => [
+              "domain",
               "name",
               "content",
               "perex",
@@ -104,12 +112,14 @@ class Blog extends \ADIOS\Core\Model {
     return $params;
   }
 
-  public function getByDate($year, $month, $filteredTags, $limit) {
+  public function getByDate($domain, $year, $month, $filteredTags, $limit) {
     $blogQuery = $this->getQuery();
 
     $this->addLookupsToQuery($blogQuery, ['id_user' => 'USER']);
 
-    if($year) {
+    $blogQuery->where("domain", $domain);
+
+    if ($year) {
       $blogQuery->whereYear("created_at", $year);
     }
 

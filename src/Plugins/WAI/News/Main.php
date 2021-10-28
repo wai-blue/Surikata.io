@@ -96,6 +96,18 @@ namespace ADIOS\Plugins\WAI {
       ];
     }
 
+    public function install(object $installer) {
+      $newsModel = new \ADIOS\Plugins\WAI\News\Models\News($this->adios);
+
+      $newsModel->insertRow([
+        "title" => $installer->translate("Welcome to our online store"),
+        "perex" => $installer->translate("We built our online store using Surikata.io."),
+        "content" => $installer->translate("We built our online store using Surikata.io."),
+        "domain" => $installer->domainName,
+      ]);
+
+    }
+
   }
 
 }

@@ -6,11 +6,13 @@ class Plugin {
   var $websiteRenderer;
   var $adminPanel;
   var $name = "";
+  var $twigRenderParams = [];
 
   public function __construct($websiteRenderer) {
     $this->name = str_replace("\\", "/", str_replace("Surikata\\Plugins\\", "", get_class($this)));
     $this->websiteRenderer = &$websiteRenderer;
     $this->adminPanel = $this->websiteRenderer->adminPanel;
+    $this->twigRenderParams = [];
   }
 
   /**

@@ -2,14 +2,19 @@
 
 class WebsiteContentGenerator {
   public $adminPanel;
+  public $domainsToInstall = [];
+  public $domainIdOffset = 0;
+  public $domainName = "";
+  public $domainSlug = "";
+  public $themeObject = [];
 
   public function __construct($adminPanel, $slideshowImageSet, $domainsToInstall) {
     $this->adminPanel = $adminPanel;
-    $this->slideshowImageSet = $slideshowImageSet;
+    // $this->slideshowImageSet = $slideshowImageSet;
     $this->domainsToInstall = $domainsToInstall;
   }
 
-  public function translate($string) {
+  public function translate(string $string) {
     // A domain is linked to the "language index".
     // A "language index" can represent any language.
     // Default installation uses following languages:
@@ -29,7 +34,7 @@ class WebsiteContentGenerator {
     }
 
     if (empty($languageIndex)) {
-      $this->adminPanel->console->warning("Translate: Destination language not set.");
+      $this->adminPanel->console->warning("Translate: Destination language not set for `{$string}`.");
       return $string;
     }
 
@@ -65,31 +70,17 @@ class WebsiteContentGenerator {
   }
 
   public function copyAssets() {
-    mkdir(__DIR__."/../upload/blogs/");
     mkdir(__DIR__."/../upload/products/");
-    mkdir(__DIR__."/../upload/slideshow/");
 
     copy(
       __DIR__."/content/images/favicon.png",
       "{$this->adminPanel->config['files_dir']}/favicon.png"
     );
 
-    for ($i = 1; $i <= 7; $i++) {
-      copy(
-        __DIR__."/content/images/category_{$i}.png",
-        "{$this->adminPanel->config['files_dir']}/blogs/{$i}.png",
-      );
-    }
     for ($i = 1; $i <= 10; $i++) {
       copy(
         __DIR__."/content/images/product_{$i}.jpg",
         "{$this->adminPanel->config['files_dir']}/products/{$i}.jpg",
-      );
-    }
-    for ($i = 1; $i <= 3; $i++) {
-      copy(
-        __DIR__."/content/images/slideshow/{$this->slideshowImageSet}/{$i}.jpg",
-        "{$this->adminPanel->config['files_dir']}/slideshow/{$i}.jpg",
       );
     }
 
@@ -132,19 +123,13 @@ class WebsiteContentGenerator {
 
   public function generateWebsiteContent($domainIndex, $themeName) {
     $this->domainCurrentlyGenerated = $this->domainsToInstall[$domainIndex];
-    $domainName = $this->domainCurrentlyGenerated['name'];
-    $domainSlug = $this->domainCurrentlyGenerated['slug'];
-    $themeObject = $this->adminPanel->widgets['Website']->themes[$themeName];
-    $sampleContentDir = __DIR__."/content";
-    $idOffset = $domainIndex * 100;
+    $this->domainName = $this->domainCurrentlyGenerated['name'];
+    $this->domainSlug = $this->domainCurrentlyGenerated['slug'];
+    $this->domainIdOffset = $domainIndex * 100;
 
-    $blogCatalogModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\Blog($this->adminPanel);
-    $blogTagModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\BlogTag($this->adminPanel);
-    $blogTagAssignmentModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\BlogTagAssignment($this->adminPanel);
-    $slideshowModel = new \ADIOS\Plugins\WAI\Misc\Slideshow\Models\HomepageSlideshow($this->adminPanel);
-    $newsModel = new \ADIOS\Plugins\WAI\News\Models\News($this->adminPanel);
+    $this->themeObject = $this->adminPanel->widgets['Website']->themes[$themeName];
+
     $websiteMenuModel = new \ADIOS\Widgets\Website\Models\WebMenu($this->adminPanel);
-    $websiteMenuItemModel = new \ADIOS\Widgets\Website\Models\WebMenuItem($this->adminPanel);
     $websiteWebPageModel = new \ADIOS\Widgets\Website\Models\WebPage($this->adminPanel);
     $websiteWebRedirectModel = new \ADIOS\Widgets\Website\Models\WebRedirect($this->adminPanel);
 
@@ -208,8 +193,8 @@ class WebsiteContentGenerator {
     $i = 1;
     foreach ($menus as $menuName => $menu) {
       $idMenu = $websiteMenuModel->insertRow([
-        "id" => $idOffset + $i,
-        "domain" => $domainName,
+        "id" => $this->domainIdOffset + $i,
+        "domain" => $this->domainName,
         "name" => $this->translate($menu["title"]),
       ]);
 
@@ -222,7 +207,7 @@ class WebsiteContentGenerator {
 
     // web - stranky
 
-    $websiteCommonPanels[$domainName] = [
+    $websiteCommonPanels[$this->domainName] = [
       "header" => [
         "plugin" => "WAI/Common/Header"
       ],
@@ -256,7 +241,7 @@ class WebsiteContentGenerator {
       ],
     ];
 
-    if ($domainSlug == "hello-world") {
+    if ($this->domainSlug == "hello-world") {
       $webPages = [
         "home|WithoutSidebar|Home" => [
           "section_1" => [
@@ -605,7 +590,7 @@ class WebsiteContentGenerator {
       }
 
       $websiteWebPageModel->insertRow([
-        "domain" => $domainName,
+        "domain" => $this->domainName,
         "name" => $this->translate($tmpTitle),
         "seo_title" => $this->translate($tmpTitle),
         "seo_description" => $this->translate($tmpTitle),
@@ -613,28 +598,28 @@ class WebsiteContentGenerator {
         "publish_always" => 1,
         "content_structure" => json_encode([
           "layout" => $tmpLayout,
-          "panels" => array_merge($websiteCommonPanels[$domainName], $tmpPanels),
+          "panels" => array_merge($websiteCommonPanels[$this->domainName], $tmpPanels),
         ]),
       ]);
     }
 
     $websiteWebRedirectModel->insertRow([
-      "domain" => $domainName,
+      "domain" => $this->domainName,
       "from_url" => "",
-      "to_url" => "//".$_SERVER['HTTP_HOST'].REWRITE_BASE.$domainSlug."/".$this->translate("home"),
+      "to_url" => "//".$_SERVER['HTTP_HOST'].REWRITE_BASE.$this->domainSlug."/".$this->translate("home"),
       "type" => 302,
     ]);
 
-    $this->adminPanel->widgets["Website"]->rebuildSitemap($domainName);
+    $this->adminPanel->widgets["Website"]->rebuildSitemap($this->domainName);
 
     // nastavenia webu
 
     $this->adminPanel->saveConfig([
       "settings" => [
         "web" => [
-          $domainName => [
+          $this->domainName => [
             "companyInfo" => [
-              "slogan" => "Môj nový eshop: {$domainName}",
+              "slogan" => "Môj nový eshop: {$this->domainName}",
               "contactPhoneNumber" => "+421 111 222 333",
               "contactEmail" => "info@{$_SERVER['HTTP_HOST']}",
               "logo" => "your-logo.png",
@@ -644,11 +629,11 @@ class WebsiteContentGenerator {
               "urlInstagram" => "https://surikata.io"
             ],
             "design" => array_merge(
-              $themeObject->getDefaultColorsAndStyles(),
+              $this->themeObject->getDefaultColorsAndStyles(),
               [
                 "theme" => $themeName,
-                "headerMenuID" => $idOffset + 1,
-                "footerMenuID" => $idOffset + 2,
+                "headerMenuID" => $this->domainIdOffset + 1,
+                "footerMenuID" => $this->domainIdOffset + 2,
               ]
             ),
             "legalDisclaimers" => [
@@ -657,12 +642,12 @@ class WebsiteContentGenerator {
               "returnPolicy" => "Bienvenue. RP!",
             ],
             "emails" => [
-              "signature" => "<p>{$domainName} - <a href='http://{$domainName}' target='_blank'>{$domainName}</a></p>",
-              "after_order_confirmation_SUBJECT" => "{$domainName} - objednávka č. {% number %}",
+              "signature" => "<p>{$this->domainName} - <a href='http://{$this->domainName}' target='_blank'>{$this->domainName}</a></p>",
+              "after_order_confirmation_SUBJECT" => "{$this->domainName} - objednávka č. {% number %}",
               "after_order_confirmation_BODY" => file_get_contents(__DIR__."/../content/PageTexts/emails/orderBody_sk.html"),
-              "after_registration_SUBJECT" => "{$domainName} - Overte Vašu emailovú adresu",
+              "after_registration_SUBJECT" => "{$this->domainName} - Overte Vašu emailovú adresu",
               "after_registration_BODY" => file_get_contents(__DIR__."/../content/PageTexts/emails/registrationBody_sk.html"),
-              "forgot_password_SUBJECT" => "{$domainName} - Obnovenie hesla",
+              "forgot_password_SUBJECT" => "{$this->domainName} - Obnovenie hesla",
               "forgot_password_BODY" => file_get_contents(__DIR__."/../content/PageTexts/emails/forgotPasswordBody_sk.html")
             ],
           ],
@@ -670,62 +655,13 @@ class WebsiteContentGenerator {
       ]
     ]);
 
-    $themeObject->onAfterInstall();
+    $this->themeObject->onAfterInstall();
 
-    /////////////////////////////////////////////////////////////////
+  }
 
-    // Blogs
-    $i = 1;
-    foreach (scandir($sampleContentDir) as $file) {
-      if (in_array($file, [".", ".."])) continue;
-
-      $tmpContent = file_get_contents("{$sampleContentDir}/{$file}");
-
-      $blogCatalogModel->insertRow([
-        "id" => $idOffset + $i,
-        "name" => pathinfo($file, PATHINFO_FILENAME),
-        "content" => $tmpContent,
-        "perex" => mb_substr($tmpContent, 0, 50),
-        "image" => "blogs/{$i}.png",
-        "created_at" => date("Y-m-d"),
-        "id_user" => 1,
-      ]);
-
-      $i++;
+  public function installPlugins() {
+    foreach ($this->adminPanel->pluginObjects as $pluginObject) {
+      $pluginObject->install($this);
     }
-
-    // Slideshow
-
-    $slideshowModel->insertRow([
-      "domain" => $domainName,
-      "heading" => $this->translate("Welcome"),
-      "description" => $this->translate("Your best online store"),
-      "image" => "slideshow/1.jpg",
-      "button_url" => "produkty",
-      "button_text" => $this->translate("Start shopping"),
-    ]);
-    $slideshowModel->insertRow([
-      "domain" => $domainName,
-      "heading" => $this->translate("Discounts"),
-      "description" => $this->translate("We have something special for your"),
-      "image" => "slideshow/2.jpg",
-      "button_url" => $this->translate("discounts"),
-      "button_text" => $this->translate("Show discounts"),
-    ]);
-    $slideshowModel->insertRow([
-      "domain" => $domainName,
-      "heading" => $this->translate("Check our luxury products"),
-      "description" => $this->translate("We sell only most-rated and reliable products"),
-      "image" => "slideshow/3.jpg",
-    ]);
-
-    // News
-
-    $newsModel->insertRow([
-      "title" => $this->translate("Welcome to our online store"),
-      "perex" => $this->translate("We built our online store using Surikata.io."),
-      "content" => $this->translate("We built our online store using Surikata.io."),
-      "domain" => $domainName,
-    ]);
- }
+  }
 }

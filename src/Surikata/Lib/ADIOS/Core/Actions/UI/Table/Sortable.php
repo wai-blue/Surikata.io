@@ -38,7 +38,7 @@ if (_count($ids)) {
     }
 
     try {
-        $adios->db->start_transaction();
+        $adios->db->startTransaction();
         foreach ($ids as $key => $id) {
             if (is_numeric($id) && $id > 0) {
                 $adios->db->update_row_part("{$_REQUEST['table']}", ["{$_REQUEST['column']}" => $new_order[$key]], $id);

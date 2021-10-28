@@ -36,6 +36,8 @@ class General extends \Surikata\Core\Web\Controller {
         if (is_file($templateFile)) {
           $renderParams["system"]["availableVariables"] = array_keys($renderParams);
 
+          $this->websiteRenderer->currentRenderedPlugin->twigRenderParams = $renderParams;
+
           $html = $this->websiteRenderer->twig
             ->render("Templates/Plugins/{$pluginName}.twig", $renderParams)
           ;

@@ -679,7 +679,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $productStockStateModel->insertRow(["id" => 3, "name_lang_1" => "Available upon request"]);
 
       // produkty - produkty
-      $adminPanel->db->start_transaction();
+      $adminPanel->db->startTransaction();
 
       RandomProductsGenerator::generateRandomProducts(
         $randomProductsCount,
@@ -693,7 +693,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $productsCount = count($products);
 
       // produkty - galeria produktov
-      $adminPanel->db->start_transaction();
+      $adminPanel->db->startTransaction();
 
       foreach ($products as $product) {
         for ($i = 1; $i <= 8; $i++) {
@@ -718,7 +718,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $adminPanel->db->commit();
       
       // produkty - podobne protuky
-      $adminPanel->db->start_transaction();
+      $adminPanel->db->startTransaction();
 
       foreach ($products as $product) {
         for ($i = 1; $i <= 8; $i++) {
@@ -736,7 +736,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $adminPanel->db->commit();
 
       // produkty - prislusenstvo k produktom
-      $adminPanel->db->start_transaction();
+      $adminPanel->db->startTransaction();
 
       foreach ($products as $product) {
         for ($i = 1; $i <= 8; $i++) {
@@ -753,7 +753,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       // nakupny cennik
 
-      $adminPanel->db->start_transaction();
+      $adminPanel->db->startTransaction();
 
       for ($i = 1; $i <= $productsCount; $i++) {
         $productPriceModel->insertRandomRow(["id_product" => $i]);
@@ -922,10 +922,14 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $slideshowImageSet,
       $domainsToInstall,
     );
+
     $wsg->copyAssets();
+
     foreach ($domainsToInstall as $domainIndex => $domain) {
       $wsg->generateWebsiteContent($domainIndex, $domain["themeName"]);
+      $wsg->installPlugins();
     }
+
 
   } catch (\Exception $e) {
     echo "

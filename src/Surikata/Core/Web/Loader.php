@@ -34,8 +34,6 @@ class Loader extends \Cascada\Loader {
 
   var $domain;
 
-
-  var $controllers;
   var $currentRenderedPlugin = NULL;
 
   var $translationCache = NULL;
@@ -217,7 +215,23 @@ class Loader extends \Cascada\Loader {
         'insertTemplateSnippets',
         function ($snippetName) {
           // TODO: prejst vsetky pluginy a od kazdeho si vypytat $snippetName
-          return "[insertTemplateSnippets: {$snippetName}]";
+          // return "[insertTemplateSnippets: {$snippetName}]";
+          
+          $html = "";
+
+          foreach ($this->adminPanel->plugins as $pluginName) {
+            $templateFile = "{$this->themeDir}/Templates/Snippets/{$pluginName}.twig";
+
+            if (is_file($templateFile)) {
+              $renderParams = $this->currentRenderedPlugin->twigRenderParams;
+              $renderParams["snippetName"] = $snippetName;
+
+              $html .= $this->twig
+                ->render("Templates/Snippets/{$pluginName}.twig", $renderParams)
+              ;
+            }
+          }
+          return $html;
         }
       ));
       

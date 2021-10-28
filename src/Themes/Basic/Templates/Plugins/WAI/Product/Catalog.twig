@@ -1,9 +1,9 @@
 {% if _GET.renderOnly == "" %}
   <script>
     $(document).ready(function () {
-      BasicThemeProductCatalog.page = {{ catalogInfo.page }};
-      BasicThemeProductCatalog.catalogListType = '{{ catalogInfo.catalogListType }}';
-      BasicThemeProductCatalog.getScrollId();
+      ThemeBasicProductCatalog.page = {{ catalogInfo.page }};
+      ThemeBasicProductCatalog.catalogListType = '{{ catalogInfo.catalogListType }}';
+      ThemeBasicProductCatalog.getScrollId();
     });
 
   </script>
@@ -144,7 +144,7 @@
                   <button
                     type="button"
                     class='load-btn'
-                    onclick="BasicThemeProductCatalog.loadNextPage().updatePagination();"
+                    onclick="ThemeBasicProductCatalog.loadNextPage().updatePagination();"
                     {% if catalogInfo.lastPage <= catalogInfo.page %} disabled {% endif %}
                   >
                     {{ translate("More products", "Product") }}
@@ -163,7 +163,7 @@
                     <a
                       class="prev"
                       href="javascript:void(0)"
-                      onclick="BasicThemeProductCatalog.loadPage('-').updatePagination();"
+                      onclick="ThemeBasicProductCatalog.loadPage('-').updatePagination();"
                     ><i class="fa fa-chevron-left"></i></a>
                   </li>
                 {% endif %}
@@ -171,7 +171,7 @@
                   <a
                     {% if catalogInfo.page == 1 %} class="active" {% endif %}
                     href="javascript:void(0)"
-                    onclick="BasicThemeProductCatalog.loadPage(1).updatePagination();"
+                    onclick="ThemeBasicProductCatalog.loadPage(1).updatePagination();"
                   >1</a>
                 </li>
                 {% if catalogInfo.page > 4 %}
@@ -184,7 +184,7 @@
                         <a
                           {% if page == catalogInfo.page %} class="active" {% endif %}
                           href="javascript:void(0)"
-                          onclick="BasicThemeProductCatalog.loadPage({{ page }}).updatePagination();"
+                          onclick="ThemeBasicProductCatalog.loadPage({{ page }}).updatePagination();"
                         >{{ page }}</a>
                       </li>
                     {% endif %}
@@ -198,7 +198,7 @@
                     <a
                       {% if catalogInfo.lastPage == catalogInfo.page %} class="active" {% endif %}
                       href="javascript:void(0)"
-                      onclick="BasicThemeProductCatalog.loadPage({{ catalogInfo.lastPage }}).updatePagination();"
+                      onclick="ThemeBasicProductCatalog.loadPage({{ catalogInfo.lastPage }}).updatePagination();"
                     >{{ catalogInfo.lastPage }}</a>
                   </li>
                 {% endif %}
@@ -207,7 +207,7 @@
                     <a
                       class="next"
                       href="javascript:void(0)"
-                      onclick="BasicThemeProductCatalog.loadPage('+').updatePagination();"
+                      onclick="ThemeBasicProductCatalog.loadPage('+').updatePagination();"
                     >
                       <i class="fa fa-chevron-right"></i>
                     </a>

@@ -74,7 +74,7 @@ class Plugin {
         foreach (scandir($folder) as $file) {
           if (is_file("{$folder}/{$file}")) {
             $tmpModelName = str_replace(".php", "", $file);
-            $this->adios->models[] = "Plugins/{$this->name}/Models/{$tmpModelName}";
+            $this->adios->registerModel("Plugins/{$this->name}/Models/{$tmpModelName}");
           }
         }
       }

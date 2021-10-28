@@ -1,10 +1,10 @@
-function SurikataProductCatalog() {
+function PluginWAIProductCatalog() {
   this.page = 0;
   this.filter = {};
   this.catalogListType = "list";
 }
 
-SurikataProductCatalog.prototype.loadUrlParams = function (varName) {
+PluginWAIProductCatalog.prototype.loadUrlParams = function (varName) {
   // Do if url contain varName
   if (window.location.href.indexOf(varName)> -1) {
     let url = new URL(window.location.href);
@@ -13,13 +13,13 @@ SurikataProductCatalog.prototype.loadUrlParams = function (varName) {
   }
 }
 
-SurikataProductCatalog.prototype.setPage = function (page) {
+PluginWAIProductCatalog.prototype.setPage = function (page) {
   this.page = page;
   this.filter['page'] = page;
   return this;
 }
 
-SurikataProductCatalog.prototype.getScrollId = function() {
+PluginWAIProductCatalog.prototype.getScrollId = function() {
   var searchParams = new URLSearchParams(window.location.search);
   var scrollId = searchParams.get('scrollId');
   var _this = this;
@@ -38,7 +38,7 @@ SurikataProductCatalog.prototype.getScrollId = function() {
   }
 }
 
-SurikataProductCatalog.prototype.setCurrentProductPage = function (page, productId) {
+PluginWAIProductCatalog.prototype.setCurrentProductPage = function (page, productId) {
   let _this = this;
   this.filter['page'] = page;
   this.filter['scrollId'] = productId;
@@ -46,12 +46,12 @@ SurikataProductCatalog.prototype.setCurrentProductPage = function (page, product
   window.history.pushState({}, '', _this.getURL());
 }
 
-SurikataProductCatalog.prototype.setFilter = function (varName, varValue) {
+PluginWAIProductCatalog.prototype.setFilter = function (varName, varValue) {
   this.filter[varName] = varValue;
   return this;
 }
 
-SurikataProductCatalog.prototype.addValueToFilter = function (varName, varValue) {
+PluginWAIProductCatalog.prototype.addValueToFilter = function (varName, varValue) {
   if (typeof this.filter[varName] == 'undefined') {
     this.filter[varName] = [];
   }
@@ -61,7 +61,7 @@ SurikataProductCatalog.prototype.addValueToFilter = function (varName, varValue)
   return this;
 }
 
-SurikataProductCatalog.prototype.removeValueFromFilter = function (varName, varValue) {
+PluginWAIProductCatalog.prototype.removeValueFromFilter = function (varName, varValue) {
   let newVar = [];
   for (i = 0; i < this.filter[varName].length; i++) {
     if (this.filter[varName][i] != varValue) {
@@ -72,7 +72,7 @@ SurikataProductCatalog.prototype.removeValueFromFilter = function (varName, varV
   return this;
 }
 
-SurikataProductCatalog.prototype.getURL = function (url) {
+PluginWAIProductCatalog.prototype.getURL = function (url) {
   let currentUrl = new URL(window.location);
   let urlObject = null;
 
@@ -102,7 +102,7 @@ SurikataProductCatalog.prototype.getURL = function (url) {
   return urlObject;
 }
 
-SurikataProductCatalog.prototype.update = function (updateDiv, url) {
+PluginWAIProductCatalog.prototype.update = function (updateDiv, url) {
   let _this = this;
   let pluginParams = null;
   
@@ -127,7 +127,7 @@ SurikataProductCatalog.prototype.update = function (updateDiv, url) {
   return this;
 }
 
-SurikataProductCatalog.prototype.updatePagination = function () {
+PluginWAIProductCatalog.prototype.updatePagination = function () {
   _this = this;
 
   Surikata.renderPlugin(
@@ -145,7 +145,7 @@ SurikataProductCatalog.prototype.updatePagination = function () {
   );
 }
 
-SurikataProductCatalog.prototype.loadNextPage = function (__this, success) {
+PluginWAIProductCatalog.prototype.loadNextPage = function (__this, success) {
   let _this = __this;
 
   Surikata.renderPlugin(
@@ -162,7 +162,7 @@ SurikataProductCatalog.prototype.loadNextPage = function (__this, success) {
   );
 }
 
-SurikataProductCatalog.prototype.loadPage = function (__this, success) {
+PluginWAIProductCatalog.prototype.loadPage = function (__this, success) {
   let _this = __this;
 
   Surikata.renderPlugin(

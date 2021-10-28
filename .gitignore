@@ -15,10 +15,10 @@
 !/prop/README.md
 !/prop/Init.php
 !/prop/MyEcommerceProject.php
-!/prop/Plugins/
-!/prop/Plugins/README.md
-!/prop/Themes/
-!/prop/Themes/README.md
+!/prop/Plugins/*
+!/prop/Themes/*
+/prop/Plugins/README.md
+/prop/Themes/README.md
 
 /vendor/*
 

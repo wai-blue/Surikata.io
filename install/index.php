@@ -124,6 +124,18 @@ foreach (@scandir(__DIR__."/../src/Themes") as $dir) {
   }
 }
 
+foreach (@scandir(__DIR__."/../prop/Themes") as $dir) {
+  if (
+    !in_array($dir, [".", ".."])
+    && is_file(__DIR__."/../prop/Themes/{$dir}/Main.php")
+  ) {
+    $availableThemes[] = $dir;
+  }
+}
+
+$availableThemes = array_unique($availableThemes);
+sort($availableThemes);
+
 $availableLanguages = [];
 foreach (@scandir(__DIR__."/languages") as $file) {
   if (!in_array($file, [".", ".."])) {
@@ -355,8 +367,8 @@ if (!$doInstall) {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Initialization
 
-    $websiteRenderer = new \Surikata\Core\Web\Loader($websiteRendererConfig);
-    $adminPanel = new \Surikata\Core\AdminPanel\Loader($adminPanelConfig, ADIOS_MODE_FULL, $websiteRenderer);
+    $websiteRenderer = new \MyEcommerceProject\Web($websiteRendererConfig);
+    $adminPanel = new \MyEcommerceProject\AdminPanel($adminPanelConfig, ADIOS_MODE_FULL, $websiteRenderer);
 
     $adminPanel->install();
     $adminPanel->installDefaultUsers();
@@ -570,7 +582,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       // produkty - vyrobcovia
       $brandModel->insertRow(["name" => "Mercedes"]);
-      $brandModel->insertRow(["name" => "Hyunday"]);
+      $brandModel->insertRow(["name" => "Hyundai"]);
       $brandModel->insertRow(["name" => "Lenovo"]);
       $brandModel->insertRow(["name" => "Yves Rocher"]);
       $brandModel->insertRow(["name" => "Milsy"]);

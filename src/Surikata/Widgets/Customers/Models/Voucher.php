@@ -19,6 +19,7 @@ class Voucher extends \ADIOS\Core\Model {
         "type" => "varchar",
         "title" => $this->translate("Voucher"),
         "show_column" => TRUE,
+        "required" => TRUE
       ],
 
       "discount_sum" => [
@@ -37,10 +38,33 @@ class Voucher extends \ADIOS\Core\Model {
         "show_column" => TRUE,
       ],
 
-      "valid" => [
-        "type" => "bool",
-        "title" => $this->translate("Valid"),
-        "description" => $this->translate("Invalid vouchers can't be used."),
+      "max_use" => [
+        "type" => "int",
+        "title" => $this->translate("Max use of voucher"),
+        "description" => $this->translate("Maximum number of voucher uses, e.g. 15x"),
+        "show_column" => TRUE,
+      ],
+
+      "valid_from" => [
+        "type" => "datetime",
+        "title" => $this->translate("Valid from"),
+        "description" => $this->translate("The date from which the voucher is enabled for use"),
+        "show_column" => TRUE,
+        "required" => TRUE
+      ],
+
+      "valid_to" => [
+        "type" => "datetime",
+        "title" => $this->translate("Valid to"),
+        "description" => $this->translate("The date until which the voucher can be used"),
+        "show_column" => TRUE,
+        "required" => TRUE
+      ],
+
+      "is_enabled" => [
+        "type" => "boolean",
+        "title" => $this->translate("Enabled"),
+        "description" => $this->translate("The voucher is enabled for use"),
         "show_column" => TRUE,
       ],
     ]);
@@ -52,11 +76,25 @@ class Voucher extends \ADIOS\Core\Model {
         "type" => "index",
         "columns" => ["voucher"],
       ],
-      "voucher_valid" => [
+      "voucher_is_enabled" => [
         "type" => "index",
-        "columns" => ["voucher", "valid"],
+        "columns" => ["voucher", "is_enabled"],
       ],
     ]);
+  }
+
+  public function getVoucherByName(string $voucherName) {
+    $voucher = 
+      $this
+      ->where("name", $voucherName)
+      ->where('is_enabled', 1)
+      ->where('valid_from', '<=', date('Y-m-d H:i:s', time()))
+      ->where('valid_to', '>=', date('Y-m-d H:i:s', time()))
+      ->get()
+      ->toArray()
+    ;
+
+    return $voucher ?? [];
   }
 
 }

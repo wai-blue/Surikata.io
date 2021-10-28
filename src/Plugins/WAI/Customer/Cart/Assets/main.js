@@ -94,6 +94,17 @@ PluginWAICustomerCart.prototype.placeOrder = function (success, fail) {
   );
 }
 
+PluginWAICustomerCart.prototype.applyVoucher = function (success, fail) {
+  let data = Surikata.serializeForm('#voucherForm');
+
+  Surikata.renderPluginJSON(
+    'WAIproprietary/Checkout/Vouchers',
+    data,
+    success,
+    fail
+  );
+}
+
 
 
 

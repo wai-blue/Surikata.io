@@ -928,7 +928,9 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
     foreach ($domainsToInstall as $domainIndex => $domain) {
       $wsg->generateWebsiteContent($domainIndex, $domain["themeName"]);
       $wsg->installPlugins();
+      $adminPanel->widgets["Website"]->rebuildSitemap($domainsToInstall[$domainIndex]['name']);
     }
+
 
 
   } catch (\Exception $e) {

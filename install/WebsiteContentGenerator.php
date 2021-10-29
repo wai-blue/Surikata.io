@@ -7,6 +7,7 @@ class WebsiteContentGenerator {
   public $domainName = "";
   public $domainSlug = "";
   public $themeObject = [];
+  public $websiteCommonPanels = [];
 
   public function __construct($adminPanel, $slideshowImageSet, $domainsToInstall) {
     $this->adminPanel = $adminPanel;
@@ -55,6 +56,25 @@ class WebsiteContentGenerator {
 
     return $this->dictionary[$languageIndex][$string];
 
+  }
+
+  public function expandPanelsDefinition($panels) {
+    $panelsExpanded = [];
+
+    foreach ($panels as $tmpPanelName => $value) {
+      $panelsExpanded[$tmpPanelName] = [];
+
+      if (is_string($value)) {
+        $panelsExpanded[$tmpPanelName]["plugin"] = $value;
+      } else {
+        $panelsExpanded[$tmpPanelName]["plugin"] = $value[0];
+        if (isset($value[1])) {
+          $panelsExpanded[$tmpPanelName]["settings"] = $value[1];
+        }
+      }
+    }
+
+    return $panelsExpanded;
   }
 
   public function webPageSimpleText($url, $title) {
@@ -207,7 +227,7 @@ class WebsiteContentGenerator {
 
     // web - stranky
 
-    $websiteCommonPanels[$this->domainName] = [
+    $this->websiteCommonPanels[$this->domainName] = [
       "header" => [
         "plugin" => "WAI/Common/Header"
       ],
@@ -575,19 +595,6 @@ class WebsiteContentGenerator {
 
     foreach ($webPages as $webPageData => $webPagePanels) {
       list($tmpUrl, $tmpLayout, $tmpTitle) = explode("|", $webPageData);
-      $tmpPanels = [];
-      foreach ($webPagePanels as $tmpPanelName => $value) {
-        $tmpPanels[$tmpPanelName] = [];
-
-        if (is_string($value)) {
-          $tmpPanels[$tmpPanelName]["plugin"] = $value;
-        } else {
-          $tmpPanels[$tmpPanelName]["plugin"] = $value[0];
-          if (isset($value[1])) {
-            $tmpPanels[$tmpPanelName]["settings"] = $value[1];
-          }
-        }
-      }
 
       $websiteWebPageModel->insertRow([
         "domain" => $this->domainName,
@@ -598,7 +605,10 @@ class WebsiteContentGenerator {
         "publish_always" => 1,
         "content_structure" => json_encode([
           "layout" => $tmpLayout,
-          "panels" => array_merge($websiteCommonPanels[$this->domainName], $tmpPanels),
+          "panels" => array_merge(
+            $this->websiteCommonPanels[$this->domainName],
+            $this->expandPanelsDefinition($webPagePanels)
+          ),
         ]),
       ]);
     }
@@ -609,8 +619,6 @@ class WebsiteContentGenerator {
       "to_url" => "//".$_SERVER['HTTP_HOST'].REWRITE_BASE.$this->domainSlug."/".$this->translate("home"),
       "type" => 302,
     ]);
-
-    $this->adminPanel->widgets["Website"]->rebuildSitemap($this->domainName);
 
     // nastavenia webu
 

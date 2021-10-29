@@ -37,6 +37,7 @@ class Loader extends \Cascada\Loader {
   var $currentRenderedPlugin = NULL;
 
   var $translationCache = NULL;
+  var $customerDataCache = [];
 
   /**
    * Class constructor.
@@ -212,18 +213,17 @@ class Loader extends \Cascada\Loader {
       ));
 
       $this->twig->addFunction(new \Twig\TwigFunction(
-        'insertTemplateSnippets',
-        function ($snippetName) {
-          // TODO: prejst vsetky pluginy a od kazdeho si vypytat $snippetName
-          // return "[insertTemplateSnippets: {$snippetName}]";
-          
+        'insertSnippets',
+        function ($snippetName, $renderParams = []) {
           $html = "";
-
           foreach ($this->adminPanel->plugins as $pluginName) {
             $templateFile = "{$this->themeDir}/Templates/Snippets/{$pluginName}.twig";
 
             if (is_file($templateFile)) {
-              $renderParams = $this->currentRenderedPlugin->twigRenderParams;
+              $renderParams = array_merge(
+                $this->currentRenderedPlugin->twigRenderParams,
+                $renderParams
+              );
               $renderParams["snippetName"] = $snippetName;
 
               $html .= $this->twig
@@ -469,6 +469,17 @@ class Loader extends \Cascada\Loader {
     }
     
     return $customerUID;
+  }
+
+  public function getCurrentCustomerData() {
+    $customerUID = $this->getCustomerUID();
+
+    if (empty($this->customerDataCache[$customerUID])) {
+      $customerModel = new \ADIOS\Widgets\Customers\Models\CustomerUID($this->adios);
+      $this->customerDataCache[$customerUID] = $customerModel->getByCustomerUID($customerUID);
+    }
+
+    return $this->customerDataCache[$customerUID];
   }
 
   public function registerPaymentPlugin($pluginName) {

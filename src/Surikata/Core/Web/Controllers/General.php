@@ -29,7 +29,7 @@ class General extends \Surikata\Core\Web\Controller {
       $this->websiteRenderer->currentRenderedPlugin = $plugin;
 
       if (($this->websiteRenderer->urlVariables["__output"] ?? "") == "json") {
-        $html = json_encode($plugin->renderJSON());
+        $html = json_encode($plugin->renderJSON($renderParams));
       } else {
         $templateFile = "{$this->websiteRenderer->themeDir}/Templates/Plugins/{$pluginName}.twig";
 

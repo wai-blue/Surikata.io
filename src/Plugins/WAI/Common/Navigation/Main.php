@@ -100,14 +100,11 @@ namespace Surikata\Plugins\WAI\Common {
         $categoryPlugin = new Catalog($this->adminPanel);
         $allCategories = $categoryModel->getAllCached();
         $allCategories = $categoryModel->translateForWeb($allCategories, $languageIndex);
-
         foreach ($allCategories as $key => $category) {
-          $url = $categoryPlugin->replaceUrlVariables(
-            $categoryPlugin->defaultUrl,
-            $categoryPlugin->convertCategoryToUrlVariables($category)
-          )
-          ;
-          $allCategories[$key]["url"] = $url;
+
+          $url = $categoryPlugin->getWebPageUrlFormatted($categoryPlugin->convertCategoryToUrlVariables($category));
+          $allCategories[$key]["url"] = $this->websiteRenderer->rootUrl ."/". $url;
+
         }
         $categoryTree = $categoryModel->getAllCategoriesAndSubCategories($allCategories);
         $twigParams["categories"] = $categoryTree;

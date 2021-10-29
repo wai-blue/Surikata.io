@@ -95,6 +95,15 @@ class Loader extends \Cascada\Loader {
         }
       }
 
+      $this->assetsUrlMap["core/assets/js/dictionary.js"] = function($websiteRenderer, $url) {
+        $domainToRender = $this->config['domainToRender'];
+
+        $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($this->adminPanel);
+        $dictionary = $translationModel->loadCache()[$domainToRender];
+        
+        echo "var __srkt_dict__ = JSON.parse('".ads(json_encode($dictionary))."');";
+        exit;
+      };
       $this->assetsUrlMap["core/assets/"] = ADMIN_PANEL_SRC_DIR."/Core/Assets/";
       $this->assetsUrlMap["theme/assets/"] = "{$this->themeDir}/Assets/";
       $this->assetsUrlMap["plugins/assets/"] = function($websiteRenderer, $url) { 

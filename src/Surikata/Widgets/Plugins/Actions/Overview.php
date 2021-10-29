@@ -44,7 +44,7 @@ class Overview extends \ADIOS\Core\Action {
                   href='javascript:void(0)'
                   class='btn btn-light'
                   onclick='desktop_render(\"Plugins/{$pluginName}/Main\");'
-                >".$this->translate(hsc($manifest['title']))."</a>
+                >".$this->translate("Manage")."</a>
               </div>
             </div>
           </div>

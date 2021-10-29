@@ -94,14 +94,19 @@ PluginWAICustomerCart.prototype.placeOrder = function (success, fail) {
   );
 }
 
-PluginWAICustomerCart.prototype.applyVoucher = function (success, fail) {
+PluginWAICustomerCart.prototype.applyVoucher = function () {
   let data = Surikata.serializeForm('#voucherForm');
+  data['renderOnly'] = 'cartTotal';
 
-  Surikata.renderPluginJSON(
-    'WAIproprietary/Checkout/Vouchers',
+  Surikata.renderPlugin(
+    'WAI/Order/CartOverview',
     data,
-    success,
-    fail
+    function(data) {
+      $('#cart-total')
+        .html(data)
+        .css('opacity', 1)
+      ;
+    },
   );
 }
 

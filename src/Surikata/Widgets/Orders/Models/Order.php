@@ -991,6 +991,21 @@ class Order extends \ADIOS\Core\Model {
                 "notes",
                 "domain",
                 [
+                  "title" => $this->translate("Tags"),
+                  "input" => (new \ADIOS\Core\UI\Input\CheckboxField(
+                    $this->adios,
+                    "{$params['uid']}_tags",
+                    [
+                      "model" => "Widgets/Orders/Models/OrderTag",
+                      // "key_column" => "id_order",
+                      // "key_value" => $data['id'],
+                      // "value_column" => "domain",
+                      // "values" => $domainAssignmentValues,
+                      // "columns" => 2,
+                    ]
+                  ))->render(),
+                ],
+                [
                   "title" => $this->translate("State"),
                   "input" => "
                     <div

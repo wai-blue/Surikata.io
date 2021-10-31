@@ -13,9 +13,28 @@ namespace ADIOS\Core\UI\Input;
 class Tags extends \ADIOS\Core\Input {
   public function render() {
     $model = $this->adios->getModel($this->params['model']);
+    $options = $model->getAll();
 
-    $html = print_r($this->params, TRUE);
+    $allTags = [];
+    foreach($options as $option) {
+      $allTags[] = strtolower($option["tag_lang_1"]);
+    }
+    $allTagsAutocomplete = "'" . implode("','", $allTags). "'";
 
+    $html = "<textarea id='{$this->uid}'></textarea>";
+
+    $html .= "
+      <script>
+        $('#{$this->uid}').tagEditor({
+          autocomplete: {
+              delay: 0,
+              position: { collision: 'flip' },
+              source: [{$allTagsAutocomplete}],
+          },
+          forceLowercase: true,
+          placeholder: 'Enter tags ...',
+        });
+      </script>";
     return $html;
   }
 }

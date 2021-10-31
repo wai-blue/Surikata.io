@@ -1373,6 +1373,7 @@ class Loader {
       dirname(__FILE__)."/../Assets/Css/adios_classes.css",
       dirname(__FILE__)."/../Assets/Css/quill-1.3.6.core.css",
       dirname(__FILE__)."/../Assets/Css/quill-1.3.6.snow.css",
+      dirname(__FILE__)."/../Assets/Css/jquery.tag-editor.css",
     ];
 
     foreach (scandir(dirname(__FILE__).'/../Assets/Css/Ui') as $file) {
@@ -1419,6 +1420,7 @@ class Loader {
       "jquery.easing.js",
       "sb-admin-2.js",
       "jsoneditor.js",
+      "jquery.tag-editor.js",
     ];
     foreach (scandir(dirname(__FILE__).'/../Assets/Js/Ui') as $file) {
       if ('.js' == substr($file, -3)) {

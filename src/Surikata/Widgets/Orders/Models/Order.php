@@ -367,6 +367,17 @@ class Order extends \ADIOS\Core\Model {
     ]);
   }
 
+  public function tags() {
+    return $this
+      ->belongsToMany(
+        \ADIOS\Widgets\Orders\Models\OrderTag::class,
+        GTP."_orders_tags_assignment",
+        'id_order',
+        'id_tag'
+      )
+      ;
+  }
+
   public function tableParams($params) {
     switch ($params['filter_type']) {
       case "New":
@@ -817,6 +828,9 @@ class Order extends \ADIOS\Core\Model {
       $params['save_action'] = "Orders/PlaceOrder";
     } else {
 
+      $orderTags = new OrderTag();
+      (new OrderTagAssignment())->getTagsForOrder($data['id']);
+
       $btnPrintOrderHtml = $this->adios->ui->button([
         "text"    => $this->translate("Print order"),
         "onclick" => "
@@ -992,12 +1006,12 @@ class Order extends \ADIOS\Core\Model {
                 "domain",
                 [
                   "title" => $this->translate("Tags"),
-                  "input" => (new \ADIOS\Core\UI\Input\CheckboxField(
+                  "input" => (new \ADIOS\Core\UI\Input\Tags(
                     $this->adios,
                     "{$params['uid']}_tags",
                     [
                       "model" => "Widgets/Orders/Models/OrderTag",
-                      // "key_column" => "id_order",
+                      "selected" => "id_order",
                       // "key_value" => $data['id'],
                       // "value_column" => "domain",
                       // "values" => $domainAssignmentValues,

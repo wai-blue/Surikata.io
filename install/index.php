@@ -396,6 +396,8 @@ if (!$doInstall) {
     $shoppingCartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($adminPanel);
     $invoiceModel = new \ADIOS\Widgets\Finances\Models\Invoice($adminPanel);
     $orderModel = new \ADIOS\Widgets\Orders\Models\Order($adminPanel);
+    $orderTagModel = new \ADIOS\Widgets\Orders\Models\OrderTag($adminPanel);
+    $orderTagAssignmentModel = new \ADIOS\Widgets\Orders\Models\OrderTagAssignment($adminPanel);
     $unitModel = new \ADIOS\Widgets\Settings\Models\Unit($adminPanel);
     $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($adminPanel);
 
@@ -848,6 +850,10 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $customersCount = $customerModel->get()->count();
       $productsCount = $productModel->get()->count();
 
+      $orderTagModel->insertRow(["tag" => "paid", "tag_lang_1" => "paid", "tag_lang_2" => "zaplatená"]);
+      $orderTagModel->insertRow(["tag" => "unpaid", "tag_lang_1" => "paid", "tag_lang_2" => "nezaplatená"]);
+      $orderTagModel->insertRow(["tag" => "good_client", "tag_lang_1" => "Good client", "tag_lang_2" => "Dobrý klient"]);
+
       $orderModel->disableNotifications = TRUE;
 
       for ($i = 1; $i <= 40; $i++) {
@@ -909,6 +915,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
         if (rand(0, 1) == 1) {
           $idInvoice = $orderModel->issueInvoce($idOrder, TRUE);
+          $orderTagAssignmentModel->insertRow(["id_order" => $idOrder, "id_tag" => rand(1,3)]);
         }
 
       }

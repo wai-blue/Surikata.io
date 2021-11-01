@@ -21,11 +21,14 @@ class Tags extends \ADIOS\Core\Input {
     }
     $allTagsAutocomplete = "'" . implode("','", $allTags). "'";
 
-    $html = "<textarea id='{$this->uid}'></textarea>";
+    $html = "<textarea id='{$this->uid}_tag'></textarea>";
+
+    $html .= "<input type='hidden' name='{$this->uid}' id='{$this->uid}'>";
 
     $html .= "
       <script>
-        $('#{$this->uid}').tagEditor({
+        $('#{$this->uid}_tag').tagEditor({
+          initialTags: {$this->params["initialTags"]},
           autocomplete: {
               delay: 0,
               position: { collision: 'flip' },
@@ -33,6 +36,12 @@ class Tags extends \ADIOS\Core\Input {
           },
           forceLowercase: true,
           placeholder: 'Enter tags ...',
+          onChange: function(field, editor, tags) {
+            let tagsJson = JSON.stringify(tags);
+            $('#{$this->uid}').val(
+              tagsJson
+            );
+          },
         });
       </script>";
     return $html;

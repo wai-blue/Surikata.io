@@ -410,6 +410,18 @@ class Order extends \ADIOS\Core\Model {
   }
 
   public function onBeforeSave($data) {
+
+    $tagNames = json_decode($data["tags"]);
+    if (count($tagNames) > 0) {
+      $tags = [];
+      foreach ($tagNames as $tagName) {
+        $tag = (new OrderTag($this->adios))->findTagFromName($tagName);
+        $tags[] = $tag["id"];
+      }
+      $data["tags"] = $tags;
+      (new OrderTagAssignment($this->adios))->saveOrderTags($data["id"], $tags);
+    }
+
     return $data;
   }
 
@@ -828,8 +840,8 @@ class Order extends \ADIOS\Core\Model {
       $params['save_action'] = "Orders/PlaceOrder";
     } else {
 
-      $orderTags = new OrderTag();
-      (new OrderTagAssignment())->getTagsForOrder($data['id']);
+      $tags = (new OrderTagAssignment())->getTagsForOrder($data['id']);
+      $initialTags = json_encode(OrderTag::getTagNamesFromArray((new OrderTag())->getSelectedTags($tags)));
 
       $btnPrintOrderHtml = $this->adios->ui->button([
         "text"    => $this->translate("Print order"),
@@ -1011,7 +1023,7 @@ class Order extends \ADIOS\Core\Model {
                     "{$params['uid']}_tags",
                     [
                       "model" => "Widgets/Orders/Models/OrderTag",
-                      "selected" => "id_order",
+                      "initialTags" => $initialTags,
                       // "key_value" => $data['id'],
                       // "value_column" => "domain",
                       // "values" => $domainAssignmentValues,

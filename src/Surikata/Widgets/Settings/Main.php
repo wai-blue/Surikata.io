@@ -14,6 +14,10 @@ class Settings extends \ADIOS\Core\Widget {
           //   "onclick" => "window_render('Settings/MerchantProfile');",
           // ],
           [
+            "title" => $this->translate("Order Tags"),
+            "onclick" => "desktop_update('Orders/Tags');",
+          ],
+          [
             "title" => $this->translate("Units"),
             "onclick" => "desktop_update('Settings/Units');",
           ],

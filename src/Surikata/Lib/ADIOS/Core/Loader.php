@@ -1366,7 +1366,7 @@ class Loader {
       dirname(__FILE__)."/../Assets/Css/responsive.css",
       dirname(__FILE__)."/../Assets/Css/colors.css",
       dirname(__FILE__)."/../Assets/Css/desktop.css",
-      dirname(__FILE__)."/../Assets/Css/jquery-ui.css",
+      /*dirname(__FILE__)."/../Assets/Css/jquery-ui.css",*/
       dirname(__FILE__)."/../Assets/Css/jquery-ui.structure.css",
       dirname(__FILE__)."/../Assets/Css/jquery-ui-fontawesome.css",
       dirname(__FILE__)."/../Assets/Css/jquery.window.css",
@@ -1374,6 +1374,8 @@ class Loader {
       dirname(__FILE__)."/../Assets/Css/quill-1.3.6.core.css",
       dirname(__FILE__)."/../Assets/Css/quill-1.3.6.snow.css",
       dirname(__FILE__)."/../Assets/Css/jquery.tag-editor.css",
+      dirname(__FILE__)."/../Assets/Css/jquery.tag-editor.css",
+      dirname(__FILE__)."/../Assets/Css/jquery-ui.min.css",
     ];
 
     foreach (scandir(dirname(__FILE__).'/../Assets/Css/Ui') as $file) {
@@ -1401,7 +1403,7 @@ class Loader {
 
     $jsFiles = [
       "jquery-3.5.1.js",
-      "jquery-ui.1.11.4.min.js",
+      /*"jquery-ui.1.11.4.min.js",*/
       "jquery.scrollTo.min.js",
       "jquery.window.js",
       "jquery-ui-touch-punch.js",
@@ -1421,6 +1423,8 @@ class Loader {
       "sb-admin-2.js",
       "jsoneditor.js",
       "jquery.tag-editor.js",
+      "jquery-ui.min.js",
+      "jquery.caret.min.js",
     ];
     foreach (scandir(dirname(__FILE__).'/../Assets/Js/Ui') as $file) {
       if ('.js' == substr($file, -3)) {

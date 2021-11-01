@@ -850,9 +850,9 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $customersCount = $customerModel->get()->count();
       $productsCount = $productModel->get()->count();
 
-      $orderTagModel->insertRow(["tag" => "paid", "tag_lang_1" => "paid", "tag_lang_2" => "zaplatená"]);
-      $orderTagModel->insertRow(["tag" => "unpaid", "tag_lang_1" => "paid", "tag_lang_2" => "nezaplatená"]);
-      $orderTagModel->insertRow(["tag" => "good_client", "tag_lang_1" => "Good client", "tag_lang_2" => "Dobrý klient"]);
+      $orderTagModel->insertRow(["tag" => "paid", "tag_lang_1" => "paid", "tag_lang_2" => "zaplatená", "color" => "#AA0000"]);
+      $orderTagModel->insertRow(["tag" => "unpaid", "tag_lang_1" => "unpaid", "tag_lang_2" => "nezaplatená", "color" => "#004500"]);
+      $orderTagModel->insertRow(["tag" => "good client", "tag_lang_1" => "Good client", "tag_lang_2" => "Dobrý klient", "color" => "#11009A"]);
 
       $orderModel->disableNotifications = TRUE;
 

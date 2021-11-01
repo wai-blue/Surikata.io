@@ -27,9 +27,28 @@ class OrderTagAssignment extends \ADIOS\Core\Model {
   }
 
   public function getTagsForOrder($idOrder) {
-    $query = $this->getQuery()->where('id_order', '=', $idOrder);
-    $tagList = $this->fetchRows($query);
-    return (new OrderTag())->getSelectedTags($tagList);
+
+    $tags = self::where('id_order', '=', $idOrder)->get()->toArray();
+    return $tags;
+
+  }
+
+  public function saveOrderTags($idOrder, $tags) {
+    $idOrder = (int) $idOrder;
+
+    $this->adios->db->query("
+      delete from `{$this->table}` WHERE `id_order` = {$idOrder};
+    ");
+
+    if (count($tags) > 0) {
+      $insertQuery = "insert into `{$this->table}` (`id_order`, `id_tag`) values ";
+      foreach ($tags as $tag) {
+
+        $insertQuery .= "({$idOrder}, {$tag}), ";
+      }
+      $insertQuery = trim($insertQuery, ", ");
+      $this->adios->db->query($insertQuery);
+    }
   }
 
 }

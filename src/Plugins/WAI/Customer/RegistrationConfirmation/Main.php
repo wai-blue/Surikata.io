@@ -5,7 +5,7 @@ namespace Surikata\Plugins\WAI\Customer {
 
     var $defaultUrl = "registration/{% token %}/confirm";
 
-    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = []) {
+    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
       $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adminPanel);
 
       $email = $urlVariables["email"] ?? [];

@@ -238,4 +238,26 @@ class Loader extends \ADIOS\Core\Loader {
     // TODO:
     // throw new \Exception('Wrong access permissions for folder "' . $value. '"');
   }
+
+  public function getAvailableDomains() {
+    return $this->config['widgets']['Website']['domains'] ?: [];
+  }
+
+  public function getDomainInfo($domainName) {
+    foreach ($this->getAvailableDomains() as $domainInfo) {
+      if ($domainInfo['name'] == $domainName) {
+        return $domainInfo;
+      }
+    }
+
+    return NULL;
+  }
+
+  public function getPluginSettings($pluginName) {
+    $settings = $this->config["settings"]["plugins"];
+    foreach (explode("/", $pluginName) as $tmpPath) {
+      $settings = $settings[$tmpPath];
+    }
+    return $settings;
+  }
 }

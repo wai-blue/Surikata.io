@@ -508,7 +508,7 @@ class Product extends \ADIOS\Core\Model {
     $tabTranslations = [];
     $domainAssignmentValues = [];
 
-    $domains = $this->adios->config['widgets']['Website']['domains'];
+    $domains = $this->adios->getAvailableDomains();
     $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
 
     $i = 1;

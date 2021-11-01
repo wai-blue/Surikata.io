@@ -4,7 +4,7 @@ namespace Surikata\Plugins\WAI {
 
   class News extends \Surikata\Core\Web\Plugin {
 
-    public function getWebPageUrlFormatted($data, $pluginSettings = []) {
+    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
       if (!empty($data['id']) && is_numeric($data['id'])) {
         // URL pre detail novinky
         return "news/{$data['id']}/".\ADIOS\Core\HelperFunctions::str2url($data['title']);

@@ -3,7 +3,7 @@
 namespace Surikata\Plugins\WAI\Order {
   class Confirmation extends \Surikata\Core\Web\Plugin {
 
-    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = []) {
+    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
 
       $order = $urlVariables["order"] ?? [];
       $orderModel = new \ADIOS\Widgets\Orders\Models\Order($this->adminPanel);
@@ -74,5 +74,22 @@ namespace ADIOS\Plugins\WAI\Order {
         ],
       ];
     }
+
+    public function onOrderDetailAfterSidebarButtons($eventData) {
+      
+      $orderModel = new \ADIOS\Widgets\Orders\Models\Order($this->adios);
+      $order = $orderModel->getById($eventData['data']['id']);
+
+      $url = (new \Surikata\Plugins\WAI\Order\Confirmation($this->adios->websiteRenderer))
+        ->getWebPageUrl(["order" => $order], $order["domain"])
+      ;
+
+      $domainInfo = $this->adios->getDomainInfo($order["domain"]);
+
+      $eventData["html"] = "<a href='//{$domainInfo["rootUrl"]}/{$url}' target=_blank>Confirmation URL</a>";
+
+      return $eventData;
+    }
+
   }
 }

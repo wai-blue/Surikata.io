@@ -484,6 +484,11 @@ class WebsiteContentGenerator {
           "section_1" => "WAI/Order/Confirmation"
         ],
 
+        // order-payment-received
+        "|WithoutSidebar|Order payment received" => [
+          "section_1" => "WAI/Order/PaymentConfirmation"
+        ],
+
         // create-account
         "create-account|WithoutSidebar|Create Account" => [
           "section_1" => [

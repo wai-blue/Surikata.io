@@ -14,7 +14,8 @@ class OrderTag extends \ADIOS\Core\Model {
 
   public function columns(array $columns = []) {
 
-    /* REVIEW - zobrazovať preklady pri stave objednávky používateľom? */
+    /* REVIEW - zobrazovať preklady stavov pri stave objednávky používateľom? */
+    /* REVIEW - pre používateľov zobrazovať len niektoré stavy */
     $translatedColumns = [];
     $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
 
@@ -93,19 +94,19 @@ class OrderTag extends \ADIOS\Core\Model {
       return self::whereIn('id', $tagList)->get()->toArray();
     }
     else {
-      return self::where('id', '>', 1)->get()->toArray();
+      return self::where('id', '>', 0)->get()->toArray();
     }
   }
 
   public function findTagFromName(string $tagName) {
-    $tag = self::where('tag', '=', $tagName)->get()->toArray();
+    $tag = self::where('tag', '=', $tagName)->orderBy('tag')->get()->toArray();
     if ($tag !== false) {
       return $tag[0];
     }
     return $tag;
   }
 
-  public static function getTagNamesFromArray($tagArray) {
+  public function getTagNamesFromArray($tagArray) {
     $names = [];
     foreach ($tagArray as $tag) {
       $names[] = $tag["tag"];

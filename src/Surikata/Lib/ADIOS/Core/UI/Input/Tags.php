@@ -17,12 +17,11 @@ class Tags extends \ADIOS\Core\Input {
 
     $allTags = [];
     foreach($options as $option) {
-      $allTags[] = strtolower($option["tag_lang_1"]);
+      $allTags[] = strtolower($option["tag"]);
     }
     $allTagsAutocomplete = "'" . implode("','", $allTags). "'";
 
     $html = "<textarea id='{$this->uid}_tag'></textarea>";
-
     $html .= "<input type='hidden' name='{$this->uid}' id='{$this->uid}'>";
 
     $html .= "
@@ -43,7 +42,14 @@ class Tags extends \ADIOS\Core\Input {
             );
           },
         });
-      </script>";
+      </script>
+      <style>
+        .ui-menu {
+          z-index: 9999999;
+        }
+      </style>
+    ";
+
     return $html;
   }
 }

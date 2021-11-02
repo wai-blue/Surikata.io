@@ -28,7 +28,16 @@ class OrderTagAssignment extends \ADIOS\Core\Model {
 
   public function getTagsForOrder($idOrder) {
 
-    $tags = self::where('id_order', '=', $idOrder)->get()->toArray();
+    return self::where('id_order', '=', $idOrder)->get()->toArray();
+
+  }
+
+  public function getTagIdsForOrder($idOrder) {
+
+    $tags = [];
+    foreach ($this->getTagsForOrder($idOrder) as $tag) {
+      $tags[] = $tag["id_tag"];
+    }
     return $tags;
 
   }

@@ -840,8 +840,9 @@ class Order extends \ADIOS\Core\Model {
       $params['save_action'] = "Orders/PlaceOrder";
     } else {
 
-      $tags = (new OrderTagAssignment())->getTagsForOrder($data['id']);
-      $initialTags = json_encode(OrderTag::getTagNamesFromArray((new OrderTag())->getSelectedTags($tags)));
+      $orderTagModel = new OrderTag($this->adios);
+      $tags = (new OrderTagAssignment($this->adios))->getTagIdsForOrder($data['id']);
+      $initialTags = json_encode($orderTagModel->getTagNamesFromArray($orderTagModel->getSelectedTags($tags)));
 
       $btnPrintOrderHtml = $this->adios->ui->button([
         "text"    => $this->translate("Print order"),
@@ -1024,10 +1025,6 @@ class Order extends \ADIOS\Core\Model {
                     [
                       "model" => "Widgets/Orders/Models/OrderTag",
                       "initialTags" => $initialTags,
-                      // "key_value" => $data['id'],
-                      // "value_column" => "domain",
-                      // "values" => $domainAssignmentValues,
-                      // "columns" => 2,
                     ]
                   ))->render(),
                 ],

@@ -419,9 +419,6 @@ class Order extends \ADIOS\Core\Model {
         $tag = (new OrderTag($this->adios))->findTagByName($tagName);
         $tagIds[] = $tag["id"];
       }
-      
-      // REVIEW: Toto je potrebne?  ... Zakomentoval som, lebo som zmenil $tags na $tagIds
-      // $data["tags"] = $tags;
 
       (new OrderTagAssignment($this->adios))->saveOrderTags($data["id"], $tagIds);
     }
@@ -847,6 +844,23 @@ class Order extends \ADIOS\Core\Model {
       $orderTagModel = new OrderTag($this->adios);
       $tags = (new OrderTagAssignment($this->adios))->getTagIdsForOrder($data['id']);
       $initialTags = json_encode($orderTagModel->getTagNamesFromArray($orderTagModel->getSelectedTags($tags)));
+      $showedTags = "";
+      foreach ($orderTagModel->getSelectedTags($tags) as $initialTag) {
+        $r = hexdec(substr($initialTag["color"],1,2));
+        $g = hexdec(substr($initialTag["color"],3,2));
+        $b = hexdec(substr($initialTag["color"],5,2));
+        if ($r + $g + $b > 382) {
+          $fontColor = "#222";
+        }
+        else {
+          $fontColor = "#fff";
+        }
+        $showedTags .= "
+          <span class='badge badge-order' style='background-color: {$initialTag["color"]}; color: {$fontColor};'>
+            {$initialTag["tag"]}
+          </span> 
+        ";
+      }
 
       $btnPrintOrderHtml = $this->adios->ui->button([
         "text"    => $this->translate("Print order"),
@@ -1002,6 +1016,14 @@ class Order extends \ADIOS\Core\Model {
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+        <div class='card shadow mb-2'>
+          <div class='card-header py-3'>
+            ".$this->translate('Tags')."
+          </div>
+          <div class='card-body'>
+            ".$showedTags."
           </div>
         </div>
       ";

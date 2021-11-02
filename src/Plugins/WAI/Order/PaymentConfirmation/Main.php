@@ -1,7 +1,7 @@
 <?php
 
 namespace Surikata\Plugins\WAI\Order {
-  class Confirmation extends \Surikata\Core\Web\Plugin {
+  class PaymentConfirmation extends \Surikata\Core\Web\Plugin {
 
     public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
 
@@ -10,7 +10,7 @@ namespace Surikata\Plugins\WAI\Order {
 
       $url = $pluginSettings["urlPattern"] ?? "";
       if (empty($url)) {
-        $url = "order/{% orderNumber %}/{% checkCode %}/thank-you";
+        $url = "order/{% orderNumber %}/{% checkCode %}/payment-received";
       }
 
       $url = str_replace("{% orderNumber %}", $order['number'], $url);
@@ -39,9 +39,9 @@ namespace Surikata\Plugins\WAI\Order {
 }
 
 namespace ADIOS\Plugins\WAI\Order {
-  class Confirmation extends \Surikata\Core\AdminPanel\Plugin {
+  class PaymentConfirmation extends \Surikata\Core\AdminPanel\Plugin {
 
-    var $defaultUrl = "order/{% orderNumber %}/{% checkCode %}/thank-you";
+    var $defaultUrl = "order/{% orderNumber %}/{% checkCode %}/payment-received";
 
     public function getSiteMap($pluginSettings = [], $webPageUrl = "") {
 
@@ -65,28 +65,27 @@ namespace ADIOS\Plugins\WAI\Order {
     public function getSettingsForWebsite() {
       return [
         "urlPattern" => [
-          "title" => "Order confirmation page URL",
+          "title" => "Payment confirmation page URL",
           "type" => "varchar",
           "description" => "
-            Relative URL for order confirmation page.<br/>
-            Default value: order/{% orderNumber %}/{% checkCode %}/thank-you
+            Relative URL for payment confirmation page.<br/>
+            Default value: order/{% orderNumber %}/{% checkCode %}/payment-received
           ",
         ],
       ];
     }
 
     public function onOrderDetailAfterSidebarButtons($eventData) {
-      
       $orderModel = new \ADIOS\Widgets\Orders\Models\Order($this->adios);
       $order = $orderModel->getById($eventData['data']['id']);
 
-      $url = (new \Surikata\Plugins\WAI\Order\Confirmation($this->adios->websiteRenderer))
+      $url = (new \Surikata\Plugins\WAI\Order\PaymentConfirmation($this->adios->websiteRenderer))
         ->getWebPageUrl(["order" => $order], $order["domain"])
       ;
 
       $domainInfo = $this->adios->getDomainInfo($order["domain"]);
 
-      $eventData["html"] .= "<a href='//{$domainInfo["rootUrl"]}/{$url}' target=_blank>Confirmation URL</a>";
+      $eventData["html"] .= "<a href='//{$domainInfo["rootUrl"]}/{$url}' target=_blank>Payment confirmation URL</a>";
 
       return $eventData;
     }

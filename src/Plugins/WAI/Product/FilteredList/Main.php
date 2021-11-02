@@ -24,6 +24,9 @@ namespace Surikata\Plugins\WAI\Product {
         break;
       }
 
+      // TODO: toto by sa malo dat optimalizovat, getDetailedInfoForListOfProducts sa pouziva iba tu
+      // a vyzera to byt zbytocny DB request
+
       $productIds = $productIds
         ->skip(0)
         ->take((int) $pluginSettings["product_count"])

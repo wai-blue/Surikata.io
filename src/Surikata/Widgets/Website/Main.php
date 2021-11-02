@@ -15,7 +15,7 @@ class Website extends \ADIOS\Core\Widget {
     }
 
     if ($this->adios->hasUserRole(\Surikata\Core\AdminPanel\Loader::USER_ROLE_ONLINE_MARKETING)) {
-      $domains = $this->adios->config['widgets']['Website']['domains'] ?? [];
+      $domains = $this->adios->getAvailableDomains();
 
       $sub = [];
       foreach ($domains as $domain => $domainInfo) {
@@ -198,7 +198,7 @@ class Website extends \ADIOS\Core\Widget {
       @unlink("{$this->adios->config['tmp_dir']}/sitemap_cache");
     }
 
-    foreach (array_keys($this->adios->config['widgets']['Website']['domains']) as $domain) {
+    foreach (array_keys($this->adios->getAvailableDomains()) as $domain) {
       $this->rebuildSitemap($domain);
     }
   }

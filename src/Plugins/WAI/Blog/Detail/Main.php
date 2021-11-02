@@ -32,7 +32,7 @@ namespace Surikata\Plugins\WAI\Blog {
       return $breadcrumbs;
     }
 
-    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = []) {
+    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
       $url = $pluginSettings["urlPattern"] ?? "";
 
       if (empty($url)) {

@@ -42,10 +42,11 @@ class Plugin {
    * 
    * @param array $urlVariables Specific variables for generating the URL. In most cases the values of variables insied the URL - e.g. ID of the product.
    * @param array optional $pluginSettings Settings of the plugin from the administration panel. E.g. the URL pattern defined by the administrator.
+   * @param string optional $domain Domain for which the URL should be generated.
    * 
    * @return string URL of the website without {{ rootUrl }}
    */
-  public function getWebPageUrlFormatted($urlVariables, $pluginSettings = []) {
+  public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
     return NULL;
   }
 
@@ -53,19 +54,22 @@ class Plugin {
    * Returns the URL of the website where the plugin is used. Uses Widgets/Website/Models/WebPage model.
    * 
    * @param array $urlVariables Specific variables for generating the URL. In most cases the values of variables insied the URL - e.g. ID of the product.
+   * @param string $domain Name of the domain for which the URL is to be generated. Used when calling this method from the administration panel, e.g. when generating URL for a specific order.
    * 
    * @return string URL of the website without {{ rootUrl }}
    */
-  public function getWebPageUrl($urlVariables = []) {
+  public function getWebPageUrl($urlVariables = [], $domain = "") {
     $url = NULL;
 
-    foreach ($this->websiteRenderer->pages as $webPage) {
+    $publishedPages = $this->websiteRenderer->loadPublishedPages($domain);
+
+    foreach ($publishedPages as $webPage) {
       $contentStructure = @json_decode($webPage['content_structure'], TRUE);
 
       if ($url === NULL) {
         foreach ($contentStructure['panels'] as $panelName => $panelSettings) {
           if (($panelSettings["plugin"] ?? "") == $this->name) {
-            $url = $this->getWebPageUrlFormatted($urlVariables, $panelSettings["settings"]);
+            $url = $this->getWebPageUrlFormatted($urlVariables, $panelSettings["settings"], $domain);
 
             if ($url === NULL) {
               // Tu je este moznost, ze plugin sice nema overridnutu

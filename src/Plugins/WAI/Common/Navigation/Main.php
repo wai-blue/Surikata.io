@@ -60,7 +60,7 @@ namespace Surikata\Plugins\WAI\Common {
     public function getLanguages() {
       $returnArray = [];
       $languages = $this->websiteRenderer->adminPanel->config['widgets']['Website']['domainLanguages'];
-      $domains = $this->websiteRenderer->adminPanel->config['widgets']['Website']['domains'];
+      $domains = $this->websiteRenderer->getAvailableDomains();
 
       foreach ($languages as $languageIndex => $language) {
         $returnArray[$languageIndex] = [];

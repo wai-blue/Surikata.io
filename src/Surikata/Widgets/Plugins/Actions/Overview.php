@@ -8,7 +8,10 @@ class Overview extends \ADIOS\Core\Action {
 
     $cardsHtml = "";
     foreach ($plugins as $pluginName) {
-      if ($this->adios->actionExists("Plugins/{$pluginName}/Main")) {
+      $mainActionExists = $this->adios->actionExists("Plugins/{$pluginName}/Main");
+      $settingsActionExists = $this->adios->actionExists("Plugins/{$pluginName}/Settings");
+
+      if ($mainActionExists || $settingsActionExists) {
         $pluginObject = $this->adios->getPlugin($pluginName);
         $manifest = $pluginObject->manifest();
 
@@ -40,11 +43,20 @@ class Overview extends \ADIOS\Core\Action {
                 <div style='height:130px'>
                   {$logoHtml}
                 </div>
-                <a
-                  href='javascript:void(0)'
-                  class='btn btn-light'
-                  onclick='desktop_render(\"Plugins/{$pluginName}/Main\");'
-                >".$this->translate("Manage")."</a>
+                ".($mainActionExists ? "
+                  <a
+                    href='javascript:void(0)'
+                    class='btn btn-light'
+                    onclick='desktop_render(\"Plugins/{$pluginName}/Main\");'
+                  >".$this->translate("Manage")."</a>
+                " : "")."
+                ".($settingsActionExists ? "
+                  <a
+                    href='javascript:void(0)'
+                    class='btn btn-light'
+                    onclick='window_render(\"Plugins/{$pluginName}/Settings\");'
+                  >".$this->translate("Settings")."</a>
+                " : "")."
               </div>
             </div>
           </div>

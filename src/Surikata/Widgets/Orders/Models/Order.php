@@ -942,11 +942,12 @@ class Order extends \ADIOS\Core\Model {
 
       $formTitle = $this->translate("Order")."&nbsp;#&nbsp;".hsc($data["number"]);
 
-      $sidebarHtml = $this->adios->dispatchEventToPlugins("onOrderDetailSidebarButtons", [
+      $sidebarHtml = $this->adios->dispatchEventToPlugins("onOrderDetailBeforeSidebarButtons", [
         "model" => $this,
         "params" => $params,
         "data" => $data,
       ])["html"];
+
       $sidebarHtml .= "
         <div class='card shadow mb-2'>
           <div class='card-header py-3'>
@@ -1004,6 +1005,12 @@ class Order extends \ADIOS\Core\Model {
           </div>
         </div>
       ";
+
+      $sidebarHtml .= $this->adios->dispatchEventToPlugins("onOrderDetailAfterSidebarButtons", [
+        "model" => $this,
+        "params" => $params,
+        "data" => $data,
+      ])["html"];
 
       $params["titleRaw"] = $formTitle;
       $params["template"] = [
@@ -1147,6 +1154,8 @@ class Order extends \ADIOS\Core\Model {
       $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adios);
       $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adios);
       $invoiceModel = new \ADIOS\Widgets\Finances\Models\Invoice($this->adios);
+      $deliveryServiceModel = new \ADIOS\Widgets\Shipping\Models\DeliveryService($this->adios);
+      $paymentServiceModel = new \ADIOS\Widgets\Shipping\Models\PaymentService($this->adios);
 
       $order['ITEMS'] = $this->adios->db->get_all_rows_query("
         select
@@ -1171,6 +1180,20 @@ class Order extends \ADIOS\Core\Model {
           f.*
         from `{$invoiceModel->table}` f
         where f.id = ".(int) $order['id_invoice']."
+      "));
+
+      $order['DELIVERY_SERVICE'] = reset($this->adios->db->get_all_rows_query("
+        select
+          ds.*
+        from `{$deliveryServiceModel->table}` ds
+        where ds.id = ".(int) $order['id_delivery_service']."
+      "));
+
+      $order['PAYMENT_SERVICE'] = reset($this->adios->db->get_all_rows_query("
+        select
+          ps.*
+        from `{$paymentServiceModel->table}` ps
+        where ps.id = ".(int) $order['id_payment_service']."
       "));
 
       $order['SUMMARY'] = $this->calculateSummaryInfo($order);

@@ -54,7 +54,7 @@ namespace Surikata\Plugins\WAI\Product {
      * 
      * @return string Final formatted relative URL
      * */
-    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = []) {
+    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
       $idCategory = (int) $urlVariables["idCategory"] ?? 0;
 
       if ($idCategory != 0) {

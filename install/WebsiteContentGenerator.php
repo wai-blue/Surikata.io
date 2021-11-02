@@ -90,7 +90,7 @@ class WebsiteContentGenerator {
   }
 
   public function copyAssets() {
-    mkdir(__DIR__."/../upload/products/");
+    mkdir("{$this->adminPanel->config['files_dir']}/products/");
 
     copy(
       __DIR__."/content/images/favicon.png",
@@ -482,6 +482,11 @@ class WebsiteContentGenerator {
         // order-confirmed
         "|WithoutSidebar|Order confirmed" => [
           "section_1" => "WAI/Order/Confirmation"
+        ],
+
+        // order-payment-received
+        "|WithoutSidebar|Order payment received" => [
+          "section_1" => "WAI/Order/PaymentConfirmation"
         ],
 
         // create-account

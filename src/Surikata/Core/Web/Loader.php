@@ -38,6 +38,7 @@ class Loader extends \Cascada\Loader {
 
   var $translationCache = NULL;
   var $customerDataCache = [];
+  var $publishedPagesCache = [];
 
   /**
    * Class constructor.
@@ -77,12 +78,7 @@ class Loader extends \Cascada\Loader {
       $this->pages = $this->loadPublishedPages();
       $this->currentPage = NULL;
 
-      $this->domain = [];
-      foreach ($this->adminPanel->config['widgets']['Website']['domains'] as $domainInfo) {
-        if ($domainInfo['name'] == $this->config["domainToRender"]) {
-          $this->domain = $domainInfo;
-        }
-      }
+      $this->domain = $this->getDomainInfo($this->config["domainToRender"]);
 
       $this->adminPanel->webSettings = $this->loadSurikataSettings("web/{$this->domain['name']}");
 
@@ -186,7 +182,6 @@ class Loader extends \Cascada\Loader {
       $this->twig->addFunction(new \Twig\TwigFunction(
         'translate',
         function ($original, $context = NULL) {
-          $domains = $this->adminPanel->config['widgets']['Website']['domains'];
           $domainToRender = $this->config['domainToRender'];
 
           $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($this->adminPanel);
@@ -229,11 +224,9 @@ class Loader extends \Cascada\Loader {
             $templateFile = "{$this->themeDir}/Templates/Snippets/{$pluginName}.twig";
 
             if (is_file($templateFile)) {
-              $renderParams = array_merge(
-                $this->currentRenderedPlugin->twigRenderParams,
-                $renderParams
-              );
+              $renderParams = array_merge($this->currentRenderedPlugin->twigRenderParams, $renderParams);
               $renderParams["snippetName"] = $snippetName;
+              $renderParams["system"]["availableVariables"] = array_keys($renderParams);
 
               $html .= $this->twig
                 ->render("Templates/Snippets/{$pluginName}.twig", $renderParams)
@@ -243,7 +236,34 @@ class Loader extends \Cascada\Loader {
           return $html;
         }
       ));
-      
+
+      $this->twig->addFunction(new \Twig\TwigFunction(
+        'insertSnippet',
+        function ($pluginName, $snippetName, $renderParams = []) {
+          $html = "";
+
+          $templateFile = "{$this->themeDir}/Templates/Snippets/{$pluginName}.twig";
+
+          $pluginTwigParams = [];
+          $plugin = $this->getPlugin($pluginName);
+
+          if (is_object($plugin)) {
+            $pluginTwigParams = $plugin->getTwigParams([]);
+          }
+
+          if (is_file($templateFile)) {
+            $renderParams = array_merge($pluginTwigParams, $renderParams);
+            $renderParams["snippetName"] = $snippetName;
+            $renderParams["system"]["availableVariables"] = array_keys($renderParams);
+
+            $html = $this->twig
+              ->render("Templates/Snippets/{$pluginName}.twig", $renderParams)
+            ;
+          }
+
+          return $html;
+        }
+      ));
 
       $this->twig->addFilter(new \Twig\TwigFilter(
         'formatPrice',
@@ -386,27 +406,37 @@ class Loader extends \Cascada\Loader {
 
   /**
    * Loads the list of published sites of the website managed by the user in the administration panel.
+   *
+   * @param string $domain Domainfor which the published pages should be loaded. Deafult: current domain to render.
    * 
    * @return array List of published sites.
    * */
-  public function loadPublishedPages() {
-    $tmp = (new \ADIOS\Widgets\Website\Models\WebPage($this->adminPanel))
-      ->where('domain', $this->config["domainToRender"])
-      ->where('publish_always', '1')
-      ->orWhere(function($q) {
-        $q
-          ->where('publish_from', '<=', date("Y-m-d"))
-          ->where('publish_to', '>=', date("Y-m-d"))
-        ;
-      })
-      ->get()
-      ->toArray()
-    ;
+  public function loadPublishedPages($domain = "") {
+    if (empty($domain)) $domain = $this->config["domainToRender"];
 
-    $pages = [];
-    foreach ($tmp as $value) {
-      $pages[$value['id']] = $value;
+    if (!isset($this->publishedPagesCache[$domain])) {
+      $tmp = (new \ADIOS\Widgets\Website\Models\WebPage($this->adminPanel))
+        ->where('domain', $domain)
+        ->where('publish_always', '1')
+        ->orWhere(function($q) {
+          $q
+            ->where('publish_from', '<=', date("Y-m-d"))
+            ->where('publish_to', '>=', date("Y-m-d"))
+          ;
+        })
+        ->get()
+        ->toArray()
+      ;
+
+      $pages = [];
+      foreach ($tmp as $value) {
+        $pages[$value['id']] = $value;
+      }
+
+      $this->publishedPagesCache[$domain] = $pages;
     }
+
+    $pages = $this->publishedPagesCache[$domain];
 
     return $pages;
   }
@@ -434,6 +464,8 @@ class Loader extends \Cascada\Loader {
    * @return object Of class \Surikata\Plugin.
    */
   public function getPlugin($pluginName) {
+    if (empty($pluginName)) return NULL;
+    
     if (empty($this->pluginObjects[$pluginName])) {
       $pluginClassName = "\\Surikata\\Plugins\\".str_replace("/", "\\", $pluginName);
       $this->pluginObjects[$pluginName] = new $pluginClassName($this);
@@ -537,6 +569,14 @@ class Loader extends \Cascada\Loader {
       }
     }
     return $this->deliveryPlugins;
+  }
+
+  public function getAvailableDomains() {
+    return $this->adminPanel->getAvailableDomains();
+  }
+
+  public function getDomainInfo($domainName) {
+    return $this->adminPanel->getDomainInfo($domainName);
   }
 
 }

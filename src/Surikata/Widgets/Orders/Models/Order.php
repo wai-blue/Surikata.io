@@ -411,15 +411,19 @@ class Order extends \ADIOS\Core\Model {
 
   public function onBeforeSave($data) {
 
-    $tagNames = json_decode($data["tags"]);
+    $tagNames = json_decode($data["tags"], TRUE);
+
     if (count($tagNames) > 0) {
-      $tags = [];
+      $tagIds = [];
       foreach ($tagNames as $tagName) {
-        $tag = (new OrderTag($this->adios))->findTagFromName($tagName);
-        $tags[] = $tag["id"];
+        $tag = (new OrderTag($this->adios))->findTagByName($tagName);
+        $tagIds[] = $tag["id"];
       }
-      $data["tags"] = $tags;
-      (new OrderTagAssignment($this->adios))->saveOrderTags($data["id"], $tags);
+      
+      // REVIEW: Toto je potrebne?  ... Zakomentoval som, lebo som zmenil $tags na $tagIds
+      // $data["tags"] = $tags;
+
+      (new OrderTagAssignment($this->adios))->saveOrderTags($data["id"], $tagIds);
     }
 
     return $data;

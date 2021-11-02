@@ -16,8 +16,8 @@ class Tags extends \ADIOS\Core\Input {
     $options = $model->getAll();
 
     $allTags = [];
-    foreach($options as $option) {
-      $allTags[] = strtolower($option["tag"]);
+    foreach ($options as $option) {
+      $allTags[] = strtolower(ads($option["tag"]));
     }
     $allTagsAutocomplete = "'" . implode("','", $allTags). "'";
 

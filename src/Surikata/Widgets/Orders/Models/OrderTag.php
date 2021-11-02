@@ -98,7 +98,7 @@ class OrderTag extends \ADIOS\Core\Model {
     }
   }
 
-  public function findTagFromName(string $tagName) {
+  public function findTagByName(string $tagName) {
     $tag = self::where('tag', '=', $tagName)->orderBy('tag')->get()->toArray();
     if ($tag !== false) {
       return $tag[0];

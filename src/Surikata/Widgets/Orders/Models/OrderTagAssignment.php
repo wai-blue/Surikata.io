@@ -42,18 +42,20 @@ class OrderTagAssignment extends \ADIOS\Core\Model {
 
   }
 
-  public function saveOrderTags($idOrder, $tags) {
+  public function saveOrderTags($idOrder, $tagIds) {
     $idOrder = (int) $idOrder;
 
     $this->adios->db->query("
       delete from `{$this->table}` WHERE `id_order` = {$idOrder};
     ");
 
-    if (count($tags) > 0) {
+    if (count($tagIds) > 0) {
       $insertQuery = "insert into `{$this->table}` (`id_order`, `id_tag`) values ";
-      foreach ($tags as $tag) {
-
-        $insertQuery .= "({$idOrder}, {$tag}), ";
+      foreach ($tagIds as $idTag) {
+        $idTag = (int) $idTag;
+        if ($idTag > 0) {
+          $insertQuery .= "({$idOrder}, {$idTag}), ";
+        }
       }
       $insertQuery = trim($insertQuery, ", ");
       $this->adios->db->query($insertQuery);

@@ -1141,7 +1141,7 @@ class DB {
         }
     }
 
-    public function start_transaction() {
+    public function startTransaction() {
       $this->query('start transaction');
     }
 

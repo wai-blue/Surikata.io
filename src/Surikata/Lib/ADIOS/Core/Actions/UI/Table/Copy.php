@@ -16,7 +16,7 @@ namespace ADIOS\Actions\UI\Table;
 class Copy extends \ADIOS\Core\Action {
   public function render($params = []) {
 
-    $this->adios->db->start_transaction();
+    $this->adios->db->startTransaction();
 
     $ids = explode(',', $_REQUEST['ids']);
     if (is_numeric($_REQUEST['id'])) {

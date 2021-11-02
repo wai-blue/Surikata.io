@@ -50,7 +50,7 @@ namespace Surikata\Plugins\WAI\Product {
       return $breadcrumbs;
     }
 
-    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = []) {
+    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
       $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
 
       $productName = $urlVariables["name_lang_{$languageIndex}"] ?? "";

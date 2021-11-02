@@ -466,8 +466,8 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       // Payment services
 
-      $paymentServiceModel->insertRow(["id" => 1, "name" => "Tatra banka", "description" => "", "logo" => "tatrabanka.jpg", "is_enabled" => TRUE, "connected_plugin" => "WAI/Payment/Tatrabanka"]);
-      $paymentServiceModel->insertRow(["id" => 2, "name" => "CardPay", "description" => "", "logo" => "cardpay.jpg", "is_enabled" => TRUE, "connected_plugin" => "WAI/Payment/Card"]);
+      $paymentServiceModel->insertRow(["id" => 1, "name" => "Tatra banka", "description" => "", "logo" => "tatrabanka.jpg", "is_enabled" => TRUE, "connected_plugin" => "WAI/Proprietary/Payment/InternetBanking/Tatrabanka"]);
+      $paymentServiceModel->insertRow(["id" => 2, "name" => "CardPay", "description" => "", "logo" => "cardpay.jpg", "is_enabled" => TRUE, "connected_plugin" => "WAI/Proprietary/Payment/Card"]);
       $paymentServiceModel->insertRow(["id" => 3, "name" => "Payment on delivery", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => ""]);
 
       $paymentServices = $paymentServiceModel->getAll();
@@ -679,7 +679,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $productStockStateModel->insertRow(["id" => 3, "name_lang_1" => "Available upon request"]);
 
       // produkty - produkty
-      $adminPanel->db->start_transaction();
+      $adminPanel->db->startTransaction();
 
       RandomProductsGenerator::generateRandomProducts(
         $randomProductsCount,
@@ -693,7 +693,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $productsCount = count($products);
 
       // produkty - galeria produktov
-      $adminPanel->db->start_transaction();
+      $adminPanel->db->startTransaction();
 
       foreach ($products as $product) {
         for ($i = 1; $i <= 8; $i++) {
@@ -718,7 +718,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $adminPanel->db->commit();
       
       // produkty - podobne protuky
-      $adminPanel->db->start_transaction();
+      $adminPanel->db->startTransaction();
 
       foreach ($products as $product) {
         for ($i = 1; $i <= 8; $i++) {
@@ -736,7 +736,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $adminPanel->db->commit();
 
       // produkty - prislusenstvo k produktom
-      $adminPanel->db->start_transaction();
+      $adminPanel->db->startTransaction();
 
       foreach ($products as $product) {
         for ($i = 1; $i <= 8; $i++) {
@@ -753,7 +753,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       // nakupny cennik
 
-      $adminPanel->db->start_transaction();
+      $adminPanel->db->startTransaction();
 
       for ($i = 1; $i <= $productsCount; $i++) {
         $productPriceModel->insertRandomRow(["id_product" => $i]);
@@ -899,7 +899,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
             "id_delivery_service"          => $deliveryServicesIds[rand(0, count($deliveryServicesIds) - 1)],
             "id_payment_service"           => $paymentServicesIds[rand(0, count($paymentServicesIds) - 1)],
 
-            "domain"                       => "EN",
+            "domain"                       => $domainsToInstall[rand(1, count($domainsToInstall))]["name"],
             "general_terms_and_conditions" => 1,
             "gdpr_consent"                 => 1,
             "confirmation_time"            => $orderConfirmationTime,
@@ -922,10 +922,16 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $slideshowImageSet,
       $domainsToInstall,
     );
+
     $wsg->copyAssets();
+
     foreach ($domainsToInstall as $domainIndex => $domain) {
       $wsg->generateWebsiteContent($domainIndex, $domain["themeName"]);
+      $wsg->installPlugins();
+      $adminPanel->widgets["Website"]->rebuildSitemap($domainsToInstall[$domainIndex]['name']);
     }
+
+
 
   } catch (\Exception $e) {
     echo "

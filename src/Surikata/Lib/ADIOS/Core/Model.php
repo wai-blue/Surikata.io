@@ -347,7 +347,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
       $lastVersion = max(array_keys($this->upgrades()));
 
       try {
-        $this->adios->db->start_transaction();
+        $this->adios->db->startTransaction();
 
         $upgrades = $this->upgrades();
 

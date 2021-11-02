@@ -33,6 +33,7 @@ class DestinationCountry extends \ADIOS\Core\Model {
       "flag" => [
         "type" => 'image',
         "title" => $this->translate("Flag"),
+        "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg."),
         "show_column" => TRUE,
       ],
 

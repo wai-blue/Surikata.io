@@ -12,6 +12,13 @@ class BlogTag extends \ADIOS\Core\Model {
 
   public function columns(array $columns = []) {
     return parent::columns([
+      "domain" => [
+        "type" => "varchar",
+        "title" => $this->translate("Domain"),
+        "required" => TRUE,
+        "show_column" => TRUE,
+      ],
+
       "name" => [
         "type" => "varchar", 
         "title" => "Tag name", 
@@ -30,9 +37,9 @@ class BlogTag extends \ADIOS\Core\Model {
 
   public function indexes(array $indexes = []) {
     return parent::indexes([
-      "unique_name" => [
+      "unique_name_for_domain" => [
         "type" => "unique",
-        "columns" => ["name"],
+        "columns" => ["name", "domain"],
       ],
     ]);
   }

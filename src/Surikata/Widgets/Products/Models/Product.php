@@ -213,7 +213,10 @@ class Product extends \ADIOS\Core\Model {
         "image" => [
           'type' => 'image',
           'title' => $this->translate("Main image"),
-          "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),
+          "description" => 
+            $this->translate("Supported image extensions: jpg, gif, png, jpeg.")
+            ." ".$this->translate("Recommended resolution: 550x415px.")
+          ,
           'show_column' => TRUE,
           "subdir" => "products"
         ],
@@ -508,7 +511,7 @@ class Product extends \ADIOS\Core\Model {
     $tabTranslations = [];
     $domainAssignmentValues = [];
 
-    $domains = $this->adios->config['widgets']['Website']['domains'];
+    $domains = $this->adios->getAvailableDomains();
     $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
 
     $i = 1;

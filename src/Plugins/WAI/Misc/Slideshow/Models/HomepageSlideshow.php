@@ -50,7 +50,10 @@ class HomepageSlideshow extends \ADIOS\Core\Model {
         "title" => $this->translate("Image"),
         "required" => TRUE,
         "show_column" => TRUE,
-        "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),
+        "description" => 
+          $this->translate("Supported image extensions: jpg, gif, png, jpeg")
+          ." ".$this->translate("Recommended resolution: 1200x500px.")
+        ,
       ],
     ]);
   }

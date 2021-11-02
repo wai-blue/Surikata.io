@@ -62,7 +62,7 @@ class Plugin {
     ];
   }
 
-  public function install() {
+  public function install(object $installer) {
     return TRUE;
   }
 

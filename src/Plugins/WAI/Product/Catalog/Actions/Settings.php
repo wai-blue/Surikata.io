@@ -4,7 +4,7 @@ namespace ADIOS\Actions\Plugins\WAI\Product\Catalog;
 
 class Settings extends \ADIOS\Core\Action {
   public function render() {
-    $settings = $this->adios->config["settings"]["plugins"]["WAI/Product/Catalog"];
+    $settings = $this->adios->getPluginSettings("WAI/Product/Catalog");
 
     return $this->adios->renderAction("UI/SettingsPanel", [
       "settings_group" => "plugins/WAI/Product/Catalog",

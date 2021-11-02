@@ -47,4 +47,31 @@ Surikata.prototype.renderPluginJSON = function (pluginName, requestData, success
   });
 }
 
+Surikata.prototype.getDictionary = function() {
+  return __srkt_dict__; // tato premenna je renderovana cez dictionary.js, cez assetsUrlMap
+}
+
+Surikata.prototype.translate = function(original, context) {
+  let dictionary = this.getDictionary();
+  let translated = null;
+
+  if (typeof dictionary == 'undefined') {
+    return original + ' [TRANSLATION WARNING: Dictonary is missing.]';
+  }
+
+  if (context == '' || typeof context == 'undefined') {
+    return original + ' [TRANSLATION WARNING: Context not specified.]';
+  }
+
+  if (typeof dictionary[context] != 'undefined') {
+    translated = dictionary[context][original];
+  }
+
+  if (translated == "" || translated == null) {
+    return original;
+  }
+
+  return translated;
+}
+
 var Surikata = new Surikata();

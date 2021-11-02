@@ -22,6 +22,7 @@ namespace Surikata\Plugins\WAI\Blog {
     }
 
     public function getBlogCatalogInfo($year = NULL, $month = NULL, $filter = NULL, $limit = NULL) {
+      $domain = $this->websiteRenderer->currentPage['domain'];
 
       if (
         self::$blogCatalogInfo === NULL
@@ -31,7 +32,7 @@ namespace Surikata\Plugins\WAI\Blog {
         $blogDetailPlugin = new \Surikata\Plugins\WAI\Blog\Detail($this->websiteRenderer);
 
         self::$blogCatalogInfo = (new \ADIOS\Plugins\WAI\Blog\Catalog\Models\Blog($this->adminPanel))
-          ->getByDate($year, $month, $filter["filteredTags"], $limit)
+          ->getByDate($domain, $year, $month, $filter["filteredTags"], $limit)
         ;
 
         foreach (self::$blogCatalogInfo as $key => $blog) {
@@ -108,6 +109,60 @@ namespace ADIOS\Plugins\WAI\Blog {
         //  "type"  => "boolean"
         //]
       ];
+    }
+
+    public function install(object $installer) {
+      $blogCatalogModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\Blog($this->adios);
+      $blogTagModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\BlogTag($this->adios);
+      $blogTagAssignmentModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\BlogTagAssignment($this->adios);
+
+      copy(
+        __DIR__."/Install/blog.png",
+        "{$this->adios->config['files_dir']}/blog.png",
+      );
+
+      $this->adios->db->startTransaction();
+
+      // Blogs tags
+      $blogTagModel->insertRow([
+        "id" => $installer->domainIdOffset + 1,
+        "domain" => $installer->domainName,
+        "name" => $installer->translate("Computers"),
+        "description" => $installer->translate("All about computers"),
+      ]);
+      $blogTagModel->insertRow([
+        "id" => $installer->domainIdOffset + 2,
+        "domain" => $installer->domainName,
+        "name" => $installer->translate("Business"),
+        "description" => $installer->translate("All about business"),
+      ]);
+      $blogTagModel->insertRow([
+        "id" => $installer->domainIdOffset + 3,
+        "domain" => $installer->domainName,
+        "name" => $installer->translate("Fashion"),
+        "description" => $installer->translate("All about fashion"),
+      ]);
+
+      // Blogs
+      for ($i = 1; $i <= 20; $i++) {
+        $idBlog = $blogCatalogModel->insertRow([
+          "id" => $installer->domainIdOffset + $i,
+          "domain" => $installer->domainName,
+          "name" => "Blog [{$installer->domainName}] #{$i}",
+          "perex" => file_get_contents(__DIR__."/Install/perex.html"),
+          "content" => file_get_contents(__DIR__."/Install/blog.html"),
+          "image" => "blog.png",
+          "created_at" => date("Y-m-d"),
+          "id_user" => 1,
+        ]);
+
+        $blogTagAssignmentModel->insertRow([
+          "id_tag" => $installer->domainIdOffset + rand(1, 3),
+          "id_blog" => $idBlog,
+        ]);
+      }
+
+      $this->adios->db->commit();
     }
 
   }

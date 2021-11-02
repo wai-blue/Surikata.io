@@ -63,4 +63,12 @@
     "We sell only most-rated and reliable products" => "Predávame najlepšie produkty",
     "Welcome to our online store" => "Vitajte v našom eshope",
     "We built our online store using Surikata.io." => "Tento eshop sme vytvorili na platforme Surikata.io.",
+    "compare" => "porovnat",
+    "Compare products" => "Porovnať produkty",
+    "Computers" => "Počítače",
+    "All about computers" => "Všetko o počítačoch",
+    "Business" => "Biznis",
+    "All about business" => "Všetko o biznise",
+    "Fashion" => "Móda",
+    "All about fashion" => "Všetko o móde",
   ];

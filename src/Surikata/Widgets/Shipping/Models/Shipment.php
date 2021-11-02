@@ -54,7 +54,7 @@ class Shipment extends \ADIOS\Core\Model {
       "logo" => [
         'type' => 'image',
         'title' => $this->translate("Shipment logo"),
-        "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),
+        "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg."),
         'show_column' => TRUE,
       ],
 

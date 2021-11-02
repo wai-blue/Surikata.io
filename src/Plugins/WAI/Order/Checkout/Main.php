@@ -7,6 +7,7 @@ namespace Surikata\Plugins\WAI\Order {
     var $selectedDestinationCountryId = NULL;
     var $destinationCountries = NULL;
 
+
     public function getPaymentMethods($selectedDeliveryService) {
       $paymentMethods = [];
       foreach ($this->shipping as $shipment) {
@@ -180,5 +181,6 @@ namespace Surikata\Plugins\WAI\Order {
 
 namespace ADIOS\Plugins\WAI\Order {
   class Checkout extends \Surikata\Core\AdminPanel\Plugin {
+
   }
 }

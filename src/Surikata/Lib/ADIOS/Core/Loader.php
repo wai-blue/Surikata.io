@@ -175,7 +175,9 @@ class Loader {
 
       $this->onBeforePluginsLoaded();
     
-      $this->loadAllPlugins();
+      foreach ($this->pluginFolders as $pluginFolder) {
+        $this->loadAllPlugins($pluginFolder);
+      }
 
       $this->onAfterPluginsLoaded();
 
@@ -440,32 +442,29 @@ class Loader {
     return $this->pluginObjects;
   }
 
-  public function loadAllPlugins($subFolder = "") {
-    foreach ($this->pluginFolders as $pluginFolder) {
-      $folder = $pluginFolder.(empty($subFolder) ? "" : "/{$subFolder}");
+  public function loadAllPlugins($pluginFolder, $subFolder = "") {
+    $folder = $pluginFolder.(empty($subFolder) ? "" : "/{$subFolder}");
 
-      foreach (scandir($folder) as $file) {
-        // if (in_array($file, [".", ".."])) continue;
-        if (strpos($file, ".") !== FALSE) continue;
+    foreach (scandir($folder) as $file) {
+      if (strpos($file, ".") !== FALSE) continue;
 
-        $fullPath = (empty($subFolder) ? "" : "{$subFolder}/").$file;
+      $fullPath = (empty($subFolder) ? "" : "{$subFolder}/").$file;
 
-        if (
-          is_dir("{$folder}/{$file}")
-          && !is_file("{$folder}/{$file}/Main.php")
-        ) {
-          $this->loadAllPlugins($fullPath);
-        } else if (is_file("{$folder}/{$file}/Main.php")) {
-          try {
-            $tmpPluginClassName = $this->getPluginClassName($fullPath);
+      if (
+        is_dir("{$folder}/{$file}")
+        && !is_file("{$folder}/{$file}/Main.php")
+      ) {
+        $this->loadAllPlugins($pluginFolder, $fullPath);
+      } else if (is_file("{$folder}/{$file}/Main.php")) {
+        try {
+          $tmpPluginClassName = $this->getPluginClassName($fullPath);
 
-            if (class_exists($tmpPluginClassName)) {
-              $this->plugins[] = $fullPath;
-              $this->pluginObjects[$fullPath] = new $tmpPluginClassName($this);
-            }
-          } catch (\Exception $e) {
-            exit("Failed to load plugin {$fullPath}: ".$e->getMessage());
+          if (class_exists($tmpPluginClassName)) {
+            $this->plugins[] = $fullPath;
+            $this->pluginObjects[$fullPath] = new $tmpPluginClassName($this);
           }
+        } catch (\Exception $e) {
+          exit("Failed to load plugin {$fullPath}: ".$e->getMessage());
         }
       }
     }
@@ -617,7 +616,7 @@ class Loader {
 
     $installationStart = microtime(TRUE);
 
-    $this->db->start_transaction();
+    $this->db->startTransaction();
 
     foreach ($this->models as $modelName) {
       try {

@@ -100,6 +100,7 @@ namespace Surikata\Plugins\WAI\Order {
 
       if (isset($this->websiteRenderer->urlVariables['orderData'])) {
         $orderData = $this->websiteRenderer->urlVariables['orderData'];
+
         $this->selectedDestinationCountryId = $orderData["id_destination_country"];
 
         $deliveryServices = $this->getDeliveryServices();
@@ -115,24 +116,16 @@ namespace Surikata\Plugins\WAI\Order {
         ;
 
         $deliveryServices =
-          $this->getActualDeliveryPrice($deliveryServices, $orderData["id_delivery_service"], $selectedPaymentMethod);
+          $this->getActualDeliveryPrice($deliveryServices, $orderData["id_delivery_service"], $selectedPaymentMethod)
+        ;
+
+        $voucherSum = 0;
 
         if (!empty($orderData['voucher'])) {
-          $voucherModel = new \ADIOS\Widgets\Customers\Models\Voucher($this->adminPanel);
-          $voucher = reset($voucherModel
-            ->where('voucher', '=', $orderData['voucher'])
-            ->where('valid', '=', 'Y')
-            ->get()
-            ->toArray()
-          );
+          $voucherPlugin = new \Surikata\Plugins\WAI\Proprietary\Checkout\Vouchers($this->websiteRenderer);
+          $voucher = $voucherPlugin->checkVoucher($orderData['voucher']);
 
-          if (isset($voucher['discount_sum'])) {
-            $twigParams["voucherDiscountSum"] = $voucher['discount_sum'];
-          }
-
-          if (isset($voucher['discount_percentage'])) {
-            $twigParams["voucherDiscountPercentage"] = $voucher['discount_percentage'];
-          }
+          $voucherSum = $voucher['discount_sum'] ?? $voucher['discount_percentage'];
         }
       } else {
         $this->selectedDestinationCountryId = reset($this->destinationCountries)['id'];
@@ -161,6 +154,8 @@ namespace Surikata\Plugins\WAI\Order {
         floatval($this->cartContents["summary"]["priceInclVAT"]) 
           + 
         floatval($twigParams['deliveryPrice'])
+          -
+        $voucherSum
       ;
 
       $twigParams['cartContents'] = $this->cartContents;
@@ -172,6 +167,7 @@ namespace Surikata\Plugins\WAI\Order {
       $twigParams["selectedDeliveryService"] = $selectedDeliveryService;
       $twigParams["selectedPaymentMethod"] = $selectedPaymentMethod;
       $twigParams["selectedDestinationCountryId"] = $this->selectedDestinationCountryId;
+      $twigParams['voucher'] = $voucher;
 
       return $twigParams;
     }
@@ -180,5 +176,15 @@ namespace Surikata\Plugins\WAI\Order {
 
 namespace ADIOS\Plugins\WAI\Order {
   class Checkout extends \Surikata\Core\AdminPanel\Plugin {
+
+    public function getSettingsForWebsite() {
+      return [
+        "enableVouchers" => [
+          "title" => $this->translate("Enable vouchers"),
+          "type" => "bool",
+        ],
+      ];
+    }
+
   }
 }

@@ -94,7 +94,7 @@ class OrderTag extends \ADIOS\Core\Model {
       return self::whereIn('id', $tagList)->get()->toArray();
     }
     else {
-      return self::where('id', '>', 0)->get()->toArray();
+      return [];
     }
   }
 

@@ -90,7 +90,7 @@ class WebsiteContentGenerator {
   }
 
   public function copyAssets() {
-    mkdir(__DIR__."/../upload/products/");
+    mkdir("{$this->adminPanel->config['files_dir']}/products/");
 
     copy(
       __DIR__."/content/images/favicon.png",

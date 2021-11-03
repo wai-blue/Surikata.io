@@ -843,21 +843,23 @@ class Order extends \ADIOS\Core\Model {
 
       $orderTagModel = new OrderTag($this->adios);
       $tags = (new OrderTagAssignment($this->adios))->getTagIdsForOrder($data['id']);
-      $initialTags = json_encode($orderTagModel->getTagNamesFromArray($orderTagModel->getSelectedTags($tags)));
-      $showedTags = "";
-      foreach ($orderTagModel->getSelectedTags($tags) as $initialTag) {
-        $r = hexdec(substr($initialTag["color"],1,2));
-        $g = hexdec(substr($initialTag["color"],3,2));
-        $b = hexdec(substr($initialTag["color"],5,2));
+      $selectedTags = $orderTagModel->getSelectedTags($tags);
+      $initialTags = json_encode($orderTagModel->getTagNamesFromArray($selectedTags));
+
+      $tagsHtml = "";
+      foreach ($selectedTags as $tag) {
+        $r = hexdec(substr($tag["color"], 1, 2));
+        $g = hexdec(substr($tag["color"], 3, 2));
+        $b = hexdec(substr($tag["color"], 5, 2));
         if ($r + $g + $b > 382) {
           $fontColor = "#222";
         }
         else {
           $fontColor = "#fff";
         }
-        $showedTags .= "
-          <span class='badge badge-order' style='background-color: {$initialTag["color"]}; color: {$fontColor};'>
-            {$initialTag["tag"]}
+        $tagsHtml .= "
+          <span class='badge badge-order' style='font-size:10pt;background-color:".hsc($tag["color"]).";color:{$fontColor};'>
+            ".hsc($tag["tag"])."
           </span> 
         ";
       }
@@ -954,7 +956,12 @@ class Order extends \ADIOS\Core\Model {
         "style" => "border-left: 10px solid {$this->enumOrderStateColors[self::STATE_CANCELED]}",
       ])->render();
 
-      $formTitle = $this->translate("Order")."&nbsp;#&nbsp;".hsc($data["number"]);
+      $formTitle =
+        $this->translate("Order")
+        ."&nbsp;#&nbsp;"
+        .hsc($data["number"])
+        ."<div style='margin-left:30px;display:inline-block'>{$tagsHtml}</div>"
+      ;
 
       $sidebarHtml = $this->adios->dispatchEventToPlugins("onOrderDetailBeforeSidebarButtons", [
         "model" => $this,
@@ -1021,9 +1028,6 @@ class Order extends \ADIOS\Core\Model {
         <div class='card shadow mb-2'>
           <div class='card-header py-3'>
             ".$this->translate('Tags')."
-          </div>
-          <div class='card-body'>
-            ".$showedTags."
           </div>
         </div>
       ";

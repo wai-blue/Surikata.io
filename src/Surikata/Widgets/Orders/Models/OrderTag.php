@@ -14,32 +14,20 @@ class OrderTag extends \ADIOS\Core\Model {
 
   public function columns(array $columns = []) {
 
-    /* REVIEW - zobrazovať preklady stavov pri stave objednávky používateľom? */
-    /* REVIEW - pre používateľov zobrazovať len niektoré stavy */
-    $translatedColumns = [];
-    $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
-
-    foreach ($domainLanguages as $languageIndex => $languageName) {
-      $translatedColumns["tag_lang_{$languageIndex}"] = [
-        "type" => "varchar",
-        "title" => $this->translate("Tag")." ({$languageName})",
-        "show_column" => ($languageIndex == 1),
-        "is_searchable" => ($languageIndex == 1),
-      ];
-    }
-    $columns = parent::columns(array_merge(
-      $translatedColumns,[
-      "tag" => [
-       "type" => "varchar",
-       "title" => $this->translate("Tag"),
-       "show_column" => TRUE,
-      ],
-      "color" => [
-        "type" => "varchar",
-        "title" => $this->translate("Color"),
-        "show_column" => TRUE,
-      ],
-    ]));
+    $columns = parent::columns(
+      [
+        "tag" => [
+         "type" => "varchar",
+         "title" => $this->translate("Tag"),
+         "show_column" => TRUE,
+        ],
+        "color" => [
+          "type" => "varchar",
+          "title" => $this->translate("Color"),
+          "show_column" => TRUE,
+        ],
+      ]
+    );
 
     return $columns;
   }
@@ -52,20 +40,9 @@ class OrderTag extends \ADIOS\Core\Model {
   public function formParams($data, $params) {
 
     $tabTranslations = [];
-    $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
 
-    $i = 1;
-    foreach ($domainLanguages as $languageIndex => $languageName) {
-      if ($i > 1) {
-        $tabTranslations[] = ["html" => "<b>".hsc($languageName)."</b>"];
-        $tabTranslations[] = "tag_lang_{$languageIndex}";
-      }
-      $i++;
-    }
+    $tabTranslations[] = "tag";
 
-    if (count($tabTranslations) == 0) {
-      $tabTranslations[] = ["html" => $this->translate("No translations available.")];
-    }
 
     $params["template"] = [
       "columns" => [
@@ -75,11 +52,13 @@ class OrderTag extends \ADIOS\Core\Model {
             $this->translate("Translations") => $tabTranslations,
             $this->translate("Tag color") =>
             [
-              ["html" => $this->adios->ui->Input([
-                "type" => "color",
-                "uid" => "{$this->uid}_color",
-                "value" => $data['color'],
-              ])->render()],
+              [
+                "html" => $this->adios->ui->Input([
+                  "type" => "color",
+                  "uid" => "{$this->uid}_color",
+                  "value" => $data['color'],
+                ])->render()
+              ],
             ],
           ],
         ],
@@ -98,10 +77,15 @@ class OrderTag extends \ADIOS\Core\Model {
     }
   }
 
-  public function findTagByName(string $tagName) {
+  public function findTagByName(string $tagName, $createNewTags = true) {
     $tag = self::where('tag', '=', $tagName)->orderBy('tag')->get()->toArray();
-    if ($tag !== false) {
+    if (count($tag) > 0) {
       return $tag[0];
+    }
+    else {
+      if ($createNewTags) {
+        $tag["id"] = $this->insertRow(["tag" => $tagName, "color" => "#BCBCBC"]);
+      }
     }
     return $tag;
   }

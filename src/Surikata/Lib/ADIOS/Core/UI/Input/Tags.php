@@ -23,6 +23,7 @@ class Tags extends \ADIOS\Core\Input {
 
     $html = "<textarea id='{$this->uid}_tag'></textarea>";
     $html .= "<input type='hidden' name='{$this->uid}' id='{$this->uid}'>";
+    $html .= "<div style='display: none' id='{$this->uid}_desc' class='adios ui Form form_description'>".$this->translate("New tag will be created.")."</div>";
 
     $html .= "
       <script>
@@ -40,6 +41,18 @@ class Tags extends \ADIOS\Core\Input {
             $('#{$this->uid}').val(
               tagsJson
             );
+            let newTagChecks = false;
+            tags.forEach((element, index) => {
+              if (this.autocomplete.source.indexOf(element) < 0) {
+                newTagChecks = true;
+              }
+            });
+            if (newTagChecks) {
+              $('#{$this->uid}_desc').css('display','block');
+            }
+            else {
+              $('#{$this->uid}_desc').css('display','none');
+            }
           },
         });
       </script>

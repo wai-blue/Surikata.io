@@ -850,11 +850,11 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $customersCount = $customerModel->get()->count();
       $productsCount = $productModel->get()->count();
 
-      $orderTagModel->insertRow(["tag" => "paid", "tag_lang_1" => "paid", "tag_lang_2" => "zaplatená", "color" => "#AA0000"]);
-      $orderTagModel->insertRow(["tag" => "unpaid", "tag_lang_1" => "unpaid", "tag_lang_2" => "nezaplatená", "color" => "#004500"]);
-      $orderTagModel->insertRow(["tag" => "good client", "tag_lang_1" => "Good client", "tag_lang_2" => "Dobrý klient", "color" => "#11009A"]);
-      $orderTagModel->insertRow(["tag" => "bad client", "tag_lang_1" => "Bad client", "tag_lang_2" => "Zlý klient", "color" => "#11009A"]);
-      $orderTagModel->insertRow(["tag" => "discount on services", "tag_lang_1" => "discount on services", "tag_lang_2" => "Zľava na služby", "color" => "#11009A"]);
+      $orderTagModel->insertRow(["tag" => "paid", "color" => "#00A500"]);
+      $orderTagModel->insertRow(["tag" => "unpaid", "color" => "#AA0000"]);
+      $orderTagModel->insertRow(["tag" => "good client", "color" => "#11009A"]);
+      $orderTagModel->insertRow(["tag" => "bad client", "color" => "#DFDFDF"]);
+      $orderTagModel->insertRow(["tag" => "discount on services", "color" => "#141414"]);
 
       $orderModel->disableNotifications = TRUE;
 

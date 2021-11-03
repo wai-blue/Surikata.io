@@ -86,7 +86,7 @@ namespace ADIOS\Plugins\WAI\Order {
 
       $domainInfo = $this->adios->getDomainInfo($order["domain"]);
 
-      $eventData["html"] .= "<a href='//{$domainInfo["rootUrl"]}/{$url}' target=_blank>Confirmation URL</a>";
+      $eventData["html"] .= "<a href='//{$domainInfo["rootUrl"]}/{$url}' target=_blank>Confirmation URL</a><br/>";
 
       return $eventData;
     }

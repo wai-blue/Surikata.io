@@ -62,5 +62,6 @@ $dictionary = [
   "Paid orders" => "Zaplatené objednávky",
   "Shipped orders" => "Doručené objednávky",
   "Canceled orders" => "Zrušené objednávky",
-  "Issue invoice" => "Vystaviť faktúru"
+  "Issue invoice" => "Vystaviť faktúru",
+  "Tags" => "Tagy",
 ];

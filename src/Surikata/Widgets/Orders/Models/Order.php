@@ -436,6 +436,7 @@ class Order extends \ADIOS\Core\Model {
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownCustomer
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownPaymentService
+   * @throws \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Exceptions\VoucherIsNotValid;
    */
   public function placeOrder($orderData, $customerUID = NULL, $cartContents = NULL, $checkRequiredFields = TRUE) {
     $idCustomer = 0;
@@ -573,7 +574,7 @@ class Order extends \ADIOS\Core\Model {
       $voucherPlugin = new \Surikata\Plugins\WAI\Proprietary\Checkout\Vouchers($this->websiteRenderer);
       $voucher = $voucherPlugin->checkVoucher($orderData['voucher']);
 
-      if (empty($voucher)) {
+      if (!empty($voucher["error"])) {
         throw new \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Exceptions\VoucherIsNotValid;
       } else {
         $this->adios->getModel('Plugins/WAI/Proprietary/Checkout/Vouchers/Models/Voucher')
@@ -1215,6 +1216,15 @@ class Order extends \ADIOS\Core\Model {
     $deliveryFeeExclVat = $order['delivery_fee'] * (1 + 20 / 100); // TODO: 20% VAT hardcoded, musi ist do nastaveni
     $paymentFeeInclVat = $order['payment_fee'];
     $paymentFeeExclVat = $order['payment_fee'] * (1 + 20 / 100); // TODO: 20% VAT hardcoded, musi ist do nastaveni
+
+    if ($order['id_voucher'] > 0) {
+      $voucherModel = new \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Models\Voucher($this->adminPanel);
+      $voucherPlugin = new \Surikata\Plugins\WAI\Proprietary\Checkout\Vouchers($this->websiteRenderer);
+
+      $voucher = $voucherModel->getById($order['id_voucher']);
+      $summary['price_total_excl_vat'] = $voucherPlugin->getVoucherDiscount($voucher, $summary['price_total_excl_vat']);
+      $summary['price_total_incl_vat'] = $voucherPlugin->getVoucherDiscount($voucher, $summary['price_total_incl_vat']);
+    }
 
     $summary['price_total_excl_vat'] += $deliveryFeeExclVat;
     $summary['price_total_excl_vat'] += $paymentFeeExclVat;

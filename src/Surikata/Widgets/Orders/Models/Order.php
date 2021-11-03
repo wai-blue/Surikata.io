@@ -328,6 +328,11 @@ class Order extends \ADIOS\Core\Model {
         "show_column" => TRUE,
       ],
 
+      "id_voucher" => [
+        "type" => "lookup",
+        "title" => $this->translate("Voucher"),
+        "model" => "Plugins/WAI/Proprietary/Checkout/Vouchers/Models/Voucher",
+      ]
       
     ]);
   }
@@ -562,6 +567,22 @@ class Order extends \ADIOS\Core\Model {
       $confirmationTime = date("Y-m-d H:i:s", strtotime($orderData['confirmation_time']));
     }
 
+    $voucher = [];
+
+    if (!empty($orderData['voucher'])) {
+      $voucherPlugin = new \Surikata\Plugins\WAI\Proprietary\Checkout\Vouchers($this->websiteRenderer);
+      $voucher = $voucherPlugin->checkVoucher($orderData['voucher']);
+
+      if (empty($voucher)) {
+        throw new \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Exceptions\VoucherIsNotValid;
+      } else {
+        $this->adios->getModel('Plugins/WAI/Proprietary/Checkout/Vouchers/Models/Voucher')
+          ->where('id', $voucher['id'])
+          ->update(["max_use" => $voucher['max_use'] - 1])
+        ;
+      }
+    }
+
     $idOrder = $this->insertRow([
       "accounting_year" => ["sql" => "year('{$confirmationTime}')"],
       "serial_number" => ["sql" => "
@@ -614,6 +635,7 @@ class Order extends \ADIOS\Core\Model {
       "notes"                  => $orderData['notes'],
       "domain"                 => $orderData['domain'],
       "state"                  => self::STATE_NEW,
+      "id_voucher"             => $voucher['id'] ?? null
     ]);
 
     if (!is_numeric($idOrder)) {

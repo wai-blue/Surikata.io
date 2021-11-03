@@ -3,11 +3,43 @@
 namespace ADIOS\Actions\Plugins;
 
 class Overview extends \ADIOS\Core\Action {
+  
+  public function onAfterDesktopPreRender($params) {
+    $params["searchButton"] = [
+      "display" => TRUE,
+      "placeholder" => $this->translate("Search plugins..."),
+    ];
+
+    return $params;
+  }
+
   public function render() {
     $plugins = $this->adios->plugins;
+    $search = $this->params["search"] ?: "";
+    $pluginsFound = 0;
+
+    $pluginsWithLogo = [];
+    $pluginsWithoutLogo = [];
+    foreach ($plugins as $pluginName) {
+      $pluginObject = $this->adios->getPlugin($pluginName);
+
+      $manifest = $pluginObject->manifest();
+      
+      if (!empty($search) && !preg_match("/{$search}/i", $manifest['title'])) {
+        continue;
+      }
+
+      if (empty($manifest['logo'])) {
+        $pluginsWithoutLogo[] = $pluginName;
+      } else {
+        $pluginsWithLogo[] = $pluginName;
+      }
+    }
 
     $cardsHtml = "";
-    foreach ($plugins as $pluginName) {
+    foreach ([...$pluginsWithLogo, ...$pluginsWithoutLogo] as $pluginName) {
+      $pluginsFound++;
+
       $mainActionExists = $this->adios->actionExists("Plugins/{$pluginName}/Main");
       $settingsActionExists = $this->adios->actionExists("Plugins/{$pluginName}/Settings");
 
@@ -64,11 +96,19 @@ class Overview extends \ADIOS\Core\Action {
       }
     }
 
-    $html = "
-      <div class='row'>
-        {$cardsHtml}
-      </div>
-    ";
+    if ($pluginsFound == 0) {
+      $html = "
+        <div class='row'>
+          ".$this->translate("No plugins found.")."
+        </div>
+      ";
+    } else {
+      $html = "
+        <div class='row'>
+          {$cardsHtml}
+        </div>
+      ";
+    }
 
     return $html;
   }

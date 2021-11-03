@@ -807,20 +807,20 @@ class Loader {
 
       // kontrola vstupov podla kontrolneho kodu "_"
       // vypnute, lebo JS btoa() pri niektorych znakoch nefunguje
-      if (FALSE && $params['__IS_RENDERED_ON_DESKTOP__'] && count($params) > 0) {
-        $tmp_params = $params;
-        unset($tmp_params['__C__']);
-        unset($tmp_params['action']);
+      // if (FALSE && $params['__IS_RENDERED_ON_DESKTOP__'] && count($params) > 0) {
+      //   $tmpParams = $params;
+      //   unset($tmpParams['__C__']);
+      //   unset($tmpParams['action']);
 
-        if (empty($params['__C__'])) {
-          return "INPUT_VALIDATION_CODE_EMPTY";
-        } else {
-          $check_code = base64_encode(json_encode($tmp_params));
-          if ($check_code != $params['__C__']) {
-            return "INPUT_VALIDATION_FAILED";
-          }
-        }
-      }
+      //   if (empty($params['__C__'])) {
+      //     return "INPUT_VALIDATION_CODE_EMPTY";
+      //   } else {
+      //     $checkCode = base64_encode(json_encode($tmpParams));
+      //     if ($checkCCode != $params['__C__']) {
+      //       return "INPUT_VALIDATION_FAILED";
+      //     }
+      //   }
+      // }
 
       // vygenerovanie UID tohto behu
       if (empty($this->uid)) {

@@ -677,4 +677,10 @@ class WebsiteContentGenerator {
       $pluginObject->install($this);
     }
   }
+
+  public function installPluginsOnce() {
+    foreach ($this->adminPanel->pluginObjects as $pluginObject) {
+      $pluginObject->installOnce($this);
+    }
+  }
 }

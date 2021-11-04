@@ -66,6 +66,10 @@ class Plugin {
     return TRUE;
   }
 
+  public function installOnce(object $installer) {
+    return TRUE;
+  }
+
   public function loadModels() {
     foreach ($this->adios->pluginFolders as $pluginFolder) {
       $folder = $pluginFolder."/{$this->name}/Models";

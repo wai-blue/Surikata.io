@@ -258,13 +258,17 @@ class Button extends \ADIOS\Core\UI\View {
             : "
             onclick=\"
               let _this = $(this);
-              _this.css('opacity', 0.5);
+              ".($this->params['cancel_bubble'] ? 'event.cancelBubble = true;' : '')."
+
+              if (!_this.hasClass('disabled')) {
+                {$this->onClick}
+              }
+
+              _this.addClass('disabled');
               setTimeout(function() {
-              _this.css('opacity', 1);
+                _this.removeClass('disabled');
               }, 300);
 
-              ".($this->params['cancel_bubble'] ? 'event.cancelBubble = true;' : '')."
-              {$this->onClick}
             \"
             "
           )."

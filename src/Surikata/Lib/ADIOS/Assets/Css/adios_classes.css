@@ -30,6 +30,7 @@
   height: 100vh;
   overflow: auto;
   top: 0px !important;
+  padding-left: 100px;
   z-index: 999998;
 }
 .xdebug-var-dump:hover > small:nth-child(1) {

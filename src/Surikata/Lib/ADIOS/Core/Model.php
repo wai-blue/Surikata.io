@@ -377,7 +377,9 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   }
 
   public function dropTableIfExists() {
+    $this->adios->db->query("set foreign_key_checks = 0");
     $this->adios->db->query("drop table if exists `".$this->getFullTableSQLName()."`");
+    $this->adios->db->query("set foreign_key_checks = 1");
   }
 
   /**

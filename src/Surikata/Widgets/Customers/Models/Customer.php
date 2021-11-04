@@ -173,7 +173,7 @@ class Customer extends \ADIOS\Core\Model {
     ]);
   }
 
-  public function routing($columns = []) {
+  public function routing(array $routing = []) {
     return parent::routing([
       '/^Customers\/Categories\/Tree$/' => [
         "action" => "UI/Tree",

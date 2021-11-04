@@ -46,6 +46,14 @@ class Products extends \ADIOS\Core\Widget {
                 "onclick" => "desktop_update('Products/Features');",
               ],
               [
+                "title" => $this->translate("Variations"),
+                "onclick" => "desktop_update('Products/Variations');",
+              ],
+              [
+                "title" => $this->translate("Variations - Values"),
+                "onclick" => "desktop_update('Products/Variations/Values');",
+              ],
+              [
                 "title" => $this->translate("Brands"),
                 "onclick" => "desktop_update('Brands');",
               ],
@@ -63,4 +71,5 @@ class Products extends \ADIOS\Core\Widget {
       ];
     }
   }
+
 }

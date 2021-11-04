@@ -62,7 +62,7 @@ function _loadCsvIntoArray($file, $separator = ',', $enclosure = '#') {
 
 set_time_limit(60*10);
 
-if (!is_file("../vendor/autoload.php")) {
+if (!is_file(__DIR__."/../vendor/autoload.php")) {
   echo "
     <div style='color:red'>
       Sorry, it looks like you did not run 'composer install'.<br/>
@@ -77,7 +77,7 @@ if (!is_file("../vendor/autoload.php")) {
   exit();
 }
 
-if (!is_file("../ConfigEnv.php")) {
+if (!is_file(__DIR__."/../ConfigEnv.php")) {
   echo "
     <div style='color:red'>
       Sorry, it looks like you do not have your ConfigEnv.php configured.<br/>
@@ -93,7 +93,7 @@ if (!is_file("../ConfigEnv.php")) {
   exit();
 }
 
-require("../Init.php");
+require(__DIR__."/../Init.php");
 
 if (empty(REWRITE_BASE) || empty(DB_LOGIN) || empty(DB_NAME)) {
   echo "
@@ -391,6 +391,8 @@ if (!$doInstall) {
     $productAccessoryModel = new \ADIOS\Widgets\Products\Models\ProductAccessory($adminPanel);
     $productFeatureModel = new \ADIOS\Widgets\Products\Models\ProductFeature($adminPanel);
     $productFeatureAssignmentModel = new \ADIOS\Widgets\Products\Models\ProductFeatureAssignment($adminPanel);
+    $productVariationModel = new \ADIOS\Widgets\Products\Models\ProductVariation($adminPanel);
+    $productVariationValueModel = new \ADIOS\Widgets\Products\Models\ProductVariationValue($adminPanel);
     $productPriceModel = new \ADIOS\Widgets\Products\Models\ProductPrice($adminPanel);
     $productStockStateModel = new \ADIOS\Widgets\Products\Models\ProductStockState($adminPanel);
     $shoppingCartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($adminPanel);
@@ -674,6 +676,22 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $productFeatureModel->insertRow(["id" => 7, "order_index" => 7, "value_type" => 2, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Rader", "name_lang_2" => "Kolesá", "id_measurement_unit" => 1]);
 
       $productFeaturesCount = $productFeatureModel->get()->count();
+
+      // produkty - moznosti variacii
+      $productVariationModel->insertRow(["id" => 1, "name_lang_1" => "Size", "name_lang_2" => "Veľkosť"]);
+      $productVariationModel->insertRow(["id" => 2, "name_lang_1" => "Color", "name_lang_2" => "Farba"]);
+
+      // produkty - moznosti variacii - values
+      $productVariationValueModel->insertRow(["id_variation" => 1, "value_lang_1" => "S"]);
+      $productVariationValueModel->insertRow(["id_variation" => 1, "value_lang_1" => "M"]);
+      $productVariationValueModel->insertRow(["id_variation" => 1, "value_lang_1" => "L"]);
+      $productVariationValueModel->insertRow(["id_variation" => 1, "value_lang_1" => "XL"]);
+      $productVariationValueModel->insertRow(["id_variation" => 1, "value_lang_1" => "XXL"]);
+      $productVariationValueModel->insertRow(["id_variation" => 2, "value_lang_1" => "blue"]);
+      $productVariationValueModel->insertRow(["id_variation" => 2, "value_lang_1" => "red"]);
+      $productVariationValueModel->insertRow(["id_variation" => 2, "value_lang_1" => "green"]);
+      $productVariationValueModel->insertRow(["id_variation" => 2, "value_lang_1" => "yellow"]);
+      $productVariationValueModel->insertRow(["id_variation" => 2, "value_lang_1" => "brown"]);
 
       // produkty - stavy na sklade
       $productStockStateModel->insertRow(["id" => 1, "name_lang_1" => "Available in stock"]);

@@ -43,7 +43,7 @@ class ProductVariationGroupAssignment extends \ADIOS\Core\Model {
     return $this->where("id_variation_group", $idVariationGroup)->pluck('id_product')->toArray();
   }
 
-  public function assignProduct(int $idVariationGroup, int $idProduct) {
+  public function addProductToVariationGroup(int $idVariationGroup, int $idProduct) {
     if ($idVariationGroup <= 0 || $idProduct <= 0) {
       return FALSE;
     }
@@ -55,7 +55,7 @@ class ProductVariationGroupAssignment extends \ADIOS\Core\Model {
 
   }
 
-  public function deassignProduct(int $idVariationGroup, int $idProduct) {
+  public function removeProductFromVariationGroup(int $idVariationGroup, int $idProduct) {
     if ($idVariationGroup <= 0 || $idProduct <= 0) {
       return FALSE;
     }

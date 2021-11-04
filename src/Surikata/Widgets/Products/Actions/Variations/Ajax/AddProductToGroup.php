@@ -9,7 +9,7 @@ class AddProductToGroup extends \ADIOS\Core\Action {
 
     try {
       $productVariationGroupAssignmentModel = new \ADIOS\Widgets\Products\Models\ProductVariationGroupAssignment($this->adios);
-      $productVariationGroupAssignmentModel->assignProduct($idVariationGroup, $idProduct);
+      $productVariationGroupAssignmentModel->addProductToVariationGroup($idVariationGroup, $idProduct);
 
       return [
         "idVariationGroup" => $idVariationGroup,

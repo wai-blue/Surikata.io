@@ -62,11 +62,10 @@ class ChooseAvailable extends \ADIOS\Core\Action {
           });
 
           _ajax_read_json(
-            'Products/Variations/Ajax/SaveAvailable',
+            'Products/Variations/Ajax/Save',
             data,
             function(res) { // onsuccess
               window_close('{$window->params['uid']}');
-              // window_render('Products/{$idProduct}/Variations/Step2');
             }
           )
         }

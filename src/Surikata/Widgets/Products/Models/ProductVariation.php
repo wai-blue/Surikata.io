@@ -34,18 +34,12 @@ class ProductVariation extends \ADIOS\Core\Model {
 
   public function routing(array $routing = []) {
     return parent::routing([
-      '/^Products\/(\d+)\/Variations\/EditValues$/' => [
-        "action" => "Products/Variations/EditValues",
+      '/^Products\/(\d+)\/Variations\/Manage$/' => [
+        "action" => "Products/Variations/Manage",
         "params" => [
           "idProduct" => '$1',
         ]
       ],
-      // '/^Products\/(\d+)\/Variations\/Step2$/' => [
-      //   "action" => "Products/Variations/Step2",
-      //   "params" => [
-      //     "idProduct" => '$1',
-      //   ]
-      // ],
     ]);
   }
 

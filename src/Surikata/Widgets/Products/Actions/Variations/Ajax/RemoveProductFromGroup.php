@@ -9,7 +9,7 @@ class RemoveProductFromGroup extends \ADIOS\Core\Action {
 
     try {
       $productVariationGroupAssignmentModel = new \ADIOS\Widgets\Products\Models\ProductVariationGroupAssignment($this->adios);
-      $productVariationGroupAssignmentModel->deassignProduct($idVariationGroup, $idProduct);
+      $productVariationGroupAssignmentModel->removeProductFromVariationGroup($idVariationGroup, $idProduct);
 
       return [
         "idVariationGroup" => $idVariationGroup,

@@ -843,7 +843,7 @@ class Product extends \ADIOS\Core\Model {
               class='btn btn-icon-split btn-light'
               style='margin-top:1em;'
               onclick='
-                window_render(\"Products/{$data['id']}/Variations/EditValues\");
+                window_render(\"Products/{$data['id']}/Variations/Manage\");
               '
             >
               <span class=\"icon\"><i class=\"fas fa-euro-sign\"></i></span>

@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Products\Variations\Ajax;
 
-class SaveAvailable extends \ADIOS\Core\Action {
+class Save extends \ADIOS\Core\Action {
   public function render() {
     $idProduct = (int) $this->params['idProduct'];
     $idVariationGroup = (int) $this->params['idVariationGroup'];
@@ -74,7 +74,7 @@ class SaveAvailable extends \ADIOS\Core\Action {
       "));
       $idVariationGroup = $tmp["@___tmp_id_variation_group"];
 
-      $productVariationGroupAssignmentModel->assignProduct($idVariationGroup, $idProduct);
+      $productVariationGroupAssignmentModel->addProductToVariationGroup($idVariationGroup, $idProduct);
 
       return [
         "params" => $this->params,

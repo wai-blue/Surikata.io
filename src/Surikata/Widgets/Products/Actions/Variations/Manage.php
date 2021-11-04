@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Products\Variations;
 
-class EditValues extends \ADIOS\Core\Action {
+class Manage extends \ADIOS\Core\Action {
   public function render() {
     $uid = $this->uid;
     $idProduct = (int) $this->params['idProduct'];
@@ -149,24 +149,6 @@ class EditValues extends \ADIOS\Core\Action {
 
     $contentHtml = "
       <div id='{$uid}_main_div'>
-        <!-- <a
-          href='javascript:void(0)'
-          class='btn btn-icon-split btn-light'
-          style='margin-top:1em;'
-          onclick='
-            window_render(
-              \"Products/{$idProduct}/Variations/ChooseAvailable\",
-              {},
-              function() {
-                {$uid}_refresh();
-              }
-            );
-          '
-        >
-          <span class=\"icon\"><i class=\"fas fa-euro-sign\"></i></span>
-          <span class=\"text\">".$this->translate("Choose available product variations")."</span>
-        </a>
-        <br/> -->
         <div id='{$uid}_variations_div'>
           {$variationsSelectHtml}
         </div>
@@ -174,6 +156,7 @@ class EditValues extends \ADIOS\Core\Action {
         <div>
           {$variationGroupProductsHtml}
         </div>
+        <br/>
         Add product to this group of variations:<br/>
         {$productSelectInputHtml}
 
@@ -189,7 +172,7 @@ class EditValues extends \ADIOS\Core\Action {
             });
 
             _ajax_read_json(
-              'Products/Variations/Ajax/SaveAvailable',
+              'Products/Variations/Ajax/Save',
               {
                 'idProduct': {$idProduct},
                 'idVariationGroup': {$idVariationGroup},
@@ -225,7 +208,7 @@ class EditValues extends \ADIOS\Core\Action {
         <script>
           function {$uid}_refresh() {
             _ajax_update(
-              'Products/Variations/EditValues',
+              'Products/Variations/Manage',
               {'refresh': true, 'idProduct': {$idProduct}},
               '{$uid}_main_div'
             );

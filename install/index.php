@@ -940,6 +940,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $adminPanel->widgets["Website"]->rebuildSitemap($domainsToInstall[$domainIndex]['name']);
     }
 
+    $wsg->installPluginsOnce();
 
 
   } catch (\Exception $e) {

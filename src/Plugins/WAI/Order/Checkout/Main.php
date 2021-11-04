@@ -123,9 +123,11 @@ namespace Surikata\Plugins\WAI\Order {
 
         if (!empty($orderData['voucher'])) {
           $voucherPlugin = new \Surikata\Plugins\WAI\Proprietary\Checkout\Vouchers($this->websiteRenderer);
+          $voucherModel = new \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Models\Voucher($this->adminPanel);
+
           $voucher = $voucherPlugin->checkVoucher($orderData['voucher']);
 
-          $voucherDiscount = $voucherPlugin->getVoucherDiscount($voucher, $this->cartContents["summary"]["priceInclVAT"]);
+          $voucherDiscount = $voucherModel->getVoucherDiscount($voucher, $this->cartContents["summary"]["priceInclVAT"]);
           $voucher["discount"] = $voucherDiscount;
         }
       } else {

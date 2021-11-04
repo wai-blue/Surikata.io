@@ -1219,11 +1219,10 @@ class Order extends \ADIOS\Core\Model {
 
     if ($order['id_voucher'] > 0) {
       $voucherModel = new \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Models\Voucher($this->adminPanel);
-      $voucherPlugin = new \Surikata\Plugins\WAI\Proprietary\Checkout\Vouchers($this->websiteRenderer);
 
       $voucher = $voucherModel->getById($order['id_voucher']);
-      $summary['price_total_excl_vat'] = $voucherPlugin->getVoucherDiscount($voucher, $summary['price_total_excl_vat']);
-      $summary['price_total_incl_vat'] = $voucherPlugin->getVoucherDiscount($voucher, $summary['price_total_incl_vat']);
+      $summary['price_total_excl_vat'] += - $voucherModel->getVoucherDiscount($voucher, $summary['price_total_excl_vat']);
+      $summary['price_total_incl_vat'] += - $voucherModel->getVoucherDiscount($voucher, $summary['price_total_incl_vat']);
     }
 
     $summary['price_total_excl_vat'] += $deliveryFeeExclVat;

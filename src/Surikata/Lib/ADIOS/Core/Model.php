@@ -111,6 +111,13 @@ class Model extends \Illuminate\Database\Eloquent\Model {
    */
   var $lookupSqlValue = "";
 
+  /**
+   * If set to TRUE, the SQL table will not contain the ID autoincrement column
+   *
+   * @var mixed
+   */
+  var $isCrossTable = FALSE;
+
   var $pdo;
   var $eloquentQuery;
   var $searchAction;
@@ -159,7 +166,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         //
       }
 
-      $this->adios->db->addTable($this->table, $this->columns());
+      $this->adios->db->addTable($this->table, $this->columns(), $this->isCrossTable);
       $this->adios->addRouting($this->routing());
 
     }
@@ -367,6 +374,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         throw new \ADIOS\Core\Exceptions\DBException($e->getMessage());
       }
     }
+  }
+
+  public function dropTableIfExists() {
+    $this->adios->db->query("drop table if exists `".$this->getFullTableSQLName()."`");
   }
 
   /**

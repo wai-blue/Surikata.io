@@ -123,12 +123,7 @@ namespace Surikata\Plugins\WAI\Order {
 
         if (!empty($orderData['voucher'])) {
           $voucherPlugin = new \Surikata\Plugins\WAI\Proprietary\Checkout\Vouchers($this->websiteRenderer);
-          $voucherModel = new \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Models\Voucher($this->adminPanel);
-
           $voucher = $voucherPlugin->checkVoucher($orderData['voucher'], $this->cartContents["summary"]);
-
-          $voucherDiscount = $voucherModel->getVoucherDiscount($voucher, $this->cartContents["summary"]["priceInclVAT"]);
-          $voucher["discount"] = $voucherDiscount;
         }
       } else {
         $this->selectedDestinationCountryId = reset($this->destinationCountries)['id'];
@@ -154,7 +149,7 @@ namespace Surikata\Plugins\WAI\Order {
       );
 
       $twigParams['totalPriceWithDelivery'] = 
-        floatval($this->cartContents["summary"]["priceInclVAT"]) - floatval($voucherDiscount) + floatval($twigParams['deliveryPrice']);
+        floatval($this->cartContents["summary"]["priceInclVAT"]) - floatval($voucher['discount']) + floatval($twigParams['deliveryPrice']);
       ;
 
       $twigParams['cartContents'] = $this->cartContents;

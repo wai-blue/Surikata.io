@@ -125,7 +125,7 @@ namespace Surikata\Plugins\WAI\Order {
           $voucherPlugin = new \Surikata\Plugins\WAI\Proprietary\Checkout\Vouchers($this->websiteRenderer);
           $voucherModel = new \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Models\Voucher($this->adminPanel);
 
-          $voucher = $voucherPlugin->checkVoucher($orderData['voucher']);
+          $voucher = $voucherPlugin->checkVoucher($orderData['voucher'], $this->cartContents["summary"]);
 
           $voucherDiscount = $voucherModel->getVoucherDiscount($voucher, $this->cartContents["summary"]["priceInclVAT"]);
           $voucher["discount"] = $voucherDiscount;

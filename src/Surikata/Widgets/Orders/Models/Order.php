@@ -685,6 +685,14 @@ class Order extends \ADIOS\Core\Model {
     $placedOrderData["payment_fee"] = $fees["paymentFee"];
 
     $summary = $this->calculateSummaryInfo($placedOrderData);
+
+    $placedOrderData = $this->adios->dispatchEventToPlugins("onAfterPlaceOrder", [
+      "model" => $this,
+      "order" => $placedOrderData,
+    ])["order"];
+
+    $summary = $placedOrderData["SUMMARY"];
+
     $this->updateSummaryInfo($idOrder, $summary);
 
     $this->sendNotificationForPlacedOrder($placedOrderData);

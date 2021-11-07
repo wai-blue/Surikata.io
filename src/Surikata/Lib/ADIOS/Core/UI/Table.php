@@ -103,6 +103,11 @@ class Table extends \ADIOS\Core\UI\View {
         $this->search = NULL;
       }
 
+      if ($this->model->isCrossTable) {
+        $params['onclick'] = "";
+        $params['show_add_button'] = FALSE;
+      }
+
       $_SESSION[_ADIOS_ID]['table'][$params['uid']] = $params;
 
       parent::__construct($adios, $params);
@@ -230,6 +235,7 @@ class Table extends \ADIOS\Core\UI\View {
 
       $this->params['show_add_button'] = (empty($this->params['add_button_params']['onclick']) ? FALSE : $this->params['show_add_button']);
 
+
       if ('' == $this->params['add_button_params']['type']) {
         $this->params['add_button_params']['type'] = 'add';
       }
@@ -276,9 +282,6 @@ class Table extends \ADIOS\Core\UI\View {
           }
         }
 
-      }
-
-      if ($this->params['show_paging']) {
         if ($this->params['page'] * $this->params['items_per_page'] > $this->table_item_count) {
           $this->params['page'] = floor($this->table_item_count / $this->params['items_per_page']) + 1;
         }
@@ -762,30 +765,30 @@ class Table extends \ADIOS\Core\UI\View {
                 >
               ";
 
-              foreach ($this->columns as $col_name => $col_def) {
-                $cellHtml = $this->getCellHtml($col_name, $col_def, $val);
+              foreach ($this->columns as $colName => $colDef) {
+                $cellHtml = $this->getCellHtml($colName, $colDef, $val);
                 $cellHtml = $this->model->tableCellHTMLFormatter([
                   'table' => $this,
-                  'column' => $col_name,
+                  'column' => $colName,
                   'row' => $val,
                   'html' => $cellHtml,
                 ]);
 
-                if ((in_array($col_def['type'], ['int', 'float']) && !is_array($col_def['enum_values']))) {
-                  $align_class = 'align_right';
+                if ((in_array($colDef['type'], ['int', 'float']) && !is_array($colDef['enum_values']))) {
+                  $alignClass = 'align_right';
                 } else {
-                  $align_class = 'align_left';
+                  $alignClass = 'align_left';
                 }
 
                 $cellStyle = $this->model->tableCellCSSFormatter([
                   'table' => $this,
-                  'column' => $col_name,
+                  'column' => $colName,
                   'row' => $val,
-                  'value' => $val[$col_name],
+                  'value' => $val[$colName],
                 ]);
 
                 $html .= "
-                  <div class='Column {$col_def['css_class']} {$align_class}' style='{$cellStyle}'>
+                  <div class='Column {$colDef['css_class']} {$alignClass}' style='{$cellStyle}'>
                     {$cellHtml}
                   </div>
                 ";

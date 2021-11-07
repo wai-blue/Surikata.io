@@ -120,7 +120,7 @@ if (!$rewriteBaseIsCorrect) {
   $expectedRewriteBase = str_replace("index.php", "", $expectedRewriteBase);
   if (REWRITE_BASE != $expectedRewriteBase) {
     echo "
-      <div style='color:orange'>{$_SERVER['REQUEST_URI']}
+      <div style='color:orange'>
         We think that your REWRITE_BASE is not configured properly.<br/>
         <br/>
         REWRITE_BASE that you have configured: <b>".REWRITE_BASE."</b><br/>

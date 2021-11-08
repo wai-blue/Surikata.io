@@ -376,6 +376,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     }
   }
 
+  public function dropTableIfExists() {
+    $this->adios->db->query("set foreign_key_checks = 0");
+    $this->adios->db->query("drop table if exists `".$this->getFullTableSQLName()."`");
+    $this->adios->db->query("set foreign_key_checks = 1");
+  }
+
   /**
    * Create foreign keys for the SQL table. Called when all models are installed.
    *
@@ -584,19 +590,28 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   //////////////////////////////////////////////////////////////////
   // CRUD methods
 
+  public function getRelationships() {
+    return $this; // to be overriden, should return chained Eloquent's ->with() method calls
+  }
+
   public function getExtendedData($item) {
     return NULL; // to be overriden, should return $item with extended information
     // the NULL return is for optimization in getAll() method
   }
 
   public function getById(int $id) {
-    $item = reset($this->where('id', $id)->get()->toArray());
+    $item = reset($this->getRelationships()->where('id', $id)->get()->toArray());
 
     if ($this->getExtendedData([]) !== NULL) {
-      return $this->getExtendedData($item);
-    } else {
-      return $item;
+      $item = $this->getExtendedData($item);
     }
+
+    $item = $this->adios->dispatchEventToPlugins("onModelAfterGetExtendedData", [
+      "model" => $this,
+      "item" => $item,
+    ])["item"];
+
+    return $item;
   }
 
   public function getAll(string $keyBy = "id", $withLookups = FALSE, $processLookups = FALSE) {

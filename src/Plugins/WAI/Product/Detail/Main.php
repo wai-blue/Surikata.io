@@ -201,7 +201,12 @@ namespace ADIOS\Plugins\WAI\Product {
         $productUrl = $this->adios->websiteRenderer->getPlugin("WAI/Product/Detail")->getWebpageUrl($event["data"]);
 
         $event["params"]["template"]["columns"][1]["rows"][2]["html"] .= "
-          <a class='btn btn-icon-split btn-light' target='_blank' href='{$this->adios->websiteRenderer->rootUrl}/{$productUrl}'>
+          <a
+            class='btn btn-icon-split btn-light'
+            target='_blank'
+            href='{$this->adios->websiteRenderer->rootUrl}/{$productUrl}'
+            style='margin:0.5em 0'
+          >
             <span class='icon'><i class='fa fa-link'></i></span>
             <span class='text'>" . $this->translate("Visit product on website") . "</span>
           </a>"

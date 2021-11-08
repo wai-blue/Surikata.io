@@ -106,7 +106,7 @@ class ShoppingCartItem extends \ADIOS\Core\Model {
     ;
 
     foreach (array_keys($items) as $key) {
-      $items[$key]['PRODUCT'] = $productModel->getDetailedInfoForSingleProduct($items[$key]['product']);
+      $items[$key]['PRODUCT'] = $productModel->getExtendedData($items[$key]['product']);
       unset($items[$key]['product']);
     }
 

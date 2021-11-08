@@ -616,6 +616,11 @@ class Loader {
 
     $installationStart = microtime(TRUE);
 
+    foreach ($this->models as $modelName) {
+      $model = $this->getModel($modelName);
+      $model->dropTableIfExists();
+    }
+
     $this->db->startTransaction();
 
     foreach ($this->models as $modelName) {

@@ -38,7 +38,7 @@ class Products extends \ADIOS\Core\Widget {
               ],
             ],
           ],
-          [
+          "settings" => [
             "title" => $this->translate("Settings"),
             "sub" => [
               [

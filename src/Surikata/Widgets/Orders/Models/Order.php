@@ -596,14 +596,17 @@ class Order extends \ADIOS\Core\Model {
 
     if (!empty($orderData['voucher'])) {
       $voucherPlugin = new \Surikata\Plugins\WAI\Proprietary\Checkout\Vouchers($this->websiteRenderer);
-      $voucher = $voucherPlugin->checkVoucher($orderData['voucher']);
+      $voucher = $voucherPlugin->checkVoucher($orderData['voucher'], $cartContents['summary']);
 
       if (!empty($voucher["error"])) {
         throw new \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Exceptions\VoucherIsNotValid;
       } else {
         $this->adios->getModel('Plugins/WAI/Proprietary/Checkout/Vouchers/Models/Voucher')
           ->where('id', $voucher['id'])
-          ->update(["max_use" => $voucher['max_use'] - 1])
+          ->update([
+            "max_use" => $voucher['max_use_is_enabled'] ? $voucher['max_use'] - 1 : $voucher['max_use'],
+            "count_of_redeemed" => $voucher['count_of_redeemed'] + 1
+          ])
         ;
       }
     }

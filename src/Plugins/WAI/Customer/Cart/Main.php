@@ -99,6 +99,7 @@ namespace Surikata\Plugins\WAI\Customer {
 
       switch ($cartAction) {
         case "addToCart":
+          $returnArray["cartOverviewUrl"] = (new \Surikata\Plugins\WAI\Order\CartOverview($this->websiteRenderer))->getWebPageUrl();
           $returnArray["itemAdded"] = $this->addToCart($idProduct, $qty);
           $returnArray["itemAdded"]["urlImage"] = $returnArray["itemAdded"]["product"]["image"];
           $returnArray["cartOverviewHtml"] = $this->renderCartContentsOverview();

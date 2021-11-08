@@ -225,12 +225,32 @@ function _ajax_read(action, params, onsuccess, onreadystatechange) {
   });
 };
 
-function _ajax_read_json(action, params, onsuccess) {
+function _ajax_read_json(action, params, onsuccess, onwarning, onfatal) {
   $.ajax({
     'type': 'GET',
     'url': _APP_URL + '/' + _ajax_action_url(action, params),
     'dataType': 'json',
-    'success': onsuccess,
+    'success': function(res) {
+      if (res.result == 'SUCCESS') {
+        if (typeof onsuccess == 'function') {
+          onsuccess(res.content);
+        } else {
+          _alert('SUCCESS\n\n' + JSON.stringify(res.content));
+        }
+      } else if (res.result == 'WARNING') {
+        if (typeof onwarning == 'function') {
+          onwarning(res.content);
+        } else {
+          _alert('WARNING\n\n' + JSON.stringify(res.content));
+        }
+      } else if (res.result == 'FATAL') {
+        if (typeof onfatal == 'function') {
+          onfatal(res.content);
+        } else {
+          _alert('FATAL\n\n' + JSON.stringify(res.content));
+        }
+      }
+    },
     'complete': function() { desktop_console_update(); }
   });
 };
@@ -309,7 +329,7 @@ function _ajax_supdate(action, params, selector, options) {
     var tmp_min_height = $(selector).css('minHeight');
 
     var sel_opacity = $(selector).css('opacity');
-    // $(selector).animate({'opacity': 0.3}, 100);
+    $(selector).animate({'opacity': 0.3}, 100);
     adios_loading_start();
 
     setTimeout(function() {

@@ -54,7 +54,7 @@ namespace Surikata\Plugins\WAI\Product {
      * 
      * @return string Final formatted relative URL
      * */
-    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = []) {
+    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
       $idCategory = (int) $urlVariables["idCategory"] ?? 0;
 
       if ($idCategory != 0) {
@@ -194,8 +194,13 @@ namespace Surikata\Plugins\WAI\Product {
 
 namespace ADIOS\Plugins\WAI\Product {
   class Catalog extends \Surikata\Core\AdminPanel\Plugin {
-    var $niceName = "Product Catalog";
-    
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => "Product Catalog",
+      ];
+    }
+
     // must be the same as in Surikata\Plugins namespace
     var $defaultUrlForCategories = "{% urlizedCategoryName %}.cid.{% idCategory %}";
     var $defaultUrlForBrands = "products/brand/{% idBrand %}/{% urlizedBrandName %}";

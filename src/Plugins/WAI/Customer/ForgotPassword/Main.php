@@ -5,7 +5,7 @@ namespace Surikata\Plugins\WAI\Customer {
 
     var $defaultForgotPasswordUrl = "password/reset/{% token %}";
 
-    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = []) {
+    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
       $email = $urlVariables["email"] ?? [];
 
       $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adminPanel);

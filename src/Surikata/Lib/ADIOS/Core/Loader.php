@@ -175,7 +175,9 @@ class Loader {
 
       $this->onBeforePluginsLoaded();
     
-      $this->loadAllPlugins();
+      foreach ($this->pluginFolders as $pluginFolder) {
+        $this->loadAllPlugins($pluginFolder);
+      }
 
       $this->onAfterPluginsLoaded();
 
@@ -440,32 +442,29 @@ class Loader {
     return $this->pluginObjects;
   }
 
-  public function loadAllPlugins($subFolder = "") {
-    foreach ($this->pluginFolders as $pluginFolder) {
-      $folder = $pluginFolder.(empty($subFolder) ? "" : "/{$subFolder}");
+  public function loadAllPlugins($pluginFolder, $subFolder = "") {
+    $folder = $pluginFolder.(empty($subFolder) ? "" : "/{$subFolder}");
 
-      foreach (scandir($folder) as $file) {
-        // if (in_array($file, [".", ".."])) continue;
-        if (strpos($file, ".") !== FALSE) continue;
+    foreach (scandir($folder) as $file) {
+      if (strpos($file, ".") !== FALSE) continue;
 
-        $fullPath = (empty($subFolder) ? "" : "{$subFolder}/").$file;
+      $fullPath = (empty($subFolder) ? "" : "{$subFolder}/").$file;
 
-        if (
-          is_dir("{$folder}/{$file}")
-          && !is_file("{$folder}/{$file}/Main.php")
-        ) {
-          $this->loadAllPlugins($fullPath);
-        } else if (is_file("{$folder}/{$file}/Main.php")) {
-          try {
-            $tmpPluginClassName = $this->getPluginClassName($fullPath);
+      if (
+        is_dir("{$folder}/{$file}")
+        && !is_file("{$folder}/{$file}/Main.php")
+      ) {
+        $this->loadAllPlugins($pluginFolder, $fullPath);
+      } else if (is_file("{$folder}/{$file}/Main.php")) {
+        try {
+          $tmpPluginClassName = $this->getPluginClassName($fullPath);
 
-            if (class_exists($tmpPluginClassName)) {
-              $this->plugins[] = $fullPath;
-              $this->pluginObjects[$fullPath] = new $tmpPluginClassName($this);
-            }
-          } catch (\Exception $e) {
-            exit("Failed to load plugin {$fullPath}: ".$e->getMessage());
+          if (class_exists($tmpPluginClassName)) {
+            $this->plugins[] = $fullPath;
+            $this->pluginObjects[$fullPath] = new $tmpPluginClassName($this);
           }
+        } catch (\Exception $e) {
+          exit("Failed to load plugin {$fullPath}: ".$e->getMessage());
         }
       }
     }
@@ -617,7 +616,12 @@ class Loader {
 
     $installationStart = microtime(TRUE);
 
-    $this->db->start_transaction();
+    foreach ($this->models as $modelName) {
+      $model = $this->getModel($modelName);
+      $model->dropTableIfExists();
+    }
+
+    $this->db->startTransaction();
 
     foreach ($this->models as $modelName) {
       try {
@@ -808,20 +812,20 @@ class Loader {
 
       // kontrola vstupov podla kontrolneho kodu "_"
       // vypnute, lebo JS btoa() pri niektorych znakoch nefunguje
-      if (FALSE && $params['__IS_RENDERED_ON_DESKTOP__'] && count($params) > 0) {
-        $tmp_params = $params;
-        unset($tmp_params['__C__']);
-        unset($tmp_params['action']);
+      // if (FALSE && $params['__IS_RENDERED_ON_DESKTOP__'] && count($params) > 0) {
+      //   $tmpParams = $params;
+      //   unset($tmpParams['__C__']);
+      //   unset($tmpParams['action']);
 
-        if (empty($params['__C__'])) {
-          return "INPUT_VALIDATION_CODE_EMPTY";
-        } else {
-          $check_code = base64_encode(json_encode($tmp_params));
-          if ($check_code != $params['__C__']) {
-            return "INPUT_VALIDATION_FAILED";
-          }
-        }
-      }
+      //   if (empty($params['__C__'])) {
+      //     return "INPUT_VALIDATION_CODE_EMPTY";
+      //   } else {
+      //     $checkCode = base64_encode(json_encode($tmpParams));
+      //     if ($checkCCode != $params['__C__']) {
+      //       return "INPUT_VALIDATION_FAILED";
+      //     }
+      //   }
+      // }
 
       // vygenerovanie UID tohto behu
       if (empty($this->uid)) {
@@ -1367,13 +1371,16 @@ class Loader {
       dirname(__FILE__)."/../Assets/Css/responsive.css",
       dirname(__FILE__)."/../Assets/Css/colors.css",
       dirname(__FILE__)."/../Assets/Css/desktop.css",
-      dirname(__FILE__)."/../Assets/Css/jquery-ui.css",
+      /*dirname(__FILE__)."/../Assets/Css/jquery-ui.css",*/
       dirname(__FILE__)."/../Assets/Css/jquery-ui.structure.css",
       dirname(__FILE__)."/../Assets/Css/jquery-ui-fontawesome.css",
       dirname(__FILE__)."/../Assets/Css/jquery.window.css",
       dirname(__FILE__)."/../Assets/Css/adios_classes.css",
       dirname(__FILE__)."/../Assets/Css/quill-1.3.6.core.css",
       dirname(__FILE__)."/../Assets/Css/quill-1.3.6.snow.css",
+      dirname(__FILE__)."/../Assets/Css/jquery.tag-editor.css",
+      dirname(__FILE__)."/../Assets/Css/jquery.tag-editor.css",
+      dirname(__FILE__)."/../Assets/Css/jquery-ui.min.css",
     ];
 
     foreach (scandir(dirname(__FILE__).'/../Assets/Css/Ui') as $file) {
@@ -1401,7 +1408,6 @@ class Loader {
 
     $jsFiles = [
       "jquery-3.5.1.js",
-      "jquery-ui.1.11.4.min.js",
       "jquery.scrollTo.min.js",
       "jquery.window.js",
       "jquery-ui-touch-punch.js",
@@ -1420,6 +1426,9 @@ class Loader {
       "jquery.easing.js",
       "sb-admin-2.js",
       "jsoneditor.js",
+      "jquery.tag-editor.js",
+      "jquery.caret.min.js",
+      "jquery-ui.min.js",
     ];
     foreach (scandir(dirname(__FILE__).'/../Assets/Js/Ui') as $file) {
       if ('.js' == substr($file, -3)) {

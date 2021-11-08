@@ -127,5 +127,5 @@ class Plugin extends \ADIOS\Core\Plugin {
     // ];
 
   }
-  
+
 }

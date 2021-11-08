@@ -213,7 +213,10 @@ class Product extends \ADIOS\Core\Model {
         "image" => [
           'type' => 'image',
           'title' => $this->translate("Main image"),
-          "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),
+          "description" => 
+            $this->translate("Supported image extensions: jpg, gif, png, jpeg.")
+            ." ".$this->translate("Recommended resolution: 550x415px.")
+          ,
           'show_column' => TRUE,
           "subdir" => "products"
         ],
@@ -508,7 +511,7 @@ class Product extends \ADIOS\Core\Model {
     $tabTranslations = [];
     $domainAssignmentValues = [];
 
-    $domains = $this->adios->config['widgets']['Website']['domains'];
+    $domains = $this->adios->getAvailableDomains();
     $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
 
     $i = 1;
@@ -913,7 +916,7 @@ class Product extends \ADIOS\Core\Model {
 
   public function recalculateAllPrices() {
     $this->beginTransaction();
-    $products = $this->getForDetail()->get()->toArray();
+    $products = $this->getRelationships()->get()->toArray();
     foreach ($products as $product) {
       $this->recalculatePriceForSingleProduct($product);
     }
@@ -984,7 +987,7 @@ class Product extends \ADIOS\Core\Model {
   ////////////////////////////////////////////////////////////////
   // GETTERS
 
-  public function getForPriceInfo() {
+  public function getRelationships() {
     return $this
       ->with('priceList')
       ->with('priceListMargins')
@@ -995,11 +998,6 @@ class Product extends \ADIOS\Core\Model {
       ->with('priceListDiscountsForCategory')
       ->with('priceListDiscountsForBrand')
       ->with('priceListDiscountsForSupplier')
-    ;
-  }
-
-  public function getForDetail() {
-    return $this->getForPriceInfo()
       ->with('gallery')
       ->with('extensions')
       ->with('brand')
@@ -1011,34 +1009,25 @@ class Product extends \ADIOS\Core\Model {
     ;
   }
 
-  public function getById($id) {
-    return $this->getDetailedInfoForSingleProduct($id);
-  }
-
   ////////////////////////////////////////////////////////////////
   // METHODS FOR DATA PROCESSING OF A SINGLE PRODUCT
 
-  public function getDetailedInfoForSingleProduct($idProductOrProduct) {
-    if (is_numeric($idProductOrProduct)) {
-      $product = reset($this->getForDetail()->where('id', $idProductOrProduct)->get()->toArray());
-    } else {
-      $product = $idProductOrProduct;
-    }
+  public function getExtendedData($item) {
 
-    $product = $this->unifyProductInformationForSingleProduct($product);
-    $product['PRICE'] = $this->getPriceInfoForSingleProduct($product);
+    $item = $this->unifyProductInformationForSingleProduct($item);
+    $item['PRICE'] = $this->getPriceInfoForSingleProduct($item);
 
-    $product['PRICES_FOR_INVOICE'] = reset(
+    $item['PRICES_FOR_INVOICE'] = reset(
       \ADIOS\Widgets\Finances::calculatePricesForInvoice([
         [
-          'unit_price' => $product['sale_price_excl_vat_cached'],
+          'unit_price' => $item['sale_price_excl_vat_cached'],
           'quantity' => 1,
-          'vat_percent' => $product['vat_percent']
+          'vat_percent' => $item['vat_percent']
         ]
       ])
     )['PRICES_FOR_INVOICE'];
 
-    return $product;
+    return $item;
 
   }
 
@@ -1223,7 +1212,7 @@ class Product extends \ADIOS\Core\Model {
 
   public function getDetailedInfoForListOfProducts($idProducts) {
     return $this->unifyProductInformationForListOfProduct(
-      $this->getForDetail()->whereIn('id', $idProducts)->get()->toArray()
+      $this->getRelationships()->whereIn('id', $idProducts)->get()->toArray()
     );
   }
 

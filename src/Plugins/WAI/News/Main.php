@@ -4,7 +4,7 @@ namespace Surikata\Plugins\WAI {
 
   class News extends \Surikata\Core\Web\Plugin {
 
-    public function getWebPageUrlFormatted($data, $pluginSettings = []) {
+    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
       if (!empty($data['id']) && is_numeric($data['id'])) {
         // URL pre detail novinky
         return "news/{$data['id']}/".\ADIOS\Core\HelperFunctions::str2url($data['title']);
@@ -94,6 +94,18 @@ namespace ADIOS\Plugins\WAI {
           ]
         ]
       ];
+    }
+
+    public function install(object $installer) {
+      $newsModel = new \ADIOS\Plugins\WAI\News\Models\News($this->adios);
+
+      $newsModel->insertRow([
+        "title" => $installer->translate("Welcome to our online store"),
+        "perex" => $installer->translate("We built our online store using Surikata.io."),
+        "content" => $installer->translate("We built our online store using Surikata.io."),
+        "domain" => $installer->domainName,
+      ]);
+
     }
 
   }

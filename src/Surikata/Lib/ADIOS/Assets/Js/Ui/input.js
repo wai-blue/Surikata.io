@@ -279,7 +279,8 @@ function ui_input_lookup_onkeydown(event, uid) {
           ui_input_lookup_show_results(uid);
 
           let params = '';
-          let form_data = ui_form_get_values($('#' + uid).attr('data-form-uid'));
+          let form_uid = $('#' + uid).attr('data-form-uid');
+          let form_data = (form_uid == '' ? {} : ui_form_get_values(form_uid));
 
           params += '&model=' + encodeURIComponent($('#' + uid).attr('data-model'));
           params += '&initiating_model=' + encodeURIComponent($('#' + uid).attr('data-initiating-model'))
@@ -516,7 +517,6 @@ function ui_input_lookup_detail(id, uid) {
 
 function ui_input_lookup_search(inputUid) {
   let form_data = ui_form_get_values($('#' + inputUid).attr('data-form-uid'));
-  console.log(form_data);
 
   window_render(
     'UI/Input/LookupSearch',

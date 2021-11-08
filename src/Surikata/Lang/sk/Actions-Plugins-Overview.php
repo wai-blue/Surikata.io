@@ -1,8 +1,7 @@
 <?php
 
 $dictionary = [
-  "Blogs" => "Blogy",
-  "News" => "Novinky",
-  "Slideshow" => "Obrázková prezentácia",
-  "Vouchers" => "Poukážky"
+  "Manage" => "Spravovať",
+  "Settings" => "Nastavenia",
+  "Search plugins..." => "Hľadať v pluginoch...",
 ];

@@ -62,7 +62,11 @@ class Plugin {
     ];
   }
 
-  public function install() {
+  public function install(object $installer) {
+    return TRUE;
+  }
+
+  public function installOnce(object $installer) {
     return TRUE;
   }
 

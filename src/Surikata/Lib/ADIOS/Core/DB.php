@@ -350,22 +350,24 @@ class DB {
      *
      * @see parse_tables
      */
-    public function basic_table_columns($add_columns = []) {
-      $basic_columns = [
-        'id' => [
+    public function commonTableColumns($columns = [], $isCrossTable = FALSE) {
+      $commonColumns = [];
+
+      if (!$isCrossTable) {
+        $commonColumns['id'] = [
           'type' => 'int',
           'byte_size' => '8',
           'sql_definitions' => 'primary key auto_increment',
           'title' => 'ID',
           'only_display' => 'yes',
           'class' => 'primary-key'
-        ],
-      ];
+        ];
+      }
 
-      if (_count($add_columns)) {
-          return array_merge($basic_columns, $add_columns);
+      if (_count($columns)) {
+          return array_merge($commonColumns, $columns);
       } else {
-        return $basic_columns;
+        return $commonColumns;
       }
     }
 
@@ -449,15 +451,15 @@ class DB {
     //                 $_table = NULL;
     //                 include("{$dir}/{$file}");
     //                 if (is_array($_table)) {
-    //                     $this->tables["{$gtp}_".str_replace(".php", "", $file)] = $this->basic_table_columns($_table);
+    //                     $this->tables["{$gtp}_".str_replace(".php", "", $file)] = $this->commonTableColumns($_table);
     //                 }
     //             }
     //         }
     //     }
     // }
 
-    public function addTable($table_name, $table_definition) {
-      $this->tables[$table_name] = $this->basic_table_columns($table_definition);
+    public function addTable($tableName, $columns, $isCrossTable = FALSE) {
+      $this->tables[$tableName] = $this->commonTableColumns($columns, $isCrossTable);
     }
 
     /**
@@ -569,22 +571,21 @@ class DB {
       $this->query("SET foreign_key_checks = 1");
     }
 
-    public function create_foreign_keys($table_name) {
-      $table_columns = $this->tables[$table_name];
-
+    public function create_foreign_keys($table) {
       $sql = '';
-      foreach ($table_columns as $col_name => $col_definition) {
+      foreach ($this->tables[$table] as $column => $columnDefinition) {
         if (
-          !$col_definition['disable_foreign_key']
-          && 'lookup' == $col_definition['type']
+          !$columnDefinition['disable_foreign_key']
+          && 'lookup' == $columnDefinition['type']
         ) {
-          $lookupModel = $this->adios->getModel($col_definition['model']);
+          $lookupModel = $this->adios->getModel($columnDefinition['model']);
+          $foreignKeyColumn = $columnDefinition['foreign_key_column'] ?: "id";
 
           $sql .= "
-            ALTER TABLE `{$table_name}`
-            ADD CONSTRAINT `fk_".md5($table_name.'_'.$col_name)."`
-            FOREIGN KEY (`{$col_name}`)
-            REFERENCES `".$lookupModel->getFullTableSQLName()."` (`id`);;
+            ALTER TABLE `{$table}`
+            ADD CONSTRAINT `fk_".md5($table.'_'.$column)."`
+            FOREIGN KEY (`{$column}`)
+            REFERENCES `".$lookupModel->getFullTableSQLName()."` (`{$foreignKeyColumn}`);;
           ";
         }
       }
@@ -692,41 +693,41 @@ class DB {
      *
      * @see _sql_column_data
      */
-    public function insert_row_query($table_name, $data, $dumping_data = false)
-    {
-        if ($dumping_data) {
-            $SQL = "insert into $table_name set ";
+    public function insert_row_query($table, $data, $dumpingData = false) {
+      $SQL = "insert into `{$table}` set ";
+
+      $addIdColumn = TRUE;
+      if ($dumpingData) $addIdColumn = FALSE;
+      if (!isset($this->tables[$table]['id'])) $addIdColumn = FALSE;
+      
+      if ($addIdColumn) {
+        if (!isset($data['id']) || $data['id'] <= 0) {
+          $SQL .= "`id`=null, ";
         } else {
-            $SQL = "insert into $table_name set ";
+          $SQL .= "`id`='".$this->escape($data['id'])."', ";
+          unset($data['id']);
+        }
+      }
 
-            if (!isset($data['id']) || $data['id'] <= 0) {
-                $SQL .= "`id`=null, ";
+      foreach ($this->tables[$table] as $col_name => $col_definition) {
+        if (!$col_definition['virtual'] && $col_name != '%%table_params%%') {
+          if ($data[$col_name] !== NULL) {
+            if (strpos((string) $data[$col_name], "SQL:") === 0) {
+                $tmp_sql = "`{$col_name}` = (".substr($data[$col_name], 4)."), ";
             } else {
-                $SQL .= "`id`='".$this->escape($data['id'])."', ";
-                unset($data['id']);
+                $tmp_sql = $this->_sql_column_data($table, $col_name, $data, $dumpingData);
             }
 
+            $SQL .= $tmp_sql;
+          } else if (!empty($col_definition['default_value'])) {
+            $SQL .= $col_definition['default_value'];
+          }
         }
+      }
 
-        foreach ($this->tables[$table_name] as $col_name => $col_definition) {
-            if (!$col_definition['virtual'] && $col_name != '%%table_params%%') {
-                if ($data[$col_name] !== NULL) {
-                    if (strpos((string) $data[$col_name], "SQL:") === 0) {
-                        $tmp_sql = "`{$col_name}` = (".substr($data[$col_name], 4)."), ";
-                    } else {
-                        $tmp_sql = $this->_sql_column_data($table_name, $col_name, $data, $dumping_data);
-                    }
+      $SQL = substr($SQL, 0, -2).';;';
 
-                    $SQL .= $tmp_sql;
-
-                } else if (!empty($col_definition['default_value'])) {
-                    $SQL .= $col_definition['default_value'];
-                }
-            }
-        }
-        $SQL = substr($SQL, 0, -2).';;';
-
-        return $SQL;
+      return $SQL;
     }
 
     /**
@@ -994,7 +995,7 @@ class DB {
     {
         $data = $this->get_row($table_name, "id=$id");
 
-        foreach (array_keys($this->basic_table_columns()) as $col_name) {
+        foreach (array_keys($this->commonTableColumns()) as $col_name) {
             unset($data[$col_name]);
         }
         $inserted_id = $this->insert_row($table_name, $data);
@@ -1141,7 +1142,7 @@ class DB {
         }
     }
 
-    public function start_transaction() {
+    public function startTransaction() {
       $this->query('start transaction');
     }
 
@@ -1227,19 +1228,21 @@ class DB {
 
         } else if ($col_definition['type'] == 'lookup') {
           $lookupModel = $this->adios->getModel($col_definition['model']);
-          $lookupTable = $lookupModel->getFullTableSqlName();
-          $lookupTableAlias = "lookup_{$lookupTable}_{$col_name}";
-          $lookupSqlValue = $lookupModel->lookupSqlValue($lookupTableAlias);
+          if (!$lookupModel->isCrossTable) {
+            $lookupTable = $lookupModel->getFullTableSqlName();
+            $lookupTableAlias = "lookup_{$lookupTable}_{$col_name}";
+            $lookupSqlValue = $lookupModel->lookupSqlValue($lookupTableAlias);
 
-          $virtualColumns[] = "({$lookupSqlValue}) as {$col_name}_lookup_sql_value";
-          $leftJoins[] = "
-            left join
-              `{$lookupTable}` as `{$lookupTableAlias}`
-              on `{$lookupTableAlias}`.`id` = `{$table_name}`.`{$col_name}`
-          ";
+            $virtualColumns[] = "({$lookupSqlValue}) as {$col_name}_lookup_sql_value";
+            $leftJoins[] = "
+              left join
+                `{$lookupTable}` as `{$lookupTableAlias}`
+                on `{$lookupTableAlias}`.`id` = `{$table_name}`.`{$col_name}`
+            ";
 
-          foreach (array_keys($lookupModel->columns()) as $lookupColumnName) {
-            $lookupColumns[] = "`{$lookupTableAlias}`.`{$lookupColumnName}` as LOOKUP___{$col_name}___{$lookupColumnName}";
+            foreach (array_keys($lookupModel->columns()) as $lookupColumnName) {
+              $lookupColumns[] = "`{$lookupTableAlias}`.`{$lookupColumnName}` as LOOKUP___{$col_name}___{$lookupColumnName}";
+            }
           }
 
         } else if (('int' == $col_definition['type'] || 'varchar' == $col_definition['type']) && is_array($col_definition['enum_values'])) {

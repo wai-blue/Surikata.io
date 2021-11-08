@@ -372,6 +372,17 @@ class Order extends \ADIOS\Core\Model {
     ]);
   }
 
+  public function tags() {
+    return $this
+      ->belongsToMany(
+        \ADIOS\Widgets\Orders\Models\OrderTag::class,
+        GTP."_orders_tags_assignment",
+        'id_order',
+        'id_tag'
+      )
+      ;
+  }
+
   public function tableParams($params) {
     switch ($params['filter_type']) {
       case "New":
@@ -404,6 +415,19 @@ class Order extends \ADIOS\Core\Model {
   }
 
   public function onBeforeSave($data) {
+
+    $tagNames = json_decode($data["tags"], TRUE);
+
+    if (count($tagNames) > 0) {
+      $tagIds = [];
+      foreach ($tagNames as $tagName) {
+        $tag = (new OrderTag($this->adios))->findTagByName($tagName);
+        $tagIds[] = $tag["id"];
+      }
+
+      (new OrderTagAssignment($this->adios))->saveOrderTags($data["id"], $tagIds);
+    }
+
     return $data;
   }
 
@@ -840,6 +864,29 @@ class Order extends \ADIOS\Core\Model {
       $params['save_action'] = "Orders/PlaceOrder";
     } else {
 
+      $orderTagModel = new OrderTag($this->adios);
+      $tags = (new OrderTagAssignment($this->adios))->getTagIdsForOrder($data['id']);
+      $selectedTags = $orderTagModel->getSelectedTags($tags);
+      $initialTags = json_encode($orderTagModel->getTagNamesFromArray($selectedTags));
+
+      $tagsHtml = "";
+      foreach ($selectedTags as $tag) {
+        $r = hexdec(substr($tag["color"], 1, 2));
+        $g = hexdec(substr($tag["color"], 3, 2));
+        $b = hexdec(substr($tag["color"], 5, 2));
+        if ($r + $g + $b > 382) {
+          $fontColor = "#222";
+        }
+        else {
+          $fontColor = "#fff";
+        }
+        $tagsHtml .= "
+          <span class='badge badge-order' style='font-size:10pt;background-color:".hsc($tag["color"]).";color:{$fontColor};'>
+            ".hsc($tag["tag"])."
+          </span> 
+        ";
+      }
+
       $btnPrintOrderHtml = $this->adios->ui->button([
         "text"    => $this->translate("Print order"),
         "onclick" => "
@@ -932,13 +979,19 @@ class Order extends \ADIOS\Core\Model {
         "style" => "border-left: 10px solid {$this->enumOrderStateColors[self::STATE_CANCELED]}",
       ])->render();
 
-      $formTitle = $this->translate("Order")."&nbsp;#&nbsp;".hsc($data["number"]);
+      $formTitle =
+        $this->translate("Order")
+        ."&nbsp;#&nbsp;"
+        .hsc($data["number"])
+        ."<div style='margin-left:30px;display:inline-block'>{$tagsHtml}</div>"
+      ;
 
-      $sidebarHtml = $this->adios->dispatchEventToPlugins("onOrderDetailSidebarButtons", [
+      $sidebarHtml = $this->adios->dispatchEventToPlugins("onOrderDetailBeforeSidebarButtons", [
         "model" => $this,
         "params" => $params,
         "data" => $data,
       ])["html"];
+
       $sidebarHtml .= "
         <div class='card shadow mb-2'>
           <div class='card-header py-3'>
@@ -995,7 +1048,18 @@ class Order extends \ADIOS\Core\Model {
             </div>
           </div>
         </div>
+        <div class='card shadow mb-2'>
+          <div class='card-header py-3'>
+            ".$this->translate('Tags')."
+          </div>
+        </div>
       ";
+
+      $sidebarHtml .= $this->adios->dispatchEventToPlugins("onOrderDetailAfterSidebarButtons", [
+        "model" => $this,
+        "params" => $params,
+        "data" => $data,
+      ])["html"];
 
       $params["titleRaw"] = $formTitle;
       $params["template"] = [
@@ -1013,6 +1077,17 @@ class Order extends \ADIOS\Core\Model {
                 "number_customer",
                 "notes",
                 "domain",
+                [
+                  "title" => $this->translate("Tags"),
+                  "input" => (new \ADIOS\Core\UI\Input\Tags(
+                    $this->adios,
+                    "{$params['uid']}_tags",
+                    [
+                      "model" => "Widgets/Orders/Models/OrderTag",
+                      "initialTags" => $initialTags,
+                    ]
+                  ))->render(),
+                ],
                 [
                   "title" => $this->translate("State"),
                   "input" => "
@@ -1128,6 +1203,8 @@ class Order extends \ADIOS\Core\Model {
       $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adios);
       $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adios);
       $invoiceModel = new \ADIOS\Widgets\Finances\Models\Invoice($this->adios);
+      $deliveryServiceModel = new \ADIOS\Widgets\Shipping\Models\DeliveryService($this->adios);
+      $paymentServiceModel = new \ADIOS\Widgets\Shipping\Models\PaymentService($this->adios);
 
       $order['ITEMS'] = $this->adios->db->get_all_rows_query("
         select
@@ -1152,6 +1229,20 @@ class Order extends \ADIOS\Core\Model {
           f.*
         from `{$invoiceModel->table}` f
         where f.id = ".(int) $order['id_invoice']."
+      "));
+
+      $order['DELIVERY_SERVICE'] = reset($this->adios->db->get_all_rows_query("
+        select
+          ds.*
+        from `{$deliveryServiceModel->table}` ds
+        where ds.id = ".(int) $order['id_delivery_service']."
+      "));
+
+      $order['PAYMENT_SERVICE'] = reset($this->adios->db->get_all_rows_query("
+        select
+          ps.*
+        from `{$paymentServiceModel->table}` ps
+        where ps.id = ".(int) $order['id_payment_service']."
       "));
 
       $order['SUMMARY'] = $this->calculateSummaryInfo($order);

@@ -7,6 +7,7 @@ namespace Surikata\Plugins\WAI\Order {
     var $selectedDestinationCountryId = NULL;
     var $destinationCountries = NULL;
 
+
     public function getPaymentMethods($selectedDeliveryService) {
       $paymentMethods = [];
       foreach ($this->shipping as $shipment) {

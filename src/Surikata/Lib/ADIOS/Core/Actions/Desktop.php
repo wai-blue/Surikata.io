@@ -100,12 +100,19 @@ class Desktop extends \ADIOS\Core\Action {
       ];
     }
 
-    return [
+    $params = [
       "console" => $this->adios->console->getLogs(),
       "settingsMenuItems" => $settingsMenuItems,
+      "searchQuery" => $_GET['search'],
       "develMenuItems" => $develMenuItems,
       "desktopContentAction" => $this->adios->desktopContentAction == "Desktop" ? "" : $this->adios->desktopContentAction,
       "desktopContentActionParams" => $this->adios->desktopContentActionParams,
     ];
+
+    $desktopContentActionClassName = $this->adios->getActionClassName($this->adios->desktopContentAction);
+    $desktopContentActionObject = new $desktopContentActionClassName($this->adios);
+    $params = $desktopContentActionObject->onAfterDesktopPreRender($params);
+
+    return $params;
   }
 }

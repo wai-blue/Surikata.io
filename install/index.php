@@ -41,6 +41,7 @@
 <?php
 
 $installationStart = microtime(TRUE);
+$rewriteBaseIsCorrect = ($_GET['rewrite_base_is_correct'] ?? "") == "1";
 
 include("RandomProductsGenerator.php");
 include("WebsiteContentGenerator.php");
@@ -110,6 +111,28 @@ if (empty(REWRITE_BASE) || empty(DB_LOGIN) || empty(DB_NAME)) {
     </div>
   ";
   exit();
+}
+
+if (!$rewriteBaseIsCorrect) {
+  $expectedRewriteBase = $_SERVER['REQUEST_URI'];
+  $expectedRewriteBase = str_replace("install/", "", $expectedRewriteBase);
+  $expectedRewriteBase = str_replace("index.php", "", $expectedRewriteBase);
+  if (REWRITE_BASE != $expectedRewriteBase) {
+    echo "
+      <div style='color:orange'>{$_SERVER['REQUEST_URI']}
+        We think that your REWRITE_BASE is not configured properly.<br/>
+        <br/>
+        REWRITE_BASE that you have configured: <b>".REWRITE_BASE."</b><br/>
+        REWRITE_BASE that we think is correct: <b>{$expectedRewriteBase}</b><br/>
+        <br/>
+        If you are sure that you configured your REWRITE_BASE correctly,
+        click on the link below.<br/>
+        <br/>
+        <a href='?rewrite_base_is_correct=1'>REWRITE_BASE is correctly configured, continue with installation</a>
+      </div>
+    ";
+    exit();
+  }
 }
 
 session_start();
@@ -253,6 +276,7 @@ if (!$doInstall) {
   echo "
     <form action='' method='GET'>
       <input type='hidden' name='do_install' value='1' />
+      <input type='hidden' name='rewrite_base_is_correct' value='1' />
 
       <p>
         Whitch parts do you want to install?
@@ -396,6 +420,8 @@ if (!$doInstall) {
     $shoppingCartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($adminPanel);
     $invoiceModel = new \ADIOS\Widgets\Finances\Models\Invoice($adminPanel);
     $orderModel = new \ADIOS\Widgets\Orders\Models\Order($adminPanel);
+    $orderTagModel = new \ADIOS\Widgets\Orders\Models\OrderTag($adminPanel);
+    $orderTagAssignmentModel = new \ADIOS\Widgets\Orders\Models\OrderTagAssignment($adminPanel);
     $unitModel = new \ADIOS\Widgets\Settings\Models\Unit($adminPanel);
     $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($adminPanel);
 
@@ -466,8 +492,8 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       // Payment services
 
-      $paymentServiceModel->insertRow(["id" => 1, "name" => "Tatra banka", "description" => "", "logo" => "tatrabanka.jpg", "is_enabled" => TRUE, "connected_plugin" => "WAI/Payment/Tatrabanka"]);
-      $paymentServiceModel->insertRow(["id" => 2, "name" => "CardPay", "description" => "", "logo" => "cardpay.jpg", "is_enabled" => TRUE, "connected_plugin" => "WAI/Payment/Card"]);
+      $paymentServiceModel->insertRow(["id" => 1, "name" => "Tatra banka", "description" => "", "logo" => "tatrabanka.jpg", "is_enabled" => TRUE, "connected_plugin" => "WAI/Proprietary/Payment/InternetBanking/Tatrabanka"]);
+      $paymentServiceModel->insertRow(["id" => 2, "name" => "CardPay", "description" => "", "logo" => "cardpay.jpg", "is_enabled" => TRUE, "connected_plugin" => "WAI/Proprietary/Payment/Card"]);
       $paymentServiceModel->insertRow(["id" => 3, "name" => "Payment on delivery", "description" => "", "logo" => "", "is_enabled" => TRUE, "connected_plugin" => ""]);
 
       $paymentServices = $paymentServiceModel->getAll();
@@ -679,7 +705,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $productStockStateModel->insertRow(["id" => 3, "name_lang_1" => "Available upon request"]);
 
       // produkty - produkty
-      $adminPanel->db->start_transaction();
+      $adminPanel->db->startTransaction();
 
       RandomProductsGenerator::generateRandomProducts(
         $randomProductsCount,
@@ -693,7 +719,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $productsCount = count($products);
 
       // produkty - galeria produktov
-      $adminPanel->db->start_transaction();
+      $adminPanel->db->startTransaction();
 
       foreach ($products as $product) {
         for ($i = 1; $i <= 8; $i++) {
@@ -718,7 +744,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $adminPanel->db->commit();
       
       // produkty - podobne protuky
-      $adminPanel->db->start_transaction();
+      $adminPanel->db->startTransaction();
 
       foreach ($products as $product) {
         for ($i = 1; $i <= 8; $i++) {
@@ -736,7 +762,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $adminPanel->db->commit();
 
       // produkty - prislusenstvo k produktom
-      $adminPanel->db->start_transaction();
+      $adminPanel->db->startTransaction();
 
       foreach ($products as $product) {
         for ($i = 1; $i <= 8; $i++) {
@@ -753,7 +779,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       // nakupny cennik
 
-      $adminPanel->db->start_transaction();
+      $adminPanel->db->startTransaction();
 
       for ($i = 1; $i <= $productsCount; $i++) {
         $productPriceModel->insertRandomRow(["id_product" => $i]);
@@ -848,6 +874,12 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $customersCount = $customerModel->get()->count();
       $productsCount = $productModel->get()->count();
 
+      $orderTagModel->insertRow(["tag" => "paid", "color" => "#00A500"]);
+      $orderTagModel->insertRow(["tag" => "unpaid", "color" => "#AA0000"]);
+      $orderTagModel->insertRow(["tag" => "good client", "color" => "#11009A"]);
+      $orderTagModel->insertRow(["tag" => "bad client", "color" => "#DFDFDF"]);
+      $orderTagModel->insertRow(["tag" => "discount on services", "color" => "#141414"]);
+
       $orderModel->disableNotifications = TRUE;
 
       for ($i = 1; $i <= 40; $i++) {
@@ -899,7 +931,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
             "id_delivery_service"          => $deliveryServicesIds[rand(0, count($deliveryServicesIds) - 1)],
             "id_payment_service"           => $paymentServicesIds[rand(0, count($paymentServicesIds) - 1)],
 
-            "domain"                       => "EN",
+            "domain"                       => $domainsToInstall[rand(1, count($domainsToInstall))]["name"],
             "general_terms_and_conditions" => 1,
             "gdpr_consent"                 => 1,
             "confirmation_time"            => $orderConfirmationTime,
@@ -909,6 +941,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
         if (rand(0, 1) == 1) {
           $idInvoice = $orderModel->issueInvoce($idOrder, TRUE);
+          $orderTagAssignmentModel->insertRow(["id_order" => $idOrder, "id_tag" => rand(1,5)]);
         }
 
       }
@@ -922,10 +955,17 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $slideshowImageSet,
       $domainsToInstall,
     );
+
     $wsg->copyAssets();
+
     foreach ($domainsToInstall as $domainIndex => $domain) {
       $wsg->generateWebsiteContent($domainIndex, $domain["themeName"]);
+      $wsg->installPlugins();
+      $adminPanel->widgets["Website"]->rebuildSitemap($domainsToInstall[$domainIndex]['name']);
     }
+
+    $wsg->installPluginsOnce();
+
 
   } catch (\Exception $e) {
     echo "

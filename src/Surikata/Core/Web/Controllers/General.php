@@ -14,7 +14,8 @@ class General extends \Surikata\Core\Web\Controller {
       ],
       $pluginSettings ?? [],
       $plugin->getTwigParams($pluginSettings ?? []),
-      $this->websiteRenderer->twigParams
+      $this->websiteRenderer->twigParams,
+      $this->websiteRenderer->getGlobalTwigParams()
     );
 
     $renderParams = $this->adminPanel->dispatchEventToPlugins("onGeneralControllerAfterRenderPlugin", [

@@ -100,6 +100,10 @@ class Loader extends \Cascada\Loader {
         echo "var __srkt_dict__ = JSON.parse('".ads(json_encode($dictionary))."');";
         exit;
       };
+      $this->assetsUrlMap["core/assets/js/plugins.js"] = function($websiteRenderer, $url) {
+        $this->getPluginsMainJS();
+        exit();
+      };
       $this->assetsUrlMap["core/assets/"] = ADMIN_PANEL_SRC_DIR."/Core/Assets/";
       $this->assetsUrlMap["theme/assets/"] = "{$this->themeDir}/Assets/";
       $this->assetsUrlMap["plugins/assets/"] = function($websiteRenderer, $url) { 
@@ -577,6 +581,21 @@ class Loader extends \Cascada\Loader {
 
   public function getDomainInfo($domainName) {
     return $this->adminPanel->getDomainInfo($domainName);
+  }
+
+  public function getPluginsMainJS() {
+    $content = "";
+    foreach ($this->adminPanel->plugins as $pluginName) {
+      if (!in_array($pluginName, [".", ".."])) {
+        foreach ($this->adminPanel->pluginFolders as $pluginFolder) {
+          $file = "{$pluginFolder}/{$pluginName}/Assets/main.js";
+          if (is_file($file)) {
+            $content .= file_get_contents($file) . ";";
+          }
+        }
+      }
+    }
+    echo $content;
   }
 
 }

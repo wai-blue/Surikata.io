@@ -86,7 +86,22 @@ var PluginWAICustomerCart = {
       success,
       fail
     );
-  }
+  },
+
+  updateCheckoutOverview: function(success) {
+    let data = this.serializeOrderData();
+    data['renderOnly'] = 'orderOverview';
+  
+    Surikata.renderPlugin(
+      'WAI/Order/Checkout',
+      data,
+      function (data) {
+        if (typeof success == 'function') {
+          success(data);
+        }
+      }
+    );
+  },
 }
 
 

@@ -28,5 +28,6 @@ $dictionary = [
   "The minimum value of all products in the cart from which the voucher can be redeemed" => "Minimálna hodnota všetkých produktov v košíku, z ktorej je možné uplatniť poukážku",
   "Enable limit the number of voucher uses" => "Povoliť obmedzenie počtu použití poukážky",
   "You can limit the maximum use of the voucher" => "Maximálne využitie poukážky môžete obmedziť",
-  "Maximum number of voucher uses, e.g. 15x" => "Maximálny počet použití voucheru, napr. 15x"
+  "Maximum number of voucher uses, e.g. 15x" => "Maximálny počet použití voucheru, napr. 15x",
+  "Remaining to be redeemed" => "Zostávajúce na uplatenie"
 ];

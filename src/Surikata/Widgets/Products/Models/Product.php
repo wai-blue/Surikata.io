@@ -338,10 +338,6 @@ class Product extends \ADIOS\Core\Model {
     return $this->hasMany(\ADIOS\Widgets\Products\Models\ProductExtension::class, 'id_product');
   }
 
-  public function variationGroup() {
-    return $this->hasOne(\ADIOS\Widgets\Products\Models\ProductVariationGroupAssignment::class, 'id_product');
-  }
-
   public function priceList() {
     return $this->hasOne(\ADIOS\Widgets\Products\Models\ProductPrice::class, 'id_product');
   }
@@ -384,15 +380,6 @@ class Product extends \ADIOS\Core\Model {
 
   public function supplier() {
     return $this->belongsTo(\ADIOS\Widgets\Products\Models\Supplier::class, 'id_supplier');
-  }
-
-  public function variations() {
-    return $this
-      ->hasMany(
-        \ADIOS\Widgets\Products\Models\ProductVariationAssignment::class,
-        'id_product'
-      )
-    ;
   }
 
   public function features() {
@@ -835,23 +822,6 @@ class Product extends \ADIOS\Core\Model {
           "id_product" => $data['id'],
         ]
       ];
-      $templateTabs[$this->translate("Variations")] = [
-        [
-          "html" => "
-            <a
-              href='javascript:void(0)'
-              class='btn btn-icon-split btn-light'
-              style='margin-top:1em;'
-              onclick='
-                window_render(\"Products/{$data['id']}/Variations/Manage\");
-              '
-            >
-              <span class=\"icon\"><i class=\"fas fa-euro-sign\"></i></span>
-              <span class=\"text\">".$this->translate("Manage product variations")."</span>
-            </a>
-          "
-        ]
-      ];
       $templateTabs[$this->translate("Features")] = [
         "action" => "UI/Table",
         "params" => [
@@ -1033,12 +1003,10 @@ class Product extends \ADIOS\Core\Model {
 
   public function getForDetail() {
     return $this->getForPriceInfo()
-      ->with('variationGroup')
       ->with('gallery')
       ->with('extensions')
       ->with('brand')
       ->with('supplier')
-      ->with('variations')
       ->with('features')
       ->with('related')
       ->with('accessories')
@@ -1080,7 +1048,6 @@ class Product extends \ADIOS\Core\Model {
       "accessories" => "ACCESSORIES",
       "services" => "SERVICES",
       "price_list" => "PRICELIST",
-      "variation_group" => "VARIATION_GROUP",
     ];
 
     foreach ($keyConversionTable as $from => $to) {
@@ -1089,13 +1056,6 @@ class Product extends \ADIOS\Core\Model {
         unset($product[$from]);
       }
     }
-
-    if (is_array($product["variations"])) {
-      foreach ($product['variations'] as $key => $value) {
-        $product['VARIATIONS'][$value['id_variation']] = $value;
-      }
-    }
-    unset($product['variations']);
 
     if (is_array($product["PRICELIST"])) {
 

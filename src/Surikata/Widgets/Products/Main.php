@@ -63,4 +63,5 @@ class Products extends \ADIOS\Core\Widget {
       ];
     }
   }
+
 }

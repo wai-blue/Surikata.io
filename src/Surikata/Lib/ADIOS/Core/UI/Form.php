@@ -283,6 +283,12 @@ class Form extends \ADIOS\Core\UI\View
               {$row['html']}
             </div>
           ";
+        } else if (is_string($row['action'])) {
+          $html .= "
+            <div class='adios ui Form subrow'>
+              ".$this->adios->renderAction($row['action'], $row['params'])."
+            </div>
+          ";
         } else if (is_string($row['title']) && is_string($row['input'])) {
           $html .= "
             <div class='adios ui Form subrow'>

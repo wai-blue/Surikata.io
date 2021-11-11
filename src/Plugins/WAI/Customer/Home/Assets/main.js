@@ -1,46 +1,49 @@
-function PluginWAICustomerHome() { }
+class PluginWAICustomerHomeClass {
 
-PluginWAICustomerHome.prototype.createAccount = function (success, fail) {
-  let data = Surikata.serializeForm('#registrationForm');
-  data['createAccount'] = true;
+  createAccount(success, fail) {
+    let data = Surikata.serializeForm('#registrationForm');
+    data['createAccount'] = true;
 
-  Surikata.renderPluginJSON(
-    'WAI/Customer/Registration',
-    data,
-    success,
-    fail
-  );
-}
+    Surikata.renderPluginJSON(
+      'WAI/Customer/Registration',
+      data,
+      success,
+      fail
+    )
+  }
 
-PluginWAICustomerHome.prototype.addAddress = function (success, fail) {
-  let data = Surikata.serializeForm('#addAddressForm');
-  data['createAddress'] = true;
-  data['customerAction'] = "editAddress";
+  addAddress(success, fail) {
+    let data = Surikata.serializeForm('#addAddressForm');
+    data['createAddress'] = true;
+    data['customerAction'] = "editAddress";
 
-  Surikata.renderPluginJSON(
+    Surikata.renderPluginJSON(
       'WAI/Customer/Home',
       data,
       success,
       fail
-  );
+    )
+  }
+
+  removeAddress(data, success, fail) {
+    Surikata.renderPluginJSON(
+      'WAI/Customer/Home',
+      data,
+      success,
+      fail
+    )
+  }
+
+  forgotPassword(success, fail) {
+    let data = Surikata.serializeForm('#forgotPasswordForm');
+    Surikata.renderPluginJSON(
+      'WAI/Customer/ForgotPassword',
+      data,
+      success,
+      fail
+    )
+  }
+
 }
 
-PluginWAICustomerHome.prototype.removeAddress = function (data, success, fail) {
-  Surikata.renderPluginJSON(
-    'WAI/Customer/Home',
-    data,
-    success,
-    fail
-  );
-}
-
-PluginWAICustomerHome.prototype.forgotPassword = function (success, fail) {
-  let data = Surikata.serializeForm('#forgotPasswordForm');
-
-  Surikata.renderPluginJSON(
-    'WAI/Customer/ForgotPassword',
-    data,
-    success,
-    fail
-  );
-}
+var PluginWAICustomerHome = new PluginWAICustomerHomeClass();

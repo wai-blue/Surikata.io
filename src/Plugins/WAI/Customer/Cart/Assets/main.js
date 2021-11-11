@@ -1,5 +1,6 @@
-var PluginWAICustomerCart = {
-  addProduct: function (idProduct, qty, success) {
+class PluginWAICustomerCartClass {
+
+  addProduct(idProduct, qty, success) {
     Surikata.renderPluginJSON(
       'WAI/Customer/Cart',
       {
@@ -12,10 +13,10 @@ var PluginWAICustomerCart = {
           success(data);
         }
       }
-    );
-  },
+    )
+  }
 
-  removeProduct: function (idProduct, success) {
+  removeProduct(idProduct, success) {
     Surikata.renderPluginJSON(
       'WAI/Customer/Cart',
       {
@@ -27,10 +28,10 @@ var PluginWAICustomerCart = {
           success(data);
         }
       }
-    );
-  },
+    )
+  }
 
-  updateProductQty: function (idProduct, qty, success) {
+  updateProductQty(idProduct, qty, success) {
     Surikata.renderPluginJSON(
       'WAI/Customer/Cart',
       {
@@ -43,10 +44,10 @@ var PluginWAICustomerCart = {
           success(data);
         }
       }
-    );
-  },
+    )
+  }
   
-  updateProductPrices: function (success) {
+  updateProductPrices(success) {
     Surikata.renderPlugin(
       'WAI/Order/CartOverview',
       {},
@@ -55,10 +56,10 @@ var PluginWAICustomerCart = {
           success(data);
         }
       }
-    );
-  },
+    )
+  }
 
-  updateDetailedOverview: function(success) {
+  updateDetailedOverview(success) {
     Surikata.renderPlugin(
       'WAI/Order/CartOverview',
       {},
@@ -67,16 +68,16 @@ var PluginWAICustomerCart = {
           success(data);
         }
       }
-    );
-  },
+    )
+  }
 
-  serializeOrderData: function () {
+  serializeOrderData() {
     return {
       'orderData': Surikata.serializeForm('#orderDataForm'),
     };
-  },
+  }
 
-  placeOrder: function (success, fail) {
+  placeOrder(success, fail) {
     let data = this.serializeOrderData();
     data['cartAction'] = 'placeOrder';
   
@@ -85,10 +86,10 @@ var PluginWAICustomerCart = {
       data,
       success,
       fail
-    );
-  },
+    )
+  }
 
-  updateCheckoutOverview: function(success) {
+  updateCheckoutOverview(success) {
     let data = this.serializeOrderData();
     data['renderOnly'] = 'orderOverview';
   
@@ -100,8 +101,9 @@ var PluginWAICustomerCart = {
           success(data);
         }
       }
-    );
-  },
+    )
+  }
+
 }
 
-
+var PluginWAICustomerCart = new PluginWAICustomerCartClass();

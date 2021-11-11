@@ -1,14 +1,14 @@
-function PluginWAICommonBreadcrumb() {}
+class PluginWAICommonBreadcrumbClass {
+  update(updateDiv) {
 
-PluginWAICommonBreadcrumb.prototype.update = function (updateDiv) {
-
-  Surikata.renderPlugin(
-    "WAI/Common/Breadcrumb",
-    {},
-    function (data) {
-      updateDiv.replaceWith(data).fadeIn(100);
-    }
-  );
-
-  return this;
+    Surikata.renderPlugin(
+      "WAI/Common/Breadcrumb",
+      {},
+      function (data) {
+        updateDiv.replaceWith(data).fadeIn(100);
+      }
+    );
+  
+    return this;
+  }
 }

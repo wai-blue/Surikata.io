@@ -41,6 +41,7 @@
 <?php
 
 $installationStart = microtime(TRUE);
+$rewriteBaseIsCorrect = ($_GET['rewrite_base_is_correct'] ?? "") == "1";
 
 include("RandomProductsGenerator.php");
 include("WebsiteContentGenerator.php");
@@ -62,7 +63,7 @@ function _loadCsvIntoArray($file, $separator = ',', $enclosure = '#') {
 
 set_time_limit(60*10);
 
-if (!is_file("../vendor/autoload.php")) {
+if (!is_file(__DIR__."/../vendor/autoload.php")) {
   echo "
     <div style='color:red'>
       Sorry, it looks like you did not run 'composer install'.<br/>
@@ -77,7 +78,7 @@ if (!is_file("../vendor/autoload.php")) {
   exit();
 }
 
-if (!is_file("../ConfigEnv.php")) {
+if (!is_file(__DIR__."/../ConfigEnv.php")) {
   echo "
     <div style='color:red'>
       Sorry, it looks like you do not have your ConfigEnv.php configured.<br/>
@@ -93,7 +94,7 @@ if (!is_file("../ConfigEnv.php")) {
   exit();
 }
 
-require("../Init.php");
+require(__DIR__."/../Init.php");
 
 if (empty(REWRITE_BASE) || empty(DB_LOGIN) || empty(DB_NAME)) {
   echo "
@@ -110,6 +111,28 @@ if (empty(REWRITE_BASE) || empty(DB_LOGIN) || empty(DB_NAME)) {
     </div>
   ";
   exit();
+}
+
+if (!$rewriteBaseIsCorrect) {
+  $expectedRewriteBase = $_SERVER['REQUEST_URI'];
+  $expectedRewriteBase = str_replace("install/", "", $expectedRewriteBase);
+  $expectedRewriteBase = str_replace("index.php", "", $expectedRewriteBase);
+  if (REWRITE_BASE != $expectedRewriteBase) {
+    echo "
+      <div style='color:orange'>
+        We think that your REWRITE_BASE is not configured properly.<br/>
+        <br/>
+        REWRITE_BASE that you have configured: <b>".REWRITE_BASE."</b><br/>
+        REWRITE_BASE that we think is correct: <b>{$expectedRewriteBase}</b><br/>
+        <br/>
+        If you are sure that you configured your REWRITE_BASE correctly,
+        click on the link below.<br/>
+        <br/>
+        <a href='?rewrite_base_is_correct=1'>REWRITE_BASE is correctly configured, continue with installation</a>
+      </div>
+    ";
+    exit();
+  }
 }
 
 session_start();
@@ -253,6 +276,7 @@ if (!$doInstall) {
   echo "
     <form action='' method='GET'>
       <input type='hidden' name='do_install' value='1' />
+      <input type='hidden' name='rewrite_base_is_correct' value='1' />
 
       <p>
         Whitch parts do you want to install?

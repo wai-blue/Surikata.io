@@ -694,7 +694,7 @@ class Product extends \ADIOS\Core\Model {
               onclick='window_render(\"Products/{$data['id']}/Prices\");'
             >
               <span class=\"icon\"><i class=\"fas fa-euro-sign\"></i></span>
-              <span class=\"text\">Open price list</span>
+              <span class=\"text\">".$this->translate("Open price list")."</span>
             </a>
           ",
         ],
@@ -998,6 +998,11 @@ class Product extends \ADIOS\Core\Model {
       ->with('priceListDiscountsForCategory')
       ->with('priceListDiscountsForBrand')
       ->with('priceListDiscountsForSupplier')
+    ;
+  }
+
+  public function getForDetail() {
+    return $this->getForPriceInfo()
       ->with('gallery')
       ->with('extensions')
       ->with('brand')

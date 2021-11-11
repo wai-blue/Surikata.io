@@ -68,6 +68,10 @@ class ShoppingCart extends \ADIOS\Core\Model {
     return $params;
   }
 
+  public function product() {
+    return $this->hasOne(\ADIOS\Widgets\Products\Models\Product::class, 'id_product');
+  }
+
   public function getOrCreateCartForCustomerUID($customerUID) {
     $customerUIDlink = $this->adios
       ->getModel("Widgets/Customers/Models/CustomerUID")
@@ -163,7 +167,7 @@ class ShoppingCart extends \ADIOS\Core\Model {
       ]);
     }
 
-    return $item->get()->first()->toArray();
+    return $item->with('product')->get()->first()->toArray();
   }
 
   public function updateProductQty($customerUID, $idProduct, $qty) {

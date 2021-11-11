@@ -122,6 +122,14 @@ class Plugin {
   }
 
   /**
+   * GET globalTwigParams
+   * @return array
+   */
+  public function getGlobalTwigParams() {
+    return [];
+  }
+
+  /**
    * Renders content of the plugin directly as a HTML string.
    * Disables TWIG rendering.
    *

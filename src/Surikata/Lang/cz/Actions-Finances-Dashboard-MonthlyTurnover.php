@@ -1,17 +1,17 @@
 <?php
 
 $dictionary = [
-  "Monthly turnover for" => "Mesačný obrat za rok",
-  "jan" => "jan", 
-  "feb" => "feb", 
-  "mar" => "mar", 
-  "apr" => "apr", 
-  "may" => "máj", 
-  "jun" => "jún", 
-  "jul" => "júl", 
-  "aug" => "aug", 
-  "sep" => "sep", 
-  "oct" => "okt", 
-  "nov" => "nov", 
-  "dec" => "dec"
+  "Monthly turnover for" => "Měsíční obrat za rok",
+  "jan" => "led", 
+  "feb" => "uno", 
+  "mar" => "bře", 
+  "apr" => "dub", 
+  "may" => "kvě", 
+  "jun" => "čer", 
+  "jul" => "čer", 
+  "aug" => "srp", 
+  "sep" => "zář", 
+  "oct" => "říj", 
+  "nov" => "lis", 
+  "dec" => "pro"
 ];

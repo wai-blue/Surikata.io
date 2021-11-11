@@ -1,9 +1,9 @@
 <?php
 
 $dictionary = [
-  "My profile" => "Môj profil",
-  "Open new tab" => "Otvoriť novú kartu",
-  "Restart" => "Reštartovať",
-  "Show console" => "Otvoriť konzolu",
-  "Examples of UI" => "Príklady UI",
+  "My profile" => "Můj profil",
+  "Open new tab" => "Otevřít novou kartu",
+  "Restart" => "Restartovat",
+  "Show console" => "Otevřít konzoli",
+  "Examples of UI" => "Příklady UI",
 ];

@@ -1,10 +1,10 @@
 <?php
 
 $dictionary = [
-  "Add" => "Pridať",
-  "Edit" => "Upraviť",
-  "Move level up" => "O úroveň vyššie",
-  "Move level down" => "O úroveň nižšie",
-  "Select for deletion" => "Vybrať na vymazanie",
-  "Unselect from deletion" => "Zrušiť z výberu pre vymazanie"
+  "Add" => "Přidat",
+  "Edit" => "Upravit",
+  "Move level up" => "O úroveň výš",
+  "Move level down" => "O úroveň níž",
+  "Select for deletion" => "Vybrat pro vymazání",
+  "Unselect from deletion" => "Zrušit z výběru pro vymazání"
 ];

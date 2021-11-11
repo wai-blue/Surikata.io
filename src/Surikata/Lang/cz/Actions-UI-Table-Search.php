@@ -1,8 +1,8 @@
 <?php
 
 $dictionary = [
-  "Saved searches" => "Uložené vyhľadávania",
-  "Save this search" => "Uložiť vyhľadávanie",
-  "Apply" => "Použiť",
-  "Search in" => "Vyhľadávať v tabuľke"
+  "Saved searches" => "Uložená vyhledávání",
+  "Save this search" => "Uložit vyhledávání",
+  "Apply" => "Použít",
+  "Search in" => "Vyhledávat v tabulce"
 ];

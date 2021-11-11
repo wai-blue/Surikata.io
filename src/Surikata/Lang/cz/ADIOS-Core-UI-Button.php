@@ -1,13 +1,13 @@
 <?php
 
 $dictionary = [
-  "Save" => "Uložiť",
-  "Search" => "Hľadať",
-  "Apply" => "Použiť",
-  "Close" => "Zavrieť",
-  "Copy" => "Kopírovať",
-  "Add" => "Pridať",
-  "Delete" => "Zmazať",
-  "Cancel" => "Zrušiť",
-  "Confirm" => "Potvrdiť",
+  "Save" => "Uložit",
+  "Search" => "Hledat",
+  "Apply" => "Použít",
+  "Close" => "Zavřít",
+  "Copy" => "Kopírovat",
+  "Add" => "Přidat",
+  "Delete" => "Zmazat",
+  "Cancel" => "Zrušit",
+  "Confirm" => "Potvrdit",
 ];

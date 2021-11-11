@@ -1,5 +1,5 @@
 <?php
 
 $dictionary = [
-  "New tag will be created." => "Zadali ste nový tag.",
+  "New tag will be created." => "Zadali jste nový tag.",
 ];

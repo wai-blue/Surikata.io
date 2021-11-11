@@ -1,5 +1,5 @@
 <?php
 
 $dictionary = [
-  "Slideshow" => "Obrázková prezentácia"
+  "Slideshow" => "Obrázková prezentace"
 ];

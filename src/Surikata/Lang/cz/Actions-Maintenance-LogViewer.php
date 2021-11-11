@@ -2,8 +2,8 @@
 
 $dictionary = [
   "LogViewer" => "Záznamy",
-  "Clear log" => "Vymazať záznam",
+  "Clear log" => "Vymazat záznam",
   "info" => "info",
-  "warning" => "varovanie",
+  "warning" => "varování",
   "error" => "chyba"
 ];

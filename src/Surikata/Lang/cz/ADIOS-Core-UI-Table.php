@@ -1,7 +1,7 @@
 <?php
 
 $dictionary = [
-  "Export to CSV" => "Exportovať do CSV",
-  "Search" => "Vyhľadávanie",
-  "items total" => "položky celkom"
+  "Export to CSV" => "Exportovat do CSV",
+  "Search" => "Vyhledávání",
+  "items total" => "položky celkem"
 ];

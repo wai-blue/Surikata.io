@@ -2,12 +2,12 @@
 
 $dictionary = [
   "Blogs" => "Blogy",
-  "Title" => "Názov",
+  "Title" => "Název",
   "Content" => "Obsah",
-  "Image" => "Obrázok",
-  "Created at" => "Vytvorený v",
+  "Image" => "Obrázek",
+  "Created at" => "Vytvořen v",
   "Author" => "Autor",
-  "General" => "Všeobecné",
+  "General" => "Obecné",
   "Tags" => "Tagy",
   "Supported image extensions: jpg, gif, png, jpeg" => "Podporovaný formát obrázku: jpg, gif, png, jpeg." ,
 ];

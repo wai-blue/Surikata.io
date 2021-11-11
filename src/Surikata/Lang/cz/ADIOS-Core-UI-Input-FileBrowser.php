@@ -1,7 +1,7 @@
 <?php
 
 $dictionary = [
-  "Create folder" => "Vytvoriť priečinok",
-  "Upload file" => "Nahrať súbor",
-  "Files And Media" => "Súbory a média"
+  "Create folder" => "Vytvořit složku",
+  "Upload file" => "Nahrát soubor",
+  "Files And Media" => "Soubory a média"
 ];

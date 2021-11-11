@@ -1,7 +1,7 @@
 <?php
 
 $dictionary = [
-  "Save" => "Uložiť",
-  "Saved" => "Uložené",
-  "Close" => "Zavrieť"
+  "Save" => "Uložit",
+  "Saved" => "Uloženo",
+  "Close" => "Zavřít"
 ];

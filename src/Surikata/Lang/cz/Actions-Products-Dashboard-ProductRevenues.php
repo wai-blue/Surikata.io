@@ -1,5 +1,5 @@
 <?php
 
 $dictionary = [
-  "Best sold products for" => "Najpredávanejšie produkty za rok"
+  "Best sold products for" => "Nejprodávanější produkty za rok"
 ];

@@ -1,7 +1,7 @@
 <?php
 
 $dictionary = [
-  "Your online stores" => "Vaše eshopy",
-  "Did you know?" => "Vedeli ste že?",
-  "Visit" => "Navštíviť"
+  "Your online stores" => "Vaše online obchody",
+  "Did you know?" => "Věděli jste že?",
+  "Visit" => "Navštívit"
 ];

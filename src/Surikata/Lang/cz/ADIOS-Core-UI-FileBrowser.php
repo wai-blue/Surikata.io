@@ -1,6 +1,6 @@
 <?php
 
 $dictionary = [
-  "File browser" => "Prehliadač súborov",
-  "Close" => "Zavrieť"
+  "File browser" => "Prohlížeč souborů",
+  "Close" => "Zavřít"
 ];

@@ -18,7 +18,7 @@ class PrintInvoice extends \ADIOS\Core\Action {
 
     foreach ($invoice["ITEMS"] as $key => $item) {
       if (is_numeric($item["id_delivery_unit"])) {
-        $invoice["ITEMS"][$key]["DELIVERY_UNIT"] = (new Unit())->getById($item["id_delivery_unit"]);
+        $invoice["ITEMS"][$key]["DELIVERY_UNIT"] = (new Unit($this->adios))->getById((int)$item["id_delivery_unit"]);
       }
     }
 

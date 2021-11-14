@@ -304,6 +304,12 @@ class Order extends \ADIOS\Core\Model {
         "show_column" => TRUE,
       ],
 
+      "discount" => [
+        "type" => "float",
+        "title" => $this->translate("Total discount in %"),
+        "show_column" => TRUE,
+      ],
+
       "price_total_excl_vat" => [
         "type" => "float",
         "title" => $this->translate("Total price excl. VAT"),
@@ -686,7 +692,7 @@ class Order extends \ADIOS\Core\Model {
 
     $summary = $this->calculateSummaryInfo($placedOrderData);
 
-    $placedOrderData = $this->adios->dispatchEventToPlugins("onAfterPlaceOrder", [
+    $placedOrderData = $this->adios->dispatchEventToPlugins("onOrderAfterPlaceOrder", [
       "model" => $this,
       "order" => $placedOrderData,
     ])["order"];
@@ -971,6 +977,33 @@ class Order extends \ADIOS\Core\Model {
         ."<div style='margin-left:30px;display:inline-block'>{$tagsHtml}</div>"
       ;
 
+      echo "<pre>";
+      print_r($data);
+      echo "</pre>";
+      $sidebarHtmlDiscount = "";
+      if ((float)$data["discount"] > 0) {
+        // Show price with discount
+        $sidebarHtmlDiscount = "
+          <tr>
+            <td>
+              ".$this->translate('Price excl. VAT with discount')."
+            </td>
+            <td class='text-right'>
+              ".number_format(($data['price_total_excl_vat'] * ((100 - $data["discount"]) / 100)), 2, ",", " ")."
+              ".$this->adios->locale->currencySymbol()."
+            </td>
+          </tr>
+          <tr>
+            <td>
+              ".$this->translate('Price incl. VAT with discount')."
+            </td>
+            <td class='text-right'>
+              ".number_format(($data['price_total_incl_vat'] * ((100 - $data["discount"]) / 100)), 2, ",", " ")."
+              ".$this->adios->locale->currencySymbol()."
+            </td>
+          </tr>
+        ";
+      }
       $sidebarHtml = $this->adios->dispatchEventToPlugins("onOrderDetailBeforeSidebarButtons", [
         "model" => $this,
         "params" => $params,
@@ -1020,6 +1053,25 @@ class Order extends \ADIOS\Core\Model {
                       ".$this->adios->locale->currencySymbol()."
                     </td>
                   </tr>
+                  ".$sidebarHtmlDiscount."
+                  <tr>
+                    <td>
+                      ".$this->translate('Delivery Fee')."
+                    </td>
+                    <td class='text-right'>
+                      ".number_format($data['delivery_fee'], 2, ",", " ")."
+                      ".$this->adios->locale->currencySymbol()."
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      ".$this->translate('Payment Fee')."
+                    </td>
+                    <td class='text-right'>
+                      ".number_format($data['payment_fee'], 2, ",", " ")."
+                      ".$this->adios->locale->currencySymbol()."
+                    </td>
+                  </tr>
                   <tr>
                     <td>
                       ".$this->translate('Total weight')."
@@ -1060,6 +1112,7 @@ class Order extends \ADIOS\Core\Model {
                 "email",
                 "confirmation_time",
                 "number_customer",
+                "discount",
                 "notes",
                 "domain",
                 [
@@ -1338,6 +1391,15 @@ class Order extends \ADIOS\Core\Model {
         "item" => $this->translate("Payment"),
         "quantity" => 1,
         "unit_price" => $order["payment_fee"] / (1 + 20 / 100), // TODO: VAT 20% hardcoded
+        "vat_percent" => 20, // TODO: VAT 20% hardcoded
+      ];
+    }
+
+    if ($order['discount'] > 0) {
+      $invoiceItems[] = [
+        "item" => $this->translate("Discount"),
+        "quantity" => 1,
+        "unit_price" => - $order["price_total_excl_vat"] * ($order['discount'] / 100), // TODO: VAT 20% hardcoded
         "vat_percent" => 20, // TODO: VAT 20% hardcoded
       ];
     }

@@ -1,1 +1,2 @@
-alert(window);
+/* Na co to je?
+alert(window);*/

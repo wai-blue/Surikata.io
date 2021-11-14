@@ -101,7 +101,27 @@ class Loader extends \Cascada\Loader {
         exit;
       };
       $this->assetsUrlMap["core/assets/js/plugins.js"] = function($websiteRenderer, $url) {
-        $this->getPluginsMainJS();
+        $pluginsMainJs = $this->renderPluginsMainJs();
+
+        header("Content-type: text/js");
+        header("ETag: ".md5($pluginsMainJs));
+        header("Expires: " . gmdate("D, d M Y H:i:s", time() + 3600) . " GMT");
+        header("Pragma: cache");
+        header("Cache-Control: max-age={3600}");
+
+        echo $pluginsMainJs;
+        exit();
+      };
+      $this->assetsUrlMap["theme/assets/js/themeabelo.js"] = function($websiteRenderer, $url) {
+        $themePluginsJs = $this->renderThemePluginsJs();
+
+        header("Content-type: text/js");
+        header("ETag: ".md5($themePluginsJs));
+        header("Expires: " . gmdate("D, d M Y H:i:s", time() + 3600) . " GMT");
+        header("Pragma: cache");
+        header("Cache-Control: max-age={3600}");
+  
+        echo $themePluginsJs;
         exit();
       };
       $this->assetsUrlMap["core/assets/js/globaltwigparams.js"] = function($websiteRenderer, $url) {
@@ -589,8 +609,9 @@ class Loader extends \Cascada\Loader {
     return $this->adminPanel->getDomainInfo($domainName);
   }
 
-  public function getPluginsMainJS() {
+  public function renderPluginsMainJs() {
     $content = "";
+
     foreach ($this->adminPanel->plugins as $pluginName) {
       if (!in_array($pluginName, [".", ".."])) {
         foreach ($this->adminPanel->pluginFolders as $pluginFolder) {
@@ -601,7 +622,21 @@ class Loader extends \Cascada\Loader {
         }
       }
     }
-    echo $content;
+
+    return $content;
+  }
+
+  public function renderThemePluginsJs() {
+    $content = "";
+
+    foreach (@scandir($this->themeDir. '/Assets/js/classes') as $themePluginJs) {
+      $file = "{$this->themeDir}/Assets/js/classes/{$themePluginJs}";
+      if (is_file($file)) {
+        $content .= file_get_contents($file) . ";";
+      }
+    }
+
+    return $content;
   }
 
   public function getGlobalTwigParams() {
@@ -618,6 +653,7 @@ class Loader extends \Cascada\Loader {
         }
       }
     }
+
     return $globalTwigParams;
   }
 

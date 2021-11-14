@@ -1367,6 +1367,8 @@ class Order extends \ADIOS\Core\Model {
     $order = $this->getById($idOrder);
 
     $invoiceItems = [];
+    $sumForAvgVat = 0;
+    $sum = 0;
     foreach ($order['ITEMS'] as $item) {
       $invoiceItems[] = [
         "item" => $item["product_number"]." ".$item["product_name"],
@@ -1375,6 +1377,8 @@ class Order extends \ADIOS\Core\Model {
         "unit_price" => $item["unit_price"],
         "vat_percent" => $item["vat_percent"],
       ];
+      $sumForAvgVat += ($item["vat_percent"] / 100) * $item["unit_price"] * $item["quantity"];
+      $sum += $item["unit_price"] * $item["quantity"];
     }
 
     if ($order['delivery_fee'] > 0) {
@@ -1396,11 +1400,12 @@ class Order extends \ADIOS\Core\Model {
     }
 
     if ($order['discount'] > 0) {
+      $avgVat = round($sumForAvgVat / $sum * 100);
       $invoiceItems[] = [
         "item" => $this->translate("Discount"),
         "quantity" => 1,
-        "unit_price" => - $order["price_total_excl_vat"] * ($order['discount'] / 100), // TODO: VAT 20% hardcoded
-        "vat_percent" => 20, // TODO: VAT 20% hardcoded
+        "unit_price" => - $order["price_total_excl_vat"] * ($order['discount'] / 100),
+        "vat_percent" => $avgVat,
       ];
     }
 

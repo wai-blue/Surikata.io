@@ -625,8 +625,31 @@ class WebsiteContentGenerator {
       "type" => 302,
     ]);
 
-    // nastavenia webu
+    // emaily podľa jazykovej verzie (SK + EN)
+    if ($this->domainSlug == "sk") {
+      $emails = [
+        "signature" => "<p>{$this->domainName} - <a href='http://{$this->domainName}' target='_blank'>{$this->domainName}</a></p>",
+        "after_order_confirmation_SUBJECT" => "{$this->domainName} - objednávka č. {% number %}",
+        "after_order_confirmation_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/orderBody_sk.html"),
+        "after_registration_SUBJECT" => "{$this->domainName} - Overte Vašu emailovú adresu",
+        "after_registration_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/registrationBody_sk.html"),
+        "forgot_password_SUBJECT" => "{$this->domainName} - Obnovenie hesla",
+        "forgot_password_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/forgotPasswordBody_sk.html")
+      ];
+    }
+    else {
+      $emails = [
+        "signature" => "<p>{$this->domainName} - <a href='http://{$this->domainName}' target='_blank'>{$this->domainName}</a></p>",
+        "after_order_confirmation_SUBJECT" => "{$this->domainName} - order number {% number %}",
+        "after_order_confirmation_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/orderBody.html"),
+        "after_registration_SUBJECT" => "{$this->domainName} - Verify your email address",
+        "after_registration_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/registrationBody.html"),
+        "forgot_password_SUBJECT" => "{$this->domainName} - Password reset",
+        "forgot_password_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/forgotPasswordBody.html")
+      ];
+    }
 
+    // nastavenia webu
     $this->adminPanel->saveConfig([
       "settings" => [
         "web" => [
@@ -654,15 +677,7 @@ class WebsiteContentGenerator {
               "privacyPolicy" => "Bienvenue. OOU!",
               "returnPolicy" => "Bienvenue. RP!",
             ],
-            "emails" => [
-              "signature" => "<p>{$this->domainName} - <a href='http://{$this->domainName}' target='_blank'>{$this->domainName}</a></p>",
-              "after_order_confirmation_SUBJECT" => "{$this->domainName} - objednávka č. {% number %}",
-              "after_order_confirmation_BODY" => file_get_contents(__DIR__."/../content/PageTexts/emails/orderBody_sk.html"),
-              "after_registration_SUBJECT" => "{$this->domainName} - Overte Vašu emailovú adresu",
-              "after_registration_BODY" => file_get_contents(__DIR__."/../content/PageTexts/emails/registrationBody_sk.html"),
-              "forgot_password_SUBJECT" => "{$this->domainName} - Obnovenie hesla",
-              "forgot_password_BODY" => file_get_contents(__DIR__."/../content/PageTexts/emails/forgotPasswordBody_sk.html")
-            ],
+            "emails" => $emails,
           ],
         ],
       ]

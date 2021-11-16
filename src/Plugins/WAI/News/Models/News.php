@@ -3,6 +3,7 @@
 namespace ADIOS\Plugins\WAI\News\Models;
 
 class News extends \ADIOS\Core\Model {
+
   var $sqlName = "news";
   var $urlBase = "Website/News";
   var $lookupSqlValue = "{%TABLE%}.title";

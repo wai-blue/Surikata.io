@@ -30,6 +30,8 @@ class Plugin {
     $this->adios = &$adios;
     $this->gtp = $this->adios->gtp;
 
+    $this->myRootFolder = dirname((new \ReflectionClass(get_class($this)))->getFileName());
+
     // inicializacia pluginu
     $this->init();
 
@@ -46,6 +48,10 @@ class Plugin {
 
     // add routing
     $this->adios->addRouting($this->routing());
+
+    // dictionary folder
+    // $this->dictionaryFolder = "{$this->myRootFolder}/Lang";
+
   }
 
   public function init() {

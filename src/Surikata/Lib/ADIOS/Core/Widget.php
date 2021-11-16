@@ -18,7 +18,7 @@ namespace ADIOS\Core;
 class Widget {
   public $adios;
   public $gtp;
-  public $languageDictionary = [];
+  // public $languageDictionary = [];
 
   public $params = [];
   public $models = [];
@@ -29,14 +29,14 @@ class Widget {
     $this->params = $params;
     $this->gtp = $this->adios->gtp;
 
+    $this->dictionaryFolder = $this->adios->config["dir"]."/Lang";
+
     if (!is_array($this->params)) {
       $this->params = [];
     }
 
     // preklady
-    $this->languageDictionary[$this->adios->config["language"]] =
-      $this->adios->loadLanguageDictionary("Widgets-".$this->name)
-    ;
+    // $this->languageDictionary = $this->adios->loadLanguageDictionary($this);
 
     // inicializacia widgetu
     $this->init();
@@ -59,8 +59,8 @@ class Widget {
     // desktop shortcuts, routing, ...
   }
 
-  public function translate($string, $context = "", $toLanguage = "") {
-    return $this->adios->translate($string, $context, $toLanguage, $this->languageDictionary);
+  public function translate($string) {
+    return $this->adios->translate($string, $this);
   }
 
   public function install() {

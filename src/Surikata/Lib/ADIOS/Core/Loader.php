@@ -319,7 +319,7 @@ class Loader {
         $this->twig->addFunction(new \Twig\TwigFunction(
           'translate',
           function($string) {
-            return $this->translate($string, "", "", $this->actionObject->languageDictionary);
+            return $this->translate($string, $this->actionObject);
           }
         ));
         $this->twig->addFunction(new \Twig\TwigFunction('adiosUI', function ($uid, $componentName, $componentParams) {
@@ -473,50 +473,53 @@ class Loader {
   //////////////////////////////////////////////////////////////////////////////
   // TRANSLATIONS
 
-  public function loadLanguageDictionary($context, $language = "") {
+  public function loadDictionary($object) {
+    $context = get_class($object);
+
     $dictionary = [];
+    $dictionaryFolder = $object->dictionaryFolder ?? "";
 
     if (empty($language)) {
       $language = $this->config['language'] ?? "";
     }
 
+    if (empty($dictionaryFolder)) {
+      $dictionaryFolder = "{$this->config['dir']}/Lang";
+    }
+
     if (strlen($language) == 2 && !empty($context)) {
-      $languageFile = "{$this->config['dir']}/Lang/{$language}/".strtr($context, "./\\", "---").".php";
+      $languageFilename = strtr($context, "./\\", "---");
+      $languageFilename = str_replace("ADIOS-Widgets", "Widgets", $languageFilename);
+      $languageFilename = str_replace("ADIOS-Core", "Core", $languageFilename);
+      $languageFilename = str_replace("ADIOS-Plugins", "Plugins", $languageFilename);
+      $languageFilename = str_replace("ADIOS-Actions", "Actions", $languageFilename);
+
+      $languageFile = "{$dictionaryFolder}/{$language}/{$languageFilename}.php";
 
       if (file_exists($languageFile)) {
         include($languageFile);
+      } else {
+        // echo("{$languageFile} does not exist\n");
       }
     }
 
-    return $dictionary;
+    $object->dictionary = $dictionary;
   }
 
-  public function translate($string, $context = "", $toLanguage = "", $dictionary = []) {
-
-    if (empty($toLanguage)) {
-      $toLanguage = $this->config['language'] ?? "";
+  public function translate($string, $object) {
+    if (empty($object->dictionary)) {
+      $this->loadDictionary($object);
     }
+
+    $dictionary = $object->dictionary ?? [];
+    $toLanguage = $this->config['language'] ?? "";
 
     if (empty($toLanguage)) {
       return $string;
-    }
-
-    if (
-      !empty($context)
-      && isset($dictionary["CONTEXT:{$context}"])
-    ) {
-      if (!isset($dictionary["CONTEXT:{$context}"][$toLanguage][$string])) {
-        return $string;
-      } else {
-        return $dictionary["CONTEXT:{$context}"][$toLanguage][$string];
-      }
+    } else if (!isset($dictionary[$string])) {
+      return $string;
     } else {
-      if (!isset($dictionary[$toLanguage][$string])) {
-        return $string;
-      } else {
-        return $dictionary[$toLanguage][$string];
-      }
-      
+      return $dictionary[$string];
     }
   }
 

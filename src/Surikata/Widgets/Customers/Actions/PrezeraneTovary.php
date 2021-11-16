@@ -3,12 +3,12 @@
 namespace ADIOS\Actions\Customers;
 
 class PrezeraneProdukty extends \ADIOS\Core\Action {
-  public function init() {
-    $this->languageDictionary["en"] = [
-      "Klient" => "Customer",
-      "Prezerané produkty" => "Displayed products",
-    ];
-  }
+  // public function init() {
+  //   $this->languageDictionary["en"] = [
+  //     "Klient" => "Customer",
+  //     "Prezerané produkty" => "Displayed products",
+  //   ];
+  // }
 
   public function render() {
     $customerModel = $this->adios->getModel("Widgets/Customers/Models/Customer");

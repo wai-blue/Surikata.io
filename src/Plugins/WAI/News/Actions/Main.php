@@ -3,6 +3,8 @@
 namespace ADIOS\Actions\Plugins\WAI\News;
 
 class Main extends \ADIOS\Core\Action {
+  // var $dictionaryFolder = __DIR__."/../Lang";
+
   public function render() {
     return "
       <h1>".$this->translate('News')."</h1>

@@ -3,11 +3,11 @@
 namespace ADIOS\Actions\Products\Products;
 
 class Search extends \ADIOS\Core\Action {
-  public function init() {
-    $this->languageDictionary["en"] = [
-      "Hľadať" => "Search",
-    ];
-  }
+  // public function init() {
+  //   $this->languageDictionary["en"] = [
+  //     "Hľadať" => "Search",
+  //   ];
+  // }
 
   public function render() {
     $modelName = "Widgets/Products/Models/Product";

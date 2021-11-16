@@ -64,4 +64,9 @@ $dictionary = [
   "Canceled orders" => "Zrušené objednávky",
   "Issue invoice" => "Vystaviť faktúru",
   "Tags" => "Tagy",
+  "Paid" => "Zaplatená",
+  "Order is paid" => "Objednávka je zaplatená",
+  "You are about to set an order as paid. Continue?" => "Chystáte sa nastaviť objednávku ako zaplatená. Chcete pokračovať?",
+  "Yes, set as paid" => "Áno, nastaviť ako zaplatené",
+  "Do not set as paid" => "Nie, nenastaviť"
 ];

@@ -23,11 +23,6 @@ class Orders extends \ADIOS\Core\Widget {
             "style" => "border-left:5px solid {$orderModel->enumOrderStateColors[$orderModel::STATE_INVOICED]}",
           ],
           [
-            "title" => $this->translate("Paid"),
-            "onclick" => "desktop_update('Orders/Paid');",
-            "style" => "border-left:5px solid {$orderModel->enumOrderStateColors[$orderModel::STATE_PAID]}",
-          ],
-          [
             "title" => $this->translate("Shipped"),
             "onclick" => "desktop_update('Orders/Shipped');",
             "style" => "border-left:5px solid {$orderModel->enumOrderStateColors[$orderModel::STATE_SHIPPED]}",
@@ -36,6 +31,11 @@ class Orders extends \ADIOS\Core\Widget {
             "title" => $this->translate("Canceled"),
             "onclick" => "desktop_update('Orders/Canceled');",
             "style" => "border-left:5px solid {$orderModel->enumOrderStateColors[$orderModel::STATE_CANCELED]}",
+          ],
+          [
+            "title" => $this->translate("Paid"),
+            "onclick" => "desktop_update('Orders/Paid');",
+            "style" => "border-left:5px solid #04631d;"
           ],
           //[
           //  "title" => "Claims",

@@ -874,8 +874,6 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $customersCount = $customerModel->get()->count();
       $productsCount = $productModel->get()->count();
 
-      $orderTagModel->insertRow(["tag" => "paid", "color" => "#00A500"]);
-      $orderTagModel->insertRow(["tag" => "unpaid", "color" => "#AA0000"]);
       $orderTagModel->insertRow(["tag" => "good client", "color" => "#11009A"]);
       $orderTagModel->insertRow(["tag" => "bad client", "color" => "#DFDFDF"]);
       $orderTagModel->insertRow(["tag" => "discount on services", "color" => "#141414"]);
@@ -941,7 +939,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
         if (rand(0, 1) == 1) {
           $idInvoice = $orderModel->issueInvoce($idOrder, TRUE);
-          $orderTagAssignmentModel->insertRow(["id_order" => $idOrder, "id_tag" => rand(1,5)]);
+          $orderTagAssignmentModel->insertRow(["id_order" => $idOrder, "id_tag" => rand(1,3)]);
         }
 
       }

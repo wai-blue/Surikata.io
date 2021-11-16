@@ -1,4 +1,4 @@
-class ThemeCustomerCartClass extends PluginWAICustomerCartClass {
+class PluginWAICommonCustomerCartDOMClass extends PluginWAICustomerCartAPIClass {
 
   /**
    * Theme functions
@@ -82,8 +82,9 @@ class ThemeCustomerCartClass extends PluginWAICustomerCartClass {
   };
 
   addProductInDetail(idProduct, qty) {
-    PluginWAICustomerCart.addProduct(idProduct, qty, function(data) {
-      ThemeCustomerCart.Popup
+    var _this = this;
+    PluginWAICustomerCartAPIClass.prototype.addProduct(idProduct, qty, function(data) {
+      _this.Popup
         .setImage(globalTwigParams['filesUrl'] + '/' + data['itemAdded']['urlImage'])
         .setTitle($('.pr_detail .product_title a').text())
         .setSubTitle(Surikata.translate('The product has been added to the cart.', 'Product'))
@@ -99,7 +100,7 @@ class ThemeCustomerCartClass extends PluginWAICustomerCartClass {
   };
 
   addProductInCatalog(idProduct, qty) {
-    PluginWAICustomerCart.addProduct(idProduct, qty, function(data) {
+    PluginWAICustomerCartAPIClass.prototype.addProduct(idProduct, qty, function(data) {
       $('#navigationCartOverview').html(data.cartOverviewHtml);
 
       let count = $('#navigationCart li').length;
@@ -111,7 +112,7 @@ class ThemeCustomerCartClass extends PluginWAICustomerCartClass {
   };
 
   removeProductInCart(idProduct) {
-    PluginWAICustomerCart.removeProduct(idProduct, function(data) {
+    PluginWAICustomerCartAPIClass.prototype.removeProduct(idProduct, function(data) {
       $('#navigationCartOverview').html(data.cartOverviewHtml);
 
       let count = $('#navigationCart li').length;
@@ -123,8 +124,8 @@ class ThemeCustomerCartClass extends PluginWAICustomerCartClass {
   };
 
   removeProductInCartOverview(idProduct) {
-    PluginWAICustomerCart.removeProduct(idProduct, function() {
-      PluginWAICustomerCart.updateDetailedOverview(function (html) {
+    PluginWAICustomerCartAPIClass.prototype.removeProduct(idProduct, function() {
+      PluginWAICustomerCartAPIClass.prototype.updateDetailedOverview(function (html) {
         $('.cart-main-area').replaceWith(function() {
           return $(html).hide().fadeIn(1000);
         });
@@ -153,8 +154,8 @@ class ThemeCustomerCartClass extends PluginWAICustomerCartClass {
   };
   
   updateProductQtyInCart(idProduct, qty) {
-    PluginWAICustomerCart.updateProductQty(idProduct, qty, function() {
-      PluginWAICustomerCart.updateProductPrices(function(html) {
+    PluginWAICustomerCartAPIClass.prototype.updateProductQty(idProduct, qty, function() {
+      PluginWAICustomerCartAPIClass.prototype.updateProductPrices(function(html) {
         $('.cart-main-area').replaceWith(function() {
           return $(html).hide().fadeIn(1000);
         });
@@ -186,7 +187,7 @@ class ThemeCustomerCartClass extends PluginWAICustomerCartClass {
     $('#orderDataForm input').removeClass('required-empty');
     $('#orderDataForm label').removeClass('required-empty');
   
-    PluginWAICustomerCart.placeOrder(
+    PluginWAICustomerCartAPIClass.prototype.placeOrder(
       function (dataSuccess) {
         if (dataSuccess.status == 'OK') {
           window.location.href = dataSuccess.orderConfirmationUrl;
@@ -221,7 +222,7 @@ class ThemeCustomerCartClass extends PluginWAICustomerCartClass {
   };
 
   updateCheckoutOverview() {
-    PluginWAICustomerCart.updateCheckoutOverview(function(data) {
+    PluginWAICustomerCartAPIClass.prototype.updateCheckoutOverview(function(data) {
       $('#order-area')
         .html(data)
         .css('opacity', 1)

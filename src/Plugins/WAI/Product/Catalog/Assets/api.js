@@ -184,5 +184,3 @@ class PluginWAIProductCatalogAPIClass {
   }
 
 }
-
-var PluginWAIProductCatalog = new PluginWAIProductCatalogClass();

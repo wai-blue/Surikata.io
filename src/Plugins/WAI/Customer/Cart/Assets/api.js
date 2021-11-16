@@ -1,4 +1,4 @@
-class PluginWAICustomerCartClass {
+class PluginWAICustomerCartAPIClass {
 
   addProduct(idProduct, qty, success) {
     Surikata.renderPluginJSON(
@@ -105,5 +105,3 @@ class PluginWAICustomerCartClass {
   }
 
 }
-
-var PluginWAICustomerCart = new PluginWAICustomerCartClass();

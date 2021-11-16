@@ -1,4 +1,4 @@
-class PluginWAICustomerHomeClass {
+class PluginWAICustomerHomeAPIClass {
 
   createAccount(success, fail) {
     let data = Surikata.serializeForm('#registrationForm');
@@ -45,5 +45,3 @@ class PluginWAICustomerHomeClass {
   }
 
 }
-
-var PluginWAICustomerHome = new PluginWAICustomerHomeClass();

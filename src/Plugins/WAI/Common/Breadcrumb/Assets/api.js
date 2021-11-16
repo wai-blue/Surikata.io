@@ -1,4 +1,4 @@
-class PluginWAICommonBreadcrumbClass {
+class PluginWAICommonBreadcrumbAPIClass {
   update(updateDiv) {
 
     Surikata.renderPlugin(

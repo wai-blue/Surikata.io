@@ -1,4 +1,4 @@
-class PluginWAIBlogCatalogClass {
+class PluginWAIBlogCatalogAPIClass {
   filter = {};
 
   loadUrlParams(varName) {

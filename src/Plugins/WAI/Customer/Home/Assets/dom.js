@@ -1,4 +1,4 @@
-class ThemeCustomerHomeClass extends PluginWAICustomerHomeClass {
+class PluginWAICustomerHomeDOMClass extends PluginWAICustomerHomeAPIClass {
 
   createAccount() {
     $('#registrationForm input').removeClass('required-empty');
@@ -13,7 +13,7 @@ class ThemeCustomerHomeClass extends PluginWAICustomerHomeClass {
       $('#privacyPolicyTermsErrorText').show();
     } else {
       $('#privacyPolicyTermsErrorDiv').removeClass("error");
-      PluginWAICustomerHome.createAccount(
+      PluginWAICustomerHomeAPIClass.prototype.createAccount(
         function (dataSuccess) {
           if (dataSuccess.status == 'OK') {
             window.location.href = dataSuccess.registrationConfirmationUrl;
@@ -42,7 +42,7 @@ class ThemeCustomerHomeClass extends PluginWAICustomerHomeClass {
   }
   
   addAddress() {
-    PluginWAICustomerHome.addAddress(
+    PluginWAICustomerHomeAPIClass.prototype.addAddress(
       function(dataSuccess) {
         if (dataSuccess.status == 'OK') {
           location.reload();
@@ -55,7 +55,7 @@ class ThemeCustomerHomeClass extends PluginWAICustomerHomeClass {
   }
   
   removeAddress(idAddress) {
-    PluginWAICustomerHome.removeAddress(
+    PluginWAICustomerHomeAPIClass.prototype.removeAddress(
       {
         'idAddress': idAddress,
         'customerAction': 'removeAddress'
@@ -77,7 +77,7 @@ class ThemeCustomerHomeClass extends PluginWAICustomerHomeClass {
     $('#emailIsInvalid').hide();
     $('#accountIsNotValidated').hide();
     $('#forgotPasswordDiv input[name=email]').removeClass('required-empty');
-    PluginWAICustomerHome.forgotPassword(
+    PluginWAICustomerHomeAPIClass.prototype.forgotPassword(
       function(dataSuccess) {
         if (dataSuccess.status == 'OK') {
           $("#forgotPasswordDiv").hide();

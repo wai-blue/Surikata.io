@@ -1,4 +1,4 @@
-class PluginWAIProductCatalogClass {
+class PluginWAIProductCatalogAPIClass {
 
   page = 0;
   filter = {};

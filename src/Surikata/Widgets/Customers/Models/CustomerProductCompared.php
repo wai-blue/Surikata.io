@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
-class CustomerProductCompared extends \ADIOS\Core\Model {
+class CustomerProductCompared extends \ADIOS\Core\Widget\Model {
   var $sqlName = "customers_products_compared";
   var $tableTitle = "Porovnávané produkty";
   var $formTitleForInserting = "Porovnávané produkty";

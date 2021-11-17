@@ -4,7 +4,7 @@ namespace ADIOS\Actions\Orders;
 
 use \ADIOS\Core\Models\Orders as DB;
 
-class Tlacit extends \ADIOS\Core\Action {
+class Tlacit extends \ADIOS\Core\Widget\Action {
   public function preRender() {
     $adios = $this->adios;
     $gtp = $this->adios->gtp;

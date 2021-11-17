@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Website\Models;
 
-class WebRedirect extends \ADIOS\Core\Model {
+class WebRedirect extends \ADIOS\Core\Widget\Model {
   var $sqlName = "web_redirects";
   var $urlBase = "Website/{{ domainName }}/Redirects";
   var $lookupSqlValue = "{%TABLE%}.name";

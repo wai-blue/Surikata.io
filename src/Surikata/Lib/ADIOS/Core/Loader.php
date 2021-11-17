@@ -319,7 +319,7 @@ class Loader {
         $this->twig->addFunction(new \Twig\TwigFunction(
           'translate',
           function($string) {
-            return $this->translate($string, "", "", $this->actionObject->languageDictionary);
+            return $this->translate($string, $this->actionObject);
           }
         ));
         $this->twig->addFunction(new \Twig\TwigFunction('adiosUI', function ($uid, $componentName, $componentParams) {
@@ -473,50 +473,48 @@ class Loader {
   //////////////////////////////////////////////////////////////////////////////
   // TRANSLATIONS
 
-  public function loadLanguageDictionary($context, $language = "") {
+  public function loadDictionary($object) {
     $dictionary = [];
+    $dictionaryFolder = $object->dictionaryFolder ?? "";
 
     if (empty($language)) {
       $language = $this->config['language'] ?? "";
     }
 
-    if (strlen($language) == 2 && !empty($context)) {
-      $languageFile = "{$this->config['dir']}/Lang/{$language}/".strtr($context, "./\\", "---").".php";
+    if (empty($dictionaryFolder)) {
+      $dictionaryFolder = "{$this->config['dir']}/Lang";
+    }
 
-      if (file_exists($languageFile)) {
-        include($languageFile);
+    if (strlen($language) == 2) {
+      $dictionaryFilename = strtr(get_class($object), "./\\", "---");
+      $dictionaryFilename = str_replace("ADIOS-", "", $dictionaryFilename);
+
+      $dictionaryFile = "{$dictionaryFolder}/{$language}/{$dictionaryFilename}.php";
+
+      if (file_exists($dictionaryFile)) {
+        include($dictionaryFile);
+      } else {
+        // echo("{$dictionaryFile} does not exist ({$object->name})\n");
       }
     }
 
-    return $dictionary;
+    $object->dictionary = $dictionary;
   }
 
-  public function translate($string, $context = "", $toLanguage = "", $dictionary = []) {
-
-    if (empty($toLanguage)) {
-      $toLanguage = $this->config['language'] ?? "";
+  public function translate($string, $object) {
+    if (empty($object->dictionary)) {
+      $this->loadDictionary($object);
     }
+
+    $dictionary = $object->dictionary ?? [];
+    $toLanguage = $this->config['language'] ?? "";
 
     if (empty($toLanguage)) {
       return $string;
-    }
-
-    if (
-      !empty($context)
-      && isset($dictionary["CONTEXT:{$context}"])
-    ) {
-      if (!isset($dictionary["CONTEXT:{$context}"][$toLanguage][$string])) {
-        return $string;
-      } else {
-        return $dictionary["CONTEXT:{$context}"][$toLanguage][$string];
-      }
+    } else if (!isset($dictionary[$string])) {
+      return $string;
     } else {
-      if (!isset($dictionary[$toLanguage][$string])) {
-        return $string;
-      } else {
-        return $dictionary[$toLanguage][$string];
-      }
-      
+      return $dictionary[$string];
     }
   }
 
@@ -616,10 +614,14 @@ class Loader {
 
     $installationStart = microtime(TRUE);
 
+    $this->console->info("Dropping existing tables.");
+
     foreach ($this->models as $modelName) {
       $model = $this->getModel($modelName);
       $model->dropTableIfExists();
     }
+
+    $this->console->info("Database is empty, installing models.");
 
     $this->db->startTransaction();
 

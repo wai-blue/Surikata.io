@@ -5,7 +5,7 @@ namespace ADIOS\Widgets\Orders\Models;
 use ADIOS\Widgets\CRM\Exceptions\AlreadyRegisteredForNewsletter;
 use ADIOS\Widgets\CRM\Models\Newsletter;
 
-class Order extends \ADIOS\Core\Model {
+class Order extends \ADIOS\Core\Widget\Model {
   const STATE_NEW      = 1;
   const STATE_INVOICED = 2;
   const STATE_SHIPPED  = 3;

@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Plugins\WAI\Misc\Slideshow;
 
-class Main extends \ADIOS\Core\Action {
+class Main extends \ADIOS\Core\Plugin\Action {
   public function render() {
     return "
       <h1>".$this->translate('Slideshow')."</h1>

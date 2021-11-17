@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
-class Customer extends \ADIOS\Core\Model {
+class Customer extends \ADIOS\Core\Widget\Model {
   var $sqlName = "customers";
   var $urlBase = "Customers";
   var $lookupSqlValue = "{%TABLE%}.email";

@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Plugins;
 
-class Overview extends \ADIOS\Core\Action {
+class Overview extends \ADIOS\Core\Widget\Action {
   
   public function onAfterDesktopPreRender($params) {
     $params["searchButton"] = [

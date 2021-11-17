@@ -47,7 +47,7 @@ spl_autoload_register(function($class) {
       $class = str_replace("ADIOS/Actions/", "", $class);
 
       // najprv skusim hladat core akciu
-      $tmp = dirname(__FILE__)."/Core/Actions/{$class}.php";
+      $tmp = dirname(__FILE__)."/Actions/{$class}.php";
       if (!@include($tmp)) {
         // ak sa nepodari, hladam widgetovsku akciu
 

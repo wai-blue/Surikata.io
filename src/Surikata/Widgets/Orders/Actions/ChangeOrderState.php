@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Orders;
 
-class ChangeOrderState extends \ADIOS\Core\Action {
+class ChangeOrderState extends \ADIOS\Core\Widget\Action {
   public function render() {
 
     $idOrder = $this->params["id_order"];

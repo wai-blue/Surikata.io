@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Settings;
 
-class Miscellaneous extends \ADIOS\Core\Action {
+class Miscellaneous extends \ADIOS\Core\Widget\Action {
   public function render() {
     $settings = $this->adios->config["settings"]["miscellaneous"];
     $locale = $this->adios->locale->getAll();

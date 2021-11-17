@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Products\Models;
 
-class Product extends \ADIOS\Core\Model {
+class Product extends \ADIOS\Core\Widget\Model {
   const PRICE_CALCULATION_METHOD_CUSTOM_PRICE  = 1;
   const PRICE_CALCULATION_METHOD_PRICE_LIST    = 2;
   const PRICE_CALCULATION_METHOD_PLUGIN        = 3;

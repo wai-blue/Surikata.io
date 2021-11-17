@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\HelpAndSupport;
 
-class Main extends \ADIOS\Core\Action {
+class Main extends \ADIOS\Core\Widget\Action {
   public function preRender() {
     return [];
   }

@@ -26,7 +26,7 @@ class View {
    * @internal
    * @var array
    */
-  public $languageDictionary = [];
+  // public $languageDictionary = [];
   
   /**
    * __construct
@@ -70,9 +70,7 @@ class View {
       $this->add_class($params['class']);
     }
 
-    $this->languageDictionary[$this->adios->config["language"]] =
-      $this->adios->loadLanguageDictionary(get_class($this))
-    ;
+    // $this->languageDictionary = $this->adios->loadLanguageDictionary($this);
   }
   
   /**
@@ -84,8 +82,8 @@ class View {
    * @param  mixed $toLanguage
    * @return void
    */
-  public function translate($string, $context = "", $toLanguage = "") {
-    return $this->adios->translate($string, $context, $toLanguage, $this->languageDictionary);
+  public function translate($string) {
+    return $this->adios->translate($string, $this);
   }
   
   /**

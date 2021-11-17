@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Maintenance;
 
-class MaintenanceMode extends \ADIOS\Core\Action {
+class MaintenanceMode extends \ADIOS\Core\Widget\Action {
   public function render() {
     $settings = $this->adios->config["settings"]["web"]["maintenance"];
 

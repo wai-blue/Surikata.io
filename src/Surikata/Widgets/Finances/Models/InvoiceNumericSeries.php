@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Finances\Models;
 
-class InvoiceNumericSeries extends \ADIOS\Core\Model {
+class InvoiceNumericSeries extends \ADIOS\Core\Widget\Model {
   var $sqlName = "invoice_numeric_series";
   var $lookupSqlValue = "{%TABLE%}.name";
   var $urlBase = "Invoices/NumericSeries";

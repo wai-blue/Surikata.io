@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\CRM\Models;
 
-class ContactForm extends \ADIOS\Core\Model {
+class ContactForm extends \ADIOS\Core\Widget\Model {
   var $sqlName = "contact_form";
   var $urlBase = "CRM/ContactForm";
 

@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\WAI\Delivery\DPD;
 
-class Settings extends \ADIOS\Core\Action {
+class Settings extends \ADIOS\Core\Plugin\Action {
   public function render() {
     $settings = $this->adios->getPluginSettings("WAI/Delivery/DPD");
 

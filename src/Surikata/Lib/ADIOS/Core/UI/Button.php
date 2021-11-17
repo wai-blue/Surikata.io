@@ -102,9 +102,7 @@ class Button extends \ADIOS\Core\UI\View {
   public function __construct(&$adios, $params = null) {
     $this->adios = $adios;
 
-    $this->languageDictionary[$this->adios->config["language"]] =
-      $this->adios->loadLanguageDictionary(get_class($this))
-    ;
+    // $this->languageDictionary = $this->adios->loadLanguageDictionary($this);
 
     $defParams = [];
     switch ($params['type'] ?? "") {

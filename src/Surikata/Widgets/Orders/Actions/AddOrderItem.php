@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Orders;
 
-class AddOrderItem extends \ADIOS\Core\Action {
+class AddOrderItem extends \ADIOS\Core\Widget\Action {
   public function render() {
 
     // REVIEW: Nepozdava sa mi nazov funkcie addProductToOrder.

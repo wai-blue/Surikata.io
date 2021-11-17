@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Overview;
 
-class Welcome extends \ADIOS\Core\Action {
+class Welcome extends \ADIOS\Core\Widget\Action {
   public function preRender() {
     $this->adios->checkFoldersPermissions();
     

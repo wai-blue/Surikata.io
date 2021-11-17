@@ -12,7 +12,7 @@ class Theme {
     $this->params = $params;
     $this->adminPanelWidgetWebsite = &$adminPanelWidgetWebsite;
 
-    $this->myRootFolder = dirname((new \ReflectionClass(get_class($this)))->getFileName());
+    $this->myRootFolder = str_replace("\\", "/", dirname((new \ReflectionClass(get_class($this)))->getFileName()));
   }
 
   public function getLayouts() {

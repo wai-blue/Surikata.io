@@ -643,6 +643,8 @@ class Loader {
       }
     }
 
+    $this->db->startTransaction();
+
     foreach ($this->models as $modelName) {
       try {
         $model = $this->getModel($modelName);
@@ -660,6 +662,8 @@ class Loader {
         //
       }
     }
+
+    $this->db->commit();
 
     foreach ($this->widgets as $widget) {
       try {

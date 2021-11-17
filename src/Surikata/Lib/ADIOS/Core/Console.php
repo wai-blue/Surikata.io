@@ -24,6 +24,8 @@ class Console {
   var $warnings = [];
   var $errors = [];
 
+  var $directEcho = FALSE;
+
   public function __construct(&$adios) {
     $this->adios = $adios;
 
@@ -72,17 +74,29 @@ class Console {
   public function info($message, array $context = [], $loggerName = 'core') {
     $this->getLogger($loggerName)->info($message, $context);
     $this->infos[microtime()] = [$message, $context];
+
+    if ($this->directEcho && php_sapi_name() === 'cli') {
+      echo $message."\n";
+    }
   }
   
   public function warning($message, array $context = [], $loggerName = 'core') {
     $this->getLogger($loggerName)->warning($message, $context);
     $this->warnings[microtime()] = [$message, $context];
+
+    if ($this->directEcho && php_sapi_name() === 'cli') {
+      echo $message."\n";
+    }
   }
   
   public function error($message, array $context = [], $loggerName = 'core') {
     $this->getLogger($loggerName)->error($message, $context);
     $this->log($message);
     $this->errors[microtime()] = [$message, $context];
+
+    if ($this->directEcho && php_sapi_name() === 'cli') {
+      echo $message."\n";
+    }
   }
 
   public function getInfos() {

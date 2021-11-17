@@ -63,8 +63,16 @@ function _loadCsvIntoArray($file, $separator = ',', $enclosure = '#') {
 
 set_time_limit(0);
 
+function _echo($msg) {
+  if (php_sapi_name() === 'cli') {
+    echo trim(strip_tags($msg))."\n";
+  } else {
+    echo $msg;
+  }
+}
+
 if (!is_file(__DIR__."/../vendor/autoload.php")) {
-  echo "
+  _echo("
     <div style='color:red'>
       Sorry, it looks like you did not run 'composer install'.<br/>
       <br/>
@@ -74,12 +82,12 @@ if (!is_file(__DIR__."/../vendor/autoload.php")) {
         <li>rerun this installer again</li>
       </ul>
     </div>
-  ";
+  ");
   exit();
 }
 
 if (!is_file(__DIR__."/../ConfigEnv.php")) {
-  echo "
+  _echo("
     <div style='color:red'>
       Sorry, it looks like you do not have your ConfigEnv.php configured.<br/>
       <br/>
@@ -90,14 +98,14 @@ if (!is_file(__DIR__."/../ConfigEnv.php")) {
         <li>rerun this installer again</li>
       </ul>
     </div>
-  ";
+  ");
   exit();
 }
 
 require(__DIR__."/../Init.php");
 
 if (empty(REWRITE_BASE) || empty(DB_LOGIN) || empty(DB_NAME)) {
-  echo "
+  _echo("
     <div style='color:red'>
       Sorry, it looks like you did not configure necessary parameters.<br/>
       <br/>
@@ -109,7 +117,7 @@ if (empty(REWRITE_BASE) || empty(DB_LOGIN) || empty(DB_NAME)) {
         <li>rerun this installer again</li>
       </ul>
     </div>
-  ";
+  ");
   exit();
 }
 
@@ -118,7 +126,7 @@ if (!$rewriteBaseIsCorrect) {
   $expectedRewriteBase = str_replace("install/", "", $expectedRewriteBase);
   $expectedRewriteBase = str_replace("index.php", "", $expectedRewriteBase);
   if (REWRITE_BASE != $expectedRewriteBase) {
-    echo "
+    _echo("
       <div style='color:orange'>
         We think that your REWRITE_BASE is not configured properly.<br/>
         <br/>
@@ -130,7 +138,7 @@ if (!$rewriteBaseIsCorrect) {
         <br/>
         <a href='?rewrite_base_is_correct=1'>REWRITE_BASE is correctly configured, continue with installation</a>
       </div>
-    ";
+    ");
     exit();
   }
 }
@@ -271,7 +279,7 @@ if (!$doInstall) {
     ";
   }
 
-  echo "
+  _echo("
     <form action='' method='GET'>
       <input type='hidden' name='do_install' value='1' />
       <input type='hidden' name='rewrite_base_is_correct' value='1' />
@@ -381,7 +389,7 @@ if (!$doInstall) {
       <br/>
       <input type='submit' class='btn' value='Hurray! Create Surikata e-shop now.' />
     </form>
-  ";
+  ");
 } else {
 
   try {
@@ -391,6 +399,7 @@ if (!$doInstall) {
 
     $websiteRenderer = new \MyEcommerceProject\Web($websiteRendererConfig);
     $adminPanel = new \MyEcommerceProject\AdminPanel($adminPanelConfig, ADIOS_MODE_FULL, $websiteRenderer);
+    $adminPanel->console->directEcho = TRUE;
 
     $adminPanel->createMissingFolders();
 
@@ -978,12 +987,12 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
 
   } catch (\Exception $e) {
-    echo "
+    _echo("
       <h2 style='color:red'>Error</h2>
       <div style='color:red'>
         ".get_class($e).": ".$e->getMessage()."
       </div>
-    ";
+    ");
     var_dump($e->getTrace());
     $adminPanel->console->error(get_class($e).": ".$e->getMessage());
   }
@@ -993,15 +1002,15 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
   $errors = $adminPanel->console->getErrors();
 
   if (count($errors) > 0) {
-    echo "
+    _echo("
       <h2 style='color:red'>Awgh!</h2>
       <div style='color:red;margin-bottom:1em'>
         ✕ Some errors occured during the installation.
       </div>
       <div style='color:red'>".$adminPanel->console->convertLogsToHtml($errors)."</div>
-    ";
+    ");
   } else {
-    echo "
+    _echo("
       <h2>Done in ".round((microtime(true) - $installationStart), 2)." seconds.</h2>
       <div style='color:green;margin-bottom:1em'>
         ✓ Congratulations. You have successfuly installed your eCommerce project.
@@ -1029,10 +1038,10 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       <a href='../admin' class='btn' target=_blank>Open administration panel</a><br/>
       Login: administrator<br/>
       Password: administrator<br/>
-    ";
+    ");
   }
 
-  echo "
+  _echo("
     <br/>
     <h2>Installation log</h2>
     <a
@@ -1043,7 +1052,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       '
     >Show installation log</a>
     <div id='log' style='display:none'>".$adminPanel->console->convertLogsToHtml($infos, TRUE)."</div>
-  ";
+  ");
 
 }
 

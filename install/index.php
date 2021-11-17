@@ -1,44 +1,48 @@
-<html>
-<head>
-  <title>Surikata.io Installer</title>
-  <link rel='shortcut icon' href='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
-  <style>
-    * { font-family: verdana; font-size: 10pt; }
-    body { background: #EEEEEE; }
-    h1 { color: #224abe; font-size: 16pt; }
-    h2 { color: #224abe; font-size: 12pt; }
-
-    table { border: 1px solid #F0F0F0; }
-    table tr:nth-child(even) td { background: #F0F0F0; }
-    table td { padding: 2px; }
-
-    label { display: block; padding: 2px; }
-    label:hover { background: #224abe; color: white; cursor: pointer; }
-
-    .btn { color: #224abe; background: white; cursor: pointer; border: 1px solid #224abe; padding: 1em; margin: 1em 0; }
-    .btn:hover { color: white; background: #224abe; }
-
-    a.btn { display: inline-block; text-decoration: none; }
-
-    .content { width: 820px; margin: auto; background: white; padding: 1em; }
-    .logo { width: 100px; margin: auto; }
-
-    #log {
-      background: #2d2d2d;
-      font-family: courier;
-      color: white;
-      padding: 1em;
-      font-size: 9pt;
-      margin-top: 1em;
-    }
-  </style>
-</head>
-<body>
-  <div class='content'>
-    <img class='logo' src='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
-    <h1>Surikata.io Installer</h1>
-
 <?php
+
+if (php_sapi_name() !== 'cli') {
+  echo "
+    <html>
+    <head>
+      <title>Surikata.io Installer</title>
+      <link rel='shortcut icon' href='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
+      <style>
+        * { font-family: verdana; font-size: 10pt; }
+        body { background: #EEEEEE; }
+        h1 { color: #224abe; font-size: 16pt; }
+        h2 { color: #224abe; font-size: 12pt; }
+
+        table { border: 1px solid #F0F0F0; }
+        table tr:nth-child(even) td { background: #F0F0F0; }
+        table td { padding: 2px; }
+
+        label { display: block; padding: 2px; }
+        label:hover { background: #224abe; color: white; cursor: pointer; }
+
+        .btn { color: #224abe; background: white; cursor: pointer; border: 1px solid #224abe; padding: 1em; margin: 1em 0; }
+        .btn:hover { color: white; background: #224abe; }
+
+        a.btn { display: inline-block; text-decoration: none; }
+
+        .content { width: 820px; margin: auto; background: white; padding: 1em; }
+        .logo { width: 100px; margin: auto; }
+
+        #log {
+          background: #2d2d2d;
+          font-family: courier;
+          color: white;
+          padding: 1em;
+          font-size: 9pt;
+          margin-top: 1em;
+        }
+      </style>
+    </head>
+    <body>
+      <div class='content'>
+        <img class='logo' src='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
+        <h1>Surikata.io Installer</h1>
+  ";
+}
 
 $installationStart = microtime(TRUE);
 $rewriteBaseIsCorrect = ($_GET['rewrite_base_is_correct'] ?? "") == "1";
@@ -406,7 +410,7 @@ if (!$doInstall) {
     $adminPanel->install();
     $adminPanel->installDefaultUsers();
 
-    $this->adminPanel->console->info("Default users installed.");
+    $adminPanel->console->info("Default users installed.");
 
     $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($adminPanel);
     $customerCategoryModel = new \ADIOS\Widgets\Customers\Models\CustomerCategory($adminPanel);
@@ -476,7 +480,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
     file_put_contents(__DIR__."/../ConfigEnvDomains.php", $configEnvDomainsPHP);
 
-    $this->adminPanel->console->info("ConfigEnvDomains.php created.");
+    $adminPanel->console->info("ConfigEnvDomains.php created.");
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // PART: delivery and payment services
@@ -578,7 +582,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $shipmentPriceModel->insertRow(["id" => 7, "id_shipment" => 7, "name" => "41", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 1000, "delivery_fee_calculation_method" => 1, "delivery_fee" => 3.35]);
       $shipmentPriceModel->insertRow(["id" => 8, "id_shipment" => 8, "name" => "42", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 1000, "delivery_fee_calculation_method" => 1, "delivery_fee" => 3.99]);
 
-      $this->adminPanel->console->info("Delivery and payment services installed.");
+      $adminPanel->console->info("Delivery and payment services installed.");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -800,7 +804,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       $adminPanel->db->commit();
 
-      $this->adminPanel->console->info("Product catalog installed.");
+      $adminPanel->console->info("Product catalog installed.");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -875,7 +879,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
         $cnt++;
       }
 
-      $this->adminPanel->console->info("Customers installed.");
+      $adminPanel->console->info("Customers installed.");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -961,7 +965,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       }
 
-      $this->adminPanel->console->info("Orders installed.");
+      $adminPanel->console->info("Orders installed.");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -983,7 +987,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
     $wsg->installPluginsOnce();
 
-    $this->adminPanel->console->info("Website content installed.");
+    $adminPanel->console->info("Website content installed.");
 
 
   } catch (\Exception $e) {

@@ -71,22 +71,24 @@ class Console {
     ];
   }
 
+  public function directEcho($message) {
+    if ($this->directEcho && php_sapi_name() === 'cli') {
+      echo date("Y-m-d H:i:s")." {$message}\n";
+    }
+  }
+
   public function info($message, array $context = [], $loggerName = 'core') {
     $this->getLogger($loggerName)->info($message, $context);
     $this->infos[microtime()] = [$message, $context];
-
-    if ($this->directEcho && php_sapi_name() === 'cli') {
-      echo $message."\n";
-    }
+  
+    $this->directEcho($message);
   }
   
   public function warning($message, array $context = [], $loggerName = 'core') {
     $this->getLogger($loggerName)->warning($message, $context);
     $this->warnings[microtime()] = [$message, $context];
 
-    if ($this->directEcho && php_sapi_name() === 'cli') {
-      echo $message."\n";
-    }
+    $this->directEcho($message);
   }
   
   public function error($message, array $context = [], $loggerName = 'core') {
@@ -94,9 +96,7 @@ class Console {
     $this->log($message);
     $this->errors[microtime()] = [$message, $context];
 
-    if ($this->directEcho && php_sapi_name() === 'cli') {
-      echo $message."\n";
-    }
+    $this->directEcho($message);
   }
 
   public function getInfos() {

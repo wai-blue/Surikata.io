@@ -2,7 +2,7 @@
 
 namespace ADIOS\Plugins\WAI\News\Models;
 
-class News extends \ADIOS\Core\Model {
+class News extends \ADIOS\Core\Plugin\Model {
 
   var $sqlName = "news";
   var $urlBase = "Website/News";

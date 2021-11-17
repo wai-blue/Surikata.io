@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Prices;
 
-class ProductMargins extends \ADIOS\Core\Action {
+class ProductMargins extends \ADIOS\Core\Widget\Action {
   public function render() {
     $window_content_html = $this->adios->renderAction("UI/Table", [
       "model" => "Widgets/Products/Models/ProductMargin",

@@ -4,7 +4,7 @@ namespace ADIOS\Widgets\Customers\Models;
 
 use ADIOS\Widgets\Customers\Exceptions\UnknownAccount;
 
-class CustomerAddress extends \ADIOS\Core\Model {
+class CustomerAddress extends \ADIOS\Core\Widget\Model {
   var $sqlName = "customers_addresses";
   var $urlBase = "Customers/{{ id_customer }}/Addresses";
   var $lookupSqlValue = "

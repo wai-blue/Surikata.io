@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Plugins\WAI\News;
 
-class Main extends \ADIOS\Core\Action {
+class Main extends \ADIOS\Core\Plugin\Action {
   // var $dictionaryFolder = __DIR__."/../Lang";
 
   public function render() {

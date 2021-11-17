@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
-class SearchQuery extends \ADIOS\Core\Model {
+class SearchQuery extends \ADIOS\Core\Widget\Model {
   var $sqlName = "customers_search_queries";
   var $urlBase = "Customers/SearchedQueries";
 

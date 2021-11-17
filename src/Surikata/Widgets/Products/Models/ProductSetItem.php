@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Products\Models;
 
-class ProductSetItem extends \ADIOS\Core\Model {
+class ProductSetItem extends \ADIOS\Core\Widget\Model {
   var $sqlName = "products_sets_items";
   var $urlBase = "Produkty/Sety/{{ id_set }}/Items";
   var $tableTitle = "Product set items";

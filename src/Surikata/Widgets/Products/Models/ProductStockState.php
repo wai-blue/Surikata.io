@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Products\Models;
 
-class ProductStockState extends \ADIOS\Core\Model {
+class ProductStockState extends \ADIOS\Core\Widget\Model {
   var $sqlName = "products_stock_states";
   var $urlBase = "Products/StockStates";
   var $lookupSqlValue = "{%TABLE%}.name_lang_1";

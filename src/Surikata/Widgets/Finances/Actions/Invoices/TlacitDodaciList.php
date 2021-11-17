@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Finances\Invoices;
 
-class TlacitDodaciList extends \ADIOS\Core\Action {
+class TlacitDodaciList extends \ADIOS\Core\Widget\Action {
   public static $hideDefaultDesktop = TRUE;
 
   public function preRender() {

@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Settings;
 
-class DeliveryDefaults extends \ADIOS\Core\Action {
+class DeliveryDefaults extends \ADIOS\Core\Widget\Action {
   public function render() {
     $settings = $this->adios->config["settings"]["delivery"]["defaults"];
 

@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Products\Models;
 
-class Service extends \ADIOS\Core\Model {
+class Service extends \ADIOS\Core\Widget\Model {
   var $sqlName = "services";
   var $lookupSqlValue = "{%TABLE%}.name_lang_1";
   var $urlBase = "Services";

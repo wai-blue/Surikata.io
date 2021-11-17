@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Website\ContentStructure;
 
-class PluginSettings extends \ADIOS\Core\Action {
+class PluginSettings extends \ADIOS\Core\Widget\Action {
   public function render() {
     $contentStructure = @json_decode($this->params['contentStructure'], TRUE);
     $themeName = $this->adios->config['settings']['web'][$this->params['domain']]['design']['theme'];

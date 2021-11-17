@@ -27,10 +27,12 @@ class Plugin {
 
   public function __construct($adios) {
     $this->name = str_replace("\\", "/", str_replace("ADIOS\\Plugins\\", "", get_class($this)));
+    $this->shortName = end(explode("/", $this->name));
     $this->adios = &$adios;
+    $this->params = [];
     $this->gtp = $this->adios->gtp;
 
-    $this->myRootFolder = dirname((new \ReflectionClass(get_class($this)))->getFileName());
+    $this->myRootFolder = str_replace("\\", "/", dirname((new \ReflectionClass(get_class($this)))->getFileName()));
 
     // inicializacia pluginu
     $this->init();
@@ -48,10 +50,6 @@ class Plugin {
 
     // add routing
     $this->adios->addRouting($this->routing());
-
-    // dictionary folder
-    // $this->dictionaryFolder = "{$this->myRootFolder}/Lang";
-
   }
 
   public function init() {

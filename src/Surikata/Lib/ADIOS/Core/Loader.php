@@ -474,8 +474,6 @@ class Loader {
   // TRANSLATIONS
 
   public function loadDictionary($object) {
-    $context = get_class($object);
-
     $dictionary = [];
     $dictionaryFolder = $object->dictionaryFolder ?? "";
 
@@ -487,19 +485,16 @@ class Loader {
       $dictionaryFolder = "{$this->config['dir']}/Lang";
     }
 
-    if (strlen($language) == 2 && !empty($context)) {
-      $languageFilename = strtr($context, "./\\", "---");
-      $languageFilename = str_replace("ADIOS-Widgets", "Widgets", $languageFilename);
-      $languageFilename = str_replace("ADIOS-Core", "Core", $languageFilename);
-      $languageFilename = str_replace("ADIOS-Plugins", "Plugins", $languageFilename);
-      $languageFilename = str_replace("ADIOS-Actions", "Actions", $languageFilename);
+    if (strlen($language) == 2) {
+      $dictionaryFilename = strtr(get_class($object), "./\\", "---");
+      $dictionaryFilename = str_replace("ADIOS-", "", $dictionaryFilename);
 
-      $languageFile = "{$dictionaryFolder}/{$language}/{$languageFilename}.php";
+      $dictionaryFile = "{$dictionaryFolder}/{$language}/{$dictionaryFilename}.php";
 
-      if (file_exists($languageFile)) {
-        include($languageFile);
+      if (file_exists($dictionaryFile)) {
+        include($dictionaryFile);
       } else {
-        // echo("{$languageFile} does not exist\n");
+        // echo("{$dictionaryFile} does not exist ({$object->name})\n");
       }
     }
 

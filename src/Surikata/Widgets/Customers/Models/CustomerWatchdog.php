@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
-class CustomerWatchdog extends \ADIOS\Core\Model {
+class CustomerWatchdog extends \ADIOS\Core\Widget\Model {
   var $sqlName = "customers_watchdog";
   var $urlBase = "Customers/{{ id_customer }}/Watchdog";
   var $tableTitle = "Customer watchdog";

@@ -25,11 +25,12 @@ class Widget {
 
   function __construct($adios, $params = []) {
     $this->name = str_replace("ADIOS\\Widgets\\", "", get_class($this));
+    $this->shortName = end(explode("/", $this->name));
     $this->adios = &$adios;
     $this->params = $params;
     $this->gtp = $this->adios->gtp;
 
-    $this->dictionaryFolder = $this->adios->config["dir"]."/Lang";
+    $this->myRootFolder = str_replace("\\", "/", dirname((new \ReflectionClass(get_class($this)))->getFileName()));
 
     if (!is_array($this->params)) {
       $this->params = [];

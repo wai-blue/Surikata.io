@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Shipping\Models;
 
-class ShipmentPrice extends \ADIOS\Core\Model {
+class ShipmentPrice extends \ADIOS\Core\Widget\Model {
   const DELIVERY_FEE_BY_ORDER_PRICE = 1;
   const DELIVERY_FEE_BY_ORDER_WEIGHT = 2;
 

@@ -134,7 +134,6 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   public function __construct($adiosOrAttributes = NULL, $eloquentQuery = NULL) {
     $this->gtp = (empty($adiosOrAttributes->gtp) ? GTP : $adiosOrAttributes->gtp); // GTP konstanta kvoli CASCADE
     $this->table = "{$this->gtp}_{$this->sqlName}";
-    $this->myRootFolder = dirname((new \ReflectionClass(get_class($this)))->getFileName());
 
     if (!is_object($adiosOrAttributes)) {
       // v tomto pripade ide o volanie construktora z Eloquentu
@@ -142,21 +141,9 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     } else {
       $this->name = str_replace("\\", "/", str_replace("ADIOS\\", "", get_class($this)));
       $this->shortName = end(explode("/", $this->name));
-      $this->modelType = substr($this->name, 0, strpos($this->name, "/"));
-
       $this->adios = &$adiosOrAttributes;
 
-      // $this->languageDictionary = $this->adios->loadLanguageDictionary($this);
-      // $this->dictionaryFolder = "{$this->myRootFolder}/../Lang";
-      switch ($this->modelType) {
-        case "Core":
-        case "Widgets":
-          $this->dictionaryFolder = "{$this->adios->config["dir"]}/Lang";
-        break;
-        case "Plugins":
-          $this->dictionaryFolder = "{$this->myRootFolder}/../Lang";
-        break;
-      }
+      $this->myRootFolder = str_replace("\\", "/", dirname((new \ReflectionClass(get_class($this)))->getFileName()));
 
       if ($eloquentQuery === NULL) {
         $this->eloquentQuery = $this->select('id');

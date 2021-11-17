@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Plugins\WAI\Blog\Catalog;
 
-class Main extends \ADIOS\Core\Action {
+class Main extends \ADIOS\Core\Plugin\Action {
   public function render() {
     return "
       <h1>".$this->translate('Blogs')."</h1>

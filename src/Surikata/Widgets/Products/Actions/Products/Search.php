@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Products\Products;
 
-class Search extends \ADIOS\Core\Action {
+class Search extends \ADIOS\Core\Widget\Action {
   // public function init() {
   //   $this->languageDictionary["en"] = [
   //     "Hľadať" => "Search",

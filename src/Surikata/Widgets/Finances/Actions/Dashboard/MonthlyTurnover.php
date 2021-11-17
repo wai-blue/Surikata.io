@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Finances\Dashboard;
 
-class MonthlyTurnover extends \ADIOS\Core\Action {
+class MonthlyTurnover extends \ADIOS\Core\Widget\Action {
   public function preRender() {
     $invoiceModel = new \ADIOS\Widgets\Finances\Models\Invoice($this->adios);
     $invoiceItemModel = new \ADIOS\Widgets\Finances\Models\InvoiceItem($this->adios);

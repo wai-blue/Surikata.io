@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Maintenance\LogViewer;
 
-class ClearLog extends \ADIOS\Core\Action {
+class ClearLog extends \ADIOS\Core\Widget\Action {
   public function render() {
     $logSeverity = $this->params['severity'];
     if (!in_array($logSeverity, ["info", "warning", "error"])) {

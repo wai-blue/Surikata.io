@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Customers;
 
-class PorovnavaneProdukty extends \ADIOS\Core\Action {
+class PorovnavaneProdukty extends \ADIOS\Core\Widget\Action {
   // public function init() {
   //   $this->languageDictionary["en"] = [
   //     "Klient" => "Customer",

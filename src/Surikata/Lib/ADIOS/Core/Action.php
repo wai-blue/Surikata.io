@@ -59,11 +59,14 @@ class Action {
 
   function __construct(&$adios, $params = []) {
     $this->name = str_replace("\\", "/", str_replace("ADIOS\\", "", get_class($this)));
+    $this->shortName = end(explode("/", $this->name));
     $this->adios = &$adios;
     $this->params = $params;
     $this->uid = $this->adios->uid;
     $this->gtp = $this->adios->gtp;
     $this->action = $this->adios->action;
+
+    $this->myRootFolder = str_replace("\\", "/", dirname((new \ReflectionClass(get_class($this)))->getFileName()));
 
     if (!is_array($this->params)) {
       $this->params = [];

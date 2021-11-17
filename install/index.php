@@ -394,7 +394,6 @@ if (!$doInstall) {
 
   try {
     
-    $this->console->info("Installation started.");
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Initialization
@@ -402,6 +401,8 @@ if (!$doInstall) {
     $websiteRenderer = new \MyEcommerceProject\Web($websiteRendererConfig);
     $adminPanel = new \MyEcommerceProject\AdminPanel($adminPanelConfig, ADIOS_MODE_FULL, $websiteRenderer);
     $adminPanel->console->cliEchoEnabled = TRUE;
+
+    $adminPanel->console->info("Installation started.");
 
     $adminPanel->createMissingFolders();
 

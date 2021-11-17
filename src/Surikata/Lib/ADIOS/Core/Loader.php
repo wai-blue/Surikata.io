@@ -614,10 +614,14 @@ class Loader {
 
     $installationStart = microtime(TRUE);
 
+    $this->console->info("Dropping existing tables.");
+
     foreach ($this->models as $modelName) {
       $model = $this->getModel($modelName);
       $model->dropTableIfExists();
     }
+
+    $this->console->info("Database is empty, installing models.");
 
     $this->db->startTransaction();
 

@@ -43,7 +43,7 @@ $_GET = [
   "rewrite_base_is_correct" => "1",
 ];
 
-$_SERVER['HTTP_HOST'] = $argv[1];
+$_SERVER['HTTP_HOST'] = $argv[1] ?? "";
 
 if (empty($_SERVER['HTTP_HOST'])) {
   exit("SERVER HTTP HOST is not provided");

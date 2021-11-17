@@ -22,6 +22,9 @@ class Orders extends \ADIOS\Core\Widget {
             "onclick" => "desktop_update('Orders/Invoiced');",
             "style" => "border-left:5px solid {$orderModel->enumOrderStateColors[$orderModel::STATE_INVOICED]}",
           ],
+          // REVIEW: Vyhodil si polozku "Paid"... Ale v modeli v tableParams() mas na to pripravenu where
+          // podmienku. Ponechaj polozku Paid, moze ist trebars na koniec a nezvyraznuj jej border-left, kedze to nie je stav.
+          // Pripadne mozu byt dve polozky Paid a Unpaid.
           [
             "title" => $this->translate("Shipped"),
             "onclick" => "desktop_update('Orders/Shipped');",

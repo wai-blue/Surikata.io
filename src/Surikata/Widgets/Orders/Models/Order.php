@@ -325,6 +325,7 @@ class Order extends \ADIOS\Core\Model {
         "show_column" => TRUE,
       ],
 
+      // REVIEW: vsetky boolean stlpce musia zacinat prefixom "is_". Cize premenuj "paid" na "is_paid"
       "paid" => [
         "type" => "boolean",
         "title" => $this->translate("Paid"),

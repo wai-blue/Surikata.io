@@ -392,9 +392,12 @@ if (!$doInstall) {
     $websiteRenderer = new \MyEcommerceProject\Web($websiteRendererConfig);
     $adminPanel = new \MyEcommerceProject\AdminPanel($adminPanelConfig, ADIOS_MODE_FULL, $websiteRenderer);
 
+    $adminPanel->createMissingFolders();
+
     $adminPanel->install();
     $adminPanel->installDefaultUsers();
-    $adminPanel->createMissingFolders();
+
+    $this->adminPanel->console->info("Default users installed.");
 
     $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($adminPanel);
     $customerCategoryModel = new \ADIOS\Widgets\Customers\Models\CustomerCategory($adminPanel);
@@ -464,6 +467,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
     file_put_contents(__DIR__."/../ConfigEnvDomains.php", $configEnvDomainsPHP);
 
+    $this->adminPanel->console->info("ConfigEnvDomains.php created.");
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // PART: delivery and payment services
@@ -564,6 +568,8 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       $shipmentPriceModel->insertRow(["id" => 7, "id_shipment" => 7, "name" => "41", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 1000, "delivery_fee_calculation_method" => 1, "delivery_fee" => 3.35]);
       $shipmentPriceModel->insertRow(["id" => 8, "id_shipment" => 8, "name" => "42", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 1000, "delivery_fee_calculation_method" => 1, "delivery_fee" => 3.99]);
+
+      $this->adminPanel->console->info("Delivery and payment services installed.");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -785,6 +791,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       $adminPanel->db->commit();
 
+      $this->adminPanel->console->info("Product catalog installed.");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -859,6 +866,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
         $cnt++;
       }
 
+      $this->adminPanel->console->info("Customers installed.");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -943,6 +951,8 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
         }
 
       }
+
+      $this->adminPanel->console->info("Orders installed.");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -963,6 +973,8 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
     }
 
     $wsg->installPluginsOnce();
+
+    $this->adminPanel->console->info("Website content installed.");
 
 
   } catch (\Exception $e) {

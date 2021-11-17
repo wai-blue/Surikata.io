@@ -61,7 +61,7 @@ function _loadCsvIntoArray($file, $separator = ',', $enclosure = '#') {
   return $lines;
 }
 
-set_time_limit(60*10);
+set_time_limit(0);
 
 if (!is_file(__DIR__."/../vendor/autoload.php")) {
   echo "

@@ -135,8 +135,6 @@ if (!$rewriteBaseIsCorrect) {
   }
 }
 
-session_start();
-
 $availableThemes = [];
 foreach (@scandir(__DIR__."/../src/Themes") as $dir) {
   if (

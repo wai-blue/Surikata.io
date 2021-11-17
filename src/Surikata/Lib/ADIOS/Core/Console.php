@@ -24,7 +24,7 @@ class Console {
   var $warnings = [];
   var $errors = [];
 
-  var $directEcho = FALSE;
+  var $cliEchoEnabled = FALSE;
 
   public function __construct(&$adios) {
     $this->adios = $adios;
@@ -71,9 +71,9 @@ class Console {
     ];
   }
 
-  public function directEcho($message) {
-    if ($this->directEcho && php_sapi_name() === 'cli') {
-      echo date("Y-m-d H:i:s")." {$message}\n";
+  public function cliEcho($message, $loggerName, $severity) {
+    if ($this->cliEchoEnabled && php_sapi_name() === 'cli') {
+      echo date("Y-m-d H:i:s")." {$loggerName}.{$severity} {$message}\n";
     }
   }
 
@@ -81,14 +81,14 @@ class Console {
     $this->getLogger($loggerName)->info($message, $context);
     $this->infos[microtime()] = [$message, $context];
   
-    $this->directEcho($message);
+    $this->cliEcho($message, $loggerName, 'INFO');
   }
   
   public function warning($message, array $context = [], $loggerName = 'core') {
     $this->getLogger($loggerName)->warning($message, $context);
     $this->warnings[microtime()] = [$message, $context];
 
-    $this->directEcho($message);
+    $this->cliEcho($message, $loggerName, 'WARNING');
   }
   
   public function error($message, array $context = [], $loggerName = 'core') {
@@ -96,7 +96,7 @@ class Console {
     $this->log($message);
     $this->errors[microtime()] = [$message, $context];
 
-    $this->directEcho($message);
+    $this->cliEcho($message, $loggerName, 'ERROR');
   }
 
   public function getInfos() {

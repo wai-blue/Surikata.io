@@ -1,48 +1,52 @@
 <?php
 
-if (php_sapi_name() !== 'cli') {
-  echo "
-    <html>
-    <head>
-      <title>Surikata.io Installer</title>
-      <link rel='shortcut icon' href='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
-      <style>
-        * { font-family: verdana; font-size: 10pt; }
-        body { background: #EEEEEE; }
-        h1 { color: #224abe; font-size: 16pt; }
-        h2 { color: #224abe; font-size: 12pt; }
-
-        table { border: 1px solid #F0F0F0; }
-        table tr:nth-child(even) td { background: #F0F0F0; }
-        table td { padding: 2px; }
-
-        label { display: block; padding: 2px; }
-        label:hover { background: #224abe; color: white; cursor: pointer; }
-
-        .btn { color: #224abe; background: white; cursor: pointer; border: 1px solid #224abe; padding: 1em; margin: 1em 0; }
-        .btn:hover { color: white; background: #224abe; }
-
-        a.btn { display: inline-block; text-decoration: none; }
-
-        .content { width: 820px; margin: auto; background: white; padding: 1em; }
-        .logo { width: 100px; margin: auto; }
-
-        #log {
-          background: #2d2d2d;
-          font-family: courier;
-          color: white;
-          padding: 1em;
-          font-size: 9pt;
-          margin-top: 1em;
-        }
-      </style>
-    </head>
-    <body>
-      <div class='content'>
-        <img class='logo' src='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
-        <h1>Surikata.io Installer</h1>
-  ";
+function _echo($msg) {
+  if (php_sapi_name() !== 'cli') {
+    echo $msg;
+  }
 }
+
+_echo("
+  <html>
+  <head>
+    <title>Surikata.io Installer</title>
+    <link rel='shortcut icon' href='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
+    <style>
+      * { font-family: verdana; font-size: 10pt; }
+      body { background: #EEEEEE; }
+      h1 { color: #224abe; font-size: 16pt; }
+      h2 { color: #224abe; font-size: 12pt; }
+
+      table { border: 1px solid #F0F0F0; }
+      table tr:nth-child(even) td { background: #F0F0F0; }
+      table td { padding: 2px; }
+
+      label { display: block; padding: 2px; }
+      label:hover { background: #224abe; color: white; cursor: pointer; }
+
+      .btn { color: #224abe; background: white; cursor: pointer; border: 1px solid #224abe; padding: 1em; margin: 1em 0; }
+      .btn:hover { color: white; background: #224abe; }
+
+      a.btn { display: inline-block; text-decoration: none; }
+
+      .content { width: 820px; margin: auto; background: white; padding: 1em; }
+      .logo { width: 100px; margin: auto; }
+
+      #log {
+        background: #2d2d2d;
+        font-family: courier;
+        color: white;
+        padding: 1em;
+        font-size: 9pt;
+        margin-top: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class='content'>
+      <img class='logo' src='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
+      <h1>Surikata.io Installer</h1>
+");
 
 $installationStart = microtime(TRUE);
 $rewriteBaseIsCorrect = ($_GET['rewrite_base_is_correct'] ?? "") == "1";
@@ -66,14 +70,6 @@ function _loadCsvIntoArray($file, $separator = ',', $enclosure = '#') {
 }
 
 set_time_limit(0);
-
-function _echo($msg) {
-  if (php_sapi_name() === 'cli') {
-    echo trim(strip_tags($msg))."\n";
-  } else {
-    echo $msg;
-  }
-}
 
 if (!is_file(__DIR__."/../vendor/autoload.php")) {
   _echo("
@@ -403,14 +399,14 @@ if (!$doInstall) {
 
     $websiteRenderer = new \MyEcommerceProject\Web($websiteRendererConfig);
     $adminPanel = new \MyEcommerceProject\AdminPanel($adminPanelConfig, ADIOS_MODE_FULL, $websiteRenderer);
-    $adminPanel->console->directEcho = TRUE;
+    $adminPanel->console->cliEchoEnabled = TRUE;
 
     $adminPanel->createMissingFolders();
 
     $adminPanel->install();
     $adminPanel->installDefaultUsers();
 
-    $adminPanel->console->info("Default users installed.");
+    $adminPanel->console->info("Default users created.");
 
     $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($adminPanel);
     $customerCategoryModel = new \ADIOS\Widgets\Customers\Models\CustomerCategory($adminPanel);
@@ -1060,7 +1056,8 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
 }
 
-?>
-  </div>
-</body>
-</html>
+_echo("
+    </div>
+  </body>
+  </html>
+");

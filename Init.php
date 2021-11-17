@@ -42,5 +42,4 @@ require_once(ADMIN_PANEL_SRC_DIR."/Core/Web/Loader.php");
 require_once(__DIR__."/prop/MyEcommerceProject.php");
 
 // start PHP session
-session_name(md5(__FILE__));
 session_start();

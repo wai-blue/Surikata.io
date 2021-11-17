@@ -625,29 +625,44 @@ class WebsiteContentGenerator {
       "type" => 302,
     ]);
 
+    // REVIEW: Nie je spravne robit "if" podla domainSlug. Ten moze byt nastaveny uplne akokolvek.
+    // Spolahlivejsie je pouzit "$this->domainCurrentlyGenerated["languageIndex"]".
+    // Ten je pre anglicky text == 1 a pre slovensky text == 2
+    // Vid funkciu _getDomainLanguageIndexInput() v install/index.php
+
+    // Potom - tieto texty treba dat do samostatnych suborov, aby sa dali lahsie editovat
+    // Naznacil som priklad v install/content/emails. Prosim dokoncit podla neho.
+
+    $emailsContentFolder = __DIR__."/content/emails/{$this->domainCurrentlyGenerated["languageIndex"]}";
+    $emails = [
+      "signature" => "<p>{$this->domainName} - <a href='http://{$this->domainName}' target='_blank'>{$this->domainName}</a></p>",
+      "after_order_confirmation_SUBJECT" => file_get_contents("{$emailsContentFolder}/after_order_confirmation_SUBJECT.txt"),
+      "after_order_confirmation_BODY" => file_get_contents("{$emailsContentFolder}/after_order_confirmation_BODY.html"),
+    ];
+
     // emaily podľa jazykovej verzie (SK + EN)
-    if ($this->domainSlug == "sk") {
-      $emails = [
-        "signature" => "<p>{$this->domainName} - <a href='http://{$this->domainName}' target='_blank'>{$this->domainName}</a></p>",
-        "after_order_confirmation_SUBJECT" => "{$this->domainName} - objednávka č. {% number %}",
-        "after_order_confirmation_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/orderBody_sk.html"),
-        "after_registration_SUBJECT" => "{$this->domainName} - Overte Vašu emailovú adresu",
-        "after_registration_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/registrationBody_sk.html"),
-        "forgot_password_SUBJECT" => "{$this->domainName} - Obnovenie hesla",
-        "forgot_password_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/forgotPasswordBody_sk.html")
-      ];
-    }
-    else {
-      $emails = [
-        "signature" => "<p>{$this->domainName} - <a href='http://{$this->domainName}' target='_blank'>{$this->domainName}</a></p>",
-        "after_order_confirmation_SUBJECT" => "{$this->domainName} - order number {% number %}",
-        "after_order_confirmation_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/orderBody.html"),
-        "after_registration_SUBJECT" => "{$this->domainName} - Verify your email address",
-        "after_registration_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/registrationBody.html"),
-        "forgot_password_SUBJECT" => "{$this->domainName} - Password reset",
-        "forgot_password_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/forgotPasswordBody.html")
-      ];
-    }
+    // if ($this->domainSlug == "sk") {
+    //   $emails = [
+    //     "signature" => "<p>{$this->domainName} - <a href='http://{$this->domainName}' target='_blank'>{$this->domainName}</a></p>",
+    //     "after_order_confirmation_SUBJECT" => "{$this->domainName} - objednávka č. {% number %}",
+    //     "after_order_confirmation_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/orderBody_sk.html"),
+    //     "after_registration_SUBJECT" => "{$this->domainName} - Overte Vašu emailovú adresu",
+    //     "after_registration_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/registrationBody_sk.html"),
+    //     "forgot_password_SUBJECT" => "{$this->domainName} - Obnovenie hesla",
+    //     "forgot_password_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/forgotPasswordBody_sk.html")
+    //   ];
+    // }
+    // else {
+    //   $emails = [
+    //     "signature" => "<p>{$this->domainName} - <a href='http://{$this->domainName}' target='_blank'>{$this->domainName}</a></p>",
+    //     "after_order_confirmation_SUBJECT" => "{$this->domainName} - order number {% number %}",
+    //     "after_order_confirmation_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/orderBody.html"),
+    //     "after_registration_SUBJECT" => "{$this->domainName} - Verify your email address",
+    //     "after_registration_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/registrationBody.html"),
+    //     "forgot_password_SUBJECT" => "{$this->domainName} - Password reset",
+    //     "forgot_password_BODY" => file_get_contents(__DIR__ . "/content/PageTexts/emails/forgotPasswordBody.html")
+    //   ];
+    // }
 
     // nastavenia webu
     $this->adminPanel->saveConfig([

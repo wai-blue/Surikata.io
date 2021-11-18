@@ -27,8 +27,12 @@ class Plugin {
 
   public function __construct($adios) {
     $this->name = str_replace("\\", "/", str_replace("ADIOS\\Plugins\\", "", get_class($this)));
+    $this->shortName = end(explode("/", $this->name));
     $this->adios = &$adios;
+    $this->params = [];
     $this->gtp = $this->adios->gtp;
+
+    $this->myRootFolder = str_replace("\\", "/", dirname((new \ReflectionClass(get_class($this)))->getFileName()));
 
     // inicializacia pluginu
     $this->init();

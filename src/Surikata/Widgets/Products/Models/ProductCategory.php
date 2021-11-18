@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Products\Models;
 
-class ProductCategory extends \ADIOS\Core\Model {
+class ProductCategory extends \ADIOS\Core\Widget\Model {
   var $sqlName = "products_categories";
   var $lookupSqlValue = "{%TABLE%}.name_lang_1";
   var $urlBase = "Products/Categories";

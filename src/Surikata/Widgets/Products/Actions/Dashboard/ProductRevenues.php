@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Products\Dashboard;
 
-class ProductRevenues extends \ADIOS\Core\Action {
+class ProductRevenues extends \ADIOS\Core\Widget\Action {
   public function preRender() {
     $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adios);
     $orderModel = new \ADIOS\Widgets\Orders\Models\Order($this->adios);

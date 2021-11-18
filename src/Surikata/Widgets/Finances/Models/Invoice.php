@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Finances\Models;
 
-class Invoice extends \ADIOS\Core\Model {
+class Invoice extends \ADIOS\Core\Widget\Model {
 
   /* Invoice payment methods */
   const PAYMENT_METHOD_WIRE_TRANSFER = 1;

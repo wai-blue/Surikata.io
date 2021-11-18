@@ -28,7 +28,7 @@ class Action {
   /**
    * Language dictionary for strings used in the action's output
    */
-  public $languageDictionary;
+  // public $languageDictionary;
 
   /**
    * If set to FALSE, the rendered content of action is available to public
@@ -58,21 +58,19 @@ class Action {
   var $name = "";
 
   function __construct(&$adios, $params = []) {
+    $this->name = str_replace("\\", "/", str_replace("ADIOS\\", "", get_class($this)));
+    $this->shortName = end(explode("/", $this->name));
     $this->adios = &$adios;
     $this->params = $params;
     $this->uid = $this->adios->uid;
     $this->gtp = $this->adios->gtp;
     $this->action = $this->adios->action;
 
+    $this->myRootFolder = str_replace("\\", "/", dirname((new \ReflectionClass(get_class($this)))->getFileName()));
+
     if (!is_array($this->params)) {
       $this->params = [];
     }
-
-    $this->name = str_replace("\\", "/", str_replace("ADIOS\\", "", get_class($this)));
-
-    $this->languageDictionary[$this->adios->config["language"]] =
-      $this->adios->loadLanguageDictionary($this->name)
-    ;
 
     $this->init();
   }
@@ -124,8 +122,8 @@ class Action {
    * @param  string $toLanguage Output language
    * @return string Translated string.
    */
-  public function translate(string $string, string $context = "", string $toLanguage = "") {
-    return $this->adios->translate($string, $context, $toLanguage, $this->languageDictionary);
+  public function translate($string) {
+    return $this->adios->translate($string, $this);
   }
   
   /**
@@ -146,7 +144,7 @@ class Action {
     $twigParams["config"] = $this->adios->config;
     $twigParams["user"] = $this->adios->userProfile;
     $twigParams["locale"] = $this->adios->locale->getAll();
-    $twigParams["languageDictionary"] = $this->languageDictionary;
+    $twigParams["dictionary"] = $this->dictionary;
     $twigParams['userNotifications'] = $this->adios->userNotifications->getAsHtml();
 
     try {

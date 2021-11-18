@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Website;
 
-class LegalDisclaimers extends \ADIOS\Core\Action {
+class LegalDisclaimers extends \ADIOS\Core\Widget\Action {
   public function render() {
     $settings = $this->adios->config["settings"]["web"][$this->params['domainName']]["legalDisclaimers"];
 

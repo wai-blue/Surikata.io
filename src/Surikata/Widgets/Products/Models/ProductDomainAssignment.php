@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Products\Models;
 
-class ProductDomainAssignment extends \ADIOS\Core\Model {
+class ProductDomainAssignment extends \ADIOS\Core\Widget\Model {
   var $sqlName = "products_domains_assignment";
   var $urlBase = "Products/{{ id_product }}/Domains";
   var $tableTitle = "Product domains";

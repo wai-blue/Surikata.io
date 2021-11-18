@@ -2,12 +2,12 @@
 
 namespace ADIOS\Actions\Products\Products;
 
-class Search extends \ADIOS\Core\Action {
-  public function init() {
-    $this->languageDictionary["en"] = [
-      "Hľadať" => "Search",
-    ];
-  }
+class Search extends \ADIOS\Core\Widget\Action {
+  // public function init() {
+  //   $this->languageDictionary["en"] = [
+  //     "Hľadať" => "Search",
+  //   ];
+  // }
 
   public function render() {
     $modelName = "Widgets/Products/Models/Product";

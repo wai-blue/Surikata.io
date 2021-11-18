@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
-class Voucher extends \ADIOS\Core\Model {
+class Voucher extends \ADIOS\Core\Widget\Model {
   var $sqlName = "vouchers";
   var $urlBase = "Customers/Vouchers";
   var $tableTitle = "Vouchers";

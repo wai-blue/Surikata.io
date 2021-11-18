@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Settings\Models;
 
-class Unit extends \ADIOS\Core\Model {
+class Unit extends \ADIOS\Core\Widget\Model {
   var $sqlName = "units";
   var $urlBase = "Settings/Units";
   var $lookupSqlValue = "if({%TABLE%}.name is null, {%TABLE%}.unit, concat({%TABLE%}.unit, ' (', {%TABLE%}.name, ')'))";

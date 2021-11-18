@@ -208,9 +208,9 @@ class Loader {
 
     // check if CSS, JS or Image should be rendered
     foreach ($this->assetsUrlMap as $urlPart => $mapping) {
-      if (preg_match('/^'.str_replace("/", "\\/", $urlPart).'/', $this->template, $m)) {
+      if (preg_match('/^'.str_replace("/", "\\/", $urlPart).'/', $this->template, $urlMapVariables)) {
         if ($mapping instanceof \Closure) {
-          $sourceFile = $mapping($this, $this->template);
+          $sourceFile = $mapping($this, $this->template, $urlMapVariables);
         } else {
           $sourceFile = $mapping.str_replace($urlPart, "", $this->template);
         }

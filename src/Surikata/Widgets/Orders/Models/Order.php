@@ -325,8 +325,7 @@ class Order extends \ADIOS\Core\Widget\Model {
         "show_column" => TRUE,
       ],
 
-      // REVIEW: vsetky boolean stlpce musia zacinat prefixom "is_". Cize premenuj "paid" na "is_paid"
-      "paid" => [
+      "is_paid" => [
         "type" => "boolean",
         "title" => $this->translate("Paid"),
         "show_column" => true
@@ -354,7 +353,7 @@ class Order extends \ADIOS\Core\Widget\Model {
 
   public function routing(array $routing = []) {
     return parent::routing([
-      '/^Orders\/([New|Invoiced|Paid|Shipped|Canceled]+)$/' => [
+      '/^Orders\/([New|Invoiced|Paid|Unpaid|Shipped|Canceled]+)$/' => [
         "action" => "UI/Table",
         "params" => [
           "model" => "Widgets/Orders/Models/Order",
@@ -401,7 +400,11 @@ class Order extends \ADIOS\Core\Widget\Model {
       break;
       case "Paid":
         $params["title"] =  $this->translate("Paid orders");
-        $params['where'] = "{$this->table}.paid = 1";
+        $params['where'] = "{$this->table}.is_paid = 1";
+      break;
+      case "Unpaid":
+        $params["title"] =  $this->translate("Unpaid orders");
+        $params['where'] = "{$this->table}.is_paid = 0";
       break;
       default:
         $params["title"] = $this->translate("All orders");
@@ -819,14 +822,14 @@ class Order extends \ADIOS\Core\Widget\Model {
 
   }
 
-  public function setAsPaid($idOrder, $isCron = false) {
-    $update = $this->updateRow(["paid" => TRUE], $idOrder);
+  public function setPaidValue(int $idOrder, bool $isPaid = false, bool $isCron = false) {
+    $update = $this->updateRow(["is_paid" => $isPaid], $idOrder);
   
     $idUser = $isCron ? 0 : $this->adios->userProfile['id'];
     (new \ADIOS\Widgets\Orders\Models\OrderHistory($this->adios))
       ->insertRow([
         "id_order" => $idOrder,
-        "paid" => TRUE,
+        "is_paid" => $isPaid,
         "event_time" => "SQL:now()",
         "user" => $idUser,
       ])
@@ -920,7 +923,7 @@ class Order extends \ADIOS\Core\Widget\Model {
         "style" => "border-left: 10px solid {$this->enumOrderStateColors[self::STATE_INVOICED]}",
       ])->render();
 
-      $btnOrderPaid = (int)$data['paid'] == 0 ? $this->adios->ui->button([
+      $btnOrderPaid = (int)$data['is_paid'] == 0 ? $this->adios->ui->button([
         "text" => $this->translate("Set as paid"),
         "onclick" => "
           var tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
@@ -949,8 +952,29 @@ class Order extends \ADIOS\Core\Widget\Model {
       ])->render() : $this->adios->ui->button([
         "text" => $this->translate("Order is paid"),
         "class" => "btn-light mb-2 w-100",
-        "style" => "border: 2px solid #11cf56;border-radius:2px;background:#8fffb8;cursor:default",
-        "disabled" => TRUE
+        "style" => "border: 2px solid #11cf56;border-radius:2px;background:#8fffb8",
+        "onclick" => "
+          var tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
+          _confirm(
+            '".$this->translate('You are about to set an order as unpaid. Continue?')."',
+            {
+              'content_class': 'border-left-danger',
+              'confirm_button_class': 'btn-danger',
+              'confirm_button_text': '".$this->translate('Yes, set as unpaid')."',
+              'cancel_button_text': '".$this->translate('Do not set as unpaid')."',
+            },
+            function() { 
+              _ajax_read('Orders/SetAsUnpaid', 'id_order=".(int) $data['id']."', function(res) {
+                if (isNaN(res)) {
+                  alert(res);
+                }
+                else {
+                  window_refresh(tmp_form_id + '_form_window');
+                }
+              });
+            }
+          );
+        "
       ])->render(); 
 
       $btnOrderStateShipped = $this->adios->ui->button([

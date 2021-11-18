@@ -1,1 +1,1 @@
-{$this->domainName} - order number {% number %}
+order number {% number %} - Surikata eshop

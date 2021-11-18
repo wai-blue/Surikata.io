@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Shipping\Models;
 
-class DestinationCountry extends \ADIOS\Core\Model {
+class DestinationCountry extends \ADIOS\Core\Widget\Model {
   var $sqlName = "shipping_destination_countries";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
   var $urlBase = "DeliveryAndPayment/Countries";

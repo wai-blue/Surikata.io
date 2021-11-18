@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Shipping\Models;
 
-class PaymentService extends \ADIOS\Core\Model {
+class PaymentService extends \ADIOS\Core\Widget\Model {
   var $sqlName = "shipping_payment_services";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
   var $urlBase = "DeliveryAndPayment/PaymentServices";

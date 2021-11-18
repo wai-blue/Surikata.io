@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Website\Models;
 
-class WebMenu extends \ADIOS\Core\Model {
+class WebMenu extends \ADIOS\Core\Widget\Model {
   var $sqlName = "web_menu";
   var $urlBase = "Website/{{ domainName }}/Menu";
   var $lookupSqlValue = "{%TABLE%}.name";

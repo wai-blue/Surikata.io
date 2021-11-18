@@ -5,7 +5,7 @@ namespace ADIOS\Widgets\Orders\Models;
 define('CLAIM_STATE_OPEN',   1);
 define('CLAIM_STATE_CLOSED', 2);
 
-class Claim extends \ADIOS\Core\Model {
+class Claim extends \ADIOS\Core\Widget\Model {
   var $sqlName = "claims";
   var $urlBase = "Claims";
   var $tableTitle = "Claims";

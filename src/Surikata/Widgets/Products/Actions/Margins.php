@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Products;
 
-class Margins extends \ADIOS\Core\Action {
+class Margins extends \ADIOS\Core\Widget\Action {
   public function render() {
     $settings = $this->adios->config["settings"]["sales"];
 

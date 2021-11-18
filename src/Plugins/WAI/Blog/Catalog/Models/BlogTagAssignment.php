@@ -2,7 +2,7 @@
 
 namespace ADIOS\Plugins\WAI\Blog\Catalog\Models;
 
-class BlogTagAssignment extends \ADIOS\Core\Model {
+class BlogTagAssignment extends \ADIOS\Core\Plugin\Model {
   var $sqlName = "blogs_tags_assignment";
   var $urlBase = "Website/Blog/{{ id_blog }}/Tags";
   var $tableTitle = "Blog tags";

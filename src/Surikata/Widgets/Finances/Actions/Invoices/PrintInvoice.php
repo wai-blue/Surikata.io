@@ -5,7 +5,7 @@ namespace ADIOS\Actions\Finances\Invoices;
 use ADIOS\Widgets\Finances\Models\Invoice;
 use ADIOS\Widgets\Settings\Models\Unit;
 
-class PrintInvoice extends \ADIOS\Core\Action {
+class PrintInvoice extends \ADIOS\Core\Widget\Action {
   public static $hideDefaultDesktop = TRUE;
 
   public function preRender() {

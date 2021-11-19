@@ -6,5 +6,6 @@ $dictionary = [
   "Paid" => "Zaplatené",
   "Shipped" => "Doručené",
   "Canceled" => "Zrušené",
-  "Orders" => "Objednávky"
+  "Orders" => "Objednávky",
+  "Unpaid" => "Nezaplatené"
 ];

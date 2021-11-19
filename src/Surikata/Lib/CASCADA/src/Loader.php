@@ -22,6 +22,7 @@ class Loader {
   var $JSONResult = NULL;
   var $urlVariables = [];
   var $assetsUrlMap = [];
+  var $assetCacheDir = "";
 
   private $canContinueWithRendering = TRUE;
 
@@ -36,6 +37,7 @@ class Loader {
     $this->relativeUrl = $config['relativeUrl'] ?? "";
     $this->themeDir = $config['themeDir'] ?? "";
     $this->twigTemplatesSubDir = $config["twigTemplatesSubDir"] ?? "Templates";
+    $this->assetCacheDir = $config['assetCacheDir'] ?? "";
 
     if (
       substr($this->rewriteBase, 0, 1) != "/"
@@ -114,11 +116,11 @@ class Loader {
       "urlVariables" => $this->urlVariables ?? [],
       "template" => $this->template ?? "",
       "cascadaInitJS" => "
-          <script>
-              Cascada = {
-                  'rootUrl': '{$this->rootUrl}',
-              }
-          </script>
+        <script>
+          Cascada = {
+            'rootUrl': '{$this->rootUrl}',
+          }
+        </script>
       ",
       "_GET" => $_GET,
       "_POST" => $_POST,
@@ -221,6 +223,13 @@ class Loader {
         $headerExpires = "Expires: ".gmdate("D, d M Y H:i:s", time() + $cachingTime) . " GMT";
         $headerCacheControl = "Cache-Control: max-age={$cachingTime}";
 
+        $assetContent = @file_get_contents($sourceFile);
+
+        if (!empty($this->assetCacheDir) && is_dir($this->assetCacheDir)) {
+          $cacheFile = "{$this->assetCacheDir}/".md5($this->template).".{$ext}";
+          @file_put_contents($cacheFile, $assetContent);
+        }
+
         switch ($ext) {
           case "css":
           case "js":
@@ -228,7 +237,7 @@ class Loader {
             header($headerExpires);
             header("Pragma: cache");
             header($headerCacheControl);
-            echo file_get_contents($sourceFile);
+            echo $assetContent;
           break;
           case "bmp":
           case "gif":
@@ -246,7 +255,7 @@ class Loader {
             header($headerExpires);
             header("Pragma: cache");
             header($headerCacheControl);
-            echo file_get_contents($sourceFile);
+            echo $assetContent;
           break;
         }
 

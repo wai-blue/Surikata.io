@@ -26,6 +26,9 @@ if (
 require_once("ConfigEnv.php");
 require_once("ConfigApp.php");
 
+// load assets from cache, if necessary
+require_once("LoadAssetsFromCache.php");
+
 // include autoloaders
 require_once("vendor/autoload.php");
 require_once(ADMIN_PANEL_SRC_DIR."/Autoload.php");

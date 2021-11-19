@@ -301,6 +301,12 @@ class Order extends \ADIOS\Core\Widget\Model {
         "show_column" => TRUE,
       ],
 
+      "discount" => [
+        "type" => "float",
+        "title" => $this->translate("Total discount in %"),
+        "show_column" => TRUE,
+      ],
+
       "price_total_excl_vat" => [
         "type" => "float",
         "title" => $this->translate("Total price excl. VAT"),
@@ -691,6 +697,14 @@ class Order extends \ADIOS\Core\Widget\Model {
     $placedOrderData["payment_fee"] = $fees["paymentFee"];
 
     $summary = $this->calculateSummaryInfo($placedOrderData);
+
+    $placedOrderData = $this->adios->dispatchEventToPlugins("onOrderAfterPlaceOrder", [
+      "model" => $this,
+      "order" => $placedOrderData,
+    ])["order"];
+
+    $summary = $placedOrderData["SUMMARY"];
+
     $this->updateSummaryInfo($idOrder, $summary);
 
     $this->sendNotificationForPlacedOrder($placedOrderData);
@@ -1021,6 +1035,33 @@ class Order extends \ADIOS\Core\Widget\Model {
         ."<div style='margin-left:30px;display:inline-block'>{$tagsHtml}</div>"
       ;
 
+      echo "<pre>";
+      print_r($data);
+      echo "</pre>";
+      $sidebarHtmlDiscount = "";
+      if ((float)$data["discount"] > 0) {
+        // Show price with discount
+        $sidebarHtmlDiscount = "
+          <tr>
+            <td>
+              ".$this->translate('Price excl. VAT with discount')."
+            </td>
+            <td class='text-right'>
+              ".number_format(($data['price_total_excl_vat'] * ((100 - $data["discount"]) / 100)), 2, ",", " ")."
+              ".$this->adios->locale->currencySymbol()."
+            </td>
+          </tr>
+          <tr>
+            <td>
+              ".$this->translate('Price incl. VAT with discount')."
+            </td>
+            <td class='text-right'>
+              ".number_format(($data['price_total_incl_vat'] * ((100 - $data["discount"]) / 100)), 2, ",", " ")."
+              ".$this->adios->locale->currencySymbol()."
+            </td>
+          </tr>
+        ";
+      }
       $sidebarHtml = $this->adios->dispatchEventToPlugins("onOrderDetailBeforeSidebarButtons", [
         "model" => $this,
         "params" => $params,
@@ -1070,6 +1111,25 @@ class Order extends \ADIOS\Core\Widget\Model {
                       ".$this->adios->locale->currencySymbol()."
                     </td>
                   </tr>
+                  ".$sidebarHtmlDiscount."
+                  <tr>
+                    <td>
+                      ".$this->translate('Delivery Fee')."
+                    </td>
+                    <td class='text-right'>
+                      ".number_format($data['delivery_fee'], 2, ",", " ")."
+                      ".$this->adios->locale->currencySymbol()."
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      ".$this->translate('Payment Fee')."
+                    </td>
+                    <td class='text-right'>
+                      ".number_format($data['payment_fee'], 2, ",", " ")."
+                      ".$this->adios->locale->currencySymbol()."
+                    </td>
+                  </tr>
                   <tr>
                     <td>
                       ".$this->translate('Total weight')."
@@ -1110,6 +1170,7 @@ class Order extends \ADIOS\Core\Widget\Model {
                 "email",
                 "confirmation_time",
                 "number_customer",
+                "discount",
                 "notes",
                 "domain",
                 [
@@ -1364,6 +1425,7 @@ class Order extends \ADIOS\Core\Widget\Model {
     $order = $this->getById($idOrder);
 
     $invoiceItems = [];
+    $invoicesVats = [];
     foreach ($order['ITEMS'] as $item) {
       $invoiceItems[] = [
         "item" => $item["product_number"]." ".$item["product_name"],
@@ -1372,6 +1434,11 @@ class Order extends \ADIOS\Core\Widget\Model {
         "unit_price" => $item["unit_price"],
         "vat_percent" => $item["vat_percent"],
       ];
+      if (array_key_exists($item["vat_percent"], $invoicesVats)) {
+        $invoicesVats[$item["vat_percent"]] += $item["unit_price"] * $item["quantity"];
+      } else {
+        $invoicesVats[$item["vat_percent"]] = $item["unit_price"] * $item["quantity"];
+      }
     }
 
     if ($order['delivery_fee'] > 0) {
@@ -1390,6 +1457,26 @@ class Order extends \ADIOS\Core\Widget\Model {
         "unit_price" => $order["payment_fee"] / (1 + 20 / 100), // TODO: VAT 20% hardcoded
         "vat_percent" => 20, // TODO: VAT 20% hardcoded
       ];
+    }
+
+    if ($order['discount'] > 0) {
+      if (count($invoicesVats) > 0) {
+        foreach ($invoicesVats as $vat => $discountSum) {
+          $invoiceItems[] = [
+            "item" => $this->translate("Discount"),
+            "quantity" => 1,
+            "unit_price" => - $discountSum * ($order['discount'] / 100),
+            "vat_percent" => $vat,
+          ];
+        }
+      } else {
+        $invoiceItems[] = [
+          "item" => $this->translate("Discount"),
+          "quantity" => 1,
+          "unit_price" => - $order["price_total_excl_vat"] * ($order['discount'] / 100),
+          "vat_percent" => 20, // TODO: VAT 20% hardcoded
+        ];
+      }
     }
 
     $invoiceData = [

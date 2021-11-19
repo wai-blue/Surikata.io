@@ -632,8 +632,8 @@ class WebsiteContentGenerator {
       "after_order_confirmation_BODY" => file_get_contents("{$emailsContentFolder}/after_order_confirmation_BODY.html"),
       "after_registration_SUBJECT" => file_get_contents("{$emailsContentFolder}/after_registration_SUBJECT.txt"),
       "after_registration_BODY" => file_get_contents("{$emailsContentFolder}/after_registration_BODY.html"),
-      "forgot_password_SUBJECT" => file_get_contents("{$emailsContentFolder}/forgot_password_SUBJECT.txt"),
-      "forgot_password_BODY" => file_get_contents("{$emailsContentFolder}/forgot_password_BODY.html"),
+      "forgotten_password_SUBJECT" => file_get_contents("{$emailsContentFolder}/forgot_password_SUBJECT.txt"),
+      "forgotten_password_BODY" => file_get_contents("{$emailsContentFolder}/forgot_password_BODY.html"),
     ];
 
     // nastavenia webu

@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Website;
 
-class WebMenuSave extends \ADIOS\Core\Action {
+class WebMenuSave extends \ADIOS\Core\Widget\Action {
   public function render() {
     $values = @json_decode($this->params['values'], TRUE);
     $items = @json_decode($values['items'], TRUE);

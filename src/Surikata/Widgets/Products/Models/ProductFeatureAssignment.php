@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Products\Models;
 
-class ProductFeatureAssignment extends \ADIOS\Core\Model {
+class ProductFeatureAssignment extends \ADIOS\Core\Widget\Model {
   var $sqlName = "products_features_assignment";
   var $urlBase = "Produkty/{{ id_product }}/Features";
   var $tableTitle = "Product features";
@@ -64,6 +64,7 @@ class ProductFeatureAssignment extends \ADIOS\Core\Model {
   public function tableParams($params) {
     $params["where"] = "{$this->table}.id_product = ".(int) $params['id_product'];
     $params['show_search_button'] = FALSE;
+    $params['show_export_csv_button'] = FALSE;
     $params['show_controls'] = FALSE;
     $params['show_filter'] = FALSE;
     $params['title'] = " ";

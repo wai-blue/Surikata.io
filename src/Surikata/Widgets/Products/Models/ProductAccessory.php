@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Products\Models;
 
-class ProductAccessory extends \ADIOS\Core\Model {
+class ProductAccessory extends \ADIOS\Core\Widget\Model {
   var $sqlName = "products_accessories";
   var $urlBase = "Products/{{ id_product }}/Accessories";
 

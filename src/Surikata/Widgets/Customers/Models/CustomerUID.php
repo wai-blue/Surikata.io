@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
-class CustomerUID extends \ADIOS\Core\Model {
+class CustomerUID extends \ADIOS\Core\Widget\Model {
   var $sqlName = "customers_uid";
   var $urlBase = "Customers/{{ id_customer }}/UID";
   var $tableTitle = "UID klienta";

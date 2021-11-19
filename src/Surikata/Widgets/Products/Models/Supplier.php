@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Products\Models;
 
-class Supplier extends \ADIOS\Core\Model {
+class Supplier extends \ADIOS\Core\Widget\Model {
   var $sqlName = "suppliers";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
   var $urlBase = "Suppliers";

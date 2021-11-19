@@ -2,12 +2,12 @@
 
 namespace ADIOS\Actions\Customers\Categories;
 
-class Strom extends \ADIOS\Core\Action {
-  public function init() {
-    $this->languageDictionary["en"] = [
-      "Kategórie klientov" => "Customer categories",
-    ];
-  }
+class Strom extends \ADIOS\Core\Widget\Action {
+  // public function init() {
+  //   $this->languageDictionary["en"] = [
+  //     "Kategórie klientov" => "Customer categories",
+  //   ];
+  // }
 
   public function render() {
     return $this->adios->ui->Tree([

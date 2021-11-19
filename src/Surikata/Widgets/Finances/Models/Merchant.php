@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Finances\Models;
 
-class Merchant extends \ADIOS\Core\Model {
+class Merchant extends \ADIOS\Core\Widget\Model {
   var $sqlName = "merchants";
   var $lookupSqlValue = "concat({%TABLE%}.company_name)";
   var $urlBase = "Merchants";

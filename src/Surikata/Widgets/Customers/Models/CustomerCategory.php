@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
-class CustomerCategory extends \ADIOS\Core\Model {
+class CustomerCategory extends \ADIOS\Core\Widget\Model {
   var $sqlName = "customers_categories";
   var $lookupSqlValue = "concat({%TABLE%}.name, ' [', {%TABLE%}.code, ']')";
   var $urlBase = "Customers/Categories";
@@ -53,7 +53,7 @@ class CustomerCategory extends \ADIOS\Core\Model {
     ]);
   }
 
-  // public function routing($columns = []) {
+  // public function routing(array $routing = []) {
   //   return parent::routing([
   //     '/^Customers\/Categories\/(\d+)\/Add$/' => [
   //       "action" => "UI/Form",

@@ -2,7 +2,7 @@
 
 namespace ADIOS\Plugins\WAI\Blog\Catalog\Models;
 
-class Blog extends \ADIOS\Core\Model {
+class Blog extends \ADIOS\Core\Plugin\Model {
   var $sqlName = "blogs";
   var $urlBase = "Website/Blog";
   var $lookupSqlValue = "{%TABLE%}.name";

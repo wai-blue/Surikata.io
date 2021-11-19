@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
-class Customer extends \ADIOS\Core\Model {
+class Customer extends \ADIOS\Core\Widget\Model {
   var $sqlName = "customers";
   var $urlBase = "Customers";
   var $lookupSqlValue = "{%TABLE%}.email";
@@ -173,7 +173,7 @@ class Customer extends \ADIOS\Core\Model {
     ]);
   }
 
-  public function routing($columns = []) {
+  public function routing(array $routing = []) {
     return parent::routing([
       '/^Customers\/Categories\/Tree$/' => [
         "action" => "UI/Tree",
@@ -322,7 +322,7 @@ class Customer extends \ADIOS\Core\Model {
   public function formParams($data, $params) {
 
     if ($data['id'] <= 0) {
-      $params['title'] = $this->translate("Nový klient");
+      $params['title'] = $this->translate("New client");
 
       $params["template"] = [
         "columns" => [

@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
-class CustomerWishlist extends \ADIOS\Core\Model {
+class CustomerWishlist extends \ADIOS\Core\Widget\Model {
   var $sqlName = "customers_wishlist";
   var $urlBase = "Customers/{{ id_customer }}/Wishlist";
   var $tableTitle = "Customer wishlist";
@@ -39,7 +39,7 @@ class CustomerWishlist extends \ADIOS\Core\Model {
     ]);
   }
 
-  public function routing($columns = []) {
+  public function routing(array $routing = []) {
     return parent::routing([
       '/^Customers\/(\d+)\/Wishlist$/' => [
         "action" => "UI/Cards",

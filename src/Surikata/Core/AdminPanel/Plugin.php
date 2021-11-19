@@ -5,13 +5,10 @@ namespace Surikata\Core\AdminPanel;
 class Plugin extends \ADIOS\Core\Plugin {
 
   var $niceName = ".";
-
-  public array $languageDictionary;
+  // var $languageDictionary = [];
 
   public function init() {
-    $this->languageDictionary["sk"] =
-      $this->adios->loadLanguageDictionary($this->name, "sk")
-    ;
+    // $this->languageDictionary = $this->adios->loadLanguageDictionary($this);
   }
 
   /**
@@ -23,8 +20,8 @@ class Plugin extends \ADIOS\Core\Plugin {
    * @param  mixed $toLanguage
    * @return void
    */
-  public function translate($string, $context = "", $toLanguage = "") {
-    return $this->adios->translate($string, $context, $toLanguage, $this->languageDictionary);
+  public function translate($string) {
+    return $this->adios->translate($string, $this);
   }
 
   /**

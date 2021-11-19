@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Customers;
 
-class Orders extends \ADIOS\Core\Action {
+class Orders extends \ADIOS\Core\Widget\Action {
   public function render() {
     $orderModel = $this->adios->getModel("Widgets/Orders/Models/Order");
     $customerModel = $this->adios->getModel("Widgets/Customers/Models/Customer");

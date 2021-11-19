@@ -1,44 +1,52 @@
-<html>
-<head>
-  <title>Surikata.io Installer</title>
-  <link rel='shortcut icon' href='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
-  <style>
-    * { font-family: verdana; font-size: 10pt; }
-    body { background: #EEEEEE; }
-    h1 { color: #224abe; font-size: 16pt; }
-    h2 { color: #224abe; font-size: 12pt; }
-
-    table { border: 1px solid #F0F0F0; }
-    table tr:nth-child(even) td { background: #F0F0F0; }
-    table td { padding: 2px; }
-
-    label { display: block; padding: 2px; }
-    label:hover { background: #224abe; color: white; cursor: pointer; }
-
-    .btn { color: #224abe; background: white; cursor: pointer; border: 1px solid #224abe; padding: 1em; margin: 1em 0; }
-    .btn:hover { color: white; background: #224abe; }
-
-    a.btn { display: inline-block; text-decoration: none; }
-
-    .content { width: 820px; margin: auto; background: white; padding: 1em; }
-    .logo { width: 100px; margin: auto; }
-
-    #log {
-      background: #2d2d2d;
-      font-family: courier;
-      color: white;
-      padding: 1em;
-      font-size: 9pt;
-      margin-top: 1em;
-    }
-  </style>
-</head>
-<body>
-  <div class='content'>
-    <img class='logo' src='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
-    <h1>Surikata.io Installer</h1>
-
 <?php
+
+function _echo($msg) {
+  if (php_sapi_name() !== 'cli') {
+    echo $msg;
+  }
+}
+
+_echo("
+  <html>
+  <head>
+    <title>Surikata.io Installer</title>
+    <link rel='shortcut icon' href='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
+    <style>
+      * { font-family: verdana; font-size: 10pt; }
+      body { background: #EEEEEE; }
+      h1 { color: #224abe; font-size: 16pt; }
+      h2 { color: #224abe; font-size: 12pt; }
+
+      table { border: 1px solid #F0F0F0; }
+      table tr:nth-child(even) td { background: #F0F0F0; }
+      table td { padding: 2px; }
+
+      label { display: block; padding: 2px; }
+      label:hover { background: #224abe; color: white; cursor: pointer; }
+
+      .btn { color: #224abe; background: white; cursor: pointer; border: 1px solid #224abe; padding: 1em; margin: 1em 0; }
+      .btn:hover { color: white; background: #224abe; }
+
+      a.btn { display: inline-block; text-decoration: none; }
+
+      .content { width: 820px; margin: auto; background: white; padding: 1em; }
+      .logo { width: 100px; margin: auto; }
+
+      #log {
+        background: #2d2d2d;
+        font-family: courier;
+        color: white;
+        padding: 1em;
+        font-size: 9pt;
+        margin-top: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class='content'>
+      <img class='logo' src='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
+      <h1>Surikata.io Installer</h1>
+");
 
 $installationStart = microtime(TRUE);
 $rewriteBaseIsCorrect = ($_GET['rewrite_base_is_correct'] ?? "") == "1";
@@ -61,10 +69,10 @@ function _loadCsvIntoArray($file, $separator = ',', $enclosure = '#') {
   return $lines;
 }
 
-set_time_limit(60*10);
+set_time_limit(0);
 
-if (!is_file("../vendor/autoload.php")) {
-  echo "
+if (!is_file(__DIR__."/../vendor/autoload.php")) {
+  _echo("
     <div style='color:red'>
       Sorry, it looks like you did not run 'composer install'.<br/>
       <br/>
@@ -74,12 +82,12 @@ if (!is_file("../vendor/autoload.php")) {
         <li>rerun this installer again</li>
       </ul>
     </div>
-  ";
+  ");
   exit();
 }
 
-if (!is_file("../ConfigEnv.php")) {
-  echo "
+if (!is_file(__DIR__."/../ConfigEnv.php")) {
+  _echo("
     <div style='color:red'>
       Sorry, it looks like you do not have your ConfigEnv.php configured.<br/>
       <br/>
@@ -90,14 +98,14 @@ if (!is_file("../ConfigEnv.php")) {
         <li>rerun this installer again</li>
       </ul>
     </div>
-  ";
+  ");
   exit();
 }
 
-require("../Init.php");
+require(__DIR__."/../Init.php");
 
 if (empty(REWRITE_BASE) || empty(DB_LOGIN) || empty(DB_NAME)) {
-  echo "
+  _echo("
     <div style='color:red'>
       Sorry, it looks like you did not configure necessary parameters.<br/>
       <br/>
@@ -109,7 +117,7 @@ if (empty(REWRITE_BASE) || empty(DB_LOGIN) || empty(DB_NAME)) {
         <li>rerun this installer again</li>
       </ul>
     </div>
-  ";
+  ");
   exit();
 }
 
@@ -118,8 +126,8 @@ if (!$rewriteBaseIsCorrect) {
   $expectedRewriteBase = str_replace("install/", "", $expectedRewriteBase);
   $expectedRewriteBase = str_replace("index.php", "", $expectedRewriteBase);
   if (REWRITE_BASE != $expectedRewriteBase) {
-    echo "
-      <div style='color:orange'>{$_SERVER['REQUEST_URI']}
+    _echo("
+      <div style='color:orange'>
         We think that your REWRITE_BASE is not configured properly.<br/>
         <br/>
         REWRITE_BASE that you have configured: <b>".REWRITE_BASE."</b><br/>
@@ -130,12 +138,10 @@ if (!$rewriteBaseIsCorrect) {
         <br/>
         <a href='?rewrite_base_is_correct=1'>REWRITE_BASE is correctly configured, continue with installation</a>
       </div>
-    ";
+    ");
     exit();
   }
 }
-
-session_start();
 
 $availableThemes = [];
 foreach (@scandir(__DIR__."/../src/Themes") as $dir) {
@@ -273,7 +279,7 @@ if (!$doInstall) {
     ";
   }
 
-  echo "
+  _echo("
     <form action='' method='GET'>
       <input type='hidden' name='do_install' value='1' />
       <input type='hidden' name='rewrite_base_is_correct' value='1' />
@@ -383,20 +389,27 @@ if (!$doInstall) {
       <br/>
       <input type='submit' class='btn' value='Hurray! Create Surikata e-shop now.' />
     </form>
-  ";
+  ");
 } else {
 
   try {
+    
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Initialization
 
     $websiteRenderer = new \MyEcommerceProject\Web($websiteRendererConfig);
     $adminPanel = new \MyEcommerceProject\AdminPanel($adminPanelConfig, ADIOS_MODE_FULL, $websiteRenderer);
+    $adminPanel->console->cliEchoEnabled = TRUE;
+
+    $adminPanel->console->info("Installation started.");
+
+    $adminPanel->createMissingFolders();
 
     $adminPanel->install();
     $adminPanel->installDefaultUsers();
-    $adminPanel->createMissingFolders();
+
+    $adminPanel->console->info("Default users created.");
 
     $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($adminPanel);
     $customerCategoryModel = new \ADIOS\Widgets\Customers\Models\CustomerCategory($adminPanel);
@@ -466,6 +479,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
     file_put_contents(__DIR__."/../ConfigEnvDomains.php", $configEnvDomainsPHP);
 
+    $adminPanel->console->info("ConfigEnvDomains.php created.");
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // PART: delivery and payment services
@@ -566,6 +580,8 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       $shipmentPriceModel->insertRow(["id" => 7, "id_shipment" => 7, "name" => "41", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 1000, "delivery_fee_calculation_method" => 1, "delivery_fee" => 3.35]);
       $shipmentPriceModel->insertRow(["id" => 8, "id_shipment" => 8, "name" => "42", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 1000, "delivery_fee_calculation_method" => 1, "delivery_fee" => 3.99]);
+
+      $adminPanel->console->info("Delivery and payment services installed.");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -787,6 +803,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       $adminPanel->db->commit();
 
+      $adminPanel->console->info("Product catalog installed.");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -861,6 +878,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
         $cnt++;
       }
 
+      $adminPanel->console->info("Customers installed.");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -945,6 +963,8 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
         }
 
       }
+
+      $adminPanel->console->info("Orders installed.");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -966,14 +986,16 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
     $wsg->installPluginsOnce();
 
+    $adminPanel->console->info("Website content installed.");
+
 
   } catch (\Exception $e) {
-    echo "
+    _echo("
       <h2 style='color:red'>Error</h2>
       <div style='color:red'>
         ".get_class($e).": ".$e->getMessage()."
       </div>
-    ";
+    ");
     var_dump($e->getTrace());
     $adminPanel->console->error(get_class($e).": ".$e->getMessage());
   }
@@ -983,15 +1005,15 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
   $errors = $adminPanel->console->getErrors();
 
   if (count($errors) > 0) {
-    echo "
+    _echo("
       <h2 style='color:red'>Awgh!</h2>
       <div style='color:red;margin-bottom:1em'>
         ✕ Some errors occured during the installation.
       </div>
       <div style='color:red'>".$adminPanel->console->convertLogsToHtml($errors)."</div>
-    ";
+    ");
   } else {
-    echo "
+    _echo("
       <h2>Done in ".round((microtime(true) - $installationStart), 2)." seconds.</h2>
       <div style='color:green;margin-bottom:1em'>
         ✓ Congratulations. You have successfuly installed your eCommerce project.
@@ -1019,10 +1041,10 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       <a href='../admin' class='btn' target=_blank>Open administration panel</a><br/>
       Login: administrator<br/>
       Password: administrator<br/>
-    ";
+    ");
   }
 
-  echo "
+  _echo("
     <br/>
     <h2>Installation log</h2>
     <a
@@ -1033,11 +1055,12 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       '
     >Show installation log</a>
     <div id='log' style='display:none'>".$adminPanel->console->convertLogsToHtml($infos, TRUE)."</div>
-  ";
+  ");
 
 }
 
-?>
-  </div>
-</body>
-</html>
+_echo("
+    </div>
+  </body>
+  </html>
+");

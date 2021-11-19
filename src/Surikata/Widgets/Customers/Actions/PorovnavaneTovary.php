@@ -2,13 +2,13 @@
 
 namespace ADIOS\Actions\Customers;
 
-class PorovnavaneProdukty extends \ADIOS\Core\Action {
-  public function init() {
-    $this->languageDictionary["en"] = [
-      "Klient" => "Customer",
-      "Porovnávané produkty" => "Compared products",
-    ];
-  }
+class PorovnavaneProdukty extends \ADIOS\Core\Widget\Action {
+  // public function init() {
+  //   $this->languageDictionary["en"] = [
+  //     "Klient" => "Customer",
+  //     "Porovnávané produkty" => "Compared products",
+  //   ];
+  // }
 
   public function render() {
     $customerModel = $this->adios->getModel("Widgets/Customers/Models/Customer");

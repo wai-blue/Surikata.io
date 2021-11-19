@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
-class ShoppingCart extends \ADIOS\Core\Model {
+class ShoppingCart extends \ADIOS\Core\Widget\Model {
   var $sqlName = "shopping_carts";
   var $urlBase = "Customers/ShoppingCarts";
   var $tableTitle = "Shopping carts";
@@ -66,6 +66,10 @@ class ShoppingCart extends \ADIOS\Core\Model {
     $params["show_add_button"] = FALSE;
 
     return $params;
+  }
+
+  public function product() {
+    return $this->hasOne(\ADIOS\Widgets\Products\Models\Product::class, 'id_product');
   }
 
   public function getOrCreateCartForCustomerUID($customerUID) {
@@ -163,7 +167,7 @@ class ShoppingCart extends \ADIOS\Core\Model {
       ]);
     }
 
-    return $item->get()->first()->toArray();
+    return $item->with('product')->get()->first()->toArray();
   }
 
   public function updateProductQty($customerUID, $idProduct, $qty) {

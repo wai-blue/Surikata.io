@@ -37,7 +37,7 @@ class Overview extends \ADIOS\Core\Widget\Action {
     }
 
     $cardsHtml = "";
-    foreach ([...$pluginsWithLogo, ...$pluginsWithoutLogo] as $pluginName) {
+    foreach (array_merge($pluginsWithLogo, $pluginsWithoutLogo) as $pluginName) {
       $pluginsFound++;
 
       $mainActionExists = $this->adios->actionExists("Plugins/{$pluginName}/Main");

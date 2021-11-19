@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
-class CustomerProductDisplayed extends \ADIOS\Core\Model {
+class CustomerProductDisplayed extends \ADIOS\Core\Widget\Model {
   var $sqlName = "customers_products_displayed";
   var $tableTitle = "Produkty navštívené klientom";
   var $formTitleForInserting = "Nový produkt navštívený klientom";

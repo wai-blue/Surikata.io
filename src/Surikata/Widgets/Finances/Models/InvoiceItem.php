@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Finances\Models;
 
-class InvoiceItem extends \ADIOS\Core\Model {
+class InvoiceItem extends \ADIOS\Core\Widget\Model {
   var $sqlName = "invoices_items";
   var $urlBase = "Invoices/{{ id_invoice }}/Items";
 

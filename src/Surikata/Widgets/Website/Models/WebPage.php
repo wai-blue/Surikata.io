@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Website\Models;
 
-class WebPage extends \ADIOS\Core\Model {
+class WebPage extends \ADIOS\Core\Widget\Model {
   const WEBPAGE_VISIBILITY_PUBLIC  = 0;
   const WEBPAGE_VISIBILITY_PRIVATE = 1;
 

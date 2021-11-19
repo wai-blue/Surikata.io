@@ -4,7 +4,7 @@ namespace ADIOS\Widgets\Orders\Models;
 
 use ADIOS\Core\Models\User;
 
-class OrderHistory extends \ADIOS\Core\Model {
+class OrderHistory extends \ADIOS\Core\Widget\Model {
   var $sqlName = "orders_history";
 
   public function columns(array $columns = []) {

@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Customers;
 
-class Invoices extends \ADIOS\Core\Action {
+class Invoices extends \ADIOS\Core\Widget\Action {
   public function render() {
     $customerModel = $this->adios->getModel("Widgets/Customers/Models/Customer");
     $invoiceModel = $this->adios->getModel("Widgets/Finances/Models/Invoice");

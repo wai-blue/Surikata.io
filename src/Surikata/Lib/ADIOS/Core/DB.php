@@ -198,7 +198,7 @@ class DB {
      * @see query
      * @see fetch_array
      */
-    public function multi_query($query, $separator = ";;\n", $initiatingModel = NULL) {
+    public function multiQuery($query, $separator = ";;\n", $initiatingModel = NULL) {
       $query = str_replace("\r\n", "\n", $query);
       foreach (explode($separator, $query) as $value) {
         $this->query(trim($value).';', $initiatingModel);
@@ -557,7 +557,7 @@ class DB {
             if ($only_sql_command) {
                 return $sql;
             } else {
-                $this->multi_query($sql);
+                $this->multiQuery($sql);
             }
 
         }
@@ -591,7 +591,7 @@ class DB {
       }
 
       if (!empty($sql)) {
-        $this->multi_query($sql);
+        $this->multiQuery($sql);
       }
     }
 
@@ -754,7 +754,7 @@ class DB {
       if ($only_sql_command) {
         return $sql."\n";
       } else {
-        $this->multi_query($sql, ";;\n", $initiatingModel);
+        $this->multiQuery($sql, ";;\n", $initiatingModel);
         $inserted_id = $this->insert_id();
 
         return $inserted_id;

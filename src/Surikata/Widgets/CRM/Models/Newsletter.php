@@ -5,7 +5,7 @@ namespace ADIOS\Widgets\CRM\Models;
 use ADIOS\Widgets\CRM\Exceptions\AlreadyRegisteredForNewsletter;
 use ADIOS\Widgets\CRM\Exceptions\EmailIsInvalid;
 
-class Newsletter extends \ADIOS\Core\Model {
+class Newsletter extends \ADIOS\Core\Widget\Model {
   var $sqlName = "newsletter";
   var $urlBase = "CRM/Newsletter";
 

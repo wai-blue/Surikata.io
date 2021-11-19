@@ -73,9 +73,7 @@ class FileBrowser extends \ADIOS\Core\Input {
   }
 
   public function render() {
-    $this->languageDictionary[$this->adios->config["language"]] =
-      $this->adios->loadLanguageDictionary(get_class($this))
-    ;
+    // $this->languageDictionary = $this->adios->loadLanguageDictionary($this);
 
     // $params = $this->params;
     $mode = $this->params["mode"] ?? self::MODE_BROWSE;

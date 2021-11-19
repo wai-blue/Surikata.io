@@ -114,11 +114,11 @@ class Loader {
       "urlVariables" => $this->urlVariables ?? [],
       "template" => $this->template ?? "",
       "cascadaInitJS" => "
-          <script>
-              Cascada = {
-                  'rootUrl': '{$this->rootUrl}',
-              }
-          </script>
+        <script>
+          Cascada = {
+            'rootUrl': '{$this->rootUrl}',
+          }
+        </script>
       ",
       "_GET" => $_GET,
       "_POST" => $_POST,

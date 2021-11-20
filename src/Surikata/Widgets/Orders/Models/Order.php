@@ -596,11 +596,12 @@ class Order extends \ADIOS\Core\Widget\Model {
 
     if (!empty($orderData['voucher'])) {
       $voucherPlugin = new \Surikata\Plugins\WAI\Proprietary\Checkout\Vouchers($this->websiteRenderer);
-      $voucher = $voucherPlugin->checkVoucher($orderData['voucher'], $cartContents['summary']);
+      $voucher = $voucherPlugin->checkVoucher($cartContents);
 
       if (!empty($voucher["error"])) {
         throw new \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Exceptions\VoucherIsNotValid;
       } else {
+        $voucherPlugin->unsetVoucherSession();
         $this->adios->getModel('Plugins/WAI/Proprietary/Checkout/Vouchers/Models/Voucher')
           ->where('id', $voucher['id'])
           ->update([

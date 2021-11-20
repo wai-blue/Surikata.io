@@ -119,13 +119,6 @@ namespace Surikata\Plugins\WAI\Order {
         $deliveryServices =
           $this->getActualDeliveryPrice($deliveryServices, $orderData["id_delivery_service"], $selectedPaymentMethod)
         ;
-
-        $voucherDiscount = 0;
-
-        if (!empty($orderData['voucher'])) {
-          $voucherPlugin = new \Surikata\Plugins\WAI\Proprietary\Checkout\Vouchers($this->websiteRenderer);
-          $voucher = $voucherPlugin->checkVoucher($orderData['voucher'], $this->cartContents["summary"]);
-        }
       } else {
         $this->selectedDestinationCountryId = reset($this->destinationCountries)['id'];
         $deliveryServices = $this->getDeliveryServices();
@@ -150,7 +143,9 @@ namespace Surikata\Plugins\WAI\Order {
       );
 
       $twigParams['totalPriceWithDelivery'] = 
-        floatval($this->cartContents["summary"]["priceInclVAT"]) - floatval($voucher['discount']) + floatval($twigParams['deliveryPrice']);
+        floatval($this->cartContents["summary"]["priceInclVAT"]) 
+        - (new \Surikata\Plugins\WAI\Proprietary\Checkout\Vouchers($this->websiteRenderer))->getVoucherDiscount()
+        + floatval($twigParams['deliveryPrice']);
       ;
 
       $twigParams['cartContents'] = $this->cartContents;
@@ -162,7 +157,6 @@ namespace Surikata\Plugins\WAI\Order {
       $twigParams["selectedDeliveryService"] = $selectedDeliveryService;
       $twigParams["selectedPaymentMethod"] = $selectedPaymentMethod;
       $twigParams["selectedDestinationCountryId"] = $this->selectedDestinationCountryId;
-      $twigParams['voucher'] = $voucher;
 
       return $twigParams;
     }

@@ -199,7 +199,7 @@ class PluginWAICommonCustomerCartDOMClass extends PluginWAICustomerCartAPIClass 
           let emptyFields = dataFail.error.split(',');
   
           $('html, body').animate({
-            scrollTop: $('#orderDataForm input[name=' + emptyFields[0] + ']').offset().top
+            scrollTop: $('#orderDataForm input[name=' + emptyFields[0] + ']').offset().top - 100
           }, 500);
   
           for (var i in emptyFields) {

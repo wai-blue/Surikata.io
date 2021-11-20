@@ -2,7 +2,11 @@
 
 namespace Surikata\Plugins\WAI\Product {
 
-    use ADIOS\Widgets\Products\Models\ProductFeature;
+  use ADIOS\Plugins\WAI\Proprietary\Product\Variations\Models\ProductVariation;
+  use ADIOS\Plugins\WAI\Proprietary\Product\Variations\Models\ProductVariationAttribute;
+  use ADIOS\Plugins\WAI\Proprietary\Product\Variations\Models\ProductVariationGroupAttribute;
+  use ADIOS\Plugins\WAI\Proprietary\Product\Variations\Models\ProductVariationValue;
+  use ADIOS\Widgets\Products\Models\ProductFeature;
     use ADIOS\Widgets\Products\Models\Service;
   class Detail extends \Surikata\Core\Web\Plugin {
     var $productInfo = NULL;
@@ -88,6 +92,31 @@ namespace Surikata\Plugins\WAI\Product {
             \ADIOS\Core\HelperFunctions::str2url($value['TRANSLATIONS']['name'])
             .".pid.{$value['id']}"
           ;
+        }
+
+        if (
+          isset($this->productInfo["VARIATIONS"]["group_uid"])
+          && $this->productInfo["VARIATIONS"]["group_uid"] > 0
+        ) {
+          // get variations available attributes
+          $attributeModel = new ProductVariationAttribute($this->adminPanel);
+          $groupAttributeModel = new ProductVariationGroupAttribute($this->adminPanel);
+          $attributeValuesModel = new ProductVariationValue($this->adminPanel);
+          $variationModel = new ProductVariation($this->adminPanel);
+          $attributeIds = $groupAttributeModel->getByGroupUid($this->productInfo["VARIATIONS"]["group_uid"]);
+          $allValues = $attributeValuesModel->getQuery()->select("*")->get()->keyBy("id")->toArray();
+
+          foreach ($attributeIds as $id) {
+            $this->productInfo["VARIATIONS"]["availableAttributes"][] = $attributeModel->getById($id);
+          }
+
+          $variationQuery = $variationModel->getQuery()->select("*");
+          $variationQuery = $variationQuery->where("group_uid", "=", $this->productInfo["VARIATIONS"]["group_uid"]);
+          $availableVariations = $variationQuery->get()->toArray();
+          foreach ($availableVariations as $variation) {
+            $variation["value"] = $allValues[$variation["id_value"]];
+            $this->productInfo["VARIATIONS"]["availableVariations"][$variation["id_attribute"]][] = $variation;
+          }
         }
 
         $this->productInfo['breadcrumbs'] = $productCategoryModel

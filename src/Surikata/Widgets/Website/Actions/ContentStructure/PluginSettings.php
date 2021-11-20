@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Website\ContentStructure;
 
-class PluginSettings extends \ADIOS\Core\Action {
+class PluginSettings extends \ADIOS\Core\Widget\Action {
   public function render() {
     $contentStructure = @json_decode($this->params['contentStructure'], TRUE);
     $themeName = $this->adios->config['settings']['web'][$this->params['domain']]['design']['theme'];
@@ -74,7 +74,7 @@ class PluginSettings extends \ADIOS\Core\Action {
 
         $settingsItems = [];
         foreach ($availableSettings as $settingName => $inputParams) {
-          $inputParams["uid"] = "{$tmpInputUIDPrefix}_".\ADIOS\Core\HelperFunctions::str2uid($settingName);
+          $inputParams["uid"] = "{$tmpInputUIDPrefix}_{$settingName}";
           $inputParams["value"] = $pluginSettings[$settingName];
 
           if (empty($inputParams["input"])) {
@@ -136,7 +136,7 @@ class PluginSettings extends \ADIOS\Core\Action {
               '{$this->uid}_' + pluginUID + '_',
             );
           }
-          
+
           {$this->uid}_close(data);
         }
 

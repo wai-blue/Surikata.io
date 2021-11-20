@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Website;
 
-class Emails extends \ADIOS\Core\Action {
+class Emails extends \ADIOS\Core\Widget\Action {
   public function render() {
     $settings = $this->adios->config["settings"]["web"][$this->params['domainName']]["emails"];
 

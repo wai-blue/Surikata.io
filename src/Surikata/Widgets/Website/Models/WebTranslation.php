@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Website\Models;
 
-class WebTranslation extends \ADIOS\Core\Model {
+class WebTranslation extends \ADIOS\Core\Widget\Model {
   var $sqlName = "web_translations";
   var $urlBase = "Website/{{ domainName }}/Translations";
 

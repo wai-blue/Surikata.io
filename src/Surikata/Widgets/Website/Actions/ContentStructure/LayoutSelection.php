@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Website\ContentStructure;
 
-class LayoutSelection extends \ADIOS\Core\Action {
+class LayoutSelection extends \ADIOS\Core\Widget\Action {
   public function render() {
 
     $contentStructure = @json_decode($this->params['contentStructure'], TRUE);

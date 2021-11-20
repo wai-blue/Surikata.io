@@ -4,7 +4,7 @@ namespace ADIOS\Actions\Orders;
 
 use ADIOS\Widgets\Orders\Models\Order;
 
-class PlaceOrder extends \ADIOS\Core\Action {
+class PlaceOrder extends \ADIOS\Core\Widget\Action {
   public function render() {
 
     $values = json_decode($this->params["values"] ?? "", true);

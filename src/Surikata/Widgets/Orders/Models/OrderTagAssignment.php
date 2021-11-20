@@ -3,7 +3,7 @@
 namespace ADIOS\Widgets\Orders\Models;
 
 
-class OrderTagAssignment extends \ADIOS\Core\Model {
+class OrderTagAssignment extends \ADIOS\Core\Widget\Model {
   var $sqlName = "orders_tags_assignment";
 
   public function columns(array $columns = []) {

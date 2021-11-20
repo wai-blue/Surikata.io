@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Products\Models;
 
-class Brand extends \ADIOS\Core\Model {
+class Brand extends \ADIOS\Core\Widget\Model {
   var $sqlName = "brands";
   var $lookupSqlValue = "concat({%TABLE%}.name)";
   var $urlBase = "Brands";

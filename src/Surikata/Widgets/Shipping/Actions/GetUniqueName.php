@@ -1,7 +1,7 @@
 <?php
 namespace ADIOS\Actions\Shipping;
 
-class GetUniqueName extends \ADIOS\Core\Action {
+class GetUniqueName extends \ADIOS\Core\Widget\Action {
   public function render() {
 
     if ((int)$this->params['shipmentId'] != 0) {

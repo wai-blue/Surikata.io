@@ -63,5 +63,17 @@ $dictionary = [
   "Shipped orders" => "Doručené objednávky",
   "Canceled orders" => "Zrušené objednávky",
   "Issue invoice" => "Vystaviť faktúru",
+  "Total discount in %" => "Zľava v %",
+  "Price excl. VAT with discount" => "Cena so zľavou bez DPH",
+  "Price incl. VAT with discount" => "Cena so zľavou s DPH",
+  "Discount" => "Zľava",
   "Tags" => "Tagy",
+  "Paid" => "Zaplatená",
+  "Order is paid" => "Objednávka je zaplatená",
+  "You are about to set an order as paid. Continue?" => "Chystáte sa nastaviť objednávku ako zaplatená. Chcete pokračovať?",
+  "Yes, set as paid" => "Áno, nastaviť ako zaplatená",
+  "Do not set as paid" => "Nie, nenastaviť",
+  "You are about to set an order as unpaid. Continue?" => "Chystáte sa nastaviť objednávku ako nezaplatená. Chcete pokračovať?",
+  "Yes, set as unpaid" => "Áno, nastaviť ako nezaplatená",
+  "Do not set as unpaid" => "Nie, nenastaviť"
 ];

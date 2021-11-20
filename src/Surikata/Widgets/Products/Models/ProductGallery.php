@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Products\Models;
 
-class ProductGallery extends \ADIOS\Core\Model {
+class ProductGallery extends \ADIOS\Core\Widget\Model {
   var $sqlName = "products_gallery";
   var $urlBase = "Products/{{ id_product }}/Gallery";
   var $tableTitle = "Product gallery";

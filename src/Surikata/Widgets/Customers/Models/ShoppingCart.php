@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
-class ShoppingCart extends \ADIOS\Core\Model {
+class ShoppingCart extends \ADIOS\Core\Widget\Model {
   var $sqlName = "shopping_carts";
   var $urlBase = "Customers/ShoppingCarts";
   var $tableTitle = "Shopping carts";

@@ -36,8 +36,9 @@ define('CONTROLLERS_DIR', __DIR__."/src/Controllers");
 define('LOG_DIR', __DIR__."/log");
 define('DATA_DIR', __DIR__."/data");
 define('PROP_DIR', __DIR__."/prop");
+define('CACHE_DIR', __DIR__."/cache");
 
-define('TWIG_CACHE_DIR', FALSE); // disable cache
+define('TWIG_CACHE_DIR', $configEnv["twigCacheDir"] ?? FALSE); // disable cache
 
 
 // External libs
@@ -123,6 +124,8 @@ $websiteRendererConfig = [
   "domainToRender" => defined("WEBSITE_DOMAIN_TO_RENDER") ? WEBSITE_DOMAIN_TO_RENDER : "",
   "minifyOutputHtml" => $configEnv['minifyOutputHtml'] ?? FALSE,
   "validateOutputHtml" => $configEnv['validateOutputHtml'] ?? FALSE,
+
+  "assetCacheDir" => CACHE_DIR,
 
   "rewriteBase" => defined("WEBSITE_REWRITE_BASE") ? WEBSITE_REWRITE_BASE : "/",
   "twigCacheDir" => TWIG_CACHE_DIR,

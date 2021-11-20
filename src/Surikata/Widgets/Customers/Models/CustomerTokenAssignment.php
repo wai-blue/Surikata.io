@@ -4,7 +4,7 @@ namespace ADIOS\Widgets\Customers\Models;
 
 use ADIOS\Core\Models\Token;
 
-class CustomerTokenAssignment extends \ADIOS\Core\Model {
+class CustomerTokenAssignment extends \ADIOS\Core\Widget\Model {
   const TOKEN_TYPE_ACCOUNT_VALIDATION = 15901;
   const TOKEN_TYPE_ACCOUNT_CONFIRMATION = 15902;
   const TOKEN_TYPE_FORGOT_PASSWORD = 4844;

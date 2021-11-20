@@ -2,7 +2,7 @@
 
 namespace ADIOS\Plugins\WAI\Delivery\DPD\Models;
 
-class DPDVydajneMiesto extends \ADIOS\Core\Model {
+class DPDVydajneMiesto extends \ADIOS\Core\Plugin\Model {
   var $sqlName = "dpd_vydajne_miesta";
   var $urlBase = "DPD/VydajneMiesta";
   var $tableTitle = "DPD Výdajné miesta";

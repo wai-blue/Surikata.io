@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\Maintenance;
 
-class LogViewer extends \ADIOS\Core\Action {
+class LogViewer extends \ADIOS\Core\Widget\Action {
   public function preRender() {
     $logSeverity = $this->params['severity'];
     if (!in_array($logSeverity, ["info", "warning", "error"])) {

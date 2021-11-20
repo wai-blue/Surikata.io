@@ -2,7 +2,7 @@
 
 namespace ADIOS\Actions\HelpAndSupport;
 
-class ContactForm extends \ADIOS\Core\Action {
+class ContactForm extends \ADIOS\Core\Widget\Action {
   public function render() {
     $uid = $this->params['uid'];
 

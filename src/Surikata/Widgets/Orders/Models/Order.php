@@ -8,10 +8,9 @@ use ADIOS\Widgets\CRM\Models\Newsletter;
 class Order extends \ADIOS\Core\Widget\Model {
   const STATE_NEW      = 1;
   const STATE_INVOICED = 2;
-  const STATE_PAID     = 3;
-  const STATE_SHIPPED  = 4;
-  const STATE_RECEIVED = 5;
-  const STATE_CANCELED = 6;
+  const STATE_SHIPPED  = 3;
+  const STATE_RECEIVED = 4;
+  const STATE_CANCELED = 5;
 
   var $sqlName = "orders";
   var $lookupSqlValue = "{%TABLE%}.number";
@@ -30,7 +29,6 @@ class Order extends \ADIOS\Core\Widget\Model {
     $this->enumOrderStates = [
       self::STATE_NEW      => $this->translate('New'),
       self::STATE_INVOICED => $this->translate('Invoiced'),
-      self::STATE_PAID     => $this->translate('Paid'),
       self::STATE_SHIPPED  => $this->translate('Shipped'),
       self::STATE_RECEIVED => $this->translate('Received'),
       self::STATE_CANCELED => $this->translate('Canceled'),
@@ -39,7 +37,6 @@ class Order extends \ADIOS\Core\Widget\Model {
     $this->enumOrderStateColors = [
       self::STATE_NEW      => '#0000FF',     //blue
       self::STATE_INVOICED => '#FFA500',     //orange
-      self::STATE_PAID     => '#008000',     //green
       self::STATE_SHIPPED  => '#800080',     //purple
       self::STATE_RECEIVED => '#D3D3D3',     //light-gray
       self::STATE_CANCELED => '#808080',     //gray
@@ -304,6 +301,12 @@ class Order extends \ADIOS\Core\Widget\Model {
         "show_column" => TRUE,
       ],
 
+      "discount" => [
+        "type" => "float",
+        "title" => $this->translate("Total discount in %"),
+        "show_column" => TRUE,
+      ],
+
       "price_total_excl_vat" => [
         "type" => "float",
         "title" => $this->translate("Total price excl. VAT"),
@@ -332,8 +335,14 @@ class Order extends \ADIOS\Core\Widget\Model {
         "type" => "lookup",
         "title" => $this->translate("Voucher"),
         "model" => "Plugins/WAI/Proprietary/Checkout/Vouchers/Models/Voucher",
-      ]
+      ],
       
+      "is_paid" => [
+        "type" => "boolean",
+        "title" => $this->translate("Paid"),
+        "show_column" => true
+      ],
+
     ]);
   }
 
@@ -356,7 +365,7 @@ class Order extends \ADIOS\Core\Widget\Model {
 
   public function routing(array $routing = []) {
     return parent::routing([
-      '/^Orders\/([New|Invoiced|Paid|Shipped|Canceled]+)$/' => [
+      '/^Orders\/([New|Invoiced|Paid|Unpaid|Shipped|Canceled]+)$/' => [
         "action" => "UI/Table",
         "params" => [
           "model" => "Widgets/Orders/Models/Order",
@@ -393,10 +402,6 @@ class Order extends \ADIOS\Core\Widget\Model {
         $params["title"] =  $this->translate("Invoiced orders");
         $params['where'] = "{$this->table}.state = (".self::STATE_INVOICED.")";
       break;
-      case "Paid":
-        $params["title"] =  $this->translate("Paid orders");
-        $params['where'] = "{$this->table}.state = (".self::STATE_PAID.")";
-      break;
       case "Shipped":
         $params["title"] =  $this->translate("Shipped orders");
         $params['where'] = "{$this->table}.state = (".self::STATE_SHIPPED.")";
@@ -404,6 +409,14 @@ class Order extends \ADIOS\Core\Widget\Model {
       case "Canceled":
         $params["title"] =  $this->translate("Canceled orders");
         $params['where'] = "{$this->table}.state = (".self::STATE_CANCELED.")";
+      break;
+      case "Paid":
+        $params["title"] =  $this->translate("Paid orders");
+        $params['where'] = "{$this->table}.is_paid = 1";
+      break;
+      case "Unpaid":
+        $params["title"] =  $this->translate("Unpaid orders");
+        $params['where'] = "{$this->table}.is_paid = 0";
       break;
       default:
         $params["title"] = $this->translate("All orders");
@@ -416,7 +429,7 @@ class Order extends \ADIOS\Core\Widget\Model {
 
   public function onBeforeSave($data) {
 
-    $tagNames = json_decode($data["tags"], TRUE);
+    $tagNames = $data["tags"] == "" ? [] : json_decode($data["tags"], TRUE);
 
     if (count($tagNames) > 0) {
       $tagIds = [];
@@ -712,6 +725,14 @@ class Order extends \ADIOS\Core\Widget\Model {
     $placedOrderData["payment_fee"] = $fees["paymentFee"];
 
     $summary = $this->calculateSummaryInfo($placedOrderData);
+
+    $placedOrderData = $this->adios->dispatchEventToPlugins("onOrderAfterPlaceOrder", [
+      "model" => $this,
+      "order" => $placedOrderData,
+    ])["order"];
+
+    $summary = $placedOrderData["SUMMARY"];
+
     $this->updateSummaryInfo($idOrder, $summary);
 
     $this->sendNotificationForPlacedOrder($placedOrderData);
@@ -843,6 +864,22 @@ class Order extends \ADIOS\Core\Widget\Model {
 
   }
 
+  public function setPaidValue(int $idOrder, bool $isPaid = false, bool $isCron = false) {
+    $update = $this->updateRow(["is_paid" => $isPaid], $idOrder);
+  
+    $idUser = $isCron ? 0 : $this->adios->userProfile['id'];
+    (new \ADIOS\Widgets\Orders\Models\OrderHistory($this->adios))
+      ->insertRow([
+        "id_order" => $idOrder,
+        "is_paid" => $isPaid,
+        "event_time" => "SQL:now()",
+        "user" => $idUser,
+      ])
+    ;
+
+    return $update;
+  }
+
   public function addItem($idOrder, $item) {
     $item["id_order"] = $idOrder;
     return (new \ADIOS\Widgets\Orders\Models\OrderItem($this->adios))
@@ -928,23 +965,59 @@ class Order extends \ADIOS\Core\Widget\Model {
         "style" => "border-left: 10px solid {$this->enumOrderStateColors[self::STATE_INVOICED]}",
       ])->render();
 
-      $btnOrderStatePaid = $this->adios->ui->button([
+      $btnOrderPaid = (int)$data['is_paid'] == 0 ? $this->adios->ui->button([
         "text" => $this->translate("Set as paid"),
         "onclick" => "
-          let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
-          _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_PAID."', function(res) {
-            if (isNaN(res)) {
-              alert(res);
+          var tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
+          _confirm(
+            '".$this->translate('You are about to set an order as paid. Continue?')."',
+            {
+              'content_class': 'border-left-success',
+              'confirm_button_class': 'btn-success',
+              'confirm_button_text': '".$this->translate('Yes, set as paid')."',
+              'cancel_button_text': '".$this->translate('Do not set as paid')."',
+            },
+            function() { 
+              _ajax_read('Orders/SetAsPaid', 'id_order=".(int) $data['id']."', function(res) {
+                if (isNaN(res)) {
+                  alert(res);
+                }
+                else {
+                  window_refresh(tmp_form_id + '_form_window');
+                }
+              });
             }
-            else {
-              // refresh order window
-              window_refresh(tmp_form_id + '_form_window');
-            }
-          });
+          );
         ",
         "class" => "btn-light mb-2 w-100",
-        "style" => "border-left: 10px solid {$this->enumOrderStateColors[self::STATE_PAID]}",
-      ])->render();
+        "style" => "border: 2px solid #f53d3d;border-radius:2px;background:#ffd9d9",
+      ])->render() : $this->adios->ui->button([
+        "text" => $this->translate("Order is paid"),
+        "class" => "btn-light mb-2 w-100",
+        "style" => "border: 2px solid #11cf56;border-radius:2px;background:#8fffb8",
+        "onclick" => "
+          var tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
+          _confirm(
+            '".$this->translate('You are about to set an order as unpaid. Continue?')."',
+            {
+              'content_class': 'border-left-danger',
+              'confirm_button_class': 'btn-danger',
+              'confirm_button_text': '".$this->translate('Yes, set as unpaid')."',
+              'cancel_button_text': '".$this->translate('Do not set as unpaid')."',
+            },
+            function() { 
+              _ajax_read('Orders/SetAsUnpaid', 'id_order=".(int) $data['id']."', function(res) {
+                if (isNaN(res)) {
+                  alert(res);
+                }
+                else {
+                  window_refresh(tmp_form_id + '_form_window');
+                }
+              });
+            }
+          );
+        "
+      ])->render(); 
 
       $btnOrderStateShipped = $this->adios->ui->button([
         "text" =>  $this->translate("Set as shipped"),
@@ -990,6 +1063,33 @@ class Order extends \ADIOS\Core\Widget\Model {
         ."<div style='margin-left:30px;display:inline-block'>{$tagsHtml}</div>"
       ;
 
+      echo "<pre>";
+      print_r($data);
+      echo "</pre>";
+      $sidebarHtmlDiscount = "";
+      if ((float)$data["discount"] > 0) {
+        // Show price with discount
+        $sidebarHtmlDiscount = "
+          <tr>
+            <td>
+              ".$this->translate('Price excl. VAT with discount')."
+            </td>
+            <td class='text-right'>
+              ".number_format(($data['price_total_excl_vat'] * ((100 - $data["discount"]) / 100)), 2, ",", " ")."
+              ".$this->adios->locale->currencySymbol()."
+            </td>
+          </tr>
+          <tr>
+            <td>
+              ".$this->translate('Price incl. VAT with discount')."
+            </td>
+            <td class='text-right'>
+              ".number_format(($data['price_total_incl_vat'] * ((100 - $data["discount"]) / 100)), 2, ",", " ")."
+              ".$this->adios->locale->currencySymbol()."
+            </td>
+          </tr>
+        ";
+      }
       $sidebarHtml = $this->adios->dispatchEventToPlugins("onOrderDetailBeforeSidebarButtons", [
         "model" => $this,
         "params" => $params,
@@ -1008,9 +1108,9 @@ class Order extends \ADIOS\Core\Widget\Model {
             </span>
           </div>
           <div class='card-body'>
-            {$btnOrderStatePaid}
             {$btnOrderStateShipped}
             {$btnOrderStateCanceled}
+            {$btnOrderPaid}
           </div>
         </div>
         <div class='card shadow mb-2'>
@@ -1036,6 +1136,25 @@ class Order extends \ADIOS\Core\Widget\Model {
                     </td>
                     <td class='text-right'>
                       ".number_format($data['price_total_incl_vat'], 2, ",", " ")."
+                      ".$this->adios->locale->currencySymbol()."
+                    </td>
+                  </tr>
+                  ".$sidebarHtmlDiscount."
+                  <tr>
+                    <td>
+                      ".$this->translate('Delivery Fee')."
+                    </td>
+                    <td class='text-right'>
+                      ".number_format($data['delivery_fee'], 2, ",", " ")."
+                      ".$this->adios->locale->currencySymbol()."
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      ".$this->translate('Payment Fee')."
+                    </td>
+                    <td class='text-right'>
+                      ".number_format($data['payment_fee'], 2, ",", " ")."
                       ".$this->adios->locale->currencySymbol()."
                     </td>
                   </tr>
@@ -1079,6 +1198,7 @@ class Order extends \ADIOS\Core\Widget\Model {
                 "email",
                 "confirmation_time",
                 "number_customer",
+                "discount",
                 "notes",
                 "domain",
                 [
@@ -1341,6 +1461,7 @@ class Order extends \ADIOS\Core\Widget\Model {
     $order = $this->getById($idOrder);
 
     $invoiceItems = [];
+    $invoicesVats = [];
     foreach ($order['ITEMS'] as $item) {
       $invoiceItems[] = [
         "item" => $item["product_number"]." ".$item["product_name"],
@@ -1349,6 +1470,11 @@ class Order extends \ADIOS\Core\Widget\Model {
         "unit_price" => $item["unit_price"],
         "vat_percent" => $item["vat_percent"],
       ];
+      if (array_key_exists($item["vat_percent"], $invoicesVats)) {
+        $invoicesVats[$item["vat_percent"]] += $item["unit_price"] * $item["quantity"];
+      } else {
+        $invoicesVats[$item["vat_percent"]] = $item["unit_price"] * $item["quantity"];
+      }
     }
 
     if ($order['delivery_fee'] > 0) {
@@ -1367,6 +1493,26 @@ class Order extends \ADIOS\Core\Widget\Model {
         "unit_price" => $order["payment_fee"] / (1 + 20 / 100), // TODO: VAT 20% hardcoded
         "vat_percent" => 20, // TODO: VAT 20% hardcoded
       ];
+    }
+
+    if ($order['discount'] > 0) {
+      if (count($invoicesVats) > 0) {
+        foreach ($invoicesVats as $vat => $discountSum) {
+          $invoiceItems[] = [
+            "item" => $this->translate("Discount"),
+            "quantity" => 1,
+            "unit_price" => - $discountSum * ($order['discount'] / 100),
+            "vat_percent" => $vat,
+          ];
+        }
+      } else {
+        $invoiceItems[] = [
+          "item" => $this->translate("Discount"),
+          "quantity" => 1,
+          "unit_price" => - $order["price_total_excl_vat"] * ($order['discount'] / 100),
+          "vat_percent" => 20, // TODO: VAT 20% hardcoded
+        ];
+      }
     }
 
     $invoiceData = [

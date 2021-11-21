@@ -74,7 +74,7 @@ class PluginSettings extends \ADIOS\Core\Widget\Action {
 
         $settingsItems = [];
         foreach ($availableSettings as $settingName => $inputParams) {
-          $inputParams["uid"] = "{$tmpInputUIDPrefix}_".\ADIOS\Core\HelperFunctions::str2uid($settingName);
+          $inputParams["uid"] = "{$tmpInputUIDPrefix}_{$settingName}";
           $inputParams["value"] = $pluginSettings[$settingName];
 
           if (empty($inputParams["input"])) {
@@ -136,7 +136,7 @@ class PluginSettings extends \ADIOS\Core\Widget\Action {
               '{$this->uid}_' + pluginUID + '_',
             );
           }
-          
+
           {$this->uid}_close(data);
         }
 

@@ -59,7 +59,9 @@ define('ADIOS_WIDGETS_DIR', __DIR__."/src/Surikata/Widgets");
 // Administration panel configuration
 ////////////////////////////////////////////////////////
 
-define('GTP', 'srkt');
+if (!defined('GTP')) {
+  define('GTP', 'srkt');
+}
 
 $adminPanelConfig["build"]["version"]          = "1.2";
 

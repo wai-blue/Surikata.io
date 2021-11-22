@@ -8,6 +8,8 @@ namespace Surikata\Plugins\WAI\Product {
   use ADIOS\Plugins\WAI\Proprietary\Product\Variations\Models\ProductVariationValue;
   use ADIOS\Widgets\Products\Models\ProductFeature;
     use ADIOS\Widgets\Products\Models\Service;
+  use Surikata\Plugins\WAI\Proprietary\Product\Variations;
+
   class Detail extends \Surikata\Core\Web\Plugin {
     var $productInfo = NULL;
     var $deleteCurrentPageBreadCrumb = true;
@@ -94,29 +96,14 @@ namespace Surikata\Plugins\WAI\Product {
           ;
         }
 
+        // REVIEW Lukáš - productInfo sa musí dostať do getTwigParams
         if (
           isset($this->productInfo["VARIATIONS"]["group_uid"])
           && $this->productInfo["VARIATIONS"]["group_uid"] > 0
         ) {
-          // get variations available attributes
-          $attributeModel = new ProductVariationAttribute($this->adminPanel);
-          $groupAttributeModel = new ProductVariationGroupAttribute($this->adminPanel);
-          $attributeValuesModel = new ProductVariationValue($this->adminPanel);
-          $variationModel = new ProductVariation($this->adminPanel);
-          $attributeIds = $groupAttributeModel->getByGroupUid($this->productInfo["VARIATIONS"]["group_uid"]);
-          $allValues = $attributeValuesModel->getQuery()->select("*")->get()->keyBy("id")->toArray();
-
-          foreach ($attributeIds as $id) {
-            $this->productInfo["VARIATIONS"]["availableAttributes"][] = $attributeModel->getById($id);
-          }
-
-          $variationQuery = $variationModel->getQuery()->select("*");
-          $variationQuery = $variationQuery->where("group_uid", "=", $this->productInfo["VARIATIONS"]["group_uid"]);
-          $availableVariations = $variationQuery->get()->toArray();
-          foreach ($availableVariations as $variation) {
-            $variation["value"] = $allValues[$variation["id_value"]];
-            $this->productInfo["VARIATIONS"]["availableVariations"][$variation["id_attribute"]][] = $variation;
-          }
+          // REVIEW Lukáš - určite to tu nemusí a nemôže byť, zatiaľ to je pre overenie funkčnosti FE
+          $variationsPlugin = new Variations($this->adminPanel);
+          $this->productInfo = $variationsPlugin->getTwigParams(["productInfo" => $this->productInfo]);
         }
 
         $this->productInfo['breadcrumbs'] = $productCategoryModel

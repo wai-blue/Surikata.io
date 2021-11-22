@@ -119,7 +119,7 @@ class Loader extends \Cascada\Loader {
         echo $js;
         exit();
       };
-      $this->assetsUrlMap["core/assets/"] = ADMIN_PANEL_SRC_DIR."/Core/Assets/";
+      $this->assetsUrlMap["core/assets/"] = SURIKATA_ROOT_DIR."/src/Surikata/Core/Assets/";
       $this->assetsUrlMap["theme/assets/"] = "{$this->themeDir}/Assets/";
       $this->assetsUrlMap["plugins/assets/"] = function($websiteRenderer, $url) { 
         $url = str_replace("plugins/assets/", "", $url);

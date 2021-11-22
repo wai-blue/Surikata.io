@@ -1,4 +1,8 @@
 {
+    "name": "wai-blue/surikata-io",
+    "description": "Open source PHP8 e-commerce platform. Multi-domain and multi-language support.",
+    "type": "project",
+    "license": "AGPL 3.0",
     "require": {
         "twig/twig": "^3.0",
         "hoa/regex": "1.17.01.13",

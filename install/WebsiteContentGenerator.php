@@ -8,11 +8,13 @@ class WebsiteContentGenerator {
   public $domainSlug = "";
   public $themeObject = [];
   public $websiteCommonPanels = [];
+  public $installationConfig = "";
 
-  public function __construct($adminPanel, $slideshowImageSet, $domainsToInstall) {
+  public function __construct($adminPanel, $slideshowImageSet, $domainsToInstall, $installationConfig) {
     $this->adminPanel = $adminPanel;
     // $this->slideshowImageSet = $slideshowImageSet;
     $this->domainsToInstall = $domainsToInstall;
+    $this->installationConfig = $installationConfig;
   }
 
   public function translate(string $string) {
@@ -621,7 +623,7 @@ class WebsiteContentGenerator {
     $websiteWebRedirectModel->insertRow([
       "domain" => $this->domainName,
       "from_url" => "",
-      "to_url" => "//".$_SERVER['HTTP_HOST'].REWRITE_BASE.$this->domainSlug."/".$this->translate("home"),
+      "to_url" => "//".$this->installationConfig['http_host'].REWRITE_BASE.$this->domainSlug."/".$this->translate("home"),
       "type" => 302,
     ]);
 
@@ -634,7 +636,7 @@ class WebsiteContentGenerator {
             "companyInfo" => [
               "slogan" => "Môj nový eshop: {$this->domainName}",
               "contactPhoneNumber" => "+421 111 222 333",
-              "contactEmail" => "info@{$_SERVER['HTTP_HOST']}",
+              "contactEmail" => "info@{$this->installationConfig['http_host']}",
               "logo" => "your-logo.png",
               "urlFacebook" => "https://surikata.io",
               "urlTwitter" => "https://surikata.io",

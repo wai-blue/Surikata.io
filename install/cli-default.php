@@ -24,8 +24,7 @@
 // &domain_4_theme_name=Abelo
 // &slideshow_image_set=books
 
-$_GET = [
-  "do_install" => "1",
+$installationConfig = [
   "slideshow_image_set" => "books",
   "domain_1_slug" => "en",
   "domain_1_description" => "English",
@@ -41,12 +40,7 @@ $_GET = [
   "customers" => "yes",
   "orders" => "yes",
   "rewrite_base_is_correct" => "1",
+  "http_host" => $argv[1] ?? "",
 ];
-
-$_SERVER['HTTP_HOST'] = $argv[1] ?? "";
-
-if (empty($_SERVER['HTTP_HOST'])) {
-  exit("SERVER HTTP HOST is not provided");
-}
 
 include(__DIR__."/index.php");

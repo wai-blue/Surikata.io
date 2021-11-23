@@ -24,6 +24,50 @@
 // &domain_4_theme_name=Abelo
 // &slideshow_image_set=books
 
+$arguments = getopt(
+  "T:L:",
+  ["template:", "languages:"],
+  $restIndex
+);
+
+$template = $arguments["T"] ?? $arguments["template"] ?? "Basic";
+$languages = $arguments["L"] ?? $arguments["languages"] ?? "en,sk";
+$packageName = $argv[$restIndex] ?? "";
+
+$availableLanguages = ["sk", "en", "cz"];
+$availableTemplates = ["Basic", "Abelo"];
+
+if (empty($packageName) || empty($languages) || empty($template)) {
+  echo "Surikata.io installer package creator.
+
+Usage: php CreatePackage.php [OPTIONS] <packageName>
+
+Required options:
+
+-L, --languages    Comma separated value with list of languages to install.
+                    Available languages: ".join(", ", $availableLanguages)."
+-T, --template     Name of the design template to use.
+                    Available templates: ".join(", ", $availableTemplates)."
+";
+  exit;
+}
+
+foreach (explode(",", $languages) as $language) {
+  if (!in_array($language, $availableLanguages)) {
+    echo "Unknown language.";
+    exit;
+  }
+}
+
+if (!in_array($template, $availableTemplates)) {
+  echo "Unknown template.";
+  exit;
+}
+
+
+
+
+
 $installationConfig = [
   "slideshow_image_set" => "books",
   "domain_1_slug" => "en",
@@ -40,8 +84,9 @@ $installationConfig = [
   "customers" => "yes",
   "orders" => "yes",
   "rewrite_base_is_correct" => "1",
-  "http_host" => $argv[1] ?? "",
-  "rewrite_base" => $argv[2] ?? "",
+  "http_host" => "{% SERVER_HTTP_HOST %}",
+  "rewrite_base" => "{% REWRITE_BASE %}",
+  "create_package" => $packageName ?? date("Ymdhis"),
 ];
 
 include(__DIR__."/index.php");

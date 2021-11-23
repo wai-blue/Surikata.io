@@ -42,7 +42,7 @@ class WebsiteContentGenerator {
     }
 
     if (empty($this->dictionary[$languageIndex])) {
-      require(__DIR__."/content/lang/{$languageIndex}.php");
+      require(__DIR__."/../content/lang/{$languageIndex}.php");
       $this->dictionary[$languageIndex] = $dictionary;
     }
 
@@ -95,19 +95,19 @@ class WebsiteContentGenerator {
     mkdir("{$this->adminPanel->config['files_dir']}/products/");
 
     copy(
-      __DIR__."/content/images/favicon.png",
+      __DIR__."/../content/images/favicon.png",
       "{$this->adminPanel->config['files_dir']}/favicon.png"
     );
 
     for ($i = 1; $i <= 10; $i++) {
       copy(
-        __DIR__."/content/images/product_{$i}.jpg",
+        __DIR__."/../content/images/product_{$i}.jpg",
         "{$this->adminPanel->config['files_dir']}/products/{$i}.jpg",
       );
     }
 
     copy(
-      __DIR__."/content/images/your-logo.png",
+      __DIR__."/../content/images/your-logo.png",
       "{$this->adminPanel->config['files_dir']}/your-logo.png",
     );
 
@@ -119,7 +119,7 @@ class WebsiteContentGenerator {
     ];
     foreach ($imagesToCopy as $item) {
       copy(
-        __DIR__."/content/images/".$item,
+        __DIR__."/../content/images/".$item,
         "{$this->adminPanel->config['files_dir']}/".$item,
       );
     }
@@ -294,7 +294,7 @@ class WebsiteContentGenerator {
             "WAI/SimpleContent/OneColumn",
             [
               "heading" => "Hello World!",
-              "content" => file_get_contents(__DIR__."/content/PageTexts/o-nas.html"),
+              "content" => file_get_contents(__DIR__."/../content/PageTexts/o-nas.html"),
             ]
           ],
         ],
@@ -543,7 +543,7 @@ class WebsiteContentGenerator {
             "WAI/SimpleContent/OneColumn",
             [
               "heading" => $this->translate("We value your privacy"),
-              "content" => file_get_contents(__DIR__."/content/PageTexts/o-nas.html"),
+              "content" => file_get_contents(__DIR__."/../content/PageTexts/o-nas.html"),
             ]
           ]
         ],
@@ -623,11 +623,11 @@ class WebsiteContentGenerator {
     $websiteWebRedirectModel->insertRow([
       "domain" => $this->domainName,
       "from_url" => "",
-      "to_url" => "//".$this->installationConfig['http_host'].REWRITE_BASE.$this->domainSlug."/".$this->translate("home"),
+      "to_url" => "//".$this->installationConfig['http_host'].$this->installationConfig['rewrite_base'].$this->domainSlug."/".$this->translate("home"),
       "type" => 302,
     ]);
 
-    $emailsContentFolder = __DIR__."/content/emails/language-index-{$this->domainCurrentlyGenerated["languageIndex"]}";
+    $emailsContentFolder = __DIR__."/../content/emails/language-index-{$this->domainCurrentlyGenerated["languageIndex"]}";
     $emails = [
       "signature" => "<p>{$this->domainName} - <a href='http://{$this->domainName}' target='_blank'>{$this->domainName}</a></p>",
       "after_order_confirmation_SUBJECT" => file_get_contents("{$emailsContentFolder}/after_order_confirmation_SUBJECT.txt"),

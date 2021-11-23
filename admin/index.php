@@ -12,7 +12,7 @@
 
 try {
 
-  require("../Init.php");
+  require(__DIR__."/../Init.php");
 
   $web = new \MyEcommerceProject\Web($websiteRendererConfig);
   

@@ -6,6 +6,18 @@ function _echo($msg) {
   }
 }
 
+if (php_sapi_name() === 'cli') {
+  $installationConfig["do_install"] = "1";
+
+  if (empty($installationConfig['http_host'])) {
+    exit("SERVER HTTP HOST is not provided");
+  }
+
+} else {
+  $installationConfig = $_GET;
+  $installationConfig["http_host"] = $_SERVER['HTTP_HOST'];
+}
+
 _echo("
   <html>
   <head>
@@ -44,18 +56,21 @@ _echo("
   </head>
   <body>
     <div class='content'>
-      <img class='logo' src='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
       <h1>Surikata.io Installer</h1>
 ");
 
 $installationStart = microtime(TRUE);
-$rewriteBaseIsCorrect = ($_GET['rewrite_base_is_correct'] ?? "") == "1";
+$rewriteBaseIsCorrect = ($installationConfig['rewrite_base_is_correct'] ?? "") == "1";
 
-include("RandomProductsGenerator.php");
-include("WebsiteContentGenerator.php");
+include("Lib/InstallerHelperFunctions.php");
+include("Lib/RandomProductsGenerator.php");
+include("Lib/WebsiteContentGenerator.php");
 
-$configEnvDomainLanguagesPHP = '$configEnv["domainLanguages"] = [1 => "English", 2 => "Slovensky", 3 => "Česky"];';
-file_put_contents(__DIR__."/../ConfigEnvDomains.php", '<?php '.$configEnvDomainLanguagesPHP);
+if (!defined('PROJECT_ROOT_DIR')) {
+  define('PROJECT_ROOT_DIR', realpath(__DIR__."/.."));
+}
+
+file_put_contents(PROJECT_ROOT_DIR."/ConfigEnvDomains.php", \InstallerHelperFunctions::renderConfigEnvDomains());
 
 function _loadCsvIntoArray($file, $separator = ',', $enclosure = '#') {
   $lines = [];
@@ -86,7 +101,7 @@ if (!is_file(__DIR__."/../vendor/autoload.php")) {
   exit();
 }
 
-if (!is_file(__DIR__."/../ConfigEnv.php")) {
+if (!is_file(PROJECT_ROOT_DIR."/ConfigEnv.php")) {
   _echo("
     <div style='color:red'>
       Sorry, it looks like you do not have your ConfigEnv.php configured.<br/>
@@ -125,6 +140,7 @@ if (!$rewriteBaseIsCorrect) {
   $expectedRewriteBase = $_SERVER['REQUEST_URI'];
   $expectedRewriteBase = str_replace("install/", "", $expectedRewriteBase);
   $expectedRewriteBase = str_replace("index.php", "", $expectedRewriteBase);
+  $expectedRewriteBase = str_replace("install.php", "", $expectedRewriteBase);
   if (REWRITE_BASE != $expectedRewriteBase) {
     _echo("
       <div style='color:orange'>
@@ -179,33 +195,26 @@ foreach (@scandir(__DIR__."/content/images/slideshow") as $file) {
   }
 }
 
-$doInstall = ($_GET['do_install'] === "1");
-// $languageToInstall = $_GET['language_to_install'];
-$slideshowImageSet = $_GET['slideshow_image_set'];
+$doInstall = ($installationConfig['do_install'] === "1");
+$createPackage = $installationConfig['create_package'] ?? "";
+$slideshowImageSet = $installationConfig['slideshow_image_set'];
 
-$domainsToInstall = [];
-for ($i = 1; $i <= 3; $i++) {
-  if (!empty($_GET["domain_{$i}_description"])) {
-    $domainsToInstall[$i] = [
-      "name" => \ADIOS\Core\HelperFunctions::str2url($_GET["domain_{$i}_description"]),
-      "description" => $_GET["domain_{$i}_description"],
-      "slug" => $_GET["domain_{$i}_slug"],
-      "themeName" => $_GET["domain_{$i}_theme_name"],
-      "languageIndex" => $_GET["domain_{$i}_language_index"],
-    ];
-  }
+if (empty($installationConfig['rewrite_base'])) {
+  $installationConfig['rewrite_base'] = REWRITE_BASE;
 }
 
-$randomProductsCount = $_GET['random_products_count'] ?? 50;
+$domainsToInstall = \InstallerHelperFunctions::parseDomainsToInstall($installationConfig);
+
+$randomProductsCount = $installationConfig['random_products_count'] ?? 50;
 if ($randomProductsCount > 100000) $randomProductsCount = 100000;
 
 $partsToInstall = [];
-if (($_GET['product-catalog'] ?? "") == "yes") $partsToInstall[] = "product-catalog";
-if (($_GET['delivery-and-payment-services'] ?? "") == "yes") $partsToInstall[] = "delivery-and-payment-services";
-if (($_GET['customers'] ?? "") == "yes") $partsToInstall[] = "customers";
-if (($_GET['orders'] ?? "") == "yes") $partsToInstall[] = "orders";
+if (($installationConfig['product-catalog'] ?? "") == "yes") $partsToInstall[] = "product-catalog";
+if (($installationConfig['delivery-and-payment-services'] ?? "") == "yes") $partsToInstall[] = "delivery-and-payment-services";
+if (($installationConfig['customers'] ?? "") == "yes") $partsToInstall[] = "customers";
+if (($installationConfig['orders'] ?? "") == "yes") $partsToInstall[] = "orders";
 
-// $themeName = $_GET['theme'] ?? "";
+// $themeName = $installationConfig['theme'] ?? "";
 // if (!in_array($themeName, $availableThemes)) {
 //   $themeName = reset($availableThemes);
 // }
@@ -283,6 +292,22 @@ if (!$doInstall) {
     <form action='' method='GET'>
       <input type='hidden' name='do_install' value='1' />
       <input type='hidden' name='rewrite_base_is_correct' value='1' />
+
+      <p>
+        Your configuration is:
+      </p>
+      <table>
+        <tr><td>REWRITE_BASE</td><td>".REWRITE_BASE."</td></tr>
+        <tr><td>DB_HOST</td><td>".DB_HOST."</td></tr>
+        <tr><td>DB_LOGIN</td><td>".DB_LOGIN."</td></tr>
+        <tr><td>DB_NAME</td><td>".DB_NAME."</td></tr>
+        <tr><td>SURIKATA_ROOT_DIR</td><td>".SURIKATA_ROOT_DIR."</td></tr>
+        <tr><td>PROJECT_ROOT_DIR</td><td>".PROJECT_ROOT_DIR."</td></tr>
+        <tr><td>CACHE_DIR</td><td>".CACHE_DIR."</td></tr>
+        <tr><td>LOG_DIR</td><td>".LOG_DIR."</td></tr>
+        <tr><td>DATA_DIR</td><td>".DATA_DIR."</td></tr>
+        <tr><td>TWIG_CACHE_DIR</td><td>".TWIG_CACHE_DIR."</td></tr>
+      </table>
 
       <p>
         Whitch parts do you want to install?
@@ -406,8 +431,14 @@ if (!$doInstall) {
 
     $adminPanel->createMissingFolders();
 
+    if (!empty($createPackage)) {
+      $adminPanel->db->startQueryBuffering();
+    }
+
     $adminPanel->install();
     $adminPanel->installDefaultUsers();
+
+    $adminPanel->db->query("SET foreign_key_checks = 0");
 
     $adminPanel->console->info("Default users created.");
 
@@ -445,39 +476,10 @@ if (!$doInstall) {
     $shipmentPriceModel = new \ADIOS\Widgets\Shipping\Models\ShipmentPrice($adminPanel);
 
     // ConfigEnvDomains.php
-    $configEnvDomainsPHP = "<?php\r\n";
-    $configEnvDomainsPHP .= "\r\n";
-    $configEnvDomainsPHP .= $configEnvDomainLanguagesPHP."\r\n";
-    $configEnvDomainsPHP .= "\r\n";
-    $configEnvDomainsPHP .= '$configEnv["domains"] = ['."\r\n";
-    foreach ($domainsToInstall as $key => $domain) {
-      $configEnvDomainsPHP .= "  [\r\n";
-      $configEnvDomainsPHP .= "    'name' => '{$domain['name']}',\r\n";
-      $configEnvDomainsPHP .= "    'description' => '{$domain['description']}',\r\n";
-      $configEnvDomainsPHP .= "    'slug' => '{$domain['slug']}',\r\n";
-      $configEnvDomainsPHP .= "    'rootUrl' => \$_SERVER['HTTP_HOST'].REWRITE_BASE.'{$domain['slug']}',\r\n";
-      $configEnvDomainsPHP .= "    'languageIndex' => {$domain['languageIndex']},\r\n";
-      $configEnvDomainsPHP .= "  ],\r\n";
-    }
-    $configEnvDomainsPHP .= "];\r\n";
-    $configEnvDomainsPHP .= "\r\n";
-
-    $configEnvDomainsPHP .= trim('
-$re = "/^".str_replace("/", "\\/", REWRITE_BASE)."/";
-$slug = reset(explode("/", preg_replace($re, "", $_SERVER["REQUEST_URI"])));
-
-$domainToRender = reset($configEnv["domains"]);
-foreach ($configEnv["domains"] as $domain) {
-  if ($domain["slug"] == $slug) {
-    $domainToRender = $domain;
-  }
-}
-
-define("WEBSITE_DOMAIN_TO_RENDER", $domainToRender["name"]);
-define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
-    ');
-
-    file_put_contents(__DIR__."/../ConfigEnvDomains.php", $configEnvDomainsPHP);
+    file_put_contents(
+      PROJECT_ROOT_DIR."/ConfigEnvDomains.php",
+      \InstallerHelperFunctions::renderConfigEnvDomains($domainsToInstall)
+    );
 
     $adminPanel->console->info("ConfigEnvDomains.php created.");
 
@@ -972,6 +974,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $adminPanel,
       $slideshowImageSet,
       $domainsToInstall,
+      $installationConfig
     );
 
     $wsg->copyAssets();
@@ -986,6 +989,23 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
     $adminPanel->console->info("Website content installed.");
 
+    if (!empty($createPackage)) {
+      $buffer = $adminPanel->db->stopQueryBuffering();
+
+      $packageFilename = \ADIOS\Core\HelperFunctions::str2url($createPackage).".zip";
+
+      $zip = new ZipArchive;
+      $res = $zip->open(PROJECT_ROOT_DIR."/install/packages/{$packageFilename}", ZipArchive::CREATE);
+      if ($res === TRUE) {
+        $zip->addFromString("surikata-installation.sql", $buffer);
+        $zip->addFromString("installation-config.json", json_encode($installationConfig));
+        $zip->close();
+
+        $adminPanel->console->info("Package stored in ".PROJECT_ROOT_DIR."/install/packages/{$packageFilename}");
+      } else {
+        $adminPanel->console->error("Failed to create package.");
+      }
+    }
 
   } catch (\Exception $e) {
     _echo("

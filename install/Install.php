@@ -60,8 +60,8 @@ $installationConfig = [
   "customers" => "yes",
   "orders" => "yes",
   "rewrite_base_is_correct" => "1",
-  "http_host" => "{% SERVER_HTTP_HOST %}",
-  "rewrite_base" => "{% REWRITE_BASE %}",
+  // "http_host" => "{% SERVER_HTTP_HOST %}",
+  // "rewrite_base" => "{% REWRITE_BASE %}",
 ];
 
 if (!empty($package)) {

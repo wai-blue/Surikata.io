@@ -9,13 +9,13 @@ function _echo($msg) {
 if (php_sapi_name() === 'cli') {
   $installationConfig["do_install"] = "1";
 
-  if (empty($installationConfig['http_host'])) {
-    exit("SERVER HTTP HOST is not provided");
-  }
+  // if (empty($installationConfig['http_host'])) {
+  //   exit("SERVER HTTP HOST is not provided");
+  // }
 
 } else {
   $installationConfig = $_GET;
-  $installationConfig["http_host"] = $_SERVER['HTTP_HOST'];
+  // $installationConfig["http_host"] = $_SERVER['HTTP_HOST'];
 }
 
 _echo("
@@ -199,9 +199,9 @@ $doInstall = ($installationConfig['do_install'] === "1");
 $createPackage = $installationConfig['create_package'] ?? "";
 $slideshowImageSet = $installationConfig['slideshow_image_set'];
 
-if (empty($installationConfig['rewrite_base'])) {
-  $installationConfig['rewrite_base'] = REWRITE_BASE;
-}
+// if (empty($installationConfig['rewrite_base'])) {
+//   $installationConfig['rewrite_base'] = REWRITE_BASE;
+// }
 
 $domainsToInstall = \InstallerHelperFunctions::parseDomainsToInstall($installationConfig);
 
@@ -973,7 +973,6 @@ if (!$doInstall) {
 
     $wsg = new WebsiteContentGenerator(
       $adminPanel,
-      $slideshowImageSet,
       $domainsToInstall,
       $installationConfig
     );

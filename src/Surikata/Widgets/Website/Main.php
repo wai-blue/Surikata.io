@@ -120,13 +120,25 @@ class Website extends \ADIOS\Core\Widget {
     }
   }
 
-  public function rebuildSitemap($domain) {
+  public function rebuildSitemap($domainName) {
+    $availableDomains = $this->adios->getAvailableDomains();
+
+    $domain = [];
+
+    foreach ($availableDomains as $tmpDomain) {
+      if ($tmpDomain['name'] == $domainName) {
+        $domain = $tmpDomain;
+      }
+    }
+
+    if (empty($domain['name'])) return;
+
     // 1. vsetky zozbierane URL prejdem cez pluginy na webstrankach
     $urlsToSitemap = [];
 
     $webPages = $this->adios
       ->getModel("Widgets/Website/Models/WebPage")
-      ->where("domain", "=", $domain)
+      ->where("domain", "=", $domain['name'])
       ->get()
       ->toArray()
     ;
@@ -171,12 +183,13 @@ class Website extends \ADIOS\Core\Widget {
     // 3. prejdem redirects
     $redirects = $this->adios
       ->getModel("Widgets/Website/Models/WebRedirect")
-      ->where("domain", "=", $domain)
+      ->where("domain", "=", $domain['name'])
       ->get()
       ->toArray()
     ;
 
     foreach ($redirects as $redirect) {
+      $redirect["to_url"] = str_replace("{% ROOT_URL %}", $domain['rootUrl'], $redirect["to_url"]);
       $urlsToSitemap[$redirect["from_url"]]["redirect"] = [
         $redirect["to_url"],
         $redirect["type"]
@@ -188,7 +201,7 @@ class Website extends \ADIOS\Core\Widget {
       mkdir(CACHE_DIR."/sitemap", 0775);
     }
 
-    $h = fopen(CACHE_DIR."/sitemap/{$domain}.json", "w");
+    $h = fopen(CACHE_DIR."/sitemap/{$domain['name']}.json", "w");
     fwrite($h, json_encode($urlsToSitemap));
     fclose($h);
   }
@@ -198,8 +211,8 @@ class Website extends \ADIOS\Core\Widget {
       @unlink(CACHE_DIR."/sitemap");
     }
 
-    foreach (array_keys($this->adios->getAvailableDomains()) as $domain) {
-      $this->rebuildSitemap($domain);
+    foreach ($this->adios->getAvailableDomains() as $domain) {
+      $this->rebuildSitemap($domain['name']);
     }
   }
 

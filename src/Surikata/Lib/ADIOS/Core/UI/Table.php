@@ -57,6 +57,7 @@ class Table extends \ADIOS\Core\UI\View {
         'show_add_button' => true,
         'show_search_button' => true,
         'show_export_csv_button' => true,
+        'show_import_csv_button' => true,
         'refresh_action' => 'UI/Table',
         'items_per_page' => 25,
         'allow_order_modification' => true,
@@ -411,6 +412,22 @@ class Table extends \ADIOS\Core\UI\View {
                   let tmpTableParams = Base64.encode(JSON.stringify(ui_table_params['{$this->uid}']));
                   window.open(
                     '{$this->adios->config['url']}/{$exportCsvAction}?tableParams=' + tmpTableParams
+                  );
+                ",
+              ];
+            }
+
+            if ($this->params['show_import_csv_button']) {
+              $importCsvAction = $this->model->importCsvAction ?? $this->model->getFullUrlBase($params)."/Import/CSV";
+
+              $moreActionsButtonItems[] = [
+                "fa_icon" => "fas fa-file-import",
+                "text" => $this->translate("Import from CSV"),
+                "onclick" => "
+                  let tmpTableParams = Base64.encode(JSON.stringify(ui_table_params['{$this->uid}']));
+                  window_render(
+                    '{$importCsvAction}',
+                    {tableParams: tmpTableParams}
                   );
                 ",
               ];

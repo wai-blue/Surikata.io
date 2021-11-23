@@ -5,7 +5,7 @@ define("REWRITE_BASE", ""); // Example value: "/" or "/devel/mysurikata/"
 ////////////////////////////////////////////////////////
 // Website Domains
 
-require __DIR__."/ConfigEnvDomains.php";
+require PROJECT_ROOT_DIR."/ConfigEnvDomains.php";
 
 ////////////////////////////////////////////////////////
 // Locale
@@ -49,4 +49,3 @@ $configEnv["brand"]["login"]["splash"] = "";
 
 $configEnv["minifyOutputHtml"] = FALSE;
 $configEnv["validateOutputHtml"] = TRUE;
-$configEnv["twigCacheDir"] = FALSE; // __DIR__."/cache/twig";

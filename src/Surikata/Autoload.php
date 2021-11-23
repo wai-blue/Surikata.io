@@ -6,9 +6,9 @@ spl_autoload_register(function($class) {
   $class = trim(str_replace("\\", "/", $class), "/");
 
   if (preg_match('/^Surikata\/Core\/([\w\/]+)/', $class, $m)) {
-    require_once(ADMIN_PANEL_SRC_DIR."/Core/{$m[1]}.php");
+    require_once(SURIKATA_ROOT_DIR."/src/Surikata/Core/{$m[1]}.php");
   } else if (preg_match('/^Surikata\/Lib\/([\w\/]+)/', $class, $m)) {
-    require_once(ADMIN_PANEL_SRC_DIR."/Lib/{$m[1]}.php");
+    require_once(SURIKATA_ROOT_DIR."/src/Surikata/Lib/{$m[1]}.php");
   } else if (preg_match('/^Surikata\/Plugins\/([\w\/]+)/', $class, $m)) {
     if (!is_object($___CASCADAObject)) return;
 

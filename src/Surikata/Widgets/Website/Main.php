@@ -184,18 +184,18 @@ class Website extends \ADIOS\Core\Widget {
     }
 
     // 4. zapisem do cache
-    if (!is_dir("{$this->adios->config['tmp_dir']}/sitemap_cache")) {
-      mkdir("{$this->adios->config['tmp_dir']}/sitemap_cache", 0775);
+    if (!is_dir(CACHE_DIR."/sitemap")) {
+      mkdir(CACHE_DIR."/sitemap", 0775);
     }
 
-    $h = fopen("{$this->adios->config['tmp_dir']}/sitemap_cache/{$domain}.json", "w");
+    $h = fopen(CACHE_DIR."/sitemap/{$domain}.json", "w");
     fwrite($h, json_encode($urlsToSitemap));
     fclose($h);
   }
 
   public function rebuildSitemapForAllDomains() {
-    if (is_dir("{$this->adios->config['tmp_dir']}/sitemap_cache")) {
-      @unlink("{$this->adios->config['tmp_dir']}/sitemap_cache");
+    if (is_dir(CACHE_DIR."/sitemap")) {
+      @unlink(CACHE_DIR."/sitemap");
     }
 
     foreach (array_keys($this->adios->getAvailableDomains()) as $domain) {
@@ -204,7 +204,7 @@ class Website extends \ADIOS\Core\Widget {
   }
 
   public function loadSitemapForDomain($domain) {
-    $cacheFile = "{$this->adios->config['tmp_dir']}/sitemap_cache/{$domain}.json";
+    $cacheFile = CACHE_DIR."/sitemap/{$domain}.json";
     if (!is_file($cacheFile)) {
       $this->rebuildSitemap($domain);
     }

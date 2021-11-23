@@ -31,8 +31,17 @@ class ContentStructure extends \ADIOS\Core\Input {
 
     $inputHtml = "
       <div>
+        <div
+          class='row surikata-theme-preview-wrapper'
+          data-input-id='{$randUid}'
+          style='position:relative;height:calc(100vh - 27em);overflow:auto;'
+        >
+          {$layoutsHtml}
+        </div>
+        <textarea style='display:none' id='{$this->uid}'>{$this->value}</textarea>
+
         ".$this->adios->ui->Button([
-          "text" => "Choose layout",
+          "text" => $this->translate("Change layout"),
           "fa_icon" => "fas fa-th",
           "class" => "btn btn-info btn-icon-split my-2",
           "onclick" => "
@@ -52,14 +61,7 @@ class ContentStructure extends \ADIOS\Core\Input {
             );
           ",
         ])->render()."
-        <div
-          class='row surikata-theme-preview-wrapper'
-          data-input-id='{$randUid}'
-          style='position:relative;height:calc(100vh - 25em);overflow:auto;'
-        >
-          {$layoutsHtml}
-        </div>
-        <textarea style='display:none' id='{$this->uid}'>{$this->value}</textarea>
+
       </div>
       <script>
         var {$this->uid}_data = {'layout': ''};
@@ -112,11 +114,11 @@ class ContentStructure extends \ADIOS\Core\Input {
         function {$this->uid}_showActivatedLayout() {
           $('.surikata-theme-preview-wrapper[data-input-id={$randUid}]')
             .find('.surikata-theme-preview-item:visible')
-            .fadeOut(2000)
+            .fadeOut(500)
           ;
           $('.surikata-theme-preview-wrapper[data-input-id={$randUid}]')
             .find('.surikata-theme-preview-item[data-layout-name=' + {$this->uid}_data['layout'] + ']')
-            .fadeIn(2000)
+            .fadeIn(500)
           ;
           {$this->uid}_updatePanelInfo();
         }
@@ -147,7 +149,7 @@ class ContentStructure extends \ADIOS\Core\Input {
 
               panelInfoHtml = 
                 '<div>' + panelInfo.plugin + '</div>' +
-                '<div>' + (settingsHtml == '' ? 'Bez nastavení' : settingsHtml) + '</div>'
+                (settingsHtml == '' ? '' : '<div>' + settingsHtml + '</div>')
               ;
             }
 

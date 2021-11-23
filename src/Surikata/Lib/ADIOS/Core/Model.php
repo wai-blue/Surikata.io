@@ -529,6 +529,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
           "model" => $this->name,
         ])
       ],
+      '/^'.$urlBase.'\/Import\/CSV$/' => [
+        "action" => "UI/Table/Import/CSV",
+        "params" => array_merge($urlParams, [
+          "model" => $this->name,
+        ])
+      ],
     ]);
 
     return $routing;

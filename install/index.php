@@ -431,6 +431,7 @@ if (!$doInstall) {
 
     $adminPanel->createMissingFolders();
 
+    // query buffer is created if we want to create a package
     if (!empty($createPackage)) {
       $adminPanel->db->startQueryBuffering();
     }
@@ -1001,7 +1002,7 @@ if (!$doInstall) {
         $zip->addFromString("installation-config.json", json_encode($installationConfig));
         $zip->close();
 
-        $adminPanel->console->info("Package stored in ".PROJECT_ROOT_DIR."/install/packages/{$packageFilename}");
+        // $adminPanel->console->info("Package stored in ".PROJECT_ROOT_DIR."/install/packages/{$packageFilename}");
       } else {
         $adminPanel->console->error("Failed to create package.");
       }

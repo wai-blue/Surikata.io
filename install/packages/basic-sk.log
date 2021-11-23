@@ -1,0 +1,173 @@
+2021-11-23 13:21:29 core.INFO Installation started.
+2021-11-23 13:21:29 core.INFO Dropping existing tables.
+2021-11-23 13:21:30 core.INFO Database is empty, installing models.
+2021-11-23 13:21:30 core.INFO Model Core/Models/Config installed.
+2021-11-23 13:21:30 core.INFO Model Core/Models/Translate installed.
+2021-11-23 13:21:31 core.INFO Model Core/Models/User installed.
+2021-11-23 13:21:31 core.INFO Model Core/Models/UserRole installed.
+2021-11-23 13:21:31 core.INFO Model Core/Models/Token installed.
+2021-11-23 13:21:31 core.INFO Model Plugins/WAI/Blog/Catalog/Models/Blog installed.
+2021-11-23 13:21:31 core.INFO Model Plugins/WAI/Blog/Catalog/Models/BlogTag installed.
+2021-11-23 13:21:31 core.INFO Model Plugins/WAI/Blog/Catalog/Models/BlogTagAssignment installed.
+2021-11-23 13:21:31 core.INFO Model Plugins/WAI/Delivery/DPD/Models/DPDVydajneMiesto installed.
+2021-11-23 13:21:31 core.INFO Model Plugins/WAI/Misc/Slideshow/Models/HomepageSlideshow installed.
+2021-11-23 13:21:31 core.INFO Model Plugins/WAI/News/Models/News installed.
+2021-11-23 13:21:31 core.INFO Model Plugins/WAI/Proprietary/Product/Compare/Models/ProductCompare installed.
+2021-11-23 13:21:31 core.INFO Model Plugins/WAI/Proprietary/Product/Variations/Models/ProductVariation installed.
+2021-11-23 13:21:31 core.INFO Model Plugins/WAI/Proprietary/Product/Variations/Models/ProductVariationAttribute installed.
+2021-11-23 13:21:31 core.INFO Model Plugins/WAI/Proprietary/Product/Variations/Models/ProductVariationGroupAttribute installed.
+2021-11-23 13:21:31 core.INFO Model Plugins/WAI/Proprietary/Product/Variations/Models/ProductVariationGroupItem installed.
+2021-11-23 13:21:31 core.INFO Model Plugins/WAI/Proprietary/Product/Variations/Models/ProductVariationValue installed.
+2021-11-23 13:21:31 core.INFO Model Widgets/Customers/Models/Customer installed.
+2021-11-23 13:21:32 core.INFO Model Widgets/Customers/Models/CustomerAddress installed.
+2021-11-23 13:21:32 core.INFO Model Widgets/Customers/Models/CustomerCategory installed.
+2021-11-23 13:21:32 core.INFO Model Widgets/Customers/Models/CustomerProductCompared installed.
+2021-11-23 13:21:32 core.INFO Model Widgets/Customers/Models/CustomerProductDisplayed installed.
+2021-11-23 13:21:32 core.INFO Model Widgets/Customers/Models/CustomerTokenAssignment installed.
+2021-11-23 13:21:32 core.INFO Model Widgets/Customers/Models/CustomerUID installed.
+2021-11-23 13:21:32 core.INFO Model Widgets/Customers/Models/CustomerWatchdog installed.
+2021-11-23 13:21:32 core.INFO Model Widgets/Customers/Models/CustomerWishlist installed.
+2021-11-23 13:21:32 core.INFO Model Widgets/Customers/Models/SearchQuery installed.
+2021-11-23 13:21:32 core.INFO Model Widgets/Customers/Models/ShoppingCart installed.
+2021-11-23 13:21:32 core.INFO Model Widgets/Customers/Models/ShoppingCartItem installed.
+2021-11-23 13:21:32 core.INFO Model Widgets/Customers/Models/Voucher installed.
+2021-11-23 13:21:32 core.INFO Model Widgets/CRM/Models/ContactForm installed.
+2021-11-23 13:21:32 core.INFO Model Widgets/CRM/Models/Newsletter installed.
+2021-11-23 13:21:32 core.INFO Model Widgets/Orders/Models/Claim installed.
+2021-11-23 13:21:33 core.INFO Model Widgets/Orders/Models/Order installed.
+2021-11-23 13:21:33 core.INFO Model Widgets/Orders/Models/OrderHistory installed.
+2021-11-23 13:21:33 core.INFO Model Widgets/Orders/Models/OrderItem installed.
+2021-11-23 13:21:33 core.INFO Model Widgets/Orders/Models/OrderTag installed.
+2021-11-23 13:21:33 core.INFO Model Widgets/Orders/Models/OrderTagAssignment installed.
+2021-11-23 13:21:33 core.INFO Model Widgets/Finances/Models/Invoice installed.
+2021-11-23 13:21:33 core.INFO Model Widgets/Finances/Models/InvoiceItem installed.
+2021-11-23 13:21:33 core.INFO Model Widgets/Finances/Models/InvoiceNumericSeries installed.
+2021-11-23 13:21:33 core.INFO Model Widgets/Finances/Models/Merchant installed.
+2021-11-23 13:21:33 core.INFO Model Widgets/Products/Models/Brand installed.
+2021-11-23 13:21:33 core.INFO Model Widgets/Products/Models/Product installed.
+2021-11-23 13:21:33 core.INFO Model Widgets/Products/Models/ProductAccessory installed.
+2021-11-23 13:21:33 core.INFO Model Widgets/Products/Models/ProductCategory installed.
+2021-11-23 13:21:33 core.INFO Model Widgets/Products/Models/ProductCategoryAssignment installed.
+2021-11-23 13:21:33 core.INFO Model Widgets/Products/Models/ProductDiscount installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Products/Models/ProductDomainAssignment installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Products/Models/ProductExtension installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Products/Models/ProductFeature installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Products/Models/ProductFeatureAssignment installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Products/Models/ProductGallery installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Products/Models/ProductMargin installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Products/Models/ProductPrice installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Products/Models/ProductRelated installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Products/Models/ProductServiceAssignment installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Products/Models/ProductSet installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Products/Models/ProductSetItem installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Products/Models/ProductStockState installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Products/Models/Service installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Products/Models/Supplier installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Shipping/Models/DeliveryService installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Shipping/Models/DestinationCountry installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Shipping/Models/PaymentService installed.
+2021-11-23 13:21:34 core.INFO Model Widgets/Shipping/Models/Shipment installed.
+2021-11-23 13:21:35 core.INFO Model Widgets/Shipping/Models/ShipmentPrice installed.
+2021-11-23 13:21:35 core.INFO Model Widgets/Website/Models/WebMenu installed.
+2021-11-23 13:21:35 core.INFO Model Widgets/Website/Models/WebMenuItem installed.
+2021-11-23 13:21:35 core.INFO Model Widgets/Website/Models/WebPage installed.
+2021-11-23 13:21:35 core.INFO Model Widgets/Website/Models/WebRedirect installed.
+2021-11-23 13:21:35 core.INFO Model Widgets/Website/Models/WebTranslation installed.
+2021-11-23 13:21:35 core.INFO Model Widgets/Settings/Models/Unit installed.
+2021-11-23 13:21:35 core.INFO Indexes for model Core/Models/Config installed.
+2021-11-23 13:21:35 core.INFO Indexes for model Core/Models/Translate installed.
+2021-11-23 13:21:35 core.INFO Indexes for model Core/Models/User installed.
+2021-11-23 13:21:35 core.INFO Indexes for model Core/Models/UserRole installed.
+2021-11-23 13:21:35 core.INFO Indexes for model Core/Models/Token installed.
+2021-11-23 13:21:35 core.INFO Indexes for model Plugins/WAI/Blog/Catalog/Models/Blog installed.
+2021-11-23 13:21:35 core.INFO Indexes for model Plugins/WAI/Blog/Catalog/Models/BlogTag installed.
+2021-11-23 13:21:36 core.INFO Indexes for model Plugins/WAI/Blog/Catalog/Models/BlogTagAssignment installed.
+2021-11-23 13:21:36 core.INFO Indexes for model Plugins/WAI/Delivery/DPD/Models/DPDVydajneMiesto installed.
+2021-11-23 13:21:36 core.INFO Indexes for model Plugins/WAI/Misc/Slideshow/Models/HomepageSlideshow installed.
+2021-11-23 13:21:36 core.INFO Indexes for model Plugins/WAI/News/Models/News installed.
+2021-11-23 13:21:36 core.INFO Indexes for model Plugins/WAI/Proprietary/Product/Compare/Models/ProductCompare installed.
+2021-11-23 13:21:36 core.INFO Indexes for model Plugins/WAI/Proprietary/Product/Variations/Models/ProductVariation installed.
+2021-11-23 13:21:36 core.INFO Indexes for model Plugins/WAI/Proprietary/Product/Variations/Models/ProductVariationAttribute installed.
+2021-11-23 13:21:36 core.INFO Indexes for model Plugins/WAI/Proprietary/Product/Variations/Models/ProductVariationGroupAttribute installed.
+2021-11-23 13:21:36 core.INFO Indexes for model Plugins/WAI/Proprietary/Product/Variations/Models/ProductVariationGroupItem installed.
+2021-11-23 13:21:37 core.INFO Indexes for model Plugins/WAI/Proprietary/Product/Variations/Models/ProductVariationValue installed.
+2021-11-23 13:21:37 core.INFO Indexes for model Widgets/Customers/Models/Customer installed.
+2021-11-23 13:21:37 core.INFO Indexes for model Widgets/Customers/Models/CustomerAddress installed.
+2021-11-23 13:21:37 core.INFO Indexes for model Widgets/Customers/Models/CustomerCategory installed.
+2021-11-23 13:21:37 core.INFO Indexes for model Widgets/Customers/Models/CustomerProductCompared installed.
+2021-11-23 13:21:37 core.INFO Indexes for model Widgets/Customers/Models/CustomerProductDisplayed installed.
+2021-11-23 13:21:38 core.INFO Indexes for model Widgets/Customers/Models/CustomerTokenAssignment installed.
+2021-11-23 13:21:38 core.INFO Indexes for model Widgets/Customers/Models/CustomerUID installed.
+2021-11-23 13:21:38 core.INFO Indexes for model Widgets/Customers/Models/CustomerWatchdog installed.
+2021-11-23 13:21:38 core.INFO Indexes for model Widgets/Customers/Models/CustomerWishlist installed.
+2021-11-23 13:21:38 core.INFO Indexes for model Widgets/Customers/Models/SearchQuery installed.
+2021-11-23 13:21:38 core.INFO Indexes for model Widgets/Customers/Models/ShoppingCart installed.
+2021-11-23 13:21:39 core.INFO Indexes for model Widgets/Customers/Models/ShoppingCartItem installed.
+2021-11-23 13:21:39 core.INFO Indexes for model Widgets/Customers/Models/Voucher installed.
+2021-11-23 13:21:39 core.INFO Indexes for model Widgets/CRM/Models/ContactForm installed.
+2021-11-23 13:21:39 core.INFO Indexes for model Widgets/CRM/Models/Newsletter installed.
+2021-11-23 13:21:39 core.INFO Indexes for model Widgets/Orders/Models/Claim installed.
+2021-11-23 13:21:40 core.INFO Indexes for model Widgets/Orders/Models/Order installed.
+2021-11-23 13:21:40 core.INFO Indexes for model Widgets/Orders/Models/OrderHistory installed.
+2021-11-23 13:21:40 core.INFO Indexes for model Widgets/Orders/Models/OrderItem installed.
+2021-11-23 13:21:40 core.INFO Indexes for model Widgets/Orders/Models/OrderTag installed.
+2021-11-23 13:21:41 core.INFO Indexes for model Widgets/Orders/Models/OrderTagAssignment installed.
+2021-11-23 13:21:41 core.INFO Indexes for model Widgets/Finances/Models/Invoice installed.
+2021-11-23 13:21:41 core.INFO Indexes for model Widgets/Finances/Models/InvoiceItem installed.
+2021-11-23 13:21:41 core.INFO Indexes for model Widgets/Finances/Models/InvoiceNumericSeries installed.
+2021-11-23 13:21:41 core.INFO Indexes for model Widgets/Finances/Models/Merchant installed.
+2021-11-23 13:21:41 core.INFO Indexes for model Widgets/Products/Models/Brand installed.
+2021-11-23 13:21:42 core.INFO Indexes for model Widgets/Products/Models/Product installed.
+2021-11-23 13:21:42 core.INFO Indexes for model Widgets/Products/Models/ProductAccessory installed.
+2021-11-23 13:21:42 core.INFO Indexes for model Widgets/Products/Models/ProductCategory installed.
+2021-11-23 13:21:43 core.INFO Indexes for model Widgets/Products/Models/ProductCategoryAssignment installed.
+2021-11-23 13:21:43 core.INFO Indexes for model Widgets/Products/Models/ProductDiscount installed.
+2021-11-23 13:21:43 core.INFO Indexes for model Widgets/Products/Models/ProductDomainAssignment installed.
+2021-11-23 13:21:44 core.INFO Indexes for model Widgets/Products/Models/ProductExtension installed.
+2021-11-23 13:21:44 core.INFO Indexes for model Widgets/Products/Models/ProductFeature installed.
+2021-11-23 13:21:44 core.INFO Indexes for model Widgets/Products/Models/ProductFeatureAssignment installed.
+2021-11-23 13:21:44 core.INFO Indexes for model Widgets/Products/Models/ProductGallery installed.
+2021-11-23 13:21:45 core.INFO Indexes for model Widgets/Products/Models/ProductMargin installed.
+2021-11-23 13:21:45 core.INFO Indexes for model Widgets/Products/Models/ProductPrice installed.
+2021-11-23 13:21:45 core.INFO Indexes for model Widgets/Products/Models/ProductRelated installed.
+2021-11-23 13:21:45 core.INFO Indexes for model Widgets/Products/Models/ProductServiceAssignment installed.
+2021-11-23 13:21:45 core.INFO Indexes for model Widgets/Products/Models/ProductSet installed.
+2021-11-23 13:21:46 core.INFO Indexes for model Widgets/Products/Models/ProductSetItem installed.
+2021-11-23 13:21:46 core.INFO Indexes for model Widgets/Products/Models/ProductStockState installed.
+2021-11-23 13:21:46 core.INFO Indexes for model Widgets/Products/Models/Service installed.
+2021-11-23 13:21:46 core.INFO Indexes for model Widgets/Products/Models/Supplier installed.
+2021-11-23 13:21:46 core.INFO Indexes for model Widgets/Shipping/Models/DeliveryService installed.
+2021-11-23 13:21:46 core.INFO Indexes for model Widgets/Shipping/Models/DestinationCountry installed.
+2021-11-23 13:21:46 core.INFO Indexes for model Widgets/Shipping/Models/PaymentService installed.
+2021-11-23 13:21:46 core.INFO Indexes for model Widgets/Shipping/Models/Shipment installed.
+2021-11-23 13:21:46 core.INFO Indexes for model Widgets/Shipping/Models/ShipmentPrice installed.
+2021-11-23 13:21:46 core.INFO Indexes for model Widgets/Website/Models/WebMenu installed.
+2021-11-23 13:21:46 core.INFO Indexes for model Widgets/Website/Models/WebMenuItem installed.
+2021-11-23 13:21:46 core.INFO Indexes for model Widgets/Website/Models/WebPage installed.
+2021-11-23 13:21:46 core.INFO Indexes for model Widgets/Website/Models/WebRedirect installed.
+2021-11-23 13:21:46 core.INFO Indexes for model Widgets/Website/Models/WebTranslation installed.
+2021-11-23 13:21:46 core.INFO Indexes for model Widgets/Settings/Models/Unit installed.
+2021-11-23 13:21:46 core.INFO Widget Overview installed.
+2021-11-23 13:21:46 core.INFO Widget Customers installed.
+2021-11-23 13:21:46 core.INFO Widget CRM installed.
+2021-11-23 13:21:46 core.INFO Widget Orders installed.
+2021-11-23 13:21:46 core.INFO Widget Finances installed.
+2021-11-23 13:21:46 core.INFO Widget Products installed.
+2021-11-23 13:21:46 core.INFO Widget Shipping installed.
+2021-11-23 13:21:46 core.INFO Widget Stock installed.
+2021-11-23 13:21:46 core.INFO Widget Website installed.
+2021-11-23 13:21:46 core.INFO Widget Plugins installed.
+2021-11-23 13:21:46 core.INFO Widget Settings installed.
+2021-11-23 13:21:46 core.INFO Widget Maintenance installed.
+2021-11-23 13:21:46 core.INFO Widget HelpAndSupport installed.
+2021-11-23 13:21:46 core.INFO Core installation done in 17.82 seconds.
+2021-11-23 13:21:47 core.INFO Default users created.
+2021-11-23 13:21:47 core.INFO ConfigEnvDomains.php created.
+2021-11-23 13:21:47 core.INFO Delivery and payment services installed.
+2021-11-23 13:21:48 core.INFO Product catalog installed.
+2021-11-23 13:21:57 core.INFO Customers installed.
+2021-11-23 13:22:04 core.INFO Orders installed.
+2021-11-23 13:22:04 core.WARNING Translate: `Order payment received` is not translated to `2`.
+2021-11-23 13:22:04 core.WARNING Translate: `Order payment received` is not translated to `2`.
+2021-11-23 13:22:04 core.WARNING Translate: `Order payment received` is not translated to `2`.
+2021-11-23 13:22:05 core.INFO Website content installed.

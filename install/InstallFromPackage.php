@@ -41,8 +41,8 @@ unlink(__DIR__."/packages/installation-config.json");
 
 require(__DIR__."/../Init.php");
 
-include("Lib/InstallerHelperFunctions.php");
-include("Lib/WebsiteContentGenerator.php");
+require_once "Lib/InstallerHelperFunctions.php";
+require_once "Lib/WebsiteContentGenerator.php";
 
 $websiteRenderer = new \MyEcommerceProject\Web($websiteRendererConfig);
 $adminPanel = new \MyEcommerceProject\AdminPanel($adminPanelConfig, ADIOS_MODE_FULL, $websiteRenderer);

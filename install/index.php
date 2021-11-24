@@ -1,10 +1,8 @@
 <?php
 
-function _echo($msg) {
-  if (php_sapi_name() !== 'cli') {
-    echo $msg;
-  }
-}
+require_once "Lib/InstallerHelperFunctions.php";
+require_once "Lib/RandomProductsGenerator.php";
+require_once "Lib/WebsiteContentGenerator.php";
 
 if (php_sapi_name() === 'cli') {
   $installationConfig["do_install"] = "1";
@@ -18,7 +16,7 @@ if (php_sapi_name() === 'cli') {
   // $installationConfig["http_host"] = $_SERVER['HTTP_HOST'];
 }
 
-_echo("
+\InstallerHelperFunctions::echo("
   <html>
   <head>
     <title>Surikata.io Installer</title>
@@ -62,32 +60,16 @@ _echo("
 $installationStart = microtime(TRUE);
 $rewriteBaseIsCorrect = ($installationConfig['rewrite_base_is_correct'] ?? "") == "1";
 
-include("Lib/InstallerHelperFunctions.php");
-include("Lib/RandomProductsGenerator.php");
-include("Lib/WebsiteContentGenerator.php");
-
 if (!defined('PROJECT_ROOT_DIR')) {
   define('PROJECT_ROOT_DIR', realpath(__DIR__."/.."));
 }
 
 file_put_contents(PROJECT_ROOT_DIR."/ConfigEnvDomains.php", \InstallerHelperFunctions::renderConfigEnvDomains());
 
-function _loadCsvIntoArray($file, $separator = ',', $enclosure = '#') {
-  $lines = [];
-
-  $file = fopen($file, 'r');
-  while (($line = fgetcsv($file, 0, $separator, $enclosure)) !== FALSE) {
-    $lines[] = $line;
-  }
-  fclose($file);
-
-  return $lines;
-}
-
 set_time_limit(0);
 
 if (!is_file(__DIR__."/../vendor/autoload.php")) {
-  _echo("
+  \InstallerHelperFunctions::echo("
     <div style='color:red'>
       Sorry, it looks like you did not run 'composer install'.<br/>
       <br/>
@@ -102,7 +84,7 @@ if (!is_file(__DIR__."/../vendor/autoload.php")) {
 }
 
 if (!is_file(PROJECT_ROOT_DIR."/ConfigEnv.php")) {
-  _echo("
+  \InstallerHelperFunctions::echo("
     <div style='color:red'>
       Sorry, it looks like you do not have your ConfigEnv.php configured.<br/>
       <br/>
@@ -120,7 +102,7 @@ if (!is_file(PROJECT_ROOT_DIR."/ConfigEnv.php")) {
 require(__DIR__."/../Init.php");
 
 if (empty(REWRITE_BASE) || empty(DB_LOGIN) || empty(DB_NAME)) {
-  _echo("
+  \InstallerHelperFunctions::echo("
     <div style='color:red'>
       Sorry, it looks like you did not configure necessary parameters.<br/>
       <br/>
@@ -142,7 +124,7 @@ if (!$rewriteBaseIsCorrect) {
   $expectedRewriteBase = str_replace("index.php", "", $expectedRewriteBase);
   $expectedRewriteBase = str_replace("install.php", "", $expectedRewriteBase);
   if (REWRITE_BASE != $expectedRewriteBase) {
-    _echo("
+    \InstallerHelperFunctions::echo("
       <div style='color:orange'>
         We think that your REWRITE_BASE is not configured properly.<br/>
         <br/>
@@ -288,7 +270,7 @@ if (!$doInstall) {
     ";
   }
 
-  _echo("
+  \InstallerHelperFunctions::echo("
     <form action='' method='GET'>
       <input type='hidden' name='do_install' value='1' />
       <input type='hidden' name='rewrite_base_is_correct' value='1' />
@@ -827,7 +809,7 @@ if (!$doInstall) {
 
       // customers
       // .csv file generated with the help of https://www.fakeaddressgenerator.com
-      $customers = _loadCsvIntoArray(__DIR__."/content/Customers.csv");
+      $customers = \InstallerHelperFunctions::loadCsvIntoArray(__DIR__."/content/Customers.csv");
 
       $cnt = 1;
       for ($i = 0; $i < 10; $i++) {
@@ -1008,7 +990,7 @@ if (!$doInstall) {
     }
 
   } catch (\Exception $e) {
-    _echo("
+    \InstallerHelperFunctions::echo("
       <h2 style='color:red'>Error</h2>
       <div style='color:red'>
         ".get_class($e).": ".$e->getMessage()."
@@ -1023,7 +1005,7 @@ if (!$doInstall) {
   $errors = $adminPanel->console->getErrors();
 
   if (count($errors) > 0) {
-    _echo("
+    \InstallerHelperFunctions::echo("
       <h2 style='color:red'>Awgh!</h2>
       <div style='color:red;margin-bottom:1em'>
         ✕ Some errors occured during the installation.
@@ -1031,7 +1013,7 @@ if (!$doInstall) {
       <div style='color:red'>".$adminPanel->console->convertLogsToHtml($errors)."</div>
     ");
   } else {
-    _echo("
+    \InstallerHelperFunctions::echo("
       <h2>Done in ".round((microtime(true) - $installationStart), 2)." seconds.</h2>
       <div style='color:green;margin-bottom:1em'>
         ✓ Congratulations. You have successfuly installed your eCommerce project.
@@ -1062,7 +1044,7 @@ if (!$doInstall) {
     ");
   }
 
-  _echo("
+  \InstallerHelperFunctions::echo("
     <br/>
     <h2>Installation log</h2>
     <a
@@ -1077,7 +1059,7 @@ if (!$doInstall) {
 
 }
 
-_echo("
+\InstallerHelperFunctions::echo("
     </div>
   </body>
   </html>

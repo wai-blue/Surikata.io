@@ -4,11 +4,15 @@ if (php_sapi_name() !== 'cli') {
   echo "Script is available only for CLI.";
 }
 
-$arguments = getopt(
-  "T:L:P:",
-  ["theme:", "languages:", "package:"],
-  $restIndex
-);
+if (is_array($arguments)) {
+  // script has been included in this case
+} else {
+  $arguments = getopt(
+    "T:L:P:",
+    ["theme:", "languages:", "package:"],
+    $restIndex
+  );
+}
 
 $theme = $arguments["T"] ?? $arguments["theme"] ?? "Basic";
 $languages = $arguments["L"] ?? $arguments["languages"] ?? "en,sk";

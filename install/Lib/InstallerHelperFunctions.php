@@ -1,6 +1,25 @@
 <?php
 
 class InstallerHelperFunctions {
+
+  public static function echo($msg) {
+    if (php_sapi_name() !== 'cli') {
+      echo $msg;
+    }
+  }
+
+  public static function loadCsvIntoArray($file, $separator = ',', $enclosure = '#') {
+    $lines = [];
+
+    $file = fopen($file, 'r');
+    while (($line = fgetcsv($file, 0, $separator, $enclosure)) !== FALSE) {
+      $lines[] = $line;
+    }
+    fclose($file);
+
+    return $lines;
+  }
+
   public static function parseDomainsToInstall($installationConfig) {
     $domainsToInstall = [];
     

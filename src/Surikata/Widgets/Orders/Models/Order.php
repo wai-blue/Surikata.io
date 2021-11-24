@@ -718,6 +718,12 @@ class Order extends \ADIOS\Core\Widget\Model {
       }
     }
 
+    $this->adios->dispatchEventToPlugins("onAfterPlaceOrderPacketaPoint", [
+      "model" => $this,
+      "order" => $orderData,
+      "idOrder" => $idOrder
+    ]);
+
     return $idOrder;
 
   }

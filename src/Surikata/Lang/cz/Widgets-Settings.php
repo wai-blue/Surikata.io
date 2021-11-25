@@ -1,8 +1,8 @@
 <?php
 
 $dictionary = [
-  "Settings" => "Nastavenia",
+  "Settings" => "Nastavení",
   "Units" => "Jednotky",
-  "Users" => "Používatelia",
-  "Miscellaneous" => "Rôzne"
+  "Users" => "Uživatelé",
+  "Miscellaneous" => "Různé"
 ];

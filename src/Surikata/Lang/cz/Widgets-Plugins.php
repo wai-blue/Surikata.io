@@ -3,6 +3,6 @@
 $dictionary = [
   "Plugins" => "Pluginy",
   "Blogs" => "Blogy",
-  "Slideshow" => "Obrázková prezentácia",
+  "Slideshow" => "Obrázková prezentace",
   "News" => "Novinky"
 ];

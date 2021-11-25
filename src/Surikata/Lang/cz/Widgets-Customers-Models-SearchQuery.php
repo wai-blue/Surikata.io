@@ -1,10 +1,10 @@
 <?php
 
 $dictionary = [
-  "Searched queries" => "Hľadané výrazy",
-  "New searched query" => "Nový hľadaný výraz",
-  "Searched query" => "Hľadaný výraz",
-  "Customer UID"  => "Zákaznícke UID",
-  "Target URL"  => "Cieľová URL",
-  "Search datetime" => "Dátum a čas vyhľadávania"
+  "Searched queries" => "Hledané výrazy",
+  "New searched query" => "Nový hledaný výraz",
+  "Searched query" => "Hledaný výraz",
+  "Customer UID"  => "Zákaznické UID",
+  "Target URL"  => "Cílová URL",
+  "Search datetime" => "Datum a čas vyhledávání"
 ];

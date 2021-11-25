@@ -1,22 +1,22 @@
 <?php
 
 $dictionary = [
-  "Given name" => "Krstné meno",
-  "Family name" => "Priezvisko",
-  "Company name" => "Názov firmy",
-  "Street, 1st line" => "Názov ulice, číslo domu",
-  "Street, 2nd line" => "Názov ulice, číslo domu",
-  "City" => "Mesto",
+  "Given name" => "Křestní jméno",
+  "Family name" => "Příjmení",
+  "Company name" => "Název firmy",
+  "Street, 1st line" => "Název ulice, číslo domu",
+  "Street, 2nd line" => "Název ulice, číslo domu",
+  "City" => "Město",
   "ZIP" => "PSČ",
   "Region" => "Okres",
-  "Country" => "Štát",
+  "Country" => "Stát",
   "Customer addresses" => "Adresy zákazníka",
   "New customer address" => "Nová adresa zákazníka",
   "Customer address" => "Adresa zákazníka",
   "Customer" => "Zákazník",
-  "Floor" => "Poschodie",
+  "Floor" => "Patro",
   "Contact: " => "Kontakt: ",
-  "Phone number" => "Mobilné číslo",
+  "Phone number" => "Mobilní číslo",
   "Email" => "E-mail",
-  "Delivery address" => "Adresa doručenia"
+  "Delivery address" => "Adresa doručení"
 ];

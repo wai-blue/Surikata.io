@@ -2,8 +2,8 @@
 
 $dictionary = [
   "Domain" => "Doména",
-  "Created at" => "Vytvorený",
-  "Newsletter Subscribers" => "Odberatelia noviniek",
-  "Newsletter edit subscriber" => "Upraviť odberateľa noviniek",
-  "Newsletter new subscriber" => "Nový odberateľ noviniek"
+  "Created at" => "Vytvořen",
+  "Newsletter Subscribers" => "Odběratelé novinek",
+  "Newsletter edit subscriber" => "Upravit odběratele novinek",
+  "Newsletter new subscriber" => "Nový odběratel noviniek"
 ];

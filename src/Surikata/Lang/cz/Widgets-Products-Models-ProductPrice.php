@@ -4,7 +4,7 @@ $dictionary = [
   "Product price" => "Cena produktu",
   "New product price" => "Cena nového produktu",
   "Product" => "Produkt",
-  "Purchase price" => "Kúpna cena",
-  "Recommended price" => "Odporúčaná cena",
-  "Including VAT" => "Vrátane DPH",
+  "Purchase price" => "Kupní cena",
+  "Recommended price" => "Doporučená cena",
+  "Including VAT" => "Včetně DPH",
 ];

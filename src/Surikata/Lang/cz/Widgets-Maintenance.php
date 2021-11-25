@@ -4,7 +4,7 @@ $dictionary = [
   "Maintenance" => "Údržba",
   "Logs" => "Záznamy",
   "Info" => "Info",
-  "Warnings" => "Varovania",
+  "Warnings" => "Varování",
   "Errors" => "Chyby",
   "Maintenance mode" => "Režim údržby"
 ];

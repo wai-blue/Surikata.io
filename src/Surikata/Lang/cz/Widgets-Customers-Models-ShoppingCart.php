@@ -1,11 +1,11 @@
 <?php
 
 $dictionary = [
-  "Shopping carts" => "Nákupné košíky",
-  "New shopping cart" => "Nový nákupný košík",
-  "Shopping cart" => "Nákupný košík",
+  "Shopping carts" => "Nákupní košíky",
+  "New shopping cart" => "Nový nákupní košík",
+  "Shopping cart" => "Nákupní košík",
   "Header" => "Hlavička",
   "Items" => "Položky",
-  "Customer UID" => "Zákacnícke UID",
+  "Customer UID" => "Zákaznické UID",
   "Order" => "Objednávka"
 ];

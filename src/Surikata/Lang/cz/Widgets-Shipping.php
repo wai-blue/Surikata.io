@@ -1,9 +1,9 @@
 <?php
 
 $dictionary = [
-  "Delivery & Payment" => "Doručenie a platby",
-  "Delivery Services" => "Doručovacie služby",
-  "Payment Services" => "Platobné služby",
-  "Destination countries" => "Cieľové krajiny",
+  "Delivery & Payment" => "Doručení a platby",
+  "Delivery Services" => "Doručovací služby",
+  "Payment Services" => "Platební služby",
+  "Destination countries" => "Cílové země",
   "Prices" => "Ceny",
 ];

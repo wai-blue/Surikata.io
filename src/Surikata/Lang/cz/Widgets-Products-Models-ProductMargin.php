@@ -2,15 +2,15 @@
 
 $dictionary = [
   "Product price margins" => "Marže z ceny produktu",
-  "Product price margin" => "Cenová marža produktu",
-  "New product price margin" => "Cenová marža nového produktu",
+  "Product price margin" => "Cenová marže produktu",
+  "New product price margin" => "Cenová marže nového produktu",
   "Customer" => "Zákazník",
-  "Customer: Category" => "Zákazník: Kategória",
+  "Customer: Category" => "Zákazník: Kategorie",
   "Product" => "Produkt",
-  "Product: Category" => "Produkt: Kategória",
+  "Product: Category" => "Produkt: Kategorie",
   "Brand" => "Značka",
-  "Supplier" => "Dodávateľ",
-  "Margin" => "Sadzba",
-  "Product category" => "Kategória produktu",
-  "Customer category" => "Kategória zákazníka",
+  "Supplier" => "Dodavatel",
+  "Margin" => "Sazba",
+  "Product category" => "Kategorie produktu",
+  "Customer category" => "Kategorie zákazníka",
 ];

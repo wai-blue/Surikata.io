@@ -1,11 +1,11 @@
 <?php
 
 $dictionary = [
-  "Phone number" => "Mobilné číslo",
-  "Message" => "Správa",
-  "Received" => "Prijaté",
-  "Recipient" => "Príjemca",
-  "Messages from contact form" => "Správy z kontaktného formulára",
-  "Message from contact form" => "Správa z kontaktného formulára",
-  "Name" => "Meno"
+  "Phone number" => "Mobilní číslo",
+  "Message" => "Zpráva",
+  "Received" => "Přijato",
+  "Recipient" => "Příjemce",
+  "Messages from contact form" => "Zprávy z kontaktního formuláře",
+  "Message from contact form" => "Zpráva z kontaktního formuláře",
+  "Name" => "Jméno"
 ];

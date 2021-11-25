@@ -1,16 +1,16 @@
 <?php
 
 $dictionary = [
-  "Categories" => "Kategórie",
-  "View as tree" => "Zobraziť ako strom",
+  "Categories" => "Kategorie",
+  "View as tree" => "Zobrazit jako strom",
   "Prices" => "Ceny",
-  "Settings" => "Nastavenia",
+  "Settings" => "Nastavení",
   "Features" => "Vlastnosti",
   "Brands" => "Značky",
   "Services" => "Služby",
   "Products" => "Produkty",
-  "Stock states" => "Dostupnosti na sklade",
+  "Stock states" => "Dostupnosti na skladě",
   "Margins" => "Marže",
-  "Discounts" => "Zľavy",
-  "No translations available." => "Žiadne preklady k dispozícii"
+  "Discounts" => "Slevy",
+  "No translations available." => "Žádné překlady k dispozici"
 ];

@@ -1,10 +1,10 @@
 <?php
 
 $dictionary = [
-  "Categories" => "Kategórie",
+  "Categories" => "Kategorie",
   "Customers" => "Zákazníci",
-  "Analytics" => "Štatistiky",
-  "Vouchers" => "Poukážky",
-  "Shopping Carts" => "Nákupné košíky",
-  "Searched queries" => "Hľadané výrazy"
+  "Analytics" => "Statistiky",
+  "Vouchers" => "Poukázky",
+  "Shopping Carts" => "Nákupní košíky",
+  "Searched queries" => "Hledané výrazy"
 ];

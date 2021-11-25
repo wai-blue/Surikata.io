@@ -1,14 +1,14 @@
 <?php
 
 $dictionary = [
-  "Product-based discounts" => "Zľavy na základe produktov",
-  "Product price discount" => "Zľava z ceny výrobku",
-  "New product price discount" => "Zľava na cenu nového produktu",
+  "Product-based discounts" => "Slevy na základě produktů",
+  "Product price discount" => "Sleva z ceny výrobku",
+  "New product price discount" => "Sleva na cenu nového produktu",
   "Customer" => "Zákazník",
-  "Customer: Category" => "Zákazník: Kategória",
+  "Customer: Category" => "Zákazník: Kategorie",
   "Product" => "Produkt",
-  "Product: Category" => "Produkt: Kategória",
+  "Product: Category" => "Produkt: Kategorie",
   "Brand" => "Značka",
-  "Supplier" => "Dodávateľ",
-  "Discount" => "Zľava",
+  "Supplier" => "Dodavatel",
+  "Discount" => "Sleva",
 ];

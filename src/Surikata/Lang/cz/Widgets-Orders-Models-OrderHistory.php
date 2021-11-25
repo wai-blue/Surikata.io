@@ -3,6 +3,6 @@
 $dictionary = [
   "Order" => "Objednávka",
   "State" => "Stav",
-  "Event time" => "Čas udalosti",
-  "User" => "Uživateľ"
+  "Event time" => "Čas události",
+  "User" => "Uživatel"
 ];

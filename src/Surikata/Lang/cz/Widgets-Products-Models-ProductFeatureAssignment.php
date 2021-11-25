@@ -1,11 +1,11 @@
 <?php
 
 $dictionary = [
-  "New product feature" => "Nová funkcia produktu",
-  "Product feature" => "Funkcia produktu",
+  "New product feature" => "Nová funkce produktu",
+  "Product feature" => "Funkce produktu",
   "Product" => "Produkt",
-  "Feature" => "Funkcia",
+  "Feature" => "Funkce",
   'Value: Text' => "Hodnota: text",
   'Value: Number' => "Hodnota: Číslo",
-  'Value: Yes/No' => "Hodnota: Áno/Nie",
+  'Value: Yes/No' => "Hodnota: Ano/Ne",
 ];

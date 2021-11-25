@@ -2,14 +2,14 @@
 
 $dictionary = [
   "Pages" => "Stránky",
-  "Redirects" => "Presmerovania",
+  "Redirects" => "Přesměrování",
   "Menu" => "Menu",
-  "Company Info" => "Informácie o spoločnosti",
+  "Company Info" => "Informace o společnosti",
   "Design" => "Dizajn",
   "Online marketing" => "Online marketing",
-  "Legal disclaimers" => "Zrieknutie zodpovednosti",
+  "Legal disclaimers" => "Právní vyloučení odpovědnosti",
   "Emails" => "Emaily",
-  "Translations" => "Preklady",
+  "Translations" => "Překlady",
   "Websites" => "Webové stránky",
-  "Files and media" => "Súbory a médiá"
+  "Files and media" => "Soubory a média"
 ];

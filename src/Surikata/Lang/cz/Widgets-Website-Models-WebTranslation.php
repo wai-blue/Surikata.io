@@ -1,11 +1,11 @@
 <?php
 
 $dictionary = [
-  "Translations" => "Preklady",
-  "New translation" => "Nový preklad",
-  "Translation" => "Preklad",
+  "Translations" => "Překlady",
+  "New translation" => "Nový překlad",
+  "Translation" => "Překlad",
   "Domain" => "Doména",
   "Context" => "Kontext",
-  "Original string" => "Pôvodné slovo",
-  "Translated string" => "Preložené slovo",
+  "Original string" => "Původní slovo",
+  "Translated string" => "Přeložené slovo",
 ];  

@@ -1,23 +1,23 @@
 <?php
 
 $dictionary = [
-  "Name" => "Názov",
-  "Name of the service as it will be displayed on the web." => "Názov doručovacej služby, ktorý bude zobrazený na web stránke.",
+  "Name" => "Název",
+  "Name of the service as it will be displayed on the web." => "Název doručovací služby, který bude zobrazen na web stránce.",
   "Description" => "Popis",
-  "Optional. Some design themes may display this description on the web." => "Voliteľné. Niektoré témy môžu tento popis zobrazovať na web stránke.",
+  "Optional. Some design themes may display this description on the web." => "Volitelné. Některá témata mohou tento popis zobrazovat na webové stránce.",
   "Logo" => "Logo",
-  "Optional. Some design themes may display the logo on the web." =>  "Voliteľné. Niektoré témy môžu logo zobrazovať na web stránke.",
-  "Enabled" => "Povolené",
-  "Only enabled delivery services will be available at the checkout." => "Iba povolené doručovacie služby budú dostupné na web stránke.",
-  "Connected plugin" => "Pripojený plugin",
-  "Select a plugin which will be used to process the delivery." => "Vyberte plugin, ktorý sa použije pre doručovaciu službu.",
-  "Manage delivery services here. Insert only record for each contract with your delivery service provider." => "Tu môžete spravovať doručovacie služby.",
-  "General" => "Všeobecné",
-  "Enable / Disable" => "Povoliť / Zakázať",
-  "Delivery services" => "Doručovacie služby",
-  "New delivery service" => "Nová doručovacia služba",
-  "Delivery service" => "Doručovacia služba",
+  "Optional. Some design themes may display the logo on the web." =>  "Volitelné. Některá témata mohou logo zobrazovat na webové stránce.",
+  "Enabled" => "Povoleno",
+  "Only enabled delivery services will be available at the checkout." => "Pouze povolené doručovací služby budou dostupné na webové stránce.",
+  "Connected plugin" => "Připojen plugin",
+  "Select a plugin which will be used to process the delivery." => "Vyberte plugin, který se použije pro doručovací službu.",
+  "Manage delivery services here. Insert only record for each contract with your delivery service provider." => "Zde můžete spravovat doručovací služby.",
+  "General" => "Obecné",
+  "Enable / Disable" => "Povolit / Zakázat",
+  "Delivery services" => "Doručovací služby",
+  "New delivery service" => "Nová doručovací služba",
+  "Delivery service" => "Doručovací služba",
   "-- Select a plugin --" => "-- Vyberte plugin --",
   "Supported image extensions: jpg, gif, png, jpeg." => "Podporovaný formát obrázku: jpg, gif, png, jpeg.",
-  "Recommended resolution: 50x50px." => "Odporúčaný rozmer: 50x50px."
+  "Recommended resolution: 50x50px." => "Doporučený rozměr: 50x50px."
 ];

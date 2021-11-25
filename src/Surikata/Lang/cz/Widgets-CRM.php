@@ -1,6 +1,6 @@
 <?php
 
 $dictionary = [
-  "Contact form" => "Kontaktný formulár",
-  "Newsletter" => "Odber noviniek"
+  "Contact form" => "Kontaktní formulář",
+  "Newsletter" => "Odběr novinek"
 ];

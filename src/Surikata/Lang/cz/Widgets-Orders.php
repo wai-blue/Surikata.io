@@ -3,7 +3,7 @@
 $dictionary = [
   "New" => "Nové",
   "Invoiced" => "Vyúčtované",
-  "Paid" => "Zaplatené",
+  "Paid" => "Zaplacené",
   "Shipped" => "Doručené",
   "Canceled" => "Zrušené",
   "Orders" => "Objednávky"

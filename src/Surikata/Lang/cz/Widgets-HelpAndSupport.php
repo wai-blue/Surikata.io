@@ -2,6 +2,6 @@
 
 $dictionary = [
   "Help & Support" => "Pomoc a podpora",
-  "User guide" => "Užívateľská príručka",
+  "User guide" => "Uživatelská příručka",
   "Contact us" => "Kontaktuj nás"
 ];

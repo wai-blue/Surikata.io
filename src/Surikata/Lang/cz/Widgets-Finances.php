@@ -1,8 +1,8 @@
 <?php
 
 $dictionary = [
-  "Invoices" => "Faktúry",
-  "Merchant profiles" => "Profily obchodníkov",
-  "Numeric series" => "Číselná séria",
-  "Settings" => "Nastavenia"
+  "Invoices" => "Faktury",
+  "Merchant profiles" => "Profily obchodníků",
+  "Numeric series" => "Číselná série",
+  "Settings" => "Nastavení"
 ];

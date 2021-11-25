@@ -1,14 +1,20 @@
 <?php
 
-class InstallerHelperFunctions {
+namespace Surikata\Installer;
 
+class HelperFunctions {
+
+  // echo
   public static function echo($msg) {
     if (php_sapi_name() !== 'cli') {
       echo $msg;
     }
   }
 
+  // loadCsvIntoArray
   public static function loadCsvIntoArray($file, $separator = ',', $enclosure = '#') {
+    if (!is_file($file)) return [];
+
     $lines = [];
 
     $file = fopen($file, 'r');
@@ -78,4 +84,86 @@ class InstallerHelperFunctions {
 
     return $configEnvDomainsPHP;
   }
+
+  // recursiveCopy
+  public static function recursiveCopy($source, $dest) {
+    mkdir($dest, 0755);
+    foreach (
+    $iterator = new \RecursiveIteratorIterator(
+      new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
+      \RecursiveIteratorIterator::SELF_FIRST) as $item
+    ) {
+      if ($item->isDir()) {
+        mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
+      } else {
+        copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
+      }
+    }
+  }
+
+  // recursiveRmDir
+  public static function recursiveRmDir($dir, $excludeFiles = []) {
+    if (!empty($dir) && is_dir($dir)) {
+      $objects = scandir($dir);
+      foreach ($objects as $object) {
+        if ($object != "." && $object != "..") {
+          if (is_dir($dir."/".$object) && !is_link($dir."/".$object)) {
+            self::recursiveRmDir($dir."/".$object, $excludeFiles);
+          } else {
+           if (in_array($object, $excludeFiles)) {
+             //
+           } else {
+             unlink($dir."/".$object);
+           }
+          }
+        } 
+      }
+      rmdir($dir);
+    }
+  }
+
+  // addFolderToZip
+  public static function addFolderToZip($zip, $source, $destinationPath = "") {
+
+    if (!file_exists($source)) {
+      return false;
+    }
+
+    $source = str_replace('\\', '/', realpath($source));
+
+    if (is_dir($source) === true) {
+      $files = new \RecursiveIteratorIterator(
+        new \RecursiveDirectoryIterator($source),
+        \RecursiveIteratorIterator::SELF_FIRST
+      );
+
+      foreach ($files as $file) {
+        $file = str_replace('\\', '/', $file);
+
+        if (in_array(substr($file, strrpos($file, '/') + 1), ['.', '..'])) {
+          continue;
+        }
+
+        $file = realpath($file);
+        $file = str_replace('\\', '/', $file);
+
+        if (is_dir($file) === true) {
+          $zip->addEmptyDir($destinationPath."/".str_replace($source.'/', '', $file.'/'));
+        } else if (is_file($file) === true) {
+          $zip->addFromString(
+            $destinationPath."/".str_replace($source.'/', '', $file),
+            file_get_contents($file)
+          );
+        }
+      }
+    } else if (is_file($source) === true) {
+      $zip->addFromString(
+        $destinationPath."/".basename($source),
+        file_get_contents($source)
+      );
+    }
+
+    return TRUE;
+  }
+
 }

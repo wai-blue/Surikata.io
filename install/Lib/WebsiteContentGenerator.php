@@ -1,5 +1,7 @@
 <?php
 
+namespace Surikata\Installer;
+
 class WebsiteContentGenerator {
   public $adminPanel;
   public $domainsToInstall = [];

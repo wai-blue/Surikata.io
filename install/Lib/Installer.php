@@ -14,6 +14,10 @@ class Installer {
 
     $createPackage = $installationConfig['create_package'] ?? "";
 
+    if (!empty($createPackage) && !class_exists("\\ZipArchive")) {
+      throw new \Exception("Cannot create package. ZipArchive class not found.");
+    }
+
     $domainsToInstall = HelperFunctions::parseDomainsToInstall($installationConfig);
 
     $randomProductsCount = $installationConfig['random-products-count'] ?? 50;

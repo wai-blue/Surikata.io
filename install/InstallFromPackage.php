@@ -9,6 +9,10 @@ if (php_sapi_name() !== 'cli') {
   echo "Script is available only for CLI.";
 }
 
+if (!class_exists("\\ZipArchive")) {
+  throw new \Exception("Cannot install package. ZipArchive class not found.");
+}
+
 require_once __DIR__."/Lib/Autoload.php";
 
 ///////////////////////////////////////////////////////////////
@@ -44,7 +48,7 @@ require_once __DIR__."/../Init.php";
 $tmpPackageFolder = __DIR__."/~~tmp~~".rand(100, 999)."~~".rand(100, 999)."~~";
 mkdir($tmpPackageFolder);
 
-$zip = new ZipArchive;
+$zip = new \ZipArchive;
 $zip->open(__DIR__."/packages/{$packageName}.zip");
 $zip->extractTo($tmpPackageFolder);
 $zip->close();

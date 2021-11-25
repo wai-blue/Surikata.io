@@ -646,7 +646,7 @@ class WebsiteContentGenerator {
         "web" => [
           $this->domainName => [
             "companyInfo" => [
-              "slogan" => "Môj nový eshop: {$this->domainName}",
+              "slogan" => $this->translate("slogan"),
               "contactPhoneNumber" => "+421 111 222 333",
               "contactEmail" => "info@{$this->installationConfig['http_host']}",
               "logo" => "your-logo.png",

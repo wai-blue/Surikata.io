@@ -29,7 +29,7 @@ class HelperFunctions {
   public static function parseDomainsToInstall($installationConfig) {
     $domainsToInstall = [];
     
-    for ($i = 1; $i <= 3; $i++) {
+    for ($i = 1; $i <= 10; $i++) {
       if (!empty($installationConfig["domain_{$i}_description"])) {
         $domainsToInstall[$i] = [
           "name" => \ADIOS\Core\HelperFunctions::str2url($installationConfig["domain_{$i}_description"]),

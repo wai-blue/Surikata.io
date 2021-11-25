@@ -347,8 +347,8 @@ if (!$doInstall) {
           <td>"._getDomainThemeSelect(3, $availableThemes)."</td>
         </tr>
         <tr>
-          <td>"._getDomainSlugInput(4, "")."</td>
-          <td>"._getDomainDescriptionInput(4, "")."</td>
+          <td>"._getDomainSlugInput(4, "cz")."</td>
+          <td>"._getDomainDescriptionInput(4, "Česká verzia")."</td>
           <td>"._getDomainLanguageIndexInput(4, 3)."</td>
           <td>"._getDomainThemeSelect(4, $availableThemes)."</td>
         </tr>

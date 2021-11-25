@@ -34,14 +34,16 @@ foreach ($availableThemes as $theme) {
   foreach ($availableLanguageCombinations as $languages) {
     $package = $theme."-".str_replace(",", "-", $languages);
     echo "CREATING PACKAGE {$package}.\n";
+
     $arguments = [
       "theme" => $theme,
       "languages" => $languages,
       "package" => $package,
     ];
 
+    ob_start();
     include(__DIR__."/Install.php");
+    ob_end_clean();
 
-    echo "PACKAGE {$package} CREATED.\n";
   }
 }

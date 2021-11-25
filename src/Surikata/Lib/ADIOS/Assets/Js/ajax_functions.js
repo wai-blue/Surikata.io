@@ -418,7 +418,6 @@ function _ajax_multiupload(options){
   if (typeof options.type == 'undefined') options.type = 'image';
   if (typeof options.subdir == 'undefined') options.subdir = 'multi_upload';
   if (typeof options.rename_file == 'undefined') options.rename_file = 1;
-  if (typeof options.allowed_extensions == 'undefined') options.allowed_extensions = '';
 
   if (! $('#adios_common_file_upload_input').length > 0){
     var file_input = "<div style='height:0px;overflow:hidden;'><input type='file' id='adios_common_file_upload_input' multiple='multiple' /></div>";
@@ -451,7 +450,7 @@ function _ajax_multiupload(options){
             formData.append('upload', files[item]);
 
             $.ajax({
-              url: _APP_URL + '/UI/FileBrowser/Upload?__IS_AJAX__=1&output=json&type=' + options.type + '&rename_file=' + options.rename_file + '&allowed_extensions=' + options.allowed_extensions + '&subdir=' + options.subdir,
+              url: _APP_URL + '/UI/FileBrowser/Upload?__IS_AJAX__=1&output=json&type=' + options.type + '&rename_file=' + options.rename_file + '&subdir=' + options.subdir,
               type: 'post',
               data: formData,
               enctype: 'multipart/form-data',

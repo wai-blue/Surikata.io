@@ -101,7 +101,7 @@ class DB {
           default collate = utf8mb4_unicode_ci
         ");
 
-        echo "Created database `{$this->db_name}`";
+        $this->adios->console->info("Created database `{$this->db_name}`");
 
         $this->connection->select_db($this->db_name);
 

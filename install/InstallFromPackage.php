@@ -1,64 +1,86 @@
 <?php
 
+use \Surikata\Installer\HelperFunctions;
+
+///////////////////////////////////////////////////////////////
+// initialize
+
 if (php_sapi_name() !== 'cli') {
   echo "Script is available only for CLI.";
 }
 
-$packageName = $argv[1] ?? "";
-$host = $argv[2] ?? "";
-$rewriteBase = $argv[3] ?? "";
+if (!class_exists("\\ZipArchive")) {
+  throw new \Exception("Cannot install package. ZipArchive class not found.");
+}
 
-if (empty($packageName) || empty($host) || empty($rewriteBase)) {
-  echo "Usage: php InstallFromPackage.php <packageName> <host> <rewriteBase>\n";
-  echo "Example: php InstallFromPackage.php basic-sk localhost /projects/Surikata.io/";
+require_once __DIR__."/Lib/Autoload.php";
+
+///////////////////////////////////////////////////////////////
+// parse and validate arguments
+
+if (isset($arguments) && is_array($arguments)) {
+  // script has been included in this case
+} else {
+  $arguments = $argv;
+}
+
+$packageName = $arguments[1] ?? "";
+
+if (empty($packageName)) {
+  echo "Usage: php InstallFromPackage.php <packageName>\n";
+  echo "Example: php InstallFromPackage.php basic-sk";
   exit;
 }
 
-if (!is_file("packages/{$packageName}.zip")) {
+if (!is_file(__DIR__."/packages/{$packageName}.zip")) {
   echo "Package {$packageName} not found.";
   exit;
 }
 
-if (substr($rewriteBase, 0, 1) != "/" || substr($rewriteBase, -1) != "/") {
-  echo "Warning: RewriteBase should start and end with a slash (/).\n";
-}
+///////////////////////////////////////////////////////////////
+// load $adminPanelConfig and $websiteRendererConfig
 
-echo "Warning: Assets are not copied to upload/ folder when installing from a package.\n";
+require_once __DIR__."/../Init.php";
 
-$zip = new ZipArchive;
+///////////////////////////////////////////////////////////////
+// install the project
+
+$tmpPackageFolder = __DIR__."/~~tmp~~".rand(100, 999)."~~".rand(100, 999)."~~";
+mkdir($tmpPackageFolder);
+
+$zip = new \ZipArchive;
 $zip->open(__DIR__."/packages/{$packageName}.zip");
-$zip->extractTo(__DIR__."/packages");
+$zip->extractTo($tmpPackageFolder);
 $zip->close();
 
-$sql = file_get_contents(__DIR__."/packages/surikata-installation.sql");
-unlink(__DIR__."/packages/surikata-installation.sql");
-
-$installationConfig = json_decode(file_get_contents(__DIR__."/packages/installation-config.json"), TRUE);
-unlink(__DIR__."/packages/installation-config.json");
-
-$sql = str_replace("{% SERVER_HTTP_HOST %}", $host, $sql);
-$sql = str_replace("{% REWRITE_BASE %}", $rewriteBase, $sql);
-
-require(__DIR__."/../Init.php");
-
-include("Lib/InstallerHelperFunctions.php");
+$sql = file_get_contents("{$tmpPackageFolder}/package.sql");
+$installationConfig = json_decode(file_get_contents("{$tmpPackageFolder}/installation-config.json"), TRUE);
 
 $websiteRenderer = new \MyEcommerceProject\Web($websiteRendererConfig);
 $adminPanel = new \MyEcommerceProject\AdminPanel($adminPanelConfig, ADIOS_MODE_FULL, $websiteRenderer);
+
+$adminPanel->createMissingFolders();
 
 $tsStart = _getmicrotime();
 
 echo "Installing Surikata.io package {$packageName}.\n";
 
 // ConfigEnvDomains.php
-$domainsToInstall = \InstallerHelperFunctions::parseDomainsToInstall($installationConfig);
+$domainsToInstall = HelperFunctions::parseDomainsToInstall($installationConfig);
 
 file_put_contents(
   PROJECT_ROOT_DIR."/ConfigEnvDomains.php",
-  \InstallerHelperFunctions::renderConfigEnvDomains($domainsToInstall)
+  HelperFunctions::renderConfigEnvDomains($domainsToInstall)
 );
 
-// SQL data
+// Assets & Upload folder
+
+$wsg = new \Surikata\Installer\WebsiteContentGenerator($adminPanel, $domainsToInstall, $installationConfig);
+
+HelperFunctions::recursiveRmDir($adminPanel->config["files_dir"], [".htaccess"]);
+HelperFunctions::recursiveCopy("{$tmpPackageFolder}/upload", $adminPanel->config["files_dir"]);
+
+// SQL
 
 $adminPanel->db->startTransaction();
 $adminPanel->db->executeBuffer($sql);
@@ -71,6 +93,8 @@ foreach ($domainsToInstall as $domainIndex => $domain) {
 }
 
 // Done
+
+HelperFunctions::recursiveRmDir($tmpPackageFolder);
 
 $executionTime = _getmicrotime() - $tsStart;
 

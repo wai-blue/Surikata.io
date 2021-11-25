@@ -33,6 +33,7 @@
     "Checkout" => "Objednať",
     "checkout" => "objednat",
     "Order confirmed" => "Potvrdenie objednávky",
+    "Order payment received" => "Prijatá platba za objednávku",
     "Create Account" => "Vytvoriť účet",
     "create-account" => "vytvorit-ucet",
     "Create Account - Confirmation" => "Vytvoriť účet - Potvrdenie",
@@ -71,4 +72,5 @@
     "All about business" => "Všetko o biznise",
     "Fashion" => "Móda",
     "All about fashion" => "Všetko o móde",
+    "slogan" => "Môj nový eshop",
   ];

@@ -154,4 +154,16 @@ class Console {
     return $html;
   }
 
+  public function convertLogsToPlainText($logs, $addTimestamps = FALSE) {
+    $html = "";
+    foreach ($logs as $mictotime => $log) {
+      if ($addTimestamps) {
+        list($msec, $sec) = explode(" ", $mictotime);
+        $html .= date("Y-m-h H:i:s", $sec).".".round($msec*1000)." ";
+      }
+      $html .= hsc($log[0])." ".hsc($log[1]['exception'])."\n";
+    }
+    return $html;
+  }
+
 }

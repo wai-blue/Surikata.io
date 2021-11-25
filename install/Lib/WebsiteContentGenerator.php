@@ -1,5 +1,7 @@
 <?php
 
+namespace Surikata\Installer;
+
 class WebsiteContentGenerator {
   public $adminPanel;
   public $domainsToInstall = [];
@@ -10,9 +12,8 @@ class WebsiteContentGenerator {
   public $websiteCommonPanels = [];
   public $installationConfig = "";
 
-  public function __construct($adminPanel, $slideshowImageSet, $domainsToInstall, $installationConfig) {
+  public function __construct($adminPanel, $domainsToInstall, $installationConfig) {
     $this->adminPanel = $adminPanel;
-    // $this->slideshowImageSet = $slideshowImageSet;
     $this->domainsToInstall = $domainsToInstall;
     $this->installationConfig = $installationConfig;
   }
@@ -623,7 +624,8 @@ class WebsiteContentGenerator {
     $websiteWebRedirectModel->insertRow([
       "domain" => $this->domainName,
       "from_url" => "",
-      "to_url" => "//".$this->installationConfig['http_host'].$this->installationConfig['rewrite_base'].$this->domainSlug."/".$this->translate("home"),
+      // "to_url" => "//".$this->installationConfig['http_host'].$this->installationConfig['rewrite_base'].$this->domainSlug."/".$this->translate("home"),
+      "to_url" => "//{% ROOT_URL %}/".$this->translate("home"),
       "type" => 302,
     ]);
 
@@ -644,7 +646,7 @@ class WebsiteContentGenerator {
         "web" => [
           $this->domainName => [
             "companyInfo" => [
-              "slogan" => "Môj nový eshop: {$this->domainName}",
+              "slogan" => $this->translate("slogan"),
               "contactPhoneNumber" => "+421 111 222 333",
               "contactEmail" => "info@{$this->installationConfig['http_host']}",
               "logo" => "your-logo.png",

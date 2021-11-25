@@ -1,6 +1,8 @@
 <?php
 
 
+namespace Surikata\Installer;
+
 class RandomProductsGenerator {
 
   public static function generateEAN($number) {
@@ -21,8 +23,8 @@ class RandomProductsGenerator {
 
   public static function generateRandomProducts(
     int $numOfProducts,
-    ADIOS\Widgets\Products\Models\Product $productModel,
-    ADIOS\Widgets\Products\Models\ProductFeatureAssignment $productFeatureAssignmentModel
+    \ADIOS\Widgets\Products\Models\Product $productModel,
+    \ADIOS\Widgets\Products\Models\ProductFeatureAssignment $productFeatureAssignmentModel
   ) {
     $productsData = [];
     for ($i = 0; $i < $numOfProducts; $i++) {

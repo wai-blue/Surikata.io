@@ -23,22 +23,12 @@ class WebPage extends \ADIOS\Core\Widget\Model {
   }
 
   public function columns(array $columns = []) {
-    $tmp_domena = "https://".($this->adios->config['settings']['web']['profile']['rootUrl'] ?? "MojaDomena.sk");
-
     return parent::columns([
       "domain" => [
         "type" => "varchar",
         "title" => $this->translate("Domain"),
         "required" => TRUE,
         "readonly" => TRUE,
-      ],
-
-      "name" => [
-        "type" => "varchar",
-        "title" => $this->translate("Name"),
-        "required" => TRUE,
-        "show_column" => TRUE,
-        "description" => $this->translate("Your webpage name. Example: 'homepage', 'list of products'."),
       ],
 
       "url" => [
@@ -54,11 +44,19 @@ class WebPage extends \ADIOS\Core\Widget\Model {
         ]
       ],
 
+      "name" => [
+        "type" => "varchar",
+        "title" => $this->translate("Brief name"),
+        // "required" => TRUE,
+        "show_column" => TRUE,
+        "description" => $this->translate("Your webpage name. Example: 'homepage', 'list of products'."),
+      ],
+
       "content_structure" => [
         "type" => "text",
-        "title" => $this->translate("Layout structure and plugin configuratin"),
+        // "title" => $this->translate("Layout structure and plugin configuratin"),
         "input" => "Widgets/Website/Inputs/ContentStructure",
-        "description" => $this->translate("More detailed settings are available by clicking on the selected panel."),
+        // "description" => $this->translate("More detailed settings are available by clicking on the selected panel."),
         "show_column" => FALSE,
       ],
 
@@ -126,46 +124,92 @@ class WebPage extends \ADIOS\Core\Widget\Model {
   }
 
   public function formParams($data, $params) {
+
     if ($params['id'] == -1) {
-      $params['default_values'] = ["domain" => $params['domainName']];
+      $params['default_values'] = [
+        "domain" => $params['domainName'],
+      ];
+
+      $params["template"] = [
+        "columns" => [
+          [
+            "class" => "col-md-8 pr-2",
+            "rows" => [
+              "domain",
+              "url",
+            ],
+          ],
+        ],
+      ];
+
+    } else {
+
+      $params["template"] = [
+        "columns" => [
+          [
+            "class" => "col-md-8 pr-2",
+            "rows" => [
+              "domain",
+              "url",
+              ["html" => $this->translate("Page content")],
+              "content_structure",
+              // "typ_stranky",
+            ],
+          ],
+          [
+            "class" => "col-md-4 pl-0",
+            "tabs" => [
+              // "Textový obsah" => [
+              //   "obsah_h1",
+              //   "obsah_text",
+              // ],
+              $this->translate("Visibility") => [
+                "publish_from",
+                "publish_to",
+                "publish_always",
+                "visibility",
+              ],
+              "SEO" => [
+                "seo_title",
+                "seo_keywords",
+                "seo_description",
+              ],
+              $this->translate("Miscelaneous") => [
+                "name",
+              ],
+            ],
+          ],
+        ],
+      ];
     }
 
-    $params["template"] = [
-      "columns" => [
-        [
-          "class" => "col-md-8 pr-2",
-          "rows" => [
-            "domain",
-            "name",
-            "url",
-            "content_structure",
-            // "typ_stranky",
-          ],
-        ],
-        [
-          "class" => "col-md-4 pl-0",
-          "tabs" => [
-            // "Textový obsah" => [
-            //   "obsah_h1",
-            //   "obsah_text",
-            // ],
-            "SEO" => [
-              "seo_title",
-              "seo_keywords",
-              "seo_description",
-            ],
-            $this->translate("Visibility and publishing") => [
-              "visibility",
-              "publish_always",
-              "publish_from",
-              "publish_to",
-            ],
-          ],
-        ],
-      ],
-    ];
-
     return $params;
+  }
+
+  public function onBeforeSave($data) {
+
+    if ($data['id'] == -1) {
+      $data["publish_always"] = TRUE;
+      $data["content_structure"] = json_encode([
+        "layout" => "WithoutSidebar",
+        "panels" => [
+          "header" => [
+            "plugin" => "WAI/Common/Header",
+            "settings" => [],
+          ],
+          "navigation" => [
+            "plugin" => "WAI/Common/Navigation",
+            "settings" => [],
+          ],
+          "footer" => [
+            "plugin" => "WAI/Common/Footer",
+            "settings" => [],
+          ],
+        ],
+      ]);
+    }
+
+    return parent::onBeforeSave($data);
   }
 
   public function onAfterSave($data, $returnValue) {

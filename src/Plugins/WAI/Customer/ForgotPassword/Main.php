@@ -19,7 +19,7 @@ namespace Surikata\Plugins\WAI\Customer {
       $customer = $customerModel->getByEmail($email);
 
       $token = $email 
-        ? "/" . 
+        ? "" .
           $customerTokenAssignmentModel->generateForgotPasswordToken(
             $customer['id'],
             $email

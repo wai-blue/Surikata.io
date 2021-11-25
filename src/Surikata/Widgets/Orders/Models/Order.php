@@ -435,7 +435,7 @@ class Order extends \ADIOS\Core\Widget\Model {
       (new OrderTagAssignment($this->adios))->saveOrderTags($data["id"], $tagIds);
     }
 
-    return $data;
+    return parent::onBeforeSave($data);
   }
 
   public function onAfterSave($data, $returnValue) {
@@ -444,6 +444,8 @@ class Order extends \ADIOS\Core\Widget\Model {
       $summary = $this->calculateSummaryInfo($order);
       $this->updateSummaryInfo($data['id'], $summary);
     }
+
+    return parent::onAfterSave($data, $returnValue);
   }
 
   public function calculateOrderNumber($orderData) {

@@ -206,6 +206,21 @@ class Loader extends \ADIOS\Core\Loader {
   }
   
   /**
+   * Creates required folder in the project's root dir
+   *
+   * @throws \Exception When failed to create at least one folder.
+   *
+   * @return void
+   */
+  public function createMissingFolder($folder) {
+    if (is_string($folder) && !is_dir($folder)) {
+      if (!mkdir($folder, 0755, TRUE)) {
+        throw new \Exception('Wrong permissions to create directory: "' . $folder. '"');
+      }
+    }
+  }
+  
+  /**
    * Creates required folders in the project if they are missing
    *
    * @throws \Exception When failed to create at least one folder.
@@ -213,18 +228,12 @@ class Loader extends \ADIOS\Core\Loader {
    * @return void
    */
   public function createMissingFolders() {
-    foreach (get_defined_constants(true)['user'] as $const => $value) {
-      if (
-        '_DIR' === substr($const, -4) 
-        && is_string($value)
-        && !empty($value)
-        && !is_dir($value)
-      ) {
-        if (!mkdir($value, 0755, TRUE)) {
-          throw new \Exception('Wrong permissions to create directory: "' . $value. '"');
-        }
-      }
-    }
+    $this->createMissingFolder(LOG_DIR);
+    $this->createMissingFolder(DATA_DIR);
+    $this->createMissingFolder(CACHE_DIR);
+    $this->createMissingFolder(TWIG_CACHE_DIR);
+    $this->createMissingFolder(UPLOADED_FILES_DIR);
+    $this->createMissingFolder(UPLOADED_FILES_DIR."/csv-import");
   }
   
   /**
@@ -235,8 +244,18 @@ class Loader extends \ADIOS\Core\Loader {
    * @return void
    */
   public function checkFoldersPermissions() {
-    // TODO:
-    // throw new \Exception('Wrong access permissions for folder "' . $value. '"');
+    foreach (get_defined_constants(true)['user'] as $const => $value) {
+      if (
+        '_DIR' === substr($const, -4) 
+        && is_string($value)
+        && !empty($value)
+        && is_dir($value)
+      ) {
+        if (substr(sprintf('%o', fileperms($value)), -4) !== '0775' and !chmod($value, 0775)) {
+          throw new \Exception('Wrong access permissions for folder: "' . $value. '"');
+        }
+      }
+    }
   }
 
   public function getAvailableDomains() {

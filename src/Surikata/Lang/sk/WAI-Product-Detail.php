@@ -1,5 +1,5 @@
 <?php
 
 $dictionary = [
-  "Visit product on website" => "Navštíviť produkt na webovej stránke"
+  "Visit product on website" => "Zobraziť produkt na webovej stránke"
 ];

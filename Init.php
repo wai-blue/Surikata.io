@@ -13,9 +13,21 @@
 ini_set("display_errors", 1);
 ini_set("error_reporting", E_ALL ^ E_NOTICE ^ E_WARNING);
 
+// SURIKATA_ROOT_DIR points to the folder where the original Surikata.io's repository files are located
+if (!defined('SURIKATA_ROOT_DIR')) {
+  define('SURIKATA_ROOT_DIR', __DIR__);
+}
+
+// By default, the PROJECT_ROOT_DIR is the same as SURIKATA_ROOT_DIR
+// However, for multi-account hosting where one Surikata.io code repository serves multiple
+// accounts, the PROJECT_ROOT_DIR points to the root folder of the account.
+if (!defined('PROJECT_ROOT_DIR')) {
+  define('PROJECT_ROOT_DIR', __DIR__);
+}
+
 if (
   strpos($_SERVER["SCRIPT_NAME"], "install/index.php") === FALSE
-  && !file_exists(__DIR__."/ConfigEnv.php")
+  && !file_exists(PROJECT_ROOT_DIR."/ConfigEnv.php")
 ) {
   echo "It looks like you did not run the installer yet.<br/>";
   echo "<a href='install'>Open the installer</a>";
@@ -23,15 +35,17 @@ if (
 }
 
 // load configs
-require_once("ConfigEnv.php");
-require_once("ConfigApp.php");
+require_once(PROJECT_ROOT_DIR."/ConfigEnv.php");
+require_once(__DIR__."/ConfigApp.php");
 
 // load assets from cache, if necessary
-require_once("LoadAssetsFromCache.php");
+if ($configEnv["cacheAssets"] ?? FALSE) {
+  require_once(__DIR__."/LoadAssetsFromCache.php");
+}
 
 // include autoloaders
 require_once("vendor/autoload.php");
-require_once(ADMIN_PANEL_SRC_DIR."/Autoload.php");
+require_once(SURIKATA_ROOT_DIR."/src/Surikata/Autoload.php");
 require_once(CASCADA_CORE_DIR."/Autoload.php");
 require_once(ADIOS_CORE_DIR."/Autoload.php");
 
@@ -39,7 +53,7 @@ require_once(ADIOS_CORE_DIR."/Autoload.php");
 require_once(__DIR__."/prop/Init.php");
 
 // include Loader classes
-require_once(ADMIN_PANEL_SRC_DIR."/Core/Web/Loader.php");
+require_once(SURIKATA_ROOT_DIR."/src/Surikata/Core/Web/Loader.php");
 
 //
 require_once(__DIR__."/prop/MyEcommerceProject.php");

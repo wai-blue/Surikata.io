@@ -6,6 +6,6 @@ $dictionary = [
   "Shopping cart" => "Nákupný košík",
   "Header" => "Hlavička",
   "Items" => "Položky",
-  "Customer UID" => "Zákacnícke UID",
+  "Customer UID" => "Zákaznícke UID",
   "Order" => "Objednávka"
 ];

@@ -57,6 +57,7 @@ class Table extends \ADIOS\Core\UI\View {
         'show_add_button' => true,
         'show_search_button' => true,
         'show_export_csv_button' => true,
+        'show_import_csv_button' => false, // Dusan: 22.11.2021, nebolo dokoncene, ale potreboval som mergnut do devel
         'refresh_action' => 'UI/Table',
         'items_per_page' => 25,
         'allow_order_modification' => true,
@@ -411,6 +412,22 @@ class Table extends \ADIOS\Core\UI\View {
                   let tmpTableParams = Base64.encode(JSON.stringify(ui_table_params['{$this->uid}']));
                   window.open(
                     '{$this->adios->config['url']}/{$exportCsvAction}?tableParams=' + tmpTableParams
+                  );
+                ",
+              ];
+            }
+
+            if ($this->params['show_import_csv_button']) {
+              $importCsvAction = $this->model->importCsvAction ?? $this->model->getFullUrlBase($params)."/Import/CSV";
+
+              $moreActionsButtonItems[] = [
+                "fa_icon" => "fas fa-file-import",
+                "text" => $this->translate("Import from CSV"),
+                "onclick" => "
+                  let tmpTableParams = Base64.encode(JSON.stringify(ui_table_params['{$this->uid}']));
+                  window_render(
+                    '{$importCsvAction}',
+                    {tableParams: tmpTableParams}
                   );
                 ",
               ];
@@ -848,7 +865,7 @@ class Table extends \ADIOS\Core\UI\View {
               'uid' => "{$this->uid}_window",
               'content' => $html,
               'header' => [
-                $this->adios->ui->Button(["text" => "Zavrieť", "type" => "close", "onclick" => "ui_form_close('{$this->uid}_window');"]),
+                $this->adios->ui->Button(["text" => $this->translate("Close"), "type" => "close", "onclick" => "ui_form_close('{$this->uid}_window');"]),
               ],
               'title' => " ",
             ]

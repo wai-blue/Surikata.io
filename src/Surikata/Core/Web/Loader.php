@@ -119,7 +119,7 @@ class Loader extends \Cascada\Loader {
         echo $js;
         exit();
       };
-      $this->assetsUrlMap["core/assets/"] = ADMIN_PANEL_SRC_DIR."/Core/Assets/";
+      $this->assetsUrlMap["core/assets/"] = SURIKATA_ROOT_DIR."/src/Surikata/Core/Assets/";
       $this->assetsUrlMap["theme/assets/"] = "{$this->themeDir}/Assets/";
       $this->assetsUrlMap["plugins/assets/"] = function($websiteRenderer, $url) { 
         $url = str_replace("plugins/assets/", "", $url);
@@ -243,12 +243,26 @@ class Loader extends \Cascada\Loader {
             $templateFile = "{$this->themeDir}/Templates/Snippets/{$pluginName}.twig";
 
             if (is_file($templateFile)) {
-              $renderParams = array_merge($this->currentRenderedPlugin->twigRenderParams, $renderParams);
-              $renderParams["snippetName"] = $snippetName;
-              $renderParams["system"]["availableVariables"] = array_keys($renderParams);
+              $pluginTwigParams = [];
+              $plugin = $this->getPlugin($pluginName);
+
+              if (is_object($plugin)) {
+                $pluginTwigParams = $plugin->getTwigParams(array_merge(
+                  $this->currentRenderedPlugin->twigRenderParams,
+                  $renderParams
+                ));
+              }
+
+              $snippetRenderParams = array_merge(
+                $this->currentRenderedPlugin->twigRenderParams,
+                $renderParams,
+                $pluginTwigParams
+              );
+              $snippetRenderParams["snippetName"] = $snippetName;
+              $snippetRenderParams["system"]["availableVariables"] = array_keys($snippetRenderParams);
 
               $html .= $this->twig
-                ->render("Templates/Snippets/{$pluginName}.twig", $renderParams)
+                ->render("Templates/Snippets/{$pluginName}.twig", $snippetRenderParams)
               ;
             }
           }
@@ -267,7 +281,7 @@ class Loader extends \Cascada\Loader {
           $plugin = $this->getPlugin($pluginName);
 
           if (is_object($plugin)) {
-            $pluginTwigParams = $plugin->getTwigParams([]);
+            $pluginTwigParams = $plugin->getTwigParams($renderParams);
           }
 
           if (is_file($templateFile)) {

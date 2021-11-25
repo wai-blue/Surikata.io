@@ -1,0 +1,5 @@
+<?php
+
+$dictionary = [
+  "News" => "Novinky"
+];

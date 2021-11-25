@@ -1,3 +1,6 @@
+/cache/*
+!/cache/.htaccess
+
 /upload/*
 !/upload/.htaccess
 
@@ -9,6 +12,9 @@
 
 /data/*
 !/data/.htaccess
+
+/install/packages/*
+!/install/packages/.htaccess
 
 /prop/*
 !/prop/.htaccess

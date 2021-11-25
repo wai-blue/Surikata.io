@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Orders\Models;
 
-class OrderTag extends \ADIOS\Core\Model {
+class OrderTag extends \ADIOS\Core\Widget\Model {
   var $sqlName = "orders_tags";
   var $urlBase = "Orders/Tags";
 

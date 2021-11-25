@@ -17,28 +17,37 @@
 // Admin panel
 
 define('ADMIN_PANEL_URL', "//".$_SERVER['HTTP_HOST'].REWRITE_BASE."admin");
-define('ADMIN_PANEL_REWRITE_BASE', REWRITE_BASE."admin/");
-
-define('ADMIN_PANEL_SRC_URL', "//".$_SERVER['HTTP_HOST'].REWRITE_BASE."src");
-
-define('ADMIN_PANEL_SRC_DIR', __DIR__."/src/Surikata");
-define('ADMIN_PANEL_LOG_DIR', __DIR__."/log");
-define('ADMIN_PANEL_TMP_DIR', __DIR__."/tmp");
 
 define('UPLOADED_FILES_URL', "//".$_SERVER['HTTP_HOST'].REWRITE_BASE."upload");
-define('UPLOADED_FILES_DIR', __DIR__."/upload");
+define('UPLOADED_FILES_DIR', PROJECT_ROOT_DIR."/upload");
 
 // Miscelaneous
 
 define('DEVEL_MODE', TRUE);
-define('PROJECT_ROOT_DIR', __DIR__);
-define('CONTROLLERS_DIR', __DIR__."/src/Controllers");
-define('LOG_DIR', __DIR__."/log");
-define('DATA_DIR', __DIR__."/data");
-define('PROP_DIR', __DIR__."/prop");
 
-define('TWIG_CACHE_DIR', FALSE); // disable cache
+if (!defined('PROP_DIR')) {
+  define('PROP_DIR', __DIR__."/prop");
+}
 
+if (!defined('LOG_DIR')) {
+  define('LOG_DIR', PROJECT_ROOT_DIR."/log");
+}
+
+if (!defined('DATA_DIR')) {
+  define('DATA_DIR', PROJECT_ROOT_DIR."/data");
+}
+
+if (!defined('CACHE_DIR')) {
+  define('CACHE_DIR', PROJECT_ROOT_DIR."/cache");
+}
+
+if (!defined('TWIG_CACHE_DIR')) {
+  define('TWIG_CACHE_DIR', PROJECT_ROOT_DIR."/cache/twig");
+}
+
+// if (!defined('CONTROLLERS_DIR')) {
+//   define('CONTROLLERS_DIR', __DIR__."/src/Controllers");
+// }
 
 // External libs
 
@@ -50,7 +59,9 @@ define('ADIOS_WIDGETS_DIR', __DIR__."/src/Surikata/Widgets");
 // Administration panel configuration
 ////////////////////////////////////////////////////////
 
-define('GTP', 'srkt');
+if (!defined('GTP')) {
+  define('GTP', 'srkt');
+}
 
 $adminPanelConfig["build"]["version"]          = "1.2";
 
@@ -65,15 +76,13 @@ $adminPanelConfig["brand"]["sidebar"]["subtitle"] = "Administration panel";
 $adminPanelConfig["global_table_prefix"]       = GTP;
 
 $adminPanelConfig['devel_mode']              = DEVEL_MODE;
-$adminPanelConfig['rewrite_base']            = ADMIN_PANEL_REWRITE_BASE;
+$adminPanelConfig['rewrite_base']            = REWRITE_BASE."admin/";
 
-$adminPanelConfig["dir"]                     = ADMIN_PANEL_SRC_DIR;
+$adminPanelConfig["dir"]                     = SURIKATA_ROOT_DIR."/src/Surikata";
 $adminPanelConfig["url"]                     = ADMIN_PANEL_URL;
 
-$adminPanelConfig["log_dir"]                 = ADMIN_PANEL_LOG_DIR;
-$adminPanelConfig["tmp_dir"]                 = ADMIN_PANEL_TMP_DIR;
-
-$adminPanelConfig["console"]["log_file"]     = ADMIN_PANEL_LOG_DIR."/admin-".date("Ymd").".log";
+$adminPanelConfig["log_dir"]                 = LOG_DIR;
+$adminPanelConfig["cache_dir"]               = CACHE_DIR;
 
 $adminPanelConfig["db_host"]                 = DB_HOST.(defined('DB_PORT') && is_numeric(DB_PORT) ? ":".DB_PORT : "");
 $adminPanelConfig["db_login"]                = DB_LOGIN;
@@ -102,7 +111,6 @@ $adminPanelConfig['widgets']['CRM']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Orders']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Finances']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Products']['enabled'] = TRUE;
-// $adminPanelConfig['widgets']['Prices']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Shipping']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Stock']['enabled'] = TRUE;
 $adminPanelConfig['widgets']['Website']['enabled'] = TRUE;
@@ -123,6 +131,8 @@ $websiteRendererConfig = [
   "domainToRender" => defined("WEBSITE_DOMAIN_TO_RENDER") ? WEBSITE_DOMAIN_TO_RENDER : "",
   "minifyOutputHtml" => $configEnv['minifyOutputHtml'] ?? FALSE,
   "validateOutputHtml" => $configEnv['validateOutputHtml'] ?? FALSE,
+
+  "assetCacheDir" => CACHE_DIR,
 
   "rewriteBase" => defined("WEBSITE_REWRITE_BASE") ? WEBSITE_REWRITE_BASE : "/",
   "twigCacheDir" => TWIG_CACHE_DIR,

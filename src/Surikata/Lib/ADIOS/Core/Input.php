@@ -20,7 +20,7 @@ class Input {
    * @internal
    * @var array
    */
-  public $languageDictionary = [];
+  // public $languageDictionary = [];
 
   function __construct(&$adios, $uid, $params) {
     $this->adios = &$adios;
@@ -29,9 +29,7 @@ class Input {
     $this->params = $params;
     $this->value = $this->params['value'];
 
-    $this->languageDictionary[$this->adios->config["language"]] =
-      $this->adios->loadLanguageDictionary(get_class($this))
-    ;
+    // $this->languageDictionary = $this->adios->loadLanguageDictionary($this);
   }
 
   /**
@@ -43,8 +41,8 @@ class Input {
    * @param  mixed $toLanguage
    * @return void
    */
-  public function translate($string, $context = "", $toLanguage = "") {
-    return $this->adios->translate($string, $context, $toLanguage, $this->languageDictionary);
+  public function translate($string) {
+    return $this->adios->translate($string, $this);
   }
 
   public function render() {

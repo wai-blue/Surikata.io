@@ -1,0 +1,3 @@
+class PluginWAIBlogCatalogDOMClass extends PluginWAIBlogCatalogAPIClass {
+
+}

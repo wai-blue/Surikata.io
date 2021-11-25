@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Orders\Models;
 
-class OrderItem extends \ADIOS\Core\Model {
+class OrderItem extends \ADIOS\Core\Widget\Model {
   var $sqlName = "orders_items";
   var $urlBase = "Orders/{{ id_order }}/Items";
   var $tableTitle = " ";

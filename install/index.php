@@ -1,70 +1,75 @@
-<html>
-<head>
-  <title>Surikata.io Installer</title>
-  <link rel='shortcut icon' href='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
-  <style>
-    * { font-family: verdana; font-size: 10pt; }
-    body { background: #EEEEEE; }
-    h1 { color: #224abe; font-size: 16pt; }
-    h2 { color: #224abe; font-size: 12pt; }
-
-    table { border: 1px solid #F0F0F0; }
-    table tr:nth-child(even) td { background: #F0F0F0; }
-    table td { padding: 2px; }
-
-    label { display: block; padding: 2px; }
-    label:hover { background: #224abe; color: white; cursor: pointer; }
-
-    .btn { color: #224abe; background: white; cursor: pointer; border: 1px solid #224abe; padding: 1em; margin: 1em 0; }
-    .btn:hover { color: white; background: #224abe; }
-
-    a.btn { display: inline-block; text-decoration: none; }
-
-    .content { width: 820px; margin: auto; background: white; padding: 1em; }
-    .logo { width: 100px; margin: auto; }
-
-    #log {
-      background: #2d2d2d;
-      font-family: courier;
-      color: white;
-      padding: 1em;
-      font-size: 9pt;
-      margin-top: 1em;
-    }
-  </style>
-</head>
-<body>
-  <div class='content'>
-    <img class='logo' src='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
-    <h1>Surikata.io Installer</h1>
-
 <?php
 
-$installationStart = microtime(TRUE);
-$rewriteBaseIsCorrect = ($_GET['rewrite_base_is_correct'] ?? "") == "1";
+require_once "Lib/InstallerHelperFunctions.php";
+require_once "Lib/RandomProductsGenerator.php";
+require_once "Lib/WebsiteContentGenerator.php";
 
-include("RandomProductsGenerator.php");
-include("WebsiteContentGenerator.php");
+if (php_sapi_name() === 'cli') {
+  $installationConfig["do_install"] = "1";
 
-$configEnvDomainLanguagesPHP = '$configEnv["domainLanguages"] = [1 => "English", 2 => "Slovensky", 3 => "Česky"];';
-file_put_contents(__DIR__."/../ConfigEnvDomains.php", '<?php '.$configEnvDomainLanguagesPHP);
+  // if (empty($installationConfig['http_host'])) {
+  //   exit("SERVER HTTP HOST is not provided");
+  // }
 
-function _loadCsvIntoArray($file, $separator = ',', $enclosure = '#') {
-  $lines = [];
-
-  $file = fopen($file, 'r');
-  while (($line = fgetcsv($file, 0, $separator, $enclosure)) !== FALSE) {
-    $lines[] = $line;
-  }
-  fclose($file);
-
-  return $lines;
+} else {
+  $installationConfig = $_GET;
+  // $installationConfig["http_host"] = $_SERVER['HTTP_HOST'];
 }
 
-set_time_limit(60*10);
+\InstallerHelperFunctions::echo("
+  <html>
+  <head>
+    <title>Surikata.io Installer</title>
+    <link rel='shortcut icon' href='../src/Surikata/Core/Assets/images/Surikata_logo_farebne_znak.png'>
+    <style>
+      * { font-family: verdana; font-size: 10pt; }
+      body { background: #EEEEEE; }
+      h1 { color: #224abe; font-size: 16pt; }
+      h2 { color: #224abe; font-size: 12pt; }
+
+      table { border: 1px solid #F0F0F0; }
+      table tr:nth-child(even) td { background: #F0F0F0; }
+      table td { padding: 2px; }
+
+      label { display: block; padding: 2px; }
+      label:hover { background: #224abe; color: white; cursor: pointer; }
+
+      .btn { color: #224abe; background: white; cursor: pointer; border: 1px solid #224abe; padding: 1em; margin: 1em 0; }
+      .btn:hover { color: white; background: #224abe; }
+
+      a.btn { display: inline-block; text-decoration: none; }
+
+      .content { width: 820px; margin: auto; background: white; padding: 1em; }
+      .logo { width: 100px; margin: auto; }
+
+      #log {
+        background: #2d2d2d;
+        font-family: courier;
+        color: white;
+        padding: 1em;
+        font-size: 9pt;
+        margin-top: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class='content'>
+      <h1>Surikata.io Installer</h1>
+");
+
+$installationStart = microtime(TRUE);
+$rewriteBaseIsCorrect = ($installationConfig['rewrite_base_is_correct'] ?? "") == "1";
+
+if (!defined('PROJECT_ROOT_DIR')) {
+  define('PROJECT_ROOT_DIR', realpath(__DIR__."/.."));
+}
+
+file_put_contents(PROJECT_ROOT_DIR."/ConfigEnvDomains.php", \InstallerHelperFunctions::renderConfigEnvDomains());
+
+set_time_limit(0);
 
 if (!is_file(__DIR__."/../vendor/autoload.php")) {
-  echo "
+  \InstallerHelperFunctions::echo("
     <div style='color:red'>
       Sorry, it looks like you did not run 'composer install'.<br/>
       <br/>
@@ -74,12 +79,12 @@ if (!is_file(__DIR__."/../vendor/autoload.php")) {
         <li>rerun this installer again</li>
       </ul>
     </div>
-  ";
+  ");
   exit();
 }
 
-if (!is_file(__DIR__."/../ConfigEnv.php")) {
-  echo "
+if (!is_file(PROJECT_ROOT_DIR."/ConfigEnv.php")) {
+  \InstallerHelperFunctions::echo("
     <div style='color:red'>
       Sorry, it looks like you do not have your ConfigEnv.php configured.<br/>
       <br/>
@@ -90,14 +95,14 @@ if (!is_file(__DIR__."/../ConfigEnv.php")) {
         <li>rerun this installer again</li>
       </ul>
     </div>
-  ";
+  ");
   exit();
 }
 
 require(__DIR__."/../Init.php");
 
 if (empty(REWRITE_BASE) || empty(DB_LOGIN) || empty(DB_NAME)) {
-  echo "
+  \InstallerHelperFunctions::echo("
     <div style='color:red'>
       Sorry, it looks like you did not configure necessary parameters.<br/>
       <br/>
@@ -109,7 +114,7 @@ if (empty(REWRITE_BASE) || empty(DB_LOGIN) || empty(DB_NAME)) {
         <li>rerun this installer again</li>
       </ul>
     </div>
-  ";
+  ");
   exit();
 }
 
@@ -117,8 +122,9 @@ if (!$rewriteBaseIsCorrect) {
   $expectedRewriteBase = $_SERVER['REQUEST_URI'];
   $expectedRewriteBase = str_replace("install/", "", $expectedRewriteBase);
   $expectedRewriteBase = str_replace("index.php", "", $expectedRewriteBase);
+  $expectedRewriteBase = str_replace("install.php", "", $expectedRewriteBase);
   if (REWRITE_BASE != $expectedRewriteBase) {
-    echo "
+    \InstallerHelperFunctions::echo("
       <div style='color:orange'>
         We think that your REWRITE_BASE is not configured properly.<br/>
         <br/>
@@ -130,12 +136,10 @@ if (!$rewriteBaseIsCorrect) {
         <br/>
         <a href='?rewrite_base_is_correct=1'>REWRITE_BASE is correctly configured, continue with installation</a>
       </div>
-    ";
+    ");
     exit();
   }
 }
-
-session_start();
 
 $availableThemes = [];
 foreach (@scandir(__DIR__."/../src/Themes") as $dir) {
@@ -173,33 +177,26 @@ foreach (@scandir(__DIR__."/content/images/slideshow") as $file) {
   }
 }
 
-$doInstall = ($_GET['do_install'] === "1");
-// $languageToInstall = $_GET['language_to_install'];
-$slideshowImageSet = $_GET['slideshow_image_set'];
+$doInstall = ($installationConfig['do_install'] === "1");
+$createPackage = $installationConfig['create_package'] ?? "";
+$slideshowImageSet = $installationConfig['slideshow_image_set'];
 
-$domainsToInstall = [];
-for ($i = 1; $i <= 3; $i++) {
-  if (!empty($_GET["domain_{$i}_description"])) {
-    $domainsToInstall[$i] = [
-      "name" => \ADIOS\Core\HelperFunctions::str2url($_GET["domain_{$i}_description"]),
-      "description" => $_GET["domain_{$i}_description"],
-      "slug" => $_GET["domain_{$i}_slug"],
-      "themeName" => $_GET["domain_{$i}_theme_name"],
-      "languageIndex" => $_GET["domain_{$i}_language_index"],
-    ];
-  }
-}
+// if (empty($installationConfig['rewrite_base'])) {
+//   $installationConfig['rewrite_base'] = REWRITE_BASE;
+// }
 
-$randomProductsCount = $_GET['random_products_count'] ?? 50;
+$domainsToInstall = \InstallerHelperFunctions::parseDomainsToInstall($installationConfig);
+
+$randomProductsCount = $installationConfig['random_products_count'] ?? 50;
 if ($randomProductsCount > 100000) $randomProductsCount = 100000;
 
 $partsToInstall = [];
-if (($_GET['product-catalog'] ?? "") == "yes") $partsToInstall[] = "product-catalog";
-if (($_GET['delivery-and-payment-services'] ?? "") == "yes") $partsToInstall[] = "delivery-and-payment-services";
-if (($_GET['customers'] ?? "") == "yes") $partsToInstall[] = "customers";
-if (($_GET['orders'] ?? "") == "yes") $partsToInstall[] = "orders";
+if (($installationConfig['product-catalog'] ?? "") == "yes") $partsToInstall[] = "product-catalog";
+if (($installationConfig['delivery-and-payment-services'] ?? "") == "yes") $partsToInstall[] = "delivery-and-payment-services";
+if (($installationConfig['customers'] ?? "") == "yes") $partsToInstall[] = "customers";
+if (($installationConfig['orders'] ?? "") == "yes") $partsToInstall[] = "orders";
 
-// $themeName = $_GET['theme'] ?? "";
+// $themeName = $installationConfig['theme'] ?? "";
 // if (!in_array($themeName, $availableThemes)) {
 //   $themeName = reset($availableThemes);
 // }
@@ -273,10 +270,26 @@ if (!$doInstall) {
     ";
   }
 
-  echo "
+  \InstallerHelperFunctions::echo("
     <form action='' method='GET'>
       <input type='hidden' name='do_install' value='1' />
       <input type='hidden' name='rewrite_base_is_correct' value='1' />
+
+      <p>
+        Your configuration is:
+      </p>
+      <table>
+        <tr><td>REWRITE_BASE</td><td>".REWRITE_BASE."</td></tr>
+        <tr><td>DB_HOST</td><td>".DB_HOST."</td></tr>
+        <tr><td>DB_LOGIN</td><td>".DB_LOGIN."</td></tr>
+        <tr><td>DB_NAME</td><td>".DB_NAME."</td></tr>
+        <tr><td>SURIKATA_ROOT_DIR</td><td>".SURIKATA_ROOT_DIR."</td></tr>
+        <tr><td>PROJECT_ROOT_DIR</td><td>".PROJECT_ROOT_DIR."</td></tr>
+        <tr><td>CACHE_DIR</td><td>".CACHE_DIR."</td></tr>
+        <tr><td>LOG_DIR</td><td>".LOG_DIR."</td></tr>
+        <tr><td>DATA_DIR</td><td>".DATA_DIR."</td></tr>
+        <tr><td>TWIG_CACHE_DIR</td><td>".TWIG_CACHE_DIR."</td></tr>
+      </table>
 
       <p>
         Whitch parts do you want to install?
@@ -383,20 +396,34 @@ if (!$doInstall) {
       <br/>
       <input type='submit' class='btn' value='Hurray! Create Surikata e-shop now.' />
     </form>
-  ";
+  ");
 } else {
 
   try {
+    
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Initialization
 
     $websiteRenderer = new \MyEcommerceProject\Web($websiteRendererConfig);
     $adminPanel = new \MyEcommerceProject\AdminPanel($adminPanelConfig, ADIOS_MODE_FULL, $websiteRenderer);
+    $adminPanel->console->cliEchoEnabled = TRUE;
+
+    $adminPanel->console->info("Installation started.");
+
+    $adminPanel->createMissingFolders();
+
+    // query buffer is created if we want to create a package
+    if (!empty($createPackage)) {
+      $adminPanel->db->startQueryBuffering();
+    }
 
     $adminPanel->install();
     $adminPanel->installDefaultUsers();
-    $adminPanel->createMissingFolders();
+
+    $adminPanel->db->query("SET foreign_key_checks = 0");
+
+    $adminPanel->console->info("Default users created.");
 
     $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($adminPanel);
     $customerCategoryModel = new \ADIOS\Widgets\Customers\Models\CustomerCategory($adminPanel);
@@ -432,40 +459,12 @@ if (!$doInstall) {
     $shipmentPriceModel = new \ADIOS\Widgets\Shipping\Models\ShipmentPrice($adminPanel);
 
     // ConfigEnvDomains.php
-    $configEnvDomainsPHP = "<?php\r\n";
-    $configEnvDomainsPHP .= "\r\n";
-    $configEnvDomainsPHP .= $configEnvDomainLanguagesPHP."\r\n";
-    $configEnvDomainsPHP .= "\r\n";
-    $configEnvDomainsPHP .= '$configEnv["domains"] = ['."\r\n";
-    foreach ($domainsToInstall as $key => $domain) {
-      $configEnvDomainsPHP .= "  [\r\n";
-      $configEnvDomainsPHP .= "    'name' => '{$domain['name']}',\r\n";
-      $configEnvDomainsPHP .= "    'description' => '{$domain['description']}',\r\n";
-      $configEnvDomainsPHP .= "    'slug' => '{$domain['slug']}',\r\n";
-      $configEnvDomainsPHP .= "    'rootUrl' => \$_SERVER['HTTP_HOST'].REWRITE_BASE.'{$domain['slug']}',\r\n";
-      $configEnvDomainsPHP .= "    'languageIndex' => {$domain['languageIndex']},\r\n";
-      $configEnvDomainsPHP .= "  ],\r\n";
-    }
-    $configEnvDomainsPHP .= "];\r\n";
-    $configEnvDomainsPHP .= "\r\n";
+    file_put_contents(
+      PROJECT_ROOT_DIR."/ConfigEnvDomains.php",
+      \InstallerHelperFunctions::renderConfigEnvDomains($domainsToInstall)
+    );
 
-    $configEnvDomainsPHP .= trim('
-$re = "/^".str_replace("/", "\\/", REWRITE_BASE)."/";
-$slug = reset(explode("/", preg_replace($re, "", $_SERVER["REQUEST_URI"])));
-
-$domainToRender = reset($configEnv["domains"]);
-foreach ($configEnv["domains"] as $domain) {
-  if ($domain["slug"] == $slug) {
-    $domainToRender = $domain;
-  }
-}
-
-define("WEBSITE_DOMAIN_TO_RENDER", $domainToRender["name"]);
-define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
-    ');
-
-    file_put_contents(__DIR__."/../ConfigEnvDomains.php", $configEnvDomainsPHP);
-
+    $adminPanel->console->info("ConfigEnvDomains.php created.");
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // PART: delivery and payment services
@@ -566,6 +565,8 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       $shipmentPriceModel->insertRow(["id" => 7, "id_shipment" => 7, "name" => "41", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 1000, "delivery_fee_calculation_method" => 1, "delivery_fee" => 3.35]);
       $shipmentPriceModel->insertRow(["id" => 8, "id_shipment" => 8, "name" => "42", "weight_from" => 0, "weight_to" => 0, "price_from" => 0, "price_to" => 1000, "delivery_fee_calculation_method" => 1, "delivery_fee" => 3.99]);
+
+      $adminPanel->console->info("Delivery and payment services installed.");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -787,6 +788,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       $adminPanel->db->commit();
 
+      $adminPanel->console->info("Product catalog installed.");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -807,7 +809,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
       // customers
       // .csv file generated with the help of https://www.fakeaddressgenerator.com
-      $customers = _loadCsvIntoArray(__DIR__."/content/Customers.csv");
+      $customers = \InstallerHelperFunctions::loadCsvIntoArray(__DIR__."/content/Customers.csv");
 
       $cnt = 1;
       for ($i = 0; $i < 10; $i++) {
@@ -861,6 +863,7 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
         $cnt++;
       }
 
+      $adminPanel->console->info("Customers installed.");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -874,8 +877,6 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       $customersCount = $customerModel->get()->count();
       $productsCount = $productModel->get()->count();
 
-      $orderTagModel->insertRow(["tag" => "paid", "color" => "#00A500"]);
-      $orderTagModel->insertRow(["tag" => "unpaid", "color" => "#AA0000"]);
       $orderTagModel->insertRow(["tag" => "good client", "color" => "#11009A"]);
       $orderTagModel->insertRow(["tag" => "bad client", "color" => "#DFDFDF"]);
       $orderTagModel->insertRow(["tag" => "discount on services", "color" => "#141414"]);
@@ -941,10 +942,12 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
         if (rand(0, 1) == 1) {
           $idInvoice = $orderModel->issueInvoce($idOrder, TRUE);
-          $orderTagAssignmentModel->insertRow(["id_order" => $idOrder, "id_tag" => rand(1,5)]);
+          $orderTagAssignmentModel->insertRow(["id_order" => $idOrder, "id_tag" => rand(1,3)]);
         }
 
       }
+
+      $adminPanel->console->info("Orders installed.");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -952,8 +955,8 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
     $wsg = new WebsiteContentGenerator(
       $adminPanel,
-      $slideshowImageSet,
       $domainsToInstall,
+      $installationConfig
     );
 
     $wsg->copyAssets();
@@ -966,14 +969,33 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
 
     $wsg->installPluginsOnce();
 
+    $adminPanel->console->info("Website content installed.");
+
+    if (!empty($createPackage)) {
+      $buffer = $adminPanel->db->stopQueryBuffering();
+
+      $packageFilename = \ADIOS\Core\HelperFunctions::str2url($createPackage).".zip";
+
+      $zip = new ZipArchive;
+      $res = $zip->open(PROJECT_ROOT_DIR."/install/packages/{$packageFilename}", ZipArchive::CREATE);
+      if ($res === TRUE) {
+        $zip->addFromString("surikata-installation.sql", $buffer);
+        $zip->addFromString("installation-config.json", json_encode($installationConfig));
+        $zip->close();
+
+        // $adminPanel->console->info("Package stored in ".PROJECT_ROOT_DIR."/install/packages/{$packageFilename}");
+      } else {
+        $adminPanel->console->error("Failed to create package.");
+      }
+    }
 
   } catch (\Exception $e) {
-    echo "
+    \InstallerHelperFunctions::echo("
       <h2 style='color:red'>Error</h2>
       <div style='color:red'>
         ".get_class($e).": ".$e->getMessage()."
       </div>
-    ";
+    ");
     var_dump($e->getTrace());
     $adminPanel->console->error(get_class($e).": ".$e->getMessage());
   }
@@ -983,15 +1005,15 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
   $errors = $adminPanel->console->getErrors();
 
   if (count($errors) > 0) {
-    echo "
+    \InstallerHelperFunctions::echo("
       <h2 style='color:red'>Awgh!</h2>
       <div style='color:red;margin-bottom:1em'>
         ✕ Some errors occured during the installation.
       </div>
       <div style='color:red'>".$adminPanel->console->convertLogsToHtml($errors)."</div>
-    ";
+    ");
   } else {
-    echo "
+    \InstallerHelperFunctions::echo("
       <h2>Done in ".round((microtime(true) - $installationStart), 2)." seconds.</h2>
       <div style='color:green;margin-bottom:1em'>
         ✓ Congratulations. You have successfuly installed your eCommerce project.
@@ -1019,10 +1041,10 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       <a href='../admin' class='btn' target=_blank>Open administration panel</a><br/>
       Login: administrator<br/>
       Password: administrator<br/>
-    ";
+    ");
   }
 
-  echo "
+  \InstallerHelperFunctions::echo("
     <br/>
     <h2>Installation log</h2>
     <a
@@ -1033,11 +1055,12 @@ define("WEBSITE_REWRITE_BASE", REWRITE_BASE.$domainToRender["slug"]."/");
       '
     >Show installation log</a>
     <div id='log' style='display:none'>".$adminPanel->console->convertLogsToHtml($infos, TRUE)."</div>
-  ";
+  ");
 
 }
 
-?>
-  </div>
-</body>
-</html>
+\InstallerHelperFunctions::echo("
+    </div>
+  </body>
+  </html>
+");

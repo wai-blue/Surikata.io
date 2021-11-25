@@ -4,7 +4,7 @@ namespace ADIOS\Actions\Orders;
 
 use ADIOS\Widgets\Orders\Models\Order;
 
-class PrintOrder extends \ADIOS\Core\Action {
+class PrintOrder extends \ADIOS\Core\Widget\Action {
   public static $hideDefaultDesktop = TRUE;
 
   public function preRender() {

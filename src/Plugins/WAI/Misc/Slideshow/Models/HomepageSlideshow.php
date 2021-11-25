@@ -2,7 +2,7 @@
 
 namespace ADIOS\Plugins\WAI\Misc\Slideshow\Models;
 
-class HomepageSlideshow extends \ADIOS\Core\Model {
+class HomepageSlideshow extends \ADIOS\Core\Plugin\Model {
   var $sqlName = "homepage_slideshow";
   var $urlBase = "Website/Slideshow";
 

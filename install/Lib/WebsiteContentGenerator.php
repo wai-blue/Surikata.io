@@ -8,11 +8,12 @@ class WebsiteContentGenerator {
   public $domainSlug = "";
   public $themeObject = [];
   public $websiteCommonPanels = [];
+  public $installationConfig = "";
 
-  public function __construct($adminPanel, $slideshowImageSet, $domainsToInstall) {
+  public function __construct($adminPanel, $domainsToInstall, $installationConfig) {
     $this->adminPanel = $adminPanel;
-    // $this->slideshowImageSet = $slideshowImageSet;
     $this->domainsToInstall = $domainsToInstall;
+    $this->installationConfig = $installationConfig;
   }
 
   public function translate(string $string) {
@@ -40,7 +41,7 @@ class WebsiteContentGenerator {
     }
 
     if (empty($this->dictionary[$languageIndex])) {
-      require(__DIR__."/content/lang/{$languageIndex}.php");
+      require(__DIR__."/../content/lang/{$languageIndex}.php");
       $this->dictionary[$languageIndex] = $dictionary;
     }
 
@@ -93,19 +94,19 @@ class WebsiteContentGenerator {
     mkdir("{$this->adminPanel->config['files_dir']}/products/");
 
     copy(
-      __DIR__."/content/images/favicon.png",
+      __DIR__."/../content/images/favicon.png",
       "{$this->adminPanel->config['files_dir']}/favicon.png"
     );
 
     for ($i = 1; $i <= 10; $i++) {
       copy(
-        __DIR__."/content/images/product_{$i}.jpg",
+        __DIR__."/../content/images/product_{$i}.jpg",
         "{$this->adminPanel->config['files_dir']}/products/{$i}.jpg",
       );
     }
 
     copy(
-      __DIR__."/content/images/your-logo.png",
+      __DIR__."/../content/images/your-logo.png",
       "{$this->adminPanel->config['files_dir']}/your-logo.png",
     );
 
@@ -117,7 +118,7 @@ class WebsiteContentGenerator {
     ];
     foreach ($imagesToCopy as $item) {
       copy(
-        __DIR__."/content/images/".$item,
+        __DIR__."/../content/images/".$item,
         "{$this->adminPanel->config['files_dir']}/".$item,
       );
     }
@@ -292,7 +293,7 @@ class WebsiteContentGenerator {
             "WAI/SimpleContent/OneColumn",
             [
               "heading" => "Hello World!",
-              "content" => file_get_contents(__DIR__."/content/PageTexts/o-nas.html"),
+              "content" => file_get_contents(__DIR__."/../content/PageTexts/o-nas.html"),
             ]
           ],
         ],
@@ -541,7 +542,7 @@ class WebsiteContentGenerator {
             "WAI/SimpleContent/OneColumn",
             [
               "heading" => $this->translate("We value your privacy"),
-              "content" => file_get_contents(__DIR__."/content/PageTexts/o-nas.html"),
+              "content" => file_get_contents(__DIR__."/../content/PageTexts/o-nas.html"),
             ]
           ]
         ],
@@ -621,12 +622,23 @@ class WebsiteContentGenerator {
     $websiteWebRedirectModel->insertRow([
       "domain" => $this->domainName,
       "from_url" => "",
-      "to_url" => "//".$_SERVER['HTTP_HOST'].REWRITE_BASE.$this->domainSlug."/".$this->translate("home"),
+      // "to_url" => "//".$this->installationConfig['http_host'].$this->installationConfig['rewrite_base'].$this->domainSlug."/".$this->translate("home"),
+      "to_url" => "//{% ROOT_URL %}/".$this->translate("home"),
       "type" => 302,
     ]);
 
-    // nastavenia webu
+    $emailsContentFolder = __DIR__."/../content/emails/language-index-{$this->domainCurrentlyGenerated["languageIndex"]}";
+    $emails = [
+      "signature" => "<p>{$this->domainName} - <a href='http://{$this->domainName}' target='_blank'>{$this->domainName}</a></p>",
+      "after_order_confirmation_SUBJECT" => file_get_contents("{$emailsContentFolder}/after_order_confirmation_SUBJECT.txt"),
+      "after_order_confirmation_BODY" => file_get_contents("{$emailsContentFolder}/after_order_confirmation_BODY.html"),
+      "after_registration_SUBJECT" => file_get_contents("{$emailsContentFolder}/after_registration_SUBJECT.txt"),
+      "after_registration_BODY" => file_get_contents("{$emailsContentFolder}/after_registration_BODY.html"),
+      "forgotten_password_SUBJECT" => file_get_contents("{$emailsContentFolder}/forgot_password_SUBJECT.txt"),
+      "forgotten_password_BODY" => file_get_contents("{$emailsContentFolder}/forgot_password_BODY.html"),
+    ];
 
+    // nastavenia webu
     $this->adminPanel->saveConfig([
       "settings" => [
         "web" => [
@@ -634,7 +646,7 @@ class WebsiteContentGenerator {
             "companyInfo" => [
               "slogan" => "Môj nový eshop: {$this->domainName}",
               "contactPhoneNumber" => "+421 111 222 333",
-              "contactEmail" => "info@{$_SERVER['HTTP_HOST']}",
+              "contactEmail" => "info@{$this->installationConfig['http_host']}",
               "logo" => "your-logo.png",
               "urlFacebook" => "https://surikata.io",
               "urlTwitter" => "https://surikata.io",
@@ -654,15 +666,7 @@ class WebsiteContentGenerator {
               "privacyPolicy" => "Bienvenue. OOU!",
               "returnPolicy" => "Bienvenue. RP!",
             ],
-            "emails" => [
-              "signature" => "<p>{$this->domainName} - <a href='http://{$this->domainName}' target='_blank'>{$this->domainName}</a></p>",
-              "after_order_confirmation_SUBJECT" => "{$this->domainName} - objednávka č. {% number %}",
-              "after_order_confirmation_BODY" => file_get_contents(__DIR__."/../content/PageTexts/emails/orderBody_sk.html"),
-              "after_registration_SUBJECT" => "{$this->domainName} - Overte Vašu emailovú adresu",
-              "after_registration_BODY" => file_get_contents(__DIR__."/../content/PageTexts/emails/registrationBody_sk.html"),
-              "forgot_password_SUBJECT" => "{$this->domainName} - Obnovenie hesla",
-              "forgot_password_BODY" => file_get_contents(__DIR__."/../content/PageTexts/emails/forgotPasswordBody_sk.html")
-            ],
+            "emails" => $emails,
           ],
         ],
       ]

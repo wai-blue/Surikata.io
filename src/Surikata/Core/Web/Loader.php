@@ -91,24 +91,35 @@ class Loader extends \Cascada\Loader {
         }
       }
 
-      $this->assetsUrlMap["core/assets/js/dictionary.js"] = function($websiteRenderer, $url) {
+      $this->assetsUrlMap["core/assets/js/variables.js"] = function($websiteRenderer, $url, $variables) {
+        // dictionary
         $domainToRender = $this->config['domainToRender'];
-
         $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($this->adminPanel);
         $dictionary = $translationModel->loadCache()[$domainToRender];
         
         echo "var __srkt_dict__ = JSON.parse('".ads(json_encode($dictionary))."');";
+
+        // globalTwigParams
+        echo "var globalTwigParams = JSON.parse('".ads(json_encode($this->getGlobalTwigParams()))."');";
+
         exit;
       };
-      $this->assetsUrlMap["core/assets/js/plugins.js"] = function($websiteRenderer, $url) {
-        $this->getPluginsMainJS();
+      $this->assetsUrlMap["core/assets/js/plugins.js"] = function($websiteRenderer, $url, $variables) {
+        $js =
+          $this->renderPluginsJs("api.js")
+          .$this->renderPluginsJs("dom.js")
+        ;
+
+        header("Content-type: text/js");
+        header("ETag: ".md5($js));
+        header("Expires: " . gmdate("D, d M Y H:i:s", time() + 3600) . " GMT");
+        header("Pragma: cache");
+        header("Cache-Control: max-age={3600}");
+
+        echo $js;
         exit();
       };
-      $this->assetsUrlMap["core/assets/js/globaltwigparams.js"] = function($websiteRenderer, $url) {
-        echo "var globalTwigParams = JSON.parse('".ads(json_encode($this->getGlobalTwigParams()))."');";
-        exit();
-      };
-      $this->assetsUrlMap["core/assets/"] = ADMIN_PANEL_SRC_DIR."/Core/Assets/";
+      $this->assetsUrlMap["core/assets/"] = SURIKATA_ROOT_DIR."/src/Surikata/Core/Assets/";
       $this->assetsUrlMap["theme/assets/"] = "{$this->themeDir}/Assets/";
       $this->assetsUrlMap["plugins/assets/"] = function($websiteRenderer, $url) { 
         $url = str_replace("plugins/assets/", "", $url);
@@ -232,12 +243,26 @@ class Loader extends \Cascada\Loader {
             $templateFile = "{$this->themeDir}/Templates/Snippets/{$pluginName}.twig";
 
             if (is_file($templateFile)) {
-              $renderParams = array_merge($this->currentRenderedPlugin->twigRenderParams, $renderParams);
-              $renderParams["snippetName"] = $snippetName;
-              $renderParams["system"]["availableVariables"] = array_keys($renderParams);
+              $pluginTwigParams = [];
+              $plugin = $this->getPlugin($pluginName);
+
+              if (is_object($plugin)) {
+                $pluginTwigParams = $plugin->getTwigParams(array_merge(
+                  $this->currentRenderedPlugin->twigRenderParams,
+                  $renderParams
+                ));
+              }
+
+              $snippetRenderParams = array_merge(
+                $this->currentRenderedPlugin->twigRenderParams,
+                $renderParams,
+                $pluginTwigParams
+              );
+              $snippetRenderParams["snippetName"] = $snippetName;
+              $snippetRenderParams["system"]["availableVariables"] = array_keys($snippetRenderParams);
 
               $html .= $this->twig
-                ->render("Templates/Snippets/{$pluginName}.twig", $renderParams)
+                ->render("Templates/Snippets/{$pluginName}.twig", $snippetRenderParams)
               ;
             }
           }
@@ -256,7 +281,7 @@ class Loader extends \Cascada\Loader {
           $plugin = $this->getPlugin($pluginName);
 
           if (is_object($plugin)) {
-            $pluginTwigParams = $plugin->getTwigParams([]);
+            $pluginTwigParams = $plugin->getTwigParams($renderParams);
           }
 
           if (is_file($templateFile)) {
@@ -589,19 +614,21 @@ class Loader extends \Cascada\Loader {
     return $this->adminPanel->getDomainInfo($domainName);
   }
 
-  public function getPluginsMainJS() {
+  public function renderPluginsJs($jsFilename) {
     $content = "";
+
     foreach ($this->adminPanel->plugins as $pluginName) {
       if (!in_array($pluginName, [".", ".."])) {
         foreach ($this->adminPanel->pluginFolders as $pluginFolder) {
-          $file = "{$pluginFolder}/{$pluginName}/Assets/main.js";
+          $file = "{$pluginFolder}/{$pluginName}/Assets/{$jsFilename}";
           if (is_file($file)) {
-            $content .= file_get_contents($file) . ";";
+            $content .= file_get_contents($file) . "\n\n";
           }
         }
       }
     }
-    echo $content;
+
+    return $content;
   }
 
   public function getGlobalTwigParams() {
@@ -618,6 +645,7 @@ class Loader extends \Cascada\Loader {
         }
       }
     }
+
     return $globalTwigParams;
   }
 

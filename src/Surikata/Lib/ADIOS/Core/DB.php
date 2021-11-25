@@ -24,6 +24,8 @@ class DB {
     public $tables;
 
     public $existingSqlTables = [];
+    public $bufferQueries = FALSE;
+    public $queryBuffer = "";
 
     /**
      * Constructor.
@@ -99,7 +101,7 @@ class DB {
           default collate = utf8mb4_unicode_ci
         ");
 
-        echo "Created database `{$this->db_name}`";
+        $this->adios->console->info("Created database `{$this->db_name}`");
 
         $this->connection->select_db($this->db_name);
 
@@ -116,38 +118,30 @@ class DB {
     }
 
 
-    // /**
-    //  * Selects a database to use. Sets the $db_error property, if an error occurs.
-    //  *
-    //  * @param string name of a database to use
-    //  * @param string name of a code page of a database
-    //  */
-    // public function run_script($filename)
-    // {
-    //     $script = implode("\n", file($filename));
-    //     $script = explode(';', $script);
-    //     while (list($key, $value) = each($script)) {
-    //         if ($value) {
-    //             $this->query($value.';');
-    //         }
-    //     }
-    // }
+    public function startQueryBuffering() {
+      $this->bufferQueries = TRUE;
+    }
 
-    // public function ob_start()
-    // {
-    //     $this->ob_mode = true;
-    //     $this->ob = '';
-    // }
+    public function stopQueryBuffering() {
+      $this->bufferQueries = FALSE;
+      return $this->getQueryBuffer();
+    }
 
-    // public function ob_get_clean()
-    // {
-    //     return $this->ob;
-    // }
+    public function getQueryBuffer() {
+      return $this->queryBuffer;
+    }
 
-    // public function ob_finish()
-    // {
-    //     $this->ob_mode = false;
-    // }
+    public function clearQueryBuffer() {
+      $this->queryBuffer = "";
+    }
+
+    public function addQueryToBuffer($query) {
+      $this->queryBuffer .= trim($query, ";").";;\n";
+    }
+
+    public function executeBuffer($buffer) {
+      $this->multiQuery($buffer, ";;\n");
+    }
 
     /**
      * Runs a single SQL query. Result of a query is stored in a property $db_result.
@@ -163,6 +157,10 @@ class DB {
     public function query($query, $initiatingModel = NULL) {
       $query = trim($query, " ;");
       if (empty($query)) return;
+
+      if ($this->bufferQueries) {
+        $this->addQueryToBuffer($query);
+      };
 
       $ts1 = _getmicrotime();
       $this->last_query = $query;
@@ -198,7 +196,7 @@ class DB {
      * @see query
      * @see fetch_array
      */
-    public function multi_query($query, $separator = ";;\n", $initiatingModel = NULL) {
+    public function multiQuery($query, $separator = ";;\n", $initiatingModel = NULL) {
       $query = str_replace("\r\n", "\n", $query);
       foreach (explode($separator, $query) as $value) {
         $this->query(trim($value).';', $initiatingModel);
@@ -557,7 +555,7 @@ class DB {
             if ($only_sql_command) {
                 return $sql;
             } else {
-                $this->multi_query($sql);
+                $this->multiQuery($sql);
             }
 
         }
@@ -591,7 +589,7 @@ class DB {
       }
 
       if (!empty($sql)) {
-        $this->multi_query($sql);
+        $this->multiQuery($sql);
       }
     }
 
@@ -754,7 +752,7 @@ class DB {
       if ($only_sql_command) {
         return $sql."\n";
       } else {
-        $this->multi_query($sql, ";;\n", $initiatingModel);
+        $this->multiQuery($sql, ";;\n", $initiatingModel);
         $inserted_id = $this->insert_id();
 
         return $inserted_id;

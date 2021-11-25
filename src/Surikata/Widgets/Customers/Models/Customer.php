@@ -2,7 +2,7 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
-class Customer extends \ADIOS\Core\Model {
+class Customer extends \ADIOS\Core\Widget\Model {
   var $sqlName = "customers";
   var $urlBase = "Customers";
   var $lookupSqlValue = "{%TABLE%}.email";
@@ -741,7 +741,7 @@ class Customer extends \ADIOS\Core\Model {
     $body = str_replace("{% password %}", $this->lastCreatedAccountPassword, $body);
     $body = str_replace(
       "{% validationUrl %}",
-      "{$this->adios->websiteRenderer->domain['rootUrl']}{$accountValidationURL}",
+      "{$this->adios->websiteRenderer->domain['rootUrl']}/{$accountValidationURL}",
       $body
     );
 
@@ -761,8 +761,8 @@ class Customer extends \ADIOS\Core\Model {
   public function sendNotificationForForgotPassword($accountInfo) {
     $domain = $this->adios->websiteRenderer->currentPage['domain'];
 
-    $subject = $this->adios->config["settings"]["web"][$domain]["emails"]['forgot_password_SUBJECT'];
-    $body = $this->adios->config["settings"]["web"][$domain]["emails"]['forgot_password_BODY'];
+    $subject = $this->adios->config["settings"]["web"][$domain]["emails"]['forgotten_password_SUBJECT'];
+    $body = $this->adios->config["settings"]["web"][$domain]["emails"]['forgotten_password_BODY'];
     $signature = $this->adios->config["settings"]["web"][$domain]["emails"]['signature'];
 
     $passwordRecoveryUrl = (new \Surikata\Plugins\WAI\Customer\ForgotPassword($this->adios->websiteRenderer))
@@ -773,7 +773,7 @@ class Customer extends \ADIOS\Core\Model {
     $body = str_replace("{% familyName %}", $accountInfo["family_name"], $body);
     $body = str_replace(
       "{% passwordRecoveryUrl %}",
-      "{$this->adios->config["settings"]["web"][$domain]["profile"]["rootUrl"]}/{$passwordRecoveryUrl}",
+      "{$this->adios->websiteRenderer->domain['rootUrl']}/{$passwordRecoveryUrl}",
       $body
     );
 

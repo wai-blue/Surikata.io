@@ -251,7 +251,7 @@ class Loader extends \ADIOS\Core\Loader {
         && !empty($value)
         && is_dir($value)
       ) {
-        if (!chmod($value, 0755)) {
+        if (substr(sprintf('%o', fileperms($value)), -4) !== '0775' and !chmod($value, 0775)) {
           throw new \Exception('Wrong access permissions for folder: "' . $value. '"');
         }
       }

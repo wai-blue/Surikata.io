@@ -562,7 +562,7 @@ class Order extends \ADIOS\Core\Widget\Model {
     if (count($requiredFieldsEmpty) > 0) {
       throw new \ADIOS\Widgets\Orders\Exceptions\EmptyRequiredFields(join(",", $requiredFieldsEmpty));
     }
-
+    //beforeOrderPlace
     if ($idAddress <= 0 && $idCustomer != 0) {
       $idAddress = $customerAddressModel->saveAddress($idCustomer, $orderData);
     }
@@ -701,7 +701,6 @@ class Order extends \ADIOS\Core\Widget\Model {
     $summary = $this->calculateSummaryInfo($placedOrderData);
 
     $placedOrderData = $this->adios->dispatchEventToPlugins("onOrderAfterPlaceOrder", [
-      "model" => $this,
       "order" => $placedOrderData,
     ])["order"];
 
@@ -719,12 +718,6 @@ class Order extends \ADIOS\Core\Widget\Model {
         // Nothing to do here
       }
     }
-
-    $this->adios->dispatchEventToPlugins("onAfterPlaceOrderPacketaPoint", [
-      "model" => $this,
-      "order" => $orderData,
-      "idOrder" => $idOrder
-    ]);
 
     return $idOrder;
 

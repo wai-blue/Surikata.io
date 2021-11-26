@@ -443,8 +443,8 @@ class Order extends \ADIOS\Core\Widget\Model {
       $order = $this->getById($data['id']);
       $summary = $this->calculateSummaryInfo($order);
       $this->updateSummaryInfo($data['id'], $summary);
-    }
-
+    } 
+    
     return parent::onAfterSave($data, $returnValue);
   }
 
@@ -601,25 +601,6 @@ class Order extends \ADIOS\Core\Widget\Model {
       $confirmationTime = date("Y-m-d H:i:s", strtotime($orderData['confirmation_time']));
     }
 
-    $voucher = [];
-    if (!empty($orderData['voucher'])) {
-      $voucherPlugin = new \Surikata\Plugins\WAI\Proprietary\Checkout\Vouchers($this->websiteRenderer);
-      $voucher = $voucherPlugin->checkVoucher($cartContents);
-      
-      if (!empty($voucher["error"])) {
-        throw new \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Exceptions\VoucherIsNotValid;
-      } else {
-        $voucherPlugin->unsetVoucherSession();
-        $this->adios->getModel('Plugins/WAI/Proprietary/Checkout/Vouchers/Models/Voucher')
-          ->where('id', $voucher['id'])
-          ->update([
-            "max_use" => $voucher['max_use_is_enabled'] ? $voucher['max_use'] - 1 : $voucher['max_use'],
-            "count_of_redeemed" => $voucher['count_of_redeemed'] + 1
-          ])
-        ;
-      }
-    }
-
     $idOrder = $this->insertRow([
       "accounting_year" => ["sql" => "year('{$confirmationTime}')"],
       "serial_number" => ["sql" => "
@@ -718,12 +699,13 @@ class Order extends \ADIOS\Core\Widget\Model {
 
     $placedOrderData["delivery_fee"] = $fees["deliveryFee"];
     $placedOrderData["payment_fee"] = $fees["paymentFee"];
+    $placedOrderData["voucher"] = $orderData["voucher"] ?? 0;
 
-    $summary = $this->calculateSummaryInfo($placedOrderData, $voucher);
+    $summary = $this->calculateSummaryInfo($placedOrderData);
 
     $placedOrderData = $this->adios->dispatchEventToPlugins("onOrderAfterPlaceOrder", [
-      "model" => $this,
       "order" => $placedOrderData,
+      "cartContents" => $cartContents
     ])["order"];
 
     $summary = $placedOrderData["SUMMARY"];
@@ -1405,7 +1387,7 @@ class Order extends \ADIOS\Core\Widget\Model {
     }
   }
 
-  public function calculateSummaryInfo(array $order, array $voucher = []) {
+  public function calculateSummaryInfo(array $order) {
     $summary = [
       'price_total_excl_vat' => 0,
       'price_total_incl_vat' => 0,
@@ -1420,26 +1402,6 @@ class Order extends \ADIOS\Core\Widget\Model {
       $summary['price_total_excl_vat'] += $item['PRICES_FOR_INVOICE']['totalPriceExclVAT'];
       $summary['price_total_incl_vat'] += $item['PRICES_FOR_INVOICE']['totalPriceInclVAT'];
       $summary['weight_total'] += $item['quantity'] * $item['product_weight'];
-    }
-
-    if (!empty($voucher)) {
-
-      $voucherOrderAssignmentModel = 
-        new \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Models\VoucherOrderAssignment($this->adios)
-      ;
-
-      $voucherModel = 
-        new \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Models\Voucher($this->adios)
-      ;
-
-      $voucherOrderAssignmentModel->insertRow([
-        "id_order" => $order['id'],
-        "id_voucher" => $voucher['id']
-      ]);
-
-      //$summary['price_total_excl_vat'] += - $voucherModel->getVoucherDiscount($voucher, $summary['price_total_excl_vat'], false);
-      $summary['price_total_incl_vat'] += - $voucherModel->getVoucherDiscount($voucher, $summary['price_total_incl_vat']);
-
     }
 
     $deliveryFeeInclVat = $order['delivery_fee'];

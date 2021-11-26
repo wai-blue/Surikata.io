@@ -96,16 +96,6 @@ namespace Surikata\Plugins\WAI\Product {
           ;
         }
 
-        // REVIEW Lukáš - productInfo sa musí dostať do getTwigParams
-        if (
-          isset($this->productInfo["VARIATIONS"]["group_uid"])
-          && $this->productInfo["VARIATIONS"]["group_uid"] > 0
-        ) {
-          // REVIEW Lukáš - určite to tu nemusí a nemôže byť, zatiaľ to je pre overenie funkčnosti FE
-          $variationsPlugin = new Variations($this->adminPanel);
-          $this->productInfo = $variationsPlugin->getTwigParams(["productInfo" => $this->productInfo]);
-        }
-
         $this->productInfo['breadcrumbs'] = $productCategoryModel
           ->breadcrumbs((int) $this->productInfo['id_category'], $allCategories)
         ;

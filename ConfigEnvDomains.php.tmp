@@ -4,14 +4,14 @@ $configEnv["domainLanguages"] = [1 => "English", 2 => "Slovensky", 3 => "Česky"
 
 $configEnv["domains"] = [
   [
-    'name' => 'english-version',
+    'name' => 'language-en',
     'description' => 'English version',
     'slug' => 'en',
     'rootUrl' => $_SERVER['HTTP_HOST'].REWRITE_BASE.'en',
     'languageIndex' => 1,
   ],
   [
-    'name' => 'slovenska-verzia',
+    'name' => 'language-sk',
     'description' => 'Slovenská verzia',
     'slug' => 'sk',
     'rootUrl' => $_SERVER['HTTP_HOST'].REWRITE_BASE.'sk',

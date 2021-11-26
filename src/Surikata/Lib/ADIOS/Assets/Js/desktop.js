@@ -70,7 +70,7 @@
 
   }
 
-  function desktop_update(action, params, options){
+  function desktop_update(action, params, options) {
     desktop_render(action, params, options);
   };
 
@@ -80,7 +80,22 @@
 
     $('#adios_main_content').css('opacity', 0.5);
 
-    window.location.href = _APP_URL + '/' + _action_url(action, params, true);
+    if (options.type == 'POST') {
+      let paramsObj = _ajax_params(params);
+      let formHtml = '';
+
+      formHtml = '<form action="' + _APP_URL + '/' + _action_url(action, {}, true) + '" method=POST>';
+      for (var i in paramsObj) {
+       formHtml += '<input type="hidden" name="' + i + '" value="' + paramsObj[i] + '" />';
+      }
+      formHtml += '</form>';
+
+      console.log(_APP_URL + '/' + _action_url(action, {}, true));
+      console.log(formHtml);
+      $(formHtml).appendTo('body').submit();
+    } else {
+      window.location.href = _APP_URL + '/' + _action_url(action, params, true);
+    }
 
   }
 

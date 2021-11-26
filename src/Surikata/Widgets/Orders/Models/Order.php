@@ -562,7 +562,11 @@ class Order extends \ADIOS\Core\Widget\Model {
     if (count($requiredFieldsEmpty) > 0) {
       throw new \ADIOS\Widgets\Orders\Exceptions\EmptyRequiredFields(join(",", $requiredFieldsEmpty));
     }
-    //beforeOrderPlace
+
+    $this->adios->dispatchEventToPlugins("onOrderBeforePlaceOrder", [
+      "orderData" => $orderData,
+    ]);
+
     if ($idAddress <= 0 && $idCustomer != 0) {
       $idAddress = $customerAddressModel->saveAddress($idCustomer, $orderData);
     }

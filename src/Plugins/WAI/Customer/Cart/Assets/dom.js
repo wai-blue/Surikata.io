@@ -213,6 +213,11 @@ class PluginWAICommonCustomerCartDOMClass extends PluginWAICustomerCartAPIClass 
           $('.order-delivery > label').addClass('input-required');
         } else if (dataFail.exception == 'ADIOS\\Widgets\\Orders\\Exceptions\\UnknownPaymentService') {
           $('.order-payments > label').addClass('input-required');
+        } else if (dataFail.exception == 'Surikata\\Plugins\\WAI\\Proprietary\\Delivery\\Packeta\\Exceptions\\PickUpPointIsEmpty') {
+          $('#packeta_pickup_point_button').addClass('pickup-point-require').fadeIn();
+          $('html, body').animate({
+            scrollTop: $('#packeta_pickup_point_button').offset().top-100
+          }, 500);
         } else if (dataFail.exception != '') {
   
           $('#unknownErrorDiv').fadeIn();

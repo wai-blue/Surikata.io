@@ -20,6 +20,11 @@ class Upload extends \ADIOS\Core\Action {
     if (!empty($_FILES['upload'])) {
 
       $folderPath = $_REQUEST['folderPath'] ?? "";
+
+      if (strpos($folderPath, "..") !== FALSE) {
+        $folderPath = "";
+      }
+
       $uploadedFilename = $_FILES['upload']['name'];
 
       if (empty($folderPath)) $folderPath = ".";
@@ -36,8 +41,8 @@ class Upload extends \ADIOS\Core\Action {
         $error = "File is too large. Maximum size of file to upload is ".round(ini_get('upload_max_filesize'), 2)." MB.";
       } elseif (empty($_FILES['upload']['tmp_name']) || 'none' == $_FILES['upload']['tmp_name']) {
         $error = "Failed to upload the file for an unknown error. Try again in few minutes.";
-      } elseif (file_exists($destinationFile)) {
-        $error = "File with this name is already uploaded.";
+      // } elseif (file_exists($destinationFile)) {
+      //   $error = "File with this name is already uploaded.";
       }
 
       if (empty($error)) {

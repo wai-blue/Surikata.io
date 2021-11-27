@@ -84,7 +84,6 @@ class Input extends \ADIOS\Core\UI\View {
             'show_download_url_button' => true,
             'show_open_button' => true,
             'show_delete_button' => true,
-            'allowed_extensions' => '',
             'where' => '',
             'follow_lookups' => true,
             'order' => '',
@@ -658,7 +657,7 @@ class Input extends \ADIOS\Core\UI\View {
                 <div>
                   ".$this->adios->ui->Button([
                     "fa_icon" => "fas fa-times",
-                    "text" => "Close files and media browser",
+                    "text" => $this->translate("Close files and media browser"),
                     "class" => "btn btn-secondary btn-icon-split",
                     "onclick" => "
                       $('#{$this->params['uid']}_browser').hide();
@@ -689,8 +688,8 @@ class Input extends \ADIOS\Core\UI\View {
         if ('file' == $this->params['type']) {
             $default_src = $this->translate("No file uploaded");
             $file_src_base = "{$this->adios->config['url']}/File?f=";
-            $upload_params = "type=file&table_column={$this->params['table_column']}&rename_file={$this->params['rename_file']}&allowed_extensions={$this->params['allowed_extensions']}&subdir={$this->params['subdir']}";
-            $file_upload_url = "{$this->adios->config['url']}/UI/FileBrowser/Upload?output=json&".$upload_params;
+            // $upload_params = "type=file&table_column={$this->params['table_column']}&rename_file={$this->params['rename_file']}&subdir={$this->params['subdir']}";
+            // $file_upload_url = "{$this->adios->config['url']}/UI/FileBrowser/Upload?output=json&".$upload_params;
 
             if ('' != $this->params['value']) {
               $file_short_name = end(explode('/', $this->params['value']));
@@ -713,12 +712,12 @@ class Input extends \ADIOS\Core\UI\View {
                   data-is-adios-input='1'
                   ".$this->main_params().'
                   '.$this->generate_input_events().'
-                  value="'.htmlspecialchars($this->params['value'])."\"
+                  value="'.ads($this->params['value'])."\"
                   {$this->params['html_attributes']}
-                  data-src-real-base=\"".htmlspecialchars($this->adios->config['files_url']).'"
-                  data-src-base="'.htmlspecialchars($file_src_base).'"
-                  data-default-txt="'.htmlspecialchars($default_src).'"
-                  data-upload-params="'.htmlspecialchars($upload_params).'"
+                  data-src-real-base=\"".ads($this->adios->config['files_url']).'"
+                  data-src-base="'.ads($file_src_base).'"
+                  data-default-txt="'.ads($default_src).'"
+                  data-subdir="'.ads($this->params['subdir']).'"
                   '.($this->params['readonly'] ? "disabled='disabled'" : '')."
                 />
                 
@@ -726,10 +725,13 @@ class Input extends \ADIOS\Core\UI\View {
                   <form id='{$this->params['uid']}_file_form' enctype='multipart/form-data'>
                     <input
                       ".($this->params['readonly'] ? "disabled='disabled'" : '')."
-                      type='file' style='display:none;'
+                      type='file'
+                      style='display:none;'
                       name='{$this->params['uid']}_file_input'
                       id='{$this->params['uid']}_file_input'
-                      onchange='ui_input_upload_file(\"{$this->params['uid']}\");'
+                      onchange='
+                        ui_input_upload_file(\"{$this->params['uid']}\");
+                      '
                     />
                     <label for='{$this->params['uid']}_file_input'>
                       <span
@@ -740,7 +742,7 @@ class Input extends \ADIOS\Core\UI\View {
                             ui_input_file_open('{$this->params['uid']}');
                           \"
                         " : '')."
-                        title='".($this->params['readonly'] ? '' : l('Presuňte sem súbor, alebo kliknite pre nahratie súboru'))."'
+                        title='".($this->params['readonly'] ? '' : $this->translate("Drag and drop file here or click to find it on a computer."))."'
                       >
                         {$file_short_name}
                       </span>

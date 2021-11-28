@@ -142,9 +142,14 @@ namespace Surikata\Plugins\WAI\Order {
         floatval($currentShipment['price']['payment_fee'])
       );
 
+      $checkoutEvents = $this->adminPanel->dispatchEventToPlugins("onCheckoutBeforeLoad", [
+        "order" => $orderData,
+        "cartContents" => $this->cartContents
+      ]);
+
       $twigParams['totalPriceWithDelivery'] = 
         floatval($this->cartContents["summary"]["priceInclVAT"]) 
-        - (new \Surikata\Plugins\WAI\Proprietary\Checkout\Vouchers($this->websiteRenderer))->getVoucherDiscount()
+        - $checkoutEvents['voucher_discount']
         + floatval($twigParams['deliveryPrice']);
       ;
 

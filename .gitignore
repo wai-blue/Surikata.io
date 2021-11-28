@@ -13,6 +13,9 @@
 /data/*
 !/data/.htaccess
 
+/install/packages/*
+!/install/packages/.htaccess
+
 /prop/*
 !/prop/.htaccess
 !/prop/README.md

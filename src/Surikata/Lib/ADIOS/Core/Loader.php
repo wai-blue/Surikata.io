@@ -121,7 +121,7 @@ class Loader {
       $gtp = $this->config['global_table_prefix'];
 
       // nacitanie zakladnych ADIOS lib suborov
-      include(dirname(__FILE__)."/Lib/basic_functions.php");
+      require_once dirname(__FILE__)."/Lib/basic_functions.php";
 
       if ($mode == ADIOS_MODE_FULL) {
 

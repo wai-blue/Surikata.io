@@ -657,7 +657,7 @@ class Input extends \ADIOS\Core\UI\View {
                 <div>
                   ".$this->adios->ui->Button([
                     "fa_icon" => "fas fa-times",
-                    "text" => "Close files and media browser",
+                    "text" => $this->translate("Close files and media browser"),
                     "class" => "btn btn-secondary btn-icon-split",
                     "onclick" => "
                       $('#{$this->params['uid']}_browser').hide();

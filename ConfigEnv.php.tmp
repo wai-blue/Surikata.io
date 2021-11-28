@@ -49,3 +49,4 @@ $configEnv["brand"]["login"]["splash"] = "";
 
 $configEnv["minifyOutputHtml"] = FALSE;
 $configEnv["validateOutputHtml"] = TRUE;
+$configEnv["cacheAssets"] = TRUE;

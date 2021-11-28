@@ -39,7 +39,9 @@ require_once(PROJECT_ROOT_DIR."/ConfigEnv.php");
 require_once(__DIR__."/ConfigApp.php");
 
 // load assets from cache, if necessary
-require_once(__DIR__."/LoadAssetsFromCache.php");
+if ($configEnv["cacheAssets"] ?? FALSE) {
+  require_once(__DIR__."/LoadAssetsFromCache.php");
+}
 
 // include autoloaders
 require_once("vendor/autoload.php");

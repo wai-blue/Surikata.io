@@ -66,7 +66,8 @@ class Loader {
     $this->pageUrl = trim($this->pageUrl, "/");
 
     // calculate rootUrl
-    $this->rootUrl = trim("./".str_repeat("../", substr_count($this->pageUrl, "/")), "/");
+    // $this->rootUrl = trim("./".str_repeat("../", substr_count($this->pageUrl, "/")), "/");
+    $this->rootUrl = rtrim($this->rewriteBase, "/");
 
     if ($this->themeDir != "") {
       $this->assetsUrlMap["theme/assets/"] = "{$this->themeDir}/Assets/";

@@ -1,14 +1,26 @@
 <?php
 
+///////////////////////////////////////////////////////////////
+// initialize
+
+require_once __DIR__."/Lib/Autoload.php";
+
 if (php_sapi_name() !== 'cli') {
   echo "Script is available only for CLI.";
 }
 
-$arguments = getopt(
-  "T:L:P:",
-  ["theme:", "languages:", "package:"],
-  $restIndex
-);
+///////////////////////////////////////////////////////////////
+// parse and validate arguments
+
+if (isset($arguments) && is_array($arguments)) {
+  // script has been included in this case
+} else {
+  $arguments = getopt(
+    "T:L:P:",
+    ["theme:", "languages:", "package:"],
+    $restIndex
+  );
+}
 
 $theme = $arguments["T"] ?? $arguments["theme"] ?? "Basic";
 $languages = $arguments["L"] ?? $arguments["languages"] ?? "en,sk";
@@ -48,20 +60,21 @@ if (!in_array($theme, $availableThemes)) {
   exit;
 }
 
+///////////////////////////////////////////////////////////////
+// load $adminPanelConfig and $websiteRendererConfig
 
+require_once __DIR__."/../Init.php";
 
-
+///////////////////////////////////////////////////////////////
+// prepare $installationConfig
 
 $installationConfig = [
-  "slideshow_image_set" => "books",
-  "random_products_count" => 50,
+  "slideshow-image-set" => "books",
+  "random-products-count" => 50,
   "product-catalog" => "yes",
   "delivery-and-payment-services" => "yes",
   "customers" => "yes",
   "orders" => "yes",
-  "rewrite_base_is_correct" => "1",
-  "http_host" => "{% SERVER_HTTP_HOST %}",
-  "rewrite_base" => "{% REWRITE_BASE %}",
 ];
 
 if (!empty($package)) {
@@ -90,4 +103,11 @@ foreach (explode(",", $languages) as $language) {
   $i++;
 }
 
-include(__DIR__."/index.php");
+///////////////////////////////////////////////////////////////
+// install the project
+
+$installationLog = \Surikata\Installer\Installer::installSurikataProject(
+  $adminPanelConfig,
+  $websiteRendererConfig,
+  $installationConfig
+);

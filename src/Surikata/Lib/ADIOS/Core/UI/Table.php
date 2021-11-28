@@ -865,7 +865,7 @@ class Table extends \ADIOS\Core\UI\View {
               'uid' => "{$this->uid}_window",
               'content' => $html,
               'header' => [
-                $this->adios->ui->Button(["text" => "Zavrieť", "type" => "close", "onclick" => "ui_form_close('{$this->uid}_window');"]),
+                $this->adios->ui->Button(["text" => $this->translate("Close"), "type" => "close", "onclick" => "ui_form_close('{$this->uid}_window');"]),
               ],
               'title' => " ",
             ]

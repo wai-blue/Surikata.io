@@ -215,8 +215,8 @@ namespace ADIOS\Plugins\WAI\Product {
           >
             <span class='icon'><i class='fa fa-link'></i></span>
             <span class='text'>" . $this->translate("Visit product on website") . "</span>
-          </a>"
-        ;
+          </a>
+        ";
       }
 
       return $event;

@@ -1037,9 +1037,6 @@ class Order extends \ADIOS\Core\Widget\Model {
         ."<div style='margin-left:30px;display:inline-block'>{$tagsHtml}</div>"
       ;
 
-      echo "<pre>";
-      print_r($data);
-      echo "</pre>";
       $sidebarHtmlDiscount = "";
       if ((float)$data["discount"] > 0) {
         // Show price with discount

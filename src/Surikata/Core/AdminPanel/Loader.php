@@ -244,8 +244,18 @@ class Loader extends \ADIOS\Core\Loader {
    * @return void
    */
   public function checkFoldersPermissions() {
-    // TODO:
-    // throw new \Exception('Wrong access permissions for folder "' . $value. '"');
+    foreach (get_defined_constants(true)['user'] as $const => $value) {
+      if (
+        '_DIR' === substr($const, -4) 
+        && is_string($value)
+        && !empty($value)
+        && is_dir($value)
+      ) {
+        if (substr(sprintf('%o', fileperms($value)), -4) !== '0775' and !chmod($value, 0775)) {
+          throw new \Exception('Wrong access permissions for folder: "' . $value. '"');
+        }
+      }
+    }
   }
 
   public function getAvailableDomains() {

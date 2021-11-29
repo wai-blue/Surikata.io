@@ -110,6 +110,9 @@ class Search extends \ADIOS\Core\Action {
             {
               'searchGroup': '".ads($searchGroup)."',
               'search': searchString,
+            },
+            {
+              'type': 'POST',
             }
           )
         }

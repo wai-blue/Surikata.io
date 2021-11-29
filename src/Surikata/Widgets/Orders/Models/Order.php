@@ -706,6 +706,7 @@ class Order extends \ADIOS\Core\Widget\Model {
 
     $placedOrderData = $this->adios->dispatchEventToPlugins("onOrderAfterPlaceOrder", [
       "order" => $placedOrderData,
+      "orderData" => $orderData
     ])["order"];
 
     $summary = $placedOrderData["SUMMARY"];

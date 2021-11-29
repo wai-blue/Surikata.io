@@ -33,6 +33,7 @@ class Plugin {
     $this->gtp = $this->adios->gtp;
 
     $this->myRootFolder = str_replace("\\", "/", dirname((new \ReflectionClass(get_class($this)))->getFileName()));
+    $this->dictionaryFolder = $this->myRootFolder."/Lang";
 
     // inicializacia pluginu
     $this->init();

@@ -332,9 +332,9 @@ class Installer {
       $productFeaturesCount = $productFeatureModel->get()->count();
 
       // produkty - stavy na sklade
-      $productStockStateModel->insertRow(["id" => 1, "name_lang_1" => "Available in stock"]);
-      $productStockStateModel->insertRow(["id" => 2, "name_lang_1" => "Currently unavailable"]);
-      $productStockStateModel->insertRow(["id" => 3, "name_lang_1" => "Available upon request"]);
+      $productStockStateModel->insertRow(["id" => 1, "name_lang_1" => "Available in stock", "name_lang_2" => "Dostupné na sklade", "name_lang_3" => "Dostupné na skladě"]);
+      $productStockStateModel->insertRow(["id" => 2, "name_lang_1" => "Currently unavailable", "name_lang_2" => "Nedostupné", "name_lang_3" => "Nedostupné"]);
+      $productStockStateModel->insertRow(["id" => 3, "name_lang_1" => "Available upon request", "name_lang_2" => "Dostupné na otázku", "name_lang_3" => "Dostupné na dotaz"]);
 
       // produkty - produkty
       $adminPanel->db->startTransaction();

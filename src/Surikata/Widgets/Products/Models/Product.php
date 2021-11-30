@@ -440,6 +440,40 @@ class Product extends \ADIOS\Core\Widget\Model {
     ]);
   }
 
+  public function onTableAfterDataLoaded($tableObject) {
+    //echo "<pre>";
+    //var_dump($tableObject->data);
+    //echo "</pre>";
+  }
+
+  public function tableCellHTMLFormatter($data) {
+    $productStockStateModel = new \ADIOS\Widgets\Products\Models\ProductStockState($this->adios);
+    $productStockStateModel->init();
+    $language = $_SESSION[_ADIOS_ID]['language'] ?? "en";
+    switch ($language) {
+      case "en":
+        $languageIndex = 1;
+        break;
+      case "sk":
+        $languageIndex = 2;
+        break;
+      case "cz":
+        $languageIndex = 3;
+        break;
+      default:
+        $languageIndex = 1;
+    }
+    if ($data['column'] === "id_stock_state" && !is_null($data['row']['id_stock_state'])) {
+      $stockState = $productStockStateModel->getById($data['row']['id_stock_state']);
+      if (strlen($stockState["name_lang_".$languageIndex]) > 0) {
+        return $stockState["name_lang_" . $languageIndex];
+      }
+    }
+    return $this->adios->dispatchEventToPlugins("onTableCellHTMLFormatter", [
+      "model" => $this,
+      "data" => $data,
+    ])["data"]["html"];
+  }
   ////////////////////////////////////////////////////////////////
   // ADIOS UI METHODS
 

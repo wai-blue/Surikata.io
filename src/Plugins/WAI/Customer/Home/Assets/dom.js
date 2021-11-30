@@ -2,10 +2,11 @@ class PluginWAICustomerHomeDOMClass extends PluginWAICustomerHomeAPIClass {
 
   createAccount() {
     $('#registrationForm input').removeClass('required-empty');
-  
+
     $('#emailIsEmptyOrInvalidErrorDiv').hide();
     $('#accountAlreadyExistsErrorDiv').hide();
     $('#unknownErrorDiv').hide();
+    $('#newPasswordsDoNotMatchDiv').hide();
     $('#privacyPolicyTermsErrorText').hide();
   
     if (!$('#privacyPolicyTermsConfirmation').is(':checked')) {
@@ -33,6 +34,8 @@ class PluginWAICustomerHomeDOMClass extends PluginWAICustomerHomeAPIClass {
           } else if (dataFail.exception == 'ADIOS\\Widgets\\Customers\\Exceptions\\AccountAlreadyExists') {
             $('#accountAlreadyExistsErrorDiv').fadeIn();
             $("#registrationForm input[name=email]").addClass('required-empty');
+          } else if (dataFail.exception == 'ADIOS\\Widgets\\Customers\\Exceptions\\NewPasswordsDoNotMatch') {
+            $('#newPasswordsDoNotMatchDiv').fadeIn();
           } else {
             $('#unknownErrorDiv').fadeIn();
           }

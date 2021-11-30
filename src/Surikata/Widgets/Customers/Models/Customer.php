@@ -530,7 +530,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
     $tmpCustomer = $this->where('email', '=', $email)->get()->toArray();
     $idCustomer = 0;
     if (count($tmpCustomer) > 0) {
-      if (strlen($tmpCustomer[0]["password"]) > 0 && $tmpCustomer[0]["is_validated"] !== 0) {
+      if (!$createFromOrder) {
         throw new \ADIOS\Widgets\Customers\Exceptions\AccountAlreadyExists();
       }
       $idCustomer = $tmpCustomer[0]["id"];

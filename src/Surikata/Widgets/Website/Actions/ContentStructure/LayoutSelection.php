@@ -14,7 +14,14 @@ class LayoutSelection extends \ADIOS\Core\Widget\Action {
 
     $layoutsHtml = "";
     foreach ($layouts as $layoutName) {
+
       $layout = $theme->getLayout($layoutName);
+      if (is_object($layout)) {
+        $layoutPreviewHtml = $layout->getPreviewHtml();
+      } else {
+        $layoutPreviewHtml = "Can't find layout definition for <i>{$layoutName}</i> in theme <i>{$themeName}</i>.";
+      }
+
       $layoutsHtml .= "
         <div class='col col-4 card shadow'>
           <div class='card-header py-3'>
@@ -25,7 +32,7 @@ class LayoutSelection extends \ADIOS\Core\Widget\Action {
               class='surikata-theme-preview-item ".($layoutName == $activatedLayoutName ? "selected" : "")."'
               onclick='{$this->uid}.apply(\"".ads($layoutName)."\");'
             >
-              ".$layout->getPreviewHtml()."
+              {$layoutPreviewHtml}
             </div>
           </div>
         </div>

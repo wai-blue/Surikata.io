@@ -11,9 +11,9 @@
     <h3 class="agileits-sear-head">Categories</h3>
     <ul>
       {% for category in filterInfo.allCategoriesAndSubCategories %}
-        {% if category.subCategory is not empty %}
+        {% if category.subCategories is not empty %}
           {% set activeCategory = "" %}
-          {% for subCategory in category.subCategory %}
+          {% for subCategory in category.subCategories %}
             {% if subCategory.id == filterInfo.idCategory %}
               {% set activeCategory = subCategory.id %}
             {% endif %}
@@ -35,7 +35,7 @@
             >
               <div class="card-body">
                 <ul class="category-list">
-                  {% for subCategory in category.subCategory %}
+                  {% for subCategory in category.subCategories %}
                     <li>
                       <a
                         href="javascript:void(0)"

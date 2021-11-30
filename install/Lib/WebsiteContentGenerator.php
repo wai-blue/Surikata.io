@@ -361,7 +361,12 @@ class WebsiteContentGenerator {
               "column2Width" => 4,
               "column2CSSClasses" => "text-right",
             ],
-          ]
+          ],
+          "section_9" => [
+            "WAI/Misc/Modal",
+            [
+            ],
+          ],
         ],
 
         // about-us

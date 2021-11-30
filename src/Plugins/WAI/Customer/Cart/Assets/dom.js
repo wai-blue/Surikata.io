@@ -96,6 +96,14 @@ class PluginWAICommonCustomerCartDOMClass extends PluginWAICustomerCartAPIClass 
         .setCancelButtonText(Surikata.translate('Continue shopping', 'Product'))
         .show()
       ;
+
+      $('#navigationCartOverview').html(data.cartOverviewHtml);
+
+      let count = $('#navigationCart li').length;
+    
+      $('.cart-info a').fadeOut(function () {
+        $('.cart-info a').attr('cart-count', count).fadeIn();
+      })
     })
   };
 

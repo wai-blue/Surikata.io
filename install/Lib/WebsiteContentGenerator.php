@@ -388,13 +388,7 @@ class WebsiteContentGenerator {
         ],
         "contact|WithoutSidebar|Contact" => [
           "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
-          "section_2" => [
-            "WAI/SimpleContent/OneColumn",
-            [
-              "heading" => "",
-              "content" => file_get_contents(__DIR__."/../content/PageTexts/kontakt_sk.html"),
-            ]
-          ],
+          "section_2" => ["WAI/Misc/ContactPage"],
         ],
 
         // search

@@ -32,10 +32,6 @@ class Customers extends \ADIOS\Core\Widget {
             "onclick" => "desktop_update('Customers/Categories');",            
           ],
           [
-            "title" => $this->translate("Vouchers"),
-            "onclick" => "desktop_update('Customers/Vouchers');",
-          ],
-          [
             "title" => $this->translate("Analytics"),
             "sub" => [
               [

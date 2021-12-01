@@ -229,22 +229,20 @@ class WebsiteContentGenerator {
     }
 
     // web - stranky
-
     $this->websiteCommonPanels[$this->domainName] = [
-      "header" => [
-        "plugin" => "WAI/Common/Header"
-      ],
+      "header" => ["WAI/Common/Header"],
       "navigation" => [
-        "plugin" => "WAI/Common/Navigation",
-        "settings" => [
+        "WAI/Common/Navigation",
+        [
           "menuId" => $menus["header"]["id"],
           "homepageUrl" => $this->translate("home"),
           "showCategories" => TRUE,
+          "showBreadcrumbs" => TRUE,
         ],
       ],
       "footer" => [ 
-        "plugin" => "WAI/Common/Footer", 
-        "settings" => [ 
+        "WAI/Common/Footer",
+        [
           "mainMenuId" => $menus["header"]["id"],
           "secondaryMenuId" => $menus["footer"]["id"],
           "mainMenuTitle" => $this->translate("Pages"),
@@ -266,7 +264,8 @@ class WebsiteContentGenerator {
 
     if ($this->domainSlug == "hello-world") {
       $webPages = [
-        "home|WithoutSidebar|Home" => [
+        "home|WithoutSidebar|Home" => array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => [
             "WAI/SimpleContent/OneColumn",
             [
@@ -289,8 +288,9 @@ class WebsiteContentGenerator {
               ",
             ]
           ],
-        ],
-        "one-column|WithoutSidebar|One Column" => [
+        ]),
+        "one-column|WithoutSidebar|One Column" => array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => [
             "WAI/SimpleContent/OneColumn",
             [
@@ -298,20 +298,20 @@ class WebsiteContentGenerator {
               "content" => file_get_contents(__DIR__."/../content/PageTexts/o-nas.html"),
             ]
           ],
-        ],
+        ]),
       ];
     } else {
+
       $webPages = [
 
         // home
-        "home|WithoutSidebar|Home" => [
+        "home|WithoutSidebar|Home" => $this->themeObject->getDefaultWebPageContent("home", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => ["WAI/Misc/Slideshow", ["speed" => 1000]],
           "section_2" => [
-            "WAI/SimpleContent/OneColumn",
+            "WAI/SimpleContent/Snippet",
             [
-              "heading" => $this->translate("Welcome"),
-              "headingLevel" => 1,
-              "content" => file_get_contents(__DIR__."/../content/PageTexts/lorem-ipsum-1.html"),
+              "snippetName" => "homepage-after-slideshow",
             ],
           ],
           "section_3" => [
@@ -362,15 +362,12 @@ class WebsiteContentGenerator {
               "column2CSSClasses" => "text-right",
             ],
           ],
-          "section_9" => [
-            "WAI/Misc/Modal",
-            [
-            ],
-          ],
-        ],
+          "section_9" => ["WAI/Misc/Modal"],
+        ]),
 
         // about-us
-        "about-us|WithoutSidebar|About us" => [
+        "about-us|WithoutSidebar|About us" => $this->themeObject->getDefaultWebPageContent("about-us", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => [
             "WAI/SimpleContent/OneColumn",
             [
@@ -385,14 +382,18 @@ class WebsiteContentGenerator {
               "content" => file_get_contents(__DIR__."/../content/PageTexts/o-nas.html"),
             ]
           ],
-        ],
-        "contact|WithoutSidebar|Contact" => [
+        ]),
+
+        // contact
+        "contact|WithoutSidebar|Contact" => $this->themeObject->getDefaultWebPageContent("contact", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
           "section_2" => ["WAI/Misc/ContactPage"],
-        ],
+        ]),
 
         // search
-        "search|WithoutSidebar|Search" => [
+        "search|WithoutSidebar|Search" => $this->themeObject->getDefaultWebPageContent("search", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => [
             "WAI/Misc/WebsiteSearch",
             [
@@ -403,10 +404,11 @@ class WebsiteContentGenerator {
               "searchInBlogs" => "name,content",
             ]
           ],
-        ],
+        ]),
 
         // products
-        "products|WithLeftSidebar|Products" => [
+        "products|WithLeftSidebar|Products" => $this->themeObject->getDefaultWebPageContent("products", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "sidebar" => [
             "WAI/Product/Filter",
             [
@@ -419,9 +421,10 @@ class WebsiteContentGenerator {
           ],
           "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
           "section_2" => ["WAI/Product/Catalog", ["defaultItemsPerPage" => 6]],
-        ],
+        ]),
 
-        "we-recommend|WithoutSidebar|We recommend" => [
+        "we-recommend|WithoutSidebar|We recommend" => $this->themeObject->getDefaultWebPageContent("we-recommend", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => ["WAI/Common/Breadcrumb", ["showHomePage" => 1]],
           "section_2" => [
             "WAI/SimpleContent/H2",
@@ -451,10 +454,11 @@ class WebsiteContentGenerator {
               "product_count" => 99,
             ],
           ],
-        ],
+        ]),
 
         // product detail
-        "|WithoutSidebar|Product detail" => [
+        "|WithoutSidebar|Product detail" => $this->themeObject->getDefaultWebPageContent("product", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => [
             "WAI/Common/Breadcrumb",
             [
@@ -469,69 +473,80 @@ class WebsiteContentGenerator {
               "showAuthor" => 1,
             ],
           ],
-        ],
+        ]),
 
         // shopping cart
-        "cart|WithoutSidebar|Cart" => [
+        "cart|WithoutSidebar|Cart" => $this->themeObject->getDefaultWebPageContent("cart", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => "WAI/Order/CartOverview",
-        ],
+        ]),
 
         // checkout
-        "checkout|WithoutSidebar|Checkout" => [
+        "checkout|WithoutSidebar|Checkout" => $this->themeObject->getDefaultWebPageContent("checkout", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => [
             "WAI/Order/Checkout", [
               "enableVouchers" => 1
             ]
           ],
-        ],
+        ]),
 
         // order-confirmed
-        "|WithoutSidebar|Order confirmed" => [
+        "|WithoutSidebar|Order confirmed" => $this->themeObject->getDefaultWebPageContent("order-confirmed", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => "WAI/Order/Confirmation"
-        ],
+        ]),
 
         // order-payment-received
-        "|WithoutSidebar|Order payment received" => [
+        "|WithoutSidebar|Order payment received" => $this->themeObject->getDefaultWebPageContent("order-payment-received", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => "WAI/Order/PaymentConfirmation"
-        ],
+        ]),
 
         // create-account
-        "create-account|WithoutSidebar|Create Account" => [
+        "create-account|WithoutSidebar|Create Account" => $this->themeObject->getDefaultWebPageContent("create-account", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => [
             "WAI/Customer/Registration", [
               "showPrivacyTerms" => 1,
               "privacyTermsUrl" => "privacy-terms",
             ],
           ],
-        ],
+        ]),
 
         // create-account/confirmation
-        "create-account/confirmation|WithoutSidebar|Create Account - Confirmation" => [
+        "create-account/confirmation|WithoutSidebar|Create Account - Confirmation" => $this->themeObject->getDefaultWebPageContent("create-account-confirmation", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => "WAI/Customer/RegistrationConfirmation"
-        ],
+        ]),
 
         // my-account/validation
-        "|WithoutSidebar|My account - Validation" => [
+        "|WithoutSidebar|My account - Validation" => $this->themeObject->getDefaultWebPageContent("validate-account", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => "WAI/Customer/ValidationConfirmation"
-        ],
+        ]),
 
         // reset-password
-        "reset-password|WithoutSidebar|Reset Password" => [
+        "reset-password|WithoutSidebar|Reset Password" => $this->themeObject->getDefaultWebPageContent("reset-password", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => "WAI/Customer/ForgotPassword"
-        ],
+        ]),
 
         // my-account
-        "my-account|WithoutSidebar|My Account" => [
+        "my-account|WithoutSidebar|My Account" => $this->themeObject->getDefaultWebPageContent("my-account", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => "WAI/Customer/Home",
-        ],
+        ]),
 
         // my-account/orders
-        "my-account/orders|WithoutSidebar|My Account - Orders" => [
+        "my-account/orders|WithoutSidebar|My Account - Orders" => $this->themeObject->getDefaultWebPageContent("my-account-orders", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => "WAI/Customer/OrderList",
-        ],
+        ]),
 
         // login
-        "sign-in|WithoutSidebar|My Account - Sign in" => [
+        "sign-in|WithoutSidebar|My Account - Sign in" => $this->themeObject->getDefaultWebPageContent("sign-in", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => [
             "WAI/Customer/Login",
             [
@@ -539,10 +554,11 @@ class WebsiteContentGenerator {
               "privacyTermsUrl" => "privacy-terms",
             ],
           ],
-        ],
+        ]),
 
         // privacy-terms
-        "privacy-terms|WithoutSidebar|Privacy Terms" => [
+        "privacy-terms|WithoutSidebar|Privacy Terms" => $this->themeObject->getDefaultWebPageContent("privacy-terms", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "section_1" => [
             "WAI/SimpleContent/OneColumn",
             [
@@ -550,16 +566,18 @@ class WebsiteContentGenerator {
               "content" => file_get_contents(__DIR__."/../content/PageTexts/o-nas.html"),
             ]
           ]
-        ],
+        ]),
 
         // news
-        "news|WithLeftSidebar|News" => [
+        "news|WithLeftSidebar|News" => $this->themeObject->getDefaultWebPageContent("news", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "sidebar" => ["WAI/News", ["contentType" => "sidebar"]],
           "section_1" => ["WAI/News", ["contentType" => "listOrDetail"]],
-        ],
+        ]),
 
         // blogs - list
-        "blog|WithLeftSidebar|Blog" => [
+        "blog|WithLeftSidebar|Blog" => $this->themeObject->getDefaultWebPageContent("blog", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "sidebar" => [
             "WAI/Blog/Sidebar", [
               "showRecent" => 1,
@@ -580,10 +598,11 @@ class WebsiteContentGenerator {
               "showAuthor" => 1,
             ],
           ],
-        ],
+        ]),
 
         // blog - detail
-        "|WithLeftSidebar|Blog" => [
+        "|WithLeftSidebar|Blog" => $this->themeObject->getDefaultWebPageContent("blog-detail", "WithoutSidebar", $menus) ?? array_merge(
+          $this->websiteCommonPanels[$this->domainName], [
           "sidebar" => [
             "WAI/Blog/Sidebar",
             [
@@ -599,7 +618,7 @@ class WebsiteContentGenerator {
             ],
           ],
           "section_2" => "WAI/Blog/Detail",
-        ],
+        ]),
 
       ];
     }
@@ -616,10 +635,7 @@ class WebsiteContentGenerator {
         "publish_always" => 1,
         "content_structure" => json_encode([
           "layout" => $tmpLayout,
-          "panels" => array_merge(
-            $this->websiteCommonPanels[$this->domainName],
-            $this->expandPanelsDefinition($webPagePanels)
-          ),
+          "panels" => $this->expandPanelsDefinition($webPagePanels),
         ]),
       ]);
     }

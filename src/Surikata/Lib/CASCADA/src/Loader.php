@@ -244,11 +244,11 @@ class Loader {
           case "ttf":
           case "woff":
           case "woff2":
-            header("Content-type: application/x-font-{$ext}");
+            header("Content-type: font/{$ext}");
             header($headerExpires);
             header("Pragma: cache");
             header($headerCacheControl);
-            echo file_get_contents($sourceFile);
+            echo $assetContent;
           break;
           case "bmp":
           case "gif":

@@ -8,6 +8,19 @@ namespace Surikata\Plugins\WAI\Misc {
   class WebsiteSearch extends \Surikata\Core\Web\Plugin {
 
     private $searchableFields;
+    var $defaultWebsiteSearchdUrl = [
+      1 => "search",
+      2 => "hladat",
+      3 => "hledat"
+    ];
+
+    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
+
+      $languageIndex = (int) $this->websiteRenderer->domain["languageIndex"];
+      $url = $pluginSettings["urlPattern"] ?? $this->defaultWebsiteSearchdUrl[$languageIndex];
+      return $url;
+
+    }
 
     public function getSearchableFields($model = null) {
       if (is_null($model)) {

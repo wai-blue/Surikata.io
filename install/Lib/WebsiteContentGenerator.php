@@ -479,7 +479,11 @@ class WebsiteContentGenerator {
 
         // checkout
         "checkout|WithoutSidebar|Checkout" => [
-          "section_1" => "WAI/Order/Checkout",
+          "section_1" => [
+            "WAI/Order/Checkout", [
+              "enableVouchers" => 1
+            ]
+          ],
         ],
 
         // order-confirmed

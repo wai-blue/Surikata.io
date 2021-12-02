@@ -96,6 +96,14 @@ class PluginWAICommonCustomerCartDOMClass extends PluginWAICustomerCartAPIClass 
         .setCancelButtonText(Surikata.translate('Continue shopping', 'Product'))
         .show()
       ;
+
+      $('#navigationCartOverview').html(data.cartOverviewHtml);
+
+      let count = $('#navigationCart li').length;
+    
+      $('.cart-info a').fadeOut(function () {
+        $('.cart-info a').attr('cart-count', count).fadeIn();
+      })
     })
   };
 
@@ -199,7 +207,7 @@ class PluginWAICommonCustomerCartDOMClass extends PluginWAICustomerCartAPIClass 
           let emptyFields = dataFail.error.split(',');
   
           $('html, body').animate({
-            scrollTop: $('#orderDataForm input[name=' + emptyFields[0] + ']').offset().top
+            scrollTop: $('#orderDataForm input[name=' + emptyFields[0] + ']').offset().top - 100
           }, 500);
   
           for (var i in emptyFields) {

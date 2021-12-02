@@ -564,6 +564,14 @@ class Order extends \ADIOS\Core\Widget\Model {
       throw new \ADIOS\Widgets\Orders\Exceptions\EmptyRequiredFields(join(",", $requiredFieldsEmpty));
     }
 
+    if (empty($orderData['id_delivery_service']) && $checkRequiredFields) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService;
+    }
+
+    if (empty($orderData['id_payment_service']) && $checkRequiredFields) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\UnknownPaymentService;
+    }
+
     $this->adios->dispatchEventToPlugins("onOrderBeforePlaceOrder", [
       "orderData" => $orderData,
     ]);
@@ -589,14 +597,6 @@ class Order extends \ADIOS\Core\Widget\Model {
 
     if ($cartContents === NULL && !empty($customerUID)) {
       $cartContents = $cartModel->getCartContents($customerUID);
-    }
-
-    if (empty($orderData['id_delivery_service']) && $checkRequiredFields) {
-      throw new \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService;
-    }
-
-    if (empty($orderData['id_payment_service']) && $checkRequiredFields) {
-      throw new \ADIOS\Widgets\Orders\Exceptions\UnknownPaymentService;
     }
 
     if (empty($orderData['confirmation_time'])) {

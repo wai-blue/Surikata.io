@@ -30,6 +30,8 @@ class Cards extends \ADIOS\Core\UI\View {
     });
 
     $html = "";
+    // REVIEW: nie je lepsie takyto zapis?
+    // if ($params['show_add_button'] ?? FALSE) {
     if(!array_key_exists('show_add_button', $params) or $params['show_add_button'] !== FALSE) {
       $html .= "
         <div class='row mb-3'>
@@ -37,8 +39,14 @@ class Cards extends \ADIOS\Core\UI\View {
             "type" => "add",
             "onclick" => "window_render('".$model->getFullUrlBase($this->params)."/Add');"
           ])->render()."
-        </div>";
+        </div>
+      ";
+      // REVIEW: dal som uvodzovky na novy riadok, aby bolo odsadzovanie lepsie citatelne
     }
+
+    // REVIEW: poznamka - pridavanie asi bude fungovat, ale refreshovanie cards po pridani
+    // nefunguje. To je known bug aj po editacii - napr. pri editacii galerie produktov v
+    // karte produktu sa cards nerefreshnu.
 
     $html .= "<div class='row'>";
     foreach ($cards as $card) {

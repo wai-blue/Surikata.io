@@ -52,8 +52,6 @@ class CustomerWatchdog extends \ADIOS\Core\Widget\Model {
   }
 
   public function cardsParams($params) {
-    $params['show_add_button'] = FALSE;
-    
     $params['where'] = "`{$this->table}`.`id_customer` = ".(int) $params['id_customer'];
     $customerModel = $this->adios->getModel("Widgets/Customers/Models/Customer");
     $customer = $customerModel->getById($params['id_customer']);

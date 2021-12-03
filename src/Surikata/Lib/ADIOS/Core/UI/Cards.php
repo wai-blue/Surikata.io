@@ -32,6 +32,7 @@ class Cards extends \ADIOS\Core\UI\View {
     $html = "";
     // REVIEW: nie je lepsie takyto zapis?
     // if ($params['show_add_button'] ?? FALSE) {
+    // Takyto zapis generuje zbytocny varning do logu ak v poli hladany kluc chyba
     if(!array_key_exists('show_add_button', $params) or $params['show_add_button'] !== FALSE) {
       $html .= "
         <div class='row mb-3'>
@@ -41,12 +42,12 @@ class Cards extends \ADIOS\Core\UI\View {
           ])->render()."
         </div>
       ";
-      // REVIEW: dal som uvodzovky na novy riadok, aby bolo odsadzovanie lepsie citatelne
     }
 
     // REVIEW: poznamka - pridavanie asi bude fungovat, ale refreshovanie cards po pridani
     // nefunguje. To je known bug aj po editacii - napr. pri editacii galerie produktov v
     // karte produktu sa cards nerefreshnu.
+    // Ja som riesil iba to, aby sa button nezobrazoval, ked nema zmysel. Neriesil som pridávanie, to tam uz bolo.
 
     $html .= "<div class='row'>";
     foreach ($cards as $card) {

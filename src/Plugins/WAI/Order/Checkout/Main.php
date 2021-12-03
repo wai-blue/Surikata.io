@@ -7,6 +7,13 @@ namespace Surikata\Plugins\WAI\Order {
     var $selectedDestinationCountryId = NULL;
     var $destinationCountries = NULL;
 
+    public function setCheckoutSession(array $checkoutSessionData) {
+      $_SESSION[$this->name] = $checkoutSessionData;
+    }
+
+    public function getCheckoutSession() {
+      return isset($_SESSION[$this->name]) ? $_SESSION[$this->name] : null;
+    }
 
     public function getPaymentMethods($selectedDeliveryService) {
       $paymentMethods = [];
@@ -45,7 +52,8 @@ namespace Surikata\Plugins\WAI\Order {
 
     public function getActualDeliveryPrice($deliveryServices, $selectedDeliveryServiceId, $selectedPaymentMethod) {
       $selectedDeliveryService =
-        $deliveryServices[$selectedDeliveryServiceId];
+        $deliveryServices[$selectedDeliveryServiceId]
+      ;
 
       foreach ($this->shipping as $index => $shipment) {
         if (
@@ -110,6 +118,8 @@ namespace Surikata\Plugins\WAI\Order {
           ?? reset($deliveryServices)
         ;
 
+        $this->setCheckoutSession(["selectedDeliveryService" => $selectedDeliveryService]);
+        
         $paymentMethods = $this->getPaymentMethods($selectedDeliveryService);
         $selectedPaymentMethod = 
           $paymentMethods[$orderData["id_payment_service"]] 
@@ -122,7 +132,10 @@ namespace Surikata\Plugins\WAI\Order {
       } else {
         $this->selectedDestinationCountryId = reset($this->destinationCountries)['id'];
         $deliveryServices = $this->getDeliveryServices();
-        $selectedDeliveryService = reset($deliveryServices);
+        $selectedDeliveryService = 
+          ($this->getCheckoutSession()['selectedDeliveryService'])
+          ?? reset($deliveryServices)
+        ;
         $paymentMethods = $this->getPaymentMethods($selectedDeliveryService);
         $selectedPaymentMethod = reset($paymentMethods);
       }

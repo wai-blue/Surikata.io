@@ -138,6 +138,8 @@ namespace Surikata\Plugins\WAI\Customer {
             | \ADIOS\Widgets\Customers\Exceptions\EmailIsInvalid
             | \ADIOS\Widgets\Customers\Exceptions\AccountAlreadyExists
             | \ADIOS\Widgets\Customers\Exceptions\CreateAccountUnknownError
+            | \Surikata\Plugins\WAI\Proprietary\Delivery\Packeta\Exceptions\PickUpPointIsEmpty
+            | \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Exceptions\VoucherIsNotValid
             $e
           ) {
             $returnArray["status"] = "FAIL";

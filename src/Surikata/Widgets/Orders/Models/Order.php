@@ -330,7 +330,7 @@ class Order extends \ADIOS\Core\Widget\Model {
         "readonly" => TRUE,
         "show_column" => TRUE,
       ],
-
+      
       "is_paid" => [
         "type" => "boolean",
         "title" => $this->translate("Paid"),
@@ -443,8 +443,8 @@ class Order extends \ADIOS\Core\Widget\Model {
       $order = $this->getById($data['id']);
       $summary = $this->calculateSummaryInfo($order);
       $this->updateSummaryInfo($data['id'], $summary);
-    }
-
+    } 
+    
     return parent::onAfterSave($data, $returnValue);
   }
 
@@ -469,6 +469,7 @@ class Order extends \ADIOS\Core\Widget\Model {
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownCustomer
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownPaymentService
+   * @throws \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Exceptions\VoucherIsNotValid;
    */
   public function placeOrder($orderData, $customerUID = NULL, $cartContents = NULL, $checkRequiredFields = TRUE) {
     $idCustomer = 0;
@@ -563,6 +564,18 @@ class Order extends \ADIOS\Core\Widget\Model {
       throw new \ADIOS\Widgets\Orders\Exceptions\EmptyRequiredFields(join(",", $requiredFieldsEmpty));
     }
 
+    if (empty($orderData['id_delivery_service']) && $checkRequiredFields) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService;
+    }
+
+    if (empty($orderData['id_payment_service']) && $checkRequiredFields) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\UnknownPaymentService;
+    }
+
+    $this->adios->dispatchEventToPlugins("onOrderBeforePlaceOrder", [
+      "orderData" => $orderData,
+    ]);
+
     if ($idAddress <= 0 && $idCustomer != 0) {
       $idAddress = $customerAddressModel->saveAddress($idCustomer, $orderData);
     }
@@ -584,14 +597,6 @@ class Order extends \ADIOS\Core\Widget\Model {
 
     if ($cartContents === NULL && !empty($customerUID)) {
       $cartContents = $cartModel->getCartContents($customerUID);
-    }
-
-    if (empty($orderData['id_delivery_service']) && $checkRequiredFields) {
-      throw new \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService;
-    }
-
-    if (empty($orderData['id_payment_service']) && $checkRequiredFields) {
-      throw new \ADIOS\Widgets\Orders\Exceptions\UnknownPaymentService;
     }
 
     if (empty($orderData['confirmation_time'])) {
@@ -652,6 +657,7 @@ class Order extends \ADIOS\Core\Widget\Model {
       "notes"                  => $orderData['notes'],
       "domain"                 => $orderData['domain'],
       "state"                  => self::STATE_NEW,
+      "id_voucher"             => $voucher['id'] ?? null
     ]);
 
     if (!is_numeric($idOrder)) {
@@ -697,18 +703,20 @@ class Order extends \ADIOS\Core\Widget\Model {
 
     $placedOrderData["delivery_fee"] = $fees["deliveryFee"];
     $placedOrderData["payment_fee"] = $fees["paymentFee"];
+    $placedOrderData["voucher"] = $orderData["voucher"] ?? 0;
 
     $summary = $this->calculateSummaryInfo($placedOrderData);
 
     $placedOrderData = $this->adios->dispatchEventToPlugins("onOrderAfterPlaceOrder", [
-      "model" => $this,
       "order" => $placedOrderData,
+      "orderData" => $orderData,
+      "cartContents" => $cartContents
     ])["order"];
 
     $summary = $placedOrderData["SUMMARY"];
 
     $this->updateSummaryInfo($idOrder, $summary);
-
+    
     $this->sendNotificationForPlacedOrder($placedOrderData);
 
     if (isset($orderData["newsletterConsent"])) {
@@ -1381,7 +1389,7 @@ class Order extends \ADIOS\Core\Widget\Model {
     }
   }
 
-  public function calculateSummaryInfo($order) {
+  public function calculateSummaryInfo(array $order) {
     $summary = [
       'price_total_excl_vat' => 0,
       'price_total_incl_vat' => 0,

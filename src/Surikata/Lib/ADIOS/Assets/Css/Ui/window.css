@@ -1,6 +1,9 @@
 .window_header {border-width:0px !important;}
 
 .adios_window {
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 span.adios_window.activated:nth-of-type(1) { z-index: 100000; }
@@ -15,7 +18,7 @@ span.adios_window.activated:nth-of-type(5) { z-index: 100004; }
     margin: 0;
     margin-left: 50%;
     transform: scale(0.15);
-    position: absolute;
+    position: fixed;
     left: 0px;
     top: 5em;
     padding-top: 2em;

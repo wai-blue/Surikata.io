@@ -96,6 +96,14 @@ class PluginWAICommonCustomerCartDOMClass extends PluginWAICustomerCartAPIClass 
         .setCancelButtonText(Surikata.translate('Continue shopping', 'Product'))
         .show()
       ;
+
+      $('#navigationCartOverview').html(data.cartOverviewHtml);
+
+      let count = $('#navigationCart li').length;
+    
+      $('.cart-info a').fadeOut(function () {
+        $('.cart-info a').attr('cart-count', count).fadeIn();
+      })
     })
   };
 
@@ -199,7 +207,7 @@ class PluginWAICommonCustomerCartDOMClass extends PluginWAICustomerCartAPIClass 
           let emptyFields = dataFail.error.split(',');
   
           $('html, body').animate({
-            scrollTop: $('#orderDataForm input[name=' + emptyFields[0] + ']').offset().top
+            scrollTop: $('#orderDataForm input[name=' + emptyFields[0] + ']').offset().top - 100
           }, 500);
   
           for (var i in emptyFields) {
@@ -213,6 +221,11 @@ class PluginWAICommonCustomerCartDOMClass extends PluginWAICustomerCartAPIClass 
           $('.order-delivery > label').addClass('input-required');
         } else if (dataFail.exception == 'ADIOS\\Widgets\\Orders\\Exceptions\\UnknownPaymentService') {
           $('.order-payments > label').addClass('input-required');
+        } else if (dataFail.exception == 'Surikata\\Plugins\\WAI\\Proprietary\\Delivery\\Packeta\\Exceptions\\PickUpPointIsEmpty') {
+          $('#packeta_pickup_point_button').addClass('pickup-point-require').fadeIn();
+          $('html, body').animate({
+            scrollTop: $('#packeta_pickup_point_button').offset().top-100
+          }, 500);
         } else if (dataFail.exception != '') {
   
           $('#unknownErrorDiv').fadeIn();

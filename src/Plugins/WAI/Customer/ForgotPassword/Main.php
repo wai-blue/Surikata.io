@@ -5,7 +5,7 @@ namespace Surikata\Plugins\WAI\Customer {
 
     var $defaultForgotPasswordUrl = "password/reset/{% token %}";
     var $formForgotPasswordUrl = [
-      1 => "reset-password/{% token %}",
+      1 => "forgot-password/{% token %}",
       2 => "obnovit-heslo/{% token %}",
       3 => "obnovit-heslo/{% token %}",
     ];

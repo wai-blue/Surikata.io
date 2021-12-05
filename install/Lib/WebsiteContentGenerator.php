@@ -517,7 +517,7 @@ class WebsiteContentGenerator {
         ],
 
         // reset-password
-        "reset-password|WithoutSidebar|Reset Password" => [
+        "forgot-password|WithoutSidebar|Reset Password" => [
           "section_1" => "WAI/Customer/ForgotPassword"
         ],
 

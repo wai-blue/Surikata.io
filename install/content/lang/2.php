@@ -42,7 +42,7 @@
     "my-account" => "moj-ucet",
     "My account - Validation" => "Môj účet - Overenie",
     "Reset Password" => "Obnoviť heslo",
-    "reset-password" => "obnovit-heslo",
+    "forgot-password" => "obnovit-heslo",
     "My Account - Orders" => "Môj účet - Objednávky",
     "my-account/orders" => "moj-ucet/objednavky",
     "My Account - Sign in" => "Môj účet - Prihlásenie",

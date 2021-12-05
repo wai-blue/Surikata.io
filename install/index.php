@@ -342,13 +342,13 @@ if (!$doInstall) {
         </tr>
         <tr>
           <td>"._getDomainSlugInput(3, "sk")."</td>
-          <td>"._getDomainDescriptionInput(3, "Slovenská verzia")."</td>
+          <td>"._getDomainDescriptionInput(3, "language-sk")."</td>
           <td>"._getDomainLanguageIndexInput(3, 2)."</td>
           <td>"._getDomainThemeSelect(3, $availableThemes)."</td>
         </tr>
         <tr>
           <td>"._getDomainSlugInput(4, "cz")."</td>
-          <td>"._getDomainDescriptionInput(4, "Česká verzia")."</td>
+          <td>"._getDomainDescriptionInput(4, "language-cz")."</td>
           <td>"._getDomainLanguageIndexInput(4, 3)."</td>
           <td>"._getDomainThemeSelect(4, $availableThemes)."</td>
         </tr>

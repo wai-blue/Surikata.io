@@ -282,6 +282,43 @@ namespace Surikata\Plugins\WAI\Misc {
       */
 
       }
+      if (count($returnArray) === 0) {
+        $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
+
+        $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adminPanel);
+        $productDetailPlugin = new \Surikata\Plugins\WAI\Product\Detail($this->websiteRenderer);
+        $filters = ["recommended", "on_sale"];
+        $take = 6;
+        $productSneakPeek = [];
+
+        foreach ($filters as $filter) {
+          switch ($filter) {
+            case "recommended":
+              $productQuery = $productModel
+                ->where("is_recommended", TRUE)
+                ->skip(0)->take($take);
+              break;
+            case "on_sale":
+              $productQuery = $productModel
+                ->where("is_on_sale", TRUE)
+                ->skip(0)->take($take);
+              break;
+          }
+
+          $products = $productModel->fetchRows($productQuery);
+          foreach ($products as $key => $product) {
+            $product["url"] = $productDetailPlugin->getWebPageUrl($product);
+            $product['PRICE'] = $this->adminPanel
+              ->getModel("Widgets/Products/Models/Product")
+              ->getPriceInfoForSingleProduct($product["id"])
+            ;
+            $product = $productModel->translateSingleProductForWeb($product, $languageIndex);
+            $products[$key] = $product;
+          }
+          $productSneakPeek[$filter] = $products;
+        }
+        $returnArray["productsNoSearch"] = $productSneakPeek;
+      }
 
       return $returnArray;
     }

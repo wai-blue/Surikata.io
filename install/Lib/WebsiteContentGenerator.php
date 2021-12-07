@@ -362,7 +362,7 @@ class WebsiteContentGenerator {
               "column2CSSClasses" => "text-right",
             ],
           ],
-          "section_9" => ["WAI/Misc/Modal"],
+          "section_9" => ["WAI/SimpleContent/Snippet", ["snippetName" => "homepage-modal"]],
         ]),
 
         // about-us

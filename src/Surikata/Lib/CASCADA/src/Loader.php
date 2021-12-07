@@ -226,6 +226,10 @@ class Loader {
 
         $assetContent = @file_get_contents($sourceFile);
 
+        if (!is_dir($this->assetCacheDir)) {
+          @mkdir($this->assetCacheDir, 0775);
+        }
+
         if (!empty($this->assetCacheDir) && is_dir($this->assetCacheDir)) {
           $cacheFile = "{$this->assetCacheDir}/".md5($this->template).".{$ext}";
           @file_put_contents($cacheFile, $assetContent);

@@ -6,7 +6,7 @@ if (defined('WEBSITE_REWRITE_BASE')) {
   if (strpos($relativeRequestUri, "theme/assets") !== FALSE) {
     $ext = strtolower(pathinfo($relativeRequestUri, PATHINFO_EXTENSION));
 
-    $assetCacheFile = CACHE_DIR."/".md5($relativeRequestUri).".{$ext}";
+    $assetCacheFile = $websiteRendererConfig["assetsCacheDir"]."/".md5($relativeRequestUri).".{$ext}";
 
     if (file_exists($assetCacheFile)) {
 

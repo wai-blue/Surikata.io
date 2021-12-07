@@ -1,7 +1,7 @@
 class PluginWAIProductCatalogDOMClass extends PluginWAIProductCatalogAPIClass {
 
   updatePagination() {
-    PluginWAIProductCatalogAPIClass.prototype.updatePagination(
+    super.updatePagination(
       this.page,
       function (data) {
         $('#productPagination')
@@ -34,7 +34,7 @@ class PluginWAIProductCatalogDOMClass extends PluginWAIProductCatalogAPIClass {
     var _this = this;
     _this.page++;
 
-    PluginWAIProductCatalogAPIClass.prototype.loadPage(
+    super.loadPage(
       _this.page,
       function (data) {
   
@@ -69,7 +69,7 @@ class PluginWAIProductCatalogDOMClass extends PluginWAIProductCatalogAPIClass {
       break;
     }
   
-    PluginWAIProductCatalogAPIClass.prototype.loadPage(
+    super.loadPage(
       this.page,
       function (data) {
         let url = new URL(window.location);
@@ -89,9 +89,11 @@ class PluginWAIProductCatalogDOMClass extends PluginWAIProductCatalogAPIClass {
     return this;
   }
   
-  setFilter() {
+  setFilter(varName, varValue) {
     $('#accordionExample a').removeClass('sidebar-active');
     $('#accordionExample span').removeClass('sidebar-active');
+
+    super.setFilter(varName, varValue);
   }
 
 }

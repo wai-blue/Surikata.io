@@ -3,7 +3,7 @@ class PluginWAIProductCatalogAPIClass {
   page = 0;
   filter = {};
   catalogListType = "list";
-
+  
   loadUrlParams(varName) {
     // Do if url contain varName
     if (window.location.href.indexOf(varName)> -1) {
@@ -158,7 +158,7 @@ class PluginWAIProductCatalogAPIClass {
   changeProductSorting(element) {
     element = $(element);
     var sortValue = element.val();
-    console.log(window.location.search);
+
     var uri = window.location.protocol + "//" + window.location.host + window.location.pathname;
     if (window.location.search.length > 0) {
       uri += window.location.search;

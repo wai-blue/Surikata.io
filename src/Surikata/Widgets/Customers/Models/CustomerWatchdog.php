@@ -57,8 +57,8 @@ class CustomerWatchdog extends \ADIOS\Core\Widget\Model {
     $customer = $customerModel->getById($params['id_customer']);
 
     $params['columns'] = 4;
-    $params['window']['title'] = $customer['email'];
-    $params['window']['subtitle'] = "Watchdog";
+    $params['window']['title'] = $this->translate("Watchdog");
+    $params['window']['subtitle'] = $customer['email'];
     return $params;
   }
 
@@ -79,7 +79,7 @@ class CustomerWatchdog extends \ADIOS\Core\Widget\Model {
           <a
             href='javascript:void(0)'
             onclick='window_render(\"Products/{$data['id_product']}/Edit\");'
-          >Show product</a>
+          >". $this->translate("Show product")."</a>
         </div>
       </div>
     ";

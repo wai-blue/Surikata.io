@@ -132,7 +132,7 @@ $websiteRendererConfig = [
   "minifyOutputHtml" => $configEnv['minifyOutputHtml'] ?? FALSE,
   "validateOutputHtml" => $configEnv['validateOutputHtml'] ?? FALSE,
 
-  "assetCacheDir" => CACHE_DIR."/assets-".WEBSITE_DOMAIN_TO_RENDER,
+  "assetCacheDir" => CACHE_DIR."/assets-".(defined("WEBSITE_DOMAIN_TO_RENDER") ? WEBSITE_DOMAIN_TO_RENDER : ""),
 
   "rewriteBase" => defined("WEBSITE_REWRITE_BASE") ? WEBSITE_REWRITE_BASE : "/",
   "twigCacheDir" => TWIG_CACHE_DIR,

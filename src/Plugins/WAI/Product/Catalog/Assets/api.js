@@ -100,14 +100,16 @@ class PluginWAIProductCatalogAPIClass {
     return urlObject;
   }
 
-  update(updateDiv, url) {
+  update(url) {
     let pluginParams = null;
     
     this.setPage(1);
 
     pluginParams = { ...this.filter };
+
     window.history.pushState({}, '', this.getURL(url));
 
+    let updateDiv = $('#productCatalogWrapperDiv');
     updateDiv.css('opacity', 0.5);
 
     Surikata.renderPlugin(
@@ -137,6 +139,8 @@ class PluginWAIProductCatalogAPIClass {
         }
       }
     );
+
+    return this;
   }
 
   loadPage(page, success) {
@@ -152,6 +156,8 @@ class PluginWAIProductCatalogAPIClass {
         }
       }
     );
+
+    return this;
   }
 
   // TODO: upravit podla konvencii, ako sa deklaruju funkcie vyssie

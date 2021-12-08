@@ -5,11 +5,13 @@ class PluginWAIProductCatalogDOMClass extends PluginWAIProductCatalogAPIClass {
       this.page,
       function (data) {
         $('#productCatalogPaginationDiv')
-          .html(data)
+          .replaceWith(data)
           .css('opacity', 1)
         ;
       }
     );
+
+    return this;
   }
 
   setCatalogListType(type) {
@@ -28,33 +30,20 @@ class PluginWAIProductCatalogDOMClass extends PluginWAIProductCatalogAPIClass {
   
     document.cookie = "catalogListType=" + type;
   }
-  
-  
-  loadNextPage() {
-    var _this = this;
-    _this.page++;
 
-    super.loadPage(
-      _this.page,
-      function (data) {
-  
-        let scrollPosition = $(document).scrollTop();
-        let url = new URL(window.location);
-        let div = $('<div></div>').html(data);
-  
-        $('.tab-content').append(div);
-        _this.setCatalogListType(_this.catalogListType);
-  
-        url.searchParams.set('page', _this.page);
-        window.history.pushState({}, '', url);
-  
-        $(document).scrollTop(scrollPosition);
-      }
-    );
-  
-    return this;
+  onCatalogHtmlBeforeLoad() {
+    $('#productCatalogProductListDiv').css('opacity', 0.5);
+    $('html, body').animate({
+      scrollTop: $("#productCatalogProductListDiv").offset().top
+    }, 200);
   }
-  
+
+  onCatalogHtmlReady(html) {
+    $('#productCatalogProductListDiv').replaceWith(html);
+    $('#productCatalogProductListDiv').css('opacity', 1);
+
+  }
+
   loadPage(page) {
     var _this = this;
     switch (page) {
@@ -68,19 +57,19 @@ class PluginWAIProductCatalogDOMClass extends PluginWAIProductCatalogAPIClass {
         this.page = page;
       break;
     }
+
+    if (page <= 0) {
+      page = 1;
+    }
   
+    _this.onCatalogHtmlBeforeLoad();
+
     super.loadPage(
       this.page,
       function (data) {
+        _this.onCatalogHtmlReady(data);
+  
         let url = new URL(window.location);
-  
-        $('.tab-content').html(data).hide().fadeIn();
-        _this.setCatalogListType(_this.catalogListType);
-  
-        $('html, body').animate({
-          scrollTop: $("#productCatalogDefaultContainerDiv").offset().top
-        }, 500);
-  
         url.searchParams.set('page', _this.page);
         window.history.pushState({}, '', url);
       }

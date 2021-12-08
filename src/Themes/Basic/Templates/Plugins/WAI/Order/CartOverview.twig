@@ -121,7 +121,7 @@
               <h4 class="grand-totall-title mt-3">{{ translate("Grand Total") }} <span id="priceTotal">{{ cartContents.summary.priceTotal|number_format(2, ",", " ") }}</span> €</h4>
 
             </div>
-            <a class="btn btn-checkout btn-grand-totall" href="{{ rootUrl }}/{{ callPluginMethod('WAI/Order/Checkout', 'getWebPageUrl') }}">Proceed to Checkout</a>
+            <a class="btn btn-checkout btn-grand-totall" href="{{ rootUrl }}/{{ getUrlForPlugin('WAI/Order/Checkout') }}">Proceed to Checkout</a>
           </div>
         </div>
       </div>

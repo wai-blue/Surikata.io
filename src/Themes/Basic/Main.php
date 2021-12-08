@@ -4,7 +4,7 @@ namespace Surikata\Themes;
 
 class Basic extends \Surikata\Core\Web\Theme {
 
-  public function getDefaultColorsAndStyles() {
+  public function getDefaultColorsAndStyles($installer) {
     return [
       "themeMainColor" => "#17C3B2",
       "themeSecondColor" => "#222222",

@@ -43,10 +43,11 @@ class Theme {
     return NULL;
   }
 
-  public function getDefaultColorsAndStyles() {
+  public function getDefaultColorsAndStyles($installer) {
     return [];
   }
 
-  public function onAfterInstall() {
+  public function onAfterInstall($installer) {
+    return NULL;
   }
 }

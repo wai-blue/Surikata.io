@@ -675,7 +675,7 @@ class WebsiteContentGenerator {
               "urlInstagram" => "https://surikata.io"
             ],
             "design" => array_merge(
-              $this->themeObject->getDefaultColorsAndStyles(),
+              $this->themeObject->getDefaultColorsAndStyles($this),
               [
                 "theme" => $themeName,
                 "headerMenuID" => $this->domainIdOffset + 1,
@@ -693,7 +693,7 @@ class WebsiteContentGenerator {
       ]
     ]);
 
-    $this->themeObject->onAfterInstall();
+    $this->themeObject->onAfterInstall($this);
 
   }
 
@@ -706,6 +706,26 @@ class WebsiteContentGenerator {
   public function installPluginsOnce() {
     foreach ($this->adminPanel->pluginObjects as $pluginObject) {
       $pluginObject->installOnce($this);
+    }
+  }
+
+  public function installDictionary($domainIndex) {
+    $domainName = $this->domainsToInstall[$domainIndex]["name"];
+    $languageIndex = (int) $this->domainsToInstall[$domainIndex]["languageIndex"];
+
+    if ($languageIndex == 1) return;
+
+    require(__DIR__."/../content/lang-themes/{$languageIndex}.php");
+
+    $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($this->adminPanel);
+
+    foreach ($dictionary as $item) {
+      $translationModel->insertRow([
+        "domain" => $domainName,
+        "context" => $item[0],
+        "original" => $item[1],
+        "translated" => $item[2],
+      ]);
     }
   }
 }

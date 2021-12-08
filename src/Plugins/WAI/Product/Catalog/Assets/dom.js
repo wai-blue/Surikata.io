@@ -4,7 +4,7 @@ class PluginWAIProductCatalogDOMClass extends PluginWAIProductCatalogAPIClass {
     super.updatePagination(
       this.page,
       function (data) {
-        $('#productPagination')
+        $('#productCatalogPaginationDiv')
           .html(data)
           .css('opacity', 1)
         ;

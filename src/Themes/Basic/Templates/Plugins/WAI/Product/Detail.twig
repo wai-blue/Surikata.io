@@ -101,7 +101,7 @@
 
                    }).then((result) => {
                      if (result.isConfirmed) {
-                       window.location.href = '{{ rootUrl }}/{{ callPluginMethod('WAI/Order/CartOverview', 'getWebPageUrl') }}';
+                       window.location.href = '{{ rootUrl }}/{{ getUrlForPlugin('WAI/Order/CartOverview') }}';
                      }
                    });
                });

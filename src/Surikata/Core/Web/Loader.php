@@ -187,7 +187,6 @@ class Loader extends \Cascada\Loader {
       ));
 
       // podobny princip, ako callSurikataMethod, akurat sa vola metoda pluginu
-      // NETESTOVANE
       $this->twig->addFunction(new \Twig\TwigFunction(
         'callPluginMethod',
         function ($pluginName, $function, $params = []) {
@@ -195,6 +194,15 @@ class Loader extends \Cascada\Loader {
             [$this->getPlugin($pluginName), $function],
             [$params]
           );
+        }
+      ));
+
+      // podobny princip, ako callSurikataMethod, akurat sa vola metoda pluginu
+      $this->twig->addFunction(new \Twig\TwigFunction(
+        'getUrlForPlugin',
+        function ($pluginName, $urlParams = []) {
+          $plugin = $this->getPlugin($pluginName);
+          return $plugin->getWebPageUrl($urlParams);
         }
       ));
 

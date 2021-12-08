@@ -81,7 +81,6 @@ class Installer {
     $orderTagModel = new \ADIOS\Widgets\Orders\Models\OrderTag($adminPanel);
     $orderTagAssignmentModel = new \ADIOS\Widgets\Orders\Models\OrderTagAssignment($adminPanel);
     $unitModel = new \ADIOS\Widgets\Settings\Models\Unit($adminPanel);
-    $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($adminPanel);
 
     $deliveryServiceModel = new \ADIOS\Widgets\Shipping\Models\DeliveryService($adminPanel);
     $destinationCountryModel = new \ADIOS\Widgets\Shipping\Models\DestinationCountry($adminPanel);
@@ -595,6 +594,7 @@ class Installer {
     foreach ($domainsToInstall as $domainIndex => $domain) {
       $wsg->generateWebsiteContent($domainIndex, $domain["themeName"]);
       $wsg->installPlugins();
+      $wsg->installDictionary($domainIndex);
       $adminPanel->widgets["Website"]->rebuildSitemap($domainsToInstall[$domainIndex]['name']);
     }
 

@@ -44,12 +44,12 @@ namespace Surikata\Plugins\WAI\Misc {
     public function renderJSON() {
       $action = $this->websiteRenderer->urlVariables['action'] ?? "";
       $returnArray = array();
-
+      
       switch ($action) {
         case "website_find":
           $returnArray = $this->searchResults();
           break;
-        case "log-query":
+        case "log-query": // TODO: this case will never be
           $this->logSearchQuery();
           $returnArray = [];
           break;
@@ -140,15 +140,17 @@ namespace Surikata\Plugins\WAI\Misc {
 
       $customerID = (new CustomerUID)->getByCustomerUID($customerUID);
       $searchValue = $this->websiteRenderer->urlVariables['value'] ?? "";
-      $searchValue = htmlspecialchars($searchValue);
-      $target_url = htmlspecialchars($this->websiteRenderer->urlVariables['urlOpened'] ?? "");
-      $searchQueryModel = new SearchQuery($this->adminPanel);
-      $searchQueryModel->insertRow([
-        "id_customer_uid" => $customerID["id"],
-        "query" => $searchValue,
-        "target_url" => $target_url,
-        "search_datetime" => ["sql" => "now()"],
-      ]);
+      if ($searchValue != '') {
+        $searchValue = htmlspecialchars($searchValue);
+        $target_url = htmlspecialchars($this->websiteRenderer->urlVariables['urlOpened'] ?? "");
+        $searchQueryModel = new SearchQuery($this->adminPanel);
+        $searchQueryModel->insertRow([
+          "id_customer_uid" => $customerID["id"],
+          "query" => $searchValue,
+          "target_url" => $target_url,
+          "search_datetime" => ["sql" => "now()"],
+        ]);
+      }
     }
 
     public function websiteSearch() {
@@ -157,6 +159,8 @@ namespace Surikata\Plugins\WAI\Misc {
       $returnArray = array();
 
       if (isset($_GET["search"])) {
+
+        $this->logSearchQuery();
 
         $searchValue = $this->websiteRenderer->urlVariables['search'] ?? "";
         $searchValue = htmlspecialchars($searchValue);

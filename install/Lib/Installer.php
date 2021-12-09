@@ -625,7 +625,6 @@ class Installer {
 
         $zip->close();
 
-        // $adminPanel->console->info("Package stored in ".PROJECT_ROOT_DIR."/install/packages/{$packageFilename}");
       } else {
         $adminPanel->console->error("Failed to create package.");
       }

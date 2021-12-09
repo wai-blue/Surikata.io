@@ -26,17 +26,39 @@ class RandomProductsGenerator {
     \ADIOS\Widgets\Products\Models\Product $productModel,
     \ADIOS\Widgets\Products\Models\ProductFeatureAssignment $productFeatureAssignmentModel
   ) {
+    $randomProductNames = [
+      "Edifier H840 Audiophile",
+      "SoundBox Pro Portable",
+      "Wireless Stereo Speaker",
+      "Naham WiFi HD 1080P",
+      "Sony WH-CH700N",
+      "Polk Audio T30 Speaker",
+      "Silicon Sleeping Earbuds",
+      "Numkuda USB 2.0 Gamepad",
+      "TCL 49S5 49” 4K Ultra HD",
+      "JBL Flip 3 Splasroof Portable Bluetooth 2",
+      "Koss Porta Pro On Ear Headphones",
+      "Bose SoundLink Bluetooth Speaker",
+      "Accusantium dolorem Security Camera",
+    ];
+
     $productsData = [];
     for ($i = 0; $i < $numOfProducts; $i++) {
       $productImgNum = rand(1, 7);
       $idCategory = rand(1, 7);
       $idBrand = rand(1, 7);
-      $name = "RND Product ".$i;
-      $brief = "Brief for RND Product ".$i;
-      $description = "Description for RND Product ".$i;
+      $name = $randomProductNames[rand(0, count($randomProductNames) - 1)]." (rnd-{$i})";
+      $brief = "Brief for RND Product ".$i.". Nam malesuada, dui eu aliquam elementum, lacus risus congue orci, eu varius dui enim.";
+      $description = "
+        Description for RND Product ".$i.". Duis ac pharetra tellus, ac pellentesque risus. Integer varius dictum sapien in venenatis. Sed varius
+        sapien tincidunt faucibus ultrices. Curabitur bibendum lorem vel urna vulputate dignissim. Nam sed orci lobortis,
+        placerat neque eu, tempus purus. Sed sit amet erat vitae nisi hendrerit tincidunt et nec odio. Nam ac ex nec libero
+        venenatis consectetur ut a felis. Nam malesuada, dui eu aliquam elementum, lacus risus congue orci, eu varius dui enim
+        at nibh. Praesent commodo felis luctus iaculis sodales. Ut ac blandit quam, a convallis risus.
+      ";
       $price = rand(500, 5000)/100;
       $features = [rand(1000,1200), rand(1200,1250), rand(250,300), rand(1,3), rand(75,120)*10, rand(50,100)*10, "155 R13"];
-      $number = "RND.".rand(10, 99).".".rand(1000, 9999).".".$i;
+      $number = "RND.".$i;
       $ean = self::generateEAN($number);
       $image = "products/{$productImgNum}.jpg";
       $vat = 20;

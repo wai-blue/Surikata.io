@@ -5,13 +5,17 @@ namespace Surikata\Installer;
 use \Symfony\Component\Yaml\Yaml;
 class WebsiteContentGenerator {
   public $adminPanel;
+
+  public $themeName = "";
   public $domainsToInstall = [];
   public $domainIdOffset = 0;
   public $domainName = "";
   public $domainSlug = "";
-  public $themeObject = [];
+  public $themeObject = NULL;
   public $websiteCommonPanels = [];
   public $installationConfig = "";
+
+  public $adminPanelDictionary = NULL;
 
   public function __construct($adminPanel, $domainsToInstall, $installationConfig) {
     $this->adminPanel = $adminPanel;
@@ -43,22 +47,22 @@ class WebsiteContentGenerator {
       return $string;
     }
 
-    if (empty($this->dictionary[$languageIndex])) {
-      require(__DIR__."/../content/lang/{$languageIndex}.php");
-      $this->dictionary[$languageIndex] = $dictionary;
+    if (empty($this->adminPanelDictionary[$languageIndex])) {
+      require(__DIR__."/../content/dictionary/adminpanel-{$languageIndex}.php");
+      $this->adminPanelDictionary[$languageIndex] = $dictionary;
     }
 
-    if (empty($this->dictionary[$languageIndex])) {
+    if (empty($this->adminPanelDictionary[$languageIndex])) {
       $this->adminPanel->console->warning("Translate: Dictionary for `{$languageIndex}` is empty.");
       return $string;
     }
 
-    if (empty($this->dictionary[$languageIndex][$string])) {
+    if (empty($this->adminPanelDictionary[$languageIndex][$string])) {
       $this->adminPanel->console->warning("Translate: `{$string}` is not translated to `{$languageIndex}`.");
       return $string;
     }
 
-    return $this->dictionary[$languageIndex][$string];
+    return $this->adminPanelDictionary[$languageIndex][$string];
 
   }
 
@@ -116,6 +120,7 @@ class WebsiteContentGenerator {
   }
 
   public function generateWebsiteContent($domainIndex, $themeName) {
+    $this->themeName = $themeName;
     $this->domainCurrentlyGenerated = $this->domainsToInstall[$domainIndex];
     $this->domainName = $this->domainCurrentlyGenerated['name'];
     $this->domainSlug = $this->domainCurrentlyGenerated['slug'];
@@ -295,7 +300,30 @@ class WebsiteContentGenerator {
 
     if ($languageIndex == 1) return;
 
-    require(__DIR__."/../content/lang-themes/{$languageIndex}.php");
+    require(__DIR__."/../content/dictionary/website-{$languageIndex}.php");
+
+    $yamlDictionaryFolders = [
+      ["", __DIR__."/../content/dictionary"],
+      [$this->themeName, "{$this->themeObject->myRootFolder}/Install/dictionary"],
+    ];
+
+    foreach ($this->adminPanel->pluginObjects as $pluginObject) {
+      $yamlDictionaryFolders[] = [$pluginObject->name, "{$pluginObject->myRootFolder}/Install/dictionary"];
+    }
+
+    foreach ($yamlDictionaryFolders as $folderData) {
+      list($context, $folder) = $folderData;
+
+      if (!is_file("{$folder}/website-{$languageIndex}.yml")) continue;
+
+      $yaml = file_get_contents("{$folder}/website-{$languageIndex}.yml");
+
+      $tmp = Yaml::parse($yaml);
+
+      foreach ($tmp as $original => $translated) {
+        $dictionary[] = [$context, $original, $translated];
+      }
+    }
 
     $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($this->adminPanel);
 

@@ -39,6 +39,7 @@ class Installer {
     $adminPanel->console->info("Installation started.");
 
     HelperFunctions::recursiveRmDir($adminPanel->config["files_dir"], [".htaccess"]);
+    HelperFunctions::recursiveRmDir($adminPanelConfig["cache_dir"], [".htaccess"]);
 
     $adminPanel->createMissingFolders();
 

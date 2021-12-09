@@ -37,8 +37,6 @@ namespace Surikata\Plugins\WAI\Common {
 
       $webMenuItemModel = new \ADIOS\Widgets\Website\Models\WebMenuItem($this->adminPanel);
 
-      $blogCatalogPlugin = new \Surikata\Plugins\WAI\Blog\Catalog($this->websiteRenderer);
-
       $mainMenuId = (int) $pluginSettings['mainMenuId'] ?? 0;
       $secondaryMenuId = (int) $pluginSettings['secondaryMenuId'] ?? 0;
 
@@ -47,10 +45,6 @@ namespace Surikata\Plugins\WAI\Common {
 
       $twigParams['mainMenuItems'] = $this->getMenuItems($flatMainMenuItems);
       $twigParams['secondaryMenuItems'] = $this->getMenuItems($flatSecondaryMenuItems);
-
-      if ($pluginSettings["showBlogs"]) {
-        $twigParams['blogs'] = $blogCatalogPlugin->getBlogCatalogInfo(NULL, NULL, NULL, 10);
-      };
 
       return $twigParams;
     }
@@ -107,14 +101,6 @@ namespace ADIOS\Plugins\WAI\Common {
         "showSecondaryMenu" => [
           "title" => "Show secondary menu",
           "type" => "boolean",
-        ],
-        "showBlogs" => [
-          "title" => "View the latest blogs",
-          "type" => "boolean",
-        ],
-        "blogsTitle" => [
-          "title" => "Blogs title",
-          "type" => "varchar"
         ],
         "Newsletter" => [
           "title" => "Zobraziť pole pre zaradenie do newsletteru",

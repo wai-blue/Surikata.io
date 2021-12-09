@@ -2,33 +2,33 @@ layout: WithoutSidebar
 url: home
 title: Home
 panels:
-  - name: header
+  header:
     plugin: WAI/Common/Header
     settings:
-  - name: navigation
+  navigation:
     plugin: WAI/Common/Navigation
     settings:
       menuId: menu("header.yml")
       showCategories: true
       showBreadcrumbs: true
-  - name: section_1
+  section_1:
     plugin: WAI/Misc/Slideshow
     settings:
       speed: 1000
-  - name: section_2
+  section_2:
     plugin: WAI/SimpleContent/Snippet
     settings:
       snippetName: homepage-after-slideshow
-  - name: section_3
+  section_3:
     plugin: WAI/SimpleContent/H2
     heading: translate("We recommend")
-  - name: section_4
+  section_4:
     plugin: WAI/Product/FilteredList
     settings:
       filterType: recommended
       layout: tiles
       productCount: 6
-  - name: section_5
+  section_5:
     plugin: WAI/SimpleContent/TwoColumns
     settings:
       column1Content: >
@@ -47,17 +47,17 @@ panels:
         at nibh. Praesent commodo felis luctus iaculis sodales. Ut ac blandit quam, a convallis risus.
       column2Width: 8
       column2CSSClasses: text-right
-  - name: section_6
+  section_6:
     plugin: WAI/SimpleContent/H2
     settings:
       heading: translate("Discount")
-  - name: section_7
+  section_7:
     plugin: WAI/Product/FilteredList
     settings:
       filterType: on_sale
       layout: tiles
       product_count: 6
-  - name: section_8
+  section_8:
     plugin: WAI/SimpleContent/TwoColumns
     settings:
       column1Content: >
@@ -76,11 +76,11 @@ panels:
         at nibh. Praesent commodo felis luctus iaculis sodales. Ut ac blandit quam, a convallis risus.
       column2Width: 4
       column2CSSClasses: text-right
-  - name: section_9
+  section_9:
     plugin: WAI/SimpleContent/Snippet
     settings:
       snippetName: homepage-modal
-  - name: footer
+  footer:
     plugin: WAI/Common/Footer
     settings:
       mainMenuId: menu("header.yml")

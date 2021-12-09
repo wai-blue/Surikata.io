@@ -1,6 +1,6 @@
-layout: WithoutSidebar
-url: 
-title: Product detail
+layout: WithLeftSidebar
+url: blog
+title: Blog
 panels:
   header:
     plugin: WAI/Common/Header
@@ -11,16 +11,21 @@ panels:
       menuId: menu("header.yml")
       showCategories: true
       showBreadcrumbs: true
+  sidebar:
+    plugin: WAI/Blog/Sidebar
+    settings:
+      showRecent: true
+      showArchive: true
+      showAdvertising: true
   section_1:
     plugin: WAI/Common/Breadcrumb
     settings:
       showHomePage: true
   section_2:
-    plugin: WAI/Product/Detail
+    plugin: WAI/Blog/Catalog
     settings:
-      showSimilarProducts: true
-      showAccessories: true
-      showAuthor: true
+      itemsPerPage: 3
+      showAuthor: 1
   footer:
     plugin: WAI/Common/Footer
     settings:

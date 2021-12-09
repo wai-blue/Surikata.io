@@ -2,15 +2,17 @@ title: Menu for the top navigation header
 items:
   - title: Home
     url: home
+    order_index: 100
     sub:
       - title: About us
         url: about-us
+        order_index: 110
         sub:
   - title: Products
     url: products
     expand_product_categories: true
-  - title: Blog
-    url: blog
+    order_index: 200
   - title: Contact
     url: contact
+    order_index: 300
 

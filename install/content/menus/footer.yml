@@ -2,6 +2,8 @@ title: Menu for the footer
 items:
   - title: About us
     url: about-us
+    order_index: 100
     sub:
   - title: Contact
     url: contact
+    order_index: 200

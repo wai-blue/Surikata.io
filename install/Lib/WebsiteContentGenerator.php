@@ -2,6 +2,7 @@
 
 namespace Surikata\Installer;
 
+use \Symfony\Component\Yaml\Yaml;
 class WebsiteContentGenerator {
   public $adminPanel;
   public $domainsToInstall = [];
@@ -105,6 +106,7 @@ class WebsiteContentGenerator {
         "title" => $this->translate($item["title"]),
         "url" => $this->translate($item["url"]),
         "expand_product_categories" => $item["expand_product_categories"] ?? FALSE,
+        "order_index" => (int) ($item["order_index"] ?? 0),
       ]);
 
       if (is_array($item["sub"]) && count($item["sub"]) > 0) {
@@ -121,6 +123,8 @@ class WebsiteContentGenerator {
 
     $this->themeObject = $this->adminPanel->widgets['Website']->themes[$themeName];
 
+    $languageIndex = $this->domainCurrentlyGenerated["languageIndex"];
+
     $websiteMenuModel = new \ADIOS\Widgets\Website\Models\WebMenu($this->adminPanel);
     $websiteWebPageModel = new \ADIOS\Widgets\Website\Models\WebPage($this->adminPanel);
     $websiteWebRedirectModel = new \ADIOS\Widgets\Website\Models\WebRedirect($this->adminPanel);
@@ -132,6 +136,10 @@ class WebsiteContentGenerator {
       "{$this->themeObject->myRootFolder}/Install/menus",
     ];
 
+    foreach ($this->adminPanel->pluginObjects as $pluginObject) {
+      $yamlMenuFolders[] = "{$pluginObject->myRootFolder}/Install/menus";
+    }
+
     $menus = [];
 
     foreach ($yamlMenuFolders as $folder) {
@@ -140,11 +148,19 @@ class WebsiteContentGenerator {
       $files = scandir($folder);
       foreach ($files as $file) {
         if (in_array($file, [".", ".."])) continue;
+
         $yaml = file_get_contents("{$folder}/{$file}");
-        $menus[$file] = \Symfony\Component\Yaml\Yaml::parse($yaml);
+
+        $tmp = Yaml::parse($yaml);
+
+        if (!is_array($menus[$file])) {
+          $menus[$file] = $tmp;
+        } else {
+          $menus[$file]["items"] = array_merge($menus[$file]["items"], $tmp["items"]);
+        }
+
       }
     }
-
 
     $i = 1;
     foreach ($menus as $menuName => $menu) {
@@ -163,68 +179,14 @@ class WebsiteContentGenerator {
 
     // web - stranky
 
-    $webPages = [
-
-      // news
-      "news|WithLeftSidebar|News" => $this->themeObject->getDefaultWebPageContent("news", "WithoutSidebar", $menus) ?? array_merge(
-        $this->websiteCommonPanels[$this->domainName], [
-        "sidebar" => ["WAI/News", ["contentType" => "sidebar"]],
-        "section_1" => ["WAI/News", ["contentType" => "listOrDetail"]],
-      ]),
-
-      // blogs - list
-      "blog|WithLeftSidebar|Blog" => $this->themeObject->getDefaultWebPageContent("blog", "WithoutSidebar", $menus) ?? array_merge(
-        $this->websiteCommonPanels[$this->domainName], [
-        "sidebar" => [
-          "WAI/Blog/Sidebar", [
-            "showRecent" => 1,
-            "showArchive" => 1,
-            "showAdvertising" => 1,
-          ],
-        ],
-        "section_1" => [
-          "WAI/Common/Breadcrumb",
-          [
-            "showHomePage" => 1,
-          ],
-        ],
-        "section_2" => [
-          "WAI/Blog/Catalog",
-          [
-            "itemsPerPage" => 3,
-            "showAuthor" => 1,
-          ],
-        ],
-      ]),
-
-      // blog - detail
-      "|WithLeftSidebar|Blog" => $this->themeObject->getDefaultWebPageContent("blog-detail", "WithoutSidebar", $menus) ?? array_merge(
-        $this->websiteCommonPanels[$this->domainName], [
-        "sidebar" => [
-          "WAI/Blog/Sidebar",
-          [
-            "showRecent" => 1,
-            "showArchive" => 1,
-            "showAdvertising" => 1,
-          ],
-        ],
-        "section_1" => [
-          "WAI/Common/Breadcrumb",
-          [
-            "showHomePage" => 1,
-          ],
-        ],
-        "section_2" => "WAI/Blog/Detail",
-      ]),
-
-    ];
-
-    //
-
     $yamlPageFolders = [
       __DIR__."/../content/pages",
       "{$this->themeObject->myRootFolder}/Install/pages",
     ];
+
+    foreach ($this->adminPanel->pluginObjects as $pluginObject) {
+      $yamlPageFolders[] = "{$pluginObject->myRootFolder}/Install/pages";
+    }
 
     $pages = [];
 
@@ -236,8 +198,6 @@ class WebsiteContentGenerator {
         if (in_array($file, [".", ".."])) continue;
 
         $yaml = file_get_contents("{$folder}/{$file}");
-        $yaml = str_replace("{{ menuHeaderId }}", $menus["header.yml"]["id"], $yaml);
-        $yaml = str_replace("{{ menuFooterId }}", $menus["footer.yml"]["id"], $yaml);
 
         preg_match_all('/menu\("(.*?)"\)/', $yaml, $m);
         foreach ($m[0] as $key => $value) {
@@ -250,20 +210,11 @@ class WebsiteContentGenerator {
           $yaml = str_replace($m[0][$key], $this->translate($m[1][$key]), $yaml);
         }
 
-        $pages[$file] = \Symfony\Component\Yaml\Yaml::parse($yaml);
+        $pages[$file] = Yaml::parse($yaml);
       }
     }
 
     foreach ($pages as $page) {
-
-      $tmpPanels = [];
-      foreach ($page["panels"] as $tmpPanel) {
-        $tmpPanels[$tmpPanel["name"]] = [
-          "plugin" => $tmpPanel["plugin"],
-          "settings" => $tmpPanel["settings"],
-        ];
-      }
-
       $websiteWebPageModel->insertRow([
         "domain" => $this->domainName,
         "name" => $this->translate($page["title"] ?? ""),
@@ -273,12 +224,12 @@ class WebsiteContentGenerator {
         "publish_always" => 1,
         "content_structure" => json_encode([
           "layout" => $page["layout"],
-          "panels" => $tmpPanels,
+          "panels" => $page["panels"],
         ]),
       ]);
     }
 
-    //
+    // web - presmerovania
 
     $websiteWebRedirectModel->insertRow([
       "domain" => $this->domainName,
@@ -287,51 +238,41 @@ class WebsiteContentGenerator {
       "type" => 302,
     ]);
 
-    $emailsContentFolder = __DIR__."/../content/emails/language-index-{$this->domainCurrentlyGenerated["languageIndex"]}";
-    $emails = [
-      "signature" => "<p>{$this->domainName} - <a href='http://{$this->domainName}' target='_blank'>{$this->domainName}</a></p>",
-      "after_order_confirmation_SUBJECT" => file_get_contents("{$emailsContentFolder}/after_order_confirmation_SUBJECT.txt"),
-      "after_order_confirmation_BODY" => file_get_contents("{$emailsContentFolder}/after_order_confirmation_BODY.html"),
-      "after_registration_SUBJECT" => file_get_contents("{$emailsContentFolder}/after_registration_SUBJECT.txt"),
-      "after_registration_BODY" => file_get_contents("{$emailsContentFolder}/after_registration_BODY.html"),
-      "forgotten_password_SUBJECT" => file_get_contents("{$emailsContentFolder}/forgot_password_SUBJECT.txt"),
-      "forgotten_password_BODY" => file_get_contents("{$emailsContentFolder}/forgot_password_BODY.html"),
-    ];
+    // web - nastavenia
 
-    // nastavenia webu
     $this->adminPanel->saveConfig([
       "settings" => [
         "web" => [
-          $this->domainName => [
-            "companyInfo" => [
-              "slogan" => $this->translate("slogan"),
-              "contactPhoneNumber" => "+421 111 222 333",
-              "contactEmail" => "info@{$this->installationConfig['http_host']}",
-              "logo" => "your-logo.png",
-              "urlFacebook" => "https://surikata.io",
-              "urlTwitter" => "https://surikata.io",
-              "urlYouTube" => "https://surikata.io",
-              "urlInstagram" => "https://surikata.io"
-            ],
-            "design" => array_merge(
-              $this->themeObject->getDefaultColorsAndStyles($this),
-              [
-                "theme" => $themeName,
-                "headerMenuID" => $this->domainIdOffset + 1,
-                "footerMenuID" => $this->domainIdOffset + 2,
-              ]
+          $this->domainName => array_merge(
+            Yaml::parse(
+              file_get_contents(__DIR__."/../content/settings/{$languageIndex}.yml")
             ),
-            "legalDisclaimers" => [
-              "generalTerms" => "Bienvenue. VOP!",
-              "privacyPolicy" => "Bienvenue. OOU!",
-              "returnPolicy" => "Bienvenue. RP!",
+            [
+              "companyInfo" => [
+                "slogan" => $this->translate("Custom e-Commerce solutions"),
+                "contactPhoneNumber" => "+421 111 222 333",
+                "contactEmail" => "info@{$this->installationConfig['http_host']}",
+                "logo" => "your-logo.png",
+                "urlFacebook" => "https://surikata.io",
+                "urlTwitter" => "https://surikata.io",
+                "urlYouTube" => "https://surikata.io",
+                "urlInstagram" => "https://surikata.io"
+              ],
+              "design" => array_merge(
+                $this->themeObject->getDefaultColorsAndStyles($this),
+                [
+                  "theme" => $themeName,
+                  // "headerMenuID" => $this->domainIdOffset + 1,
+                  // "footerMenuID" => $this->domainIdOffset + 2,
+                ]
+              ),
             ],
-            "emails" => $emails,
-          ],
+          )
         ],
       ]
     ]);
 
+    // theme onAfterInstall
     $this->themeObject->onAfterInstall($this);
 
   }

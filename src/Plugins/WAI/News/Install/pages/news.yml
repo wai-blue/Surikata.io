@@ -1,6 +1,6 @@
-layout: WithoutSidebar
-url: 
-title: Product detail
+layout: WithLeftSidebar
+url: news
+title: News
 panels:
   header:
     plugin: WAI/Common/Header
@@ -11,16 +11,14 @@ panels:
       menuId: menu("header.yml")
       showCategories: true
       showBreadcrumbs: true
+  sidebar:
+    plugin: WAI/News
+    settings:
+      contentType: sidebar
   section_1:
-    plugin: WAI/Common/Breadcrumb
+    plugin: WAI/News
     settings:
-      showHomePage: true
-  section_2:
-    plugin: WAI/Product/Detail
-    settings:
-      showSimilarProducts: true
-      showAccessories: true
-      showAuthor: true
+      contentType: listOrDetail
   footer:
     plugin: WAI/Common/Footer
     settings:

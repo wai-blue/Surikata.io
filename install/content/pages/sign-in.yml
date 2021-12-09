@@ -2,25 +2,25 @@ layout: WithoutSidebar
 url: sign-in
 title: Sign in
 panels:
-  - name: header
+  header:
     plugin: WAI/Common/Header
     settings:
-  - name: navigation
+  navigation:
     plugin: WAI/Common/Navigation
     settings:
-      menuId: {{ menuHeaderId }}
+      menuId: menu("header.yml")
       showCategories: true
       showBreadcrumbs: true
-  - name: section_1
+  section_1:
     plugin: WAI/Customer/Login
     settings:
       showPrivacyTerms: true
       privacyTermsUrl: privacy-terms
-  - name: footer
+  footer:
     plugin: WAI/Common/Footer
     settings:
-      mainMenuId: {{ menuHeaderId }}
-      secondaryMenuId: {{ menuFooterId }}
+      mainMenuId: menu("header.yml")
+      secondaryMenuId: menu("footer.yml")
       mainMenuTitle: translate("Pages")
       secondaryMenuTitle: translate("Our Company")
       showContactAddress: false

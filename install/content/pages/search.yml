@@ -2,16 +2,16 @@ layout: WithoutSidebar
 url: search
 title: Search
 panels:
-  - name: header
+  header:
     plugin: WAI/Common/Header
     settings:
-  - name: navigation
+  navigation:
     plugin: WAI/Common/Navigation
     settings:
-      menuId: {{ menuHeaderId }}
+      menuId: menu("header.yml")
       showCategories: true
       showBreadcrumbs: true
-  - name: section_1
+  section_1:
     plugin: WAI/Misc/WebsiteSearch
     settings:
       heading: translate("Search")
@@ -19,11 +19,11 @@ panels:
       searchInProducts: name_lang,brief_lang,description_lang
       searchInProductCategories: name_lang
       searchInBlogs: name,content
-  - name: footer
+  footer:
     plugin: WAI/Common/Footer
     settings:
-      mainMenuId: {{ menuHeaderId }}
-      secondaryMenuId: {{ menuFooterId }}
+      mainMenuId: menu("header.yml")
+      secondaryMenuId: menu("footer.yml")
       mainMenuTitle: translate("Pages")
       secondaryMenuTitle: translate("Our Company")
       showContactAddress: false

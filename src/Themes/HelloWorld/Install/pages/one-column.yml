@@ -2,16 +2,16 @@ layout: WithoutSidebar
 url: home
 title: Home
 panels:
-  - name: header
+  header:
     plugin: WAI/Common/Header
     settings:
-  - name: navigation
+  navigation:
     plugin: WAI/Common/Navigation
     settings:
-      menuId: {{ menuHeaderId }}
+      menuId: menu("header.yml")
       showCategories: true
       showBreadcrumbs: true
-  - name: section_1
+  section_1:
     plugin: WAI/SimpleContent/OneColumn
     settings:
       heading: Hello World!
@@ -24,11 +24,11 @@ panels:
         the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
         and more recently with desktop publishing software like Aldus PageMaker including
         versions of Lorem Ipsum.
-  - name: footer
+  footer:
     plugin: WAI/Common/Footer
     settings:
-      mainMenuId: {{ menuHeaderId }}
-      secondaryMenuId: {{ menuFooterId }}
+      mainMenuId: menu("header.yml")
+      secondaryMenuId: menu("footer.yml")
       mainMenuTitle: translate("Pages")
       secondaryMenuTitle: translate("Our Company")
       showContactAddress: false

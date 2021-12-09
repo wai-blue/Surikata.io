@@ -8,6 +8,19 @@ namespace Surikata\Plugins\WAI\Misc {
   class WebsiteSearch extends \Surikata\Core\Web\Plugin {
 
     private $searchableFields;
+    var $defaultWebsiteSearchdUrl = [
+      1 => "search",
+      2 => "hladat",
+      3 => "hledat"
+    ];
+
+    public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
+
+      $languageIndex = (int) $this->websiteRenderer->domain["languageIndex"];
+      $url = $pluginSettings["urlPattern"] ?? $this->defaultWebsiteSearchdUrl[$languageIndex];
+      return $url;
+
+    }
 
     public function getSearchableFields($model = null) {
       if (is_null($model)) {
@@ -187,10 +200,11 @@ namespace Surikata\Plugins\WAI\Misc {
         }
         foreach ($products as $product) {
           $product["url"] = $productDetailPlugin->getWebPageUrl($product); // TODO: UPPERCASE LOOKUP
-          $product['price'] = $this->adminPanel
+          $product['PRICE'] = $this->adminPanel
             ->getModel("Widgets/Products/Models/Product")
             ->getPriceInfoForSingleProduct($product["id"])
           ;
+          $product = $productModel->translateSingleProductForWeb($product, $languageIndex);
           $returnArray[] = [
             "model" => "Product",
             "data" => $product
@@ -271,6 +285,43 @@ namespace Surikata\Plugins\WAI\Misc {
         }
       */
 
+      }
+      if (count($returnArray) === 0) {
+        $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
+
+        $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adminPanel);
+        $productDetailPlugin = new \Surikata\Plugins\WAI\Product\Detail($this->websiteRenderer);
+        $filters = ["recommended", "on_sale"];
+        $take = 6;
+        $productSneakPeek = [];
+
+        foreach ($filters as $filter) {
+          switch ($filter) {
+            case "recommended":
+              $productQuery = $productModel
+                ->where("is_recommended", TRUE)
+                ->skip(0)->take($take);
+              break;
+            case "on_sale":
+              $productQuery = $productModel
+                ->where("is_on_sale", TRUE)
+                ->skip(0)->take($take);
+              break;
+          }
+
+          $products = $productModel->fetchRows($productQuery);
+          foreach ($products as $key => $product) {
+            $product["url"] = $productDetailPlugin->getWebPageUrl($product);
+            $product['PRICE'] = $this->adminPanel
+              ->getModel("Widgets/Products/Models/Product")
+              ->getPriceInfoForSingleProduct($product["id"])
+            ;
+            $product = $productModel->translateSingleProductForWeb($product, $languageIndex);
+            $products[$key] = $product;
+          }
+          $productSneakPeek[$filter] = $products;
+        }
+        $returnArray["productsNoSearch"] = $productSneakPeek;
       }
 
       return $returnArray;

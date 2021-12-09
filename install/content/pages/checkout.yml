@@ -1,0 +1,32 @@
+layout: WithoutSidebar
+url: checkout
+title: Checkout
+panels:
+  - name: header
+    plugin: WAI/Common/Header
+    settings:
+  - name: navigation
+    plugin: WAI/Common/Navigation
+    settings:
+      menuId: {{ menuHeaderId }}
+      showCategories: true
+      showBreadcrumbs: true
+  - name: section_1
+    plugin: WAI/Order/Checkout
+    settings:
+      enableVouchers: true
+  - name: footer
+    plugin: WAI/Common/Footer
+    settings:
+      mainMenuId: {{ menuHeaderId }}
+      secondaryMenuId: {{ menuFooterId }}
+      mainMenuTitle: translate("Pages")
+      secondaryMenuTitle: translate("Our Company")
+      showContactAddress: false
+      showContactEmail: true
+      showContactPhoneNumber: true
+      contactTitle: translate("Contact us")
+      showPayments: true
+      showSocialMedia: true
+      showMainMenu: true
+      showSecondaryMenu: true

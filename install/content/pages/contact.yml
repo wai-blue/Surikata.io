@@ -1,0 +1,34 @@
+layout: WithoutSidebar
+url: contact
+title: Contact
+panels:
+  - name: header
+    plugin: WAI/Common/Header
+    settings:
+  - name: navigation
+    plugin: WAI/Common/Navigation
+    settings:
+      menuId: {{ menuHeaderId }}
+      showCategories: true
+      showBreadcrumbs: true
+  - name: section_1
+    plugin: WAI/Common/Breadcrumb
+    settings:
+      showHomePage: true
+  - name: section_2
+    plugin: WAI/Misc/ContactPage
+  - name: footer
+    plugin: WAI/Common/Footer
+    settings:
+      mainMenuId: {{ menuHeaderId }}
+      secondaryMenuId: {{ menuFooterId }}
+      mainMenuTitle: translate("Pages")
+      secondaryMenuTitle: translate("Our Company")
+      showContactAddress: false
+      showContactEmail: true
+      showContactPhoneNumber: true
+      contactTitle: translate("Contact us")
+      showPayments: true
+      showSocialMedia: true
+      showMainMenu: true
+      showSecondaryMenu: true

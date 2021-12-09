@@ -102,7 +102,7 @@ class PluginWAIProductCatalogAPIClass {
 
   update(url) {
     let pluginParams = null;
-    
+
     this.setPage(1);
 
     pluginParams = { ...this.filter };

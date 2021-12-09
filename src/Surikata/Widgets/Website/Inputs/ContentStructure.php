@@ -131,7 +131,7 @@ class ContentStructure extends \ADIOS\Core\Input {
           for (var panelName in {$this->uid}_data['panels']) {
             let panelInfo = {$this->uid}_data['panels'][panelName];
             let settingsHtml = '';
-            let panelInfoHtml = '<i>Žiadny plugin</i>';
+            let panelInfoHtml = '<div>[' + panelName + ']</div>';
 
             if (panelInfo.plugin) {
               for (var i in panelInfo.settings) {
@@ -142,13 +142,13 @@ class ContentStructure extends \ADIOS\Core\Input {
                   }
 
                   settingsHtml +=
-                    '<b>[' + i + '</b>]<br/>' + str + '<br/>'
+                    '<b>' + i + '</b>: ' + str + '<br/>'
                   ;
                 }
               }
 
               panelInfoHtml = 
-                '<div>' + panelInfo.plugin + '</div>' +
+                '<div>[' + panelName + '] ' + panelInfo.plugin + '</div>' +
                 (settingsHtml == '' ? '' : '<div>' + settingsHtml + '</div>')
               ;
             }

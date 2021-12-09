@@ -80,7 +80,11 @@ class General extends \Surikata\Core\Web\Controller {
 
       foreach ($contentStructure as $panelName => $panelSettings) {
         if (!empty($panelSettings["plugin"])) {
-          $tmpHtml = $this->renderPlugin($panelSettings["plugin"], $panelSettings['settings'], $panelName);
+          $tmpHtml = $this->renderPlugin(
+            $panelSettings["plugin"],
+            $panelSettings['settings'],
+            $panelName
+          );
 
           $twigParams["plugins"][$panelSettings["plugin"]]["html"] = $tmpHtml;
           $twigParams["panels"][$panelName]["html"] = $tmpHtml;

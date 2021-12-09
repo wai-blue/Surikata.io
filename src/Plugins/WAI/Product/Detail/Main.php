@@ -183,11 +183,11 @@ namespace ADIOS\Plugins\WAI\Product {
 
     public function getSettingsForWebsite() {
       return [
-        "show_accessories" => [
+        "showAccessories" => [
           "title" => "Show accessories for products",
           "type" => "boolean",
         ],
-        "show_similar_products" => [
+        "showSimilarProducts" => [
           "title" => "Zobraziť podobné produkty",
           "type" => "boolean",
         ],

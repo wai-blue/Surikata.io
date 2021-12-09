@@ -27,7 +27,7 @@ $languages = $arguments["L"] ?? $arguments["languages"] ?? "en,sk";
 $package = $arguments["P"] ?? $arguments["package"] ?? "";
 
 $availableLanguages = [1 => "en", 2 => "sk", 3 => "cz"]; // kluc pola = languageIndex
-$availableThemes = ["Basic", "Abelo"];
+$availableThemes = ["Basic", "Abelo", "Autima", "Evara", "Riode"];
 
 if (empty($languages) || empty($theme)) {
   echo "Surikata.io installer package creator.

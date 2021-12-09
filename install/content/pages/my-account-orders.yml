@@ -1,0 +1,30 @@
+layout: WithoutSidebar
+url: my-account/orders
+title: My account - Orders
+panels:
+  - name: header
+    plugin: WAI/Common/Header
+    settings:
+  - name: navigation
+    plugin: WAI/Common/Navigation
+    settings:
+      menuId: {{ menuHeaderId }}
+      showCategories: true
+      showBreadcrumbs: true
+  - name: section_1
+    plugin: WAI/Customer/OrderList
+  - name: footer
+    plugin: WAI/Common/Footer
+    settings:
+      mainMenuId: {{ menuHeaderId }}
+      secondaryMenuId: {{ menuFooterId }}
+      mainMenuTitle: translate("Pages")
+      secondaryMenuTitle: translate("Our Company")
+      showContactAddress: false
+      showContactEmail: true
+      showContactPhoneNumber: true
+      contactTitle: translate("Contact us")
+      showPayments: true
+      showSocialMedia: true
+      showMainMenu: true
+      showSecondaryMenu: true

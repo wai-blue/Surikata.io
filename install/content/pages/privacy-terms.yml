@@ -1,0 +1,41 @@
+layout: WithoutSidebar
+url: privacy-terms
+title: Privacy terms
+panels:
+  - name: header
+    plugin: WAI/Common/Header
+    settings:
+  - name: navigation
+    plugin: WAI/Common/Navigation
+    settings:
+      menuId: {{ menuHeaderId }}
+      showCategories: true
+      showBreadcrumbs: true
+  - name: section_1
+    plugin: WAI/SimpleContent/OneColumn
+    settings:
+      heading: translate("We value your privacy")
+      content: >
+        <b>Lorem Ipsum is simply dummy text</b> of the printing and typesetting industry.
+        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+        when an unknown printer took a galley of type and scrambled it to make a type
+        specimen book. It has survived not only five centuries, but also the leap into
+        electronic typesetting, remaining essentially unchanged. It was popularised in
+        the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+        and more recently with desktop publishing software like Aldus PageMaker including
+        versions of Lorem Ipsum.
+  - name: footer
+    plugin: WAI/Common/Footer
+    settings:
+      mainMenuId: {{ menuHeaderId }}
+      secondaryMenuId: {{ menuFooterId }}
+      mainMenuTitle: translate("Pages")
+      secondaryMenuTitle: translate("Our Company")
+      showContactAddress: false
+      showContactEmail: true
+      showContactPhoneNumber: true
+      contactTitle: translate("Contact us")
+      showPayments: true
+      showSocialMedia: true
+      showMainMenu: true
+      showSecondaryMenu: true

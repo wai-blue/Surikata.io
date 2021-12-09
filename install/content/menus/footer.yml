@@ -1,0 +1,7 @@
+title: Menu for the footer
+items:
+  - title: About us
+    url: about-us
+    sub:
+  - title: Contact
+    url: contact

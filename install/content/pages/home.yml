@@ -8,7 +8,7 @@ panels:
   - name: navigation
     plugin: WAI/Common/Navigation
     settings:
-      menuId: {{ menuHeaderId }}
+      menuId: menu("header.yml")
       showCategories: true
       showBreadcrumbs: true
   - name: section_1
@@ -83,8 +83,8 @@ panels:
   - name: footer
     plugin: WAI/Common/Footer
     settings:
-      mainMenuId: {{ menuHeaderId }}
-      secondaryMenuId: {{ menuFooterId }}
+      mainMenuId: menu("header.yml")
+      secondaryMenuId: menu("footer.yml")
       mainMenuTitle: translate("Pages")
       secondaryMenuTitle: translate("Our Company")
       showContactAddress: false

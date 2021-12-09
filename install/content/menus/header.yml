@@ -1,0 +1,16 @@
+title: Menu for the top navigation header
+items:
+  - title: Home
+    url: home
+    sub:
+      - title: About us
+        url: about-us
+        sub:
+  - title: Products
+    url: products
+    expand_product_categories: true
+  - title: Blog
+    url: blog
+  - title: Contact
+    url: contact
+

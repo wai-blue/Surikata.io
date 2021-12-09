@@ -138,7 +138,7 @@ class WebsiteContentGenerator {
         "expand_product_categories" => $item["expand_product_categories"] ?? FALSE,
       ]);
 
-      if (is_array($item["sub"])) {
+      if (is_array($item["sub"]) && count($item["sub"]) > 0) {
         $this->generateMenuItems($idMenu, $item["sub"], $idItem);
       }
     }
@@ -157,61 +157,79 @@ class WebsiteContentGenerator {
     $websiteWebRedirectModel = new \ADIOS\Widgets\Website\Models\WebRedirect($this->adminPanel);
 
     // web - menu
-    $menus = [
-      "header" => [
-        "title" => "Header Menu",
-        "items" => [
-          [
-            "title" => "Home",
-            "url" => "home",
-            "sub" => [
-              [
-                "title" => "About us",
-                "url" => "about-us",
-                "sub" => [],
-              ],
-            ],
-          ],
-          [
-            "title" => "Products",
-            "url" => "products",
-            "expand_product_categories" => TRUE,
-            // "sub" => [
-            //   [
-            //     "title" => "We recommend",
-            //     "url" => "we-recommend",
-            //     "sub" => [],
-            //   ],
-            // ],
-          ],
-          [
-            "title" => "Blog",
-            "url" => "blog",
-            "sub" => [],
-          ],
-          [
-            "title" => "Contact",
-            "url" => "contact",
-            "sub" => [],
-          ],
-        ],
-      ],
-      "footer" => [
-        "title" => "Footer Menu",
-        "items" => [
-          [
-            "title" => "About us",
-            "url" => "about-us",
-            "sub" => [],
-          ],
-          [
-            "title" => "Contact",
-            "url" => "contact",
-            "sub" => [],
-          ],
-        ],
-      ],
+    $yamlMenuFolders = [
+      __DIR__."/../content/menus",
+      "{$this->themeObject->myRootFolder}/Install/menus",
     ];
+
+    $menus = [];
+
+    foreach ($yamlMenuFolders as $folder) {
+      if (!is_dir($folder)) continue;
+
+      $files = scandir($folder);
+      foreach ($files as $file) {
+        if (in_array($file, [".", ".."])) continue;
+        $yaml = file_get_contents("{$folder}/{$file}");
+        $menus[$file] = \Symfony\Component\Yaml\Yaml::parse($yaml);
+      }
+    }
+
+    // $menus = [
+    //   "header" => [
+    //     "title" => "Header Menu",
+    //     "items" => [
+    //       [
+    //         "title" => "Home",
+    //         "url" => "home",
+    //         "sub" => [
+    //           [
+    //             "title" => "About us",
+    //             "url" => "about-us",
+    //             "sub" => [],
+    //           ],
+    //         ],
+    //       ],
+    //       [
+    //         "title" => "Products",
+    //         "url" => "products",
+    //         "expand_product_categories" => TRUE,
+    //         // "sub" => [
+    //         //   [
+    //         //     "title" => "We recommend",
+    //         //     "url" => "we-recommend",
+    //         //     "sub" => [],
+    //         //   ],
+    //         // ],
+    //       ],
+    //       [
+    //         "title" => "Blog",
+    //         "url" => "blog",
+    //         "sub" => [],
+    //       ],
+    //       [
+    //         "title" => "Contact",
+    //         "url" => "contact",
+    //         "sub" => [],
+    //       ],
+    //     ],
+    //   ],
+    //   "footer" => [
+    //     "title" => "Footer Menu",
+    //     "items" => [
+    //       [
+    //         "title" => "About us",
+    //         "url" => "about-us",
+    //         "sub" => [],
+    //       ],
+    //       [
+    //         "title" => "Contact",
+    //         "url" => "contact",
+    //         "sub" => [],
+    //       ],
+    //     ],
+    //   ],
+    // ];
 
     $i = 1;
     foreach ($menus as $menuName => $menu) {
@@ -229,38 +247,38 @@ class WebsiteContentGenerator {
     }
 
     // web - stranky
-    $this->websiteCommonPanels[$this->domainName] = [
-      "header" => ["WAI/Common/Header"],
-      "navigation" => [
-        "WAI/Common/Navigation",
-        [
-          "menuId" => $menus["header"]["id"],
-          "homepageUrl" => $this->translate("home"),
-          "showCategories" => TRUE,
-          "showBreadcrumbs" => TRUE,
-        ],
-      ],
-      "footer" => [ 
-        "WAI/Common/Footer",
-        [
-          "mainMenuId" => $menus["header"]["id"],
-          "secondaryMenuId" => $menus["footer"]["id"],
-          "mainMenuTitle" => $this->translate("Pages"),
-          "secondaryMenuTitle" => $this->translate("Our Company"),
-          "showContactAddress" => 0,
-          "showContactEmail" => 1,
-          "showContactPhoneNumber" => 1,
-          "contactTitle" => $this->translate("Contact us"),
-          "showPayments" => 1,
-          "showSocialMedia" => 1,
-          "showSecondaryMenu" => 1,
-          "showMainMenu" => 1,
-          "showBlogs" => 1,
-          "Newsletter" => 1,
-          "blogsTitle" => $this->translate("Recent blogs"),
-        ] 
-      ],
-    ];
+    // $this->websiteCommonPanels[$this->domainName] = [
+    //   "header" => ["WAI/Common/Header"],
+    //   "navigation" => [
+    //     "WAI/Common/Navigation",
+    //     [
+    //       "menuId" => $menus["header"]["id"],
+    //       "homepageUrl" => $this->translate("home"),
+    //       "showCategories" => TRUE,
+    //       "showBreadcrumbs" => TRUE,
+    //     ],
+    //   ],
+    //   "footer" => [ 
+    //     "WAI/Common/Footer",
+    //     [
+    //       "mainMenuId" => $menus["header"]["id"],
+    //       "secondaryMenuId" => $menus["footer"]["id"],
+    //       "mainMenuTitle" => $this->translate("Pages"),
+    //       "secondaryMenuTitle" => $this->translate("Our Company"),
+    //       "showContactAddress" => 0,
+    //       "showContactEmail" => 1,
+    //       "showContactPhoneNumber" => 1,
+    //       "contactTitle" => $this->translate("Contact us"),
+    //       "showPayments" => 1,
+    //       "showSocialMedia" => 1,
+    //       "showSecondaryMenu" => 1,
+    //       "showMainMenu" => 1,
+    //       "showBlogs" => 1,
+    //       "Newsletter" => 1,
+    //       "blogsTitle" => $this->translate("Recent blogs"),
+    //     ] 
+    //   ],
+    // ];
 
     if ($this->domainSlug == "hello-world") {
       // $webPages = [
@@ -504,69 +522,69 @@ class WebsiteContentGenerator {
         // ]),
 
         // create-account
-        "create-account|WithoutSidebar|Create Account" => $this->themeObject->getDefaultWebPageContent("create-account", "WithoutSidebar", $menus) ?? array_merge(
-          $this->websiteCommonPanels[$this->domainName], [
-          "section_1" => [
-            "WAI/Customer/Registration", [
-              "showPrivacyTerms" => 1,
-              "privacyTermsUrl" => "privacy-terms",
-            ],
-          ],
-        ]),
+        // "create-account|WithoutSidebar|Create Account" => $this->themeObject->getDefaultWebPageContent("create-account", "WithoutSidebar", $menus) ?? array_merge(
+        //   $this->websiteCommonPanels[$this->domainName], [
+        //   "section_1" => [
+        //     "WAI/Customer/Registration", [
+        //       "showPrivacyTerms" => 1,
+        //       "privacyTermsUrl" => "privacy-terms",
+        //     ],
+        //   ],
+        // ]),
 
-        // create-account/confirmation
-        "create-account/confirmation|WithoutSidebar|Create Account - Confirmation" => $this->themeObject->getDefaultWebPageContent("create-account-confirmation", "WithoutSidebar", $menus) ?? array_merge(
-          $this->websiteCommonPanels[$this->domainName], [
-          "section_1" => "WAI/Customer/RegistrationConfirmation"
-        ]),
+        // // create-account/confirmation
+        // "create-account/confirmation|WithoutSidebar|Create Account - Confirmation" => $this->themeObject->getDefaultWebPageContent("create-account-confirmation", "WithoutSidebar", $menus) ?? array_merge(
+        //   $this->websiteCommonPanels[$this->domainName], [
+        //   "section_1" => "WAI/Customer/RegistrationConfirmation"
+        // ]),
 
-        // my-account/validation
-        "|WithoutSidebar|My account - Validation" => $this->themeObject->getDefaultWebPageContent("validate-account", "WithoutSidebar", $menus) ?? array_merge(
-          $this->websiteCommonPanels[$this->domainName], [
-          "section_1" => "WAI/Customer/ValidationConfirmation"
-        ]),
+        // // my-account/validation
+        // "|WithoutSidebar|My account - Validation" => $this->themeObject->getDefaultWebPageContent("validate-account", "WithoutSidebar", $menus) ?? array_merge(
+        //   $this->websiteCommonPanels[$this->domainName], [
+        //   "section_1" => "WAI/Customer/ValidationConfirmation"
+        // ]),
 
-        // reset-password
-        "reset-password|WithoutSidebar|Reset Password" => $this->themeObject->getDefaultWebPageContent("reset-password", "WithoutSidebar", $menus) ?? array_merge(
-          $this->websiteCommonPanels[$this->domainName], [
-          "section_1" => "WAI/Customer/ForgotPassword"
-        ]),
+        // // reset-password
+        // "reset-password|WithoutSidebar|Reset Password" => $this->themeObject->getDefaultWebPageContent("reset-password", "WithoutSidebar", $menus) ?? array_merge(
+        //   $this->websiteCommonPanels[$this->domainName], [
+        //   "section_1" => "WAI/Customer/ForgotPassword"
+        // ]),
 
-        // my-account
-        "my-account|WithoutSidebar|My Account" => $this->themeObject->getDefaultWebPageContent("my-account", "WithoutSidebar", $menus) ?? array_merge(
-          $this->websiteCommonPanels[$this->domainName], [
-          "section_1" => "WAI/Customer/Home",
-        ]),
+        // // my-account
+        // "my-account|WithoutSidebar|My Account" => $this->themeObject->getDefaultWebPageContent("my-account", "WithoutSidebar", $menus) ?? array_merge(
+        //   $this->websiteCommonPanels[$this->domainName], [
+        //   "section_1" => "WAI/Customer/Home",
+        // ]),
 
-        // my-account/orders
-        "my-account/orders|WithoutSidebar|My Account - Orders" => $this->themeObject->getDefaultWebPageContent("my-account-orders", "WithoutSidebar", $menus) ?? array_merge(
-          $this->websiteCommonPanels[$this->domainName], [
-          "section_1" => "WAI/Customer/OrderList",
-        ]),
+        // // my-account/orders
+        // "my-account/orders|WithoutSidebar|My Account - Orders" => $this->themeObject->getDefaultWebPageContent("my-account-orders", "WithoutSidebar", $menus) ?? array_merge(
+        //   $this->websiteCommonPanels[$this->domainName], [
+        //   "section_1" => "WAI/Customer/OrderList",
+        // ]),
 
-        // login
-        "sign-in|WithoutSidebar|My Account - Sign in" => $this->themeObject->getDefaultWebPageContent("sign-in", "WithoutSidebar", $menus) ?? array_merge(
-          $this->websiteCommonPanels[$this->domainName], [
-          "section_1" => [
-            "WAI/Customer/Login",
-            [
-              "showPrivacyTerms" => 1,
-              "privacyTermsUrl" => "privacy-terms",
-            ],
-          ],
-        ]),
+        // // login
+        // "sign-in|WithoutSidebar|My Account - Sign in" => $this->themeObject->getDefaultWebPageContent("sign-in", "WithoutSidebar", $menus) ?? array_merge(
+        //   $this->websiteCommonPanels[$this->domainName], [
+        //   "section_1" => [
+        //     "WAI/Customer/Login",
+        //     [
+        //       "showPrivacyTerms" => 1,
+        //       "privacyTermsUrl" => "privacy-terms",
+        //     ],
+        //   ],
+        // ]),
 
-        // privacy-terms
-        "privacy-terms|WithoutSidebar|Privacy Terms" => $this->themeObject->getDefaultWebPageContent("privacy-terms", "WithoutSidebar", $menus) ?? array_merge(
-          $this->websiteCommonPanels[$this->domainName], [
-          "section_1" => [
-            "WAI/SimpleContent/OneColumn",
-            [
-              "heading" => $this->translate("We value your privacy"),
-              "content" => file_get_contents(__DIR__."/../content/PageTexts/o-nas.html"),
-            ]
-          ]
-        ]),
+        // // privacy-terms
+        // "privacy-terms|WithoutSidebar|Privacy Terms" => $this->themeObject->getDefaultWebPageContent("privacy-terms", "WithoutSidebar", $menus) ?? array_merge(
+        //   $this->websiteCommonPanels[$this->domainName], [
+        //   "section_1" => [
+        //     "WAI/SimpleContent/OneColumn",
+        //     [
+        //       "heading" => $this->translate("We value your privacy"),
+        //       "content" => file_get_contents(__DIR__."/../content/PageTexts/o-nas.html"),
+        //     ]
+        //   ]
+        // ]),
 
         // news
         "news|WithLeftSidebar|News" => $this->themeObject->getDefaultWebPageContent("news", "WithoutSidebar", $menus) ?? array_merge(
@@ -641,23 +659,28 @@ class WebsiteContentGenerator {
     // }
 
     //
-    $yamlFolders = [
+    $yamlPageFolders = [
       __DIR__."/../content/pages",
       "{$this->themeObject->myRootFolder}/Install/pages",
     ];
 
     $pages = [];
 
-    foreach ($yamlFolders as $folder) {
+    foreach ($yamlPageFolders as $folder) {
       if (!is_dir($folder)) continue;
 
-      $pageFiles = scandir($folder);
-      foreach ($pageFiles as $pageFile) {
-        if (in_array($pageFile, [".", ".."])) continue;
+      $files = scandir($folder);
+      foreach ($files as $file) {
+        if (in_array($file, [".", ".."])) continue;
 
-        $yaml = file_get_contents("{$folder}/{$pageFile}");
-        $yaml = str_replace("{{ menuHeaderId }}", $menus["header"]["id"], $yaml);
-        $yaml = str_replace("{{ menuFooterId }}", $menus["footer"]["id"], $yaml);
+        $yaml = file_get_contents("{$folder}/{$file}");
+        $yaml = str_replace("{{ menuHeaderId }}", $menus["header.yml"]["id"], $yaml);
+        $yaml = str_replace("{{ menuFooterId }}", $menus["footer.yml"]["id"], $yaml);
+
+        preg_match_all('/menu\("(.*?)"\)/', $yaml, $m);
+        foreach ($m[0] as $key => $value) {
+          $yaml = str_replace($m[0][$key], $menus[$m[1][$key]]["id"], $yaml);
+        }
 
         preg_match_all('/translate\("(.*?)"\)/', $yaml, $m);
 
@@ -665,7 +688,7 @@ class WebsiteContentGenerator {
           $yaml = str_replace($m[0][$key], $this->translate($m[1][$key]), $yaml);
         }
 
-        $pages[$pageFile] = \Symfony\Component\Yaml\Yaml::parse($yaml);
+        $pages[$file] = \Symfony\Component\Yaml\Yaml::parse($yaml);
       }
     }
 

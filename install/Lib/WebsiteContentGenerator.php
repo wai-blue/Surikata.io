@@ -245,34 +245,32 @@ class WebsiteContentGenerator {
 
     // web - nastavenia
 
+    $webSettings = Yaml::parse(
+      file_get_contents(__DIR__."/../content/settings/{$languageIndex}.yml")
+    );
+
+    $webSettings["companyInfo"] = [
+      "slogan" => $this->translate("Custom e-Commerce solutions"),
+      "contactPhoneNumber" => "+421 111 222 333",
+      "contactEmail" => "info@{$this->installationConfig['http_host']}",
+      "logo" => "your-logo.png",
+      "urlFacebook" => "https://surikata.io",
+      "urlTwitter" => "https://surikata.io",
+      "urlYouTube" => "https://surikata.io",
+      "urlInstagram" => "https://surikata.io"
+    ];
+
+    $webSettings["design"] = array_merge(
+      $this->themeObject->getDefaultColorsAndStyles($this),
+      [
+        "theme" => $themeName,
+      ]
+    );
+
     $this->adminPanel->saveConfig([
       "settings" => [
         "web" => [
-          $this->domainName => array_merge(
-            Yaml::parse(
-              file_get_contents(__DIR__."/../content/settings/{$languageIndex}.yml")
-            ),
-            [
-              "companyInfo" => [
-                "slogan" => $this->translate("Custom e-Commerce solutions"),
-                "contactPhoneNumber" => "+421 111 222 333",
-                "contactEmail" => "info@{$this->installationConfig['http_host']}",
-                "logo" => "your-logo.png",
-                "urlFacebook" => "https://surikata.io",
-                "urlTwitter" => "https://surikata.io",
-                "urlYouTube" => "https://surikata.io",
-                "urlInstagram" => "https://surikata.io"
-              ],
-              "design" => array_merge(
-                $this->themeObject->getDefaultColorsAndStyles($this),
-                [
-                  "theme" => $themeName,
-                  // "headerMenuID" => $this->domainIdOffset + 1,
-                  // "footerMenuID" => $this->domainIdOffset + 2,
-                ]
-              ),
-            ],
-          )
+          $this->domainName => $webSettings
         ],
       ]
     ]);

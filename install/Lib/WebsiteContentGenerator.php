@@ -300,7 +300,7 @@ class WebsiteContentGenerator {
 
     if ($languageIndex == 1) return;
 
-    require(__DIR__."/../content/dictionary/website-{$languageIndex}.php");
+    include(__DIR__."/../content/dictionary/website-{$languageIndex}.php");
 
     $yamlDictionaryFolders = [
       ["", __DIR__."/../content/dictionary"],

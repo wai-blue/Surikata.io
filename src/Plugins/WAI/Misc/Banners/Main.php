@@ -33,5 +33,17 @@ namespace ADIOS\Plugins\WAI\Misc {
         ]
       ];
     }
+
+    public function installOnce(object $installer) {
+      foreach (scandir(__DIR__."/Install/banners") as $banner) {
+        if (in_array($banner, [".", ".."])) continue;
+
+        copy(
+          __DIR__."/Install/banners/{$banner}",
+          "{$this->adios->config['files_dir']}/{$banner}",
+        );
+      }
+    }
+
   }
 }

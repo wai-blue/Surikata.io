@@ -7,3 +7,4 @@
 items:
   - title: Blog
     url: blog
+    order_index: 250

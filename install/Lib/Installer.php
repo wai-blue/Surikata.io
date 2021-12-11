@@ -595,7 +595,6 @@ class Installer {
     foreach ($domainsToInstall as $domainIndex => $domain) {
       $wsg->generateWebsiteContent($domainIndex, $domain["themeName"]);
       $wsg->installPlugins();
-      $wsg->installDictionary($domainIndex);
       $adminPanel->widgets["Website"]->rebuildSitemap($domainsToInstall[$domainIndex]['name']);
     }
 

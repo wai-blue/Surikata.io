@@ -23,46 +23,69 @@ class WebsiteContentGenerator {
     $this->installationConfig = $installationConfig;
   }
 
-  public function translate(string $string) {
-    // A domain is linked to the "language index".
-    // A "language index" can represent any language.
-    // Default installation uses following languages:
-    //   LanguageIndex = 1 => English
-    //   LanguageIndex = 2 => Slovensky
-    //   LanguageIndex = 3 => Cesky
+  public function translate(string $original, string $context = "Installer") {
+    // // A domain is linked to the "language index".
+    // // A "language index" can represent any language.
+    // // Default installation uses following languages:
+    // //   LanguageIndex = 1 => English
+    // //   LanguageIndex = 2 => Slovensky
+    // //   LanguageIndex = 3 => Cesky
 
-    $languageIndex = $this->domainCurrentlyGenerated["languageIndex"];
+    // $languageIndex = $this->domainCurrentlyGenerated["languageIndex"];
 
-    // languageIndex == 1 is not translated
-    if ($languageIndex == 1) {
-      return $string;
-    }
+    // // languageIndex == 1 is not translated
+    // if ($languageIndex == 1) {
+    //   return $original;
+    // }
 
-    if (empty($string)) {
+    // if (empty($original)) {
+    //   return "";
+    // }
+
+    // if (empty($languageIndex)) {
+    //   $this->adminPanel->console->warning("Translate: Destination language not set for `{$original}`.");
+    //   return $original;
+    // }
+
+    // if (empty($this->adminPanelDictionary[$languageIndex])) {
+    //   require(__DIR__."/../content/dictionary/adminpanel-{$languageIndex}.php");
+    //   $this->adminPanelDictionary[$languageIndex] = $dictionary;
+    // }
+
+    // if (empty($this->adminPanelDictionary[$languageIndex])) {
+    //   $this->adminPanel->console->warning("Translate: Dictionary for `{$languageIndex}` is empty.");
+    //   return $original;
+    // }
+
+    // if (empty($this->adminPanelDictionary[$languageIndex][$original])) {
+    //   $this->adminPanel->console->warning("Translate: `{$original}` is not translated to `{$languageIndex}`.");
+    //   return $original;
+    // }
+
+    // return $this->adminPanelDictionary[$languageIndex][$original];
+
+    if (empty($original)) {
       return "";
     }
 
-    if (empty($languageIndex)) {
-      $this->adminPanel->console->warning("Translate: Destination language not set for `{$string}`.");
-      return $string;
+    if ($this->domainCurrentlyGenerated["languageIndex"] == 1) {
+      return $original;
     }
 
-    if (empty($this->adminPanelDictionary[$languageIndex])) {
-      require(__DIR__."/../content/dictionary/adminpanel-{$languageIndex}.php");
-      $this->adminPanelDictionary[$languageIndex] = $dictionary;
+    $translated = "";
+
+    foreach ($this->dictionary as $item) {
+      if ($item["context"] == $context && $item["original"] == $original) {
+        $translated = $item["translated"];
+      }
     }
 
-    if (empty($this->adminPanelDictionary[$languageIndex])) {
-      $this->adminPanel->console->warning("Translate: Dictionary for `{$languageIndex}` is empty.");
-      return $string;
+    if (empty($translated)) {
+      $this->adminPanel->console->warning("Translate: `{$original}` (context: {$context}) is not translated to `{$this->domainName}`.");
+      return $original;
     }
 
-    if (empty($this->adminPanelDictionary[$languageIndex][$string])) {
-      $this->adminPanel->console->warning("Translate: `{$string}` is not translated to `{$languageIndex}`.");
-      return $string;
-    }
-
-    return $this->adminPanelDictionary[$languageIndex][$string];
+    return $translated;
 
   }
 
@@ -127,6 +150,9 @@ class WebsiteContentGenerator {
     $this->domainIdOffset = $domainIndex * 100;
 
     $this->themeObject = $this->adminPanel->widgets['Website']->themes[$themeName];
+    $this->dictionary = $this->loadDictionary($domainIndex);
+
+    $this->installDictionary();
 
     $languageIndex = $this->domainCurrentlyGenerated["languageIndex"];
 
@@ -185,17 +211,19 @@ class WebsiteContentGenerator {
     // web - stranky
 
     $yamlPageFolders = [
-      __DIR__."/../content/pages",
-      "{$this->themeObject->myRootFolder}/Install/pages",
+      ["Installer", __DIR__."/../content/pages"],
+      [$this->themeName, "{$this->themeObject->myRootFolder}/Install/pages"],
     ];
 
     foreach ($this->adminPanel->pluginObjects as $pluginObject) {
-      $yamlPageFolders[] = "{$pluginObject->myRootFolder}/Install/pages";
+      $yamlPageFolders[] = [$pluginObject->name, "{$pluginObject->myRootFolder}/Install/pages"];
     }
 
     $pages = [];
 
-    foreach ($yamlPageFolders as $folder) {
+    foreach ($yamlPageFolders as $folderData) {
+      list($folderContext, $folder) = $folderData;
+
       if (!is_dir($folder)) continue;
 
       $files = scandir($folder);
@@ -209,23 +237,37 @@ class WebsiteContentGenerator {
           $yaml = str_replace($m[0][$key], $menus[$m[1][$key]]["id"], $yaml);
         }
 
-        preg_match_all('/translate\("(.*?)"\)/', $yaml, $m);
-
+        preg_match_all('/translate\(("[^"]+")[, ]*?("[^"]+")?\)/', $yaml, $m);
         foreach ($m[0] as $key => $value) {
-          $yaml = str_replace($m[0][$key], $this->translate($m[1][$key]), $yaml);
+          $tmpOriginal = trim($m[1][$key], '"');
+          $tmpContext = trim($m[2][$key], '"');
+
+          if (empty($tmpContext)) {
+            $tmpContext = $folderContext;
+          }
+
+          $yaml = str_replace(
+            $m[0][$key],
+            $this->translate($tmpOriginal, $tmpContext),
+            $yaml
+          );
         }
 
-        $pages[$file] = Yaml::parse($yaml);
+        $page = Yaml::parse($yaml);
+        $page["title"] = $this->translate($page["title"] ?? "", $folderContext);
+        $page["url"] = $this->translate($page["url"] ?? "", $folderContext);
+
+        $pages[$file] = $page;
       }
     }
 
     foreach ($pages as $page) {
       $websiteWebPageModel->insertRow([
         "domain" => $this->domainName,
-        "name" => $this->translate($page["title"] ?? ""),
-        "seo_title" => $this->translate($page["title"] ?? ""),
-        "seo_description" => $this->translate($page["title"] ?? ""),
-        "url" => $this->translate($page["url"] ?? ""),
+        "name" => $page["title"],
+        "seo_title" => $page["title"],
+        "seo_description" => $page["title"],
+        "url" => $page["url"],
         "publish_always" => 1,
         "content_structure" => json_encode([
           "layout" => $page["layout"],
@@ -292,16 +334,15 @@ class WebsiteContentGenerator {
     }
   }
 
-  public function installDictionary($domainIndex) {
-    $domainName = $this->domainsToInstall[$domainIndex]["name"];
+  public function loadDictionary($domainIndex) {
     $languageIndex = (int) $this->domainsToInstall[$domainIndex]["languageIndex"];
 
     if ($languageIndex == 1) return;
 
-    include(__DIR__."/../content/dictionary/website-{$languageIndex}.php");
+    include(__DIR__."/../content/dictionary/{$languageIndex}.php");
 
     $yamlDictionaryFolders = [
-      ["", __DIR__."/../content/dictionary"],
+      ["Installer", __DIR__."/../content/dictionary"],
       [$this->themeName, "{$this->themeObject->myRootFolder}/Install/dictionary"],
     ];
 
@@ -310,27 +351,35 @@ class WebsiteContentGenerator {
     }
 
     foreach ($yamlDictionaryFolders as $folderData) {
-      list($context, $folder) = $folderData;
+      list($folderContext, $folder) = $folderData;
 
-      if (!is_file("{$folder}/website-{$languageIndex}.yml")) continue;
+      if (!is_file("{$folder}/{$languageIndex}.yml")) continue;
 
-      $yaml = file_get_contents("{$folder}/website-{$languageIndex}.yml");
+      $yaml = file_get_contents("{$folder}/{$languageIndex}.yml");
 
       $tmp = Yaml::parse($yaml);
 
       foreach ($tmp as $original => $translated) {
-        $dictionary[] = [$context, $original, $translated];
+        $dictionary[] = [
+          "context" => $folderContext,
+          "original" => $original,
+          "translated" => $translated,
+        ];
       }
     }
 
+    return $dictionary;
+  }
+
+  public function installDictionary() {
     $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($this->adminPanel);
 
-    foreach ($dictionary as $item) {
+    foreach ($this->dictionary as $item) {
       $translationModel->insertRow([
-        "domain" => $domainName,
-        "context" => $item[0],
-        "original" => $item[1],
-        "translated" => $item[2],
+        "domain" => $this->domainName,
+        "context" => $item["context"],
+        "original" => $item["original"],
+        "translated" => $item["translated"],
       ]);
     }
   }

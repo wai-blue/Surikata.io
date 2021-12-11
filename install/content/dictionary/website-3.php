@@ -35,7 +35,7 @@
     ['WAI/Order/Checkout', 'I agree to the processing of personal data for the processing of the order', 'Souhlasím se zpracováním osobních údajů pro účely zpracování objednávky'],
     ['WAI/Order/Checkout', 'I agree to the processing of personal data for the purpose of sending marketing information', 'Souhlasím se zpracováním osobních údajů pro marketingové účely'],
     ['Common', 'Surikata', 'Surikata'],
-    ['Common', 'My account', 'Můj účet'],
+    ['Common', 'My Account', 'Můj účet'],
     ['Common', 'Checkout', 'Košík'],
     ['Common', 'Logout', 'Odhlásit se'],
     ['Common', 'All categories', 'Všechny kategorie'],

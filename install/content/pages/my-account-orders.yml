@@ -1,6 +1,6 @@
 layout: WithoutSidebar
 url: my-account/orders
-title: My account - Orders
+title: My Account - Orders
 panels:
   header:
     plugin: WAI/Common/Header

@@ -1,6 +1,6 @@
 layout: WithoutSidebar
 url: 
-title: My account - Validation
+title: My Account - Validation
 panels:
   header:
     plugin: WAI/Common/Header

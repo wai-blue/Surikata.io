@@ -98,12 +98,16 @@ class PluginWAICommonCustomerCartDOMClass extends PluginWAICustomerCartAPIClass 
       ;
 
       $('#navigationCartOverview').html(data.cartOverviewHtml);
+      $('.cart-info a.offcanvas-toggle')
+        .attr('cart-count', $('#navigationCart li').length)
+        .trigger('click')
+      ;
 
-      let count = $('#navigationCart li').length;
+      // let count = $('#navigationCart li').length;
     
-      $('.cart-info a').fadeOut(function () {
-        $('.cart-info a').attr('cart-count', count).fadeIn();
-      })
+      // $('.cart-info a').fadeOut(function () {
+      //   $('.cart-info a').fadeIn();
+      // })
     })
   };
 
@@ -112,10 +116,14 @@ class PluginWAICommonCustomerCartDOMClass extends PluginWAICustomerCartAPIClass 
       $('#navigationCartOverview').html(data.cartOverviewHtml);
 
       let count = $('#navigationCart li').length;
-    
-      $('.cart-info a').fadeOut(function () {
-        $('.cart-info a').attr('cart-count', count).fadeIn();
-      })
+
+      $('.cart-info a.offcanvas-toggle')
+        .attr('cart-count', $('#navigationCart li').length)
+        .trigger('click')
+      ;
+      // $('.cart-info a').fadeOut(function () {
+      //   $('.cart-info a').attr('cart-count', count).fadeIn();
+      // })
     })
   };
 

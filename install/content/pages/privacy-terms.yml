@@ -1,6 +1,6 @@
 layout: WithoutSidebar
 url: privacy-terms
-title: Privacy terms
+title: Privacy Terms
 panels:
   header:
     plugin: WAI/Common/Header

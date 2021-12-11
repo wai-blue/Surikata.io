@@ -1,6 +1,6 @@
 layout: WithoutSidebar
 url: my-account
-title: My account
+title: My Account
 panels:
   header:
     plugin: WAI/Common/Header

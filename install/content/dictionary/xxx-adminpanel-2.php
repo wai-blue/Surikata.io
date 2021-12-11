@@ -40,7 +40,7 @@
     "create-account/confirmation" => "vytvorit-ucet/potvrdenie",
     "My Account" => "Môj účet",
     "my-account" => "moj-ucet",
-    "My account - Validation" => "Môj účet - Overenie",
+    "My Account - Validation" => "Môj účet - Overenie",
     "Reset Password" => "Obnoviť heslo",
     "reset-password" => "obnovit-heslo",
     "My Account - Orders" => "Môj účet - Objednávky",

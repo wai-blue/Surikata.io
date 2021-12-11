@@ -24,12 +24,12 @@ panels:
     settings:
       mainMenuId: menu("header.yml")
       secondaryMenuId: menu("footer.yml")
-      mainMenuTitle: translate("Pages")
-      secondaryMenuTitle: translate("Our Company")
+      mainMenuTitle: translate("Pages", "Installer")
+      secondaryMenuTitle: translate("Our Company", "Installer")
       showContactAddress: false
       showContactEmail: true
       showContactPhoneNumber: true
-      contactTitle: translate("Contact us")
+      contactTitle: translate("Contact us", "Installer")
       showPayments: true
       showSocialMedia: true
       showMainMenu: true

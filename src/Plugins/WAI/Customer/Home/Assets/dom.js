@@ -14,7 +14,7 @@ class PluginWAICustomerHomeDOMClass extends PluginWAICustomerHomeAPIClass {
       $('#privacyPolicyTermsErrorText').show();
     } else {
       $('#privacyPolicyTermsErrorDiv').removeClass("error");
-      PluginWAICustomerHomeAPIClass.prototype.createAccount(
+      super.createAccount(
         function (dataSuccess) {
           if (dataSuccess.status == 'OK') {
             window.location.href = dataSuccess.registrationConfirmationUrl;
@@ -45,7 +45,7 @@ class PluginWAICustomerHomeDOMClass extends PluginWAICustomerHomeAPIClass {
   }
   
   addAddress() {
-    PluginWAICustomerHomeAPIClass.prototype.addAddress(
+    super.addAddress(
       function(dataSuccess) {
         if (dataSuccess.status == 'OK') {
           location.reload();
@@ -58,7 +58,7 @@ class PluginWAICustomerHomeDOMClass extends PluginWAICustomerHomeAPIClass {
   }
   
   removeAddress(idAddress) {
-    PluginWAICustomerHomeAPIClass.prototype.removeAddress(
+    super.removeAddress(
       {
         'idAddress': idAddress,
         'customerAction': 'removeAddress'
@@ -80,7 +80,7 @@ class PluginWAICustomerHomeDOMClass extends PluginWAICustomerHomeAPIClass {
     $('#emailIsInvalid').hide();
     $('#accountIsNotValidated').hide();
     $('#forgotPasswordDiv input[name=email]').removeClass('required-empty');
-    PluginWAICustomerHomeAPIClass.prototype.forgotPassword(
+    super.forgotPassword(
       function(dataSuccess) {
         if (dataSuccess.status == 'OK') {
           $("#forgotPasswordDiv").hide();

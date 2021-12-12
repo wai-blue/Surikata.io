@@ -1,0 +1,36 @@
+layout: WithoutSidebar
+url: search
+title: Search
+panels:
+  header:
+    plugin: WAI/Common/Header
+    settings:
+  navigation:
+    plugin: WAI/Common/Navigation
+    settings:
+      menuId: menu("header.yml")
+      showCategories: true
+      showBreadcrumbs: true
+  section_1:
+    plugin: WAI/Misc/WebsiteSearch
+    settings:
+      heading: translate("Search")
+      numberOfResults: 10
+      searchInProducts: name_lang,brief_lang,description_lang
+      searchInProductCategories: name_lang
+      searchInBlogs: name,content
+  footer:
+    plugin: WAI/Common/Footer
+    settings:
+      mainMenuId: menu("header.yml")
+      secondaryMenuId: menu("footer.yml")
+      mainMenuTitle: translate("Pages")
+      secondaryMenuTitle: translate("Our Company")
+      showContactAddress: false
+      showContactEmail: true
+      showContactPhoneNumber: true
+      contactTitle: translate("Contact us")
+      showPayments: true
+      showSocialMedia: true
+      showMainMenu: true
+      showSecondaryMenu: true

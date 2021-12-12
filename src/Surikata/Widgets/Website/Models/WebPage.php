@@ -31,6 +31,14 @@ class WebPage extends \ADIOS\Core\Widget\Model {
         "readonly" => TRUE,
       ],
 
+      "name" => [
+        "type" => "varchar",
+        "title" => $this->translate("Brief name"),
+        // "required" => TRUE,
+        "show_column" => TRUE,
+        "description" => $this->translate("Your webpage name. Example: 'homepage', 'list of products'."),
+      ],
+
       "url" => [
         "type" => "varchar",
         "title" => $this->translate("URL address"),
@@ -42,14 +50,6 @@ class WebPage extends \ADIOS\Core\Widget\Model {
         "input" => [
           "style" => "font-size:1.5em",
         ]
-      ],
-
-      "name" => [
-        "type" => "varchar",
-        "title" => $this->translate("Brief name"),
-        // "required" => TRUE,
-        "show_column" => TRUE,
-        "description" => $this->translate("Your webpage name. Example: 'homepage', 'list of products'."),
       ],
 
       "content_structure" => [

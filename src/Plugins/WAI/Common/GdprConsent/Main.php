@@ -72,14 +72,6 @@ namespace ADIOS\Plugins\WAI\Common {
           "title" => "Show secondary menu",
           "type" => "boolean",
         ],
-        "showBlogs" => [
-          "title" => "View the latest blogs",
-          "type" => "boolean",
-        ],
-        "blogsTitle" => [
-          "title" => "Blogs title",
-          "type" => "varchar"
-        ],
         "Newsletter" => [
           "title" => "Zobraziť pole pre zaradenie do newsletteru",
           "type" => "boolean",

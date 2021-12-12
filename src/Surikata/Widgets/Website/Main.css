@@ -18,9 +18,9 @@
 
 .surikata-theme-preview-wrapper > div .col {
   /* font-size: 6pt; */
-  padding: 0.5em 0;
+  padding: 0.5em;
   color: white;
-  text-align: center;
+  /* text-align: center; */
   background: #9b9595;
   border: 1px solid white;
 }
@@ -51,12 +51,12 @@
 }
 
 .surikata-theme-preview-wrapper > div.selected *[data-panel-name] div:nth-child(2) {
-  font-size: 0.5em;
-  background: rgba(255, 255, 255, 0.8);
-  color: black;
+  font-size: 0.75em;
+  /* background: rgba(255, 255, 255, 0.8); */
+  color: white;
   padding: 1em;
-  width: 66%;
-  margin: auto;
+  width: 100%;
+  /* margin: auto; */
   max-height: 20em;
   overflow: hidden;
   text-align: left;

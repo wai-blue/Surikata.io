@@ -63,21 +63,6 @@ class Website extends \ADIOS\Core\Widget {
         ];
       }
 
-      // $sub[] = [
-      //   "fa_icon" => "fas fa-folder-open",
-      //   "title" => $this->translate("Files and media"),
-      //   "onclick" => "window_render('Website/Media');",
-      // ];
-      // $sub['WebsitePluginsMenu'] = [
-      //   "fa_icon" => "fas fa-puzzle-piece",
-      //   "title" => "Plugins",
-      //   "sub" => []
-      // ];
-      // $sub[] = [
-      //   "title" => "Modern templates",
-      //   "onclick" => "window.open('https://uicookies.com/shop-website-template');",
-      // ];
-
       $this->adios->config['desktop']['sidebarItems']['Website'] = [
         "fa_icon" => "fas fa-globe",
         "title" => $this->translate("Websites"),

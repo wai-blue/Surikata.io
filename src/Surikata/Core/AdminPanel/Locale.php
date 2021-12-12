@@ -20,6 +20,10 @@ class Locale extends \ADIOS\Core\Locale {
     return $this->adios->config["settings"]["miscellaneous"]["localeCurrencySymbol"] ?: parent::currencySymbol();
   }
 
+  public function priceDecimals() {
+    return $this->adios->config["settings"]["miscellaneous"]["priceDecimals"] ?: 2;
+  }
+
   /**
    * Rounds price values to user-configured decimal places
    *
@@ -35,6 +39,6 @@ class Locale extends \ADIOS\Core\Locale {
    * @return void
    */
   public function formatPrice($price) {
-    return rtrim(number_format($price, 10, ",", " "), "0");
+    return number_format($price, $this->priceDecimals(), ",", " ");
   }
 }

@@ -1,0 +1,43 @@
+layout: WithLeftSidebar
+url: blog
+title: Blog
+panels:
+  header:
+    plugin: WAI/Common/Header
+    settings:
+  navigation:
+    plugin: WAI/Common/Navigation
+    settings:
+      menuId: menu("header.yml")
+      showCategories: true
+      showBreadcrumbs: true
+  sidebar:
+    plugin: WAI/Blog/Sidebar
+    settings:
+      showRecent: true
+      showArchive: true
+      showAdvertising: true
+  section_1:
+    plugin: WAI/Common/Breadcrumb
+    settings:
+      showHomePage: true
+  section_2:
+    plugin: WAI/Blog/Catalog
+    settings:
+      itemsPerPage: 3
+      showAuthor: 1
+  footer:
+    plugin: WAI/Common/Footer
+    settings:
+      mainMenuId: menu("header.yml")
+      secondaryMenuId: menu("footer.yml")
+      mainMenuTitle: translate("Pages", "Installer")
+      secondaryMenuTitle: translate("Our Company", "Installer")
+      showContactAddress: false
+      showContactEmail: true
+      showContactPhoneNumber: true
+      contactTitle: translate("Contact us", "Installer")
+      showPayments: true
+      showSocialMedia: true
+      showMainMenu: true
+      showSecondaryMenu: true

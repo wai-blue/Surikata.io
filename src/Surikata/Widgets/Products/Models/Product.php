@@ -86,7 +86,7 @@ class Product extends \ADIOS\Core\Widget\Model {
           "sql_data_type" => "decimal",
           "decimals" => 4,
           "title" => $this->translate("Original price excl. VAT"),
-          "unit" => $this->adios->locale->currencySymbol()." excl. VAT",
+          "unit" => $this->adios->locale->currencySymbol()." ".$this->translate("excl. VAT"),
           "readonly" => TRUE,
           "show_column" => FALSE,
         ],
@@ -96,7 +96,7 @@ class Product extends \ADIOS\Core\Widget\Model {
           "sql_data_type" => "decimal",
           "decimals" => 4,
           "title" => $this->translate("Original price incl. VAT"),
-          "unit" => $this->adios->locale->currencySymbol()." incl. VAT",
+          "unit" => $this->adios->locale->currencySymbol()." ".$this->translate("incl. VAT"),
           "show_column" => FALSE,
         ],
 
@@ -105,7 +105,7 @@ class Product extends \ADIOS\Core\Widget\Model {
           "sql_data_type" => "decimal",
           "decimals" => 4,
           "title" => $this->translate("Sale price excl. VAT"),
-          "unit" => $this->adios->locale->currencySymbol()." excl. VAT",
+          "unit" => $this->adios->locale->currencySymbol()." ".$this->translate("excl. VAT"),
           "readonly" => TRUE,
           "show_column" => FALSE,
         ],
@@ -115,7 +115,7 @@ class Product extends \ADIOS\Core\Widget\Model {
           "sql_data_type" => "decimal",
           "decimals" => 4,
           "title" => $this->translate("Sale price incl. VAT"),
-          "unit" => $this->adios->locale->currencySymbol()." incl. VAT",
+          "unit" => $this->adios->locale->currencySymbol()." ".$this->translate("incl. VAT"),
           "show_column" => FALSE,
         ],
 
@@ -372,6 +372,10 @@ class Product extends \ADIOS\Core\Widget\Model {
 
   public function priceListMarginsForSupplier() {
     return $this->hasMany(\ADIOS\Widgets\Products\Models\ProductMargin::class, 'id_supplier', 'id_supplier');
+  }
+
+  public function category() {
+    return $this->belongsTo(\ADIOS\Widgets\Products\Models\ProductCategory::class, 'id_category');
   }
 
   public function brand() {
@@ -1053,6 +1057,15 @@ class Product extends \ADIOS\Core\Widget\Model {
 
   public function getRelationships() {
     return $this
+      ->with('gallery')
+      ->with('extensions')
+      ->with('category')
+      ->with('brand')
+      ->with('supplier')
+      ->with('features')
+      ->with('related')
+      ->with('accessories')
+      ->with('services')
       ->with('priceList')
       ->with('priceListMargins')
       ->with('priceListMarginsForCategory')
@@ -1065,18 +1078,19 @@ class Product extends \ADIOS\Core\Widget\Model {
     ;
   }
 
-  public function getForDetail() {
-    return $this->getForPriceInfo()
-      ->with('gallery')
-      ->with('extensions')
-      ->with('brand')
-      ->with('supplier')
-      ->with('features')
-      ->with('related')
-      ->with('accessories')
-      ->with('services')
-    ;
-  }
+  // public function getForDetail() {
+  //   return $this->getForPriceInfo()
+  //     ->with('gallery')
+  //     ->with('extensions')
+  //     ->with('category')
+  //     ->with('brand')
+  //     ->with('supplier')
+  //     ->with('features')
+  //     ->with('related')
+  //     ->with('accessories')
+  //     ->with('services')
+  //   ;
+  // }
 
   ////////////////////////////////////////////////////////////////
   // METHODS FOR DATA PROCESSING OF A SINGLE PRODUCT
@@ -1084,25 +1098,29 @@ class Product extends \ADIOS\Core\Widget\Model {
   public function getExtendedData($item) {
 
     $item = $this->unifyProductInformationForSingleProduct($item);
-    $item['PRICE'] = $this->getPriceInfoForSingleProduct($item);
+    $item = reset($this->addPriceInfoForListOfProducts([$item]));
 
-    $item['PRICES_FOR_INVOICE'] = reset(
-      \ADIOS\Widgets\Finances::calculatePricesForInvoice([
-        [
-          'unit_price' => $item['sale_price_excl_vat_cached'],
-          'quantity' => 1,
-          'vat_percent' => $item['vat_percent']
-        ]
-      ])
-    )['PRICES_FOR_INVOICE'];
+    // $item['PRICE'] = $this->getPriceInfoForSingleProduct($item);
+
+    // $item['PRICES_FOR_INVOICE'] = reset(
+    //   \ADIOS\Widgets\Finances::calculatePricesForInvoice([
+    //     [
+    //       'unit_price' => $item['sale_price_excl_vat_cached'],
+    //       'quantity' => 1,
+    //       'vat_percent' => $item['vat_percent']
+    //     ]
+    //   ])
+    // )['PRICES_FOR_INVOICE'];
 
     return $item;
 
   }
 
-  public function unifyProductInformationForSingleProduct($product) {
+  public function unifyProductInformationForSingleProduct($product, $languageIndex = 0) {
+    $productCategoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adios);
 
     $keyConversionTable = [
+      "category" => "CATEGORY",
       "brand" => "BRAND",
       "gallery" => "GALLERY",
       "extensions" => "EXTENSIONS",
@@ -1119,6 +1137,28 @@ class Product extends \ADIOS\Core\Widget\Model {
         $product[$to] = $product[$from];
         unset($product[$from]);
       }
+    }
+
+    if ($languageIndex > 0) {
+      $product = reset(
+        $this->translateForWeb(
+          [
+            $product
+          ],
+          $languageIndex
+        )
+      );
+
+      // category translation
+      $product["CATEGORY"] = reset(
+        $productCategoryModel->translateForWeb(
+          [
+            $product["CATEGORY"]
+          ],
+          $languageIndex
+        )
+      );
+
     }
 
     if (is_array($product["PRICELIST"])) {
@@ -1279,15 +1319,16 @@ class Product extends \ADIOS\Core\Widget\Model {
   ////////////////////////////////////////////////////////////////
   // METHODS FOR DATA PROCESSING OF LIST OF PRODUCTS
 
-  public function getDetailedInfoForListOfProducts($idProducts) {
+  public function getDetailedInfoForListOfProducts($idProducts, $languageIndex = 0) {
     return $this->unifyProductInformationForListOfProduct(
-      $this->getRelationships()->whereIn('id', $idProducts)->get()->toArray()
+      $this->getRelationships()->whereIn('id', $idProducts)->get()->toArray(),
+      $languageIndex
     );
   }
 
-  public function unifyProductInformationForListOfProduct($products) {
+  public function unifyProductInformationForListOfProduct($products, $languageIndex = 0) {
     foreach ($products as $key => $product) {
-      $products[$key] = $this->unifyProductInformationForSingleProduct($product);
+      $products[$key] = $this->unifyProductInformationForSingleProduct($product, $languageIndex);
     }
     return $products;
   }
@@ -1297,7 +1338,7 @@ class Product extends \ADIOS\Core\Widget\Model {
       $products[$key]['PRICE'] = $this->getPriceInfoForSingleProduct($product, NULL, $useCache);
 
       $products[$key]['PRICES_FOR_INVOICE'] = reset(
-        \ADIOS\Widgets\Finances::calculatePricesForInvoice([
+        (new \ADIOS\Widgets\Finances($this->adios))->calculatePricesForInvoice([
           [
             'unit_price' => $product['sale_price_excl_vat_cached'],
             'quantity' => 1,

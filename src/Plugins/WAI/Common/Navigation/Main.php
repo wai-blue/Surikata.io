@@ -109,6 +109,10 @@ namespace Surikata\Plugins\WAI\Common {
         $categoryTree = $categoryModel->getAllCategoriesAndSubCategories($allCategories);
         $twigParams["categories"] = $categoryTree;
       }
+
+      // breadcrumbs (in some templates it is better to render breadcrumbs within Navigation plugin)
+      $twigParams['breadcrumbs'] = (new \Surikata\Plugins\WAI\Common\Breadcrumb($this->websiteRenderer))->getBreadcrumbsUrl();
+
       return $twigParams;
     }
   }

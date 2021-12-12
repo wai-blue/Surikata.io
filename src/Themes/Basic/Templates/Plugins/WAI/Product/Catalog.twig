@@ -134,7 +134,7 @@
   {# --- Pagination --- #}
   {% if _GET.renderOnly == "" or _GET.renderOnly == "productPagination" %}
     {% if catalogInfo.products|length > 0 %}
-      <div id="productPagination">
+      <div id="productCatalogPaginationDiv">
         <div class="row mt-3 mb-5">
           {% if not showPaging %}
             <div class="col-lg-4"></div>

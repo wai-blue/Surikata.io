@@ -40,6 +40,39 @@ class WithoutSidebar extends \Surikata\Core\Web\Layout {
         <div class='col col-12' data-panel-name='section_9'><i>Section 9</i></div>
       </div>
       <div class='row'>
+        <div class='col col-12' data-panel-name='section_10'><i>Section 10</i></div>
+      </div>
+      <div class='row'>
+        <div class='col col-12' data-panel-name='section_11'><i>Section 11</i></div>
+      </div>
+      <div class='row'>
+        <div class='col col-12' data-panel-name='section_12'><i>Section 13</i></div>
+      </div>
+      <div class='row'>
+        <div class='col col-12' data-panel-name='section_13'><i>Section 13</i></div>
+      </div>
+      <div class='row'>
+        <div class='col col-12' data-panel-name='section_14'><i>Section 14</i></div>
+      </div>
+      <div class='row'>
+        <div class='col col-12' data-panel-name='section_15'><i>Section 15</i></div>
+      </div>
+      <div class='row'>
+        <div class='col col-12' data-panel-name='section_16'><i>Section 16</i></div>
+      </div>
+      <div class='row'>
+        <div class='col col-12' data-panel-name='section_17'><i>Section 17</i></div>
+      </div>
+      <div class='row'>
+        <div class='col col-12' data-panel-name='section_18'><i>Section 18</i></div>
+      </div>
+      <div class='row'>
+        <div class='col col-12' data-panel-name='section_19'><i>Section 19</i></div>
+      </div>
+      <div class='row'>
+        <div class='col col-12' data-panel-name='section_20'><i>Section 20</i></div>
+      </div>
+      <div class='row'>
         <div class='col col-12' data-panel-name='footer'>Footer</div>
       </div>
     ";

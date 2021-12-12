@@ -669,6 +669,28 @@ class Product extends \ADIOS\Core\Widget\Model {
     $priceInfoPriceList = $this->getPriceInfoForSingleProduct($data, self::PRICE_CALCULATION_METHOD_PRICE_LIST, FALSE);
     $priceInfoPlugin = $this->getPriceInfoForSingleProduct($data, self::PRICE_CALCULATION_METHOD_PLUGIN, FALSE);
 
+    $productStockStateModel = (new ProductStockState($this->adios));
+    $language = $_SESSION[_ADIOS_ID]['language'] ?? "en";
+    switch ($language) {
+      case "en":
+        $languageIndex = 1;
+        break;
+      case "sk":
+        $languageIndex = 2;
+        break;
+      case "cz":
+        $languageIndex = 3;
+        break;
+      default:
+        $languageIndex = 1;
+    }
+    $allStockStates = $productStockStateModel->getAll();
+    $stockStates = [];
+    $stockStates[0] = "";
+    foreach ($allStockStates as $stockState) {
+      $stockStates[$stockState["id"]] = $stockState["name_lang_".$languageIndex];
+    }
+
     $templateTabs = [
       $this->translate("General") => [
         "number",
@@ -772,7 +794,15 @@ class Product extends \ADIOS\Core\Widget\Model {
         "sale_price_incl_vat_custom",
       ],
       $this->translate("Stock & Delivery") => [
-        "id_stock_state",
+        $this->translate("Current state in the stock") => [
+          "title" => $this->translate("Current state in the stock"),
+          "input" => $this->adios->ui->Input([
+            "type" => "int",
+            "enum_values" => $stockStates,
+            "uid" => "{$params['uid']}_id_stock_state",
+            "value" => $data['id_stock_state'],
+          ])->render()
+        ],
         "stock_quantity",
         "id_delivery_unit",
         "delivery_day",

@@ -577,7 +577,7 @@ class Loader {
             case "ttf":
             case "woff":
             case "woff2":
-              header("Content-type: application/x-font-{$ext}");
+              header("Content-type: font/{$ext}");
               header($headerExpires);
               header("Pragma: cache");
               header($headerCacheControl);
@@ -591,11 +591,13 @@ class Loader {
             case "tiff":
             case "webp":
             case "svg":
-            case "eot":
-            case "ttf":
-            case "woff":
-            case "woff2":
-              header("Content-type: image/{$ext}");
+              if ($ext == "svg") {
+                $contentType = "svg+xml";
+              } else {
+                $contentType = $ext;
+              }
+
+              header("Content-type: image/{$contentType}");
               header($headerExpires);
               header("Pragma: cache");
               header($headerCacheControl);

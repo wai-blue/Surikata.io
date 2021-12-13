@@ -14,13 +14,16 @@ namespace Surikata\Plugins\WAI\Product {
         case "recommended":
           $productIds = $productModel
             ->where("is_recommended", TRUE)
-            ->skip(0)->take((int)$pluginSettings["product_count"]);
+            ->skip(0)->take((int)$pluginSettings["productCount"]);
         break;
         case "on_sale":
           $productIds = $productModel->where("is_on_sale", TRUE);
         break;
         case "sale_out":
           $productIds = $productModel->where("is_sale_out", TRUE);
+        break;
+        default:
+          throw new \ADIOS\Core\Exceptions\GeneralException("Plugins/WAI/Product/FilteredList: Unknown filter type {$pluginSettings["filterType"]}");
         break;
       }
 
@@ -29,7 +32,7 @@ namespace Surikata\Plugins\WAI\Product {
 
       $productIds = $productIds
         ->skip(0)
-        ->take((int) $pluginSettings["product_count"])
+        ->take((int) $pluginSettings["productCount"])
         ->get()
         ->pluck('id')
       ;
@@ -66,6 +69,10 @@ namespace ADIOS\Plugins\WAI\Product {
 
     public function getSettingsForWebsite() {
       return [
+        "heading" => [
+          "title" => "Heading",
+          "type" => "varchar",
+        ],
         "filterType" => [
           "title" => "Products for display",
           "type" => "varchar",
@@ -85,9 +92,17 @@ namespace ADIOS\Plugins\WAI\Product {
             "row-large" => "Row large"
           ],
         ],
-        "product_count" => [
+        "productCount" => [
           "title" => "Number of products",
           "type" => "int",
+        ],
+        "productCardCssClass" => [
+          "title" => "Custom CSS class for product card",
+          "type" => "varchar",
+        ],
+        "productCardCssStyle" => [
+          "title" => "Custom CSS style for product card",
+          "type" => "varchar",
         ],
       ];
     }

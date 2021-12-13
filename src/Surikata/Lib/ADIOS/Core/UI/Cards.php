@@ -29,15 +29,19 @@ class Cards extends \ADIOS\Core\UI\View {
       return $query;
     });
 
-    $html = "
-      <div class='row mb-3'>
-        ".$this->adios->ui->Button([
-          "type" => "add",
-          "onclick" => "window_render('".$model->getFullUrlBase($this->params)."/Add');"
-        ])->render()."
-      </div>
-      <div class='row'>
-    ";
+    $html = "";
+    if ($params['show_add_button'] ?? FALSE) {
+      $html .= "
+        <div class='row mb-3'>
+          ".$this->adios->ui->Button([
+            "type" => "add",
+            "onclick" => "window_render('".$model->getFullUrlBase($this->params)."/Add');"
+          ])->render()."
+        </div>
+      ";
+    }
+
+    $html .= "<div class='row'>";
     foreach ($cards as $card) {
       $html .= "
         <div class='col-lg-{$bootstrapColumnSize} col-md-12'>

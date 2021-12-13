@@ -1,0 +1,97 @@
+layout: WithoutSidebar
+url: home
+title: Home
+panels:
+  header:
+    plugin: WAI/Common/Header
+    settings:
+  navigation:
+    plugin: WAI/Common/Navigation
+    settings:
+      menuId: menu("header.yml")
+      showCategories: true
+      showBreadcrumbs: true
+  section_1:
+    plugin: WAI/Misc/Slideshow
+    settings:
+      speed: 1000
+  section_2:
+    plugin: WAI/SimpleContent/Snippet
+    settings:
+      snippetName: homepage-after-slideshow
+  section_3:
+    plugin: WAI/SimpleContent/H2
+    heading: translate("We recommend")
+  section_4:
+    plugin: WAI/Product/FilteredList
+    settings:
+      filterType: recommended
+      layout: tiles
+      productCount: 6
+  section_5:
+    plugin: WAI/SimpleContent/TwoColumns
+    settings:
+      column1Content: >
+        Aliquam ultrices nisl nisi, sed semper elit ultrices in. Fusce blandit ligula a ex faucibus porttitor. Vivamus
+        pellentesque dolor in nisl blandit, fermentum sollicitudin felis porttitor. Etiam nibh justo, efficitur sit amet
+        efficitur accumsan, tincidunt non elit. Duis semper purus vitae quam viverra, non ultrices elit viverra. Pellentesque
+        habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam iaculis feugiat luctus.
+        Suspendisse eget sodales ligula.
+      column1Width: 4
+      column2Content: >
+        Nam ligula eros, vestibulum sed sem sed, interdum molestie elit. Morbi fringilla leo augue, ut ultricies enim
+        condimentum nec. Duis ac pharetra tellus, ac pellentesque risus. Integer varius dictum sapien in venenatis. Sed varius
+        sapien tincidunt faucibus ultrices. Curabitur bibendum lorem vel urna vulputate dignissim. Nam sed orci lobortis,
+        placerat neque eu, tempus purus. Sed sit amet erat vitae nisi hendrerit tincidunt et nec odio. Nam ac ex nec libero
+        venenatis consectetur ut a felis. Nam malesuada, dui eu aliquam elementum, lacus risus congue orci, eu varius dui enim
+        at nibh. Praesent commodo felis luctus iaculis sodales. Ut ac blandit quam, a convallis risus.
+      column2Width: 8
+      column2CSSClasses: text-right
+  section_6:
+    plugin: WAI/SimpleContent/H2
+    settings:
+      heading: translate("Discount")
+  section_7:
+    plugin: WAI/Product/FilteredList
+    settings:
+      filterType: on_sale
+      layout: tiles
+      product_count: 6
+  section_8:
+    plugin: WAI/SimpleContent/TwoColumns
+    settings:
+      column1Content: >
+        Aliquam ultrices nisl nisi, sed semper elit ultrices in. Fusce blandit ligula a ex faucibus porttitor. Vivamus
+        pellentesque dolor in nisl blandit, fermentum sollicitudin felis porttitor. Etiam nibh justo, efficitur sit amet
+        efficitur accumsan, tincidunt non elit. Duis semper purus vitae quam viverra, non ultrices elit viverra. Pellentesque
+        habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam iaculis feugiat luctus.
+        Suspendisse eget sodales ligula.
+      column1Width: 8
+      column2Content: >
+        Nam ligula eros, vestibulum sed sem sed, interdum molestie elit. Morbi fringilla leo augue, ut ultricies enim
+        condimentum nec. Duis ac pharetra tellus, ac pellentesque risus. Integer varius dictum sapien in venenatis. Sed varius
+        sapien tincidunt faucibus ultrices. Curabitur bibendum lorem vel urna vulputate dignissim. Nam sed orci lobortis,
+        placerat neque eu, tempus purus. Sed sit amet erat vitae nisi hendrerit tincidunt et nec odio. Nam ac ex nec libero
+        venenatis consectetur ut a felis. Nam malesuada, dui eu aliquam elementum, lacus risus congue orci, eu varius dui enim
+        at nibh. Praesent commodo felis luctus iaculis sodales. Ut ac blandit quam, a convallis risus.
+      column2Width: 4
+      column2CSSClasses: text-right
+  section_9:
+    plugin: WAI/SimpleContent/Snippet
+    settings:
+      snippetName: homepage-modal
+  footer:
+    plugin: WAI/Common/Footer
+    settings:
+      mainMenuId: menu("header.yml")
+      secondaryMenuId: menu("footer.yml")
+      mainMenuTitle: translate("Pages")
+      secondaryMenuTitle: translate("Our Company")
+      showContactAddress: false
+      showContactEmail: true
+      showContactPhoneNumber: true
+      contactTitle: translate("Contact us")
+      showPayments: true
+      showSocialMedia: true
+      showMainMenu: true
+      showSecondaryMenu: true

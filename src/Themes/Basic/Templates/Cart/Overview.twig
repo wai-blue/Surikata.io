@@ -35,8 +35,8 @@
         </div>
     </div>
     <div class="buttons">
-      <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Order/CartOverview', 'getWebPageUrl') }}" class="btn btn-view">view cart</a>
-      <a href="{{ rootUrl }}/{{ callPluginMethod('WAI/Order/Checkout', 'getWebPageUrl') }}" class="btn btn-checkout">checkout</a>
+      <a href="{{ rootUrl }}/{{ getUrlForPlugin('WAI/Order/CartOverview') }}" class="btn btn-view">view cart</a>
+      <a href="{{ rootUrl }}/{{ getUrlForPlugin('WAI/Order/Checkout') }}" class="btn btn-checkout">checkout</a>
     </div>
     <!--<p class="minicart-message">Free Shipping on All Orders Over $100!</p>-->
   </div>
@@ -49,7 +49,7 @@
             <p class="text-large">{{ settings.customTexts.emptyCart|raw }}</p>
             <a 
               class="empty-cart-btn" 
-              href="{{ rootUrl }}/{{ callPluginMethod('WAI/Product/Catalog', 'getWebPageUrl') }}"
+              href="{{ rootUrl }}/{{ getUrlForPlugin('WAI/Product/Catalog') }}"
             ><i class="fa fa-chevron-left"> </i> Continue shopping</a>
           </div>
         </div>
@@ -65,7 +65,7 @@
       </p>
       <a
         class="empty-cart-btn"
-        href="{{ rootUrl }}/{{ callPluginMethod('WAI/Product/Catalog', 'getWebPageUrl') }}">
+        href="{{ rootUrl }}/{{ getUrlForPlugin('WAI/Product/Catalog') }}">
         <i class="fa fa-chevron-left"> </i> Continue shopping
       </a>
     </div>

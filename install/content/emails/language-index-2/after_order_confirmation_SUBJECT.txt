@@ -1,1 +1,0 @@
-Objednávka č. {% number %} - Surikata eshop

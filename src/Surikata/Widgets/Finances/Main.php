@@ -30,23 +30,24 @@ class Finances extends \ADIOS\Core\Widget {
     }
   }
 
-  public static function calculatePricesForInvoice($items) {
+  public function calculatePricesForInvoice($items) {
+    $priceDecimals = $this->adios->locale->priceDecimals();
+
     foreach ($items as $key => $item) {
       $quantity = $item['quantity'];
       $vatPercent = $item['vat_percent'];
 
-      $unitPriceExclVAT = round($item['unit_price'], 2);
-      $totalPriceExclVAT = round($unitPriceExclVAT * $quantity, 2);
+      $unitPriceExclVAT = round($item['unit_price'], $priceDecimals);
+      $totalPriceExclVAT = round($unitPriceExclVAT * $quantity, $priceDecimals);
 
-      $unitVAT = round($unitPriceExclVAT * ($vatPercent / 100), 2);
-      $totalVAT = round($unitVAT * $quantity, 2);
+      $unitVAT = round($unitPriceExclVAT * ($vatPercent / 100), $priceDecimals);
+      $totalVAT = round($unitVAT * $quantity, $priceDecimals);
 
       $unitPriceInclVAT = $unitPriceExclVAT + $unitVAT;
       $totalPriceInclVAT = $totalPriceExclVAT + $totalVAT;
 
       $items[$key]['PRICES_FOR_INVOICE']['vatPercent'] = $vatPercent;
 
-      // REVIEW: poprekladat
       $items[$key]['PRICES_FOR_INVOICE']['unitPriceExclVAT'] = $unitPriceExclVAT;
       $items[$key]['PRICES_FOR_INVOICE']['unitVAT'] = $unitVAT;
       $items[$key]['PRICES_FOR_INVOICE']['unitPriceInclVAT'] = $unitPriceInclVAT;

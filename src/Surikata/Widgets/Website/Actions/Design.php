@@ -11,7 +11,9 @@ class Design extends \ADIOS\Core\Widget\Action {
     ];
     foreach ($this->adios->websiteRenderer->themeFolders as $themeFolder) {
       foreach (scandir($themeFolder) as $file) {
-        if (strpos(".", $file) !== FALSE) continue;
+        if (strpos($file, ".") !== FALSE) continue;
+        if (!file_exists("{$themeFolder}/{$file}/Main.php")) continue;
+
         $themeEnumValues[$file] = $file;
       }
     }
@@ -206,8 +208,8 @@ class Design extends \ADIOS\Core\Widget\Action {
                 "title" => $this->translate("Custom CSS statements"),
                 "input" => $this->adios->ui->Input([
                   "type" => "text",
-                  "uid" => "{$this->uid}_custom_css",
-                  "value" => $settings['custom_css'],
+                  "uid" => "{$this->uid}_customCss",
+                  "value" => $settings['customCss'],
                 ]),
                 "description" => $this->translate("Only for experienced users. CSS knowledge is required. Supported CSS statements may vary in different templates."),
               ],

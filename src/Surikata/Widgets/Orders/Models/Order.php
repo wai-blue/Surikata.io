@@ -564,6 +564,18 @@ class Order extends \ADIOS\Core\Widget\Model {
       throw new \ADIOS\Widgets\Orders\Exceptions\EmptyRequiredFields(join(",", $requiredFieldsEmpty));
     }
 
+    if (empty($orderData['id_delivery_service']) && $checkRequiredFields) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService;
+    }
+
+    if (empty($orderData['id_payment_service']) && $checkRequiredFields) {
+      throw new \ADIOS\Widgets\Orders\Exceptions\UnknownPaymentService;
+    }
+
+    $this->adios->dispatchEventToPlugins("onOrderBeforePlaceOrder", [
+      "orderData" => $orderData,
+    ]);
+
     if ($idAddress <= 0 && $idCustomer != 0) {
       $idAddress = $customerAddressModel->saveAddress($idCustomer, $orderData);
     }
@@ -585,14 +597,6 @@ class Order extends \ADIOS\Core\Widget\Model {
 
     if ($cartContents === NULL && !empty($customerUID)) {
       $cartContents = $cartModel->getCartContents($customerUID);
-    }
-
-    if (empty($orderData['id_delivery_service']) && $checkRequiredFields) {
-      throw new \ADIOS\Widgets\Orders\Exceptions\UnknownDeliveryService;
-    }
-
-    if (empty($orderData['id_payment_service']) && $checkRequiredFields) {
-      throw new \ADIOS\Widgets\Orders\Exceptions\UnknownPaymentService;
     }
 
     if (empty($orderData['confirmation_time'])) {
@@ -705,6 +709,7 @@ class Order extends \ADIOS\Core\Widget\Model {
 
     $placedOrderData = $this->adios->dispatchEventToPlugins("onOrderAfterPlaceOrder", [
       "order" => $placedOrderData,
+      "orderData" => $orderData,
       "cartContents" => $cartContents
     ])["order"];
 
@@ -1393,7 +1398,9 @@ class Order extends \ADIOS\Core\Widget\Model {
 
     // REVIEW: preverit, ci tieto vzorce budu fungovat aj pre velke mnozstva
     // produktov s cenami na 4 a viac des. miest
-    $order['ITEMS'] = \ADIOS\Widgets\Finances::calculatePricesForInvoice($order['ITEMS']);
+    $order['ITEMS'] = (new \ADIOS\Widgets\Finances($this->adios))
+      ->calculatePricesForInvoice($order['ITEMS'])
+    ;
 
     foreach ($order['ITEMS'] as $item) {
       $summary['price_total_excl_vat'] += $item['PRICES_FOR_INVOICE']['totalPriceExclVAT'];

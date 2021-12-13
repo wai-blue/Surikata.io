@@ -1,6 +1,7 @@
 Register: Registrujte sa
 Email is incomplete or invalid.: Email je v nesprávnom formáte
 Such an account already exists.: Tento email už je registrovaný
+Given passwords do not match: Zadané heslá nie sú rovnaké
 An unexpected error occurred while creating the account. Please try again later.: Nastala neočakávaná chyba pri vytváraní účtu. Skúste znova neskôr.
 E-mail: E-mail
 Password: Heslo

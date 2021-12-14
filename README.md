@@ -40,14 +40,15 @@ Now, you should have following folder structure in your project folder:
 Following packages should be installed:
 
     {
-        "require": {
-            "twig/twig": "^3.0",
-            "hoa/regex": "1.17.01.13",
-            "illuminate/database": "^8.19",
-            "twig/markdown-extra": "^3.2",
-            "erusev/parsedown": "^1.7",
-            "voku/html-compress-twig": "^4.0",
-        }
+      "require": {
+        "twig/twig": "^3.0",
+        "illuminate/database": "^8.19",
+        "twig/markdown-extra": "^3.2",
+        "erusev/parsedown": "^1.7",
+        "voku/html-compress-twig": "^4.0",
+        "monolog/monolog": "^2.3",
+        "symfony/yaml": "^5.4"
+      }
     }
 
 Note: If for some reason this installation fails, install the packages manually.

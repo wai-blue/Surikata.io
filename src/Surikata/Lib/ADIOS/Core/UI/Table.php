@@ -410,9 +410,10 @@ class Table extends \ADIOS\Core\UI\View {
                 "text" => $this->translate("Export to CSV"),
                 "onclick" => "
                   let tmpTableParams = Base64.encode(JSON.stringify(ui_table_params['{$this->uid}']));
-                  window.open(
-                    '{$this->adios->config['url']}/{$exportCsvAction}?tableParams=' + tmpTableParams
-                  );
+                  window_popup('{$exportCsvAction}', {tableParams: tmpTableParams}, {'type': 'POST'});
+                  // window.open(
+                  //   '{$this->adios->config['url']}/{$exportCsvAction}?tableParams=' + tmpTableParams
+                  // );
                 ",
               ];
             }

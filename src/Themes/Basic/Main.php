@@ -4,7 +4,7 @@ namespace Surikata\Themes;
 
 class Basic extends \Surikata\Core\Web\Theme {
 
-  public function getDefaultColorsAndStyles() {
+  public function getDefaultColorsAndStyles($installer) {
     return [
       "themeMainColor" => "#17C3B2",
       "themeSecondColor" => "#222222",
@@ -27,7 +27,7 @@ class Basic extends \Surikata\Core\Web\Theme {
       "footerLinkColor" => "#17C3B2",
       "footerHeadingColor" => "#ffffff",
 
-      "custom_css" => "
+      "customCss" => "
         li.slideshow-basic {
           background: rgb(29,6,7);
           background: linear-gradient(180deg, rgba(29,6,7,1) 0%, rgba(29,6,7,0.75) 15%, rgba(73,18,18,0.6) 35%, rgba(156,36,38,0) 100%);

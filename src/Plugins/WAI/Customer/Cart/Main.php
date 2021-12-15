@@ -38,10 +38,12 @@ namespace Surikata\Plugins\WAI\Customer {
     public function renderCartContentsOverview() {
       $tmpParams = $this->websiteRenderer->twigParams;
       $tmpParams["cartContents"] = $this->getCartContents(TRUE);
-      return $this->websiteRenderer->twig->render(
-        "{$this->websiteRenderer->twigTemplatesSubDir}/Cart/Overview.twig",
-        $tmpParams
-      );
+
+      return $this->websiteRenderer->renderSnippets("cart-overview-for-navigation", $tmpParams);
+      // return $this->websiteRenderer->twig->render(
+      //   "{$this->websiteRenderer->twigTemplatesSubDir}/Cart/Overview.twig",
+      //   $tmpParams
+      // );
     }
 
     public function addToCart($idProduct, $qty) {

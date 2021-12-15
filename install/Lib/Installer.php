@@ -39,6 +39,7 @@ class Installer {
     $adminPanel->console->info("Installation started.");
 
     HelperFunctions::recursiveRmDir($adminPanel->config["files_dir"], [".htaccess"]);
+    HelperFunctions::recursiveRmDir($adminPanelConfig["cache_dir"], [".htaccess"]);
 
     $adminPanel->createMissingFolders();
 
@@ -81,7 +82,6 @@ class Installer {
     $orderTagModel = new \ADIOS\Widgets\Orders\Models\OrderTag($adminPanel);
     $orderTagAssignmentModel = new \ADIOS\Widgets\Orders\Models\OrderTagAssignment($adminPanel);
     $unitModel = new \ADIOS\Widgets\Settings\Models\Unit($adminPanel);
-    $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($adminPanel);
 
     $deliveryServiceModel = new \ADIOS\Widgets\Shipping\Models\DeliveryService($adminPanel);
     $destinationCountryModel = new \ADIOS\Widgets\Shipping\Models\DestinationCountry($adminPanel);
@@ -625,7 +625,6 @@ class Installer {
 
         $zip->close();
 
-        // $adminPanel->console->info("Package stored in ".PROJECT_ROOT_DIR."/install/packages/{$packageFilename}");
       } else {
         $adminPanel->console->error("Failed to create package.");
       }

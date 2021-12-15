@@ -186,13 +186,6 @@ if (($installationConfig['orders'] ?? "") == "yes") $partsToInstall[] = "orders"
 
 if (!$doInstall) {
 
-  // $languageSelectOptions = "";
-  // foreach ($availableLanguages as $availableLanguage) {
-  //   $languageSelectOptions .= "
-  //     <option value='{$availableLanguage}'>{$availableLanguage}</option>
-  //   ";
-  // }
-
   function _getDomainDescriptionInput($domainIndex, $value = "") {
     return "
       <input
@@ -329,28 +322,28 @@ if (!$doInstall) {
           <td><b>Theme</b></td>
         </tr>
         <tr>
-          <td>"._getDomainSlugInput(1, "hello-world")."</td>
-          <td>"._getDomainDescriptionInput(1, "Developer`s Hello World example")."</td>
+          <td>"._getDomainSlugInput(1, "en")."</td>
+          <td>"._getDomainDescriptionInput(1, "English version")."</td>
           <td>"._getDomainLanguageIndexInput(1, 1)."</td>
-          <td>"._getDomainThemeSelect(1, $availableThemes, "HelloWorld")."</td>
+          <td>"._getDomainThemeSelect(1, $availableThemes)."</td>
         </tr>
         <tr>
-          <td>"._getDomainSlugInput(2, "en")."</td>
-          <td>"._getDomainDescriptionInput(2, "English version")."</td>
-          <td>"._getDomainLanguageIndexInput(2, 1)."</td>
+          <td>"._getDomainSlugInput(2, "sk")."</td>
+          <td>"._getDomainDescriptionInput(2, "Slovenská verzia")."</td>
+          <td>"._getDomainLanguageIndexInput(2, 2)."</td>
           <td>"._getDomainThemeSelect(2, $availableThemes)."</td>
         </tr>
         <tr>
-          <td>"._getDomainSlugInput(3, "sk")."</td>
-          <td>"._getDomainDescriptionInput(3, "Slovenská verzia")."</td>
-          <td>"._getDomainLanguageIndexInput(3, 2)."</td>
+          <td>"._getDomainSlugInput(3, "cz")."</td>
+          <td>"._getDomainDescriptionInput(3, "Česká verzia")."</td>
+          <td>"._getDomainLanguageIndexInput(3, 3)."</td>
           <td>"._getDomainThemeSelect(3, $availableThemes)."</td>
         </tr>
         <tr>
-          <td>"._getDomainSlugInput(4, "cz")."</td>
-          <td>"._getDomainDescriptionInput(4, "Česká verzia")."</td>
-          <td>"._getDomainLanguageIndexInput(4, 3)."</td>
-          <td>"._getDomainThemeSelect(4, $availableThemes)."</td>
+          <td>"._getDomainSlugInput(4, "hello-world")."</td>
+          <td>"._getDomainDescriptionInput(4, "Developer`s Hello World example")."</td>
+          <td>"._getDomainLanguageIndexInput(4, 1)."</td>
+          <td>"._getDomainThemeSelect(4, $availableThemes, "HelloWorld")."</td>
         </tr>
       </table>
       <p style='color:#888888'>

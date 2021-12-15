@@ -103,7 +103,9 @@ class ShoppingCart extends \ADIOS\Core\Widget\Model {
       $items[$key]['vat_percent'] = $item['PRODUCT']['vat_percent'];
     }
     
-    $items = \ADIOS\Widgets\Finances::calculatePricesForInvoice($items);
+    $items = (new \ADIOS\Widgets\Finances($this->adios))
+      ->calculatePricesForInvoice($items)
+    ;
 
     foreach ($items as $key => $item) {
       $priceExclVAT += $items[$key]['PRICES_FOR_INVOICE']['totalPriceExclVAT'];

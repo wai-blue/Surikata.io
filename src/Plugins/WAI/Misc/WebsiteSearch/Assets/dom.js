@@ -1,0 +1,3 @@
+class PluginWAIMiscWebsiteSearchDOMClass extends PluginWAIMiscWebsiteSearchAPIClass {
+
+}

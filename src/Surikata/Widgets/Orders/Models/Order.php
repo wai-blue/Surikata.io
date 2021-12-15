@@ -1398,7 +1398,9 @@ class Order extends \ADIOS\Core\Widget\Model {
 
     // REVIEW: preverit, ci tieto vzorce budu fungovat aj pre velke mnozstva
     // produktov s cenami na 4 a viac des. miest
-    $order['ITEMS'] = \ADIOS\Widgets\Finances::calculatePricesForInvoice($order['ITEMS']);
+    $order['ITEMS'] = (new \ADIOS\Widgets\Finances($this->adios))
+      ->calculatePricesForInvoice($order['ITEMS'])
+    ;
 
     foreach ($order['ITEMS'] as $item) {
       $summary['price_total_excl_vat'] += $item['PRICES_FOR_INVOICE']['totalPriceExclVAT'];

@@ -4,6 +4,27 @@
 
   var adios_menu_hidden = 0;
 
+  function window_popup(action, params, options) {
+    if (typeof options == 'undefined') options = {};
+
+    if (options.type == 'POST') {
+      let paramsObj = _ajax_params(params);
+      let formHtml = '';
+
+      formHtml = '<form action="' + _APP_URL + '/' + _action_url(action, {}, true) + '" method=POST target="adios_popup">';
+      for (var i in paramsObj) {
+       formHtml += '<input type="hidden" name="' + i + '" value="' + paramsObj[i] + '" />';
+      }
+      formHtml += '</form>';
+
+      // console.log(_APP_URL + '/' + _action_url(action, {}, true));
+      // console.log(formHtml);
+      $(formHtml).appendTo('body').submit();
+    } else {
+      window.open(_APP_URL + '/' + _ajax_action_url(action, params));
+    }
+  }
+
   function window_render(action, params, onclose) {
     if (typeof params == 'undefined') params = {};
     if (typeof options == 'undefined') options = {};

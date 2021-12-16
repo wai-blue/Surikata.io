@@ -59,6 +59,10 @@ class Products extends \ADIOS\Core\Widget {
               ],
            ],
           ],
+          [
+            "title" => $this->translate("Import"),
+            "onclick" => "window_render('Products/Import/CSV');",
+          ],
         ],
       ];
     }

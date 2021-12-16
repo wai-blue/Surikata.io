@@ -664,6 +664,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     return $this->adios->db->insert_row($this->table, $data, FALSE, FALSE, $this);
   }
 
+  public function insertOrUpdateRow($data) {
+    return $this->adios->db->insert_or_update_row($this->table, $data, FALSE, FALSE, $this);
+  }
+
   public function insertRandomRow($data = [], $dictionary = []) {
     return $this->adios->db->insert_random_row($this->table, $data, $dictionary, $this);
   }

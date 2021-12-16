@@ -29,7 +29,7 @@ class Customers extends \ADIOS\Core\Widget {
           // ],
           [
             "title" => $this->translate("Categories"),
-            "onclick" => "desktop_update('Customers/Categories');",            
+            "onclick" => "desktop_update('Customers/Categories');",
           ],
           [
             "title" => $this->translate("Analytics"),
@@ -43,6 +43,10 @@ class Customers extends \ADIOS\Core\Widget {
                 "onclick" => "desktop_update('Customers/SearchedQueries');",
               ],
             ],
+          ],
+          [
+            "title" => $this->translate("Import"),
+            "onclick" => "window_render('Customers/Import/CSV');",
           ],
         ],
       ];

@@ -600,23 +600,23 @@ class DB {
      * @param string name of a table to dump
      * @param bool if this param is TRUE, it also creates the table
      */
-    public function dump_data($table_name, $table_create = false)
-    {
-        $sql = '';
+    // public function dump_data($table_name, $table_create = false)
+    // {
+    //     $sql = '';
 
-        if ($table_create) {
-            $sql .= $this->_sql_table_create($table_name)."\n\n";
-        }
+    //     if ($table_create) {
+    //         $sql .= $this->_sql_table_create($table_name)."\n\n";
+    //     }
 
-        $rows = $this->get_all_rows($table_name, ["order" => "id asc"]);
-        if (is_array($rows)) {
-            foreach ($rows as $key => $value) {
-                $sql .= $this->insert_row_query($table_name, $value, $dumping_data = true).";\n";
-            }
-        }
+    //     $rows = $this->get_all_rows($table_name, ["order" => "id asc"]);
+    //     if (is_array($rows)) {
+    //         foreach ($rows as $key => $value) {
+    //             $sql .= $this->insert_row_query($table_name, $value, $dumping_data = true).";\n";
+    //         }
+    //     }
 
-        return $sql;
-    }
+    //     return $sql;
+    // }
 
     /**
      * Returns part of SQL command representing the value of specified column to
@@ -691,12 +691,12 @@ class DB {
      *
      * @see _sql_column_data
      */
-    public function insert_row_query($table, $data, $dumpingData = false) {
-      $SQL = "insert into `{$table}` set ";
+    public function insert_row_query($table_name, $data, $dumpingData = false) {
+      $SQL = "";
 
       $addIdColumn = TRUE;
       if ($dumpingData) $addIdColumn = FALSE;
-      if (!isset($this->tables[$table]['id'])) $addIdColumn = FALSE;
+      if (!isset($this->tables[$table_name]['id'])) $addIdColumn = FALSE;
       
       if ($addIdColumn) {
         if (!isset($data['id']) || $data['id'] <= 0) {
@@ -707,13 +707,13 @@ class DB {
         }
       }
 
-      foreach ($this->tables[$table] as $col_name => $col_definition) {
+      foreach ($this->tables[$table_name] as $col_name => $col_definition) {
         if (!$col_definition['virtual'] && $col_name != '%%table_params%%') {
           if ($data[$col_name] !== NULL) {
             if (strpos((string) $data[$col_name], "SQL:") === 0) {
-                $tmp_sql = "`{$col_name}` = (".substr($data[$col_name], 4)."), ";
+              $tmp_sql = "`{$col_name}` = (".substr($data[$col_name], 4)."), ";
             } else {
-                $tmp_sql = $this->_sql_column_data($table, $col_name, $data, $dumpingData);
+              $tmp_sql = $this->_sql_column_data($table_name, $col_name, $data, $dumpingData);
             }
 
             $SQL .= $tmp_sql;
@@ -723,7 +723,7 @@ class DB {
         }
       }
 
-      $SQL = substr($SQL, 0, -2).';;';
+      $SQL = substr($SQL, 0, -2);
 
       return $SQL;
     }
@@ -739,15 +739,35 @@ class DB {
      * @see insert_row_query
      */
     public function insert_row($table_name, $data, $only_sql_command = false, $dumping_data = false, $initiatingModel = NULL) {
-      global $_FILES;
-
-      $allowed = true;
-
       if ($data['id'] <= 0) {
         unset($data['id']);
       }
 
-      $sql = $this->insert_row_query($table_name, $data, $dumping_data);
+      $sql = "insert into `{$table_name}` set ";
+      $sql .= $this->insert_row_query($table_name, $data, $dumping_data);
+
+      if ($only_sql_command) {
+        return $sql."\n";
+      } else {
+        $this->multiQuery($sql, ";;\n", $initiatingModel);
+        $inserted_id = $this->insert_id();
+
+        return $inserted_id;
+      }
+    }
+
+    public function insert_or_update_row($table_name, $data, $only_sql_command = false, $dumping_data = false, $initiatingModel = NULL) {
+      if ($data['id'] <= 0) {
+        unset($data['id']);
+      }
+
+      $dataWithoutId = $data;
+      unset($dataWithoutId['id']);
+
+      $sql = "insert into `{$table_name}` set ";
+      $sql .= $this->insert_row_query($table_name, $data, $dumping_data);
+      $sql .= " on duplicate key update ";
+      $sql .= $this->insert_row_query($table_name, $dataWithoutId, TRUE);
 
       if ($only_sql_command) {
         return $sql."\n";
@@ -831,7 +851,7 @@ class DB {
       return $this->insert_row($table_name, $data, FALSE, FALSE, $initiatingModel);
     }
 
-//
+    //
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

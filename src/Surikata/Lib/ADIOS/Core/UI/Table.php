@@ -57,7 +57,7 @@ class Table extends \ADIOS\Core\UI\View {
         'show_add_button' => true,
         'show_search_button' => true,
         'show_export_csv_button' => true,
-        'show_import_csv_button' => false, // Dusan: 22.11.2021, nebolo dokoncene, ale potreboval som mergnut do devel
+        'show_import_csv_button' => false,
         'refresh_action' => 'UI/Table',
         'items_per_page' => 25,
         'allow_order_modification' => true,
@@ -428,7 +428,7 @@ class Table extends \ADIOS\Core\UI\View {
                   let tmpTableParams = Base64.encode(JSON.stringify(ui_table_params['{$this->uid}']));
                   window_render(
                     '{$importCsvAction}',
-                    {tableParams: tmpTableParams}
+                    { model: '".ads($this->params['model'])."' }
                   );
                 ",
               ];

@@ -148,7 +148,7 @@ function ui_input_upload_file(uid) {
   let fileInput = $('#' + uid + '_file_input');
   let formData = new FormData();
   formData.append('upload', fileInput[0].files[0]);
-  formData.append('folderPath', $('#' + uid).data(''));
+  formData.append('folderPath', $('#' + uid).data('subdir'));
 
   if ($('#' + uid + '_file_input').val() != '') {
     $('#' + uid + '_info_div').css('display', 'inline-block');

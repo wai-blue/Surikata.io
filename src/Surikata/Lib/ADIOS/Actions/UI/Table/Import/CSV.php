@@ -14,17 +14,9 @@ namespace ADIOS\Actions\UI\Table\Import;
  * @package UI\Actions
  */
 class CSV extends \ADIOS\Core\Action {
-  public static $hideDefaultDesktop = TRUE;
+  // public static $hideDefaultDesktop = TRUE;
 
   public function render() {
-    $model = $this->adios->getModel($this->params['model']);
-    // $columns = $model->columns();
-    // $tableParams = json_decode(base64_decode($this->params['tableParams']), TRUE);
-
-    // $uiTable = new \ADIOS\Core\UI\Table($this->adios, $tableParams);
-    // $data = $uiTable->data;
-    // $firstRow = reset($data);
-
     $fileUploadInput = new \ADIOS\Core\UI\Input(
       $this->adios,
       [
@@ -42,26 +34,78 @@ class CSV extends \ADIOS\Core\Action {
         }
 
         function {$this->uid}_import() {
-          console.log($('#{$this->uid}_csv_file').val());
+          let warningText = '';
+          warningText += '".$this->translate("WARNING !!!")."\\n';
+          warningText += '\\n';
+          warningText += '".$this->translate("Some data may be overwritten or even lost.")."\\n';
+          warningText += '\\n';
+          warningText += '".$this->translate("Action cannot be undone.")."\\n';
+          warningText += '\\n';
+          warningText += '".$this->translate("Continue with import?")."';
+
+          if (confirm(warningText)) {
+            let data = ui_form_get_values('{$this->uid}_form', '{$this->uid}_');
+            data.model = '{$this->params['model']}';
+            window_render(
+              'UI/Table/Import/CSV/Import',
+              data
+            );
+          }
         }
 
         function {$this->uid}_previewCsv() {
-          let csvFile = $('#{$this->uid}_csv_file').val();
-
           _ajax_update(
             'UI/Table/Import/CSV/Preview',
             {
+              'parentUid': '{$this->uid}',
               'model': '{$this->params['model']}',
-              'csvFile': csvFile,
+              'csvFile': $('#{$this->uid}_csv_file').val(),
+              'columnNamesInFirstLine': ($('#{$this->uid}_column_names_in_first_line').is(':checked') ? '1' : '0'),
+              'separator': $('#{$this->uid}_separator').val(),
             },
             '{$this->uid}_preview_div'
           );
         }
       </script>
 
-      ".$fileUploadInput->render()."
-
-      <div id='{$this->uid}_preview_div'></div>
+      <div id='{$this->uid}_form' class='adios ui Form table'>
+        <div class='adios ui Form subrow'>
+          <div class='adios ui Form form_title'>
+            ".$this->translate("CSV file")."
+          </div>
+          <div class='adios ui Form form_input'>
+            ".$fileUploadInput->render()."
+          </div>
+        </div>
+        <div class='adios ui Form subrow'>
+          <div class='adios ui Form form_title'>
+            <label for='{$this->uid}_column_names_in_first_line'>".$this->translate("Column names are in the first line")."</label>
+          </div>
+          <div class='adios ui Form form_input'>
+            <input type='checkbox' id='{$this->uid}_column_names_in_first_line' checked onchange='{$this->uid}_previewCsv();'>
+          </div>
+        </div>
+        <div class='adios ui Form subrow'>
+          <div class='adios ui Form form_title'>
+            ".$this->translate("Separator")."
+          </div>
+          <div class='adios ui Form form_input'>
+            <select id='{$this->uid}_separator' onchange='{$this->uid}_previewCsv();'>
+              <option value=','>,</option>
+              <option value=';'>;</option>
+              <option value='TAB'>TAB</option>
+            </select>
+          </div>
+        </div>
+        <div class='adios ui Form subrow'>
+          <div class='adios ui Form form_title'>
+            ".$this->translate("Preview")."
+          </div>
+          <div class='adios ui Form form_input'>
+            <div id='{$this->uid}_preview_div'></div>
+          </div>
+        </div>
+      </div>
     ";
 
     $window = $this->adios->ui->Window([
@@ -77,7 +121,7 @@ class CSV extends \ADIOS\Core\Action {
       ]),
       $this->adios->ui->button([
         'type' => 'save',
-        'text' => $this->translate('Import !'),
+        'text' => $this->translate("Start import !"),
         'onclick' => "{$this->uid}_import();",
       ]),
     ];

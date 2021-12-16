@@ -30,26 +30,20 @@ class Product extends \ADIOS\Core\Widget\Model {
         "type" => "varchar",
         "title" => $this->translate("Name")." (".$this->translate($languageName).")",
         "show_column" => ($languageIndex == 1),
-        "is_searchable" => ($languageIndex == 1),
+        "is_searchable" => TRUE,
       ];
       $translatedColumns["brief_lang_{$languageIndex}"] = [
         "type" => "varchar",
-        "title" => $this->translate("Short description")." ({$languageName})",
+        "title" => $this->translate("Short description")." (".$this->translate($languageName).")",
         "show_column" => FALSE,
-        "is_searchable" => ($languageIndex == 1),
+        "is_searchable" => TRUE,
       ];
       $translatedColumns["description_lang_{$languageIndex}"] = [
         "type" => "text",
-        "title" => $this->translate("Description")." ({$languageName})",
+        "title" => $this->translate("Description")." (".$this->translate($languageName).")",
         "interface" => "formatted_text",
         "show_column" => FALSE,
-        "is_searchable" => ($languageIndex == 1),
-      ];
-      $translatedColumns["gift_lang_{$languageIndex}"] = [
-        "type" => "varchar",
-        "title" => $this->translate("Gift")." ({$languageName})",
-        "show_column" => FALSE,
-        "is_searchable" => ($languageIndex == 1),
+        "is_searchable" => TRUE,
       ];
     }
 
@@ -525,7 +519,6 @@ class Product extends \ADIOS\Core\Widget\Model {
         $tabTranslations[] = "name_lang_{$languageIndex}";
         $tabTranslations[] = "brief_lang_{$languageIndex}";
         $tabTranslations[] = "description_lang_{$languageIndex}";
-        $tabTranslations[] = "gift_lang_{$languageIndex}";
       }
       $i++;
     }

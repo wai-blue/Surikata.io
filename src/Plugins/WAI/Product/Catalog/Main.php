@@ -128,6 +128,20 @@ namespace Surikata\Plugins\WAI\Product {
           $categoryIdsToBrowse[] = $filter['idCategory'];
 
           $productsQuery->whereIn('id_category', $categoryIdsToBrowse);
+
+          // Add additional categories to query
+          $productCategoryAssignmentModel = new \ADIOS\Widgets\Products\Models\ProductCategoryAssignment(
+            $this->websiteRenderer->adminPanel
+          );
+          $productIdsFromAdditionalCategories = $productCategoryAssignmentModel
+            ->distinct('id_product')
+            ->whereIn('id_category', $categoryIdsToBrowse)
+            ->pluck('id_product')
+            ->toArray()
+          ;
+
+          $productsQuery->orWhereIn('id',  $productIdsFromAdditionalCategories);
+
         }
 
         if (!empty($filter['filteredBrands'])) {

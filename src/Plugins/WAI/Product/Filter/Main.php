@@ -24,8 +24,14 @@ namespace Surikata\Plugins\WAI\Product {
         $allFeaturesAssignments = $productFeatureAssignmentModel->getAllCached();
 
         if (empty(self::$allCategories)) {
+          self::$allCategories = $productCategoryModel->pdoPrepareExecuteAndFetch(
+            "select * from :table order by order_index",
+            [],
+            "id"
+          );
+          
           self::$allCategories = $productCategoryModel->translateForWeb(
-            $productCategoryModel->orderBy('order_index')->get()->toArray(),
+            self::$allCategories,
             $languageIndex
           );
         }

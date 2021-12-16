@@ -180,7 +180,7 @@ class Form extends \ADIOS\Core\UI\View
       $this->delete_button->add_class("{$this->params['uid']}_button");
     }
 
-    if (TRUE || $this->params['show_copy_button']) {
+    if ($this->params['show_copy_button']) {
       if ('' == $this->params['copy_button_params']['type']) {
         $this->params['copy_button_params']['type'] = 'copy';
       }

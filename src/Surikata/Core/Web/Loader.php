@@ -187,7 +187,6 @@ class Loader extends \Cascada\Loader {
       ));
 
       // podobny princip, ako callSurikataMethod, akurat sa vola metoda pluginu
-      // NETESTOVANE
       $this->twig->addFunction(new \Twig\TwigFunction(
         'callPluginMethod',
         function ($pluginName, $function, $params = []) {
@@ -195,6 +194,15 @@ class Loader extends \Cascada\Loader {
             [$this->getPlugin($pluginName), $function],
             [$params]
           );
+        }
+      ));
+
+      // podobny princip, ako callSurikataMethod, akurat sa vola metoda pluginu
+      $this->twig->addFunction(new \Twig\TwigFunction(
+        'getUrlForPlugin',
+        function ($pluginName, $urlParams = []) {
+          $plugin = $this->getPlugin($pluginName);
+          return $plugin->getWebPageUrl($urlParams);
         }
       ));
 
@@ -238,63 +246,14 @@ class Loader extends \Cascada\Loader {
       $this->twig->addFunction(new \Twig\TwigFunction(
         'insertSnippets',
         function ($snippetName, $renderParams = []) {
-          $html = "";
-          foreach ($this->adminPanel->plugins as $pluginName) {
-            $templateFile = "{$this->themeDir}/Templates/Snippets/{$pluginName}.twig";
-
-            if (is_file($templateFile)) {
-              $pluginTwigParams = [];
-              $plugin = $this->getPlugin($pluginName);
-
-              if (is_object($plugin)) {
-                $pluginTwigParams = $plugin->getTwigParams(array_merge(
-                  $this->currentRenderedPlugin->twigRenderParams,
-                  $renderParams
-                ));
-              }
-
-              $snippetRenderParams = array_merge(
-                $this->currentRenderedPlugin->twigRenderParams,
-                $renderParams,
-                $pluginTwigParams
-              );
-              $snippetRenderParams["snippetName"] = $snippetName;
-              $snippetRenderParams["system"]["availableVariables"] = array_keys($snippetRenderParams);
-
-              $html .= $this->twig
-                ->render("Templates/Snippets/{$pluginName}.twig", $snippetRenderParams)
-              ;
-            }
-          }
-          return $html;
+          return $this->renderSnippets($snippetName, $renderParams);
         }
       ));
 
       $this->twig->addFunction(new \Twig\TwigFunction(
         'insertSnippet',
         function ($pluginName, $snippetName, $renderParams = []) {
-          $html = "";
-
-          $templateFile = "{$this->themeDir}/Templates/Snippets/{$pluginName}.twig";
-
-          $pluginTwigParams = [];
-          $plugin = $this->getPlugin($pluginName);
-
-          if (is_object($plugin)) {
-            $pluginTwigParams = $plugin->getTwigParams($renderParams);
-          }
-
-          if (is_file($templateFile)) {
-            $renderParams = array_merge($pluginTwigParams, $renderParams);
-            $renderParams["snippetName"] = $snippetName;
-            $renderParams["system"]["availableVariables"] = array_keys($renderParams);
-
-            $html = $this->twig
-              ->render("Templates/Snippets/{$pluginName}.twig", $renderParams)
-            ;
-          }
-
-          return $html;
+          return $this->renderSnippet($pluginName, $snippetName, $renderParams);
         }
       ));
 
@@ -401,6 +360,53 @@ class Loader extends \Cascada\Loader {
 
     return $siteMap;
 
+  }
+
+  public function renderSnippet($pluginName, $snippetName, $renderParams) {
+    $html = "";
+
+    $snippetTemplateFile1 = "Templates/Snippets/{$pluginName}.twig";
+    $snippetTemplateFile2 = "Templates/Snippets/{$pluginName}/{$snippetName}.twig";
+
+    $templateFile = "";
+    if (is_file("{$this->themeDir}/{$snippetTemplateFile1}")) {
+      $templateFile = $snippetTemplateFile1;
+    } else if (is_file("{$this->themeDir}/{$snippetTemplateFile2}")) {
+      $templateFile = $snippetTemplateFile2;
+    }
+
+    if (!empty($templateFile)) {
+      $pluginTwigParams = [];
+      $plugin = $this->getPlugin($pluginName);
+
+      if (is_object($plugin)) {
+        $pluginTwigParams = $plugin->getTwigParams($renderParams);
+      }
+
+      $snippetRenderParams = array_merge(
+        $this->currentRenderedPlugin->twigRenderParams,
+        $renderParams,
+        $pluginTwigParams
+      );
+      $snippetRenderParams["snippetName"] = $snippetName;
+      $snippetRenderParams["system"]["availableVariables"] = array_keys($snippetRenderParams);
+
+      $html = $this->twig
+        ->render($templateFile, $snippetRenderParams)
+      ;
+    }
+
+    return $html;
+  }
+
+  public function renderSnippets($snippetName, $renderParams) {
+    $html = "";
+
+    foreach ($this->adminPanel->plugins as $pluginName) {
+      $html .= $this->renderSnippet($pluginName, $snippetName, $renderParams);
+    }
+
+    return $html;
   }
 
   public function onGeneralControllerAfterRouting() {

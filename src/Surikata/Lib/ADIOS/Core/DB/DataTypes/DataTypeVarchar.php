@@ -49,9 +49,13 @@ class DataTypeVarchar extends DataType
         if (is_array($params['col_definition']['enum_values'])) {
             $html = l($params['col_definition']['enum_values'][$value]);
         } else {
-            $html = mb_substr($value, 0, ($params['col_definition']['wa_list_char_length'] ? $params['col_definition']['wa_list_char_length'] : 80), 'utf-8');
-            if (strlen($html) < strlen($value)) {
-                $html .= '...';
+            if (empty($value)) {
+              $html = "<div style='color:#EEEEEE'>[N/A]</div>";
+            } else {
+                $html = mb_substr($value, 0, ($params['col_definition']['wa_list_char_length'] ? $params['col_definition']['wa_list_char_length'] : 80), 'utf-8');
+                if (strlen($html) < strlen($value)) {
+                    $html .= '...';
+                }
             }
         }
 

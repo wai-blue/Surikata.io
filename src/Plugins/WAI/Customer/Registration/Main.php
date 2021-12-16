@@ -37,6 +37,7 @@ namespace Surikata\Plugins\WAI\Customer {
           | \ADIOS\Widgets\Customers\Exceptions\AccountAlreadyExists
           | \ADIOS\Widgets\Customers\Exceptions\CreateAccountUnknownError
           | \ADIOS\Widgets\Customers\Exceptions\EmptyRequiredFields
+          | \ADIOS\Widgets\Customers\Exceptions\NewPasswordsDoNotMatch
           $e
         ) {
           $returnArray["status"] = "FAIL";

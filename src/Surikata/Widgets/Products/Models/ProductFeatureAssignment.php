@@ -83,7 +83,7 @@ class ProductFeatureAssignment extends \ADIOS\Core\Widget\Model {
         ]
       ];
     } else {
-      $featuresModel = new ProductFeature();
+      $featuresModel = new ProductFeature($this->adios);
       if (isset($data['id_feature'])) {
         $params['columns']['id_feature']['disabled'] = TRUE;
         $feature = $featuresModel->getById($data["id_feature"]);

@@ -399,7 +399,9 @@ class Invoice extends \ADIOS\Core\Widget\Model {
         where p.id_invoice = {$invoice['id']}
       ");
 
-      $invoice['ITEMS'] = \ADIOS\Widgets\Finances::calculatePricesForInvoice($invoice['ITEMS']);
+      $invoice['ITEMS'] = (new \ADIOS\Widgets\Finances($this->adios))
+        ->calculatePricesForInvoice($invoice['ITEMS'])
+      ;
 
       // $sumaCelkomBezDPH = 0;
       // $sumaCelkomSDPH = 0;
@@ -493,7 +495,9 @@ class Invoice extends \ADIOS\Core\Widget\Model {
       'price_total_incl_vat' => 0,
     ];
 
-    $invoice['ITEMS'] = \ADIOS\Widgets\Finances::calculatePricesForInvoice($invoice['ITEMS']);
+    $invoice['ITEMS'] = (new \ADIOS\Widgets\Finances($this->adios))
+      ->calculatePricesForInvoice($invoice['ITEMS'])
+    ;
 
     foreach ($invoice['ITEMS'] as $item) {
       $summary['vat_total'] += $item['PRICES_FOR_INVOICE']['totalVAT'];

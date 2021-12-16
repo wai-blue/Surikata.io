@@ -15,6 +15,10 @@ class Theme {
     $this->myRootFolder = str_replace("\\", "/", dirname((new \ReflectionClass(get_class($this)))->getFileName()));
   }
 
+  public function translate($string) {
+    return $string;
+  }
+
   public function getLayouts() {
     $layouts = [];
     foreach (scandir("{$this->myRootFolder}/Layouts") as $file) {
@@ -35,10 +39,15 @@ class Theme {
     }
   }
 
-  public function getDefaultColorsAndStyles() {
+  public function getDefaultWebPageContent($pageUrl, $layoutName, $menus) {
+    return NULL;
+  }
+
+  public function getDefaultColorsAndStyles($installer) {
     return [];
   }
 
-  public function onAfterInstall() {
+  public function onAfterInstall($installer) {
+    return NULL;
   }
 }

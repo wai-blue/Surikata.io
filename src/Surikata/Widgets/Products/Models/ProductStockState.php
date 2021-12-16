@@ -15,14 +15,15 @@ class ProductStockState extends \ADIOS\Core\Widget\Model {
 
   public function columns(array $columns = []) {
     $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
+    $columnIndex = $this->adios->getColumnIndexByLanguage();
 
     $translatedColumns = [];
     foreach ($domainLanguages as $languageIndex => $languageName) {
       $translatedColumns["name_lang_{$languageIndex}"] = [
         "type" => "varchar",
         "title" => $this->translate("Stock state")." (".$this->translate($languageName).")",
-        "show_column" => ($languageIndex == 1),
-        "is_searchable" => ($languageIndex == 1),
+        "show_column" => ($languageIndex == $columnIndex),
+        "is_searchable" => ($languageIndex == $columnIndex),
       ];
     }
 

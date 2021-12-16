@@ -1,0 +1,88 @@
+##########################################################
+# emails
+
+emails:
+
+  # signature
+
+  signature: >
+    <p>
+      {% domainName %} - <a href='http://{% domainName %}' target='_blank'>{% domainName %}</a>
+    </p>
+
+  # after_order_confirmation
+
+  after_order_confirmation_SUBJECT: order number {% number %} - Surikata eshop
+  after_order_confirmation_BODY: >
+    <h2>Order Confirmation</h2>
+    <p>Dear Customer,</p>
+    <p>Thank you for your purchase. Your order <b>{% number %}</b></p>
+    <p>we have registered and we will try to equip it as soon as possible.</p>
+    <h2>Order Details</h2>
+    <h3>Billing Address</h3>
+    <ul>
+      <li>Company name: {% invCompanyName %}</li>
+      <li>Company ID: {% companyId %}</li>
+      <li>Company TAX ID: {% companyTaxId %}</li>
+      <li>Company VAT ID: {% companyVatId %}</li>
+      <li>Given name: {% invGivenName %}</li>
+      <li>Last name: {% invFamilyName %}</li>
+      <li>Street 1: {% invStreet1 %}</li>
+      <li>Street 2: {% invStreet2 %}</li>
+      <li>City: {% invCity %}</li>
+      <li>Zip code: {% invZip %}</li>
+    </ul>
+    <h3>Shipping Address</h3>
+    <ul>
+      <li>Given name: {% delGivenName %}</li>
+      <li>Last name: {% delFamilyName %}</li>
+      <li>Street 1: {% delStreet1 %}</li>
+      <li>Street 2: {% delStreet2 %}</li>
+      <li>City: {% delCity %}</li>
+      <li>Zip code: {% delZip %}</li>
+      <li>Phone: {% phoneNumber %}</li>
+      <li>Email: {% email %}</li>
+    </ul>
+
+  # after_registration
+
+  after_registration_SUBJECT: Verify your email address - Surikata eshop
+  after_registration_BODY: >
+    <h2>Hi {% givenName %}!</h2>
+    <p><b>For security purposes, we need you to verify your email address before continuing on our platform.</b></p>
+    <p>Click on the link below or copy and paste this link into your browser to verify your email address.</p>
+    <p><a href="{% validationUrl %}" target="_blank">{% validationUrl %}</a></p>
+
+  # forgotten_password
+
+  forgotten_password_SUBJECT: Password reset - Surikata eshop
+  forgotten_password_BODY: >
+    <h2>Hi {% givenName %}!</h2>
+    <p>Your password recovery link in below.</p>
+    <p><a href="{% passwordRecoveryUrl %}" target="_blank">{% passwordRecoveryUrl %}</a></p>
+
+##########################################################
+# legalDisclaimers
+
+legalDisclaimers:
+
+  generalTerms: >
+    General Terms. Duis ac pharetra tellus, ac pellentesque risus. Integer varius dictum sapien in venenatis. Sed varius
+    sapien tincidunt faucibus ultrices. Curabitur bibendum lorem vel urna vulputate dignissim. Nam sed orci lobortis,
+    placerat neque eu, tempus purus. Sed sit amet erat vitae nisi hendrerit tincidunt et nec odio. Nam ac ex nec libero
+    venenatis consectetur ut a felis. Nam malesuada, dui eu aliquam elementum, lacus risus congue orci, eu varius dui enim
+    at nibh. Praesent commodo felis luctus iaculis sodales. Ut ac blandit quam, a convallis risus.
+
+  privacyPolicy: >
+    Privacy policy. Duis ac pharetra tellus, ac pellentesque risus. Integer varius dictum sapien in venenatis. Sed varius
+    sapien tincidunt faucibus ultrices. Curabitur bibendum lorem vel urna vulputate dignissim. Nam sed orci lobortis,
+    placerat neque eu, tempus purus. Sed sit amet erat vitae nisi hendrerit tincidunt et nec odio. Nam ac ex nec libero
+    venenatis consectetur ut a felis. Nam malesuada, dui eu aliquam elementum, lacus risus congue orci, eu varius dui enim
+    at nibh. Praesent commodo felis luctus iaculis sodales. Ut ac blandit quam, a convallis risus.
+
+  returnPolicy: >
+    Return policy. Duis ac pharetra tellus, ac pellentesque risus. Integer varius dictum sapien in venenatis. Sed varius
+    sapien tincidunt faucibus ultrices. Curabitur bibendum lorem vel urna vulputate dignissim. Nam sed orci lobortis,
+    placerat neque eu, tempus purus. Sed sit amet erat vitae nisi hendrerit tincidunt et nec odio. Nam ac ex nec libero
+    venenatis consectetur ut a felis. Nam malesuada, dui eu aliquam elementum, lacus risus congue orci, eu varius dui enim
+    at nibh. Praesent commodo felis luctus iaculis sodales. Ut ac blandit quam, a convallis risus.

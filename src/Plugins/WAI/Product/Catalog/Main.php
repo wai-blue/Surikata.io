@@ -110,7 +110,7 @@ namespace Surikata\Plugins\WAI\Product {
 
         $productModel = new \ADIOS\Widgets\Products\Models\Product($this->websiteRenderer->adminPanel);
 
-        $productsQuery = $productModel->getQuery();
+        $productsQuery = $productModel->select('id');
 
         if ($filter['idCategory'] > 0) {
           $productCategoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->websiteRenderer->adminPanel);
@@ -155,14 +155,22 @@ namespace Surikata\Plugins\WAI\Product {
           }
         }
 
-        $productModel->addLookupsToQuery($productsQuery);
+        // $productModel->addLookupsToQuery($productsQuery);
         $productsQuery->skip(($page - 1) * $itemsPerPage);
         $productsQuery->take($itemsPerPage);
 
-        self::$catalogInfo["products"] = $productModel->fetchRows($productsQuery);
+        $productIds = $productsQuery->pluck('id')->toArray();
+
+        self::$catalogInfo["products"] = $productModel->getDetailedInfoForListOfProducts(
+          $productIds,
+          $languageIndex
+        );
+
         self::$catalogInfo["products"] = $productModel->addPriceInfoForListOfProducts(self::$catalogInfo["products"]);
-        self::$catalogInfo["products"] = $productModel->unifyProductInformationForListOfProduct(self::$catalogInfo["products"]);
-        self::$catalogInfo["products"] = $productModel->translateForWeb(self::$catalogInfo["products"], $languageIndex);
+
+        // self::$catalogInfo["products"] = $productModel->fetchRows($productsQuery);
+        // self::$catalogInfo["products"] = $productModel->addPriceInfoForListOfProducts(self::$catalogInfo["products"]);
+        // self::$catalogInfo["products"] = $productModel->unifyProductInformationForListOfProduct(self::$catalogInfo["products"], $languageIndex);
 
         $productDetailPlugin = new \Surikata\Plugins\WAI\Product\Detail($this->websiteRenderer);
         foreach (self::$catalogInfo["products"] as $key => $product) {

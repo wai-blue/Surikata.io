@@ -1,0 +1,43 @@
+layout: WithLeftSidebar
+url: products
+title: Products
+panels:
+  header:
+    plugin: WAI/Common/Header
+    settings:
+  navigation:
+    plugin: WAI/Common/Navigation
+    settings:
+      menuId: menu("header.yml")
+      showCategories: true
+      showBreadcrumbs: true
+  sidebar:
+    plugin: WAI/Product/Filter
+    settings:
+      showProductCategories: true
+      layout: sidebar
+      showBrands: true
+      showFeaturesFilter: true
+  section_1:
+    plugin: WAI/Common/Breadcrumb
+    settings:
+      showHomePage: true
+  section_2:
+    plugin: WAI/Product/Catalog
+    settings:
+      defaultItemsPerPage: 6
+  footer:
+    plugin: WAI/Common/Footer
+    settings:
+      mainMenuId: menu("header.yml")
+      secondaryMenuId: menu("footer.yml")
+      mainMenuTitle: translate("Pages")
+      secondaryMenuTitle: translate("Our Company")
+      showContactAddress: false
+      showContactEmail: true
+      showContactPhoneNumber: true
+      contactTitle: translate("Contact us")
+      showPayments: true
+      showSocialMedia: true
+      showMainMenu: true
+      showSecondaryMenu: true

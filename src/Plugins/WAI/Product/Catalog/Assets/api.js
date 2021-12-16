@@ -3,7 +3,7 @@ class PluginWAIProductCatalogAPIClass {
   page = 0;
   filter = {};
   catalogListType = "list";
-
+  
   loadUrlParams(varName) {
     // Do if url contain varName
     if (window.location.href.indexOf(varName)> -1) {
@@ -100,14 +100,16 @@ class PluginWAIProductCatalogAPIClass {
     return urlObject;
   }
 
-  update(updateDiv, url) {
+  update(url) {
     let pluginParams = null;
-    
+
     this.setPage(1);
 
     pluginParams = { ...this.filter };
+
     window.history.pushState({}, '', this.getURL(url));
 
+    let updateDiv = $('#productCatalogWrapperDiv');
     updateDiv.css('opacity', 0.5);
 
     Surikata.renderPlugin(
@@ -137,6 +139,8 @@ class PluginWAIProductCatalogAPIClass {
         }
       }
     );
+
+    return this;
   }
 
   loadPage(page, success) {
@@ -152,13 +156,15 @@ class PluginWAIProductCatalogAPIClass {
         }
       }
     );
+
+    return this;
   }
 
   // TODO: upravit podla konvencii, ako sa deklaruju funkcie vyssie
   changeProductSorting(element) {
     element = $(element);
     var sortValue = element.val();
-    console.log(window.location.search);
+
     var uri = window.location.protocol + "//" + window.location.host + window.location.pathname;
     if (window.location.search.length > 0) {
       uri += window.location.search;

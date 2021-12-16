@@ -14,56 +14,60 @@ class PluginSettings extends \ADIOS\Core\Widget\Action {
     $theme = $this->adios->widgets['Website']->themes[$themeName];
     $layout = $theme->getLayout($layoutName);
 
-    $pluginsSettingsHtml = "
+    $pluginSelectHtml = "
       <div class='adios ui form table'>
         <div class='adios ui form subrow'>
           <div class='adios ui form form_title'>
-            Choose a plugin that will render the content of the <i>{$panelName}</i>.
+            Choose a plugin
           </div>
           <div class='adios ui form form_input'>
             <select
               id='{$this->uid}_plugin'
               style='width:100%;font-size:1.5em;'
+              size=15
               onchange='
+                let pluginUID = $(this).find(\"option:selected\").data(\"plugin-uid\");
                 $(\".surikata-theme-plugin\").hide();
-                $(\"#{$this->uid}_plugin_\" + this.value).show();
+                $(\"#{$this->uid}_plugin_\" + pluginUID).show();
               '
             >
-              <option value=''></option>
+              <option value=''>-- No plugin here --</option>
     ";
     foreach ($this->adios->getPlugins() as $pluginName => $plugin) {
-      $pluginNameUID = \ADIOS\Core\HelperFunctions::str2uid($pluginName);
+      $pluginUID = \ADIOS\Core\HelperFunctions::str2uid($pluginName);
 
-      $pluginsSettingsHtml .= "
+      $pluginSelectHtml .= "
         <option
           data-plugin-name='".ads($pluginName)."'
-          data-plugin-uid='{$pluginNameUID}'
+          data-plugin-uid='{$pluginUID}'
           ".($pluginName == $activatedPluginName ? "selected" : "")."
         >
           {$pluginName}
         </option>
       ";
     }
-    $pluginsSettingsHtml .= "
+    $pluginSelectHtml .= "
             </select>
           </div>
         </div>
       </div>
     ";
 
+    $pluginsSettingsHtml = "";
+
     foreach ($this->adios->getPlugins() as $pluginName => $plugin) {
-      $pluginNameUID = \ADIOS\Core\HelperFunctions::str2uid($pluginName);
+      $pluginUID = \ADIOS\Core\HelperFunctions::str2uid($pluginName);
 
       $pluginsSettingsHtml .= "
         <div
           class='surikata-theme-plugin'
-          id='{$this->uid}_plugin_{$pluginNameUID}'
+          id='{$this->uid}_plugin_{$pluginUID}'
           style='display:".($pluginName == $activatedPluginName ? "block" : "none")."'
         >
       ";
 
       $tmpPlugin = $this->adios->getPlugin($pluginName);
-      $tmpInputUIDPrefix = "{$this->uid}_{$pluginNameUID}";
+      $tmpInputUIDPrefix = "{$this->uid}_{$pluginUID}";
 
       if (is_object($tmpPlugin)) {
         if (method_exists($tmpPlugin, "getSettingsForWebsite")) {
@@ -142,15 +146,17 @@ class PluginSettings extends \ADIOS\Core\Widget\Action {
 
       </script>
       <div id='{$this->uid}_wrapper' class='row'>
-        <div class='col-8'>
-          {$pluginsSettingsHtml}
-        </div>
         <div class='col-4'>
-          <div class='surikata-theme-preview-wrapper'>
-            <div class='surikata-theme-preview-item'>
-              ".$layout->getPreviewHtml()."
-            </div>
+          <div class='h4'>
+            Renderer plugin
           </div>
+          {$pluginSelectHtml}
+        </div>
+        <div class='col-8'>
+          <div class='h4'>
+            Plugin settings
+          </div>
+          {$pluginsSettingsHtml}
         </div>
       </div>
       <script>

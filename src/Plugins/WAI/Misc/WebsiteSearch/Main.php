@@ -59,124 +59,40 @@ namespace Surikata\Plugins\WAI\Misc {
       $returnArray = array();
       
       switch ($action) {
-        case "website_find":
+        case "searchResults":
           $returnArray = $this->searchResults();
-          break;
-        case "log-query": // TODO: this case will never be
-          $this->logSearchQuery();
-          $returnArray = [];
-          break;
+        break;
       }
 
       return $returnArray;
     }
 
-    public function searchResults() {
-
-      $returnArray = [];
-      $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
-      $searchValue = $this->websiteRenderer->urlVariables['value'] ?? "";
-      $searchValue = htmlspecialchars($searchValue);
-
-      // ADD rootUrl to the URL
-      $productDetailPlugin = new \Surikata\Plugins\WAI\Product\Detail($this->websiteRenderer);
-      $productCatalogPlugin = new \Surikata\Plugins\WAI\Product\Catalog($this->websiteRenderer);
-      $blogDetailPlugin = new \Surikata\Plugins\WAI\Blog\Detail($this->websiteRenderer);
-
-      // Search in products
-      $productModel = $this->adminPanel
-        ->getModel("Widgets/Products/Models/Product");
-      $productsQuery = $productModel->getQuery();
-      $productsQuery->select("*");
-      $productsQuery->where('name_lang_'.$languageIndex, 'like', '%' . $searchValue . '%');
-      $productsQuery->skip(0)->take(20);
-      $products = $productModel->fetchRows($productsQuery); // TODO: UPPERCASE LOOKUP
-      foreach ($products as $product) {
-        $returnArray[] = [
-          "category" => "products",
-          "label" => $product["name_lang_".$languageIndex],
-          "value" => $product["name_lang_".$languageIndex],
-          "url" => "./".$productDetailPlugin->getWebPageUrl($product),
-          "term" => $searchValue,
-        ];
-      }
-
-      // Search in Categories
-      $productCategoryModel = $this->adminPanel
-        ->getModel("Widgets/Products/Models/ProductCategory");
-      $productCategoriesQuery = $productCategoryModel->getQuery();
-      $productCategoriesQuery->select("*");
-      $productCategoriesQuery->where('name_lang_'.$languageIndex, 'like', '%' . $searchValue . '%');
-      $categories = $productCategoryModel->fetchRows($productCategoriesQuery); // TODO: UPPERCASE LOOKUP
-      foreach ($categories as $category) {
-        $returnArray[] = [
-          "category" => "product categories",
-          "label" => $category["name_lang_".$languageIndex],
-          "value" => $category["code"],
-          "url" => "./".$productCatalogPlugin->getWebPageUrl($productCatalogPlugin->convertCategoryToUrlVariables($category)),
-          "term" => $searchValue,
-        ];
-      }
-
-      // Search in Websites
-
-      // Search in Blogs
-      $blogModel = new \ADIOS\Plugins\WAI\Blog\Catalog\Models\Blog($this->adminPanel);
-      $blogQuery = $blogModel->getQuery();
-      $blogQuery->select("*");
-      $blogQuery->where('name', 'like', '%' . $searchValue . '%');
-      $blogQuery->orWhere('content', 'like', '%' . $searchValue . '%');
-      $blogs = $blogModel->fetchRows($blogQuery); // TODO: UPPERCASE LOOKUP
-      foreach ($blogs as $blog) {
-        $returnArray[] = [
-          "category" => "blogs",
-          "label" => $blog["name"],
-          "value" => $blog["name"],
-          "url" => "./".$blogDetailPlugin->getWebPageUrl($blog),
-          "term" => $searchValue
-        ];
-      }
-
-      if (count($returnArray) == 0) {
-        $returnArray[] = ["category" => "we did not find",
-          "label" => $searchValue,
-          "value" => $searchValue,
-          "term" => $searchValue
-        ];
-      }
-
-      return $returnArray;
-    }
-
-    public function logSearchQuery() {
+    public function logSearchQuery($query) {
       $customerUID = $this->websiteRenderer->getCustomerUID();
-
       $customerID = (new CustomerUID)->getByCustomerUID($customerUID);
-      $searchValue = $this->websiteRenderer->urlVariables['value'] ?? "";
-      if ($searchValue != '') {
-        $searchValue = htmlspecialchars($searchValue);
+
+      if ($query != '') {
         $target_url = htmlspecialchars($this->websiteRenderer->urlVariables['urlOpened'] ?? "");
         $searchQueryModel = new SearchQuery($this->adminPanel);
         $searchQueryModel->insertRow([
           "id_customer_uid" => $customerID["id"],
-          "query" => $searchValue,
+          "query" => $query,
           "target_url" => $target_url,
           "search_datetime" => ["sql" => "now()"],
         ]);
       }
     }
 
-    public function websiteSearch() {
+    public function searchResults() {
       // Fulltext search across website
       $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
       $returnArray = array();
 
-      if (isset($_GET["search"])) {
+      $query = $this->websiteRenderer->urlVariables['q'] ?? "";
 
-        $this->logSearchQuery();
+      if (strlen($query) > 3) {
 
-        $searchValue = $this->websiteRenderer->urlVariables['search'] ?? "";
-        $searchValue = htmlspecialchars($searchValue);
+        $this->logSearchQuery($query);
 
         // ADD rootUrl to the URL
         $productDetailPlugin = new \Surikata\Plugins\WAI\Product\Detail($this->websiteRenderer);
@@ -188,7 +104,7 @@ namespace Surikata\Plugins\WAI\Misc {
 
         $productsQuery = $productModel->getQuery();
         $productsQuery->select("*");
-        $productsQuery = $this->setWhereOrClausule($productsQuery, "Product", "_".$languageIndex, $searchValue);
+        $productsQuery = $this->setWhereOrClausule($productsQuery, "Product", "_".$languageIndex, $query);
         $productsQuery->skip(0)->take(40);
         $products = $productModel->fetchRows($productsQuery); // TODO: UPPERCASE LOOKUP
         if (count($products) > 0) {
@@ -217,7 +133,7 @@ namespace Surikata\Plugins\WAI\Misc {
         $productCategoriesQuery = $productCategoryModel->getQuery();
         $productCategoriesQuery->select("*");
 
-        $productCategoriesQuery = $this->setWhereOrClausule($productCategoriesQuery, "ProductCategory", "_".$languageIndex, $searchValue);
+        $productCategoriesQuery = $this->setWhereOrClausule($productCategoriesQuery, "ProductCategory", "_".$languageIndex, $query);
         $productCategoriesQuery->skip(0)->take(20);
 
         $categories = $productCategoryModel->fetchRows($productCategoriesQuery); // TODO: UPPERCASE LOOKUP
@@ -241,7 +157,7 @@ namespace Surikata\Plugins\WAI\Misc {
         $blogQuery = $blogModel->getQuery();
         $blogQuery->select("*");
 
-        $blogQuery = $this->setWhereOrClausule($blogQuery, "Blog", "", $searchValue);
+        $blogQuery = $this->setWhereOrClausule($blogQuery, "Blog", "", $query);
         $blogQuery->skip(0)->take(40);
 
         $blogs = $blogModel->fetchRows($blogQuery); // TODO: UPPERCASE LOOKUP
@@ -259,33 +175,8 @@ namespace Surikata\Plugins\WAI\Misc {
             "data" => $blog
           ];
         }
-
-        // Search in Webpages
-        /*
-        $pageModel = $this->adminPanel
-          ->getModel("Widgets/Website/Models/WebPage");
-        $pageQuery = $pageModel->getQuery();
-        $pageQuery->select("*");
-        $pageQuery->where('name', 'like', '%' . $searchValue . '%');
-        $pageQuery->orWhere('url', 'like', '%' . $searchValue . '%');
-        $pageQuery->orWhere('content_structure', 'like', '%' . $searchValue . '%');
-        $pages = $pageModel->fetchRows($pageQuery);
-        if (count($pages) > 0) {
-          $returnArray[] = [
-            "model" => "Divider",
-            "data" => "Pages",
-            "count" => count($pages),
-          ];
-        }
-        foreach ($pages as $page) {
-          $returnArray[] = [
-            "model" => "WebPage",
-            "data" => $page
-          ];
-        }
-      */
-
       }
+
       if (count($returnArray) === 0) {
         $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
 
@@ -331,7 +222,8 @@ namespace Surikata\Plugins\WAI\Misc {
       $twigParams = $pluginSettings;
 
       $this->setSearchableFields($twigParams);
-      $twigParams["results"] = $this->websiteSearch();
+      $twigParams["results"] = $this->searchResults();
+
       return $twigParams;
     }
 

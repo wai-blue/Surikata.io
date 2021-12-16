@@ -47,7 +47,7 @@ class LookupSearch extends \ADIOS\Core\Action {
           'onclick' => "window_close('{$windowUid}');"
         ]),
       ],
-      'title' => l('Vyhľadať v zozname'),
+      'title' => $this->translate("Search in list"),
     ];
 
     return $this->adios->ui->Window($window_params)->render();

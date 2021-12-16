@@ -4,16 +4,26 @@ namespace Surikata\Plugins\WAI\Customer {
   class ForgotPassword extends \Surikata\Core\Web\Plugin {
 
     var $defaultForgotPasswordUrl = "password/reset/{% token %}";
+    var $formForgotPasswordUrl = [
+      1 => "forgot-password/{% token %}",
+      2 => "obnovit-heslo/{% token %}",
+      3 => "obnovit-heslo/{% token %}",
+    ];
 
     public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
       $email = $urlVariables["email"] ?? [];
+      $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
 
       $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adminPanel);
       $customerTokenAssignmentModel = new \ADIOS\Widgets\Customers\Models\CustomerTokenAssignment($this->adminPanel);
 
       $url = $pluginSettings["urlPattern"] ?? "";
       if (empty($url)) {
-        $url = $this->defaultForgotPasswordUrl;
+        if (count($email) > 0) {
+          $url = $this->defaultForgotPasswordUrl;
+        } else {
+          $url = $this->formForgotPasswordUrl[$languageIndex];
+        }
       }
 
       $customer = $customerModel->getByEmail($email);

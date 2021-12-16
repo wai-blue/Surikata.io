@@ -173,7 +173,6 @@
   };
 
   function ui_form_close(uid) {
-
     let is_ajax = $('#' + uid).attr('data-is-ajax') == '1';
 
     var data = {};

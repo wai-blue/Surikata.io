@@ -184,6 +184,7 @@
     ['Customer', 'Forgot password', 'Zapomněli jste heslo'],
     ['Customer', 'Email is incomplete or invalid.', 'Email je v nesprávném formátu'],
     ['Customer', 'Such an account already exists.', 'Tento email již je registrován'],
+    ['Customer', 'Given passwords do not match', 'Zadaná hesla nejsou stejná'],
     ['Customer', 'An unexpected error occurred while creating the account. Please try again later.', 'Nastala neočekávaná chyba při vytváření účtu. Zkuste znovu později.'],
     ['Customer', 'Retype Password', 'Zopakujte heslo'],
     ['Customer', 'I agree with the processing of personal data.', 'Souhlasím se zpracováním osobních údajů'],

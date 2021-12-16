@@ -920,13 +920,13 @@ class Order extends \ADIOS\Core\Widget\Model {
       $btnIssueInvoice = $this->adios->ui->button([
         "text"    => $this->translate("Issue invoice"),
         "onclick" => "
-          let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
+          let tmp_window_id = $(this).closest('.adios.ui.Window').attr('id');
           _ajax_read('Orders/IssueInvoice', 'id_order=".(int) $data['id']."', function(res) {
             if (isNaN(res)) {
               alert(res);
             } else {
               // refresh order window
-              window_refresh(tmp_form_id + '_form_window');
+            window_refresh(tmp_window_id);
             }
           });
         ",
@@ -937,10 +937,10 @@ class Order extends \ADIOS\Core\Widget\Model {
       $btnShowInvoice = $this->adios->ui->button([
         "text" => $this->translate("Show invoice nr. ").hsc($data['INVOICE']['number']),
         "onclick" => "
-          let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
+          let tmp_window_id = $(this).closest('.adios.ui.Window').attr('id');
           window_render('Invoices/".(int) $data['INVOICE']['id']."/Edit', '', function(res) {
             // refresh order window
-            window_refresh(tmp_form_id + '_form_window');
+            window_refresh(tmp_window_id);
           });
         ",
         "class"   => "btn-light mb-2 w-100",
@@ -950,7 +950,7 @@ class Order extends \ADIOS\Core\Widget\Model {
       $btnOrderPaid = (int)$data['is_paid'] == 0 ? $this->adios->ui->button([
         "text" => $this->translate("Set as paid"),
         "onclick" => "
-          var tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
+          let tmp_window_id = $(this).closest('.adios.ui.Window').attr('id');
           _confirm(
             '".$this->translate('You are about to set an order as paid. Continue?')."',
             {
@@ -965,7 +965,7 @@ class Order extends \ADIOS\Core\Widget\Model {
                   alert(res);
                 }
                 else {
-                  window_refresh(tmp_form_id + '_form_window');
+                  window_refresh(tmp_window_id);
                 }
               });
             }
@@ -978,7 +978,7 @@ class Order extends \ADIOS\Core\Widget\Model {
         "class" => "btn-light mb-2 w-100",
         "style" => "border: 2px solid #11cf56;border-radius:2px;background:#8fffb8",
         "onclick" => "
-          var tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
+          let tmp_window_id = $(this).closest('.adios.ui.Window').attr('id');
           _confirm(
             '".$this->translate('You are about to set an order as unpaid. Continue?')."',
             {
@@ -993,7 +993,7 @@ class Order extends \ADIOS\Core\Widget\Model {
                   alert(res);
                 }
                 else {
-                  window_refresh(tmp_form_id + '_form_window');
+                  window_refresh(tmp_window_id);
                 }
               });
             }
@@ -1004,14 +1004,14 @@ class Order extends \ADIOS\Core\Widget\Model {
       $btnOrderStateShipped = $this->adios->ui->button([
         "text" =>  $this->translate("Set as shipped"),
         "onclick" => "
-          let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
+          let tmp_window_id = $(this).closest('.adios.ui.Window').attr('id');
           _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_SHIPPED."', function(res) {
             if (isNaN(res)) {
               alert(res);
             }
             else {
               // refresh order window
-              window_refresh(tmp_form_id + '_form_window');
+              window_refresh(tmp_window_id);
             }
           });
         ",
@@ -1023,14 +1023,14 @@ class Order extends \ADIOS\Core\Widget\Model {
       $btnOrderStateCanceled = $this->adios->ui->button([
         "text" =>  $this->translate("Set as canceled"),
         "onclick" => "
-          let tmp_form_id = $(this).closest('.adios.ui.Form').attr('id');
+          let tmp_window_id = $(this).closest('.adios.ui.Window').attr('id');
           _ajax_read('Orders/ChangeOrderState', 'id_order=".(int) $data['id']."&state=".(int) self::STATE_CANCELED."', function(res) {
             if (isNaN(res)) {
               alert(res);
             }
             else {
               // refresh order window
-              window_refresh(tmp_form_id + '_form_window');
+              window_refresh(tmp_window_id);
             }
           });
         ",

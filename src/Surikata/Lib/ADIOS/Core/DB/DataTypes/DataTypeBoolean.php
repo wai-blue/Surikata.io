@@ -55,9 +55,9 @@ class DataTypeBoolean extends DataType {
    */
   public function get_html($value, $params = []) {
     if ((int) $value !== 0) {
-      $html = "<i class='fas fa-check-circle' style='color:#4caf50'></i>";
+      $html = "<i class='fas fa-check-circle' style='color:#4caf50' title='".$this->translate("Yes")."'></i>";
     } else {
-      $html = "<i class='fas fa-times-circle' style='color:#ff5722'></i>";
+      $html = "<i class='fas fa-times-circle' style='color:#ff5722' title='".$this->translate("No")."'></i>";
     }
 
     return "<div style='text-align:center'>{$html}</div>";

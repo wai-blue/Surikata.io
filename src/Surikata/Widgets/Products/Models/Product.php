@@ -24,32 +24,33 @@ class Product extends \ADIOS\Core\Widget\Model {
   public function columns(array $columns = []) {
     $translatedColumns = [];
     $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
+    $columnIndex = $this->adios->getColumnIndexByLanguage();
 
     foreach ($domainLanguages as $languageIndex => $languageName) {
       $translatedColumns["name_lang_{$languageIndex}"] = [
         "type" => "varchar",
         "title" => $this->translate("Name")." (".$this->translate($languageName).")",
-        "show_column" => ($languageIndex == 1),
-        "is_searchable" => ($languageIndex == 1),
+        "show_column" => ($languageIndex == $columnIndex),
+        "is_searchable" => ($languageIndex == $columnIndex),
       ];
       $translatedColumns["brief_lang_{$languageIndex}"] = [
         "type" => "varchar",
         "title" => $this->translate("Short description")." ({$languageName})",
         "show_column" => FALSE,
-        "is_searchable" => ($languageIndex == 1),
+        "is_searchable" => ($languageIndex == $columnIndex),
       ];
       $translatedColumns["description_lang_{$languageIndex}"] = [
         "type" => "text",
         "title" => $this->translate("Description")." ({$languageName})",
         "interface" => "formatted_text",
         "show_column" => FALSE,
-        "is_searchable" => ($languageIndex == 1),
+        "is_searchable" => ($languageIndex == $columnIndex),
       ];
       $translatedColumns["gift_lang_{$languageIndex}"] = [
         "type" => "varchar",
         "title" => $this->translate("Gift")." ({$languageName})",
         "show_column" => FALSE,
-        "is_searchable" => ($languageIndex == 1),
+        "is_searchable" => ($languageIndex == $columnIndex),
       ];
     }
 
@@ -674,25 +675,13 @@ class Product extends \ADIOS\Core\Widget\Model {
     $priceInfoPlugin = $this->getPriceInfoForSingleProduct($data, self::PRICE_CALCULATION_METHOD_PLUGIN, FALSE);
 
     $productStockStateModel = (new ProductStockState($this->adios));
-    $language = $_SESSION[_ADIOS_ID]['language'] ?? "en";
-    switch ($language) {
-      case "en":
-        $languageIndex = 1;
-        break;
-      case "sk":
-        $languageIndex = 2;
-        break;
-      case "cz":
-        $languageIndex = 3;
-        break;
-      default:
-        $languageIndex = 1;
-    }
+
+    $columnIndex = $this->adios->getColumnIndexByLanguage();
+
     $allStockStates = $productStockStateModel->getAll();
-    $stockStates = [];
-    $stockStates[0] = "";
+    $enumValuesStockStates = [0 => ""];
     foreach ($allStockStates as $stockState) {
-      $stockStates[$stockState["id"]] = $stockState["name_lang_".$languageIndex];
+      $enumValuesStockStates[$stockState["id"]] = $stockState["name_lang_".$columnIndex];
     }
 
     $templateTabs = [
@@ -802,7 +791,7 @@ class Product extends \ADIOS\Core\Widget\Model {
           "title" => $this->translate("Current state in the stock"),
           "input" => $this->adios->ui->Input([
             "type" => "int",
-            "enum_values" => $stockStates,
+            "enum_values" => $enumValuesStockStates,
             "uid" => "{$params['uid']}_id_stock_state",
             "value" => $data['id_stock_state'],
           ])->render()

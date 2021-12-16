@@ -279,4 +279,20 @@ class Loader extends \ADIOS\Core\Loader {
     }
     return $settings;
   }
+
+  public function getColumnIndexByLanguage(string $languageShort = "") {
+    if (empty($languageShort)) {
+      $languageShort = $this->config["language"];
+    }
+
+    $columnIndex = 1;
+    $languages = $this->config['widgets']['Website']['domainLanguagesShort'];
+    foreach ($languages as $tmpColumnIndex => $tmpLanguageShort) {
+      if ($languageShort == $tmpLanguageShort) {
+        $columnIndex = $tmpColumnIndex;
+      }
+    }
+
+    return $columnIndex;
+  }
 }

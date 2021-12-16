@@ -122,6 +122,7 @@ $adminPanelConfig['widgets']['HelpAndSupport']['enabled'] = TRUE;
 $adminPanelConfig['default_action'] = "Overview/Welcome";
 $adminPanelConfig['widgets']['Website']['domains'] = $configEnv["domains"];
 $adminPanelConfig['widgets']['Website']['domainLanguages'] = $configEnv["domainLanguages"];
+$adminPanelConfig['widgets']['Website']['domainLanguagesShort'] = $configEnv["domainLanguagesShort"];
 
 ////////////////////////////////////////////////////////
 // Website renderer configuration

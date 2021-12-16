@@ -37,8 +37,6 @@
 
         $('#adios_main_content').append(html);
 
-        console.log();
-
         if ($('#adios_main_content .adios_window').length == 1) {
           desktop_main_box_history_push(action, params, $('#adios_main_content').html(), options);
         }
@@ -59,17 +57,20 @@
   function window_refresh(window_id) {
     let win = $('#' + window_id);
 
-    win
-      .attr('id', win.attr('id') + '_TO_BE_REMOVED')
-      .fadeOut(800, function() {
+    if (win.length > 0) {
+      win
+        .attr('id', win.attr('id') + '_TO_BE_REMOVED')
+      ;
+      window_render(
+        ADIOS_windows[window_id]['action'],
+        ADIOS_windows[window_id]['params'],
+        ADIOS_windows[window_id]['onclick'],
+      );
+
+      setTimeout(function() {
         win.remove();
-      })
-    ;
-    window_render(
-      ADIOS_windows[window_id]['action'],
-      ADIOS_windows[window_id]['params'],
-      ADIOS_windows[window_id]['onclick'],
-    );
+      }, 500);
+    }
   }
 
   function window_close(window_id, oncloseParams) {

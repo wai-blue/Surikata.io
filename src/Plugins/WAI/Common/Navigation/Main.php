@@ -8,6 +8,8 @@ namespace Surikata\Plugins\WAI\Common {
 
     var $navigationItems = NULL;
 
+    public static $allCategories = [];
+
     private function convertFlatMenuItemsToTree(&$flatMenuItems, $idParent = 0) {
       $treeItems = [];
       foreach ($flatMenuItems as $item) {
@@ -96,17 +98,21 @@ namespace Surikata\Plugins\WAI\Common {
       $twigParams["cartContents"] = (new \Surikata\Plugins\WAI\Customer\Cart($this->websiteRenderer))->getCartContents();
 
       if ($pluginSettings["showCategories"]) {
-        $categoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
-        $categoryPlugin = new Catalog($this->adminPanel);
-        $allCategories = $categoryModel->getAllCached();
-        $allCategories = $categoryModel->translateForWeb($allCategories, $languageIndex);
-        foreach ($allCategories as $key => $category) {
+        if (empty(self::$allCategories)) {
+          $categoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
+          $categoryPlugin = new Catalog($this->adminPanel);
 
-          $url = $categoryPlugin->getWebPageUrlFormatted($categoryPlugin->convertCategoryToUrlVariables($category));
-          $allCategories[$key]["url"] = $this->websiteRenderer->rootUrl ."/". $url;
+          self::$allCategories = $categoryModel->orderBy('order_index')->get()->toArray();
 
+          self::$allCategories = $categoryModel->translateForWeb(self::$allCategories, $languageIndex);
+
+          foreach (self::$allCategories as $key => $category) {
+            $url = $categoryPlugin->getWebPageUrlFormatted($categoryPlugin->convertCategoryToUrlVariables($category));
+            self::$allCategories[$key]["url"] = $this->websiteRenderer->rootUrl ."/". $url;
+          }
         }
-        $categoryTree = $categoryModel->getAllCategoriesAndSubCategories($allCategories);
+
+        $categoryTree = $categoryModel->getAllCategoriesAndSubCategories(self::$allCategories);
         $twigParams["categories"] = $categoryTree;
       }
 

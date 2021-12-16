@@ -3,6 +3,7 @@
 namespace Surikata\Plugins\WAI\Product {
   class Filter extends \Surikata\Core\Web\Plugin {
     public static $filterInfo = NULL;
+    public static $allCategories = [];
 
     public function getFilterInfo() {
       if (self::$filterInfo === NULL) {
@@ -21,23 +22,26 @@ namespace Surikata\Plugins\WAI\Product {
         $allBrands = $brandModel->getAllCached();
         $allFeatures = $productFeatureModel->getAllCached();
         $allFeaturesAssignments = $productFeatureAssignmentModel->getAllCached();
-        $allCategories = $productCategoryModel->translateForWeb(
-          $productCategoryModel->getAllCached(),
-          $languageIndex
-        );
 
-        foreach ($allCategories as $key => $category) {
-          $allCategories[$key]["url"] = $productCatalogPlugin->getWebPageUrl(
+        if (empty(self::$allCategories)) {
+          self::$allCategories = $productCategoryModel->translateForWeb(
+            $productCategoryModel->orderBy('order_index')->get()->toArray(),
+            $languageIndex
+          );
+        }
+
+        foreach (self::$allCategories as $key => $category) {
+          self::$allCategories[$key]["url"] = $productCatalogPlugin->getWebPageUrl(
             $productCatalogPlugin->convertCategoryToUrlVariables($category)
           );
         }
 
-        $allCategoriesAndSubCategories = $productCategoryModel->getAllCategoriesAndSubCategories($allCategories);
+        $allCategoriesAndSubCategories = $productCategoryModel->getAllCategoriesAndSubCategories(self::$allCategories);
 
         if ($idCategory > 0) {
-          $parentCategories = $productCategoryModel->extractParentCategories($idCategory, $allCategories);
-          $allSubCategories = $productCategoryModel->extractAllSubCategories($idCategory, $allCategories);
-          $directSubCategories = $productCategoryModel->extractDirectSubCategories($idCategory, $allCategories);
+          $parentCategories = $productCategoryModel->extractParentCategories($idCategory, self::$allCategories);
+          $allSubCategories = $productCategoryModel->extractAllSubCategories($idCategory, self::$allCategories);
+          $directSubCategories = $productCategoryModel->extractDirectSubCategories($idCategory, self::$allCategories);
         }
 
         foreach ($allFeaturesAssignments as $value) {
@@ -75,7 +79,7 @@ namespace Surikata\Plugins\WAI\Product {
 
         self::$filterInfo = [
           "allBrands" => $allBrands,
-          "allCategories" => $allCategories,
+          "allCategories" => self::$allCategories,
           "allCategoriesAndSubCategories" => $allCategoriesAndSubCategories,
           "parentCategories" => $parentCategories,
           "allSubCategories" => $allSubCategories,

@@ -64,5 +64,10 @@ class DataType {
   public function get_csv($value, $params = []) {
     return $value;
   }
+
+  public function translate($string) {
+    return $this->adios->translate($string, $this);
+  }
+  
 }
 

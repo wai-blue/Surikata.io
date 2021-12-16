@@ -44,10 +44,10 @@ h3 { padding-bottom: 0.5em; }
 
 #adios_user_notifications {
   position: fixed;
-  left: 0em;
+  right: 0em;
   bottom: 0em;
   padding: 1em;
-  width: 100%;
+  width: 40%;
   z-index: 1000;
 }
 

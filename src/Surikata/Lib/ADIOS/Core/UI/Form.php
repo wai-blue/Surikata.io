@@ -180,12 +180,12 @@ class Form extends \ADIOS\Core\UI\View
       $this->delete_button->add_class("{$this->params['uid']}_button");
     }
 
-    if ($this->params['show_copy_button']) {
+    if (TRUE || $this->params['show_copy_button']) {
       if ('' == $this->params['copy_button_params']['type']) {
         $this->params['copy_button_params']['type'] = 'copy';
       }
       if ('' == $this->params['copy_button_params']['onclick']) {
-        $this->params['copy_button_params']['onclick'] = "_confirm('".l('Naozaj si želáte kopírovať záznam')."?', {}, function(){ ui_form_copy('{$this->params['uid']}') });";
+        $this->params['copy_button_params']['onclick'] = "_confirm('".$this->translate("Are you sure to delete this record?")."', {}, function(){ ui_form_copy('{$this->params['uid']}') });";
       }
       $this->params['copy_button_params']['style'] .= 'float:right;';
       $this->copy_button = $this->adios->ui->button($this->params['copy_button_params']);

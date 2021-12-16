@@ -55,9 +55,9 @@ class DataTypeBool extends DataType {
 
   public function get_html_or_csv($value, $params = []) {
     if ('Y' == $value) {
-      $html = l('áno');
+      $html = $this->translate("Yes");
     } else {
-      $html = l('nie');
+      $html = $this->translate("No");
     }
 
     return $html;

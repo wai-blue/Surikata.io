@@ -535,6 +535,24 @@ class Model extends \Illuminate\Database\Eloquent\Model {
           "model" => $this->name,
         ])
       ],
+      '/^'.$urlBase.'\/Import\/CSV\/Import$/' => [
+        "action" => "UI/Table/Import/CSV/Import",
+        "params" => array_merge($urlParams, [
+          "model" => $this->name,
+        ])
+      ],
+      '/^'.$urlBase.'\/Import\/CSV\/DownloadTemplate$/' => [
+        "action" => "UI/Table/Import/CSV/DownloadTemplate",
+        "params" => array_merge($urlParams, [
+          "model" => $this->name,
+        ])
+      ],
+      '/^'.$urlBase.'\/Import\/CSV\/Preview$/' => [
+        "action" => "UI/Table/Import/CSV/Preview",
+        "params" => array_merge($urlParams, [
+          "model" => $this->name,
+        ])
+      ],
     ]);
 
     return $routing;

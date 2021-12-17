@@ -11,4 +11,5 @@ $dictionary = [
   "CSV file" => "Nahrajte súbor CSV",
   "Column names are in the first line" => "Názvy stĺpcov sú v prvom riadku",
   "Start import !" => "Naimportovať !",
+  "Download CSV file template" => "Prevziať šablónu CSV",
 ];

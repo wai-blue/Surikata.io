@@ -17,6 +17,9 @@ class CSV extends \ADIOS\Core\Action {
   // public static $hideDefaultDesktop = TRUE;
 
   public function render() {
+    $model = $this->params['model'];
+    $modelObject = $this->adios->getModel($model);
+
     $fileUploadInput = new \ADIOS\Core\UI\Input(
       $this->adios,
       [
@@ -45,9 +48,9 @@ class CSV extends \ADIOS\Core\Action {
 
           if (confirm(warningText)) {
             let data = ui_form_get_values('{$this->uid}_form', '{$this->uid}_');
-            data.model = '{$this->params['model']}';
+            data.model = '{$model}';
             window_render(
-              'UI/Table/Import/CSV/Import',
+              '{$modelObject->urlBase}/Import/CSV/Import',
               data
             );
           }
@@ -55,15 +58,23 @@ class CSV extends \ADIOS\Core\Action {
 
         function {$this->uid}_previewCsv() {
           _ajax_update(
-            'UI/Table/Import/CSV/Preview',
+            '{$modelObject->urlBase}/Import/CSV/Preview',
             {
               'parentUid': '{$this->uid}',
-              'model': '{$this->params['model']}',
+              'model': '{$model}',
               'csvFile': $('#{$this->uid}_csv_file').val(),
               'columnNamesInFirstLine': ($('#{$this->uid}_column_names_in_first_line').is(':checked') ? '1' : '0'),
               'separator': $('#{$this->uid}_separator').val(),
             },
             '{$this->uid}_preview_div'
+          );
+        }
+
+        function {$this->uid}_downloadTemplate() {
+          window_popup(
+            '{$modelObject->urlBase}/Import/CSV/DownloadTemplate',
+            {'model': '{$model}'},
+            {'type': 'POST'}
           );
         }
       </script>
@@ -118,6 +129,11 @@ class CSV extends \ADIOS\Core\Action {
       $this->adios->ui->button([
         'type' => 'close',
         'onclick' => "{$this->uid}_close();",
+      ]),
+      $this->adios->ui->button([
+        'fa_icon' => 'fas fa-file-alt',
+        'text' => $this->translate("Download CSV file template"),
+        'onclick' => "{$this->uid}_downloadTemplate();",
       ]),
       $this->adios->ui->button([
         'type' => 'save',

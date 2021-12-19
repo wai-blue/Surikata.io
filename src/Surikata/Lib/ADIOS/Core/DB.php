@@ -632,32 +632,29 @@ class DB {
      * @see update_row
      * @see update_row_part
      */
-    public function _sql_column_data($table_name, $col_name, $data, $dumping_data = false) {
-      $col_type = $this->tables[$table_name][$col_name]['type'];
-
-      $value = $data[$col_name];
-      $value_exists = array_key_exists($col_name, $data);
+    public function _sql_column_data($table, $colName, $data, $dumping_data = false) {
+      $colType = $this->tables[$table][$colName]['type'];
+      $value = $data[$colName];
+      $valueExists = array_key_exists($colName, $data);
 
       $sql = '';
 
       // ak je hodnota stlpca definovana ako pole, tak moze mat rozne parametre
-      if (is_array($value)) {
-        if (isset($value['sql']) && '' != trim($value['sql'])) {
-          $sql = "`{$col_name}` = ({$value['sql']})";
-        }
-      } else {
-        if (isset($this->registered_columns[$col_type])) {
-          $sql = $this->registered_columns[$col_type]->get_sql_column_data_string(
-            $table_name,
-            $col_name,
-            $data[$col_name],
-            [
-              'null_value' => !$value_exists,
-              'dumping_data' => $dumping_data,
-              'data' => $data,
-            ]
-          );
-        }
+      if (is_array($value) && isset($value['sql']) && !empty(trim($value['sql']))) {
+        $sql = "`{$colName}` = ({$value['sql']})";
+      } else if (strpos((string) $value, "SQL:") === 0) {
+        $sql = "`{$colName}` = (".substr($value, 4).")";
+      } else if (isset($this->registered_columns[$colType])) {
+        $sql = $this->registered_columns[$colType]->get_sql_column_data_string(
+          $table,
+          $colName,
+          $data[$colName],
+          [
+            'null_value' => !$valueExists,
+            'dumping_data' => $dumping_data,
+            'data' => $data,
+          ]
+        );
       }
 
       return (empty($sql) ? "" : "{$sql}, ");
@@ -691,12 +688,12 @@ class DB {
      *
      * @see _sql_column_data
      */
-    public function insert_row_query($table_name, $data, $dumpingData = false) {
+    public function insert_row_query(string $table, array $data, bool $dumpingData = false) {
       $SQL = "";
 
       $addIdColumn = TRUE;
       if ($dumpingData) $addIdColumn = FALSE;
-      if (!isset($this->tables[$table_name]['id'])) $addIdColumn = FALSE;
+      if (!isset($this->tables[$table]['id'])) $addIdColumn = FALSE;
       
       if ($addIdColumn) {
         if (!isset($data['id']) || $data['id'] <= 0) {
@@ -707,18 +704,14 @@ class DB {
         }
       }
 
-      foreach ($this->tables[$table_name] as $col_name => $col_definition) {
-        if (!$col_definition['virtual'] && $col_name != '%%table_params%%') {
-          if ($data[$col_name] !== NULL) {
-            if (strpos((string) $data[$col_name], "SQL:") === 0) {
-              $tmp_sql = "`{$col_name}` = (".substr($data[$col_name], 4)."), ";
-            } else {
-              $tmp_sql = $this->_sql_column_data($table_name, $col_name, $data, $dumpingData);
-            }
+      foreach ($this->tables[$table] as $colName => $colDefinition) {
+        if (!$colDefinition['virtual'] && $colName != '%%table_params%%') {
+          if ($data[$colName] !== NULL) {
+            $tmp_sql = $this->_sql_column_data($table, $colName, $data, $dumpingData);
 
             $SQL .= $tmp_sql;
-          } else if (!empty($col_definition['default_value'])) {
-            $SQL .= $col_definition['default_value'];
+          } else if (!empty($colDefinition['default_value'])) {
+            $SQL .= $colDefinition['default_value'];
           }
         }
       }
@@ -738,13 +731,13 @@ class DB {
      *
      * @see insert_row_query
      */
-    public function insert_row($table_name, $data, $only_sql_command = false, $dumping_data = false, $initiatingModel = NULL) {
+    public function insert_row($table, $data, $only_sql_command = false, $dumping_data = false, $initiatingModel = NULL) {
       if ($data['id'] <= 0) {
         unset($data['id']);
       }
 
-      $sql = "insert into `{$table_name}` set ";
-      $sql .= $this->insert_row_query($table_name, $data, $dumping_data);
+      $sql = "insert into `{$table}` set ";
+      $sql .= $this->insert_row_query($table, $data, $dumping_data);
 
       if ($only_sql_command) {
         return $sql."\n";
@@ -756,7 +749,7 @@ class DB {
       }
     }
 
-    public function insert_or_update_row($table_name, $data, $only_sql_command = false, $dumping_data = false, $initiatingModel = NULL) {
+    public function insert_or_update_row($table, $data, $only_sql_command = false, $dumping_data = false, $initiatingModel = NULL) {
       if ($data['id'] <= 0) {
         unset($data['id']);
       }
@@ -764,10 +757,10 @@ class DB {
       $dataWithoutId = $data;
       unset($dataWithoutId['id']);
 
-      $sql = "insert into `{$table_name}` set ";
-      $sql .= $this->insert_row_query($table_name, $data, $dumping_data);
+      $sql = "insert into `{$table}` set ";
+      $sql .= $this->insert_row_query($table, $data, $dumping_data);
       $sql .= " on duplicate key update ";
-      $sql .= $this->insert_row_query($table_name, $dataWithoutId, TRUE);
+      $sql .= $this->insert_row_query($table, $dataWithoutId, TRUE);
 
       if ($only_sql_command) {
         return $sql."\n";
@@ -867,48 +860,45 @@ class DB {
      *
      * @see _sql_column_data
      */
-    public function update_row_query($table_name, $data, $id, $whole_row)
-    {
-        global $_FILES;
+    public function update_row_query($table_name, $data, $id, $whole_row) {
+      global $_FILES;
 
-        // $data = array_merge($data, $_FILES);
-        if (is_array($_FILES)) {
-            foreach ($_FILES as $key => $value) {
-                if (null !== $data[$key]) {
-                    $data[$key] = $value;
-                }
-            }
+      if (is_array($_FILES)) {
+        foreach ($_FILES as $key => $value) {
+          if (null !== $data[$key]) {
+            $data[$key] = $value;
+          }
         }
+      }
 
-        //$data[$pk] = $id;
-
-        $SQL = "update $table_name set ";
-        foreach ($this->tables[$table_name] as $col_name => $col_definition) {
-            if (!$col_definition['virtual'] && '%%table_params%%' != $col_name /* && $col_name != "owner" */ && 'rights' != $col_name) {
-                // when user wants to delete a value by entering an empty string...
-                if ($whole_row) {
-                    if (
-                      null == $data[$col_name]
-                      && (
-                        'varchar' == $col_definition['type']
-                        || 'text' == $col_definition['type']
-                        || 'password' == $col_definition['type']
-                        || 'float' == $col_definition['type']
-                        || 'int' == $col_definition['type']
-                      )
-                    ) {
-                        $data[$col_name] = '';
-                    }
-                }
-
-                if (array_key_exists($col_name, $data) && 'yes' != $col_definition['no_update']) {
-                    $SQL .= $this->_sql_column_data($table_name, $col_name, $data);
-                }
+      $SQL = "update $table_name set ";
+      foreach ($this->tables[$table_name] as $col_name => $col_definition) {
+        if (!$col_definition['virtual'] && '%%table_params%%' != $col_name /* && $col_name != "owner" */ && 'rights' != $col_name) {
+          // when user wants to delete a value by entering an empty string...
+          if ($whole_row) {
+            if (
+              null == $data[$col_name]
+              && (
+                'varchar' == $col_definition['type']
+                || 'text' == $col_definition['type']
+                || 'password' == $col_definition['type']
+                || 'float' == $col_definition['type']
+                || 'int' == $col_definition['type']
+              )
+            ) {
+              $data[$col_name] = '';
             }
-        }
-        $SQL = substr($SQL, 0, -2)." where id=$id;";
+          }
 
-        return $SQL;
+          if (array_key_exists($col_name, $data) && 'yes' != $col_definition['no_update']) {
+            $SQL .= $this->_sql_column_data($table_name, $col_name, $data);
+          }
+        }
+      }
+
+      $SQL = substr($SQL, 0, -2)." where `id` = $id;";
+
+      return $SQL;
     }
 
     /**

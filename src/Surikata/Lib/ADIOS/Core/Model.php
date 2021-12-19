@@ -635,6 +635,16 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     return $item;
   }
 
+  public function getByLookupSqlValue(string $lookupSqlValue) {
+    return reset($this->adios->db->get_all_rows_query("
+      select
+        id,
+        ".$this->lookupSqlValue("t")." as `input_lookup_value`
+      from `{$this->table}` t
+      having `input_lookup_value` = '".$this->adios->db->escape($lookupSqlValue)."'
+    "));
+  }
+
   public function getAll(string $keyBy = "id", $withLookups = FALSE, $processLookups = FALSE) {
     if ($withLookups) {
       $items = $this->getWithLookups(NULL, $keyBy, $processLookups);
@@ -740,7 +750,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     return str_replace('{%TABLE%}', $this->table, "
       select
         id,
-        ".$this->lookupSqlValue()." as input_lookup_value
+        ".$this->lookupSqlValue()." as `input_lookup_value`
       from `{$this->table}`
       where
         ".$this->lookupSqlWhere($initiatingModel, $initiatingColumn, $formData, $params)."

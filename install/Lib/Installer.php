@@ -334,7 +334,7 @@ class Installer {
       // produkty - stavy na sklade
       $productStockStateModel->insertRow(["id" => 1, "name_lang_1" => "Available in stock", "name_lang_2" => "Dostupné na sklade", "name_lang_3" => "Dostupné na skladě"]);
       $productStockStateModel->insertRow(["id" => 2, "name_lang_1" => "Currently unavailable", "name_lang_2" => "Nedostupné", "name_lang_3" => "Nedostupné"]);
-      $productStockStateModel->insertRow(["id" => 3, "name_lang_1" => "Available upon request", "name_lang_2" => "Dostupné na otázku", "name_lang_3" => "Dostupné na dotaz"]);
+      $productStockStateModel->insertRow(["id" => 3, "name_lang_1" => "Available upon request", "name_lang_2" => "Dostupné na dotaz", "name_lang_3" => "Dostupné na dotaz"]);
 
       // produkty - produkty
       $adminPanel->db->startTransaction();

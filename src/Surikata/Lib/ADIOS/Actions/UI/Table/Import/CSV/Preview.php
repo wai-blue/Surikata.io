@@ -18,6 +18,7 @@ class Preview extends \ADIOS\Core\Action {
     $parentUid = $this->params['parentUid'];
     $model = $this->params['model'];
     $modelObject = $this->adios->getModel($model);
+    $columns = $modelObject->columns();
 
     $this->adios->checkUid($parentUid);
 
@@ -26,11 +27,16 @@ class Preview extends \ADIOS\Core\Action {
         id='{$parentUid}_column_{$colIndex}'
         onchange='
           $(this).css(\"opacity\", (this.value == \"\" ? 0.35 : 1));
+          $(\".{$parentUid}_column_{$colIndex}_info\").hide();
+          $(\".{$parentUid}_column_{$colIndex}_info[data-col-name=\" + this.value + \"]\").css(\"display\", \"inline-block\");
         '
       >
         <option value=''>-- ".$this->translate("Do not import this column")." --</option>
     ";
-    foreach ($modelObject->columns() as $tmpColName => $tmpColDefinition) {
+    foreach ($columns as $tmpColName => $tmpColDefinition) {
+      if (in_array($columns[$tmpColName]['type'], ["image", "file"])) continue;
+      if ($columns[$tmpColName]['virtual']) continue;
+
       $modelColumnsSelectHtml .= "
         <option
           value='".ads($tmpColName)."'
@@ -47,6 +53,70 @@ class Preview extends \ADIOS\Core\Action {
     }
     $modelColumnsSelectHtml .= "
       </select>
+    ";
+
+    foreach ($columns as $tmpColName => $tmpColDefinition) {
+      $acceptedValuesHtml = "";
+      switch ($columns[$tmpColName]['type']) {
+        case "lookup":
+          $lookupModelObject = $this->adios->getModel($columns[$tmpColName]["model"]);
+          $tmp = $this->adios->db->get_all_rows_query($lookupModelObject->lookupSqlQuery());
+
+          $acceptedValuesHtml = "<select style='font-size:inherit;color:inherit'>";
+          foreach ($tmp as $value) {
+            $acceptedValuesHtml .= "<option>".hsc($value['input_lookup_value'])."</option>";
+          }
+          $acceptedValuesHtml .= "</select>";
+        break;
+        case "boolean":
+          $acceptedValuesHtml = "0, 1";
+        break;
+        case "float":
+          $acceptedValuesHtml = $this->translate("Decimal numbers with dot (.) as a decimal separator and no thousands separator. Example: 123456.78");
+        break;
+        case "int":
+          if (is_array($columns[$tmpColName]["enum_values"])) {
+            $acceptedValuesHtml = "<select style='font-size:inherit;color:inherit'>";
+            foreach ($columns[$tmpColName]["enum_values"] as $value) {
+              $acceptedValuesHtml .= "<option>".hsc($value)."</option>";
+            }
+            $acceptedValuesHtml .= "</select>";
+          } else {
+            $acceptedValuesHtml = $this->translate("Non-decimal number, no thousands separator. Example: 123456");
+          }
+        break;
+        case "varchar":
+          $acceptedValuesHtml = $this->translate("Single-line text");
+        break;
+        case "text":
+          $acceptedValuesHtml = $this->translate("Multi-line text");
+        break;
+        case "date":
+          $acceptedValuesHtml = $this->translate("Date in YYYY-MM-DD format. Example: 2020-12-31");
+        break;
+        case "time":
+          $acceptedValuesHtml = $this->translate("Time in HH:MM:SS format. Example: 14:05:07");
+        break;
+        case "date":
+          $acceptedValuesHtml = $this->translate("Datetime in YYYY-MM-DD HH:MM:SS format. Example: 2020-12-31 14:05:07");
+        break;
+      }
+
+      if (!empty($acceptedValuesHtml)) {
+        $modelColumnsSelectHtml .= "
+          <div
+            class='{$parentUid}_column_{$colIndex}_info'
+            data-col-name='{$tmpColName}'
+            style='background:#ffecc8;padding:5px;font-size:0.8em;float:right;display:none'
+          >
+            ".$this->translate("Accepted values").":
+            {$acceptedValuesHtml}
+          </div>
+        ";
+      }
+    }
+
+    $modelColumnsSelectHtml .= "
       <script> $('#{$parentUid}_column_{$colIndex}').trigger('change'); </script>
     ";
 
@@ -55,6 +125,7 @@ class Preview extends \ADIOS\Core\Action {
   }
 
   public function render() {
+    $model = $this->params['model'];
     $csvFile = $this->params['csvFile'];
     $columnNamesInFirstLine = (bool) $this->params['columnNamesInFirstLine'];
     $separator = $this->params['separator'];
@@ -96,9 +167,9 @@ class Preview extends \ADIOS\Core\Action {
     foreach ($firstLine as $colIndex => $colName) {
       $conversionTableHtml .= "
         <tr>
-          ".($columnNamesInFirstLine ? "<td>".hsc($colName)."</td>" : "")."
-          <td>".hsc($secondLine[$colIndex])."</td>
-          <td>".$this->getModelColumnSelectHtml($colIndex, $colName)."</td>
+          ".($columnNamesInFirstLine ? "<td style='width:10%'>".hsc($colName)."</td>" : "")."
+          <td style='width:45%'>".hsc($secondLine[$colIndex])."</td>
+          <td style='width:45%'>".$this->getModelColumnSelectHtml($colIndex, $colName)."</td>
         </tr>
       ";
     }

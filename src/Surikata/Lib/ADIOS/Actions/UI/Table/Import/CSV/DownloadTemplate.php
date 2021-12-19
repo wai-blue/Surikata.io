@@ -24,6 +24,7 @@ class DownloadTemplate extends \ADIOS\Core\Action {
     $csv = "";
 
     foreach ($columns as $colName => $colDefinition) {
+      if (empty($colDefinition['title'])) continue;
       $csv .= '"'.str_replace('"', '""', $colDefinition['title']).'";';
     }
     $csv .= "\n";

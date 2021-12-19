@@ -1,0 +1,30 @@
+layout: WithoutSidebar
+url: 
+title: My Account - Validation
+panels:
+  header:
+    plugin: WAI/Common/Header
+    settings:
+  navigation:
+    plugin: WAI/Common/Navigation
+    settings:
+      menuId: menu("header.yml")
+      showCategories: true
+      showBreadcrumbs: true
+  section_1:
+    plugin: WAI/Customer/ValidationConfirmation
+  footer:
+    plugin: WAI/Common/Footer
+    settings:
+      mainMenuId: menu("header.yml")
+      secondaryMenuId: menu("footer.yml")
+      mainMenuTitle: translate("Pages")
+      secondaryMenuTitle: translate("Our Company")
+      showContactAddress: false
+      showContactEmail: true
+      showContactPhoneNumber: true
+      contactTitle: translate("Contact us")
+      showPayments: true
+      showSocialMedia: true
+      showMainMenu: true
+      showSecondaryMenu: true

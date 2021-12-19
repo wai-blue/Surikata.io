@@ -35,8 +35,16 @@ class CompanyInfo extends \ADIOS\Core\Widget\Action {
           ],
 
           [
-            "title" => $this->translate("Headquarter"),
+            "title" => $this->translate("Headquarter (Invoicing)"),
             "items" => [
+              [
+                "title" => $this->translate("Company name"),
+                "input" => $this->adios->ui->Input([
+                  "type" => "varchar",
+                  "uid" => "{$this->uid}_headquarterCompanyName",
+                  "value" => $settings['headquarterCompanyName'],
+                ]),
+              ],
               [
                 "title" => $this->translate("Street, 1st line"),
                 "input" => $this->adios->ui->Input([
@@ -83,6 +91,30 @@ class CompanyInfo extends \ADIOS\Core\Widget\Action {
                   "type" => "varchar",
                   "uid" => "{$this->uid}_headquarterCountry",
                   "value" => $settings['headquarterCountry'],
+                ]),
+              ],
+              [
+                "title" => $this->translate("Company ID"),
+                "input" => $this->adios->ui->Input([
+                  "type" => "varchar",
+                  "uid" => "{$this->uid}_headquarterCompanyID",
+                  "value" => $settings['headquarterCompanyID'],
+                ]),
+              ],
+              [
+                "title" => $this->translate("Tax ID"),
+                "input" => $this->adios->ui->Input([
+                  "type" => "varchar",
+                  "uid" => "{$this->uid}_headquarterTaxID",
+                  "value" => $settings['headquarterTaxID'],
+                ]),
+              ],
+              [
+                "title" => $this->translate("VAT ID"),
+                "input" => $this->adios->ui->Input([
+                  "type" => "varchar",
+                  "uid" => "{$this->uid}_headquarterVatID",
+                  "value" => $settings['headquarterVatID'],
                 ]),
               ],
             ],

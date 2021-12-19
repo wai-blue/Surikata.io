@@ -33,5 +33,7 @@ $dictionary = [
   "Email" => "E-mail",
   "Orders" => "Objednávky",
   "Invoices" => "Faktúry",
-  "New client" => "Nový klient"
+  "New client" => "Nový klient",
+  "Wishlist" => "Zoznam želaní",
+  "Watchdog" => "Strážny pes"
 ];

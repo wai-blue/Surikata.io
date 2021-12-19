@@ -307,8 +307,9 @@ class ProductCategory extends \ADIOS\Core\Widget\Model {
         $items[] = [
           "id" => $item["id"],
           "name" => $item["TRANSLATIONS"]["name"],
-          "subCategory" => $children,
-          "url" => $item["url"]
+          "subCategories" => $children,
+          "url" => $item["url"],
+          "TRANSLATIONS" => $item["TRANSLATIONS"],
         ];
       }
 

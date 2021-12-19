@@ -1,0 +1,10 @@
+# Adding items to the default installed menu is possible
+# for each plugin.
+# It is not necessary to configure "title" of the menu
+# here, because only list of items will be added to the
+# default menu.
+
+items:
+  - title: Blog
+    url: blog
+    order_index: 250

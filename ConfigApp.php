@@ -122,6 +122,7 @@ $adminPanelConfig['widgets']['HelpAndSupport']['enabled'] = TRUE;
 $adminPanelConfig['default_action'] = "Overview/Welcome";
 $adminPanelConfig['widgets']['Website']['domains'] = $configEnv["domains"];
 $adminPanelConfig['widgets']['Website']['domainLanguages'] = $configEnv["domainLanguages"];
+$adminPanelConfig['widgets']['Website']['domainLanguagesShort'] = $configEnv["domainLanguagesShort"];
 
 ////////////////////////////////////////////////////////
 // Website renderer configuration
@@ -132,7 +133,7 @@ $websiteRendererConfig = [
   "minifyOutputHtml" => $configEnv['minifyOutputHtml'] ?? FALSE,
   "validateOutputHtml" => $configEnv['validateOutputHtml'] ?? FALSE,
 
-  "assetCacheDir" => CACHE_DIR,
+  "assetCacheDir" => CACHE_DIR."/assets-".(defined("WEBSITE_DOMAIN_TO_RENDER") ? WEBSITE_DOMAIN_TO_RENDER : ""),
 
   "rewriteBase" => defined("WEBSITE_REWRITE_BASE") ? WEBSITE_REWRITE_BASE : "/",
   "twigCacheDir" => TWIG_CACHE_DIR,

@@ -3,8 +3,8 @@
 namespace Surikata\Plugins\WAI\Order {
   class CartOverview extends \Surikata\Core\Web\Plugin {
 
-    public function getTwigParams($pluginSettings) {
 
+    public function getTwigParams($pluginSettings) {
       $twigParams = $pluginSettings;
 
       $twigParams["cartContents"] = (new \Surikata\Plugins\WAI\Customer\Cart($this->websiteRenderer))->getCartContents();

@@ -76,7 +76,7 @@ class Form extends \ADIOS\Core\UI\View
     $params['table'] = $this->model->getFullTableSQLName();
 
     if (empty($params['uid'])) {
-      $params['uid'] = $this->adios->getUid("{$params['model']}_{$params['id']}");
+      $params['uid'] = $this->adios->getUid("{$params['model']}_{$params['id']}")."_".rand(1000, 9999);
     }
 
     if (empty($params['title'])) {
@@ -185,7 +185,7 @@ class Form extends \ADIOS\Core\UI\View
         $this->params['copy_button_params']['type'] = 'copy';
       }
       if ('' == $this->params['copy_button_params']['onclick']) {
-        $this->params['copy_button_params']['onclick'] = "_confirm('".l('Naozaj si želáte kopírovať záznam')."?', {}, function(){ ui_form_copy('{$this->params['uid']}') });";
+        $this->params['copy_button_params']['onclick'] = "_confirm('".$this->translate("Are you sure to delete this record?")."', {}, function(){ ui_form_copy('{$this->params['uid']}') });";
       }
       $this->params['copy_button_params']['style'] .= 'float:right;';
       $this->copy_button = $this->adios->ui->button($this->params['copy_button_params']);

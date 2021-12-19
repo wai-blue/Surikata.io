@@ -1,0 +1,88 @@
+##########################################################
+# emails
+
+emails:
+
+  # signature
+
+  signature: >
+    <p>
+      {{ domainName }} - <a href='http://{{ domainName }}' target='_blank'>{{ domainName }}</a>
+    </p>
+
+  # after_order_confirmation
+
+  after_order_confirmation_SUBJECT: Objednávka č. {% number %} - Surikata eshop
+  after_order_confirmation_BODY: >
+    <h2>Potvrdenie objednávky</h2>
+    <p>Vážený zákazník,</p>
+    <p>Ďakujeme vám za váš nákup. Vašu objednávku <b>{% number %}</b></p>
+    <p> sme zaregistrovali a vybavíme ju v čo najkratšom možno čase.</p>
+    <h2>Detaily objednávky</h2>
+    <h3>Fakturačná adresa</h3>
+    <ul>
+      <li>Názov spoločnosti: {% invCompanyName %}</li>
+      <li>IČO: {% companyId %}</li>
+      <li>DIČ: {% companyTaxId %}</li>
+      <li>IČ DPH: {% companyVatId %}</li>
+      <li>Meno: {% invGivenName %}</li>
+      <li>Priezvisko: {% invFamilyName %}</li>
+      <li>Ulica 1: {% invStreet1 %}</li>
+      <li>Ulica 2: {% invStreet2 %}</li>
+      <li>Mesto: {% invCity %}</li>
+      <li>PSČ: {% invZip %}</li>
+    </ul>
+    <h3>Dodacia adresa</h3>
+    <ul>
+      <li>Meno: {% delGivenName %}</li>
+      <li>Priezvisko: {% delFamilyName %}</li>
+      <li>Ulica 1: {% delStreet1 %}</li>
+      <li>Ulica 2: {% delStreet2 %}</li>
+      <li>Mesto: {% delCity %}</li>
+      <li>PSČ: {% delZip %}</li>
+      <li>Telefón: {% phoneNumber %}</li>
+      <li>Email: {% email %}</li>
+    </ul>
+
+  # after_registration
+
+  after_registration_SUBJECT: Overte Vašu emailovú adresu - Surikata Eshop
+  after_registration_BODY: >
+    <h2>Ahoj {% givenName %}!</h2>
+    <p><b>Kvôli bezpečnosti potrebujeme overiť vašu emailovú adresu, aby ste ju mohli použiť na našom eshope.</b></p>
+    <p>Kliknite na odkaz nižšie alebo skopírujte a prejdite na url aby sme mohli overiť vašu identitu.</p>
+    <p><a href="{% validationUrl %}" target="_blank">{% validationUrl %}</a></p>
+
+  # forgotten_password
+
+  forgotten_password_SUBJECT: Obnovenie hesla - Surikata eshop
+  forgotten_password_BODY: >
+    <h2>Ahoj {% givenName %}!</h2>
+    <p>Odkaz na obnovenie vášho hesla je nižšie.</p>
+    <p><a href="{% passwordRecoveryUrl %}" target="_blank">{% passwordRecoveryUrl %}</a></p>
+
+##########################################################
+# legalDisclaimers
+
+legalDisclaimers:
+
+  generalTerms: >
+    Všeobecné obchodné podmienky. Duis ac pharetra tellus, ac pellentesque risus. Integer varius dictum sapien in venenatis. Sed varius
+    sapien tincidunt faucibus ultrices. Curabitur bibendum lorem vel urna vulputate dignissim. Nam sed orci lobortis,
+    placerat neque eu, tempus purus. Sed sit amet erat vitae nisi hendrerit tincidunt et nec odio. Nam ac ex nec libero
+    venenatis consectetur ut a felis. Nam malesuada, dui eu aliquam elementum, lacus risus congue orci, eu varius dui enim
+    at nibh. Praesent commodo felis luctus iaculis sodales. Ut ac blandit quam, a convallis risus.
+
+  privacyPolicy: >
+    Pravidlá ochrany osobných údajov. Duis ac pharetra tellus, ac pellentesque risus. Integer varius dictum sapien in venenatis. Sed varius
+    sapien tincidunt faucibus ultrices. Curabitur bibendum lorem vel urna vulputate dignissim. Nam sed orci lobortis,
+    placerat neque eu, tempus purus. Sed sit amet erat vitae nisi hendrerit tincidunt et nec odio. Nam ac ex nec libero
+    venenatis consectetur ut a felis. Nam malesuada, dui eu aliquam elementum, lacus risus congue orci, eu varius dui enim
+    at nibh. Praesent commodo felis luctus iaculis sodales. Ut ac blandit quam, a convallis risus.
+
+  returnPolicy: >
+    Reklamačný poriadok. Duis ac pharetra tellus, ac pellentesque risus. Integer varius dictum sapien in venenatis. Sed varius
+    sapien tincidunt faucibus ultrices. Curabitur bibendum lorem vel urna vulputate dignissim. Nam sed orci lobortis,
+    placerat neque eu, tempus purus. Sed sit amet erat vitae nisi hendrerit tincidunt et nec odio. Nam ac ex nec libero
+    venenatis consectetur ut a felis. Nam malesuada, dui eu aliquam elementum, lacus risus congue orci, eu varius dui enim
+    at nibh. Praesent commodo felis luctus iaculis sodales. Ut ac blandit quam, a convallis risus.

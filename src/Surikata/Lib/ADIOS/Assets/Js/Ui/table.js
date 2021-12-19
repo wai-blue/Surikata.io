@@ -174,25 +174,6 @@
     };
   };
 
-  function ui_table_save_order(uid, column){
-    var order = '';
-    table = $('#'+uid).attr('data-table');
-    if (table != ''){
-
-      $('#'+uid+' .table_tr.data_tr').each(function(){
-        if ($(this).attr('data-id') > 0) order += $(this).attr('data-id')+',';
-      });
-
-      action = 'UI/Table/sortable';
-      res = _ajax_sread(action, {order: order, table: table, column: column});
-      if (isNaN(res)) _alert(res);
-      else ui_table_refresh(uid);
-
-    }else{
-      _alert('table missing');
-    };
-  };
-
   function ui_table_insert_row(uid){
     var data = ui_form_get_values(uid+'_insert_row_form');
     $('.'+uid+'_insert_row_button').attr('disabled', 'disabled');

@@ -14,7 +14,7 @@ namespace Surikata\Plugins\WAI\Product {
         case "recommended":
           $productIds = $productModel
             ->where("is_recommended", TRUE)
-            ->skip(0)->take((int)$pluginSettings["product_count"]);
+            ->skip(0)->take((int)$pluginSettings["productCount"]);
         break;
         case "on_sale":
           $productIds = $productModel->where("is_on_sale", TRUE);
@@ -22,19 +22,20 @@ namespace Surikata\Plugins\WAI\Product {
         case "sale_out":
           $productIds = $productModel->where("is_sale_out", TRUE);
         break;
+        default:
+          throw new \ADIOS\Core\Exceptions\GeneralException("Plugins/WAI/Product/FilteredList: Unknown filter type {$pluginSettings["filterType"]}");
+        break;
       }
-
-      // TODO: toto by sa malo dat optimalizovat, getDetailedInfoForListOfProducts sa pouziva iba tu
-      // a vyzera to byt zbytocny DB request
 
       $productIds = $productIds
         ->skip(0)
-        ->take((int) $pluginSettings["product_count"])
+        ->take((int) $pluginSettings["productCount"])
         ->get()
         ->pluck('id')
       ;
 
-      $twigParams["products"] = $productModel->getDetailedInfoForListOfProducts($productIds);
+      $twigParams["products"] = $productModel->getDetailedInfoForListOfProducts($productIds, $languageIndex);
+      $twigParams["products"] = $productModel->addPriceInfoForListOfProducts($twigParams["products"]);
 
       $productDetailPlugin = new \Surikata\Plugins\WAI\Product\Detail($this->websiteRenderer);
       foreach ($twigParams["products"] as $key => $product) {
@@ -42,17 +43,6 @@ namespace Surikata\Plugins\WAI\Product {
           $productDetailPlugin->getWebPageUrl($product)
         ;
 
-        $twigParams["products"][$key] =
-          $productModel->translateSingleProductForWeb($twigParams["products"][$key], $languageIndex);
-
-        $twigParams["products"][$key]["ProductCategory"] =
-          $productCategoryModel
-            ->translateForWeb(
-              [
-                $productCategoryModel
-                ->getById($twigParams["products"][$key]["id_category"])
-              ], $languageIndex
-            )[0];
       }
 
       return $twigParams;
@@ -66,6 +56,10 @@ namespace ADIOS\Plugins\WAI\Product {
 
     public function getSettingsForWebsite() {
       return [
+        "heading" => [
+          "title" => "Heading",
+          "type" => "varchar",
+        ],
         "filterType" => [
           "title" => "Products for display",
           "type" => "varchar",
@@ -85,9 +79,17 @@ namespace ADIOS\Plugins\WAI\Product {
             "row-large" => "Row large"
           ],
         ],
-        "product_count" => [
+        "productCount" => [
           "title" => "Number of products",
           "type" => "int",
+        ],
+        "productCardCssClass" => [
+          "title" => "Custom CSS class for product card",
+          "type" => "varchar",
+        ],
+        "productCardCssStyle" => [
+          "title" => "Custom CSS style for product card",
+          "type" => "varchar",
         ],
       ];
     }

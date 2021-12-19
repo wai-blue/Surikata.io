@@ -13,7 +13,7 @@ class CustomerWishlist extends \ADIOS\Core\Widget\Model {
     return parent::columns([
       "id_customer" => [
         "type" => "lookup",
-        "title" => "Customer",
+        "title" => $this->translate("Customer"),
         "model" => "Widgets/Customers/Models/Customer",
         "readonly" => TRUE,
         "required" => TRUE,
@@ -21,7 +21,7 @@ class CustomerWishlist extends \ADIOS\Core\Widget\Model {
 
       "id_product" => [
         "type" => "lookup",
-        "title" => "Product",
+        "title" => $this->translate("Product"),
         "model" => "Widgets/Products/Models/Product",
         "readonly" => TRUE,
         "required" => TRUE,
@@ -57,8 +57,8 @@ class CustomerWishlist extends \ADIOS\Core\Widget\Model {
     $customer = $customerModel->getById($params['id_customer']);
 
     $params['columns'] = 4;
-    $params['window']['title'] = $customer['email'];
-    $params['window']['subtitle'] = "Wishlist";
+    $params['window']['title'] = $this->translate("Wishlist");
+    $params['window']['subtitle'] = $customer['email'];
     return $params;
   }
 
@@ -79,7 +79,7 @@ class CustomerWishlist extends \ADIOS\Core\Widget\Model {
           <a
             href='javascript:void(0)'
             onclick='window_render(\"Products/{$data['id_product']}/Edit\");'
-          >Show product</a>
+          >". $this->translate("Show product")."</a>
         </div>
       </div>
     ";

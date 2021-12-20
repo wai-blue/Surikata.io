@@ -42,10 +42,10 @@ class Search extends \ADIOS\Core\Action {
           if (!in_array($lookupColDef["type"], $unsearchableColumnTypes)) {
             $tabs[$lookupModel->name]["items"][] = [
               "title" => $lookupColDef['title'],
-              "value" => NULL,
               "input" => $this->adios->ui->Input([
                 "model" => $this->params['model'],
                 "type" => $lookupColDef["type"],
+                "value" => NULL,
                 "uid" => "{$this->uid}_LOOKUP___{$colName}___{$lookupColName}",
               ]),
             ];

@@ -1314,7 +1314,7 @@ class Order extends \ADIOS\Core\Widget\Model {
           i.*,
           p.number as product_number,
           p.weight as product_weight,
-          p.name_lang_1 as product_name
+          p.name_lang_{$this->adios->translatedColumnIndex} as product_name
         from `{$orderItemModel->table}` i
         left join `{$productModel->table}` p on p.id = i.id_product
         where i.id_order = ".(int) $order['id']."

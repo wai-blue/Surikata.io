@@ -5,46 +5,60 @@ namespace ADIOS\Widgets\Settings\Models;
 class Unit extends \ADIOS\Core\Widget\Model {
   var $sqlName = "units";
   var $urlBase = "Settings/Units";
-  var $lookupSqlValue = "if({%TABLE%}.name is null, {%TABLE%}.unit, concat({%TABLE%}.unit, ' (', {%TABLE%}.name, ')'))";
 
   public function init() {
     $this->tableTitle = $this->translate("Units");
     $this->formTitleForInserting = $this->translate("New unit");
     $this->formTitleForEditing = $this->translate("Unit");
+
+    $this->lookupSqlValue = "
+      if(
+        {%TABLE%}.name_lang_{$this->adios->translatedColumnIndex} is null,
+        {%TABLE%}.unit,
+        concat({%TABLE%}.unit, ' (', {%TABLE%}.name_lang_{$this->adios->translatedColumnIndex}, ')')
+      )
+    ";
   }
 
   public function columns(array $columns = []) {
-    return parent::columns([
-      "unit" => [
+    $translatedColumns = [];
+    $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
+
+    foreach ($domainLanguages as $languageIndex => $languageName) {
+      $translatedColumns["name_lang_{$languageIndex}"] = [
         "type" => "varchar",
-        "title" => $this->translate("Unit"),
-        "description" => $this->translate("E.g.: mm, kg, l, btl, pkg, ..."),
-        "show_column" => TRUE,
-        "required" => TRUE,
-      ],
+        "title" => $this->translate("Name")." (".$this->translate($languageName).")",
+        "show_column" => ($languageIndex == $this->adios->translatedColumnIndex),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
+      ];
+    }
 
-      "name" => [
-        "type" => "varchar",
-        "title" => $this->translate("Unit name"),
-        "description" => $this->translate("E.g.: milimetres, kilogramms, litres, bottles, packages, ..."),
-        "show_column" => TRUE,
-        "required" => TRUE,
-      ],
+    return parent::columns(array_merge(
+      $translatedColumns,
+      [
+        "unit" => [
+          "type" => "varchar",
+          "title" => $this->translate("Unit"),
+          "description" => $this->translate("E.g.: mm, kg, l, btl, pkg, ..."),
+          "show_column" => TRUE,
+          "required" => TRUE,
+        ],
 
-      "is_for_products" => [
-        "type" => "boolean",
-        "title" => $this->translate("Is for products"),
-        "description" => $this->translate("If checked, this unit will be available as a delivery unit for product."),
-        "show_column" => TRUE,
-      ],
+        "is_for_products" => [
+          "type" => "boolean",
+          "title" => $this->translate("Is for products"),
+          "description" => $this->translate("If checked, this unit will be available as a delivery unit for product."),
+          "show_column" => TRUE,
+        ],
 
-      "is_for_features" => [
-        "type" => "boolean",
-        "title" => $this->translate("Is for features"),
-        "description" => $this->translate("If checked, this unit will be available as a unit for a product feature."),
-        "show_column" => TRUE,
-      ],
-    ]);
+        "is_for_features" => [
+          "type" => "boolean",
+          "title" => $this->translate("Is for features"),
+          "description" => $this->translate("If checked, this unit will be available as a unit for a product feature."),
+          "show_column" => TRUE,
+        ],
+      ]
+    ));
   }
 
   public function indexes(array $indexes = []) {

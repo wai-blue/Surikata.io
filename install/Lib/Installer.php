@@ -206,28 +206,28 @@ class Installer {
     if (in_array("product-catalog", $partsToInstall)) {
 
       // merne jednotky
-      $unitModel->insertRow(["id" => 1, "unit" => "N/A", "name" => "no unit", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 2, "unit" => "mm", "name" => "milimeters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 3, "unit" => "cm", "name" => "centimeters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 4, "unit" => "m", "name" => "meters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 22, "unit" => "km", "name" => "kilometers", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 5, "unit" => "ml", "name" => "mililitres", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 6, "unit" => "dl", "name" => "decilitres", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 7, "unit" => "l", "name" => "litres", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 8, "unit" => "mg", "name" => "miligramms", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 9, "unit" => "g", "name" => "gramms", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 10, "unit" => "kg", "name" => "kilogramms", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 11, "unit" => "t", "name" => "tonnes", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 12, "unit" => "mm2", "name" => "square milimeters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 13, "unit" => "cm2", "name" => "square centimeters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 14, "unit" => "m2", "name" => "square meters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 15, "unit" => "mm3", "name" => "cubic milimeters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 16, "unit" => "cm3", "name" => "cubic centimeters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 17, "unit" => "m3", "name" => "cubic meters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 18, "unit" => "btl", "name" => "bottles", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 19, "unit" => "pcs", "name" => "pieces", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 20, "unit" => "pkg", "name" => "packages", "is_for_products" => TRUE, "is_for_features" => TRUE]);
-      $unitModel->insertRow(["id" => 21, "unit" => "cnt", "name" => "containers", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 1, "unit" => "-", "name_lang_1" => "no unit", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 2, "unit" => "mm", "name_lang_1" => "milimeters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 3, "unit" => "cm", "name_lang_1" => "centimeters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 4, "unit" => "m", "name_lang_1" => "meters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 22, "unit" => "km", "name_lang_1" => "kilometers", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 5, "unit" => "ml", "name_lang_1" => "mililitres", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 6, "unit" => "dl", "name_lang_1" => "decilitres", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 7, "unit" => "l", "name_lang_1" => "litres", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 8, "unit" => "mg", "name_lang_1" => "miligramms", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 9, "unit" => "g", "name_lang_1" => "gramms", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 10, "unit" => "kg", "name_lang_1" => "kilogramms", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 11, "unit" => "t", "name_lang_1" => "tonnes", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 12, "unit" => "mm2", "name_lang_1" => "square milimeters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 13, "unit" => "cm2", "name_lang_1" => "square centimeters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 14, "unit" => "m2", "name_lang_1" => "square meters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 15, "unit" => "mm3", "name_lang_1" => "cubic milimeters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 16, "unit" => "cm3", "name_lang_1" => "cubic centimeters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 17, "unit" => "m3", "name_lang_1" => "cubic meters", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 18, "unit" => "btl", "name_lang_1" => "bottles", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 19, "unit" => "pcs", "name_lang_1" => "pieces", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 20, "unit" => "pkg", "name_lang_1" => "packages", "is_for_products" => TRUE, "is_for_features" => TRUE]);
+      $unitModel->insertRow(["id" => 21, "unit" => "cnt", "name_lang_1" => "containers", "is_for_products" => TRUE, "is_for_features" => TRUE]);
 
       // produkty - dodavatelia
       $supplierModel->insertRow(["name" => "Baumax"]);

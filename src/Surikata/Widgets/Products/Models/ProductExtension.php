@@ -20,15 +20,15 @@ class ProductExtension extends \ADIOS\Core\Widget\Model {
       $translatedColumns["name_lang_{$languageIndex}"] = [
         "type" => "varchar",
         "title" => $this->translate("Name")." ({$languageName})",
-        "show_column" => ($languageIndex == 1),
-        "is_searchable" => ($languageIndex == 1),
+        "show_column" => ($languageIndex == $this->adios->translatedColumnIndex),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
       ];
       $translatedColumns["description_lang_{$languageIndex}"] = [
         "type" => "text",
         "title" => $this->translate("Description")." ({$languageName})",
         "interface" => "formatted_text",
         "show_column" => FALSE,
-        "is_searchable" => ($languageIndex == 1),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
       ];
     }
 

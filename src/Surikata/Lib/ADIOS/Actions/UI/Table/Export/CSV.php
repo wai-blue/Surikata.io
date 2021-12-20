@@ -25,31 +25,42 @@ class CSV extends \ADIOS\Core\Action {
     $data = $uiTable->data;
     $firstRow = reset($data);
 
-    $firstLine = "";
-    foreach (array_keys($firstRow) as $colName) {
-      if (isset($columns[$colName])) {
-        $firstLine .= '"'.str_replace('"', '""', $columns[$colName]['title']).'";';
-      }
-    }
+    $csv = "";
 
-    $csv = trim($firstLine, ";")."\n";
-
-    foreach ($data as $row) {
-      $line = "";
-      foreach ($row as $colName => $colValue) {
-        if (isset($columns[$colName])) {
-          $cellCsv = $uiTable->getCellCsv($colName, $columns[$colName], $row);
-          $cellCsv = $model->tableCellCSVFormatter([
-            'table' => $uiTable,
-            'column' => $colName,
-            'row' => $row,
-            'csv' => $cellCsv,
-          ]);
-
-          $line .= '"'.str_replace('"', '""', $cellCsv).'";';
+    if (count($data) == 0) {
+      foreach ($columns as $colName => $colDefinition) {
+        if ($colDefinition["show_column"]) {
+          $csv .= '"'.str_replace('"', '""', $colDefinition['title'] ?? "-").'";';
         }
       }
-      $csv .= trim($line, ";")."\n";
+    } else {
+      $firstLine = "";
+
+      foreach (array_keys($firstRow) as $colName) {
+        if (isset($columns[$colName])) {
+          $firstLine .= '"'.str_replace('"', '""', $columns[$colName]['title'] ?? "-").'";';
+        }
+      }
+
+      $csv = trim($firstLine, ";")."\n";
+
+      foreach ($data as $row) {
+        $line = "";
+        foreach ($row as $colName => $colValue) {
+          if (isset($columns[$colName])) {
+            $cellCsv = $uiTable->getCellCsv($colName, $columns[$colName], $row);
+            $cellCsv = $model->tableCellCSVFormatter([
+              'table' => $uiTable,
+              'column' => $colName,
+              'row' => $row,
+              'csv' => $cellCsv,
+            ]);
+
+            $line .= '"'.str_replace('"', '""', $cellCsv).'";';
+          }
+        }
+        $csv .= trim($line, ";")."\n";
+      }
     }
 
     header("Expires: 0");

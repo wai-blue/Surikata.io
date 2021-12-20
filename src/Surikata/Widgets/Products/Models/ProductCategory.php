@@ -4,7 +4,6 @@ namespace ADIOS\Widgets\Products\Models;
 
 class ProductCategory extends \ADIOS\Core\Widget\Model {
   var $sqlName = "products_categories";
-  var $lookupSqlValue = "{%TABLE%}.name_lang_1";
   var $urlBase = "Products/Categories";
 
   public static $allItemsCache = NULL;
@@ -13,6 +12,7 @@ class ProductCategory extends \ADIOS\Core\Widget\Model {
     $this->tableTitle = $this->translate("Product categories");
     $this->formTitleForInserting = $this->translate("New product category");
     $this->formTitleForEditing = $this->translate("Product category");
+    $this->lookupSqlValue = "{%TABLE%}.name_lang_{$this->adios->translatedColumnIndex}";
   }
 
   public function columns(array $columns = []) {
@@ -23,15 +23,15 @@ class ProductCategory extends \ADIOS\Core\Widget\Model {
       $translatedColumns["name_lang_{$languageIndex}"] = [
         "type" => "varchar",
         "title" => $this->translate("Name")." ({$languageName})",
-        "show_column" => ($languageIndex == 1),
-        "is_searchable" => ($languageIndex == 1),
+        "show_column" => ($languageIndex == $this->adios->translatedColumnIndex),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
       ];
       $translatedColumns["description_lang_{$languageIndex}"] = [
         "type" => "text",
         "title" => $this->translate("Description")." ({$languageName})",
         "interface" => "formatted_text",
-        "show_column" => ($languageIndex == 1),
-        "is_searchable" => ($languageIndex == 1),
+        "show_column" => ($languageIndex == $this->adios->translatedColumnIndex),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
       ];
     }
 
@@ -108,12 +108,13 @@ class ProductCategory extends \ADIOS\Core\Widget\Model {
   }
 
   public function formParams($data, $params) {
+
     $params['default_values'] = [
       'id_parent' => $params['id_parent']
     ];
 
     if ($data['id'] > 0) {
-      $params['title'] = $data['name_lang_1'];
+      $params['title'] = $data["name_lang_{$this->adios->translatedColumnIndex}"];
       $params['subtitle'] = $this->translate("Product category");
     }
 
@@ -142,8 +143,8 @@ class ProductCategory extends \ADIOS\Core\Widget\Model {
           "class" => "col-md-9 pl-0",
           "tabs" => [
             $this->translate("General") => [
-              "name_lang_1",
-              "description_lang_1",
+              "name_lang_{$this->adios->translatedColumnIndex}",
+              "description_lang_{$this->adios->translatedColumnIndex}",
               "image",
             ],
             $this->translate("Translations") => $tabTranslations,
@@ -217,7 +218,7 @@ class ProductCategory extends \ADIOS\Core\Widget\Model {
             break;
         case "title":
         case "title_desc":
-          $productsQuery->orderBy('name_lang_1', $sortDesc);
+          $productsQuery->orderBy("name_lang_{$this->adios->translatedColumnIndex}", $sortDesc);
           break;
         case "date":
         case "date_desc":

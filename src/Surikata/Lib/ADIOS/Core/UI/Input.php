@@ -430,36 +430,35 @@ class Input extends \ADIOS\Core\UI\View {
 
             /* datetime, timestamp */
             if ('datetime' == $this->params['type'] || 'timestamp' == $this->params['type']) {
-                if ('' == $this->params['placeholder']) {
-                    $this->params['placeholder'] = 'dd.mm.yyyy hh:mm';
-                }
-                if ('' == $this->params['value']) {
-                    $this->params['value'] = ('' != $this->params['default_date_value'] ? $this->params['default_date_value'] : '');
-                }
-                $this->params['value'] = (false !== strtotime($this->params['value']) ? date('d.m.Y H:i:s', strtotime($this->params['value'])) : '');
+              if ('' == $this->params['placeholder']) {
+                $this->params['placeholder'] = 'dd.mm.yyyy hh:mm';
+              }
+              if ('' == $this->params['value']) {
+                $this->params['value'] = ('' != $this->params['default_date_value'] ? $this->params['default_date_value'] : '');
+              }
+              $this->params['value'] = (false !== strtotime($this->params['value']) ? date('d.m.Y H:i:s', strtotime($this->params['value'])) : '');
             }
 
             /* float */
             if ('float' == $this->params['type']) {
-                if (!($this->params['decimals'] > 0)) {
-                    $this->params['decimals'] = 2;
-                }
-                // $this->params['onchange'] = " ui_input_check_float_number($(this), {$this->params['decimals']}, '".l('Zadajte číselnú hodnotu')."'); ".$this->params['onchange'];
+              if (!($this->params['decimals'] > 0)) {
+                $this->params['decimals'] = 2;
+              }
             }
 
             /* int - slider */
             if ('int' == $this->params['type'] && 'slider' == $this->params['input_style']) {
-                $input_type = 'hidden';
+              $input_type = 'hidden';
             }
 
             /* time */
             if ('time' == $this->params['type']) {
-                if ('' == $this->params['placeholder']) {
-                    $this->params['placeholder'] = 'hh:mm:ss';
-                }
-                // medzera s x je tam naschval kvoli parsovaniu do inputov. nemazat
-                $this->params['onkeyup'] = "ui_input_parse_time('{$this->params['uid']}', 'x '+this.value); ".$this->params['onchange'];
-                $this->params['onkeydown'] = ' if (event.which > 31 && (event.which < 48 || event.which > 57) && event.which != 186) return false; '.$this->params['onchange'];
+              if ('' == $this->params['placeholder']) {
+                $this->params['placeholder'] = 'hh:mm:ss';
+              }
+              // medzera s x je tam naschval kvoli parsovaniu do inputov. nemazat
+              $this->params['onkeyup'] = "ui_input_parse_time('{$this->params['uid']}', 'x '+this.value); ".$this->params['onchange'];
+              $this->params['onkeydown'] = ' if (event.which > 31 && (event.which < 48 || event.which > 57) && event.which != 186) return false; '.$this->params['onchange'];
             }
 
             $this->params['onkeyup'] .= "
@@ -766,16 +765,16 @@ class Input extends \ADIOS\Core\UI\View {
                           'uid' => $this->params['uid'].'_file_input_browser_button',
                           'onclick' => "ui_input_ftp_browser('{$this->params['uid']}', 'file');",
                           'fa_icon' => 'fas fa-search',
-                          'text' => l('Použiť už nahratý (Nájsť na serveri)'),
+                          'text' => $this->translate("Browse in uploaded files"),
                           'class' => "float-left mr-1 btn-secondary btn-sm btn-icon-split",
                         ])->render()
                       : '').
                       (FALSE && $this->params['show_download_url_button'] ?
                         $this->adios->ui->button([
                           'uid' => $this->params['uid'].'_file_input_download_button',
-                          'onclick' => "ui_input_file_download('{$this->params['uid']}', '".l('Zadajte URL adresu')."');",
+                          'onclick' => "ui_input_file_download('{$this->params['uid']}', '".$this->translate("Enter URL address")."');",
                           'fa_icon' => 'fas fa-download',
-                          'title' => l('Stiahnuť'),
+                          'title' => $this->translate('Download'),
                           'class' => "float-left mr-1 btn-secondary btn-sm btn-icon-split",
                         ])->render()
                       : '').
@@ -784,7 +783,7 @@ class Input extends \ADIOS\Core\UI\View {
                           'uid' => $this->params['uid'].'_file_input_open_button',
                           'onclick' => "ui_input_file_open('{$this->params['uid']}');",
                           'fa_icon' => 'fas fa-eye',
-                          'title' => l('Náhľad'),
+                          'title' => $this->translate('Preview'),
                           'class' => "float-left mr-1 btn-secondary btn-sm btn-icon-split",
                           'style' => (empty($this->params['value']) ? 'display:none;' : '')
                         ])->render()
@@ -794,7 +793,7 @@ class Input extends \ADIOS\Core\UI\View {
                           'uid' => $this->params['uid'].'_file_input_delete_button',
                           'onclick' => "ui_input_file_remove('{$this->params['uid']}');",
                           'fa_icon' => 'fas fa-trash-alt',
-                          'title' => l('Vyčistiť'),
+                          'title' => $this->translate('Clear'),
                           'class' => "float-left mr-1 btn-danger btn-sm btn-icon-split",
                           'style' => (empty($this->params['value']) ? 'display:none;' : '')
                         ])->render()
@@ -987,7 +986,7 @@ class Input extends \ADIOS\Core\UI\View {
                           id='{$this->params['uid']}_detail_button'
                           style='".($this->params['value'] > 0 && is_array($row) ? '' : 'display:none;')."'
                           class='icon fas fa-id-card'
-                          title='".l('Zobraziť detail záznamu')."' 
+                          title='".$this->translate("Show details")."' 
                         ></i>
                       </span>
                     " : "")."
@@ -998,7 +997,7 @@ class Input extends \ADIOS\Core\UI\View {
                           id='{$this->params['uid']}_clear_button'
                           style='".($this->params['value'] > 0 && is_array($row) ? '' : 'display:none;').";'
                           class='icon fas fa-times'
-                          title='".l('Zrušiť výber')."' 
+                          title='".$this->translate("Clear selection")."' 
                         ></i>
                       </span>
                     " : '')."

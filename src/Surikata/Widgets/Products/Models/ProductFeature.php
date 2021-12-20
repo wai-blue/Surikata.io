@@ -38,15 +38,15 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
       $translatedColumns["name_lang_{$languageIndex}"] = [
         "type" => "varchar",
         "title" => $this->translate("Name")." ({$languageName})",
-        "show_column" => ($languageIndex == 1),
-        "is_searchable" => ($languageIndex == 1),
+        "show_column" => ($languageIndex == $this->adios->translatedColumnIndex),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
       ];
       $translatedColumns["description_lang_{$languageIndex}"] = [
         "type" => "text",
         "title" => $this->translate("Description")." ({$languageName})",
         "interface" => "formatted_text",
-        "show_column" => ($languageIndex == 1),
-        "is_searchable" => ($languageIndex == 1),
+        "show_column" => ($languageIndex == $this->adios->translatedColumnIndex),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
       ];
     }
 
@@ -110,7 +110,7 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
 
     $value = "
       concat(
-        {%TABLE%}.name_lang_1,
+        {%TABLE%}.name_lang_{$this->adios->translatedColumnIndex},
         ' [',
         ifnull(
           (
@@ -142,7 +142,7 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
     ];
 
     if ($data['id'] > 0) {
-      $params['title'] = $data['name_lang_1'];
+      $params['title'] = $data["name_lang_{$this->adios->translatedColumnIndex}"];
       $params['subtitle'] = "Product feature";
     }
 
@@ -171,8 +171,8 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
           "class" => "col-md-9 pl-0",
           "tabs" => [
             $this->translate("General") => [
-              "name_lang_1",
-              "description_lang_1",
+              "name_lang_{$this->adios->translatedColumnIndex}",
+              "description_lang_{$this->adios->translatedColumnIndex}",
               "icon",
               "value_type",
               "id_measurement_unit",

@@ -12,7 +12,7 @@ class ProductRevenues extends \ADIOS\Core\Widget\Action {
       select
         year(`o`.`confirmation_time`) as `year`,
         sum(`oi`.`unit_price` * `oi`.`quantity`) as `revenue`,
-        `p`.`name_lang_1` as `product_name`
+        `p`.`name_lang_{$this->adios->translatedColumnIndex}` as `product_name`
       from `".$orderItemModel->getFullTableSQLName()."` `oi`
       left join `".$productModel->getFullTableSQLName()."` `p` on `p`.`id` = `oi`.`id_product`
       left join `".$orderModel->getFullTableSQLName()."` `o` on `o`.`id` = `oi`.`id_order`

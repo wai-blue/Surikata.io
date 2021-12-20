@@ -7,5 +7,11 @@ $dictionary = [
   "Find on this computer" => "Nájsť na tomto počítači",
   "Uploading file. Please wait." => "Nahráva sa súbor. Prosím čakajte.",
   "Search" => "Vyhľadávanie",
-  "Search in list" => "Hľadať v zozname"
+  "Search in list" => "Hľadať v zozname",
+  "Browse in uploaded files" => "Použiť už nahratý (Nájsť na serveri)",
+  "Download" => "Prevziať",
+  "Preview" => "Náhľad",
+  "Clear" => "Vyčistiť",
+  "Show details" => "Zobraziť detail záznamu",
+  "Clear selection" => "Zrušiť výber",
 ];

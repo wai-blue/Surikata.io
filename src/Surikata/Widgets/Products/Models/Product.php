@@ -8,11 +8,11 @@ class Product extends \ADIOS\Core\Widget\Model {
   const PRICE_CALCULATION_METHOD_PLUGIN        = 3;
   
   var $sqlName = "products";
-  var $lookupSqlValue = "concat({%TABLE%}.number, ' ', {%TABLE%}.name_lang_1)";
   var $urlBase = "Products";
 
   public function init() {
     $this->tableTitle = $this->translate("Products");
+    $this->lookupSqlValue = "concat({%TABLE%}.number, ' ', {%TABLE%}.name_lang_{$this->adios->translatedColumnIndex})";
 
     $this->enumValuesSalePriceCalculationMethod = [
       self::PRICE_CALCULATION_METHOD_CUSTOM_PRICE => $this->translate("Custom price: You can enter your custom price"),
@@ -29,27 +29,21 @@ class Product extends \ADIOS\Core\Widget\Model {
       $translatedColumns["name_lang_{$languageIndex}"] = [
         "type" => "varchar",
         "title" => $this->translate("Name")." (".$this->translate($languageName).")",
-        "show_column" => ($languageIndex == 1),
-        "is_searchable" => ($languageIndex == 1),
+        "show_column" => ($languageIndex == $this->adios->translatedColumnIndex),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
       ];
       $translatedColumns["brief_lang_{$languageIndex}"] = [
         "type" => "varchar",
-        "title" => $this->translate("Short description")." ({$languageName})",
+        "title" => $this->translate("Short description")." (".$this->translate($languageName).")",
         "show_column" => FALSE,
-        "is_searchable" => ($languageIndex == 1),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
       ];
       $translatedColumns["description_lang_{$languageIndex}"] = [
         "type" => "text",
-        "title" => $this->translate("Description")." ({$languageName})",
+        "title" => $this->translate("Description")." (".$this->translate($languageName).")",
         "interface" => "formatted_text",
         "show_column" => FALSE,
-        "is_searchable" => ($languageIndex == 1),
-      ];
-      $translatedColumns["gift_lang_{$languageIndex}"] = [
-        "type" => "varchar",
-        "title" => $this->translate("Gift")." ({$languageName})",
-        "show_column" => FALSE,
-        "is_searchable" => ($languageIndex == 1),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
       ];
     }
 
@@ -444,6 +438,40 @@ class Product extends \ADIOS\Core\Widget\Model {
     ]);
   }
 
+  public function onTableAfterDataLoaded($tableObject) {
+    //echo "<pre>";
+    //var_dump($tableObject->data);
+    //echo "</pre>";
+  }
+
+  public function tableCellHTMLFormatter($data) {
+    $productStockStateModel = new \ADIOS\Widgets\Products\Models\ProductStockState($this->adios);
+    $productStockStateModel->init();
+    $language = $_SESSION[_ADIOS_ID]['language'] ?? "en";
+    switch ($language) {
+      case "en":
+        $languageIndex = 1;
+        break;
+      case "sk":
+        $languageIndex = 2;
+        break;
+      case "cz":
+        $languageIndex = 3;
+        break;
+      default:
+        $languageIndex = 1;
+    }
+    if ($data['column'] === "id_stock_state" && !is_null($data['row']['id_stock_state'])) {
+      $stockState = $productStockStateModel->getById($data['row']['id_stock_state']);
+      if (strlen($stockState["name_lang_".$languageIndex]) > 0) {
+        return $stockState["name_lang_" . $languageIndex];
+      }
+    }
+    return $this->adios->dispatchEventToPlugins("onTableCellHTMLFormatter", [
+      "model" => $this,
+      "data" => $data,
+    ])["data"]["html"];
+  }
   ////////////////////////////////////////////////////////////////
   // ADIOS UI METHODS
 
@@ -500,7 +528,7 @@ class Product extends \ADIOS\Core\Widget\Model {
     if ($data['id'] <= 0) {
       $params['title'] = $this->translate("New product");
     } else {
-      $params['title'] = "{$data['number']} {$data['name_lang_1']}";
+      $params['title'] = "{$data['number']} {$data["name_lang_{$this->adios->translatedColumnIndex}"]}";
       $params['subtitle'] = $this->translate("Product");
     }
 
@@ -509,7 +537,7 @@ class Product extends \ADIOS\Core\Widget\Model {
       "table" => $this->adios->getModel("Widgets/Products/Models/ProductCategoryAssignment")->table,
       "input_style" => "autocomplete",
       "title" => $this->translate("Zaradenie do vedľajších kategórií"),
-      "order" => "name_lang_1 asc"
+      "order" => "name_lang_{$this->adios->translatedColumnIndex} asc"
     ];
 
     $tabTranslations = [];
@@ -518,16 +546,13 @@ class Product extends \ADIOS\Core\Widget\Model {
     $domains = $this->adios->getAvailableDomains();
     $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
 
-    $i = 1;
     foreach ($domainLanguages as $languageIndex => $languageName) {
-      if ($i > 1) {
+      if ($languageIndex != $this->adios->translatedColumnIndex) {
         $tabTranslations[] = ["html" => "<b style='color:var(--cl-main)'>".hsc($languageName)."</b>"];
         $tabTranslations[] = "name_lang_{$languageIndex}";
         $tabTranslations[] = "brief_lang_{$languageIndex}";
         $tabTranslations[] = "description_lang_{$languageIndex}";
-        $tabTranslations[] = "gift_lang_{$languageIndex}";
       }
-      $i++;
     }
 
     foreach ($domains as $domain => $domainInfo) {
@@ -639,13 +664,21 @@ class Product extends \ADIOS\Core\Widget\Model {
     $priceInfoPriceList = $this->getPriceInfoForSingleProduct($data, self::PRICE_CALCULATION_METHOD_PRICE_LIST, FALSE);
     $priceInfoPlugin = $this->getPriceInfoForSingleProduct($data, self::PRICE_CALCULATION_METHOD_PLUGIN, FALSE);
 
+    $productStockStateModel = (new ProductStockState($this->adios));
+
+    $allStockStates = $productStockStateModel->getAll();
+    $enumValuesStockStates = [0 => ""];
+    foreach ($allStockStates as $stockState) {
+      $enumValuesStockStates[$stockState["id"]] = $stockState["name_lang_".$this->adios->translatedColumnIndex];
+    }
+
     $templateTabs = [
       $this->translate("General") => [
         "number",
         "ean",
-        "name_lang_1",
-        "brief_lang_1",
-        "description_lang_1",
+        "name_lang_{$this->adios->translatedColumnIndex}",
+        "brief_lang_{$this->adios->translatedColumnIndex}",
+        "description_lang_{$this->adios->translatedColumnIndex}",
         "vat_percent",
         "weight",
         "id_supplier",
@@ -742,7 +775,15 @@ class Product extends \ADIOS\Core\Widget\Model {
         "sale_price_incl_vat_custom",
       ],
       $this->translate("Stock & Delivery") => [
-        "id_stock_state",
+        $this->translate("Current state in the stock") => [
+          "title" => $this->translate("Current state in the stock"),
+          "input" => $this->adios->ui->Input([
+            "type" => "int",
+            "enum_values" => $enumValuesStockStates,
+            "uid" => "{$params['uid']}_id_stock_state",
+            "value" => $data['id_stock_state'],
+          ])->render()
+        ],
         "stock_quantity",
         "id_delivery_unit",
         "delivery_day",
@@ -784,7 +825,7 @@ class Product extends \ADIOS\Core\Widget\Model {
               "constraints" => [
                 "id_product" => $data['id'],
               ],
-              "order" => "name_lang_1 asc"
+              "order" => "name_lang_{$this->adios->translatedColumnIndex} asc"
             ]
           ))->render(),
         ],
@@ -814,7 +855,7 @@ class Product extends \ADIOS\Core\Widget\Model {
               "constraints" => [
                 "id_product" => $data['id'],
               ],
-              "order" => "name_lang_1 asc"
+              "order" => "name_lang_{$this->adios->translatedColumnIndex} asc"
             ]
           ))->render(),
         ],

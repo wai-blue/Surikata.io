@@ -4,6 +4,27 @@
 
   var adios_menu_hidden = 0;
 
+  function window_popup(action, params, options) {
+    if (typeof options == 'undefined') options = {};
+
+    if (options.type == 'POST') {
+      let paramsObj = _ajax_params(params);
+      let formHtml = '';
+
+      formHtml = '<form action="' + _APP_URL + '/' + _action_url(action, {}, true) + '" method=POST target="adios_popup">';
+      for (var i in paramsObj) {
+       formHtml += '<input type="hidden" name="' + i + '" value="' + paramsObj[i] + '" />';
+      }
+      formHtml += '</form>';
+
+      // console.log(_APP_URL + '/' + _action_url(action, {}, true));
+      // console.log(formHtml);
+      $(formHtml).appendTo('body').submit();
+    } else {
+      window.open(_APP_URL + '/' + _ajax_action_url(action, params));
+    }
+  }
+
   function window_render(action, params, onclose) {
     if (typeof params == 'undefined') params = {};
     if (typeof options == 'undefined') options = {};
@@ -15,8 +36,6 @@
         if (typeof options.onafter == 'function') options.onafter(action, params);
 
         $('#adios_main_content').append(html);
-
-        console.log();
 
         if ($('#adios_main_content .adios_window').length == 1) {
           desktop_main_box_history_push(action, params, $('#adios_main_content').html(), options);
@@ -38,17 +57,20 @@
   function window_refresh(window_id) {
     let win = $('#' + window_id);
 
-    win
-      .attr('id', win.attr('id') + '_TO_BE_REMOVED')
-      .fadeOut(800, function() {
+    if (win.length > 0) {
+      win
+        .attr('id', win.attr('id') + '_TO_BE_REMOVED')
+      ;
+      window_render(
+        ADIOS_windows[window_id]['action'],
+        ADIOS_windows[window_id]['params'],
+        ADIOS_windows[window_id]['onclick'],
+      );
+
+      setTimeout(function() {
         win.remove();
-      })
-    ;
-    window_render(
-      ADIOS_windows[window_id]['action'],
-      ADIOS_windows[window_id]['params'],
-      ADIOS_windows[window_id]['onclick'],
-    );
+      }, 500);
+    }
   }
 
   function window_close(window_id, oncloseParams) {

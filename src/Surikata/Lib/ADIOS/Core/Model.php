@@ -535,6 +535,24 @@ class Model extends \Illuminate\Database\Eloquent\Model {
           "model" => $this->name,
         ])
       ],
+      '/^'.$urlBase.'\/Import\/CSV\/Import$/' => [
+        "action" => "UI/Table/Import/CSV/Import",
+        "params" => array_merge($urlParams, [
+          "model" => $this->name,
+        ])
+      ],
+      '/^'.$urlBase.'\/Import\/CSV\/DownloadTemplate$/' => [
+        "action" => "UI/Table/Import/CSV/DownloadTemplate",
+        "params" => array_merge($urlParams, [
+          "model" => $this->name,
+        ])
+      ],
+      '/^'.$urlBase.'\/Import\/CSV\/Preview$/' => [
+        "action" => "UI/Table/Import/CSV/Preview",
+        "params" => array_merge($urlParams, [
+          "model" => $this->name,
+        ])
+      ],
     ]);
 
     return $routing;
@@ -617,6 +635,16 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     return $item;
   }
 
+  public function getByLookupSqlValue(string $lookupSqlValue) {
+    return reset($this->adios->db->get_all_rows_query("
+      select
+        id,
+        ".$this->lookupSqlValue("t")." as `input_lookup_value`
+      from `{$this->table}` t
+      having `input_lookup_value` = '".$this->adios->db->escape($lookupSqlValue)."'
+    "));
+  }
+
   public function getAll(string $keyBy = "id", $withLookups = FALSE, $processLookups = FALSE) {
     if ($withLookups) {
       $items = $this->getWithLookups(NULL, $keyBy, $processLookups);
@@ -662,6 +690,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
   public function insertRow($data) {
     return $this->adios->db->insert_row($this->table, $data, FALSE, FALSE, $this);
+  }
+
+  public function insertOrUpdateRow($data) {
+    return $this->adios->db->insert_or_update_row($this->table, $data, FALSE, FALSE, $this);
   }
 
   public function insertRandomRow($data = [], $dictionary = []) {
@@ -718,7 +750,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     return str_replace('{%TABLE%}', $this->table, "
       select
         id,
-        ".$this->lookupSqlValue()." as input_lookup_value
+        ".$this->lookupSqlValue()." as `input_lookup_value`
       from `{$this->table}`
       where
         ".$this->lookupSqlWhere($initiatingModel, $initiatingColumn, $formData, $params)."

@@ -45,6 +45,7 @@ class Search extends \ADIOS\Core\Action {
               "input" => $this->adios->ui->Input([
                 "model" => $this->params['model'],
                 "type" => $lookupColDef["type"],
+                "value" => NULL,
                 "uid" => "{$this->uid}_LOOKUP___{$colName}___{$lookupColName}",
               ]),
             ];
@@ -59,6 +60,7 @@ class Search extends \ADIOS\Core\Action {
             "model" => $colDef['model'] ?? $this->params['model'],
             "type" => $colDef["type"],
             "input_style" => "select",
+            "value" => NULL,
             "uid" => "{$this->uid}_{$colName}",
           ]),
         ];

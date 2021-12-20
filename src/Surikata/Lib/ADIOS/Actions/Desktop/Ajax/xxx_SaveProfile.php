@@ -45,7 +45,7 @@ class SaveProfile extends \ADIOS\Core\Action {
     }
 
     if (false === filter_var($this->params['email'], FILTER_VALIDATE_EMAIL) && '' != $this->params['email']) {
-      echo l('Nezadali ste správný formát emailovej adresy.');
+      echo $this->translate("Please provide valid email address.");
       exit();
     }
 

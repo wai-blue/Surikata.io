@@ -27,9 +27,6 @@ namespace Surikata\Plugins\WAI\Product {
         break;
       }
 
-      // TODO: toto by sa malo dat optimalizovat, getDetailedInfoForListOfProducts sa pouziva iba tu
-      // a vyzera to byt zbytocny DB request
-
       $productIds = $productIds
         ->skip(0)
         ->take((int) $pluginSettings["productCount"])
@@ -37,7 +34,8 @@ namespace Surikata\Plugins\WAI\Product {
         ->pluck('id')
       ;
 
-      $twigParams["products"] = $productModel->getDetailedInfoForListOfProducts($productIds);
+      $twigParams["products"] = $productModel->getDetailedInfoForListOfProducts($productIds, $languageIndex);
+      $twigParams["products"] = $productModel->addPriceInfoForListOfProducts($twigParams["products"]);
 
       $productDetailPlugin = new \Surikata\Plugins\WAI\Product\Detail($this->websiteRenderer);
       foreach ($twigParams["products"] as $key => $product) {
@@ -45,17 +43,6 @@ namespace Surikata\Plugins\WAI\Product {
           $productDetailPlugin->getWebPageUrl($product)
         ;
 
-        $twigParams["products"][$key] =
-          $productModel->translateSingleProductForWeb($twigParams["products"][$key], $languageIndex);
-
-        $twigParams["products"][$key]["ProductCategory"] =
-          $productCategoryModel
-            ->translateForWeb(
-              [
-                $productCategoryModel
-                ->getById($twigParams["products"][$key]["id_category"])
-              ], $languageIndex
-            )[0];
       }
 
       return $twigParams;

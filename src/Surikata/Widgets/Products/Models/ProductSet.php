@@ -5,23 +5,31 @@ namespace ADIOS\Widgets\Products\Models;
 class ProductSet extends \ADIOS\Core\Widget\Model {
   var $sqlName = "products_sets";
   var $urlBase = "Products/Sets";
-  var $tableTitle = "Product sets";
-  var $formTitleForInserting = "New product set";
-  var $formTitleForEditing = "Product Set";
-  var $lookupSqlValue = "{%TABLE%}.name_lang_1";
+
+  public function init() {
+    $this->tableTitle = $this->translate("Product sets");
+    $this->formTitleForInserting = $this->translate("New product set");
+    $this->formTitleForEditing = $this->translate("Product Set");
+    $this->lookupSqlValue = "{%TABLE%}.name_lang_{$this->adios->translatedColumnIndex}";
+  }
 
   public function columns(array $columns = []) {
-    return parent::columns([
-      "name_lang_1" => ["type" => "varchar", "title" => "Product set name, language 1", "show_column" => TRUE],
-      "name_lang_2" => ["type" => "varchar", "title" => "Product set name, language 2", "show_column" => FALSE],
-      "name_lang_3" => ["type" => "varchar", "title" => "Product set name, language 3", "show_column" => FALSE],
-      "name_lang_4" => ["type" => "varchar", "title" => "Product set name, language 4", "show_column" => FALSE],
-      "name_lang_5" => ["type" => "varchar", "title" => "Product set name, language 5", "show_column" => FALSE],
-      "name_lang_6" => ["type" => "varchar", "title" => "Product set name, language 6", "show_column" => FALSE],
-      "name_lang_7" => ["type" => "varchar", "title" => "Product set name, language 7", "show_column" => FALSE],
-      "name_lang_8" => ["type" => "varchar", "title" => "Product set name, language 8", "show_column" => FALSE],
-      "name_lang_9" => ["type" => "varchar", "title" => "Product set name, language 9", "show_column" => FALSE],
-    ]);
+    $translatedColumns = [];
+    $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
+
+    foreach ($domainLanguages as $languageIndex => $languageName) {
+      $translatedColumns["name_lang_{$languageIndex}"] = [
+        "type" => "varchar",
+        "title" => $this->translate("Name")." (".$this->translate($languageName).")",
+        "show_column" => ($languageIndex == $this->adios->translatedColumnIndex),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
+      ];
+    }
+
+    return parent::columns(array_merge(
+      $translatedColumns,
+      []
+    ));
   }
 
   public function tableParams($params) {

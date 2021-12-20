@@ -38,7 +38,7 @@ class DataTypeLookup extends DataType {
 
     if ($params['null_value']) {
       return "`{$colName}` = null";
-    } else if (is_string($value)) {
+    } else if (is_string($value) && !is_numeric($value)) {
       $model = $this->adios->getModel($colDefinition["model"]);
       $tmp = $model->getByLookupSqlValue($value);
       $id = (int) $tmp['id'];

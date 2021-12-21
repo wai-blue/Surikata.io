@@ -863,21 +863,22 @@ class Product extends \ADIOS\Core\Widget\Model {
       $templateTabs[$this->translate("Gallery")] = [
         "action" => "UI/Cards",
         "params" => [
-          "model"    => "Widgets/Products/Models/ProductGallery",
-          "id_product" => $data['id'],
+          "model"           => "Widgets/Products/Models/ProductGallery",
+          "id_product"      => $data['id'],
+          "show_add_button" => TRUE,
         ]
       ];
       $templateTabs[$this->translate("Features")] = [
         "action" => "UI/Table",
         "params" => [
-          "model"    => "Widgets/Products/Models/ProductFeatureAssignment",
+          "model"      => "Widgets/Products/Models/ProductFeatureAssignment",
           "id_product" => $data['id'],
         ]
       ];
       $templateTabs[$this->translate("Extensions")] = [
         "action" => "UI/Table",
         "params" => [
-          "model"    => "Widgets/Products/Models/ProductExtension",
+          "model"      => "Widgets/Products/Models/ProductExtension",
           "id_product" => $data['id'],
         ]
       ];

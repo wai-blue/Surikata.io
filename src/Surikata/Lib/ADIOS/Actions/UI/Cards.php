@@ -30,13 +30,11 @@ namespace ADIOS\Actions\UI;
  * );
  * ```
  *
- * *More optimal way is to render the Cards by calling $adios->ui->create().*
- *
- *
  * @package UI\Actions
  */
+
 class Cards extends \ADIOS\Core\Action {
   function render() {
-    return $this->adios->ui->create('Cards', $this->params)->render();
+    return (new \ADIOS\Core\UI\Cards($this->adios, $this->params))->render();
   }
 }

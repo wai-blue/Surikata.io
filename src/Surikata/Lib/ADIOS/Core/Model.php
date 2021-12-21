@@ -1177,9 +1177,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     ])["params"];
   }
 
-  public function cardsCardHtmlFormatter($data) {
+  public function cardsCardHtmlFormatter($cardsObject, $data) {
     return $this->adios->dispatchEventToPlugins("onModelAfterCardsCardHtmlFormatter", [
       "model" => $this,
+      "cardsObject" => $cardsObject,
       "data" => $data,
     ])["html"];
   }

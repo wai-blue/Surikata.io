@@ -62,7 +62,7 @@ class CustomerWatchdog extends \ADIOS\Core\Widget\Model {
     return $params;
   }
 
-  public function cardsCardHtmlFormatter($data) {
+  public function cardsCardHtmlFormatter($cardsObject, $data) {
     return "
       <div class='card shadow mb-2'>
         <div class='card-header py-3'>

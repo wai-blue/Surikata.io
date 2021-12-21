@@ -54,14 +54,22 @@ class ProductGallery extends \ADIOS\Core\Widget\Model {
     return $params;
   }
 
-  public function cardsCardHtmlFormatter($data) {
+  public function cardsCardHtmlFormatter($cardsObject, $data) {
     return "
       <div class='card shadow mb-2'>
         <div class='text-center'>
           <img
             src='{$this->adios->config['upload_url']}/{$data['image']}'
             style='width:100%;cursor:pointer;'
-            onclick='window_render(\"Products/{$data['id_product']}/Gallery/{$data['id']}/Edit\");'
+            onclick='
+              window_render(
+                \"Products/{$data['id_product']}/Gallery/{$data['id']}/Edit\",
+                {},
+                function(res) {
+                  ui_cards_refresh(\"{$cardsObject->uid}\");
+                }
+              );
+            '
           />
         </div>
       </div>

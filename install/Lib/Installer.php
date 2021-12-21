@@ -357,7 +357,7 @@ class Installer {
         for ($i = 1; $i <= 8; $i++) {
           $productGalleryModel->insertRow([
             "id_product" => $product['id'],
-            "image" => "products/product_" . rand(1, 10) . ".jpg",
+            "image" => "products/".rand(1, 10).".jpg",
           ]);
         }
       }

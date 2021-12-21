@@ -655,9 +655,8 @@ class Order extends \ADIOS\Core\Widget\Model {
       "id_delivery_service"    => $orderData['id_delivery_service'],
       "id_payment_service"     => $orderData['id_payment_service'],
       "notes"                  => $orderData['notes'],
-      "domain"                 => $orderData['domain'],
-      "state"                  => self::STATE_NEW,
-      "id_voucher"             => $voucher['id'] ?? null
+      "domain"                 => $this->adios->websiteRenderer->domain['name'],
+      "state"                  => self::STATE_NEW
     ]);
 
     if (!is_numeric($idOrder)) {

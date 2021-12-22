@@ -18,11 +18,14 @@ class Merchant extends \ADIOS\Core\Widget\Model {
       "company_name" => [
         "type" => "varchar",
         "title" => $this->translate("Company name"),
+        "required" => TRUE,
+        "show_column" => TRUE,
       ],
 
       "street_1" => [
         "type" => "varchar",
         "title" => $this->translate("Street, 1st line"),
+        "show_column" => TRUE,
       ],
 
       "street_2" => [
@@ -48,6 +51,8 @@ class Merchant extends \ADIOS\Core\Widget\Model {
       "company_id" => [
         "type" => "varchar",
         "title" => $this->translate("Company ID"),
+        "required" => TRUE,
+        "show_column" => TRUE,
       ],
 
       "company_tax_id" => [
@@ -63,11 +68,13 @@ class Merchant extends \ADIOS\Core\Widget\Model {
       "email" => [
         "type" => "varchar",
         "title" => $this->translate("E-mail"),
+        "show_column" => TRUE,
       ],
 
       "phone" => [
         "type" => "varchar",
         "title" => $this->translate("Phone number"),
+        "show_column" => TRUE,
       ],
 
       "www" => [
@@ -78,19 +85,18 @@ class Merchant extends \ADIOS\Core\Widget\Model {
       "iban" => [
         "type" => "varchar",
         "title" => $this->translate("Bank account IBAN"),
+        "show_column" => TRUE,
       ],
 
       "description" => [
         'type' => 'text',
         'title' => $this->translate("Description"),
-        'show_column' => TRUE,
       ],
 
       "logo" => [
         'type' => 'image',
         'title' => 'Logo',
         "description" => $this->translate("Supported image extensions: jpg, gif, png, jpeg"),
-        'show_column' => TRUE,
         "subdir" => $this->translate("merchant_logos")
       ],
 

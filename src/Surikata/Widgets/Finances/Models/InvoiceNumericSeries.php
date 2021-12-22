@@ -23,14 +23,14 @@ class InvoiceNumericSeries extends \ADIOS\Core\Widget\Model {
 
       "pattern" => [
         "type" => "varchar",
-        "title" => $this->translate("Series pattern"),
+        "title" => $this->translate("Invoice numbering pattern"),
         "show_column" => TRUE,
       ],
 
       "id_merchant" => [
         "type" => "lookup",
         "model" => "Widgets/Finances/Models/Merchant",
-        "title" => $this->translate("Merchant"),
+        "title" => $this->translate("Applies to merchant profile"),
         "show_column" => true
       ],
     ]);

@@ -749,17 +749,15 @@ class Order extends \ADIOS\Core\Widget\Model {
       }
     }
 
-    $this->adios->sendEmail(
-      $orderData["email"],
-      str_replace("{% number %}", $orderData["number"], $subject),
-      "
+    $this->adios->sendEmail([
+      "to" => $orderData["email"],
+      "subject" => str_replace("{% number %}", $orderData["number"], $subject),
+      "bodyHtml" => "
         <div style='font-family:Verdana;font-size:10pt;'>
           {$body}
         </div>
         <div style='font-family:Verdana;font-size:10pt;padding-top:10px;margin-top:10px;border-top:1px solid #AAAAAA'>{$signature}</div>
-      ",
-      ""
-    );
+      "]);
   }
 
   /**

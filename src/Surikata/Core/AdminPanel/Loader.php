@@ -81,7 +81,14 @@ class Loader extends \ADIOS\Core\Loader {
     }
   }
 
-  public function sendEmail($to, $subject, $bodyHtml, $bodyPlain) {
+  public function sendEmail($params = []) {
+    $to = $params["to"] ?? "";
+    $subject = $params["subject"] ?? "";
+    $bodyHtml = $params["bodyHtml"] ?? "";
+    $bodyText = $params["bodyText"] ?? "";
+    $from = $params["from"] ?? $this->config['smtp_from'];
+    $replyTo = $params["replyTo"] ?? "";
+
     $email = new \Surikata\Lib\Email(
       $this->config['smtp_host'],
       $this->config['smtp_port']
@@ -89,12 +96,22 @@ class Loader extends \ADIOS\Core\Loader {
 
     $email
       ->setLogin($this->config['smtp_login'], $this->config['smtp_password'])
-      ->setFrom($this->config['smtp_from'])
+      ->setFrom($from)
       ->setSubject($subject)
-      ->setHtmlMessage($bodyHtml)
-      ->setTextMessage($bodyPlain)
       ->addTo($to)
     ;
+
+    if (!empty($replyTo)) {
+      $email->addReplyTo($replyTo);
+    }
+
+    if (!empty($bodyHtml)) {
+      $email->setHtmlMessage($bodyHtml);
+    }
+
+    if (!empty($bodyText)) {
+      $email->setTextMessage($bodyText);
+    }
 
     if ($this->config['smtp_protocol'] == 'ssl') {
       $email->setProtocol(\Surikata\Lib\Email::SSL);

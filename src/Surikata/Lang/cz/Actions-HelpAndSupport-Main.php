@@ -2,7 +2,7 @@
 
 $dictionary = [
   "User guide" => "Uživatelská příručka",
-  "Open Surikata.io's User Guide" => "Otevřete uživatelskou příručku Surikata.io",
+  "Open Surikata.io's User guide" => "Otevřete uživatelskou příručku Surikata.io",
   "Feedback" => "Zpětná vazba",
   "Need help? Found a bug? Want new features?" => "Potřebujete pomoc? Našli jste chybu? Chcete nové funkce?",
   "Ask for help, report a bug or request new feature" => "Požádejte o pomoc, nahlaste chybu nebo požádejte o přidání nové funkce",

@@ -48,17 +48,17 @@ emails:
 
   after_registration_SUBJECT: Overte Vašu emailovú adresu - Surikata Eshop
   after_registration_BODY: >
-    <h2>Ahoj {% givenName %}!</h2>
-    <p><b>Kvôli bezpečnosti potrebujeme overiť vašu emailovú adresu, aby ste ju mohli použiť na našom eshope.</b></p>
-    <p>Kliknite na odkaz nižšie alebo skopírujte a prejdite na url aby sme mohli overiť vašu identitu.</p>
+    <h2>Dobrý deň {% givenName %}!</h2>
+    <p><b>Kvôli bezpečnosti potrebujeme overiť Vašu emailovú adresu, aby ste ju mohli použiť na našom eshope.</b></p>
+    <p>Kliknite na odkaz nižšie alebo skopírujte a prejdite na odkaz, aby sme mohli overiť Vašu identitu.</p>
     <p><a href="{% validationUrl %}" target="_blank">{% validationUrl %}</a></p>
 
   # forgotten_password
 
   forgotten_password_SUBJECT: Obnovenie hesla - Surikata eshop
   forgotten_password_BODY: >
-    <h2>Ahoj {% givenName %}!</h2>
-    <p>Odkaz na obnovenie vášho hesla je nižšie.</p>
+    <h2>Dobrý deň {% givenName %}!</h2>
+    <p>Odkaz na obnovenie Vášho hesla je nižšie.</p>
     <p><a href="{% passwordRecoveryUrl %}" target="_blank">{% passwordRecoveryUrl %}</a></p>
 
 ##########################################################

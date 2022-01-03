@@ -12,13 +12,7 @@ namespace ADIOS\Core\UI;
 
 class View {
   
-  /**
-   * componentsCounter
-   *
-   * @internal
-   * @var int
-   */
-  private $componentsCounter = 0;
+  var $useSession = FALSE;
   
   /**
    * languageDictionary
@@ -36,41 +30,50 @@ class View {
    * @param  mixed $params
    * @return void
    */
-  public function __construct(&$adios, $params = null) {
-    ++$this->componentsCounter;
+  public function __construct(object $adios, array $params = []) {
+    if (!isset($adios->viewsCounter)) {
+      $adios->viewsCounter = 0;
+    }
+    ++$adios->viewsCounter;
 
     $this->adios = $adios;
 
-    if ('' == $params['uid']) {
-      $params['uid'] = $this->adios->uid."_{$params['component_class']}_".$this->componentsCounter;
+    if ($params['lpfs']) {
+      $params = $this->loadParamsFromSession($params['uid']);
     }
 
-    if (!is_array($params)) {
-      if (isset($this->default_param)) {
-        $params = [$this->default_param => $params];
-      } else {
-        $params = [];
-      }
+    if (empty($params['uid'])) {
+      $params['uid'] =
+        $this->adios->uid."_"
+        .str_replace("\\", "", str_replace("ADIOS\\Core\\", "", get_class($this)))."_"
+        .$adios->viewsCounter
+      ;
     }
 
-    if (!is_array($params)) {
-      var_dump($params);
+    if ($this->useSession) {
+      $tmpParams = $params;
+      unset($tmpParams["_REQUEST"]);
+      unset($tmpParams["_COOKIE"]);
+      unset($tmpParams["uid"]);
+      $this->saveParamsToSession($params['uid'], $tmpParams);
     }
 
-    $this->params = $this->params_merge($this->params, $this->adios->config['ui'][$params['component_class']]['default_params']);
-    $this->params = $this->params_merge($this->params, $params);
-    $this->params['class'] = $params['class'];
-    $this->params['style'] = $params['style'];
-    $this->uid = $params['uid'] ?? "UID_".rand(10, 99)."_".md5(rand(10000, 99999));
+    $this->params = $params;
+    $this->uid = $params['uid'];
     $this->views = [];
-    $this->html['default'] = $params['html'];
     $this->classes = ['adios', 'ui', $params['component_class']];
 
-    if ('' != $params['class']) {
-      $this->add_class($params['class']);
-    }
+    $this->add_class($params['class']);
+  }
 
-    // $this->languageDictionary = $this->adios->loadLanguageDictionary($this);
+  public function saveParamsToSession(string $uid = "", $params = NULL) {
+    $_SESSION[_ADIOS_ID]['views'][$uid ?? $this->uid] = is_array($params) ? $params : $this->params;
+  }
+  
+  public function loadParamsFromSession(string $uid = "") {
+    $params = $_SESSION[_ADIOS_ID]['views'][$uid ?? $this->uid];
+    $params["uid"] = $uid ?? $this->uid;
+    return $params;
   }
   
   /**
@@ -236,6 +239,8 @@ class View {
    * @return void
    */
   public function add_class($class_name, $target = '') {
+    if (empty($class_name)) return;
+
     if (!in_array($target, ['', 'desktop', 'mobile', 'tablet'])) {
       $target = '';
     }

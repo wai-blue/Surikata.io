@@ -8,6 +8,8 @@ namespace ADIOS\Core\UI;
  * @package UI\Elements
  */
 class Cards extends \ADIOS\Core\UI\View {
+  var $useSession = TRUE;
+  
   public function render(string $panel = "") {
     $model = $this->adios->getModel($this->params['model']);
 
@@ -29,13 +31,23 @@ class Cards extends \ADIOS\Core\UI\View {
       return $query;
     });
 
-    $html = "";
+    $html = "<div id='{$this->uid}'>";
+
     if ($params['show_add_button'] ?? FALSE) {
       $html .= "
         <div class='row mb-3'>
           ".$this->adios->ui->Button([
             "type" => "add",
-            "onclick" => "window_render('".$model->getFullUrlBase($this->params)."/Add');"
+            "onclick" => "
+              window_render(
+                '".$model->getFullUrlBase($this->params)."/Add',
+                {},
+                function(res) {
+                  ui_cards_refresh('{$this->uid}')
+                }
+              );
+
+            "
           ])->render()."
         </div>
       ";
@@ -45,13 +57,14 @@ class Cards extends \ADIOS\Core\UI\View {
     foreach ($cards as $card) {
       $html .= "
         <div class='col-lg-{$bootstrapColumnSize} col-md-12'>
-          ".$model->cardsCardHtmlFormatter($card)."
+          ".$model->cardsCardHtmlFormatter($this, $card)."
         </div>
       ";
     }
-    $html .= "
-      </div>
-    ";
+    $html .= "</div>"; // class='row'
+
+    $html .= "</div>"; // id='{$this->uid}_wrapper_div'
+
 
     if ($this->params['__IS_WINDOW__']) {
       $html = $this->adios->ui->Window([

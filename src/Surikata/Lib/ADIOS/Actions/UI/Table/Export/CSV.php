@@ -30,7 +30,7 @@ class CSV extends \ADIOS\Core\Action {
     if (count($data) == 0) {
       foreach ($columns as $colName => $colDefinition) {
         if ($colDefinition["show_column"]) {
-          $csv .= '"'.str_replace('"', '""', $colDefinition['title']).'";';
+          $csv .= '"'.str_replace('"', '""', $colDefinition['title'] ?? "-").'";';
         }
       }
     } else {
@@ -38,7 +38,7 @@ class CSV extends \ADIOS\Core\Action {
 
       foreach (array_keys($firstRow) as $colName) {
         if (isset($columns[$colName])) {
-          $firstLine .= '"'.str_replace('"', '""', $columns[$colName]['title']).'";';
+          $firstLine .= '"'.str_replace('"', '""', $columns[$colName]['title'] ?? "-").'";';
         }
       }
 

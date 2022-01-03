@@ -7,4 +7,6 @@ $dictionary = [
   "Purchase price" => "Kupní cena",
   "Recommended price" => "Doporučená cena",
   "Including VAT" => "Včetně DPH",
+  "Purchase price excl. VAT" => "Nákupní cena bez DPH",
+  "Recommended price excl. VAT" => "Doporučená cena bez DPH",
 ];

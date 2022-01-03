@@ -322,7 +322,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
   public function formParams($data, $params) {
 
     if ($data['id'] <= 0) {
-      $params['title'] = $this->translate("New client");
+      $params['title'] = $this->translate("New customer");
 
       $params["template"] = [
         "columns" => [

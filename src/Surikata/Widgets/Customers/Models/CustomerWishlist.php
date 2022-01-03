@@ -62,11 +62,11 @@ class CustomerWishlist extends \ADIOS\Core\Widget\Model {
     return $params;
   }
 
-  public function cardsCardHtmlFormatter($data) {
+  public function cardsCardHtmlFormatter($cardsObject, $data) {
     return "
       <div class='card shadow mb-2'>
         <div class='card-header py-3'>
-          <h6 class='m-0 font-weight-bold text-primary'>".hsc($data['PRODUCT']['name_lang_1'])."</h6>
+          <h6 class='m-0 font-weight-bold text-primary'>".hsc($data['PRODUCT']["name_lang_{$this->adios->translatedColumnIndex}"])."</h6>
         </div>
         <div class='card-body text-center' style='height:220px;'>
           <div style='height:calc(100% - 2.5em);overflow:hidden;margin-bottom:1em'>

@@ -2,6 +2,7 @@
 
 namespace Surikata\Plugins\WAI\Misc {
   class ContactPage extends \Surikata\Core\Web\Plugin {
+
   }
 }
 

@@ -8,11 +8,11 @@ class Product extends \ADIOS\Core\Widget\Model {
   const PRICE_CALCULATION_METHOD_PLUGIN        = 3;
   
   var $sqlName = "products";
-  var $lookupSqlValue = "concat({%TABLE%}.number, ' ', {%TABLE%}.name_lang_1)";
   var $urlBase = "Products";
 
   public function init() {
     $this->tableTitle = $this->translate("Products");
+    $this->lookupSqlValue = "concat({%TABLE%}.number, ' ', {%TABLE%}.name_lang_{$this->adios->translatedColumnIndex})";
 
     $this->enumValuesSalePriceCalculationMethod = [
       self::PRICE_CALCULATION_METHOD_CUSTOM_PRICE => $this->translate("Custom price: You can enter your custom price"),
@@ -24,27 +24,26 @@ class Product extends \ADIOS\Core\Widget\Model {
   public function columns(array $columns = []) {
     $translatedColumns = [];
     $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
-    $columnIndex = $this->adios->getColumnIndexByLanguage();
 
     foreach ($domainLanguages as $languageIndex => $languageName) {
       $translatedColumns["name_lang_{$languageIndex}"] = [
         "type" => "varchar",
         "title" => $this->translate("Name")." (".$this->translate($languageName).")",
-        "show_column" => ($languageIndex == $columnIndex),
-        "is_searchable" => ($languageIndex == $columnIndex),
+        "show_column" => ($languageIndex == $this->adios->translatedColumnIndex),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
       ];
       $translatedColumns["brief_lang_{$languageIndex}"] = [
         "type" => "varchar",
         "title" => $this->translate("Short description")." (".$this->translate($languageName).")",
         "show_column" => FALSE,
-        "is_searchable" => ($languageIndex == $columnIndex),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
       ];
       $translatedColumns["description_lang_{$languageIndex}"] = [
         "type" => "text",
         "title" => $this->translate("Description")." (".$this->translate($languageName).")",
         "interface" => "formatted_text",
         "show_column" => FALSE,
-        "is_searchable" => ($languageIndex == $columnIndex),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
       ];
     }
 
@@ -529,7 +528,7 @@ class Product extends \ADIOS\Core\Widget\Model {
     if ($data['id'] <= 0) {
       $params['title'] = $this->translate("New product");
     } else {
-      $params['title'] = "{$data['number']} {$data['name_lang_1']}";
+      $params['title'] = "{$data['number']} {$data["name_lang_{$this->adios->translatedColumnIndex}"]}";
       $params['subtitle'] = $this->translate("Product");
     }
 
@@ -538,7 +537,7 @@ class Product extends \ADIOS\Core\Widget\Model {
       "table" => $this->adios->getModel("Widgets/Products/Models/ProductCategoryAssignment")->table,
       "input_style" => "autocomplete",
       "title" => $this->translate("Zaradenie do vedľajších kategórií"),
-      "order" => "name_lang_1 asc"
+      "order" => "name_lang_{$this->adios->translatedColumnIndex} asc"
     ];
 
     $tabTranslations = [];
@@ -547,15 +546,13 @@ class Product extends \ADIOS\Core\Widget\Model {
     $domains = $this->adios->getAvailableDomains();
     $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
 
-    $i = 1;
     foreach ($domainLanguages as $languageIndex => $languageName) {
-      if ($i > 1) {
+      if ($languageIndex != $this->adios->translatedColumnIndex) {
         $tabTranslations[] = ["html" => "<b style='color:var(--cl-main)'>".hsc($languageName)."</b>"];
         $tabTranslations[] = "name_lang_{$languageIndex}";
         $tabTranslations[] = "brief_lang_{$languageIndex}";
         $tabTranslations[] = "description_lang_{$languageIndex}";
       }
-      $i++;
     }
 
     foreach ($domains as $domain => $domainInfo) {
@@ -669,21 +666,19 @@ class Product extends \ADIOS\Core\Widget\Model {
 
     $productStockStateModel = (new ProductStockState($this->adios));
 
-    $columnIndex = $this->adios->getColumnIndexByLanguage();
-
     $allStockStates = $productStockStateModel->getAll();
     $enumValuesStockStates = [0 => ""];
     foreach ($allStockStates as $stockState) {
-      $enumValuesStockStates[$stockState["id"]] = $stockState["name_lang_".$columnIndex];
+      $enumValuesStockStates[$stockState["id"]] = $stockState["name_lang_".$this->adios->translatedColumnIndex];
     }
 
     $templateTabs = [
       $this->translate("General") => [
         "number",
         "ean",
-        "name_lang_1",
-        "brief_lang_1",
-        "description_lang_1",
+        "name_lang_{$this->adios->translatedColumnIndex}",
+        "brief_lang_{$this->adios->translatedColumnIndex}",
+        "description_lang_{$this->adios->translatedColumnIndex}",
         "vat_percent",
         "weight",
         "id_supplier",
@@ -830,7 +825,7 @@ class Product extends \ADIOS\Core\Widget\Model {
               "constraints" => [
                 "id_product" => $data['id'],
               ],
-              "order" => "name_lang_1 asc"
+              "order" => "name_lang_{$this->adios->translatedColumnIndex} asc"
             ]
           ))->render(),
         ],
@@ -860,7 +855,7 @@ class Product extends \ADIOS\Core\Widget\Model {
               "constraints" => [
                 "id_product" => $data['id'],
               ],
-              "order" => "name_lang_1 asc"
+              "order" => "name_lang_{$this->adios->translatedColumnIndex} asc"
             ]
           ))->render(),
         ],
@@ -868,21 +863,22 @@ class Product extends \ADIOS\Core\Widget\Model {
       $templateTabs[$this->translate("Gallery")] = [
         "action" => "UI/Cards",
         "params" => [
-          "model"    => "Widgets/Products/Models/ProductGallery",
-          "id_product" => $data['id'],
+          "model"           => "Widgets/Products/Models/ProductGallery",
+          "id_product"      => $data['id'],
+          "show_add_button" => TRUE,
         ]
       ];
       $templateTabs[$this->translate("Features")] = [
         "action" => "UI/Table",
         "params" => [
-          "model"    => "Widgets/Products/Models/ProductFeatureAssignment",
+          "model"      => "Widgets/Products/Models/ProductFeatureAssignment",
           "id_product" => $data['id'],
         ]
       ];
       $templateTabs[$this->translate("Extensions")] = [
         "action" => "UI/Table",
         "params" => [
-          "model"    => "Widgets/Products/Models/ProductExtension",
+          "model"      => "Widgets/Products/Models/ProductExtension",
           "id_product" => $data['id'],
         ]
       ];

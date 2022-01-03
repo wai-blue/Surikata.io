@@ -50,6 +50,10 @@ class Loader extends \ADIOS\Core\Loader {
       }
     }
   }
+
+  public function onAfterConfigLoaded() {
+    $this->translatedColumnIndex = $this->getTranslatedColumnIndexByLanguage();
+  }
   
   public function onBeforePluginsLoaded() {
     parent::onBeforePluginsLoaded();
@@ -280,19 +284,19 @@ class Loader extends \ADIOS\Core\Loader {
     return $settings;
   }
 
-  public function getColumnIndexByLanguage(string $languageShort = "") {
+  public function getTranslatedColumnIndexByLanguage(string $languageShort = "") {
     if (empty($languageShort)) {
       $languageShort = $this->config["language"];
     }
 
-    $columnIndex = 1;
+    $translatedColumnIndex = 1;
     $languages = $this->config['widgets']['Website']['domainLanguagesShort'];
     foreach ($languages as $tmpColumnIndex => $tmpLanguageShort) {
       if ($languageShort == $tmpLanguageShort) {
-        $columnIndex = $tmpColumnIndex;
+        $translatedColumnIndex = $tmpColumnIndex;
       }
     }
 
-    return $columnIndex;
+    return $translatedColumnIndex;
   }
 }

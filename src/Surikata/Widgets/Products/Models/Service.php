@@ -4,13 +4,13 @@ namespace ADIOS\Widgets\Products\Models;
 
 class Service extends \ADIOS\Core\Widget\Model {
   var $sqlName = "services";
-  var $lookupSqlValue = "{%TABLE%}.name_lang_1";
   var $urlBase = "Services";
 
   public function init() {
     $this->tableTitle = $this->translate("Services");
     $this->formTitleForInserting = $this->translate("New service");
     $this->formTitleForEditing = $this->translate("Service");
+    $this->lookupSqlValue = "{%TABLE%}.name_lang_{$this->adios->translatedColumnIndex}";
   }
 
   public function columns(array $columns = []) {
@@ -21,15 +21,15 @@ class Service extends \ADIOS\Core\Widget\Model {
       $translatedColumns["name_lang_{$languageIndex}"] = [
         "type" => "varchar",
         "title" => $this->translate("Name")." ({$languageName})",
-        "show_column" => ($languageIndex == 1),
-        "is_searchable" => ($languageIndex == 1),
+        "show_column" => ($languageIndex == $this->adios->translatedColumnIndex),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
       ];
       $translatedColumns["description_lang_{$languageIndex}"] = [
         "type" => "text",
         "title" => $this->translate("Description")." ({$languageName})",
         "interface" => "formatted_text",
-        "show_column" => ($languageIndex == 1),
-        "is_searchable" => ($languageIndex == 1),
+        "show_column" => ($languageIndex == $this->adios->translatedColumnIndex),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
       ];
     }
 
@@ -53,7 +53,7 @@ class Service extends \ADIOS\Core\Widget\Model {
     ];
 
     if ($data['id'] > 0) {
-      $params['title'] = $data['name_lang_1'];
+      $params['title'] = $data["name_lang_{$this->adios->translatedColumnIndex}"];
       $params['subtitle'] = "Service";
     }
 
@@ -82,8 +82,8 @@ class Service extends \ADIOS\Core\Widget\Model {
           "class" => "col-md-9 pl-0",
           "tabs" => [
             $this->translate("General") => [
-              "name_lang_1",
-              "description_lang_1",
+              "name_lang_{$this->adios->translatedColumnIndex}",
+              "description_lang_{$this->adios->translatedColumnIndex}",
               "pictogram",
             ],
             $this->translate("Translations") => $tabTranslations,

@@ -29,6 +29,10 @@ class Upload extends \ADIOS\Core\Action {
 
       if (empty($folderPath)) $folderPath = ".";
 
+      if (!is_dir("{$this->adios->config['files_dir']}/{$folderPath}")) {
+        @mkdir("{$this->adios->config['files_dir']}/{$folderPath}", 0775);
+      }
+
       $sourceFile = $_FILES['upload']['tmp_name'];
       $destinationFile = "{$this->adios->config['files_dir']}/{$folderPath}/{$uploadedFilename}";
 

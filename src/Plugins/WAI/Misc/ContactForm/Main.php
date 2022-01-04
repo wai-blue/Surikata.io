@@ -143,7 +143,7 @@ namespace Surikata\Plugins\WAI\Misc {
 namespace ADIOS\Plugins\WAI\Misc {
   class ContactForm extends \Surikata\Core\AdminPanel\Plugin {
 
-    public function getAvailableSettings() {
+    public function getSettingsForWebsite() {
       return [
         "heading" => [
           "title" => "Heading",

@@ -40,6 +40,9 @@ class Loader extends \Cascada\Loader {
   var $customerDataCache = [];
   var $publishedPagesCache = [];
 
+  var $visualContentEditorEnabled = FALSE;
+  var $visualContentEditorIframeToken = "";
+
   /**
    * Class constructor.
    * 
@@ -106,8 +109,8 @@ class Loader extends \Cascada\Loader {
       };
       $this->assetsUrlMap["core/assets/js/plugins.js"] = function($websiteRenderer, $url, $variables) {
         $js =
-          $this->renderPluginsJs("api.js")
-          .$this->renderPluginsJs("dom.js")
+          $this->renderPluginsAsset("js/api.js")
+          .$this->renderPluginsAsset("js/dom.js")
         ;
 
         header("Content-type: text/js");
@@ -117,6 +120,20 @@ class Loader extends \Cascada\Loader {
         header("Cache-Control: max-age={3600}");
 
         echo $js;
+        exit();
+      };
+      $this->assetsUrlMap["core/assets/css/plugins.css"] = function($websiteRenderer, $url, $variables) {
+        $css =
+          $this->renderPluginsAsset("css/default.css")
+        ;
+
+        header("Content-type: text/css");
+        header("ETag: ".md5($css));
+        header("Expires: " . gmdate("D, d M Y H:i:s", time() + 3600) . " GMT");
+        header("Pragma: cache");
+        header("Cache-Control: max-age={3600}");
+
+        echo $css;
         exit();
       };
       $this->assetsUrlMap["core/assets/"] = SURIKATA_ROOT_DIR."/src/Surikata/Core/Assets/";
@@ -620,13 +637,13 @@ class Loader extends \Cascada\Loader {
     return $this->adminPanel->getDomainInfo($domainName);
   }
 
-  public function renderPluginsJs($jsFilename) {
+  public function renderPluginsAsset($assetFilename) {
     $content = "";
 
     foreach ($this->adminPanel->plugins as $pluginName) {
       if (!in_array($pluginName, [".", ".."])) {
         foreach ($this->adminPanel->pluginFolders as $pluginFolder) {
-          $file = "{$pluginFolder}/{$pluginName}/Assets/{$jsFilename}";
+          $file = "{$pluginFolder}/{$pluginName}/Assets/{$assetFilename}";
           if (is_file($file)) {
             $content .= file_get_contents($file) . "\n\n";
           }

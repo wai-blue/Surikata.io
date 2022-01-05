@@ -114,6 +114,13 @@ namespace Surikata\Plugins\WAI\Common {
 namespace ADIOS\Plugins\WAI\Common {
   class Breadcrumb extends \Surikata\Core\AdminPanel\Plugin {
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => $this->translate("Breadcrumbs"),
+      ];
+    }
+
     public function getSettingsForWebsite() {
       return [
         "showHomePage" => [

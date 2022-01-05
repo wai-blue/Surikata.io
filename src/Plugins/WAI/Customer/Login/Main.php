@@ -20,6 +20,13 @@ namespace Surikata\Plugins\WAI\Customer {
 namespace ADIOS\Plugins\WAI\Customer {
   class Login extends \Surikata\Core\AdminPanel\Plugin {
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => $this->translate("Login form"),
+      ];
+    }
+
     public function getSettingsForWebsite() {
       return [
         "privacyTermsUrl" => [

@@ -130,6 +130,13 @@ namespace ADIOS\Plugins\WAI\Common {
 
   class Navigation extends \Surikata\Core\AdminPanel\Plugin {
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => $this->translate("Main website navigation"),
+      ];
+    }
+
     public function getSettingsForWebsite() {
       return [
         "menuId" => [

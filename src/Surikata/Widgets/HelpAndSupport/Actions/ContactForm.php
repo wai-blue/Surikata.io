@@ -4,9 +4,46 @@ namespace ADIOS\Actions\HelpAndSupport;
 
 class ContactForm extends \ADIOS\Core\Widget\Action {
   public function render() {
-    $uid = $this->params['uid'];
 
     $html = "
+      <script>
+        function {$this->uid}_sendMessage() {
+          let data = {
+            'message': $('#{$this->uid}_message').val(),
+            'replyTo': $('#{$this->uid}_reply_to').val(),
+          };
+
+          let error = false;
+
+          $('#{$this->uid}_message').removeClass('has-error');
+          $('#{$this->uid}_reply_to').removeClass('has-error');
+
+          if (data.message == '') {
+            $('#{$this->uid}_message').addClass('has-error');
+            error = true;
+          }
+
+          if (data.replyTo == '') {
+            $('#{$this->uid}_reply_to').addClass('has-error');
+            error = true;
+          }
+
+          if (!error) {
+            _ajax_read_json(
+              'HelpAndSupport/Ajax/SendMessage',
+              data,
+              function(res) {
+                alert('Ďakujeme. Správa bola odoslaná. Budeme vás kontaktovať čo najskôr.');
+                $('#{$this->uid}_message').val('');
+              }
+            );
+          }
+        }
+      </script>
+      <style>
+        #{$this->uid}_message.has-error { border-color: red; }
+        #{$this->uid}_reply_to.has-error { border-color: red; }
+      </style>
       <div class='row'>
         <div class='col-12 col-md-6'>
           <div class='card shadow-sm mb-2'>
@@ -15,7 +52,7 @@ class ContactForm extends \ADIOS\Core\Widget\Action {
             </div>
             <div class='card-body text-justify'>
               <textarea
-                id='{$uid}_message'
+                id='{$this->uid}_message'
                 style='width:100%;height:200px;display:block;'
                 placeholder='".$this->translate("Leave us a message.")."'
               ></textarea>
@@ -28,7 +65,7 @@ class ContactForm extends \ADIOS\Core\Widget\Action {
             </div>
             <div class='card-body text-justify'>
               <input
-                id='{$uid}_reply_to'
+                id='{$this->uid}_reply_to'
                 style='width:100%;display:block;'
                 placeholder='".$this->translate("Where can we reach you?")."'
                 value='".ads($this->adios->config['smtp_from'])."'
@@ -39,7 +76,7 @@ class ContactForm extends \ADIOS\Core\Widget\Action {
           <br/>
           <a
             href='javascript:void(0)'
-            onclick=''
+            onclick='{$this->uid}_sendMessage();'
             class='btn btn-info btn-icon-split'
           >
             <span class='icon'><i class='fas fa-share'></i></span>

@@ -60,6 +60,13 @@ namespace ADIOS\Plugins\WAI\Customer {
 
     var $defaultUrl = "customer/{% token %}/validate-account";
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => $this->translate("Customer registration - account validation info"),
+      ];
+    }
+
     public function getSiteMap($pluginSettings = [], $webPageUrl = "") {
 
       $urlPattern = $pluginSettings["urlPattern"] ?? "";

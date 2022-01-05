@@ -8,6 +8,13 @@ namespace Surikata\Plugins\WAI\SimpleContent {
 namespace ADIOS\Plugins\WAI\SimpleContent {
   class TwoColumns extends \Surikata\Core\AdminPanel\Plugin {
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => $this->translate("Formatted text with heading in two columns"),
+      ];
+    }
+
     public function getSettingsForWebsite() {
       return [
         "column1Content" => [

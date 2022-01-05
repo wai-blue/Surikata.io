@@ -92,6 +92,13 @@ namespace ADIOS\Plugins\WAI\Customer {
 
     var $defaultForgotPasswordUrl = "password/reset/{% token %}";
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => $this->translate("Reset password form"),
+      ];
+    }
+
     public function getSiteMap($pluginSettings = [], $webPageUrl = "") {
 
       $urlPattern = $pluginSettings["defaultForgotPasswordUrl"] ?? "";

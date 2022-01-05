@@ -845,17 +845,16 @@ class Invoice extends \ADIOS\Core\Widget\Model {
 
     $invoiceHtml = print_r($invoiceData, TRUE);
 
-    $this->adios->sendEmail(
-      $invoiceData['customer_email'],
-      str_replace("{#}", $invoiceData['number'], $subject),
-      "
+    $this->adios->sendEmail([
+      "to" => $invoiceData['customer_email'],
+      "subject" => str_replace("{#}", $invoiceData['number'], $subject),
+      "bodyHtml" => "
         <div style='font-family:Verdana;font-size:10pt'>
           ".str_replace("{#}", $invoiceHtml, $body)."
         </div>
         <div style='font-family:Verdana;font-size:10pt;padding-top:10px;margin-top:10px;border-top:1px solid #AAAAAA'>{$signature}</div>
-      ",
-      ""
-    );
+      "
+    ]);
   }
 
 }

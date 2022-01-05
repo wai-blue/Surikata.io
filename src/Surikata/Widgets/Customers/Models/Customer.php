@@ -745,17 +745,16 @@ class Customer extends \ADIOS\Core\Widget\Model {
       $body
     );
 
-    $this->adios->sendEmail(
-      $accountInfo['email'],
-      str_replace("{% email %}", $accountInfo['email'], $subject),
-      "
+    $this->adios->sendEmail([
+      "to" => $accountInfo['email'],
+      "subject" => str_replace("{% email %}", $accountInfo['email'], $subject),
+      "bodyHtml" => "
         <div style='font-family:Verdana;font-size:10pt'>
           {$body}
         </div>
         <div style='font-family:Verdana;font-size:10pt;padding-top:10px;margin-top:10px;border-top:1px solid #AAAAAA'>{$signature}</div>
-      ",
-      ""
-    );
+      "
+    ]);
   }
 
   public function sendNotificationForForgotPassword($accountInfo) {
@@ -777,17 +776,16 @@ class Customer extends \ADIOS\Core\Widget\Model {
       $body
     );
 
-    $this->adios->sendEmail(
-      $accountInfo['email'],
-      str_replace("{% email %}", $accountInfo['email'], $subject),
-      "
+    $this->adios->sendEmail([
+      "to" => $accountInfo['email'],
+      "subject" => str_replace("{% email %}", $accountInfo['email'], $subject),
+      "bodyHtml" => "
         <div style='font-family:Verdana;font-size:10pt'>
           {$body}
         </div>
         <div style='font-family:Verdana;font-size:10pt;padding-top:10px;margin-top:10px;border-top:1px solid #AAAAAA'>{$signature}</div>
-      ",
-      ""
-    );
+      "
+    ]);
   }
 
 }

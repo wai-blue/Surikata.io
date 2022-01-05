@@ -5,13 +5,12 @@ namespace ADIOS\Widgets\Website\Inputs;
 class ContentStructure extends \ADIOS\Core\Input {
   public function render() {
     $domain = $this->params['form_data']['domain'];
+    $idWebPage = (int) $this->params['form_data']['id'];
     $themeName = $this->adios->config['settings']['web'][$domain]['design']['theme'];
 
     $theme = $this->adios->widgets['Website']->themes[$themeName];
 
     $layouts = $theme->getLayouts();
-
-    $value = @json_decode($this->value, TRUE);
 
     $randUid = $this->uid.time().rand(1000, 9999);
 
@@ -31,10 +30,37 @@ class ContentStructure extends \ADIOS\Core\Input {
 
     $inputHtml = "
       <div>
+        ".$this->adios->ui->Button([
+          "text" => $this->translate("Open visual content editor")." (BETA)",
+          "fa_icon" => "fas fa-paint-brush",
+          "class" => "btn btn-info btn-icon-split my-2",
+          "onclick" => "
+            window_render(
+              'Website/ContentStructure/VisualEditor',
+              {
+                'idWebPage': {$idWebPage},
+                'domain': '{$domain}'
+              },
+              function(res) {
+                if (res && res.panelContent) {
+                  if (!{$this->uid}_data['panels']) {
+                    {$this->uid}_data['panels'] = {};
+                  }
+
+                  {$this->uid}_data['panels'][res.panelName] = res.panelContent;
+
+                  {$this->uid}_serialize();
+                  {$this->uid}_updatePanelInfo();
+                }
+              }
+            );
+          ",
+        ])->render()."
+
         <div
           class='row surikata-theme-preview-wrapper'
           data-input-id='{$randUid}'
-          style='position:relative;height:calc(100vh - 27em);overflow:auto;'
+          style='position:relative;height:calc(100vh - 32em);overflow:auto;'
         >
           {$layoutsHtml}
         </div>
@@ -43,7 +69,7 @@ class ContentStructure extends \ADIOS\Core\Input {
         ".$this->adios->ui->Button([
           "text" => $this->translate("Change layout"),
           "fa_icon" => "fas fa-th",
-          "class" => "btn btn-info btn-icon-split my-2",
+          "class" => "btn btn-light btn-icon-split my-2",
           "onclick" => "
             window_render(
               'Website/ContentStructure/LayoutSelection',

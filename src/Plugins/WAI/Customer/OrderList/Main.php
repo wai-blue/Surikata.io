@@ -54,5 +54,12 @@ namespace Surikata\Plugins\WAI\Customer {
 
 namespace ADIOS\Plugins\WAI\Customer {
   class OrderList extends \Surikata\Core\AdminPanel\Plugin {
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => $this->translate("Customer's list of orders"),
+      ];
+    }
+
   }
 }

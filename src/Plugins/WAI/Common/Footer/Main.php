@@ -54,6 +54,13 @@ namespace Surikata\Plugins\WAI\Common {
 namespace ADIOS\Plugins\WAI\Common {
   class Footer extends \Surikata\Core\AdminPanel\Plugin {
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => $this->translate("HTML Footer"),
+      ];
+    }
+
     public function getSettingsForWebsite() {
       return [
         "showContactAddress" => [

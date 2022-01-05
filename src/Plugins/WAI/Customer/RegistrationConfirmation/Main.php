@@ -59,6 +59,13 @@ namespace ADIOS\Plugins\WAI\Customer {
 
     var $defaultUrl = "registration/{% token %}/confirm";
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => $this->translate("Customer registration - confirmation info"),
+      ];
+    }
+
     public function getSiteMap($pluginSettings = [], $webPageUrl = "") {
 
       $urlPattern = $pluginSettings["urlPattern"] ?? "";

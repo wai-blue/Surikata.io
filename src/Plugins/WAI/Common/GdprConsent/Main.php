@@ -24,6 +24,13 @@ namespace Surikata\Plugins\WAI\Common {
 namespace ADIOS\Plugins\WAI\Common {
   class GdprConsent extends \Surikata\Core\AdminPanel\Plugin {
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => $this->translate("GDPR and privacy content popup"),
+      ];
+    }
+
     public function getSettingsForWebsite() {
       return [
         "showContactAddress" => [

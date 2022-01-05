@@ -8,6 +8,13 @@ namespace Surikata\Plugins\WAI\SimpleContent {
 namespace ADIOS\Plugins\WAI\SimpleContent {
   class OneColumn extends \Surikata\Core\AdminPanel\Plugin {
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => $this->translate("Formatted text with heading in one column"),
+      ];
+    }
+
     public function getSettingsForWebsite() {
       return [
         "heading" => [

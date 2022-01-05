@@ -16,17 +16,29 @@ class VisualEditor extends \ADIOS\Core\Widget\Action {
     
     $windowContentHtml = print_r($webPage, TRUE);
     $windowContentHtml = "
-      <div style='background:#F8F8F8'>
-        <iframe
-          src='//{$domainInfo['rootUrl']}/{$webPage['url']}?_vce=1&_vcetkn={$iframeToken}'
-          style='
-            width:100%;
-            height:calc(100vh - 200px);
-          '
-        >Loading...</iframe>
+      <div
+        id='{$this->uid}_loading_div'
+        style='background:#F8F8F8;padding:1em'
+      >
+        Loading editor. Please wait..
       </div>
 
+      <iframe
+        id='{$this->uid}_iframe'
+        src='//{$domainInfo['rootUrl']}/{$webPage['url']}?_vce=1&_vcetkn={$iframeToken}'
+        style='
+          width:100%;
+          height:calc(100vh - 200px);
+          display:none;
+        '
+      ></iframe>
+
       <script>
+        setTimeout(function() {
+          $('#{$this->uid}_loading_div').hide();
+          $('#{$this->uid}_iframe').fadeIn();
+        }, 1300);
+
         window.addEventListener(
           'message',
           {$this->uid}_onOpenPanel,

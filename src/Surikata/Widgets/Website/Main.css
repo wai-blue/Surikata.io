@@ -19,7 +19,7 @@
 .surikata-theme-preview-wrapper > div .col {
   /* font-size: 6pt; */
   padding: 0.5em;
-  color: white;
+  color: var(--cl-main);
   /* text-align: center; */
   background: #9b9595;
   border: 1px solid white;
@@ -43,7 +43,7 @@
 }
 
 .surikata-theme-preview-wrapper > div.selected *[data-panel-name] {
-  background: var(--cl-bckg-1);
+  background: white;
 }
 
 .surikata-theme-preview-wrapper > div.selected *[data-panel-name] div:nth-child(1) {
@@ -53,7 +53,7 @@
 .surikata-theme-preview-wrapper > div.selected *[data-panel-name] div:nth-child(2) {
   font-size: 0.75em;
   /* background: rgba(255, 255, 255, 0.8); */
-  color: white;
+  /* color: var(--cl-main); */
   padding: 1em;
   width: 100%;
   /* margin: auto; */
@@ -63,12 +63,13 @@
 }
 
 .surikata-theme-preview-wrapper > div.selected *[data-panel-name]:hover {
-  background: var(--cl-bckg-2);
+  background: var(--cl-bckg-1);
+  color: white;
 }
 
 .surikata-theme-preview-wrapper > div *[data-panel-name].selected {
   background: orange;
-  color: white;
+  /* color: white; */
 }
 
 .surikata-theme-preview-wrapper.table-cell > div {

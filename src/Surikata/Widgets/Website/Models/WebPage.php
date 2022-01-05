@@ -147,17 +147,17 @@ class WebPage extends \ADIOS\Core\Widget\Model {
       $params["template"] = [
         "columns" => [
           [
-            "class" => "col-md-8 pr-2",
+            "class" => "col-md-6 pr-2",
             "rows" => [
               "domain",
               "url",
-              ["html" => $this->translate("Page content")],
+              // ["html" => "<h3>".$this->translate("Page content")."</h3>"],
               "content_structure",
               // "typ_stranky",
             ],
           ],
           [
-            "class" => "col-md-4 pl-0",
+            "class" => "col-md-6 pl-0",
             "tabs" => [
               // "Textový obsah" => [
               //   "obsah_h1",

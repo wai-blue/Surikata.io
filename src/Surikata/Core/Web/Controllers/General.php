@@ -85,8 +85,13 @@ class General extends \Surikata\Core\Web\Controller {
             $panelSettings['settings'],
             $panelName
           );
+
+          $pluginObject = $this->adminPanel->getPlugin($panelSettings["plugin"]);
+          $manifest = $pluginObject->manifest();
+          $pluginTitle = $manifest["title"];
         } else {
           $tmpHtml = "";
+          $pluginTitle = "";
         }
 
         if ($this->websiteRenderer->visualContentEditorEnabled) {
@@ -111,7 +116,7 @@ class General extends \Surikata\Core\Web\Controller {
               '
             >
               <div class='sio-edit-mode-info-tag'>Panel: ".hsc($panelName)."</div>
-              <div class='sio-edit-mode-info-tag'>Plugin: ".hsc($panelSettings["plugin"])."</div>
+              <div class='sio-edit-mode-info-tag'>Plugin: ".hsc("{$pluginTitle} ({$panelSettings["plugin"]})")."</div>
               {$tmpHtml}
             </div>
           ";

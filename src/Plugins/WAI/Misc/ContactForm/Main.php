@@ -64,20 +64,21 @@ namespace Surikata\Plugins\WAI\Misc {
         ->getModel("Widgets/CRM/Models/ContactForm")
       ;
 
+      $settings = $this->adminPanel->getPluginSettings("WAI/Misc/ContactForm");
+
       $status = $contactFormModel->insertRow([
         "email" => $email,
         "name" => $name,
         "phone_number" => $phone_number,
         "message" => "Name: ". $name."<br>\n".$message,
         "received" => date('Y-m-d H:i:s'),
-        "recipient" => "lukas.koska@wai.sk"]
-      );
+        "recipient" => $settings["send_mail_is_enabled"] ? $settings["recipient_email"] : ""
+      ]);
 
       $returnArray['status'] = ($status > 0 || !is_null($status)) ? "success" : "error";
       $returnArray['message'] = "Message is saved";
 
-      $settings = $this->websiteRenderer->getCurrentPagePluginSettings("ContactForm") ?? [];
-      if ($settings['sendEmail']) {
+      if ($settings['send_mail_is_enabled']) {
 
         $fields = [
           "name" => $name,
@@ -102,7 +103,7 @@ namespace Surikata\Plugins\WAI\Misc {
           $emailController->setProtocol(\Surikata\Lib\Email::TLS);
         }
 
-        $receive_email = strlen($settings["emailAddress"]) > 0 ? $settings["emailAddress"] : "";
+        $receive_email = strlen($settings["recipient_email"]) > 0 ? $settings["recipient_email"] : "";
         $emailController->setLogin($config['smtp_login'], $config['smtp_password']);
         $emailController->setSubject("Contact Form | Surikata Eshop");
         $emailController->setHtmlMessage($content);
@@ -145,6 +146,13 @@ namespace Surikata\Plugins\WAI\Misc {
 namespace ADIOS\Plugins\WAI\Misc {
   class ContactForm extends \Surikata\Core\AdminPanel\Plugin {
 
+    public function manifest() {
+      return [
+        "title" => "Contact form",
+        "faIcon" => "fa fa-file-signature",
+      ];
+    }
+
     public function getSettingsForWebsite() {
       return [
         "heading" => [
@@ -159,16 +167,28 @@ namespace ADIOS\Plugins\WAI\Misc {
         "formClass" => [
           "title" => "Form Class",
           "type" => "varchar",
-        ],
-        "sendEmail" => [
-          "title" => "Send email",
-          "type" => "boolean",
-        ],
-        "emailAddress" => [
-          "title" => "Email address to send form",
-          "type" => "varchar",
-        ],
+        ]
       ];
+    }
+
+    public function onADIOSBeforeActionRender($event) {
+      $adios = $event["adios"];
+      $pluginConfig = $adios->getPluginSettings("WAI/Misc/ContactForm");
+  
+      if (
+        empty($adios->requestedURI)
+        && empty($pluginConfig["recipient_email"])
+      ) {
+        $adios->userNotifications->addHtml("
+          ".$this->translate("Contact form: You do not have the ricipient email configured.")."
+          <a
+            href='javascript:void(0)'
+            onclick='window_render(\"Plugins/WAI/Misc/ContactForm/Settings\");'
+          > ".$this->translate("Configure")."</a>
+        ");
+      }
+  
+      return $event;
     }
 
   }

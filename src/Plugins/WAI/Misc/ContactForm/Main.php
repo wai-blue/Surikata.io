@@ -148,7 +148,7 @@ namespace ADIOS\Plugins\WAI\Misc {
 
     public function manifest() {
       return [
-        "title" => "Contact form",
+        "title" => "ContactForm",
         "faIcon" => "fa fa-file-signature",
       ];
     }

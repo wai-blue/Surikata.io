@@ -61,7 +61,8 @@ namespace Surikata\Plugins\WAI\Misc {
       }
 
       $contactFormModel = $this->adminPanel
-        ->getModel("Widgets/CRM/Models/ContactForm");
+        ->getModel("Widgets/CRM/Models/ContactForm")
+      ;
 
       $status = $contactFormModel->insertRow([
         "email" => $email,
@@ -69,7 +70,8 @@ namespace Surikata\Plugins\WAI\Misc {
         "phone_number" => $phone_number,
         "message" => "Name: ". $name."<br>\n".$message,
         "received" => date('Y-m-d H:i:s'),
-        "recipient" => "lukas.koska@wai.sk"]);
+        "recipient" => "lukas.koska@wai.sk"]
+      );
 
       $returnArray['status'] = ($status > 0 || !is_null($status)) ? "success" : "error";
       $returnArray['message'] = "Message is saved";

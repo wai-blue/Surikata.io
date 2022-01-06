@@ -1,13 +1,47 @@
 class PluginWAIMiscContactFormAPIClass {
 
+  validateInputs(element) {
+    element = $(element);
+    var value = element.val();
+    var test = false;
+
+    if (value.length > 0) {
+      switch (element.attr('name')) {
+        case "email":
+          var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+          test = regex.test(value);
+          break;
+        case "name":
+        case "contact_message":
+          test = value.length > 2;
+          break;
+        case "phone_number":
+          test = value.length > 9;
+          break;
+        default:
+          test = true;
+          break;
+      }
+      if (!test) {
+        element.addClass("error-input");
+      } else {
+        element.removeClass("error-input");
+      }
+    }
+
+    return test;
+  }
+
   sendContactForm(formId, button) {
     var form = $(formId);
     button = $(button);
     var data = {};
 
+    var _this = this;
     form.find('input, select, textarea').each(function () {
       var element = $(this);
-      if (!validateInputs(this)) {
+
+      if (!_this.validateInputs(element)) {
         return false;
       }
       if (element.prop('disabled') !== true && element.attr("name") !== undefined && element.attr("name") !== null) {

@@ -4,7 +4,18 @@ namespace ADIOS\Actions\Website\ContentStructure;
 
 class PluginSettings extends \ADIOS\Core\Widget\Action {
   public function render() {
-    $contentStructure = @json_decode($this->params['contentStructure'], TRUE);
+    
+    $idWebPage = (int) $this->params['idWebPage'];
+    $contentStructureRaw = $this->params['contentStructure'] ?? "";
+
+    if ($idWebPage > 0 && empty($contentStructureRaw)) {
+      $modelWebPage = new \ADIOS\Widgets\Website\Models\WebPage($this->adios);
+      $webPage = $modelWebPage->getById($idWebPage);
+
+      $contentStructureRaw = $webPage['content_structure'];
+    }
+    
+    $contentStructure = @json_decode($contentStructureRaw, TRUE);
     $themeName = $this->adios->config['settings']['web'][$this->params['domain']]['design']['theme'];
     $layoutName = $contentStructure['layout'];
     $panelName = $this->params['panelName'];
@@ -21,36 +32,73 @@ class PluginSettings extends \ADIOS\Core\Widget\Action {
             Choose a plugin
           </div>
           <div class='adios ui form form_input'>
-            <select
-              id='{$this->uid}_plugin'
-              style='width:100%;font-size:1.5em;'
-              size=15
-              onchange='
-                let pluginUID = $(this).find(\"option:selected\").data(\"plugin-uid\");
-                $(\".surikata-theme-plugin\").hide();
-                $(\"#{$this->uid}_plugin_\" + pluginUID).show();
-              '
-            >
-              <option value=''>-- No plugin here --</option>
+            <div id='{$this->uid}_plugin_select_div'>
+              <div
+                data-plugin-name='".ads($pluginName)."'
+                data-plugin-uid='{$pluginUID}'
+                class='item ".($activatedPluginName == "" ? "selected" : "")."'
+              >
+                -- No plugin for this panel --
+              </div>
     ";
     foreach ($this->adios->getPlugins() as $pluginName => $plugin) {
       $pluginUID = \ADIOS\Core\HelperFunctions::str2uid($pluginName);
 
+      $manifest = $plugin->manifest();
+
       $pluginSelectHtml .= "
-        <option
+        <div
           data-plugin-name='".ads($pluginName)."'
           data-plugin-uid='{$pluginUID}'
-          ".($pluginName == $activatedPluginName ? "selected" : "")."
+          class='item ".($activatedPluginName == $pluginName ? "selected" : "")."'
         >
-          {$pluginName}
-        </option>
+          <div class='title'>".hsc($manifest['title'])."</div>
+          <div class='subtitle'>{$pluginName}</div>
+        </div>
       ";
     }
     $pluginSelectHtml .= "
-            </select>
+            </div>
           </div>
         </div>
       </div>
+      <script>
+        $('#{$this->uid}_plugin_select_div .item').click(function() {
+          let pluginUID = $(this).data('plugin-uid');
+
+          $('#{$this->uid}_plugin_select_div > .item').removeClass('selected');
+          $(this).addClass('selected');
+
+          $('.surikata-theme-plugin').hide();
+          $('#{$this->uid}_plugin_' + pluginUID).show();
+        });
+      </script>
+      <style>
+        #{$this->uid}_plugin_select_div {
+        }
+
+        #{$this->uid}_plugin_select_div .item {
+          cursor: pointer;
+          padding: 0.25em;
+          border: 1px solid transparent;
+          box-sizing: border-box;
+          margin-right: 5px;
+        }
+
+        #{$this->uid}_plugin_select_div .item:hover {
+          border-color: var(--cl-main);
+        }
+
+        #{$this->uid}_plugin_select_div .item.selected {
+          background: var(--cl-main);
+          color: white;
+        }
+
+        #{$this->uid}_plugin_select_div .item .subtitle {
+          font-size: 0.5em;
+        }
+
+      </style>
     ";
 
     $pluginsSettingsHtml = "";
@@ -58,12 +106,16 @@ class PluginSettings extends \ADIOS\Core\Widget\Action {
     foreach ($this->adios->getPlugins() as $pluginName => $plugin) {
       $pluginUID = \ADIOS\Core\HelperFunctions::str2uid($pluginName);
 
+      $manifest = $plugin->manifest();
+
       $pluginsSettingsHtml .= "
         <div
           class='surikata-theme-plugin'
           id='{$this->uid}_plugin_{$pluginUID}'
           style='display:".($pluginName == $activatedPluginName ? "block" : "none")."'
         >
+
+        <h3>".hsc($manifest['title'])."</h3>
       ";
 
       $tmpPlugin = $this->adios->getPlugin($pluginName);
@@ -128,9 +180,9 @@ class PluginSettings extends \ADIOS\Core\Widget\Action {
         }
 
         function {$this->uid}_save() {
-          let pluginSelectedOption = $('#{$this->uid}_plugin option:selected');
-          let pluginName = $(pluginSelectedOption).data('plugin-name');
-          let pluginUID = $(pluginSelectedOption).data('plugin-uid');
+          let pluginSelected = $('#{$this->uid}_plugin_select_div > .item.selected');
+          let pluginName = $(pluginSelected).data('plugin-name');
+          let pluginUID = $(pluginSelected).data('plugin-uid');
 
           let data = { 'plugin': pluginName, 'settings': {} };
 
@@ -146,16 +198,10 @@ class PluginSettings extends \ADIOS\Core\Widget\Action {
 
       </script>
       <div id='{$this->uid}_wrapper' class='row'>
-        <div class='col-4'>
-          <div class='h4'>
-            Renderer plugin
-          </div>
+        <div class='col-4 p-0' style='height: calc(100vh - 200px);overflow: auto;'>
           {$pluginSelectHtml}
         </div>
-        <div class='col-8'>
-          <div class='h4'>
-            Plugin settings
-          </div>
+        <div class='col-8 p-0 pl-4' style='height: calc(100vh - 200px);overflow: auto;'>
           {$pluginsSettingsHtml}
         </div>
       </div>

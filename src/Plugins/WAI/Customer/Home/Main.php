@@ -117,5 +117,12 @@ namespace Surikata\Plugins\WAI\Customer {
 
 namespace ADIOS\Plugins\WAI\Customer {
   class Home extends \Surikata\Core\AdminPanel\Plugin {
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => $this->translate("Customer's home page"),
+      ];
+    }
+
   }
 }

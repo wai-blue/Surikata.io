@@ -1,0 +1,35 @@
+.sio-edit-mode-panel {
+  border: 1px dashed #ff6a00;
+  margin: 0.5em 0.5px;
+  padding: 1px;
+  box-sizing: border-box;
+  cursor: pointer;
+  opacity: 0.5;
+  position: relative;
+  min-height: 1em;
+}
+
+.sio-edit-mode-panel:hover {
+  border-color: #ff6a00;
+  opacity: 1;
+}
+
+.sio-edit-mode-info-tag {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  font-size: 8pt;
+  padding: 3px;
+  color: white;
+  background: #ff6a00;
+  display: none;
+  z-index: 99999999;
+}
+
+.sio-edit-mode-panel:hover .sio-edit-mode-info-tag {
+  display: inline-block;
+}
+
+.sio-edit-mode-info-tag:nth-child(2) { top: calc(1.5em + 5px); }
+.sio-edit-mode-info-tag:nth-child(3) { top: calc(3.0em + 5px); }
+.sio-edit-mode-info-tag:nth-child(4) { top: calc(4.5em + 5px); }

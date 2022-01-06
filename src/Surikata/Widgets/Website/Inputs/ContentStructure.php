@@ -5,13 +5,12 @@ namespace ADIOS\Widgets\Website\Inputs;
 class ContentStructure extends \ADIOS\Core\Input {
   public function render() {
     $domain = $this->params['form_data']['domain'];
+    $idWebPage = (int) $this->params['form_data']['id'];
     $themeName = $this->adios->config['settings']['web'][$domain]['design']['theme'];
 
     $theme = $this->adios->widgets['Website']->themes[$themeName];
 
     $layouts = $theme->getLayouts();
-
-    $value = @json_decode($this->value, TRUE);
 
     $randUid = $this->uid.time().rand(1000, 9999);
 
@@ -29,21 +28,47 @@ class ContentStructure extends \ADIOS\Core\Input {
       ";
     }
 
+    $pluginManifestsJs = "var {$this->uid}_pluginManifests = {}";
+    foreach ($this->adios->getPlugins() as $pluginName => $plugin) {
+      $manifest = $plugin->manifest();
+      $pluginManifestsJs .= "
+        {$this->uid}_pluginManifests['{$pluginName}'] = JSON.parse(Base64.decode('".base64_encode(json_encode($manifest))."'));
+      ";
+    }
+
     $inputHtml = "
       <div>
-        <div
-          class='row surikata-theme-preview-wrapper'
-          data-input-id='{$randUid}'
-          style='position:relative;height:calc(100vh - 27em);overflow:auto;'
-        >
-          {$layoutsHtml}
-        </div>
-        <textarea style='display:none' id='{$this->uid}'>{$this->value}</textarea>
+        ".$this->adios->ui->Button([
+          "text" => $this->translate("Open Visual Content Editor")." (BETA)",
+          "fa_icon" => "fas fa-paint-brush",
+          "class" => "btn btn-info btn-icon-split my-2",
+          "onclick" => "
+            window_render(
+              'Website/ContentStructure/VisualEditor',
+              {
+                'idWebPage': {$idWebPage},
+                'domain': '{$domain}'
+              },
+              function(res) {
+                if (res && res.panelContent) {
+                  if (!{$this->uid}_data['panels']) {
+                    {$this->uid}_data['panels'] = {};
+                  }
+
+                  {$this->uid}_data['panels'][res.panelName] = res.panelContent;
+
+                  {$this->uid}_serialize();
+                  {$this->uid}_updatePanelInfo();
+                }
+              }
+            );
+          ",
+        ])->render()."
 
         ".$this->adios->ui->Button([
-          "text" => $this->translate("Change layout"),
+          "text" => $this->translate("Change page layout"),
           "fa_icon" => "fas fa-th",
-          "class" => "btn btn-info btn-icon-split my-2",
+          "class" => "btn btn-light btn-icon-split my-2",
           "onclick" => "
             window_render(
               'Website/ContentStructure/LayoutSelection',
@@ -62,12 +87,24 @@ class ContentStructure extends \ADIOS\Core\Input {
           ",
         ])->render()."
 
+        <div
+          class='row surikata-theme-preview-wrapper'
+          data-input-id='{$randUid}'
+          style='position:relative;height:calc(100vh - 27em);overflow:auto;'
+        >
+          {$layoutsHtml}
+        </div>
+        <textarea style='display:none' id='{$this->uid}'>{$this->value}</textarea>
+
       </div>
       <script>
         var {$this->uid}_data = {'layout': ''};
         ".(empty($this->value) ? "" : "
           {$this->uid}_data = JSON.parse('".ads($this->value)."');
         ")."
+
+        {$pluginManifestsJs}
+        console.log({$this->uid}_pluginManifests);
 
 
         function {$this->uid}_serialize() {
@@ -148,7 +185,10 @@ class ContentStructure extends \ADIOS\Core\Input {
               }
 
               panelInfoHtml = 
-                '<div>[' + panelName + '] ' + panelInfo.plugin + '</div>' +
+                '<div>' +
+                  ' [' + panelName + '] ' + {$this->uid}_pluginManifests[panelInfo.plugin].title +
+                  ' <small>(' + panelInfo.plugin + ')</small>' +
+                '</div>' +
                 (settingsHtml == '' ? '' : '<div>' + settingsHtml + '</div>')
               ;
             }

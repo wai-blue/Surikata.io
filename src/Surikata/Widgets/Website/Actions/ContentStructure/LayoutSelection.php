@@ -23,13 +23,14 @@ class LayoutSelection extends \ADIOS\Core\Widget\Action {
       }
 
       $layoutsHtml .= "
-        <div class='col col-4 card shadow'>
+        <div class='col-3 card shadow m-2'>
           <div class='card-header py-3'>
             <h6 class='m-0 font-weight-bold text-primary'>".hsc($layoutName)."</h6>
           </div>
           <div class='card-body'>
             <div
               class='surikata-theme-preview-item ".($layoutName == $activatedLayoutName ? "selected" : "")."'
+              style='zoom:0.75'
               onclick='{$this->uid}.apply(\"".ads($layoutName)."\");'
             >
               {$layoutPreviewHtml}
@@ -54,10 +55,8 @@ class LayoutSelection extends \ADIOS\Core\Widget\Action {
         }
 
       </script>
-      <div class='container'>
-        <div id='{$this->uid}_wrapper' class='row surikata-theme-preview-wrapper'>
-          {$layoutsHtml}
-        </div>
+      <div id='{$this->uid}_wrapper' class='row surikata-theme-preview-wrapper'>
+        {$layoutsHtml}
       </div>
       <script>
         $('#{$this->uid}_wrapper *[data-panel-name=\"{$panelName}\"]').addClass('selected');

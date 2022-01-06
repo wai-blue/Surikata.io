@@ -40,6 +40,9 @@ class Loader extends \Cascada\Loader {
   var $customerDataCache = [];
   var $publishedPagesCache = [];
 
+  var $visualContentEditorEnabled = FALSE;
+  var $visualContentEditorIframeToken = "";
+
   /**
    * Class constructor.
    * 

@@ -86,9 +86,44 @@ class General extends \Surikata\Core\Web\Controller {
             $panelName
           );
 
-          $twigParams["plugins"][$panelSettings["plugin"]]["html"] = $tmpHtml;
-          $twigParams["panels"][$panelName]["html"] = $tmpHtml;
+          $pluginObject = $this->adminPanel->getPlugin($panelSettings["plugin"]);
+          $manifest = $pluginObject->manifest();
+          $pluginTitle = $manifest["title"];
+        } else {
+          $tmpHtml = "";
+          $pluginTitle = "";
         }
+
+        if ($this->websiteRenderer->visualContentEditorEnabled) {
+          $tmpHtml = "
+            <div
+              class='sio-edit-mode-panel'
+              data-panel-name='".ads($panelName)."'
+              data-iframe-token='".ads($this->websiteRenderer->visualContentEditorIframeToken)."'
+              title='".ads($panelName)."'
+              onclick='
+                window.parent.postMessage(
+                  {
+                    initiator: \"visualContentEditor\",
+                    action: \"openPanel\",
+                    panelName: $(this).data(\"panel-name\"),
+                    iframeToken: $(this).data(\"iframe-token\"),
+                  }
+                );
+
+                event.stopPropagation();
+                return false;
+              '
+            >
+              <div class='sio-edit-mode-info-tag'>Panel: ".hsc($panelName)."</div>
+              <div class='sio-edit-mode-info-tag'>Plugin: ".hsc("{$pluginTitle} ({$panelSettings["plugin"]})")."</div>
+              {$tmpHtml}
+            </div>
+          ";
+        }
+
+        $twigParams["plugins"][$panelSettings["plugin"]]["html"] = $tmpHtml;
+        $twigParams["panels"][$panelName]["html"] = $tmpHtml;
       }
 
       // pripravene TwigParams podsuniem do CASCADy na renderovanie
@@ -103,6 +138,8 @@ class General extends \Surikata\Core\Web\Controller {
     // cize viem si vytiahnut nastavenia stranky (z GTP_web_stranky)
 
     $this->websiteRenderer->idWebPage = $this->websiteRenderer->urlVariables["idWebPage"] ?? 0;
+    $this->websiteRenderer->visualContentEditorEnabled = (bool) ($this->websiteRenderer->urlVariables["_vce"] ?? FALSE);
+    $this->websiteRenderer->visualContentEditorIframeToken = ($this->websiteRenderer->urlVariables["_vcetkn"] ?? "");
     $this->websiteRenderer->currentPage = $this->websiteRenderer->pages[$this->websiteRenderer->idWebPage] ?? NULL;
 
     if ($this->websiteRenderer->currentPage === NULL) {

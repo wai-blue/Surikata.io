@@ -42,8 +42,9 @@ class PluginWAIMiscContactFormAPIClass {
       var element = $(this);
 
       if (!_this.validateInputs(element)) {
-        return false;
+        element.addClass("error-input");
       }
+
       if (element.prop('disabled') !== true && element.attr("name") !== undefined && element.attr("name") !== null) {
         if (element.val() !== undefined && element.val() instanceof Array && element.val().length > 0) {
           element.val().forEach(function (value, index) {

@@ -18,6 +18,7 @@ class Settings extends \ADIOS\Core\Plugin\Action {
                 "title" => $this->translate("Send email"),
                 "input" => $this->adios->ui->Input([
                   "type" => "boolean",
+                  // REVIEW: CamelCase
                   "uid" => "{$this->uid}_send_mail_is_enabled",
                   "value" => $settings['send_mail_is_enabled'],
                 ]),
@@ -27,6 +28,7 @@ class Settings extends \ADIOS\Core\Plugin\Action {
                 "title" => $this->translate("Recipient email"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
+                  // REVIEW: CamelCase
                   "uid" => "{$this->uid}_recipient_email",
                   "value" => $settings['recipient_email'],
                 ]),

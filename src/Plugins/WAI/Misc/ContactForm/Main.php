@@ -66,6 +66,7 @@ namespace Surikata\Plugins\WAI\Misc {
 
       $settings = $this->adminPanel->getPluginSettings("WAI/Misc/ContactForm");
 
+      // REVIEW: CamelCase
       $status = $contactFormModel->insertRow([
         "email" => $email,
         "name" => $name,
@@ -78,6 +79,7 @@ namespace Surikata\Plugins\WAI\Misc {
       $returnArray['status'] = ($status > 0 || !is_null($status)) ? "success" : "error";
       $returnArray['message'] = "Message is saved";
 
+      // REVIEW: CamelCase
       if ($settings['send_mail_is_enabled']) {
 
         $fields = [
@@ -103,6 +105,8 @@ namespace Surikata\Plugins\WAI\Misc {
           $emailController->setProtocol(\Surikata\Lib\Email::TLS);
         }
 
+        // REVIEW: CamelCase
+        // REVIEW: $receive_email -> $recipientEmail
         $receive_email = strlen($settings["recipient_email"]) > 0 ? $settings["recipient_email"] : "";
         $emailController->setLogin($config['smtp_login'], $config['smtp_password']);
         $emailController->setSubject("Contact Form | Surikata Eshop");
@@ -148,6 +152,7 @@ namespace ADIOS\Plugins\WAI\Misc {
 
     public function manifest() {
       return [
+        // REVIEW: preco pouzivas v "title", ktory sa zobrazuje na obrazovke, CamelCase?
         "title" => "ContactForm",
         "faIcon" => "fa fa-file-signature",
       ];

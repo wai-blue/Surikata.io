@@ -18,9 +18,8 @@ class Settings extends \ADIOS\Core\Plugin\Action {
                 "title" => $this->translate("Send email"),
                 "input" => $this->adios->ui->Input([
                   "type" => "boolean",
-                  // REVIEW: CamelCase
-                  "uid" => "{$this->uid}_send_mail_is_enabled",
-                  "value" => $settings['send_mail_is_enabled'],
+                  "uid" => "{$this->uid}_sendMailIsEnabled",
+                  "value" => $settings['sendMailIsEnabled'],
                 ]),
                 "description" => $this->translate("An email will be sent once the form has been completed.")
               ],
@@ -28,9 +27,8 @@ class Settings extends \ADIOS\Core\Plugin\Action {
                 "title" => $this->translate("Recipient email"),
                 "input" => $this->adios->ui->Input([
                   "type" => "varchar",
-                  // REVIEW: CamelCase
-                  "uid" => "{$this->uid}_recipient_email",
-                  "value" => $settings['recipient_email'],
+                  "uid" => "{$this->uid}_recipientEmail",
+                  "value" => $settings['recipientEmail'],
                 ]),
                 "description" => $this->translate("Email where the email about the completed form will come")
               ],

@@ -46,13 +46,13 @@ namespace Surikata\Plugins\WAI\Misc {
 
       $name = htmlspecialchars($this->websiteRenderer->urlVariables['name'] ?? "");
       $email = htmlspecialchars($this->websiteRenderer->urlVariables['email'] ?? "");
-      $phone_number = htmlspecialchars($this->websiteRenderer->urlVariables['phone_number'] ?? "");
+      $phoneNumber = htmlspecialchars($this->websiteRenderer->urlVariables['phone_number'] ?? "");
       $message = htmlspecialchars($this->websiteRenderer->urlVariables['contact_message'] ?? "");
 
       if (
         !$this->validateFields($name, "name") ||
         !$this->validateFields($email, "email") ||
-        !$this->validateFields($phone_number, "phone_number") ||
+        !$this->validateFields($phoneNumber, "phone_number") ||
         !$this->validateFields($message, "message")
       ) {
         $returnArray['status'] = "error";
@@ -66,27 +66,24 @@ namespace Surikata\Plugins\WAI\Misc {
 
       $settings = $this->adminPanel->getPluginSettings("WAI/Misc/ContactForm");
 
-      // REVIEW: CamelCase
       $status = $contactFormModel->insertRow([
         "email" => $email,
         "name" => $name,
-        "phone_number" => $phone_number,
+        "phone_number" => $phoneNumber,
         "message" => "Name: ". $name."<br>\n".$message,
         "received" => date('Y-m-d H:i:s'),
-        "recipient" => $settings["send_mail_is_enabled"] ? $settings["recipient_email"] : ""
+        "recipient" => $settings["sendMailIsEnabled"] ? $settings["recipientEmail"] : ""
       ]);
 
       $returnArray['status'] = ($status > 0 || !is_null($status)) ? "success" : "error";
       $returnArray['message'] = "Message is saved";
 
-      // REVIEW: CamelCase
-      if ($settings['send_mail_is_enabled']) {
-
+      if ($settings['sendMailIsEnabled']) {
         $fields = [
           "name" => $name,
           "message" => $message,
           "email" => $email,
-          "phone" => $phone_number,
+          "phone" => $phoneNumber,
         ];
         $content = $this->getMailContent($fields);
 
@@ -105,9 +102,7 @@ namespace Surikata\Plugins\WAI\Misc {
           $emailController->setProtocol(\Surikata\Lib\Email::TLS);
         }
 
-        // REVIEW: CamelCase
-        // REVIEW: $receive_email -> $recipientEmail
-        $receive_email = strlen($settings["recipient_email"]) > 0 ? $settings["recipient_email"] : "";
+        $receive_email = strlen($settings["recipientEmail"]) > 0 ? $settings["recipientEmail"] : "";
         $emailController->setLogin($config['smtp_login'], $config['smtp_password']);
         $emailController->setSubject("Contact Form | Surikata Eshop");
         $emailController->setHtmlMessage($content);
@@ -152,8 +147,7 @@ namespace ADIOS\Plugins\WAI\Misc {
 
     public function manifest() {
       return [
-        // REVIEW: preco pouzivas v "title", ktory sa zobrazuje na obrazovke, CamelCase?
-        "title" => "ContactForm",
+        "title" => "Contact form",
         "faIcon" => "fa fa-file-signature",
       ];
     }
@@ -182,10 +176,10 @@ namespace ADIOS\Plugins\WAI\Misc {
   
       if (
         empty($adios->requestedURI)
-        && empty($pluginConfig["recipient_email"])
+        && empty($pluginConfig["recipientEmail"])
       ) {
         $adios->userNotifications->addHtml("
-          ".$this->translate("Contact form: You do not have the ricipient email configured.")."
+          ".$this->translate("Contact form: You do not have the recipient email configured.")."
           <a
             href='javascript:void(0)'
             onclick='window_render(\"Plugins/WAI/Misc/ContactForm/Settings\");'

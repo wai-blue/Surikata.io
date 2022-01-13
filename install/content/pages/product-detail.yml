@@ -15,6 +15,7 @@ panels:
     plugin: WAI/Common/Breadcrumb
     settings:
       showHomePage: true
+      homePageUrl: translate("home")
   section_2:
     plugin: WAI/Product/Detail
     settings:

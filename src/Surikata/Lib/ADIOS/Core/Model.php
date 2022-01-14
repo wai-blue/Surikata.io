@@ -1266,8 +1266,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
       $selects[] = $lookupedModel->getFullTableSQLName().".id as {$lookupName}___LOOKUP___id";
 
+      $lookupedModelColumns = $lookupedModel->columns();
+
       foreach ($lookupedModel->columnNames() as $lookupedColName) {
-        $selects[] = $lookupedModel->getFullTableSQLName().".{$lookupedColName} as {$lookupName}___LOOKUP___{$lookupedColName}";
+        if (!$lookupedModelColumns[$lookupedColName]['virtual'] ?? FALSE) {
+          $selects[] = $lookupedModel->getFullTableSQLName().".{$lookupedColName} as {$lookupName}___LOOKUP___{$lookupedColName}";
+        }
       }
 
       $joins[] = [

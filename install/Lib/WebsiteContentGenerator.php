@@ -285,6 +285,13 @@ class WebsiteContentGenerator {
       "type" => 302,
     ]);
 
+    $websiteWebRedirectModel->insertRow([
+      "domain" => $this->domainName,
+      "from_url" => "homePage",
+      "to_url" => "//{% ROOT_URL %}/".$this->translate("home"),
+      "type" => 301,
+    ]);
+
     // web - nastavenia
 
     $webSettings = Yaml::parse(

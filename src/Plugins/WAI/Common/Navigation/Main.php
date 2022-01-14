@@ -116,6 +116,11 @@ namespace Surikata\Plugins\WAI\Common {
         $twigParams["categories"] = $categoryTree;
       }
 
+      // homePageUrl redirect
+      $twigParams['homePageUrl'] = (new \ADIOS\Widgets\Website\Models\WebRedirect($this->adminPanel))
+        ->getHomePageUrl()
+      ;
+
       // breadcrumbs (in some templates it is better to render breadcrumbs within Navigation plugin)
       $twigParams['breadcrumbs'] = (new \Surikata\Plugins\WAI\Common\Breadcrumb($this->websiteRenderer))->getBreadcrumbsUrl();
 

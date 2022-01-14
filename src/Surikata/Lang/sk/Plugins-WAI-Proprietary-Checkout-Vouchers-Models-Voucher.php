@@ -29,5 +29,8 @@ $dictionary = [
   "Enable limit the number of voucher uses" => "Povoliť obmedzenie počtu použití poukážky",
   "You can limit the maximum use of the voucher" => "Maximálne využitie poukážky môžete obmedziť",
   "Maximum number of voucher uses, e.g. 15x" => "Maximálny počet použití voucheru, napr. 15x",
-  "Remaining to be redeemed" => "Zostávajúce na uplatenie"
+  "Remaining to be redeemed" => "Zostávajúce na uplatenie",
+  "Voucher is" => "Poukážka je",
+  "limited" => "limitovaná",
+  "unlimited" => "nelimitovaná"
 ];

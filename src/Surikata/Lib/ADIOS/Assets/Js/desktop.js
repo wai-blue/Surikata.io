@@ -431,7 +431,7 @@
 };
 
   function _confirm(text, params, callback) {
-    params.title = 'Confirmation';
+    params.title = params.title ?? 'Confirmation';
     params.onConfirm = callback;
     _alert(text, params);
   }

@@ -45,3 +45,4 @@ panels:
       showSocialMedia: true
       showMainMenu: true
       showSecondaryMenu: true
+Newsletter: true

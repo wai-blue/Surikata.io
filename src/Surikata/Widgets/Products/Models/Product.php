@@ -652,7 +652,7 @@ class Product extends \ADIOS\Core\Widget\Model {
             if ($('#{$params['uid']}_full_price_incl_vat_custom').val().length === 0) {
               fullPriceExclVAT = salePriceExclVAT;
               fullPriceInclVAT = salePriceInclVAT;
-            {$params['uid']}_price_input_animate_change(fullPriceInclVATInput);
+              {$params['uid']}_price_input_animate_change(fullPriceInclVATInput);
             }
           break;
         }

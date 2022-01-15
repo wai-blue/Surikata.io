@@ -649,6 +649,11 @@ class Product extends \ADIOS\Core\Widget\Model {
           case '{$params['uid']}_sale_price_incl_vat_custom':
             salePriceExclVAT = salePriceInclVAT / (1 + VATPercent / 100);
             {$params['uid']}_price_input_animate_change(salePriceExclVATInput);
+            if ($('#{$params['uid']}_full_price_incl_vat_custom').val().length === 0) {
+              fullPriceExclVAT = salePriceExclVAT;
+              fullPriceInclVAT = salePriceInclVAT;
+            {$params['uid']}_price_input_animate_change(fullPriceInclVATInput);
+            }
           break;
         }
 

@@ -47,7 +47,7 @@ class DB {
 
       $this->ob_mode = false;
       $this->ob = '';
-      $this->debug_correct_queries = false;
+      $this->debugCorrectQueries = true; //false;
 
       $this->tables = [];
 
@@ -165,7 +165,7 @@ class DB {
       $ts1 = _getmicrotime();
       $this->last_query = $query;
       $this->db_result = $this->connection->query($query);
-      $this->last_query_duration = _getmicrotime() - $ts1;
+      $this->lastQueryDurationSec = _getmicrotime() - $ts1;
 
       if (!empty($this->connection->error)) {
         $foreginKeyErrorCodes = [1062, 1216, 1217, 1451, 1452];
@@ -179,8 +179,8 @@ class DB {
           throw new \ADIOS\Core\Exceptions\DBException($this->get_error().", QUERY: {$query}");
         }
       } else {
-        if ($this->debug_correct_queries) {
-          $this->adios->console->info("Query OK:\n{$query}");
+        if ($this->debugCorrectQueries) {
+          $this->adios->console->info("Query OK [".($this->lastQueryDurationSec * 1000)."]:\n{$query}", [], "db");
         }
       }
 

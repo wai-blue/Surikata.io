@@ -59,6 +59,7 @@ class Loader extends \Cascada\Loader {
    * 
    */
   public function __construct($config, $adminPanel = NULL) {
+    $this->currentRunHash = substr(md5(time().rand(1000, 9999)), 0, 5);
 
     $this->adminPanel = $adminPanel;
 
@@ -671,6 +672,10 @@ class Loader extends \Cascada\Loader {
     }
 
     return $globalTwigParams;
+  }
+
+  public function logTimestamp($message) {
+    $this->adminPanel->console->logTimestamp("{$this->currentRunHash}, {$_SERVER['REQUEST_URI']}, {$message}", "web");
   }
 
 }

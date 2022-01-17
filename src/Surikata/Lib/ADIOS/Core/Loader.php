@@ -126,7 +126,13 @@ class Loader {
 
     try {
 
-      global $gtp;
+      // inicializacia debug konzoly
+      $this->console = new \ADIOS\Core\Console($this);
+      $this->console->clearLog("timestamps", "info");
+
+      $this->console->logTimestamp("__construct() start");
+
+      // global $gtp;
 
       $gtp = $this->config['global_table_prefix'];
 
@@ -219,9 +225,6 @@ class Loader {
 
       // inicializacia objektu notifikacii
       $this->userNotifications = new \ADIOS\Core\UserNotifications($this);
-
-      // inicializacia debug konzoly
-      $this->console = new \ADIOS\Core\Console($this);
 
       // inicializacia mailera
       // 2021-07-05 deprecated
@@ -345,6 +348,8 @@ class Loader {
 
       $this->dispatchEventToPlugins("onADIOSAfterInit", ["adios" => $this]);
 
+
+      $this->console->logTimestamp("__construct() end");
     } catch (\Exception $e) {
       exit("ADIOS INIT failed. ".$e->getMessage());
     }

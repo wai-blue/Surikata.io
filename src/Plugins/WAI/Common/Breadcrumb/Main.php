@@ -123,6 +123,11 @@ namespace ADIOS\Plugins\WAI\Common {
 
     public function getSettingsForWebsite() {
       return [
+        "homePageUrl" => [
+          "title" => "Home page link",
+          "type"  => "varchar",
+          "description" => "Home page link for redirect e.g.: home"
+        ],
         "showHomePage" => [
           "title" => "Show home page link",
           "type"  => "boolean"

@@ -46,6 +46,10 @@ namespace Surikata\Plugins\WAI\Common {
       $twigParams['mainMenuItems'] = $this->getMenuItems($flatMainMenuItems);
       $twigParams['secondaryMenuItems'] = $this->getMenuItems($flatSecondaryMenuItems);
 
+      $twigParams['homePageUrl'] = (new \ADIOS\Widgets\Website\Models\WebRedirect($this->adminPanel))
+        ->getHomePageUrl()
+      ;
+
       return $twigParams;
     }
   }

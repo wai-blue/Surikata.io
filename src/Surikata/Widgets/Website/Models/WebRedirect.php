@@ -6,6 +6,7 @@ class WebRedirect extends \ADIOS\Core\Widget\Model {
   var $sqlName = "web_redirects";
   var $urlBase = "Website/{{ domainName }}/Redirects";
   var $lookupSqlValue = "{%TABLE%}.name";
+  static $redirects = [];
 
   public function init() {
     $this->tableTitle = $this->translate("Website redirects");
@@ -79,6 +80,37 @@ class WebRedirect extends \ADIOS\Core\Widget\Model {
   public function onAfterSave($data, $returnValue) {
     $this->adios->widgets['Website']->rebuildSitemapForAllDomains();
     return parent::onAfterSave($data, $returnValue);
+  }
+
+  public function getAllByDomain() {
+    if (empty(self::$redirects)) {
+      self::$redirects = $this
+        ->where("domain", "=", $this->adios->websiteRenderer->domain['name'])
+        ->get()
+        ->toArray()
+      ;
+    }
+
+    return self::$redirects;
+  }
+
+  public function getHomePageUrl() {
+    foreach ($this->getAllByDomain() as $redirect) {
+      if ($redirect['from_url'] == "homePage") {
+        if (str_contains($redirect['to_url'], "//{% ROOT_URL %}")) {
+          $homePageUrl = str_replace(
+            "//{% ROOT_URL %}", 
+            $this->adios->websiteRenderer->rootUrl, 
+            $redirect['to_url']
+          );
+        } else {
+          $homePageUrl = $redirect['to_url'];
+        }
+        break;
+      }
+    }
+
+    return $homePageUrl;
   }
 
 }

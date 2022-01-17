@@ -9,7 +9,7 @@ namespace Surikata\Plugins\WAI\Common {
     var $navigationItems = NULL;
 
     public static $allCategories = [];
-    public static $twigParams = [];
+    public static $twigParams = NULL;
 
     private function convertFlatMenuItemsToTree(&$flatMenuItems, $idParent = 0) {
       $treeItems = [];

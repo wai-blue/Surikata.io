@@ -47,6 +47,8 @@ class Loader {
   public $actionNestingLevel = 0;
   public $actionStack = [];
 
+  public $dictionaryFilename = "Core-Loader";
+
   public function __construct($config = NULL, $mode = NULL) {
 
     global $___ADIOSObject;
@@ -65,6 +67,14 @@ class Loader {
     
     if (empty($this->config['system_table_prefix'])) {
       $this->config['system_table_prefix'] = "adios";
+    }
+
+    // load available languages
+    $this->config['available_languages'] = ["en"];
+    foreach (scandir("{$this->config["dir"]}/Lang") as $tmpLang) {
+      if (!in_array($tmpLang, [".", ".."]) && is_dir("{$this->config["dir"]}/Lang/{$tmpLang}")) {
+        $this->config['available_languages'][] = $tmpLang;
+      }
     }
 
     // pouziva sa ako vseobecny prefix niektorych session premennych,
@@ -234,14 +244,6 @@ class Loader {
 
       if ($mode == ADIOS_MODE_FULL) {
 
-        // load available languages
-        $this->config['available_languages'] = ["en"];
-        foreach (scandir("{$this->config["dir"]}/Lang") as $tmpLang) {
-          if (!in_array($tmpLang, [".", ".."]) && is_dir("{$this->config["dir"]}/Lang/{$tmpLang}")) {
-            $this->config['available_languages'][] = $tmpLang;
-          }
-        }
-
         // set language
         if (!empty($_SESSION[_ADIOS_ID]['language'])) {
           $this->config['language'] = $_SESSION[_ADIOS_ID]['language'];
@@ -251,6 +253,10 @@ class Loader {
           if (!in_array($this->params['language'], $this->adios->config['available_languages'])) {
             $this->config['language'] = reset($this->adios->config['available_languages']);
           }
+        }
+
+        if (empty($this->config['language'])) {
+          $this->config['language'] = "en";
         }
 
         // user authentication
@@ -473,23 +479,27 @@ class Loader {
   //////////////////////////////////////////////////////////////////////////////
   // TRANSLATIONS
 
-  public function loadDictionary($object) {
+  public function loadDictionary($object, $toLanguage = "") {
     $dictionary = [];
     $dictionaryFolder = $object->dictionaryFolder ?? "";
 
-    if (empty($language)) {
-      $language = $this->config['language'] ?? "";
+    if (empty($toLanguage)) {
+      $toLanguage = $this->config['language'] ?? "";
     }
 
     if (empty($dictionaryFolder)) {
       $dictionaryFolder = "{$this->config['dir']}/Lang";
     }
 
-    if (strlen($language) == 2) {
-      $dictionaryFilename = strtr(get_class($object), "./\\", "---");
-      $dictionaryFilename = str_replace("ADIOS-", "", $dictionaryFilename);
+    if (strlen($toLanguage) == 2) {
+      if (empty($object->dictionaryFilename)) {
+        $dictionaryFilename = strtr(get_class($object), "./\\", "---");
+        $dictionaryFilename = str_replace("ADIOS-", "", $dictionaryFilename);
+      } else {
+        $dictionaryFilename = $object->dictionaryFilename;
+      }
 
-      $dictionaryFile = "{$dictionaryFolder}/{$language}/{$dictionaryFilename}.php";
+      $dictionaryFile = "{$dictionaryFolder}/{$toLanguage}/{$dictionaryFilename}.php";
 
       if (file_exists($dictionaryFile)) {
         include($dictionaryFile);
@@ -498,23 +508,35 @@ class Loader {
       }
     }
 
-    $object->dictionary = $dictionary;
+    return $dictionary;
   }
 
-  public function translate($string, $object) {
-    if (empty($object->dictionary)) {
-      $this->loadDictionary($object);
+  public function translate($string, $object, $toLanguage = "") {
+    if (empty($toLanguage)) {
+      $toLanguage = $this->config['language'] ?? "en";
     }
 
-    $dictionary = $object->dictionary ?? [];
-    $toLanguage = $this->config['language'] ?? "";
-
-    if (empty($toLanguage)) {
+    if ($toLanguage == "en") {
       return $string;
-    } else if (!isset($dictionary[$string])) {
+    }
+
+    $dictionary = [];
+    
+    if (empty($object->dictionary[$toLanguage])) {
+      $dictionary[$toLanguage] = $this->loadDictionary($object, $toLanguage);
+    }
+
+    // // $dictionary[$toLanguage] = $object->dictionary[$toLanguage] ?? [];
+    // if (get_class($object) == "ADIOS\\Widgets\\Orders\\Models\\Order") {
+    //   var_dump($string);
+    //   var_dump(get_class($object));
+    //   print_r($dictionary);exit;
+    //   }
+
+    if (!isset($dictionary[$toLanguage][$string])) {
       return $string;
     } else {
-      return $dictionary[$string];
+      return $dictionary[$toLanguage][$string];
     }
   }
 
@@ -1442,6 +1464,18 @@ class Loader {
 
     foreach ($jsFiles as $file) {
       $js .= @file_get_contents(dirname(__FILE__)."/../Assets/Js/{$file}")."\n";
+    }
+
+    $js .= "
+      var adios_language_translations = {};
+    ";
+
+    foreach ($this->config['available_languages'] as $language) {
+      $js .= "
+        adios_language_translations['{$language}'] = {
+          'Confirmation': '".ads($this->translate("Confirmation", $this, $language))."',
+        };
+      ";
     }
 
     return $js;

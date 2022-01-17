@@ -18,6 +18,10 @@
     if (_DEVEL_MODE) {
       setTimeout(desktop_console_update, 300);
     }
+
+    var _LANG = '{{ config.language }}';
+    var _TRANSLATIONS = adios_language_translations[_LANG];
+
   </script>
 </head>
 
@@ -304,8 +308,6 @@
       </div>
     </div>
   </div>
-
-  {{ widgets_js|raw }}
 
 </body>
 

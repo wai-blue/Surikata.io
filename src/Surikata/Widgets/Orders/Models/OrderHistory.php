@@ -71,17 +71,22 @@ class OrderHistory extends \ADIOS\Core\Widget\Model {
     $orderModel = new \ADIOS\Widgets\Orders\Models\Order($this->adios);
     $orderModel->init();
 
-    if ($data['column'] == "state") {
-      return $orderModel->enumOrderStates[(int)$data['row']['state']];
+    switch ($data['column']) {
+      case "state":
+        return $orderModel->enumOrderStates[(int)$data['row']['state']];
+      break;
+      case "user":
+        if ($data['row']['user'] == 0) {
+          return "Automatic change";
+        } else {
+          return (new User($this->adios))->getById($data['row']['user'])["name"];
+        }
+      break;
+      default:
+        return $data['html'];
+      break;
     }
-    if ($data['column'] == "user") {
-      if ($data['row']['user'] == 0) {
-        return "Automatic change";
-      }
-      else {
-        return (new User($this->adios))->getById($data['row']['user'])["name"];
-      }
-    }
+
   }
 
   public function tableCellCSSFormatter($data) {

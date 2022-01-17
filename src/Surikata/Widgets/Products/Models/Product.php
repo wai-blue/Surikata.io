@@ -144,6 +144,13 @@ class Product extends \ADIOS\Core\Widget\Model {
           "model" => "Widgets/Settings/Models/Unit",
         ],
 
+        "id_supplier" => [
+          "type" => "lookup",
+          "model" => "Widgets/Products/Models/Supplier",
+          "title" => $this->translate("Supplier"),
+          "show_column" => TRUE,
+        ],
+
         "id_stock_state" => [
           "type" => "lookup",
           "input_style" => "select",
@@ -155,26 +162,26 @@ class Product extends \ADIOS\Core\Widget\Model {
         "stock_quantity" => [
           "type" => "float",
           "title" => $this->translate("Stock quantity"),
-          "Description" => $this->translate("Number of units of product available on stock and ready for immediate delivery."),
+          "description" => $this->translate("Number of units of product available on stock and ready for immediate delivery."),
           "show_column" => TRUE,
         ],
 
         "delivery_day" => [
           "type" => "int",
           "title" => $this->translate("Delivery day"),
-          "Description" => $this->translate("Duration of delivery in days. '1' means that the product will be delivered in the next day after the order."),
+          "description" => $this->translate("Duration of delivery in days. '1' means that the product will be delivered in the next day after the order."),
         ],
 
         "delivery_time" => [
           "type" => "time",
           "title" => $this->translate("Delivery time"),
-          "Description" => $this->translate("Date and time of the delivery if the product is ordered before the order deadline. Leave empty for default value."),
+          "description" => $this->translate("Date and time of the delivery if the product is ordered before the order deadline. Leave empty for default value."),
         ],
 
         "order_deadline" => [
           "type" => "time",
           "title" => $this->translate("Order deadline"),
-          "Description" => $this->translate("Date and time of the delivery if the product is ordered before the order deadline. Leave empty for default value."),
+          "description" => $this->translate("Date and time of the delivery if the product is ordered before the order deadline. Leave empty for default value."),
         ],
 
         "extended_warranty" => [
@@ -791,6 +798,7 @@ class Product extends \ADIOS\Core\Widget\Model {
         ],
         "stock_quantity",
         "id_delivery_unit",
+        "id_supplier",
         "delivery_day",
         "delivery_time",
         "order_deadline",

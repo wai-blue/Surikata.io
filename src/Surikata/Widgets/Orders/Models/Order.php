@@ -298,6 +298,7 @@ class Order extends \ADIOS\Core\Widget\Model {
         "type" => "varchar",
         "title" => $this->translate("Domain"),
         "readonly" => TRUE,
+        "enum_values" => $this->adios->getEnumValuesForListOfDomains(),
         "show_column" => TRUE,
       ],
 
@@ -342,6 +343,10 @@ class Order extends \ADIOS\Core\Widget\Model {
 
   public function indexes(array $indexes = []) {
     return parent::indexes([
+      "domain" => [
+        "type" => "index",
+        "columns" => ["domain"],
+      ],
       "order___accounting_year___serial_number" => [
         "type" => "unique",
         "columns" => ["accounting_year", "serial_number"],

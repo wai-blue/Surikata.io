@@ -70,19 +70,21 @@ namespace Surikata\Plugins\WAI\Product {
 
         self::$productInfo = $productModel->translateSingleProductForWeb(self::$productInfo, $languageIndex);
 
-        $allCategories = (new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel))->getAll(); // TODO: UPPERCASE LOOKUP
+        $allCategories = (new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel))->getAll();
 
-        // REVIEW: atribut 'prislusenstvo' prelozit na 'accesories'
-        // REVIEW: nemal by "vypocet" URL adresy ist do nejakej separatnej funkcie?
-        foreach (self::$productInfo['prislusenstvo'] as $key => $value) {
-          self::$productInfo['prislusenstvo'][$key]['url'] =
+        self::$productInfo['ACCESSORIES'] = $productModel->addPriceInfoForListOfProducts(self::$productInfo['ACCESSORIES']);
+        self::$productInfo['ACCESSORIES'] = $productModel->translateForWeb(self::$productInfo['ACCESSORIES'], $languageIndex);
+        foreach (self::$productInfo['ACCESSORIES'] as $key => $value) {
+          self::$productInfo['ACCESSORIES'][$key]['url'] =
             \ADIOS\Core\HelperFunctions::str2url($value['TRANSLATIONS']['name'])
             .".pid.{$value['id']}"
           ;
         }
-
-        foreach (self::$productInfo['related'] as $key => $value) {
-          self::$productInfo['related'][$key]['url'] =
+        
+        self::$productInfo['RELATED'] = $productModel->addPriceInfoForListOfProducts(self::$productInfo['RELATED']);
+        self::$productInfo['RELATED'] = $productModel->translateForWeb(self::$productInfo['RELATED'], $languageIndex);
+        foreach (self::$productInfo['RELATED'] as $key => $value) {
+          self::$productInfo['RELATED'][$key]['url'] =
             \ADIOS\Core\HelperFunctions::str2url($value['TRANSLATIONS']['name'])
             .".pid.{$value['id']}"
           ;
@@ -186,7 +188,7 @@ namespace ADIOS\Plugins\WAI\Product {
           "title" => "Show accessories for products",
           "type" => "boolean",
         ],
-        "showSimilarProducts" => [
+        "showRelatedProducts" => [
           "title" => "Zobraziť podobné produkty",
           "type" => "boolean",
         ],

@@ -35,7 +35,7 @@ panels:
       showContactEmail: true
       showContactPhoneNumber: true
       contactTitle: translate("Contact us", "Installer")
-      Newsletter: true
+      showNewsletter: true
       showPayments: true
       showSocialMedia: true
       showMainMenu: true

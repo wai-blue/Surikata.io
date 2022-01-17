@@ -24,7 +24,7 @@ panels:
       showContactEmail: true
       showContactPhoneNumber: true
       contactTitle: translate("Contact us")
-      Newsletter: true
+      showNewsletter: true
       showPayments: true
       showSocialMedia: true
       showMainMenu: true

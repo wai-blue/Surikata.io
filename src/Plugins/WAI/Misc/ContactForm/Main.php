@@ -42,17 +42,15 @@ namespace Surikata\Plugins\WAI\Misc {
     public function renderJSON() {
       $returnArray = array();
 
-      $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
-
       $name = htmlspecialchars($this->websiteRenderer->urlVariables['name'] ?? "");
       $email = htmlspecialchars($this->websiteRenderer->urlVariables['email'] ?? "");
-      $phone_number = htmlspecialchars($this->websiteRenderer->urlVariables['phone_number'] ?? "");
+      $phoneNumber = htmlspecialchars($this->websiteRenderer->urlVariables['phone_number'] ?? "");
       $message = htmlspecialchars($this->websiteRenderer->urlVariables['contact_message'] ?? "");
 
       if (
         !$this->validateFields($name, "name") ||
         !$this->validateFields($email, "email") ||
-        !$this->validateFields($phone_number, "phone_number") ||
+        !$this->validateFields($phoneNumber, "phone_number") ||
         !$this->validateFields($message, "message")
       ) {
         $returnArray['status'] = "error";
@@ -61,27 +59,29 @@ namespace Surikata\Plugins\WAI\Misc {
       }
 
       $contactFormModel = $this->adminPanel
-        ->getModel("Widgets/CRM/Models/ContactForm");
+        ->getModel("Widgets/CRM/Models/ContactForm")
+      ;
+
+      $settings = $this->adminPanel->getPluginSettings("WAI/Misc/ContactForm");
 
       $status = $contactFormModel->insertRow([
         "email" => $email,
         "name" => $name,
-        "phone_number" => $phone_number,
+        "phone_number" => $phoneNumber,
         "message" => "Name: ". $name."<br>\n".$message,
         "received" => date('Y-m-d H:i:s'),
-        "recipient" => "lukas.koska@wai.sk"]);
+        "recipient" => $settings["sendMailIsEnabled"] ? $settings["recipientEmail"] : ""
+      ]);
 
       $returnArray['status'] = ($status > 0 || !is_null($status)) ? "success" : "error";
       $returnArray['message'] = "Message is saved";
 
-      $settings = $this->websiteRenderer->getCurrentPagePluginSettings("ContactForm") ?? [];
-      if ($settings['sendEmail']) {
-
+      if ($settings['sendMailIsEnabled']) {
         $fields = [
           "name" => $name,
           "message" => $message,
           "email" => $email,
-          "phone" => $phone_number,
+          "phone" => $phoneNumber,
         ];
         $content = $this->getMailContent($fields);
 
@@ -100,7 +100,7 @@ namespace Surikata\Plugins\WAI\Misc {
           $emailController->setProtocol(\Surikata\Lib\Email::TLS);
         }
 
-        $receive_email = strlen($settings["emailAddress"]) > 0 ? $settings["emailAddress"] : "";
+        $receive_email = strlen($settings["recipientEmail"]) > 0 ? $settings["recipientEmail"] : "";
         $emailController->setLogin($config['smtp_login'], $config['smtp_password']);
         $emailController->setSubject("Contact Form | Surikata Eshop");
         $emailController->setHtmlMessage($content);
@@ -143,7 +143,14 @@ namespace Surikata\Plugins\WAI\Misc {
 namespace ADIOS\Plugins\WAI\Misc {
   class ContactForm extends \Surikata\Core\AdminPanel\Plugin {
 
-    public function getAvailableSettings() {
+    public function manifest() {
+      return [
+        "title" => "Contact form",
+        "faIcon" => "fa fa-file-signature",
+      ];
+    }
+
+    public function getSettingsForWebsite() {
       return [
         "heading" => [
           "title" => "Heading",
@@ -157,16 +164,28 @@ namespace ADIOS\Plugins\WAI\Misc {
         "formClass" => [
           "title" => "Form Class",
           "type" => "varchar",
-        ],
-        "sendEmail" => [
-          "title" => "Send email",
-          "type" => "boolean",
-        ],
-        "emailAddress" => [
-          "title" => "Email address to send form",
-          "type" => "varchar",
-        ],
+        ]
       ];
+    }
+
+    public function onADIOSBeforeActionRender($event) {
+      $adios = $event["adios"];
+      $pluginConfig = $adios->getPluginSettings("WAI/Misc/ContactForm");
+  
+      if (
+        empty($adios->requestedURI)
+        && empty($pluginConfig["recipientEmail"])
+      ) {
+        $adios->userNotifications->addHtml("
+          ".$this->translate("Contact form: You do not have the recipient email configured.")."
+          <a
+            href='javascript:void(0)'
+            onclick='window_render(\"Plugins/WAI/Misc/ContactForm/Settings\");'
+          > ".$this->translate("Configure")."</a>
+        ");
+      }
+  
+      return $event;
     }
 
   }

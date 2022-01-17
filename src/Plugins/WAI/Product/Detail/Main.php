@@ -2,52 +2,50 @@
 
 namespace Surikata\Plugins\WAI\Product {
 
-    use ADIOS\Widgets\Products\Models\ProductFeature;
-    use ADIOS\Widgets\Products\Models\Service;
+  use ADIOS\Widgets\Products\Models\ProductFeature;
+  use ADIOS\Widgets\Products\Models\Service;
+  
   class Detail extends \Surikata\Core\Web\Plugin {
-    var $productInfo = NULL;
+    public static $productInfo = NULL;
     var $deleteCurrentPageBreadCrumb = true;
 
+    public static $breadcrumbsCache = NULL;
+
     public function getBreadcrumbs($urlVariables = []) {
-      $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
+      if (self::$breadcrumbsCache === NULL) {
+        $productInfo = $this->getProductInfo();
+        $productInfo['idCategory'] = $productInfo['id_category'];
 
-      $productInfo = $this->getProductInfo();
-      $productInfo['idCategory'] = $productInfo['id_category'];
+        $productCatalog = 
+          new \Surikata\Plugins\WAI\Product\Catalog(
+            $this->websiteRenderer
+          )
+        ;
 
-      $productCatalog = 
-        new \Surikata\Plugins\WAI\Product\Catalog(
-          $this->websiteRenderer
-        )
-      ;
+        $breadcrumbModel = 
+          new \Surikata\Plugins\WAI\Common\Breadcrumb(
+            $this->websiteRenderer
+          )
+        ;
 
-      $productCatalogUrl = $productCatalog->getWebPageUrl();
-
-      $breadcrumb = 
-        new \Surikata\Plugins\WAI\Common\Breadcrumb(
-          $this->websiteRenderer
-        )
-      ;
-
-      $breadcrumbs = 
-        $breadcrumb->getMenuBreadcrumbs(
-          $productCatalogUrl, 
+        $breadcrumbs = $breadcrumbModel->getMenuBreadcrumbs(
+          $productCatalog->getWebPageUrl(),
           true
-        )
-      ;
+        );
 
-      $breadcrumbs = array_merge(
-        $breadcrumbs, 
-        $productCatalog->getBreadcrumbs($productInfo)
-      );
+        $breadcrumbs = array_merge(
+          $breadcrumbs, 
+          $productCatalog->getBreadcrumbs($productInfo)
+        );
 
-      // REVIEW: toto "$productInfo["name_lang_{$languageIndex}"];" som
-      // opravil na $productInfo["TRANSLATIONS"]["name"];
-      // Treba podobnu opravu spravit aj na ostatnych miestach.
-      $breadcrumbs[
-        $this->getWebPageUrlFormatted($productInfo)
-      ] = $productInfo["TRANSLATIONS"]["name"];
+        $breadcrumbs[
+          $this->getWebPageUrlFormatted($productInfo)
+        ] = $productInfo["TRANSLATIONS"]["name"];
 
-      return $breadcrumbs;
+        self::$breadcrumbsCache = $breadcrumbs;
+      }
+
+      return self::$breadcrumbsCache;
     }
 
     public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
@@ -59,60 +57,61 @@ namespace Surikata\Plugins\WAI\Product {
     }
 
     function getProductInfo() {
-      if ($this->productInfo === NULL) {
+      if (self::$productInfo === NULL) {
 
         $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
 
         $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adminPanel);
         $productCategoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
 
-        $this->productInfo = $productModel
+        self::$productInfo = $productModel
           ->getById((int) $this->websiteRenderer->urlVariables['idProduct'])
         ;
 
-        $this->productInfo = $productModel->translateSingleProductForWeb($this->productInfo, $languageIndex);
+        self::$productInfo = $productModel->translateSingleProductForWeb(self::$productInfo, $languageIndex);
 
         $allCategories = (new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel))->getAll(); // TODO: UPPERCASE LOOKUP
 
         // REVIEW: atribut 'prislusenstvo' prelozit na 'accesories'
         // REVIEW: nemal by "vypocet" URL adresy ist do nejakej separatnej funkcie?
-        foreach ($this->productInfo['prislusenstvo'] as $key => $value) {
-          $this->productInfo['prislusenstvo'][$key]['url'] =
+        foreach (self::$productInfo['prislusenstvo'] as $key => $value) {
+          self::$productInfo['prislusenstvo'][$key]['url'] =
             \ADIOS\Core\HelperFunctions::str2url($value['TRANSLATIONS']['name'])
             .".pid.{$value['id']}"
           ;
         }
 
-        foreach ($this->productInfo['related'] as $key => $value) {
-          $this->productInfo['related'][$key]['url'] =
+        foreach (self::$productInfo['related'] as $key => $value) {
+          self::$productInfo['related'][$key]['url'] =
             \ADIOS\Core\HelperFunctions::str2url($value['TRANSLATIONS']['name'])
             .".pid.{$value['id']}"
           ;
         }
 
-        $this->productInfo['breadcrumbs'] = $productCategoryModel
-          ->breadcrumbs((int) $this->productInfo['id_category'], $allCategories)
+        self::$productInfo['breadcrumbs'] = $productCategoryModel
+          ->breadcrumbs((int) self::$productInfo['id_category'], $allCategories)
         ;
       }
 
       $allUnits = (new \ADIOS\Widgets\Settings\Models\Unit($this->adminPanel))->getAll();
       foreach ($allUnits as $unit) {
-        if ($this->productInfo["id_delivery_unit"] == $unit["id"]) {
-          $this->productInfo["DELIVERY_UNIT"] = $unit;
+        if (self::$productInfo["id_delivery_unit"] == $unit["id"]) {
+          self::$productInfo["DELIVERY_UNIT"] = $unit;
           break;
         }
       }
-      foreach ($this->productInfo['FEATURES'] as $key => $feature) {
+      foreach (self::$productInfo['FEATURES'] as $key => $feature) {
         foreach ($allUnits as $unit) {
           if ($feature["id_measurement_unit"] == $unit["id"]) {
-            $this->productInfo['FEATURES'][$key]["MEASUREMENT_UNIT"] = $unit;
+            self::$productInfo['FEATURES'][$key]["MEASUREMENT_UNIT"] = $unit;
             break;
           }
         }
-        $this->productInfo['FEATURES'][$key] = (new ProductFeature($this->adminPanel))
-          ->translateProductFeatureForWeb($this->productInfo['FEATURES'][$key], $languageIndex);
+        self::$productInfo['FEATURES'][$key] = (new ProductFeature($this->adminPanel))
+          ->translateProductFeatureForWeb(self::$productInfo['FEATURES'][$key], $languageIndex);
       }
-      return $this->productInfo;
+
+      return self::$productInfo;
     }
 
     public function getServices() {

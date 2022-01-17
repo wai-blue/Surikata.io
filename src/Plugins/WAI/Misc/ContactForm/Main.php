@@ -42,8 +42,6 @@ namespace Surikata\Plugins\WAI\Misc {
     public function renderJSON() {
       $returnArray = array();
 
-      $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
-
       $name = htmlspecialchars($this->websiteRenderer->urlVariables['name'] ?? "");
       $email = htmlspecialchars($this->websiteRenderer->urlVariables['email'] ?? "");
       $phoneNumber = htmlspecialchars($this->websiteRenderer->urlVariables['phone_number'] ?? "");

@@ -30,6 +30,7 @@ panels:
       showContactEmail: true
       showContactPhoneNumber: true
       contactTitle: translate("Contact us")
+      showNewsletter: true
       showPayments: true
       showSocialMedia: true
       showMainMenu: true

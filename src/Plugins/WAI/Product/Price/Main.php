@@ -1,5 +1,10 @@
 <?php
 
+namespace Surikata\Plugins\WAI\Product {
+  class Price extends \Surikata\Core\Web\Plugin {
+  }
+}
+
 namespace ADIOS\Plugins\WAI\Product {
   class Price extends \Surikata\Core\AdminPanel\Plugin {
     public function onProductGetPriceInfoForSingleProduct($event) {

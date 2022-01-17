@@ -26,6 +26,8 @@ class Console {
 
   var $cliEchoEnabled = FALSE;
 
+  var $lastTimestamp = 0;
+
   public function __construct(&$adios) {
     $this->adios = $adios;
 
@@ -64,11 +66,36 @@ class Console {
    * @param  string $message Message to be logged
    * @return void
    */
-  public function log($message) {
+  public function log($message, $object = NULL) {
     $_SESSION[_ADIOS_ID]['console'][] = [
       'header' => date('H:i:s'),
-      'message' => trim($message),
+      'message' => trim($message.(is_object($object) ? " (".get_class($object).")" : "")),
     ];
+  }
+
+  public function clearLog($logger, $logSeverity) {
+    if (!in_array($logSeverity, ["info", "warning", "error"])) {
+      $logSeverity = "info";
+    }
+
+    $logFile = "{$this->adios->config['log_dir']}/".date("Y")."/".date("m")."/".date("d")."/{$logger}-{$logSeverity}.log";
+    if (is_file($logFile)) {
+      unlink($logFile);
+    }
+  }
+
+  function timestampMicrosec() {
+    list($usec, $sec) = explode(' ', microtime());
+    return (float) $usec + (float) $sec;
+  }
+
+  public function logTimestamp($message, $logger = "core") {
+    if (!$this->adios->config['devel_mode']) return;
+
+    $now = $this->timestampMicrosec();
+    if ($this->lastTimestamp == 0) $this->lastTimestamp = $now;
+    $this->info($message, ["secFromLast" => $now - $this->lastTimestamp], $logger."-timestamps");
+    $this->lastTimestamp = $now;
   }
 
   public function cliEcho($message, $loggerName, $severity) {

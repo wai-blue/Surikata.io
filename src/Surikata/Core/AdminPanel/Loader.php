@@ -316,4 +316,14 @@ class Loader extends \ADIOS\Core\Loader {
 
     return $translatedColumnIndex;
   }
+
+  public function getEnumValuesForListOfDomains() {
+    $enumValues = [];
+
+    foreach ($this->getAvailableDomains() as $domain) {
+      $enumValues[$domain["name"]] = $domain["description"];
+    }
+
+    return $enumValues;
+  }
 }

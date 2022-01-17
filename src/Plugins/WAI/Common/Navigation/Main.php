@@ -9,6 +9,7 @@ namespace Surikata\Plugins\WAI\Common {
     var $navigationItems = NULL;
 
     public static $allCategories = [];
+    public static $twigParams = NULL;
 
     private function convertFlatMenuItemsToTree(&$flatMenuItems, $idParent = 0) {
       $treeItems = [];
@@ -79,52 +80,74 @@ namespace Surikata\Plugins\WAI\Common {
     }
 
     public function getTwigParams($pluginSettings) {
-      $twigParams = $pluginSettings;
-      $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
+      if (self::$twigParams === NULL) {
+        $twigParams = $pluginSettings;
+        $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
 
-      $twigParams["languages"] = $this->getLanguages();
+        $twigParams["languages"] = $this->getLanguages();
 
-      if ($this->navigationItems === NULL) {
-        $this->navigationItems = $this->convertFlatMenuItemsToTree(
-          (new \ADIOS\Widgets\Website\Models\WebMenuItem($this->adminPanel))
+        $this->websiteRenderer->logTimestamp("Navigation getTWigParams #1");
+
+        if ($this->navigationItems === NULL) {
+          $this->websiteRenderer->logTimestamp("Navigation getTWigParams #1.1");
+
+          $flatMenuItems =
+            (new \ADIOS\Widgets\Website\Models\WebMenuItem($this->adminPanel))
             ->getByIdMenu((int) $pluginSettings['menuId'] ?? 0)
-        );
-      }
+          ;
 
-      // navigationItems
-      $twigParams["navigationItems"] = $this->navigationItems;
+          $this->websiteRenderer->logTimestamp("Navigation getTWigParams #1.2");
 
-      // cartContents
-      $twigParams["cartContents"] = (new \Surikata\Plugins\WAI\Customer\Cart($this->websiteRenderer))->getCartContents();
+          $this->navigationItems = $this->convertFlatMenuItemsToTree(
+            $flatMenuItems
+          );
 
-      if ($pluginSettings["showCategories"]) {
-        if (empty(self::$allCategories)) {
-          $categoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
-          $categoryPlugin = new Catalog($this->adminPanel);
-
-          self::$allCategories = $categoryModel->orderBy('order_index')->get()->toArray();
-
-          self::$allCategories = $categoryModel->translateForWeb(self::$allCategories, $languageIndex);
-
-          foreach (self::$allCategories as $key => $category) {
-            $url = $categoryPlugin->getWebPageUrlFormatted($categoryPlugin->convertCategoryToUrlVariables($category));
-            self::$allCategories[$key]["url"] = $this->websiteRenderer->rootUrl ."/". $url;
-          }
+          $this->websiteRenderer->logTimestamp("Navigation getTWigParams #1.3");
         }
 
-        $categoryTree = $categoryModel->getAllCategoriesAndSubCategories(self::$allCategories);
-        $twigParams["categories"] = $categoryTree;
+        $this->websiteRenderer->logTimestamp("Navigation getTWigParams #2");
+
+        // navigationItems
+        $twigParams["navigationItems"] = $this->navigationItems;
+
+        // cartContents
+        $twigParams["cartContents"] = (new \Surikata\Plugins\WAI\Customer\Cart($this->websiteRenderer))->getCartContents();
+
+        if ($pluginSettings["showCategories"]) {
+          if (empty(self::$allCategories)) {
+            $categoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
+            $categoryPlugin = new Catalog($this->adminPanel);
+
+            self::$allCategories = $categoryModel->orderBy('order_index')->get()->toArray();
+
+            self::$allCategories = $categoryModel->translateForWeb(self::$allCategories, $languageIndex);
+
+            foreach (self::$allCategories as $key => $category) {
+              $url = $categoryPlugin->getWebPageUrlFormatted($categoryPlugin->convertCategoryToUrlVariables($category));
+              self::$allCategories[$key]["url"] = $this->websiteRenderer->rootUrl ."/". $url;
+            }
+          }
+
+          $categoryTree = $categoryModel->getAllCategoriesAndSubCategories(self::$allCategories);
+          $twigParams["categories"] = $categoryTree;
+        }
+
+        $this->websiteRenderer->logTimestamp("Navigation getTWigParams #3");
+
+        // homePageUrl redirect
+        $twigParams['homePageUrl'] = (new \ADIOS\Widgets\Website\Models\WebRedirect($this->adminPanel))
+          ->getHomePageUrl()
+        ;
+
+        // breadcrumbs (in some templates it is better to render breadcrumbs within Navigation plugin)
+        $twigParams['breadcrumbs'] = (new \Surikata\Plugins\WAI\Common\Breadcrumb($this->websiteRenderer))->getBreadcrumbsUrl();
+
+        $this->websiteRenderer->logTimestamp("Navigation getTWigParams #4");
+
+        self::$twigParams = $twigParams;
       }
 
-      // homePageUrl redirect
-      $twigParams['homePageUrl'] = (new \ADIOS\Widgets\Website\Models\WebRedirect($this->adminPanel))
-        ->getHomePageUrl()
-      ;
-
-      // breadcrumbs (in some templates it is better to render breadcrumbs within Navigation plugin)
-      $twigParams['breadcrumbs'] = (new \Surikata\Plugins\WAI\Common\Breadcrumb($this->websiteRenderer))->getBreadcrumbsUrl();
-
-      return $twigParams;
+      return self::$twigParams;
     }
   }
 

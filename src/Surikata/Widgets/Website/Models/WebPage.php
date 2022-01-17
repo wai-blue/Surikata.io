@@ -28,6 +28,7 @@ class WebPage extends \ADIOS\Core\Widget\Model {
         "type" => "varchar",
         "title" => $this->translate("Domain"),
         "required" => TRUE,
+        "enum_values" => $this->adios->getEnumValuesForListOfDomains(),
         "readonly" => TRUE,
       ],
 

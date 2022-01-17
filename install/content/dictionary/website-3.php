@@ -165,7 +165,7 @@
     ['Product', 'Message', 'Správa'],
     ['Product', 'Submit', 'Poslat'],
     ['Product', 'Accessories', 'Příslušenství'],
-    ['Product', 'Similar products', 'Podobné produkty'],
+    ['Product', 'Related products', 'Podobné produkty'],
     ['Product', 'Action', 'Akcia'],
     ['Product', 'Availability', 'Dostupnost'],
     ['Product', 'Filter By', 'Filtr'],

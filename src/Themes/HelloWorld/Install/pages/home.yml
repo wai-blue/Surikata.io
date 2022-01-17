@@ -44,4 +44,5 @@ panels:
       showPayments: true
       showSocialMedia: true
       showMainMenu: true
+      showNewsletter: true
       showSecondaryMenu: true

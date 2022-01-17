@@ -306,7 +306,10 @@ class WebsiteContentGenerator {
       "urlFacebook" => "https://surikata.io",
       "urlTwitter" => "https://surikata.io",
       "urlYouTube" => "https://surikata.io",
-      "urlInstagram" => "https://surikata.io"
+      "urlInstagram" => "https://surikata.io",
+      "headquarterCompanyName" => "Surikata.io",
+      "headquarterStreet1" => "Address 123",
+      "headquarterZIP" => "98765",
     ];
 
     $webSettings["design"] = array_merge(

@@ -83,6 +83,7 @@ class ProductCategory extends \ADIOS\Core\Widget\Model {
         "is_highlighted" => [
           "type" => "boolean",
           "title" => $this->translate("Highlight category"),
+          "description" => $this->translate("Some desing templates may support category highlighting."),
         ],
 
       ]
@@ -123,14 +124,12 @@ class ProductCategory extends \ADIOS\Core\Widget\Model {
     $tabTranslations = [];
     $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
 
-    $i = 1;
     foreach ($domainLanguages as $languageIndex => $languageName) {
-      if ($i > 1) {
+      if ($languageIndex != $this->adios->translatedColumnIndex) {
         $tabTranslations[] = ["html" => "<b>".hsc($languageName)."</b>"];
         $tabTranslations[] = "name_lang_{$languageIndex}";
         $tabTranslations[] = "description_lang_{$languageIndex}";
       }
-      $i++;
     }
 
     if (count($tabTranslations) == 0) {

@@ -16,5 +16,6 @@ $dictionary = [
   "Translations" => "Preklady",
   "Miscelaneous" => "Rôzne",
   "No translations available." => "Žiadne preklady k dispozícii",
-  "Supported image extensions: jpg, gif, png, jpeg" => "Podporovaný formát obrázku: jpg, gif, png, jpeg."
+  "Supported image extensions: jpg, gif, png, jpeg" => "Podporovaný formát obrázku: jpg, gif, png, jpeg.",
+  "Some desing templates may support category highlighting." => "Niektoré grafické šablóny môžu podporovať zvýrazňovanie kategórií.",
 ];

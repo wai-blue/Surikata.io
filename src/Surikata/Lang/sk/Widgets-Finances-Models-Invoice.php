@@ -56,5 +56,6 @@ $dictionary = [
   "Supplier" => "Dodávateľ",
   "Items" => "Položky",
   "General" => "Všeobecné",
-  "Header" => "Hlavička"
+  "Header" => "Hlavička",
+  "Refresh window" => "Prepočítať sumy"
 ];

@@ -5,6 +5,7 @@ namespace ADIOS\Widgets\Products\Models;
 class ProductPrice extends \ADIOS\Core\Widget\Model {
   var $sqlName = "product_prices";
   var $urlBase = "Products/Prices";
+  var $lookupSqlValue = "concat('##', {%TABLE%}.id)";
 
   public function init() {
     $this->tableTitle = $this->translate("Product price");

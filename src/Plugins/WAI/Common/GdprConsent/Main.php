@@ -79,7 +79,7 @@ namespace ADIOS\Plugins\WAI\Common {
           "title" => "Show secondary menu",
           "type" => "boolean",
         ],
-        "Newsletter" => [
+        "showNewsletter" => [
           "title" => "Zobraziť pole pre zaradenie do newsletteru",
           "type" => "boolean",
         ],

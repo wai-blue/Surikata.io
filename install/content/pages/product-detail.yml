@@ -19,7 +19,7 @@ panels:
   section_2:
     plugin: WAI/Product/Detail
     settings:
-      showSimilarProducts: true
+      showRelatedProducts: true
       showAccessories: true
       showAuthor: true
   footer:
@@ -33,6 +33,7 @@ panels:
       showContactEmail: true
       showContactPhoneNumber: true
       contactTitle: translate("Contact us")
+      showNewsletter: true
       showPayments: true
       showSocialMedia: true
       showMainMenu: true

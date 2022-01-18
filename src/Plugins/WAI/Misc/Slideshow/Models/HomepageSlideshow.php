@@ -16,6 +16,7 @@ class HomepageSlideshow extends \ADIOS\Core\Plugin\Model {
         "type" => "varchar",
         "title" => $this->translate("Domain"),
         "required" => TRUE,
+        "enum_values" => $this->adios->getEnumValuesForListOfDomains(),
         "show_column" => TRUE,
       ],
 

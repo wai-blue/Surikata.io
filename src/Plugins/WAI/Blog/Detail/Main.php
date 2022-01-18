@@ -10,13 +10,13 @@ namespace Surikata\Plugins\WAI\Blog {
     public function getBreadcrumbs($urlVariables = []) {
       $currentBlog = $this->getCurrentBlog();
 
-      $breadcrumb = 
+      $breadcrumbModel = 
         new \Surikata\Plugins\WAI\Common\Breadcrumb(
           $this->websiteRenderer
         )
       ;
 
-      $breadcrumbs = $breadcrumb->getMenuBreadcrumbs(
+      $breadcrumbs = $breadcrumbModel->getMenuBreadcrumbs(
         $currentBlog['blogCatalogUrl'], 
         true
       );

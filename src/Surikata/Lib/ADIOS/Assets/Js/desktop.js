@@ -354,13 +354,13 @@
 
     if (typeof params == 'undefined') params = {};
 
-    if (params.title == '' || typeof params.title == 'undefined') params.title = 'Warning';
+    if (params.title == '' || typeof params.title == 'undefined') params.title = _TRANSLATIONS['Warning'];
     if (params.modal == '' || typeof params.modal == 'undefined') params.modal = true;
     if (params.resizable == '' || typeof params.resizable == 'undefined') params.resizable = false;
     if (params.modal == '' || typeof params.modal == 'undefined') params.modal = true;
     if (params.width == '' || typeof params.width == 'undefined') params.width = 450;
-    if (params.confirm_button_text == '' || typeof params.confirm_button_text == 'undefined') params.confirm_button_text = 'OK, I understand';
-    if (params.cancel_button_text == '' || typeof params.cancel_button_text == 'undefined') params.cancel_button_text = 'Cancel';
+    if (params.confirm_button_text == '' || typeof params.confirm_button_text == 'undefined') params.confirm_button_text = _TRANSLATIONS['OK, I understand'];
+    if (params.cancel_button_text == '' || typeof params.cancel_button_text == 'undefined') params.cancel_button_text = _TRANSLATIONS['Cancel'];
       
     if (params.width > $(window).width()) params.width = $(window).width() - 20;
     if (params.buttons == '' || typeof params.buttons == 'undefined') {

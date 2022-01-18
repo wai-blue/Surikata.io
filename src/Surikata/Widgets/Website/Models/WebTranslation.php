@@ -20,6 +20,7 @@ class WebTranslation extends \ADIOS\Core\Widget\Model {
         "required" => TRUE,
         "readonly" => TRUE,
         "show_column" => FALSE,
+        "enum_values" => $this->adios->getEnumValuesForListOfDomains(),
       ],
 
       "context" => [

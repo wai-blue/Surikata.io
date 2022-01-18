@@ -126,7 +126,13 @@ class Loader {
 
     try {
 
-      global $gtp;
+      // inicializacia debug konzoly
+      $this->console = new \ADIOS\Core\Console($this);
+      $this->console->clearLog("timestamps", "info");
+
+      $this->console->logTimestamp("__construct() start");
+
+      // global $gtp;
 
       $gtp = $this->config['global_table_prefix'];
 
@@ -219,9 +225,6 @@ class Loader {
 
       // inicializacia objektu notifikacii
       $this->userNotifications = new \ADIOS\Core\UserNotifications($this);
-
-      // inicializacia debug konzoly
-      $this->console = new \ADIOS\Core\Console($this);
 
       // inicializacia mailera
       // 2021-07-05 deprecated
@@ -345,6 +348,8 @@ class Loader {
 
       $this->dispatchEventToPlugins("onADIOSAfterInit", ["adios" => $this]);
 
+
+      $this->console->logTimestamp("__construct() end");
     } catch (\Exception $e) {
       exit("ADIOS INIT failed. ".$e->getMessage());
     }
@@ -1044,12 +1049,12 @@ class Loader {
             <i class='fas fa-copy'></i>
           </div>
           <div style='margin-top:1em;margin-bottom:3em;text-align:center;color:red;'>
-            You are trying to save a record that is already existing.<br/>
+            ".$this->translate("You are trying to save a record that is already existing.", $this)."<br/>
             <br/>
             <b>".join(", ", $invalidColumns)."</b>
           </div>
           <a href='javascript:void(0);' onclick='$(this).next(\"div\").slideDown();'>
-            Show more information
+          ".$this->translate("Show more information", $this)."
           </a>
           <div style='display:none'>
             <div style='color:red;margin-bottom:1em;font-family:courier;font-size:8pt;max-height:10em;overflow:auto;'>
@@ -1474,6 +1479,9 @@ class Loader {
       $js .= "
         adios_language_translations['{$language}'] = {
           'Confirmation': '".ads($this->translate("Confirmation", $this, $language))."',
+          'OK, I understand': '".ads($this->translate("OK, I understand", $this, $language))."',
+          'Cancel': '".ads($this->translate("Cancel", $this, $language))."',
+          'Warning': '".ads($this->translate("Warning", $this, $language))."',
         };
       ";
     }

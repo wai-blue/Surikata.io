@@ -16,6 +16,7 @@ class BlogTag extends \ADIOS\Core\Plugin\Model {
         "type" => "varchar",
         "title" => $this->translate("Domain"),
         "required" => TRUE,
+        "enum_values" => $this->adios->getEnumValuesForListOfDomains(),
         "show_column" => TRUE,
       ],
 
@@ -37,6 +38,10 @@ class BlogTag extends \ADIOS\Core\Plugin\Model {
 
   public function indexes(array $indexes = []) {
     return parent::indexes([
+      "domain" => [
+        "type" => "index",
+        "columns" => ["domain"],
+      ],
       "unique_name_for_domain" => [
         "type" => "unique",
         "columns" => ["name", "domain"],

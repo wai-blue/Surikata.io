@@ -34,5 +34,6 @@ panels:
       contactTitle: translate("Contact us")
       showPayments: true
       showSocialMedia: true
+      showNewsletter: true
       showMainMenu: true
       showSecondaryMenu: true

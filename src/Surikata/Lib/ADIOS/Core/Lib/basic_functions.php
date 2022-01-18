@@ -22,13 +22,13 @@ function ads($string) {
  * Switch debugging outputs on.
  *
  * @deprecated
- * @param  boolean $debug_correct_queries If set to TRUE, also valid DB queries will be debugged.
+ * @param  boolean $debugCorrectQueries If set to TRUE, also valid DB queries will be debugged.
  * @return void
  */
-function _d($debug_correct_queries = false) {
+function _d($debugCorrectQueries = false) {
   global $___ADIOSObject;
   $___ADIOSObject->config['debug_enabled'] = TRUE;
-  $___ADIOSObject->db->debug_correct_queries = $debug_correct_queries;
+  $___ADIOSObject->db->debugCorrectQueries = $debugCorrectQueries;
 }
 
 /**

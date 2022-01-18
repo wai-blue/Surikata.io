@@ -2,6 +2,11 @@
 
 namespace Surikata\Plugins\WAI\Common {
   class Header extends \Surikata\Core\Web\Plugin {
+    public function getTwigParams($pluginSettings) {
+      $twigParams = $pluginSettings;
+      $this->websiteRenderer->logTimestamp("Header getTWigParams #1");
+      return $twigParams;
+    }
   }
 }
 

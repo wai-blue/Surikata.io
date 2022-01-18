@@ -36,6 +36,7 @@ panels:
       showContactPhoneNumber: true
       contactTitle: translate("Contact us")
       showPayments: true
+      showNewsletter: true
       showSocialMedia: true
       showMainMenu: true
       showSecondaryMenu: true

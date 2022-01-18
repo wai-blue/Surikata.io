@@ -11,18 +11,12 @@ class Newsletter extends \ADIOS\Core\Widget\Model {
 
   public function init() {
 
-    $this->enumDomains = [];
-    $domains = $this->adios->getAvailableDomains();
-
-    foreach (array_keys($domains) as $domain) {
-      $this->enumDomains = [$domain => $domain];
-    }
-
     $this->tableTitle = $this->translate("Newsletter Subscribers");
     $this->formTitleForInserting = $this->translate("Newsletter new subscriber");
     $this->formTitleForEditing = $this->translate("Newsletter edit subscriber");
 
   }
+
   public function columns(array $columns = []) {
     return parent::columns([
       "email" => [
@@ -35,7 +29,7 @@ class Newsletter extends \ADIOS\Core\Widget\Model {
         "type" => "varchar",
         "title" => $this->translate("Domain"),
         "show_column" => TRUE,
-        "enum_values" => $this->enumDomains,
+        "enum_values" => $this->adios->getEnumValuesForListOfDomains(),
       ],
 
       "created_at" => [
@@ -46,13 +40,24 @@ class Newsletter extends \ADIOS\Core\Widget\Model {
     ]);
   }
 
+  public function indexes(array $indexes = []) {
+    return parent::indexes([
+      "domain" => [
+        "type" => "index",
+        "columns" => ["domain"],
+      ],
+    ]);
+  }
+
   public function registerForNewsletter($email, $domain = "") {
     if ($domain === "") {
-      $domain = $this->enumDomains[array_key_first($this->enumDomains)];
+      $domain = reset($this->adios->getEnumValuesForListOfDomains());
     }
+
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
       throw new EmailIsInvalid();
     }
+
     $newsletter = $this
       ->where('email', '=', $email)
       ->get()

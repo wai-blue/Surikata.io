@@ -75,10 +75,9 @@ namespace Surikata\Plugins\WAI\Product {
 
         $allCategories = (new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel))->getAll(); // TODO: UPPERCASE LOOKUP
 
-        // REVIEW: atribut 'prislusenstvo' prelozit na 'accesories'
         // REVIEW: nemal by "vypocet" URL adresy ist do nejakej separatnej funkcie?
-        foreach ($this->productInfo['prislusenstvo'] as $key => $value) {
-          $this->productInfo['prislusenstvo'][$key]['url'] =
+        foreach ($this->productInfo['ACCESSORIES'] as $key => $value) {
+          $this->productInfo['ACCESSORIES'][$key]['url'] =
             \ADIOS\Core\HelperFunctions::str2url($value['TRANSLATIONS']['name'])
             .".pid.{$value['id']}"
           ;

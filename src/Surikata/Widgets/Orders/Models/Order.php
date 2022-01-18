@@ -927,8 +927,10 @@ class Order extends \ADIOS\Core\Widget\Model {
             if (isNaN(res)) {
               alert(res);
             } else {
-              // refresh order window
-            window_refresh(tmp_window_id);
+              window_render('Invoices/' + res + '/Edit', '', function(res) {
+                // refresh order window
+                window_refresh(tmp_window_id);
+              });
             }
           });
         ",

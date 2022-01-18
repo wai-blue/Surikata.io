@@ -1150,6 +1150,13 @@ class Product extends \ADIOS\Core\Widget\Model {
         )
       );
 
+      if ($product['id_stock_state'] > 0) {
+        $stockStateModel = new ProductStockState($this->adios);
+        $stockState = $stockStateModel->getById($product['id_stock_state']);
+        $stockState = $stockStateModel->translateSingleStockStateForWeb($stockState, $languageIndex);
+        $product["STOCK_STATE"] = $stockState;
+      }
+
     }
 
     if (is_array($product["PRICELIST"])) {

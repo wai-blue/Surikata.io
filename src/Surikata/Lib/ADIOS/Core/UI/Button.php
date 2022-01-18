@@ -31,7 +31,7 @@ class Button extends \ADIOS\Core\UI\View {
    *
    * @var string
    */
-  public $id = "";
+  // public $id = "";
   
   /**
    * If not empty, will be used as href attribute. Otherwise will href attribute be set to javascript:void(0).
@@ -172,7 +172,7 @@ class Button extends \ADIOS\Core\UI\View {
 
     parent::__construct($adios, $this->params);
 
-    $this->id = $this->params['id'];
+    // $this->id = $this->params['id'];
     $this->href = $this->params['href'];
     $this->faIcon = $this->params['fa_icon'];
     $this->text = $this->params['text'];
@@ -188,7 +188,7 @@ class Button extends \ADIOS\Core\UI\View {
   public function render($render_panel = '') {
     if (_count($this->params['dropdown'])) {
       $dropdowns_html = "";
-      foreach ($this->params['dropdown'] as $key => $dropdown) {
+      foreach ($this->params['dropdown'] as $dropdown) {
         if ($dropdown['fa_icon'] != '') {
           $tmp_icon = "<i class='{$dropdown['fa_icon']} mr-2'></i>";
         } else {
@@ -245,7 +245,8 @@ class Button extends \ADIOS\Core\UI\View {
       return "
         <a
           href='".($this->href ?? "javascript:void(0);")."'
-          ".(empty($this->id) ? "" : "id='{$this->id}'")."
+          ".(empty($this->id) ? "" : "x-id='{$this->id}'")."
+          id='".ads($this->uid)."'
           class='
             btn
             ".($this->class == "" ? "btn-primary btn-icon-split" : $this->class)."

@@ -2,8 +2,6 @@
 
 namespace Surikata\Plugins\WAI\Common {
 
-  use Surikata\Plugins\WAI\Product\Catalog;
-
   class Navigation extends \Surikata\Core\Web\Plugin {
 
     var $navigationItems = NULL;
@@ -44,7 +42,7 @@ namespace Surikata\Plugins\WAI\Common {
             foreach ($productCategories as $key => $value) {
               $productCategories[$key]["title"] = $value["TRANSLATIONS"]["name"];
               $productCategories[$key]["url"] = $productCatalogPlugin->getWebPageUrl(
-                $productCatalogPlugin->convertCategoryToUrlVariables($value)
+                $productCatalogPlugin->extractUrlVariablesFromCategory($value)
               );
             }
 
@@ -115,20 +113,20 @@ namespace Surikata\Plugins\WAI\Common {
 
         if ($pluginSettings["showCategories"]) {
           if (empty(self::$allCategories)) {
-            $categoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
-            $categoryPlugin = new Catalog($this->adminPanel);
+            $productCategoryModel = new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel);
+            $productCatalogPlugin = new \Surikata\Plugins\WAI\Product\Catalog($this->websiteRenderer);
 
-            self::$allCategories = $categoryModel->orderBy('order_index')->get()->toArray();
+            self::$allCategories = $productCategoryModel->orderBy('order_index')->get()->toArray();
 
-            self::$allCategories = $categoryModel->translateForWeb(self::$allCategories, $languageIndex);
+            self::$allCategories = $productCategoryModel->translateForWeb(self::$allCategories, $languageIndex);
 
             foreach (self::$allCategories as $key => $category) {
-              $url = $categoryPlugin->getWebPageUrlFormatted($categoryPlugin->convertCategoryToUrlVariables($category));
+              $url = $productCatalogPlugin->getWebPageUrl($productCatalogPlugin->extractUrlVariablesFromCategory($category));
               self::$allCategories[$key]["url"] = $this->websiteRenderer->rootUrl ."/". $url;
             }
           }
 
-          $categoryTree = $categoryModel->getAllCategoriesAndSubCategories(self::$allCategories);
+          $categoryTree = $productCategoryModel->getAllCategoriesAndSubCategories(self::$allCategories);
           $twigParams["categories"] = $categoryTree;
         }
 

@@ -32,4 +32,18 @@ class ProductStockState extends \ADIOS\Core\Widget\Model {
     ));
   }
 
+  public function translateSingleStockStateForWeb($productStockState, $languageIndex) {
+    $productStockState["TRANSLATIONS"]["name"] = $productStockState["name_lang_{$languageIndex}"];
+
+    return $productStockState;
+  }
+
+  public function translateForWeb($productStockState, $languageIndex) {
+    foreach ($productStockState as $key => $value) {
+      $productStockState[$key] = $this->translateSingleStockStateForWeb($value, $languageIndex);
+    }
+
+    return $productStockState;
+  }
+
 }

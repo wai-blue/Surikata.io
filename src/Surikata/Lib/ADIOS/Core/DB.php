@@ -176,7 +176,7 @@ class DB {
             json_encode([$this->connection->error, $query, $initiatingModel->name, $errorNo])
           );
         } else {
-          throw new \ADIOS\Core\Exceptions\DBException($this->get_error().", QUERY: {$query}");
+          throw new \ADIOS\Core\Exceptions\DBException("ERROR #: {$errorNo}, ".$this->get_error().", QUERY: {$query}");
         }
       } else {
         if ($this->debugCorrectQueries) {

@@ -1010,12 +1010,16 @@ class Loader {
 
   public function renderExceptionWarningHtml($exception) {
     
+    $traceLog = "";
+    foreach ($exception->getTrace() as $item) {
+      $traceLog .= "{$item['file']}:{$item['line']}\n";
+    }
+
     switch (get_class($exception)) {
-      case 'Illuminate\Database\QueryException':
       case 'ADIOS\Core\Exceptions\DBException':
         $errorMessage = $exception->getMessage();
         $errorHash = md5(date("YmdHis").$errorMessage);
-        $this->console->error("{$errorHash}\t{$errorMessage}\t{$this->db->last_query}\t{$this->db->db_error}");
+        // $this->console->error("{$errorHash}\t{$errorMessage}\t{$this->db->last_query}\t{$this->db->db_error}");
         $html = "
           <div style='text-align:center;font-size:5em;color:red'>
             🥴
@@ -1025,23 +1029,38 @@ class Loader {
             See logs for more information or contact the support.<br/>
           </div>
           <div style='color:red;margin-bottom:1em;white-space:pre;font-family:courier;font-size:0.8em;overflow:auto;'>{$errorMessage}</div>
-          <div style='color:gray'>
-            {$errorHash}
+          <div style='color:gray;font-size:0.8em;'>
+            {$errorHash}<br/>
+            ".get_class($exception)."<br/>
+            <a href='javascript:void(0);' onclick='$(this).closest(\"div\").find(\".trace-log\").show()'>Show/Hide trace log</a><br/>
+            <div class='trace-log' style='display:none'>{$traceLog}</div>
           </div>
         ";
       break;
+      case 'Illuminate\Database\QueryException':
       case 'ADIOS\Core\Exceptions\DBDuplicateEntryException':
-        list($dbError, $dbQuery, $initiatingModelName, $errorNo) = json_decode($exception->getMessage(), TRUE);
 
-        $initiatingModel = $this->getModel($initiatingModelName);
-        $columns = $initiatingModel->columns();
-        $indexes = $initiatingModel->indexes();
+        if (get_class($exception) == 'Illuminate\Database\QueryException') {
+          $dbQuery = $exception->getSql();
+          $dbError = $exception->errorInfo[2];
+          $errorNo = $exception->errorInfo[1];
+        } else {
+          list($dbError, $dbQuery, $initiatingModelName, $errorNo) = json_decode($exception->getMessage(), TRUE);
+        }
 
-        preg_match("/Duplicate entry '(.*?)' for key '(.*?)'/", $dbError, $m);
-        $invalidIndex = $m[2];
         $invalidColumns = [];
-        foreach ($indexes[$invalidIndex]['columns'] as $columnName) {
-          $invalidColumns[] = $columns[$columnName]["title"];
+
+        if (!empty($initiatingModelName)) {
+          $initiatingModel = $this->getModel($initiatingModelName);
+          $columns = $initiatingModel->columns();
+          $indexes = $initiatingModel->indexes();
+
+          preg_match("/Duplicate entry '(.*?)' for key '(.*?)'/", $dbError, $m);
+          $invalidIndex = $m[2];
+          $invalidColumns = [];
+          foreach ($indexes[$invalidIndex]['columns'] as $columnName) {
+            $invalidColumns[] = $columns[$columnName]["title"];
+          }
         }
 
         switch ($errorNo) {
@@ -1070,13 +1089,15 @@ class Loader {
           </a>
           <div style='display:none'>
             <div style='color:red;margin-bottom:1em;font-family:courier;font-size:8pt;max-height:10em;overflow:auto;'>
-              Error # {$errorNo}<br/>
               {$dbError}<br/>
               {$dbQuery}<br/>
-              {$initiatingModelName}<Br/>
+              {$initiatingModelName}
             </div>
-            <div style='color:gray'>
-              ".get_class($exception)."
+            <div style='color:gray;font-size:0.8em;'>
+              Error # {$errorNo}<br/>
+              ".get_class($exception)."<br/>
+              <a href='javascript:void(0);' onclick='$(this).closest(\"div\").find(\".trace-log\").show()'>Show/Hide trace log</a><br/>
+              <div class='trace-log' style='display:none'>{$traceLog}</div>
             </div>
           </div>
         ";

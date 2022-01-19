@@ -173,7 +173,7 @@ class DB {
 
         if (in_array($errorNo, $foreginKeyErrorCodes)) {
           throw new \ADIOS\Core\Exceptions\DBDuplicateEntryException(
-            json_encode([$this->connection->error, $query, $initiatingModel->name])
+            json_encode([$this->connection->error, $query, $initiatingModel->name, $errorNo])
           );
         } else {
           throw new \ADIOS\Core\Exceptions\DBException($this->get_error().", QUERY: {$query}");

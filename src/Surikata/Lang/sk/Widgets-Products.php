@@ -10,6 +10,7 @@ $dictionary = [
   "Services" => "Služby",
   "Products" => "Produkty",
   "Stock states" => "Dostupnosti na sklade",
+  "Suppliers" => "Dodávatelia",
   "Margins" => "Marže",
   "Discounts" => "Zľavy",
   "No translations available." => "Žiadne preklady k dispozícii"

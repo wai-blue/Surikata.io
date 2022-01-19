@@ -1031,7 +1031,7 @@ class Loader {
         ";
       break;
       case 'ADIOS\Core\Exceptions\DBDuplicateEntryException':
-        list($dbError, $dbQuery, $initiatingModelName) = json_decode($exception->getMessage(), TRUE);
+        list($dbError, $dbQuery, $initiatingModelName, $errorNo) = json_decode($exception->getMessage(), TRUE);
 
         $initiatingModel = $this->getModel($initiatingModelName);
         $columns = $initiatingModel->columns();
@@ -1044,12 +1044,24 @@ class Loader {
           $invalidColumns[] = $columns[$columnName]["title"];
         }
 
+        switch ($errorNo) {
+          case 1216:
+          case 1451:
+            $errorMessage = "You are trying to delete a record that is linked with another record(s).";
+          break;
+          case 1062:
+          case 1217:
+          case 1452:
+            $errorMessage = "You are trying to save a record that is already existing.";
+          break;
+        }
+
         $html = "
           <div style='text-align:center;font-size:5em;color:red'>
             <i class='fas fa-copy'></i>
           </div>
           <div style='margin-top:1em;margin-bottom:3em;text-align:center;color:red;'>
-            ".$this->translate("You are trying to save a record that is already existing.", $this)."<br/>
+            ".$this->translate($errorMessage, $this)."<br/>
             <br/>
             <b>".join(", ", $invalidColumns)."</b>
           </div>
@@ -1058,6 +1070,7 @@ class Loader {
           </a>
           <div style='display:none'>
             <div style='color:red;margin-bottom:1em;font-family:courier;font-size:8pt;max-height:10em;overflow:auto;'>
+              Error # {$errorNo}<br/>
               {$dbError}<br/>
               {$dbQuery}<br/>
               {$initiatingModelName}<Br/>

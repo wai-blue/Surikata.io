@@ -47,7 +47,7 @@ class DB {
 
       $this->ob_mode = false;
       $this->ob = '';
-      $this->debugCorrectQueries = true; //false;
+      $this->debugCorrectQueries = false;
 
       $this->tables = [];
 

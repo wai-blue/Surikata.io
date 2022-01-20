@@ -38,6 +38,10 @@ class Products extends \ADIOS\Core\Widget {
               ],
             ],
           ],
+          [
+            "title" => $this->translate("Suppliers"),
+            "onclick" => "desktop_update('Suppliers');",
+          ],
           "settings" => [
             "title" => $this->translate("Settings"),
             "sub" => [

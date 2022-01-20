@@ -25,6 +25,7 @@ $dictionary = [
   "Calculated sale price incl. VAT" => "Vypočítaná prodejní cena s DPH",
   "WARNING: Final sale price of the product will be updated after save." => "UPOZORNĚNÍ: Konečná prodejní cena produktu bude aktualizována po uložení.",
   "Delivery unit" => "Dodací jednotka",
+  "Supplier" => "Dodavatel",
   "Current state in the stock" => "Aktuální dostupnost na skladě",
   "Stock quantity" => "Množství skladem",
   "Number of units of product available on stock and ready for immediate delivery." => "Počet jednotek produktu dostupných na skladě a připravených k okamžitému dodání.",

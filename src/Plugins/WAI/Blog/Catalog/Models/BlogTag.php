@@ -6,9 +6,12 @@ class BlogTag extends \ADIOS\Core\Plugin\Model {
   var $sqlName = "blogs_tags";
   var $urlBase = "Website/Blog/Tags";
   var $lookupSqlValue = "{%TABLE%}.name";
-  var $tableTitle = "Blogs tags";
-  var $formTitleForInserting = "New blog tag";
-  var $formTitleForEditing = "Blog tag";
+
+  public function init() {
+    $this->tableTitle = $this->translate("Blog tags");
+    $this->formTitleForInserting = $this->translate("New blog tag");
+    $this->formTitleForEditing = $this->translate("Blog tag");
+  }
 
   public function columns(array $columns = []) {
     return parent::columns([
@@ -22,14 +25,14 @@ class BlogTag extends \ADIOS\Core\Plugin\Model {
 
       "name" => [
         "type" => "varchar", 
-        "title" => "Tag name", 
+        "title" => $this->translate("Tag"), 
         "show_column" => TRUE,
         "required" => TRUE,
       ],
 
       "description" => [
         'type' => 'text',
-        'title' => 'Description',
+        'title' => $this->translate("Description"),
         'show_column' => TRUE,
       ],
 

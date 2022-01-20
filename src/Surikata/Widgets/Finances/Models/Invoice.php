@@ -636,6 +636,16 @@ class Invoice extends \ADIOS\Core\Widget\Model {
         "class"   => "btn-primary mb-2 w-100",
       ])->render();
 
+      $btnRefreshInvoiceWindow = $this->adios->ui->button([
+        "text"    => $this->translate("Refresh window"),
+        "onclick" => "
+          let tmp_window_id = $(this).closest('.adios.ui.Window').attr('id');
+          // refresh invoice window
+          window_refresh(tmp_window_id);
+        ",
+        "class"   => "btn-primary mb-2 w-100",
+      ])->render();
+
       $btnSelectLanguageHtml = $this->adios->ui->Input([
         "type"    => "varchar",
         "enum_values" => $this->enumInvoiceLanguages,
@@ -719,6 +729,7 @@ class Invoice extends \ADIOS\Core\Widget\Model {
           [
             "class" => "col-md-3 pr-0",
             "html" => "
+              {$btnRefreshInvoiceWindow}
               <div class='card shadow mb-2'>
                 <div class='card-header py-3'>
                   ".$this->translate('Invoice summary')."

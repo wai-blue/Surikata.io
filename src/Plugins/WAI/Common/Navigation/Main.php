@@ -7,6 +7,7 @@ namespace Surikata\Plugins\WAI\Common {
     var $navigationItems = NULL;
 
     public static $allCategories = [];
+    public static $flatMenuItems = [];
     public static $twigParams = NULL;
 
     private function convertFlatMenuItemsToTree(&$flatMenuItems, $idParent = 0) {
@@ -58,6 +59,23 @@ namespace Surikata\Plugins\WAI\Common {
       return $treeItems;
     }
 
+    public function getMenuItems() {
+      if (empty(self::$flatMenuItems)) {
+        $navigationPluginSettings = 
+          $this->websiteRenderer->getCurrentPagePluginSettings(
+            "WAI/Common/Navigation"
+          )
+        ;
+
+        self::$flatMenuItems =
+          (new \ADIOS\Widgets\Website\Models\WebMenuItem($this->adminPanel))
+          ->getByIdMenu((int) $navigationPluginSettings['menuId'] ?? 0)
+        ;
+      }
+
+      return self::$flatMenuItems;
+    }
+
     public function getLanguages() {
       $returnArray = [];
       $languages = $this->websiteRenderer->adminPanel->config['widgets']['Website']['domainLanguages'];
@@ -89,15 +107,12 @@ namespace Surikata\Plugins\WAI\Common {
         if ($this->navigationItems === NULL) {
           $this->websiteRenderer->logTimestamp("Navigation getTWigParams #1.1");
 
-          $flatMenuItems =
-            (new \ADIOS\Widgets\Website\Models\WebMenuItem($this->adminPanel))
-            ->getByIdMenu((int) $pluginSettings['menuId'] ?? 0)
-          ;
+          self::$flatMenuItems = $this->getMenuItems();
 
           $this->websiteRenderer->logTimestamp("Navigation getTWigParams #1.2");
 
           $this->navigationItems = $this->convertFlatMenuItemsToTree(
-            $flatMenuItems
+            self::$flatMenuItems
           );
 
           $this->websiteRenderer->logTimestamp("Navigation getTWigParams #1.3");

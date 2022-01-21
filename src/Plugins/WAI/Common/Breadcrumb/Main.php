@@ -13,17 +13,13 @@ namespace Surikata\Plugins\WAI\Common {
         )
       ;
       
-      $navigationPluginSettings = 
-        $this->websiteRenderer->getCurrentPagePluginSettings(
-          "WAI/Common/Navigation"
+      $navigationPlugin = 
+        new \Surikata\Plugins\WAI\Common\Navigation(
+          $this->websiteRenderer
         )
       ;
 
-      $allMenuItems = 
-        $webMenuItemModel->getByIdMenu(
-          $navigationPluginSettings['menuId']
-        )
-      ; 
+      $allMenuItems = $navigationPlugin->getMenuItems();
 
       $breadcrumbs = 
         $webMenuItemModel->extractParentMenuItems(

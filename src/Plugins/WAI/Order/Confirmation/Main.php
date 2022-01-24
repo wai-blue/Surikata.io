@@ -28,6 +28,11 @@ namespace Surikata\Plugins\WAI\Order {
       $orderModel = new \ADIOS\Widgets\Orders\Models\Order($this->adminPanel);
       $order = $orderModel->getByNumber($orderNumber);
 
+      $paymentPlugin = $order['PAYMENT_SERVICE']['connected_plugin'];
+      if ($paymentPlugin != "") {
+        $twigParams["paymentPluginTwig"] = "Templates/Plugins/{$paymentPlugin}.twig";
+      }
+
       if ($orderModel->validateCheckCode($order, $checkCode)) {
         $twigParams["order"] = $order;
       }

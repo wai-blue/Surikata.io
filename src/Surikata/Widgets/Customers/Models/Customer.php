@@ -694,8 +694,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
       ->toArray()
     );
 
-    // REVIEW: $customer je podla mna pole, nie integer. Tento if je teda nefunkcny.
-    if ($customer > 0) {
+    if (!empty($customer)) {
       if ($customer["is_validated"]) {
         $this->sendNotificationForForgotPassword($customer);
       } else {

@@ -8,3 +8,8 @@ The account must be verified first: Účet musí byť najprv overený
 Your email: Váš email
 Submit: Odoslať
 A password recovery link was successfully sent to your mail account.: Odkaz na obnovenie hesla sme zaslali na váš email.
+Password must be at least 8 characters long: "Heslo musí obsahovať aspoň 8 znakov"
+Unknown error. Try refreshing the page.: "Neznáma chyba. Skúste obnoviť stránku."
+New password is the same as the current password: "Nové heslo je rovnaké ako súčasné heslo"
+New password cannot be empty: "Nové heslo nemôže byť prázdne"
+Unknown error: "Neznáma chyba"

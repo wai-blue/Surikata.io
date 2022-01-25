@@ -3,8 +3,8 @@
 namespace Surikata\Plugins\WAI\Product {
 
   use ADIOS\Widgets\Products\Models\ProductFeature;
+  use ADIOS\Widgets\Products\Models\ProductStockState;
   use ADIOS\Widgets\Products\Models\Service;
-  
   class Detail extends \Surikata\Core\Web\Plugin {
     public static $productInfo = NULL;
     var $deleteCurrentPageBreadCrumb = true;
@@ -93,6 +93,13 @@ namespace Surikata\Plugins\WAI\Product {
         self::$productInfo['breadcrumbs'] = $productCategoryModel
           ->breadcrumbs((int) self::$productInfo['id_category'], $allCategories)
         ;
+
+        if ($this->productInfo['id_stock_state'] > 0) {
+          $stockStateModel = new ProductStockState($this->adminPanel);
+          $stockState = $stockStateModel->getById($this->productInfo['id_stock_state']);
+          $stockState = $stockStateModel->translateSingleStockStateForWeb($stockState, $languageIndex);
+          $this->productInfo["STOCK_STATE"] = $stockState;
+        }
       }
 
       $allUnits = (new \ADIOS\Widgets\Settings\Models\Unit($this->adminPanel))->getAll();

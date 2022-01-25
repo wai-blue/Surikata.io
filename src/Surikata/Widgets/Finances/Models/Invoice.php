@@ -2,6 +2,8 @@
 
 namespace ADIOS\Widgets\Finances\Models;
 
+use ADIOS\Widgets\Customers\Models\Customer;
+
 class Invoice extends \ADIOS\Core\Widget\Model {
 
   /* Invoice payment methods */
@@ -519,9 +521,85 @@ class Invoice extends \ADIOS\Core\Widget\Model {
   public function onAfterSave($data, $returnValue) {
     if ($data['id'] > 0) {
       $invoice = $this->getById($data['id']);
+      if ($invoice["number"] == null || strlen($invoice["number"]) === 0){
+        $numberingPattern = "ymd";
+        $issueTime = (empty($data["TIMESTAMPS"]["issue_time"])
+          ? date("Y-m-d H:i:s")
+          : date("Y-m-d H:i:s", strtotime($data["TIMESTAMPS"]["issue_time"]))
+        );
+        $this->updateRow(
+          [
+            "accounting_year" => ["sql" => "year('{$issueTime}')"],
+            "serial_number" => ["sql" => "
+              @serial_number := (ifnull(
+                (
+                  select
+                    ifnull(max(`i`.`serial_number`), 0)
+                  from `{$this->table}` `i`
+                  where year(`i`.`issue_time`) = year('{$issueTime}')
+                ),
+                0
+              ) + 1)
+            "],
+            "number" => ["sql" => "
+              @number := concat('" . date($numberingPattern, strtotime($issueTime)) . "', lpad(@serial_number, 4, '0'))
+            "],
+            "state" => self::STATE_ISSUED
+          ],
+          $data['id']
+        );
+      }
+
       $summary = $this->calculateSummaryInfo($invoice);
       $this->updateSummaryInfo($data['id'], $summary);
     }
+  }
+
+  public function onBeforeSave($data) {
+    if ($data['id'] <= 0) {
+      if ($data["id_customer"] > 0) {
+        $customer = (new Customer($this->adios))->getById($data["id_customer"]);
+        $data["customer_email"] = $customer["email"];
+        if (strlen($customer["company_name"]) > 0) {
+          $data["customer_name"] = $customer["inv_company_name"];
+        } else {
+          $data["customer_name"] = $customer["inv_given_name"]." ".$customer["inv_given_name"];
+        }
+        $data["customer_street_1"] = $customer["inv_street_1"];
+        $data["customer_street_2"] = $customer["inv_street_2"];
+        $data["customer_city"] = $customer["inv_city"];
+        $data["customer_zip"] = $customer["inv_zip"];
+        $data["customer_country"] = $customer["inv_country"];
+
+        $data["customer_company_id"] = $customer["company_id"];
+        $data["customer_company_tax_id"] = $customer["company_tax_id"];
+        $data["customer_vat_id"] = $customer["company_vat_id"];
+
+        // $data["customer_phone"] = $customer["phone_number"];
+        // $data["customer_www"] = $customer["www"];
+        // $data["customer_iban"] = $customer["iban"];
+      }
+      $supplier = (new Merchant($this->adios))->getDefault();
+      if ($supplier !== false) {
+        $data["supplier_email"] = $supplier["email"];
+        $data["supplier_name"] = $supplier["company_name"];
+
+        $data["supplier_street_1"] = $supplier["street_1"];
+        $data["supplier_street_2"] = $supplier["street_2"];
+        $data["supplier_city"] = $supplier["city"];
+        $data["supplier_zip"] = $supplier["zip"];
+        $data["supplier_country"] = $supplier["country"];
+
+        $data["supplier_company_id"] = $supplier["company_id"];
+        $data["supplier_company_tax_id"] = $supplier["company_tax_id"];
+        $data["supplier_vat_id"] = $supplier["company_vat_id"];
+
+        $data["supplier_phone"] = $supplier["phone"];
+        $data["supplier_www"] = $supplier["www"];
+        $data["supplier_iban"] = $supplier["iban"];
+      }
+    }
+    return parent::onBeforeSave($data);
   }
 
   public function tableParams($params) {
@@ -555,6 +633,16 @@ class Invoice extends \ADIOS\Core\Widget\Model {
           var invoiceLanguage = $('#".$params["uid"]."_invoiceLanguage').val();
           var invoiceTemplate = $('#".$params["uid"]."_enumInvoiceTemplates').val();
           window.open(_APP_URL + '/Invoices/".(int) $data['id']."/PrintInvoice?invoiceLanguage='+invoiceLanguage+'&invoiceTemplate='+invoiceTemplate);",
+        "class"   => "btn-primary mb-2 w-100",
+      ])->render();
+
+      $btnRefreshInvoiceWindow = $this->adios->ui->button([
+        "text"    => $this->translate("Refresh window"),
+        "onclick" => "
+          let tmp_window_id = $(this).closest('.adios.ui.Window').attr('id');
+          // refresh invoice window
+          window_refresh(tmp_window_id);
+        ",
         "class"   => "btn-primary mb-2 w-100",
       ])->render();
 
@@ -641,6 +729,7 @@ class Invoice extends \ADIOS\Core\Widget\Model {
           [
             "class" => "col-md-3 pr-0",
             "html" => "
+              {$btnRefreshInvoiceWindow}
               <div class='card shadow mb-2'>
                 <div class='card-header py-3'>
                   ".$this->translate('Invoice summary')."

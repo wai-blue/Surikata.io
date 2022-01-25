@@ -215,6 +215,24 @@ class Customer extends \ADIOS\Core\Widget\Model {
     ]);
   }
 
+  public function onBeforeDelete(int $id) {
+    if ($id > 0) {
+      $customerUIDModel = new \ADIOS\Widgets\Customers\Models\CustomerUID($this->adios);
+
+      $customerUIDModel
+        ->where("id_customer", "=", $id)
+        ->delete()
+      ;
+
+      $customerTokenAssignmentModel = new \ADIOS\Widgets\Customers\Models\CustomerTokenAssignment($this->adios);
+
+      $customerTokenAssignmentModel
+        ->where("id_customer", "=", $id)
+        ->delete()
+      ;
+    }
+  }
+
   public function getById($id) {
     $id = (int) $id;
 

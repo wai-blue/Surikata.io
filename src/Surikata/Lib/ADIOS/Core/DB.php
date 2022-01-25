@@ -47,7 +47,7 @@ class DB {
 
       $this->ob_mode = false;
       $this->ob = '';
-      $this->debugCorrectQueries = true; //false;
+      $this->debugCorrectQueries = false;
 
       $this->tables = [];
 
@@ -173,10 +173,10 @@ class DB {
 
         if (in_array($errorNo, $foreginKeyErrorCodes)) {
           throw new \ADIOS\Core\Exceptions\DBDuplicateEntryException(
-            json_encode([$this->connection->error, $query, $initiatingModel->name])
+            json_encode([$this->connection->error, $query, $initiatingModel->name, $errorNo])
           );
         } else {
-          throw new \ADIOS\Core\Exceptions\DBException($this->get_error().", QUERY: {$query}");
+          throw new \ADIOS\Core\Exceptions\DBException("ERROR #: {$errorNo}, ".$this->get_error().", QUERY: {$query}");
         }
       } else {
         if ($this->debugCorrectQueries) {

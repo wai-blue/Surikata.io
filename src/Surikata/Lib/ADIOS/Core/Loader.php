@@ -1010,12 +1010,16 @@ class Loader {
 
   public function renderExceptionWarningHtml($exception) {
     
+    $traceLog = "";
+    foreach ($exception->getTrace() as $item) {
+      $traceLog .= "{$item['file']}:{$item['line']}\n";
+    }
+
     switch (get_class($exception)) {
-      case 'Illuminate\Database\QueryException':
       case 'ADIOS\Core\Exceptions\DBException':
         $errorMessage = $exception->getMessage();
         $errorHash = md5(date("YmdHis").$errorMessage);
-        $this->console->error("{$errorHash}\t{$errorMessage}\t{$this->db->last_query}\t{$this->db->db_error}");
+        // $this->console->error("{$errorHash}\t{$errorMessage}\t{$this->db->last_query}\t{$this->db->db_error}");
         $html = "
           <div style='text-align:center;font-size:5em;color:red'>
             🥴
@@ -1025,23 +1029,50 @@ class Loader {
             See logs for more information or contact the support.<br/>
           </div>
           <div style='color:red;margin-bottom:1em;white-space:pre;font-family:courier;font-size:0.8em;overflow:auto;'>{$errorMessage}</div>
-          <div style='color:gray'>
-            {$errorHash}
+          <div style='color:gray;font-size:0.8em;'>
+            {$errorHash}<br/>
+            ".get_class($exception)."<br/>
+            <a href='javascript:void(0);' onclick='$(this).closest(\"div\").find(\".trace-log\").show()'>Show/Hide trace log</a><br/>
+            <div class='trace-log' style='display:none'>{$traceLog}</div>
           </div>
         ";
       break;
+      case 'Illuminate\Database\QueryException':
       case 'ADIOS\Core\Exceptions\DBDuplicateEntryException':
-        list($dbError, $dbQuery, $initiatingModelName) = json_decode($exception->getMessage(), TRUE);
 
-        $initiatingModel = $this->getModel($initiatingModelName);
-        $columns = $initiatingModel->columns();
-        $indexes = $initiatingModel->indexes();
+        if (get_class($exception) == 'Illuminate\Database\QueryException') {
+          $dbQuery = $exception->getSql();
+          $dbError = $exception->errorInfo[2];
+          $errorNo = $exception->errorInfo[1];
+        } else {
+          list($dbError, $dbQuery, $initiatingModelName, $errorNo) = json_decode($exception->getMessage(), TRUE);
+        }
 
-        preg_match("/Duplicate entry '(.*?)' for key '(.*?)'/", $dbError, $m);
-        $invalidIndex = $m[2];
         $invalidColumns = [];
-        foreach ($indexes[$invalidIndex]['columns'] as $columnName) {
-          $invalidColumns[] = $columns[$columnName]["title"];
+
+        if (!empty($initiatingModelName)) {
+          $initiatingModel = $this->getModel($initiatingModelName);
+          $columns = $initiatingModel->columns();
+          $indexes = $initiatingModel->indexes();
+
+          preg_match("/Duplicate entry '(.*?)' for key '(.*?)'/", $dbError, $m);
+          $invalidIndex = $m[2];
+          $invalidColumns = [];
+          foreach ($indexes[$invalidIndex]['columns'] as $columnName) {
+            $invalidColumns[] = $columns[$columnName]["title"];
+          }
+        }
+
+        switch ($errorNo) {
+          case 1216:
+          case 1451:
+            $errorMessage = "You are trying to delete a record that is linked with another record(s).";
+          break;
+          case 1062:
+          case 1217:
+          case 1452:
+            $errorMessage = "You are trying to save a record that is already existing.";
+          break;
         }
 
         $html = "
@@ -1049,7 +1080,7 @@ class Loader {
             <i class='fas fa-copy'></i>
           </div>
           <div style='margin-top:1em;margin-bottom:3em;text-align:center;color:red;'>
-            ".$this->translate("You are trying to save a record that is already existing.", $this)."<br/>
+            ".$this->translate($errorMessage, $this)."<br/>
             <br/>
             <b>".join(", ", $invalidColumns)."</b>
           </div>
@@ -1060,10 +1091,13 @@ class Loader {
             <div style='color:red;margin-bottom:1em;font-family:courier;font-size:8pt;max-height:10em;overflow:auto;'>
               {$dbError}<br/>
               {$dbQuery}<br/>
-              {$initiatingModelName}<Br/>
+              {$initiatingModelName}
             </div>
-            <div style='color:gray'>
-              ".get_class($exception)."
+            <div style='color:gray;font-size:0.8em;'>
+              Error # {$errorNo}<br/>
+              ".get_class($exception)."<br/>
+              <a href='javascript:void(0);' onclick='$(this).closest(\"div\").find(\".trace-log\").show()'>Show/Hide trace log</a><br/>
+              <div class='trace-log' style='display:none'>{$traceLog}</div>
             </div>
           </div>
         ";

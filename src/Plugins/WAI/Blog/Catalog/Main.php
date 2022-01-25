@@ -97,11 +97,11 @@ namespace ADIOS\Plugins\WAI\Blog {
     public function getSettingsForWebsite() {
       return [
         "itemsPerPage" => [
-          "title"   => "Blogs per page",
+          "title"   => $this->translate("Blogs per page"),
           "type"    => "int",
         ],
         "showAuthor" => [
-          "title"   => "Display author name",
+          "title"   => $this->translate("Display author name"),
           "type"    => "boolean",
         ],
         //"allowComments" => [

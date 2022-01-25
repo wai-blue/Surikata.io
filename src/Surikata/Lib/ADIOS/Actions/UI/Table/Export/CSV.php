@@ -30,7 +30,7 @@ class CSV extends \ADIOS\Core\Action {
     if (count($data) == 0) {
       foreach ($columns as $colName => $colDefinition) {
         if ($colDefinition["show_column"]) {
-          $csv .= '"'.str_replace('"', '""', $colDefinition['title'] ?? "-").'";';
+          $csv .= iconv('UTF-8', 'CP1250', '"'.str_replace('"', '""', $colDefinition['title'] ?? "-").'";');
         }
       }
     } else {
@@ -38,7 +38,7 @@ class CSV extends \ADIOS\Core\Action {
 
       foreach (array_keys($firstRow) as $colName) {
         if (isset($columns[$colName])) {
-          $firstLine .= '"'.str_replace('"', '""', $columns[$colName]['title'] ?? "-").'";';
+          $firstLine .= iconv('UTF-8', 'CP1250', '"'.str_replace('"', '""', $columns[$colName]['title'] ?? "-").'";');
         }
       }
 
@@ -56,7 +56,7 @@ class CSV extends \ADIOS\Core\Action {
               'csv' => $cellCsv,
             ]);
 
-            $line .= '"'.str_replace('"', '""', $cellCsv).'";';
+            $line .= iconv('UTF-8', 'CP1250', '"'.str_replace('"', '""', $cellCsv).'";');
           }
         }
         $csv .= trim($line, ";")."\n";

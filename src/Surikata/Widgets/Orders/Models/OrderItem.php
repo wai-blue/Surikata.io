@@ -76,7 +76,7 @@ class OrderItem extends \ADIOS\Core\Widget\Model {
     $params["columns"]["id_product"]["onchange"] = "
       let productId = $(this).val();
       let inputName = $(this).attr('name');
-      _ajax_read('Orders/AddOrderItem', 'id_product='+productId, function(res) {
+      _ajax_read('Orders/GetProductInformationForOrderItem', 'id_product='+productId, function(res) {
 
         // REVIEW: je pouzitie res.sale_price spravne po upravach v pocitani cien produktu?
         // Treba otestovat

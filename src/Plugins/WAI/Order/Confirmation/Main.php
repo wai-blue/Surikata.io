@@ -19,8 +19,35 @@ namespace Surikata\Plugins\WAI\Order {
       return $url;
     }
 
-    public function getTwigParams($pluginSettings) {
+    public function renderJSON() {
+      $orderId = (int) ($this->websiteRenderer->urlVariables['orderId'] ?? 0);
+      $orderAction = ($this->websiteRenderer->urlVariables['orderAction'] ?? "");
 
+      switch ($orderAction) {
+        case "setAsPaid":
+          if ($orderId > 0) {
+            $orderModel = new \ADIOS\Widgets\Orders\Models\Order($this->adminPanel);
+            try {
+              $orderModel->where('id', '=', $orderId)
+                ->update([
+                  "is_paid" => 1
+                ])
+              ;
+    
+              $returnArray["status"] = "OK";
+            } catch(\Exception $e) {
+              $returnArray["status"] = "FAIL";
+              $returnArray["exception"] = get_class($e);
+              $returnArray["error"] = $e->getMessage();
+            }
+          }
+        break;
+      }
+
+      return $returnArray;
+    }
+
+    public function getTwigParams($pluginSettings) {
       $twigParams = $pluginSettings;
       $orderNumber = (int) ($this->websiteRenderer->urlVariables["orderNumber"] ?? 0);
       $checkCode = $this->websiteRenderer->urlVariables["checkCode"] ?? "";

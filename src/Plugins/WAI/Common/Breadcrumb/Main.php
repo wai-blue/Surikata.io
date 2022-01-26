@@ -2,8 +2,9 @@
 
 namespace Surikata\Plugins\WAI\Common {
 
-  // REVIEW: pouziva sa BreadCrumb aj Breadcrumb. Zjednotit na Breadcrumb.
   class Breadcrumb extends \Surikata\Core\Web\Plugin {
+
+    public static $breadcrumbs = [];
 
     public function getMenuBreadcrumbs($pageUrl, $allowNestedPage = false) {
       $webMenuItemModel = 
@@ -12,17 +13,13 @@ namespace Surikata\Plugins\WAI\Common {
         )
       ;
       
-      $navigationPluginSettings = 
-        $this->websiteRenderer->getCurrentPagePluginSettings(
-          "WAI/Common/Navigation"
+      $navigationPlugin = 
+        new \Surikata\Plugins\WAI\Common\Navigation(
+          $this->websiteRenderer
         )
       ;
 
-      $allMenuItems = 
-        $webMenuItemModel->getByIdMenu(
-          $navigationPluginSettings['menuId']
-        )
-      ; 
+      $allMenuItems = $navigationPlugin->getMenuItems();
 
       $breadcrumbs = 
         $webMenuItemModel->extractParentMenuItems(
@@ -50,54 +47,53 @@ namespace Surikata\Plugins\WAI\Common {
      * @return array Breadcrumbs
      * */
     public function getBreadcrumbsUrl() {
-      $urlVariables = $this->websiteRenderer->urlVariables;
+      if (empty(self::$breadcrumbs)) {
+        $urlVariables = $this->websiteRenderer->urlVariables;
 
-      $currentPage = 
-        $this->websiteRenderer->currentPage
-        ?? []
-      ;
+        $currentPage = 
+          $this->websiteRenderer->currentPage
+          ?? []
+        ;
 
-      // GET menu items
-      $breadcrumbs = $this->getMenuBreadcrumbs($currentPage['url']);
-      $breadcrumbs[$currentPage['url']] = $currentPage['name'];
+        // GET menu items
+        self::$breadcrumbs = $this->getMenuBreadcrumbs($currentPage['url']);
+        self::$breadcrumbs[$currentPage['url']] = $currentPage['name'];
 
-      // GET Plugin Breadcrumbs if exists
-      // REVIEW: vid Widgets/Website/Actions/ContentStructure/PluginSettings:
-      //     foreach ($this->adios->getPlugins() as $pluginName => $plugin) {
-      // ... Myslim, ze kod nizsie sa da optimalizovat
-      $contentStructure = 
-        json_decode(
-          $this->websiteRenderer->currentPage["content_structure"]
-        )
-      ;
-      
-      foreach ($contentStructure->panels as $panelName => $panelValues) {
-        if (
-          $panelName != "navigation" 
-          && $panelName != "header" 
-          && $panelName != "footer"
-        ) {
-          if ($panelValues->plugin !== NULL) {
-            $plugin = 
-              "\\Surikata\\Plugins\\" . 
-              str_replace("/", "\\", $panelValues->plugin)
-            ;
+        // GET Plugin Breadcrumbs if exists
+        $contentStructure = 
+          json_decode(
+            $this->websiteRenderer->currentPage["content_structure"]
+          )
+        ;
 
-            $getPlugin = new $plugin($this->websiteRenderer);
+        foreach ($contentStructure->panels as $panelName => $panelValues) {
+          if (
+            $panelName != "navigation" 
+            && $panelName != "header" 
+            && $panelName != "footer"
+          ) {
+            if ($panelValues->plugin != "") {
+              $plugin = 
+                "\\Surikata\\Plugins\\" . 
+                str_replace("/", "\\", $panelValues->plugin)
+              ;
 
-            if (method_exists($getPlugin, 'getBreadcrumbs')) {
-              if ($getPlugin->deleteCurrentPageBreadCrumb) array_shift($breadcrumbs);
-              $pluginBreadcrumbs = $getPlugin->getBreadcrumbs($urlVariables);
-              
-              foreach ($pluginBreadcrumbs as $url => $item) {
-                $breadcrumbs[$url] = $item;
+              $getPlugin = new $plugin($this->websiteRenderer);
+
+              if (method_exists($getPlugin, 'getBreadcrumbs')) {
+                if ($getPlugin->deleteCurrentPageBreadCrumb) array_shift(self::$breadcrumbs);
+                $pluginBreadcrumbs = $getPlugin->getBreadcrumbs($urlVariables);
+
+                foreach ($pluginBreadcrumbs as $url => $item) {
+                  self::$breadcrumbs[$url] = $item;
+                }
               }
             }
           }
         }
       }
 
-      return $breadcrumbs;
+      return self::$breadcrumbs;
     }
 
     public function getTwigParams($pluginSettings) {

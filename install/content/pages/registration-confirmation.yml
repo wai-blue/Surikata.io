@@ -1,6 +1,6 @@
 layout: WithoutSidebar
-url: create-account
-title: Create Account
+url: registration/confirmation
+title: Registration - Confirmation
 panels:
   header:
     plugin: WAI/Common/Header
@@ -12,10 +12,7 @@ panels:
       showCategories: true
       showBreadcrumbs: true
   section_1:
-    plugin: WAI/Customer/Registration
-    settings:
-      showPrivacyTerms: true
-      privacyTermsUrl: privacy-terms
+    plugin: WAI/Customer/RegistrationConfirmation
   footer:
     plugin: WAI/Common/Footer
     settings:

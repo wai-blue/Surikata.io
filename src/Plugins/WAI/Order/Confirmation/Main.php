@@ -19,14 +19,54 @@ namespace Surikata\Plugins\WAI\Order {
       return $url;
     }
 
-    public function getTwigParams($pluginSettings) {
+    public function renderJSON() {
+      $orderId = (int) ($this->websiteRenderer->urlVariables['orderId'] ?? 0);
+      $orderAction = ($this->websiteRenderer->urlVariables['orderAction'] ?? "");
 
+      switch ($orderAction) {
+        case "setAsPaid":
+          if ($orderId > 0) {
+            $orderModel = new \ADIOS\Widgets\Orders\Models\Order($this->adminPanel);
+            try {
+              $orderModel->where('id', '=', $orderId)
+                ->update([
+                  "is_paid" => 1
+                ])
+              ;
+    
+              $returnArray["status"] = "OK";
+            } catch(\Exception $e) {
+              $returnArray["status"] = "FAIL";
+              $returnArray["exception"] = get_class($e);
+              $returnArray["error"] = $e->getMessage();
+            }
+          }
+        break;
+      }
+
+      return $returnArray;
+    }
+
+    public function getTwigParams($pluginSettings) {
       $twigParams = $pluginSettings;
       $orderNumber = (int) ($this->websiteRenderer->urlVariables["orderNumber"] ?? 0);
       $checkCode = $this->websiteRenderer->urlVariables["checkCode"] ?? "";
 
       $orderModel = new \ADIOS\Widgets\Orders\Models\Order($this->adminPanel);
       $order = $orderModel->getByNumber($orderNumber);
+
+      // If order is not paid use payment snippet
+      if ($order['is_paid'] == 0) {
+        $orderPaymentPlugin = $order['PAYMENT_SERVICE']['connected_plugin'];
+        if ($orderPaymentPlugin != "") {
+          foreach ($this->websiteRenderer->getPaymentPlugins() as $paymentPlugin) {
+            if ($paymentPlugin->name == $orderPaymentPlugin) {
+              $twigParams["paymentPlugin"] = $orderPaymentPlugin;
+              break;
+            }
+          }
+        }
+      }
 
       if ($orderModel->validateCheckCode($order, $checkCode)) {
         $twigParams["order"] = $order;

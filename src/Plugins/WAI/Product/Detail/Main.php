@@ -94,11 +94,11 @@ namespace Surikata\Plugins\WAI\Product {
           ->breadcrumbs((int) self::$productInfo['id_category'], $allCategories)
         ;
 
-        if ($this->productInfo['id_stock_state'] > 0) {
+        if (self::$productInfo['id_stock_state'] > 0) {
           $stockStateModel = new ProductStockState($this->adminPanel);
-          $stockState = $stockStateModel->getById($this->productInfo['id_stock_state']);
+          $stockState = $stockStateModel->getById(self::$productInfo['id_stock_state']);
           $stockState = $stockStateModel->translateSingleStockStateForWeb($stockState, $languageIndex);
-          $this->productInfo["STOCK_STATE"] = $stockState;
+          self::$productInfo["STOCK_STATE"] = $stockState;
         }
       }
 

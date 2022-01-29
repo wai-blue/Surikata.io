@@ -625,7 +625,7 @@ class Invoice extends \ADIOS\Core\Widget\Model {
       ];
 
     } else {
-      $params['title'] = "Invoice nr. ".hsc($data['number']);
+      $params['title'] = $this->translate("Invoice nr.")." ".hsc($data['number']);
 
       $btnPrintInvoiceHtml = $this->adios->ui->button([
         "text"    => $this->translate("Print invoice"),

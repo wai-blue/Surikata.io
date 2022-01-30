@@ -9,5 +9,6 @@ $dictionary = [
   "Author" => "Autor",
   "General" => "Všeobecné",
   "Tags" => "Tagy",
+  "Domain" => "Doména",
   "Supported image extensions: jpg, gif, png, jpeg" => "Podporovaný formát obrázku: jpg, gif, png, jpeg." ,
 ];

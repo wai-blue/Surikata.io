@@ -2,5 +2,5 @@
 
 $dictionary = [
   "Blogs" => "Blogy",
-  "Tags" => "Tagy"
+  "Tags" => "Značky"
 ];

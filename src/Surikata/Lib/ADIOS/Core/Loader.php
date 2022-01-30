@@ -47,6 +47,8 @@ class Loader {
   public $actionNestingLevel = 0;
   public $actionStack = [];
 
+  public $dictionaryFilename = "Core-Loader";
+
   public function __construct($config = NULL, $mode = NULL) {
 
     global $___ADIOSObject;
@@ -65,6 +67,14 @@ class Loader {
     
     if (empty($this->config['system_table_prefix'])) {
       $this->config['system_table_prefix'] = "adios";
+    }
+
+    // load available languages
+    $this->config['available_languages'] = ["en"];
+    foreach (scandir("{$this->config["dir"]}/Lang") as $tmpLang) {
+      if (!in_array($tmpLang, [".", ".."]) && is_dir("{$this->config["dir"]}/Lang/{$tmpLang}")) {
+        $this->config['available_languages'][] = $tmpLang;
+      }
     }
 
     // pouziva sa ako vseobecny prefix niektorych session premennych,
@@ -116,7 +126,13 @@ class Loader {
 
     try {
 
-      global $gtp;
+      // inicializacia debug konzoly
+      $this->console = new \ADIOS\Core\Console($this);
+      $this->console->clearLog("timestamps", "info");
+
+      $this->console->logTimestamp("__construct() start");
+
+      // global $gtp;
 
       $gtp = $this->config['global_table_prefix'];
 
@@ -210,9 +226,6 @@ class Loader {
       // inicializacia objektu notifikacii
       $this->userNotifications = new \ADIOS\Core\UserNotifications($this);
 
-      // inicializacia debug konzoly
-      $this->console = new \ADIOS\Core\Console($this);
-
       // inicializacia mailera
       // 2021-07-05 deprecated
       // $this->email = new \ADIOS\Core\Email($this);
@@ -234,14 +247,6 @@ class Loader {
 
       if ($mode == ADIOS_MODE_FULL) {
 
-        // load available languages
-        $this->config['available_languages'] = ["en"];
-        foreach (scandir("{$this->config["dir"]}/Lang") as $tmpLang) {
-          if (!in_array($tmpLang, [".", ".."]) && is_dir("{$this->config["dir"]}/Lang/{$tmpLang}")) {
-            $this->config['available_languages'][] = $tmpLang;
-          }
-        }
-
         // set language
         if (!empty($_SESSION[_ADIOS_ID]['language'])) {
           $this->config['language'] = $_SESSION[_ADIOS_ID]['language'];
@@ -251,6 +256,10 @@ class Loader {
           if (!in_array($this->params['language'], $this->adios->config['available_languages'])) {
             $this->config['language'] = reset($this->adios->config['available_languages']);
           }
+        }
+
+        if (empty($this->config['language'])) {
+          $this->config['language'] = "en";
         }
 
         // user authentication
@@ -339,6 +348,8 @@ class Loader {
 
       $this->dispatchEventToPlugins("onADIOSAfterInit", ["adios" => $this]);
 
+
+      $this->console->logTimestamp("__construct() end");
     } catch (\Exception $e) {
       exit("ADIOS INIT failed. ".$e->getMessage());
     }
@@ -473,23 +484,27 @@ class Loader {
   //////////////////////////////////////////////////////////////////////////////
   // TRANSLATIONS
 
-  public function loadDictionary($object) {
+  public function loadDictionary($object, $toLanguage = "") {
     $dictionary = [];
     $dictionaryFolder = $object->dictionaryFolder ?? "";
 
-    if (empty($language)) {
-      $language = $this->config['language'] ?? "";
+    if (empty($toLanguage)) {
+      $toLanguage = $this->config['language'] ?? "";
     }
 
     if (empty($dictionaryFolder)) {
       $dictionaryFolder = "{$this->config['dir']}/Lang";
     }
 
-    if (strlen($language) == 2) {
-      $dictionaryFilename = strtr(get_class($object), "./\\", "---");
-      $dictionaryFilename = str_replace("ADIOS-", "", $dictionaryFilename);
+    if (strlen($toLanguage) == 2) {
+      if (empty($object->dictionaryFilename)) {
+        $dictionaryFilename = strtr(get_class($object), "./\\", "---");
+        $dictionaryFilename = str_replace("ADIOS-", "", $dictionaryFilename);
+      } else {
+        $dictionaryFilename = $object->dictionaryFilename;
+      }
 
-      $dictionaryFile = "{$dictionaryFolder}/{$language}/{$dictionaryFilename}.php";
+      $dictionaryFile = "{$dictionaryFolder}/{$toLanguage}/{$dictionaryFilename}.php";
 
       if (file_exists($dictionaryFile)) {
         include($dictionaryFile);
@@ -498,23 +513,35 @@ class Loader {
       }
     }
 
-    $object->dictionary = $dictionary;
+    return $dictionary;
   }
 
-  public function translate($string, $object) {
-    if (empty($object->dictionary)) {
-      $this->loadDictionary($object);
+  public function translate($string, $object, $toLanguage = "") {
+    if (empty($toLanguage)) {
+      $toLanguage = $this->config['language'] ?? "en";
     }
 
-    $dictionary = $object->dictionary ?? [];
-    $toLanguage = $this->config['language'] ?? "";
-
-    if (empty($toLanguage)) {
+    if ($toLanguage == "en") {
       return $string;
-    } else if (!isset($dictionary[$string])) {
+    }
+
+    $dictionary = [];
+    
+    if (empty($object->dictionary[$toLanguage])) {
+      $dictionary[$toLanguage] = $this->loadDictionary($object, $toLanguage);
+    }
+
+    // // $dictionary[$toLanguage] = $object->dictionary[$toLanguage] ?? [];
+    // if (get_class($object) == "ADIOS\\Widgets\\Orders\\Models\\Order") {
+    //   var_dump($string);
+    //   var_dump(get_class($object));
+    //   print_r($dictionary);exit;
+    //   }
+
+    if (!isset($dictionary[$toLanguage][$string])) {
       return $string;
     } else {
-      return $dictionary[$string];
+      return $dictionary[$toLanguage][$string];
     }
   }
 
@@ -983,12 +1010,16 @@ class Loader {
 
   public function renderExceptionWarningHtml($exception) {
     
+    $traceLog = "";
+    foreach ($exception->getTrace() as $item) {
+      $traceLog .= "{$item['file']}:{$item['line']}\n";
+    }
+
     switch (get_class($exception)) {
-      case 'Illuminate\Database\QueryException':
       case 'ADIOS\Core\Exceptions\DBException':
         $errorMessage = $exception->getMessage();
         $errorHash = md5(date("YmdHis").$errorMessage);
-        $this->console->error("{$errorHash}\t{$errorMessage}\t{$this->db->last_query}\t{$this->db->db_error}");
+        // $this->console->error("{$errorHash}\t{$errorMessage}\t{$this->db->last_query}\t{$this->db->db_error}");
         $html = "
           <div style='text-align:center;font-size:5em;color:red'>
             🥴
@@ -998,23 +1029,50 @@ class Loader {
             See logs for more information or contact the support.<br/>
           </div>
           <div style='color:red;margin-bottom:1em;white-space:pre;font-family:courier;font-size:0.8em;overflow:auto;'>{$errorMessage}</div>
-          <div style='color:gray'>
-            {$errorHash}
+          <div style='color:gray;font-size:0.8em;'>
+            {$errorHash}<br/>
+            ".get_class($exception)."<br/>
+            <a href='javascript:void(0);' onclick='$(this).closest(\"div\").find(\".trace-log\").show()'>Show/Hide trace log</a><br/>
+            <div class='trace-log' style='display:none'>{$traceLog}</div>
           </div>
         ";
       break;
+      case 'Illuminate\Database\QueryException':
       case 'ADIOS\Core\Exceptions\DBDuplicateEntryException':
-        list($dbError, $dbQuery, $initiatingModelName) = json_decode($exception->getMessage(), TRUE);
 
-        $initiatingModel = $this->getModel($initiatingModelName);
-        $columns = $initiatingModel->columns();
-        $indexes = $initiatingModel->indexes();
+        if (get_class($exception) == 'Illuminate\Database\QueryException') {
+          $dbQuery = $exception->getSql();
+          $dbError = $exception->errorInfo[2];
+          $errorNo = $exception->errorInfo[1];
+        } else {
+          list($dbError, $dbQuery, $initiatingModelName, $errorNo) = json_decode($exception->getMessage(), TRUE);
+        }
 
-        preg_match("/Duplicate entry '(.*?)' for key '(.*?)'/", $dbError, $m);
-        $invalidIndex = $m[2];
         $invalidColumns = [];
-        foreach ($indexes[$invalidIndex]['columns'] as $columnName) {
-          $invalidColumns[] = $columns[$columnName]["title"];
+
+        if (!empty($initiatingModelName)) {
+          $initiatingModel = $this->getModel($initiatingModelName);
+          $columns = $initiatingModel->columns();
+          $indexes = $initiatingModel->indexes();
+
+          preg_match("/Duplicate entry '(.*?)' for key '(.*?)'/", $dbError, $m);
+          $invalidIndex = $m[2];
+          $invalidColumns = [];
+          foreach ($indexes[$invalidIndex]['columns'] as $columnName) {
+            $invalidColumns[] = $columns[$columnName]["title"];
+          }
+        }
+
+        switch ($errorNo) {
+          case 1216:
+          case 1451:
+            $errorMessage = "You are trying to delete a record that is linked with another record(s).";
+          break;
+          case 1062:
+          case 1217:
+          case 1452:
+            $errorMessage = "You are trying to save a record that is already existing.";
+          break;
         }
 
         $html = "
@@ -1022,21 +1080,24 @@ class Loader {
             <i class='fas fa-copy'></i>
           </div>
           <div style='margin-top:1em;margin-bottom:3em;text-align:center;color:red;'>
-            You are trying to save a record that is already existing.<br/>
+            ".$this->translate($errorMessage, $this)."<br/>
             <br/>
             <b>".join(", ", $invalidColumns)."</b>
           </div>
           <a href='javascript:void(0);' onclick='$(this).next(\"div\").slideDown();'>
-            Show more information
+          ".$this->translate("Show more information", $this)."
           </a>
           <div style='display:none'>
             <div style='color:red;margin-bottom:1em;font-family:courier;font-size:8pt;max-height:10em;overflow:auto;'>
               {$dbError}<br/>
               {$dbQuery}<br/>
-              {$initiatingModelName}<Br/>
+              {$initiatingModelName}
             </div>
-            <div style='color:gray'>
-              ".get_class($exception)."
+            <div style='color:gray;font-size:0.8em;'>
+              Error # {$errorNo}<br/>
+              ".get_class($exception)."<br/>
+              <a href='javascript:void(0);' onclick='$(this).closest(\"div\").find(\".trace-log\").show()'>Show/Hide trace log</a><br/>
+              <div class='trace-log' style='display:none'>{$traceLog}</div>
             </div>
           </div>
         ";
@@ -1442,6 +1503,21 @@ class Loader {
 
     foreach ($jsFiles as $file) {
       $js .= @file_get_contents(dirname(__FILE__)."/../Assets/Js/{$file}")."\n";
+    }
+
+    $js .= "
+      var adios_language_translations = {};
+    ";
+
+    foreach ($this->config['available_languages'] as $language) {
+      $js .= "
+        adios_language_translations['{$language}'] = {
+          'Confirmation': '".ads($this->translate("Confirmation", $this, $language))."',
+          'OK, I understand': '".ads($this->translate("OK, I understand", $this, $language))."',
+          'Cancel': '".ads($this->translate("Cancel", $this, $language))."',
+          'Warning': '".ads($this->translate("Warning", $this, $language))."',
+        };
+      ";
     }
 
     return $js;

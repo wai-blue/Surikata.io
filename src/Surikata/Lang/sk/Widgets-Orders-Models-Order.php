@@ -75,5 +75,6 @@ $dictionary = [
   "Do not set as paid" => "Nie, nenastaviť",
   "You are about to set an order as unpaid. Continue?" => "Chystáte sa nastaviť objednávku ako nezaplatená. Chcete pokračovať?",
   "Yes, set as unpaid" => "Áno, nastaviť ako nezaplatená",
-  "Do not set as unpaid" => "Nie, nenastaviť"
+  "Do not set as unpaid" => "Nie, nenastaviť",
+  "Print order" => "Vytlačiť objednávku"
 ];

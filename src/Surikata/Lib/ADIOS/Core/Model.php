@@ -1167,6 +1167,27 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     }
   }
 
+  public function formDelete(int $id) {
+    $id = (int) $id;
+
+    try {
+      $data = $this->onBeforeDelete($id);
+
+      $returnValue = $this->deleteRow($id);
+
+      $returnValue = $this->adios->dispatchEventToPlugins("onModelAfterDelete", [
+        "model" => $this,
+        "data" => $data,
+        "returnValue" => $returnValue,
+      ])["returnValue"];
+
+      $returnValue = $this->onAfterDelete($id);
+      return $returnValue;
+    } catch (\ADIOS\Core\Exceptions\FormDeleteException $e) {
+      return $this->adios->renderHtmlWarning($e->getMessage());
+    }
+  }
+
   //////////////////////////////////////////////////////////////////
   // UI/Cards methods
 
@@ -1214,18 +1235,18 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     ])["returnValue"];
   }
 
-  public function onBeforeDelete($data) {
+  public function onBeforeDelete(int $id) {
     return $this->adios->dispatchEventToPlugins("onModelBeforeDelete", [
       "model" => $this,
-      "data" => $data,
-    ])["data"];
+      "id" => $id,
+    ])["id"];
   }
 
-  public function onAfterDelete($data) {
+  public function onAfterDelete(int $id) {
     return $this->adios->dispatchEventToPlugins("onModelAfterDelete", [
       "model" => $this,
-      "data" => $data,
-    ])["data"];
+      "id" => $id,
+    ])["id"];
   }
 
 
@@ -1266,8 +1287,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
       $selects[] = $lookupedModel->getFullTableSQLName().".id as {$lookupName}___LOOKUP___id";
 
+      $lookupedModelColumns = $lookupedModel->columns();
+
       foreach ($lookupedModel->columnNames() as $lookupedColName) {
-        $selects[] = $lookupedModel->getFullTableSQLName().".{$lookupedColName} as {$lookupName}___LOOKUP___{$lookupedColName}";
+        if (!$lookupedModelColumns[$lookupedColName]['virtual'] ?? FALSE) {
+          $selects[] = $lookupedModel->getFullTableSQLName().".{$lookupedColName} as {$lookupName}___LOOKUP___{$lookupedColName}";
+        }
       }
 
       $joins[] = [

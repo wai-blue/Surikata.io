@@ -21,6 +21,7 @@ panels:
     plugin: WAI/Common/Breadcrumb
     settings:
       showHomePage: true
+      homePageUrl: translate("home")
   section_2:
     plugin: WAI/Blog/Detail
   footer:
@@ -34,6 +35,7 @@ panels:
       showContactEmail: true
       showContactPhoneNumber: true
       contactTitle: translate("Contact us", "Installer")
+      showNewsletter: true
       showPayments: true
       showSocialMedia: true
       showMainMenu: true

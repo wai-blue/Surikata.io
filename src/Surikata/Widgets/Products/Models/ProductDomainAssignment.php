@@ -23,6 +23,7 @@ class ProductDomainAssignment extends \ADIOS\Core\Widget\Model {
         "type" => "varchar",
         "title" => "Domain",
         "show_column" => TRUE,
+        "enum_values" => $this->adios->getEnumValuesForListOfDomains(),
       ],
     ]);
   }

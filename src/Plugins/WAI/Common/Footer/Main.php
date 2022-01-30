@@ -46,6 +46,10 @@ namespace Surikata\Plugins\WAI\Common {
       $twigParams['mainMenuItems'] = $this->getMenuItems($flatMainMenuItems);
       $twigParams['secondaryMenuItems'] = $this->getMenuItems($flatSecondaryMenuItems);
 
+      $twigParams['homePageUrl'] = (new \ADIOS\Widgets\Website\Models\WebRedirect($this->adminPanel))
+        ->getHomePageUrl()
+      ;
+
       return $twigParams;
     }
   }
@@ -109,7 +113,7 @@ namespace ADIOS\Plugins\WAI\Common {
           "title" => "Show secondary menu",
           "type" => "boolean",
         ],
-        "Newsletter" => [
+        "showNewsletter" => [
           "title" => "Zobraziť pole pre zaradenie do newsletteru",
           "type" => "boolean",
         ],

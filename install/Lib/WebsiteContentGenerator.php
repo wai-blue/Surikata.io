@@ -285,6 +285,13 @@ class WebsiteContentGenerator {
       "type" => 302,
     ]);
 
+    $websiteWebRedirectModel->insertRow([
+      "domain" => $this->domainName,
+      "from_url" => "homePage",
+      "to_url" => "//{% ROOT_URL %}/".$this->translate("home"),
+      "type" => 301,
+    ]);
+
     // web - nastavenia
 
     $webSettings = Yaml::parse(
@@ -299,7 +306,10 @@ class WebsiteContentGenerator {
       "urlFacebook" => "https://surikata.io",
       "urlTwitter" => "https://surikata.io",
       "urlYouTube" => "https://surikata.io",
-      "urlInstagram" => "https://surikata.io"
+      "urlInstagram" => "https://surikata.io",
+      "headquarterCompanyName" => "Surikata.io",
+      "headquarterStreet1" => "Address 123",
+      "headquarterZIP" => "98765",
     ];
 
     $webSettings["design"] = array_merge(

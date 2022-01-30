@@ -59,6 +59,7 @@ class Loader extends \Cascada\Loader {
    * 
    */
   public function __construct($config, $adminPanel = NULL) {
+    $this->currentRunHash = substr(md5(time().rand(1000, 9999)), 0, 5);
 
     $this->adminPanel = $adminPanel;
 
@@ -657,6 +658,7 @@ class Loader extends \Cascada\Loader {
   public function getGlobalTwigParams() {
     $globalTwigParams['filesUrl'] = $this->adminPanel->config['files_url'];
     $globalTwigParams['domain']['slug'] = $this->adminPanel->websiteRenderer->domain["slug"];
+    $globalTwigParams['rootUrl'] = rtrim($this->rewriteBase, "/");
 
     foreach ($this->adminPanel->plugins as $pluginName) {
       if (!in_array($pluginName, [".", ".."])) {
@@ -671,6 +673,10 @@ class Loader extends \Cascada\Loader {
     }
 
     return $globalTwigParams;
+  }
+
+  public function logTimestamp($message) {
+    $this->adminPanel->console->logTimestamp("{$this->currentRunHash}, {$_SERVER['REQUEST_URI']}, {$message}", "web");
   }
 
 }

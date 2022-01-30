@@ -18,7 +18,7 @@ namespace Surikata\Plugins\WAI\Product {
 
       foreach ($allCategories as $key => $category) {
         $allCategories[$key]["url"] = $productCatalogPlugin->getWebPageUrl(
-          $productCatalogPlugin->convertCategoryToUrlVariables($category)
+          $productCatalogPlugin->extractUrlVariablesFromCategory($category)
         );
       }
 

@@ -47,6 +47,7 @@ class News extends \ADIOS\Core\Plugin\Model {
         "type" => "varchar",
         "title" => $this->translate("Domain"),
         "required" => FALSE,
+        "enum_values" => $this->adios->getEnumValuesForListOfDomains(),
         "show_column" => TRUE,
       ],
 
@@ -54,6 +55,15 @@ class News extends \ADIOS\Core\Plugin\Model {
         "type" => "date",
         "title" => $this->translate("Show from"),
         "show_column" => TRUE,
+      ],
+    ]);
+  }
+
+  public function indexes(array $indexes = []) {
+    return parent::indexes([
+      "domain" => [
+        "type" => "index",
+        "columns" => ["domain"],
       ],
     ]);
   }

@@ -1,10 +1,10 @@
 <?php
 
 $dictionary = [
-  "New product feature" => "Nová funkcia produktu",
-  "Product feature" => "Funkcia produktu",
+  "New product feature" => "Nová vlastnosť produktu",
+  "Product feature" => "Vlastnosť produktu",
   "Product" => "Produkt",
-  "Feature" => "Funkcia",
+  "Feature" => "Vlastnosť",
   'Value: Text' => "Hodnota: text",
   'Value: Number' => "Hodnota: Číslo",
   'Value: Yes/No' => "Hodnota: Áno/Nie",

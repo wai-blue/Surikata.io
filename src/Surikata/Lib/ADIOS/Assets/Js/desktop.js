@@ -121,84 +121,84 @@
 
   }
 
-  function desktop_register_shortcut(shortcut, title, callback, options) {
-    // The valid Keys are...
+  // function desktop_register_shortcut(shortcut, title, callback, options) {
+  //   // The valid Keys are...
 
-    // All alpha/numeric keys - abc...xyz,01..89
-    // Special Characters - Every special character on a standard keyboard can be accessed.
-    // Special Keys...
-    // Tab
-    // Space
-    // Return
-    // Enter
-    // Backspace
-    // Scroll_lock
-    // Caps_lock
-    // Num_lock
-    // Pause
-    // Insert
-    // Home
-    // Delete
-    // End
-    // Page_up
-    // Page_down
-    // Left
-    // Up
-    // Right
-    // Down
-    // F1
-    // F2
-    // F3
-    // F4
-    // F5
-    // F6
-    // F7
-    // F8
-    // F9
-    // F10
-    // F11
-    // F12
-    // These keys are case insensitive - so don't worry about using the correct case.
+  //   // All alpha/numeric keys - abc...xyz,01..89
+  //   // Special Characters - Every special character on a standard keyboard can be accessed.
+  //   // Special Keys...
+  //   // Tab
+  //   // Space
+  //   // Return
+  //   // Enter
+  //   // Backspace
+  //   // Scroll_lock
+  //   // Caps_lock
+  //   // Num_lock
+  //   // Pause
+  //   // Insert
+  //   // Home
+  //   // Delete
+  //   // End
+  //   // Page_up
+  //   // Page_down
+  //   // Left
+  //   // Up
+  //   // Right
+  //   // Down
+  //   // F1
+  //   // F2
+  //   // F3
+  //   // F4
+  //   // F5
+  //   // F6
+  //   // F7
+  //   // F8
+  //   // F9
+  //   // F10
+  //   // F11
+  //   // F12
+  //   // These keys are case insensitive - so don't worry about using the correct case.
 
-    if (typeof options == 'undefined') options = {};
-    if (typeof options.target == 'undefined') options.target = document;
-    if (typeof options.type == 'undefined') options.type = 'keydown';
-    if (typeof options.propagate == 'undefined') options.propagate = false;
-    if (typeof options.disable_in_input == 'undefined') options.disable_in_input = true;
+  //   if (typeof options == 'undefined') options = {};
+  //   if (typeof options.target == 'undefined') options.target = document;
+  //   if (typeof options.type == 'undefined') options.type = 'keydown';
+  //   if (typeof options.propagate == 'undefined') options.propagate = false;
+  //   if (typeof options.disable_in_input == 'undefined') options.disable_in_input = true;
 
-    _keyboard_shortcut.add(shortcut, function() {
-      var notification_obj = $('#w_swi_desktop_toolbar .settings-menu .user-info');
-      var tmp_html = notification_obj.html();
-      notification_obj.html('<span style="font-size:14px">' + title + '</span>');
+  //   _keyboard_shortcut.add(shortcut, function() {
+  //     var notification_obj = $('#w_swi_desktop_toolbar .settings-menu .user-info');
+  //     var tmp_html = notification_obj.html();
+  //     notification_obj.html('<span style="font-size:14px">' + title + '</span>');
 
-      setTimeout(function() {
-        callback();
-        notification_obj.html(tmp_html);
-      }, 100);
-    }, options);
+  //     setTimeout(function() {
+  //       callback();
+  //       notification_obj.html(tmp_html);
+  //     }, 100);
+  //   }, options);
 
-    desktop_keyboard_shortcuts.push({'shortcut': shortcut, 'title': title, 'callback': callback, 'options': options});
-  };
+  //   desktop_keyboard_shortcuts.push({'shortcut': shortcut, 'title': title, 'callback': callback, 'options': options});
+  // };
 
-  function _desktop_register_shortcut(shortcut, title, callback, options) {
-    desktop_register_shortcut(shortcut, title, callback, options);
-  };
+  // // function _desktop_register_shortcut(shortcut, title, callback, options) {
+  // //   desktop_register_shortcut(shortcut, title, callback, options);
+  // // };
 
-  function desktop_unregister_shortcut(shortcut) {
-    var tmp = [];
-    for (var i in desktop_keyboard_shortcuts) {
-      if (desktop_keyboard_shortcuts[i].shortcut == shortcut) {
-        _keyboard_shortcut.remove(shortcut);
-      } else {
-        tmp.push(desktop_keyboard_shortcuts[i]);
-      };
-    };
-    desktop_keyboard_shortcuts = tmp;
-  };
+  // function desktop_unregister_shortcut(shortcut) {
+  //   var tmp = [];
+  //   for (var i in desktop_keyboard_shortcuts) {
+  //     if (desktop_keyboard_shortcuts[i].shortcut == shortcut) {
+  //       _keyboard_shortcut.remove(shortcut);
+  //     } else {
+  //       tmp.push(desktop_keyboard_shortcuts[i]);
+  //     };
+  //   };
+  //   desktop_keyboard_shortcuts = tmp;
+  // };
 
-  function _desktop_unregister_shortcut(shortcut) {
-    desktop_unregister_shortcut(shortcut);
-  };
+  // function _desktop_unregister_shortcut(shortcut) {
+  //   desktop_unregister_shortcut(shortcut);
+  // };
 
 
   function desktop_main_box_history_push(action, params, html, options) {
@@ -222,37 +222,37 @@
   };
 
 
-  function desktop_notify_widget(widget, params){
-    if (typeof params == 'undefined') params = {};
-    $('.app-icon.'+widget+' button').on('fade-cycle', function() {
-      $(this).fadeOut('slow', function() {
-        $(this).fadeIn('slow', function() {
-          $(this).trigger('fade-cycle');
-        });
-      });
-    });
-    if (!params['do_not_stop_onclick']){
-      $('.app-icon.'+widget).click(function(){
-        $('.app-icon.'+widget+' button').off('fade-cycle');
-      });
-    };
-    $('.app-icon.'+widget+' button').trigger('fade-cycle');
-  };
+  // function desktop_notify_widget(widget, params){
+  //   if (typeof params == 'undefined') params = {};
+  //   $('.app-icon.'+widget+' button').on('fade-cycle', function() {
+  //     $(this).fadeOut('slow', function() {
+  //       $(this).fadeIn('slow', function() {
+  //         $(this).trigger('fade-cycle');
+  //       });
+  //     });
+  //   });
+  //   if (!params['do_not_stop_onclick']){
+  //     $('.app-icon.'+widget).click(function(){
+  //       $('.app-icon.'+widget+' button').off('fade-cycle');
+  //     });
+  //   };
+  //   $('.app-icon.'+widget+' button').trigger('fade-cycle');
+  // };
 
-  function _desktop_notify_widget(widget, params){
-    desktop_notify_widget(widget, params);
-  };
+  // function _desktop_notify_widget(widget, params){
+  //   desktop_notify_widget(widget, params);
+  // };
 
-  function desktop_show_settings(params) {
-    if ($('#adios_shortcuts_items_adios_settings').length > 0){
-      if (typeof params == 'undefined') params = '';
-      desktop_update('administrator/users/table', params);
-    };
-  };
+  // function desktop_show_settings(params) {
+  //   if ($('#adios_shortcuts_items_adios_settings').length > 0){
+  //     if (typeof params == 'undefined') params = '';
+  //     desktop_update('administrator/users/table', params);
+  //   };
+  // };
 
-  function desktop_default_user_profile_edit(id){
-    window_render('desktop/simple_profile');
-  };
+  // function desktop_default_user_profile_edit(id){
+  //   window_render('desktop/simple_profile');
+  // };
 
   function desktop_show_console(){
     $('#adios_console_content').show();
@@ -327,7 +327,7 @@
     }
   };
 
-  function desktop_get_read_notifications(){
+  function desktop_get_read_notifications() {
     _ajax_read('Desktop/Ajax/get_read_notifications', {}, function(res) {
       try {
         var notifications = JSON.parse(res);
@@ -341,26 +341,26 @@
     });
   };
 
-  function desktop_update_scale(scale){
-    $('.adios_zoom_image').hide();
-    $('#adios_zoom_image_'+scale).show();
-    document.querySelector("meta[name=viewport]").setAttribute(
-          'content',
-          'width=device-width, initial-scale='+(scale/100)+', maximum-scale='+(scale/100)+', user-scalable=0');
-  };
+  // function desktop_update_scale(scale){
+  //   $('.adios_zoom_image').hide();
+  //   $('#adios_zoom_image_'+scale).show();
+  //   document.querySelector("meta[name=viewport]").setAttribute(
+  //         'content',
+  //         'width=device-width, initial-scale='+(scale/100)+', maximum-scale='+(scale/100)+', user-scalable=0');
+  // };
 
 
   function _alert(text, params) {
 
     if (typeof params == 'undefined') params = {};
 
-    if (params.title == '' || typeof params.title == 'undefined') params.title = 'Warning';
+    if (params.title == '' || typeof params.title == 'undefined') params.title = _TRANSLATIONS['Warning'];
     if (params.modal == '' || typeof params.modal == 'undefined') params.modal = true;
     if (params.resizable == '' || typeof params.resizable == 'undefined') params.resizable = false;
     if (params.modal == '' || typeof params.modal == 'undefined') params.modal = true;
     if (params.width == '' || typeof params.width == 'undefined') params.width = 450;
-    if (params.confirm_button_text == '' || typeof params.confirm_button_text == 'undefined') params.confirm_button_text = 'OK, I understand';
-    if (params.cancel_button_text == '' || typeof params.cancel_button_text == 'undefined') params.cancel_button_text = 'Cancel';
+    if (params.confirm_button_text == '' || typeof params.confirm_button_text == 'undefined') params.confirm_button_text = _TRANSLATIONS['OK, I understand'];
+    if (params.cancel_button_text == '' || typeof params.cancel_button_text == 'undefined') params.cancel_button_text = _TRANSLATIONS['Cancel'];
       
     if (params.width > $(window).width()) params.width = $(window).width() - 20;
     if (params.buttons == '' || typeof params.buttons == 'undefined') {
@@ -428,10 +428,10 @@
     for (let i in params.buttons) {
       $(window_div).find("button[btn-index='" + i + "']").bind('click', params.buttons[i].onclick)
     }
-};
+  };
 
   function _confirm(text, params, callback) {
-    params.title = 'Confirmation';
+    params.title = params.title ?? _TRANSLATIONS['Confirmation'];
     params.onConfirm = callback;
     _alert(text, params);
   }
@@ -565,9 +565,9 @@
 
   }
 
-  function _desktop_notification(data){
-    desktop_notification(data);
-  };
+  // function _desktop_notification(data){
+  //   desktop_notification(data);
+  // };
 
   function desktop_deactivate_notification(obj){
 
@@ -656,25 +656,25 @@
   }
 
 
-  $(document).ready(function(){
-    //setInterval(function(){ desktop_console_update();}, 5000);
-  });
+  // $(document).ready(function(){
+  //   //setInterval(function(){ desktop_console_update();}, 5000);
+  // });
 
 
   document.desktop_console_counter = 0;
   document.notification_deactivate_blocked = 0;
 
-  desktop_register_shortcut('F10', 'Settings', function() { desktop_show_settings(); });
+  // desktop_register_shortcut('F10', 'Settings', function() { desktop_show_settings(); });
 
 
 // vypnutie drag droup na plochu adios
 
-$(document).ready(function(){
-  var doc = document.documentElement;
-  doc.ondragover = function () { this.className = 'hover'; return false; };
-  doc.ondragend = function () { this.className = ''; return false; };
-  doc.ondrop = function (event) {
-    event.preventDefault && event.preventDefault();
-    return false;
-  };
-});
+// $(document).ready(function(){
+//   var doc = document.documentElement;
+//   doc.ondragover = function () { this.className = 'hover'; return false; };
+//   doc.ondragend = function () { this.className = ''; return false; };
+//   doc.ondrop = function (event) {
+//     event.preventDefault && event.preventDefault();
+//     return false;
+//   };
+// });

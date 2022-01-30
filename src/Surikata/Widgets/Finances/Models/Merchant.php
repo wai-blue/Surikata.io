@@ -100,7 +100,21 @@ class Merchant extends \ADIOS\Core\Widget\Model {
         "subdir" => $this->translate("merchant_logos")
       ],
 
+      "is_default" => [
+        "type" => 'boolean',
+        'title' => $this->translate("Default company for invoicing"),
+        'description' => $this->translate("Default company profile for invoicing")
+      ]
+
     ]);
   }
 
+  public function getDefault() {
+    return reset($this->adios->db->get_all_rows_query("
+      select
+        *
+      from {$this->table}
+      where `is_default` = 1 limit 0,1
+    "));
+  }
 }

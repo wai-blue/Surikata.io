@@ -7,6 +7,8 @@ class General extends \Surikata\Core\Web\Controller {
   public function renderPlugin($pluginName, $pluginSettings, $panelName = "") {
     $plugin = $this->websiteRenderer->getPlugin($pluginName);
 
+    $this->websiteRenderer->logTimestamp("renderPlugin {$pluginName} start");
+
     $renderParams = array_merge(
       [
         "panel" => $panelName,
@@ -17,6 +19,7 @@ class General extends \Surikata\Core\Web\Controller {
       $this->websiteRenderer->twigParams,
       $this->websiteRenderer->getGlobalTwigParams()
     );
+    $this->websiteRenderer->logTimestamp("renderPlugin {$pluginName} #1");
 
     $renderParams = $this->adminPanel->dispatchEventToPlugins("onGeneralControllerAfterRenderPlugin", [
       "controller" => $this,
@@ -25,6 +28,7 @@ class General extends \Surikata\Core\Web\Controller {
       "panelName" => $panelName,
       "renderParams" => $renderParams,
     ])["renderParams"];
+    $this->websiteRenderer->logTimestamp("renderPlugin {$pluginName} #2");
 
     if (is_object($plugin)) {
       $this->websiteRenderer->currentRenderedPlugin = $plugin;
@@ -38,10 +42,13 @@ class General extends \Surikata\Core\Web\Controller {
           $renderParams["system"]["availableVariables"] = array_keys($renderParams);
 
           $this->websiteRenderer->currentRenderedPlugin->twigRenderParams = $renderParams;
+          $this->websiteRenderer->logTimestamp("renderPlugin {$pluginName} #3 $pluginName.twig");
 
           $html = $this->websiteRenderer->twig
             ->render("Templates/Plugins/{$pluginName}.twig", $renderParams)
           ;
+          $this->websiteRenderer->logTimestamp("renderPlugin {$pluginName} #4");
+
         } else if (($tmpRawHtml = $plugin->render($renderParams)) !== NULL) {
           $html = $tmpRawHtml;
         } else {
@@ -51,6 +58,8 @@ class General extends \Surikata\Core\Web\Controller {
 
       $this->websiteRenderer->currentRenderedPlugin = NULL;
     }
+
+    $this->websiteRenderer->logTimestamp("renderPlugin {$pluginName} end");
 
     return $html;
   }
@@ -137,6 +146,8 @@ class General extends \Surikata\Core\Web\Controller {
     // v tomto momente uz CASCADA router zistil, aka webstranka sa ma zobrazit,
     // cize viem si vytiahnut nastavenia stranky (z GTP_web_stranky)
 
+    $this->websiteRenderer->logTimestamp("GenCon preRender() start");
+
     $this->websiteRenderer->idWebPage = $this->websiteRenderer->urlVariables["idWebPage"] ?? 0;
     $this->websiteRenderer->visualContentEditorEnabled = (bool) ($this->websiteRenderer->urlVariables["_vce"] ?? FALSE);
     $this->websiteRenderer->visualContentEditorIframeToken = ($this->websiteRenderer->urlVariables["_vcetkn"] ?? "");
@@ -207,6 +218,8 @@ class General extends \Surikata\Core\Web\Controller {
       $this->websiteRenderer->outputHtml = $this->renderPlugin($pluginName, $pluginSettings);
       $this->websiteRenderer->cancelRendering();
     }
+
+    $this->websiteRenderer->logTimestamp("GenCon preRender() end");
 
   }
 

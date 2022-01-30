@@ -25,6 +25,7 @@ class WebMenu extends \ADIOS\Core\Widget\Model {
         "type" => "varchar",
         "title" => $this->translate("Web menu name (for internal use)"),
         "required" => TRUE,
+        "enum_values" => $this->adios->getEnumValuesForListOfDomains(),
         "show_column" => TRUE,
       ],
     ]);

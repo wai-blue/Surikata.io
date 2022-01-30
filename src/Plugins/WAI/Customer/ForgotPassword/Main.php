@@ -4,6 +4,7 @@ namespace Surikata\Plugins\WAI\Customer {
   class ForgotPassword extends \Surikata\Core\Web\Plugin {
 
     var $defaultForgotPasswordUrl = "password/reset/{% token %}";
+    // REVIEW-PH: Toto treba spravit inym sposobom nie natvrdo nakodene
     var $formForgotPasswordUrl = [
       1 => "forgot-password/{% token %}",
       2 => "obnovit-heslo/{% token %}",
@@ -11,7 +12,7 @@ namespace Surikata\Plugins\WAI\Customer {
     ];
 
     public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
-      $email = $urlVariables["email"] ?? [];
+      $email = $urlVariables["email"] ?? "";
       $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
 
       $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adminPanel);
@@ -19,7 +20,7 @@ namespace Surikata\Plugins\WAI\Customer {
 
       $url = $pluginSettings["urlPattern"] ?? "";
       if (empty($url)) {
-        if (count($email) > 0) {
+        if ($email != "") {
           $url = $this->defaultForgotPasswordUrl;
         } else {
           $url = $this->formForgotPasswordUrl[$languageIndex];

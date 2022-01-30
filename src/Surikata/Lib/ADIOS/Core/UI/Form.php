@@ -91,8 +91,11 @@ class Form extends \ADIOS\Core\UI\View
       }
     }
 
+    // call the parent constructor
+    // after this, the $this->params must be used instead of $params.
     parent::__construct($adios, $params);
 
+    $this->params['id'] = (int) $this->params['id'];
     $this->params['columns'] = $this->adios->db->tables[$this->params['table']];
 
     $this->model->onFormBeforeInit($this);
@@ -116,60 +119,52 @@ class Form extends \ADIOS\Core\UI\View
       }
     }
 
-    // $this->params['show_save_button'] = ('UI/Form/Save' != $this->params['save_action'] || '' != $this->params['save_button_params']['onclick'] ? $this->params['show_save_button'] : false);
-    // $this->params['show_delete_button'] = ('UI/Table/Delete' != $this->params['delete_action'] || '' != $this->params['delete_button_params']['onclick'] ? $this->params['show_delete_button'] : false);
-    // $this->params['show_copy_button'] = ('UI/Table/Copy' != $this->params['copy_action'] || '' != $this->params['copy_button_params']['onclick'] ? $this->params['show_copy_button'] : false);
-
-    if (!($this->params['id'] > 0)) {
+    // default button params
+    
+    if ($this->params['id'] <= 0) {
       $this->params['show_delete_button'] = false;
-    }
-    if (!($this->params['id'] > 0)) {
       $this->params['show_copy_button'] = false;
     }
 
     if ($this->params['show_save_button']) {
-      if ($params['id'] <= 0) {
-        $this->params['save_button_params']['type'] = 'add';
-        if (!empty($this->model->formAddButtonText)) {
-          $this->params['save_button_params']['text'] = $this->model->formAddButtonText;
-        }
-      } else {
-        $this->params['save_button_params']['type'] = 'save';
-        if (!empty($this->model->formSaveButtonText)) {
-          $this->params['save_button_params']['text'] = $this->model->formSaveButtonText;
-        }
+      $this->params['save_button_params']['type'] = ($this->params['id'] <= 0 ? 'add' : 'save');
+
+      if (!empty($this->model->formAddButtonText)) {
+        $this->params['save_button_params']['text'] = $this->model->formAddButtonText;
       }
-      if ('' == $this->params['save_button_params']['onclick']) {
+
+      if (empty($this->params['save_button_params']['onclick'])) {
         $this->params['save_button_params']['onclick'] = "ui_form_save('{$this->params['uid']}', {}, this);";
       }
+
       $this->params['save_button_params']['class'] = "btn-save";
-      $this->params['save_button_params']['id'] = "{$this->params['uid']}_save_btn";
+      // $this->params['save_button_params']['uid'] = "{$this->params['uid']}_save_btn";
       $this->save_button = $this->adios->ui->button($this->params['save_button_params']);
     }
 
     if ($this->params['show_close_button']) {
-      if ('' == $this->params['close_button_params']['type']) {
-        $this->params['close_button_params']['type'] = 'close';
-      }
-      if ('' == $this->params['close_button_params']['onclick']) {
+      $this->params['close_button_params']['type'] = 'close';
+
+      if (empty($this->params['close_button_params']['onclick'])) {
         $this->params['close_button_params']['onclick'] = "ui_form_close('{$this->params['uid']}');";
       }
+
       $this->close_button = $this->adios->ui->button($this->params['close_button_params']);
     }
 
     if ($this->params['show_delete_button']) {
-      if ('' == $this->params['delete_button_params']['type']) {
-        $this->params['delete_button_params']['type'] = 'delete';
-      }
-      if ('' == $this->params['delete_button_params']['onclick']) {
+      $this->params['delete_button_params']['type'] = 'delete';
+
+      if (empty($this->params['delete_button_params']['onclick'])) {
         $this->params['delete_button_params']['onclick'] = "
           _confirm(
-            'You are about to delete the record. Continue?',
+            '".$this->translate('You are about to delete the record. Continue?')."',
             {
+              'title': '".$this->translate('Delete record confirmation')."',
               'content_class': 'border-left-danger',
               'confirm_button_class': 'btn-danger',
-              'confirm_button_text': 'Yes, delete the record',
-              'cancel_button_text': 'Do not delete',
+              'confirm_button_text': '".$this->translate('Yes, delete the record')."',
+              'cancel_button_text': '".$this->translate('Do not delete')."',
             },
             function() { ui_form_delete('{$this->params['uid']}') }
           );
@@ -177,19 +172,27 @@ class Form extends \ADIOS\Core\UI\View
       }
       $this->params['delete_button_params']['style'] .= 'float:right;';
       $this->delete_button = $this->adios->ui->button($this->params['delete_button_params']);
-      $this->delete_button->add_class("{$this->params['uid']}_button");
+      // $this->delete_button->add_class("{$this->params['uid']}_button");
     }
 
     if ($this->params['show_copy_button']) {
-      if ('' == $this->params['copy_button_params']['type']) {
-        $this->params['copy_button_params']['type'] = 'copy';
+      $this->params['copy_button_params']['type'] = 'copy';
+
+      if (empty($this->params['copy_button_params']['onclick'])) {
+        $this->params['copy_button_params']['onclick'] = "
+          _confirm(
+            '".$this->translate("Are you sure to delete this record?")."',
+            {},
+            function() {
+              ui_form_copy('{$this->params['uid']}')
+            }
+          );
+        ";
       }
-      if ('' == $this->params['copy_button_params']['onclick']) {
-        $this->params['copy_button_params']['onclick'] = "_confirm('".$this->translate("Are you sure to delete this record?")."', {}, function(){ ui_form_copy('{$this->params['uid']}') });";
-      }
+
       $this->params['copy_button_params']['style'] .= 'float:right;';
       $this->copy_button = $this->adios->ui->button($this->params['copy_button_params']);
-      $this->copy_button->add_class("{$this->params['uid']}_button");
+      // $this->copy_button->add_class("{$this->params['uid']}_button");
     }
 
     if (empty($this->params['header'])) {

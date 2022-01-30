@@ -86,11 +86,11 @@ class Table extends \ADIOS\Core\UI\View {
         $params['title'] = $this->model->tableTitle;
       }
 
-      if (empty($params['onclick'])) {
-        $params['onclick'] = "
-          window_render('".$this->model->getFullUrlBase($params)."/' + id + '/Edit')
-        ";
-      }
+      // if (empty($params['onclick'])) {
+      //   $params['onclick'] = "
+      //     window_render('".$this->model->getFullUrlBase($params)."/' + id + '/Edit')
+      //   ";
+      // }
 
       if (empty($params['add_button_params']['onclick'])) {
         $params['add_button_params']['onclick'] = "
@@ -761,6 +761,8 @@ class Table extends \ADIOS\Core\UI\View {
                 'row' => $val,
               ]);
 
+              $onclick = $params['onclick'] ?: "window_render('".$this->model->getFullUrlBase(array_merge($params, $val))."/' + id + '/Edit')";
+
               $html .= "
                 <div 
                   class='Row'
@@ -778,7 +780,7 @@ class Table extends \ADIOS\Core\UI\View {
                     let base64 = $(this).data('row-values-base64');
                     let rowValues = JSON.parse(Base64.decode(base64));
                     
-                    {$params['onclick']}
+                    {$onclick}
                   \"
                 >
               ";

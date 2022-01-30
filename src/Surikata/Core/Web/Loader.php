@@ -84,7 +84,7 @@ class Loader extends \Cascada\Loader {
 
       $this->domain = $this->getDomainInfo($this->config["domainToRender"]);
 
-      $this->adminPanel->webSettings = $this->loadSurikataSettings("web/{$this->domain['name']}");
+      $this->adminPanel->webSettings = $this->adminPanel->config["settings"]["web"][$this->domain['name']];
 
       $this->themeName = $this->adminPanel->webSettings["design"]["theme"];
 
@@ -370,9 +370,8 @@ class Loader extends \Cascada\Loader {
     $siteMap = array_merge($siteMap, $siteMapDomain);
 
     $siteMap = $this->adminPanel->dispatchEventToPlugins("onAfterSiteMap", [
-      "site_map" => $siteMap,
-      "website_renderer" => $this,
-    ])["site_map"];
+      "siteMap" => $siteMap,
+    ])["siteMap"];
 
     if (!is_array($siteMap)) $siteMap = [];
 
@@ -429,36 +428,6 @@ class Loader extends \Cascada\Loader {
 
   public function onGeneralControllerAfterRouting() {
     // to be overriden
-  }
-
-  /**
-   * Loads settings of the website configured by the user in the administration panel.
-   * 
-   * @param string group Name of the settings group.
-   * 
-   * @return array Website settings configured in the administration panel.
-   * */
-  public function loadSurikataSettings($group) {
-    $path = "settings/{$group}/";
-
-    $tmp = (new \ADIOS\Core\Models\Config($this->adminPanel))
-      ->where('path', 'like', "{$path}%")
-      ->get()
-      ->toArray()
-    ;
-
-    $settings = [];
-    foreach ($tmp as $value) {
-      $tmp_path = str_replace($path, "", $value['path']);
-      list($tmp_level_1, $tmp_level_2) = explode("/", $tmp_path);
-      if (empty($tmp_level_2)) {
-        $settings[$tmp_level_1] = $value['value'];
-      } else {
-        $settings[$tmp_level_1][$tmp_level_2] = $value['value'];
-      }
-    }
-    
-    return $settings;
   }
 
   /**

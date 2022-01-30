@@ -158,15 +158,6 @@ namespace Surikata\Plugins\WAI\Product {
 
     public function getTwigParams($pluginSettings) {
 
-      $customerUID = $this->websiteRenderer->getCustomerUID();
-      $idProduct = (int) $this->websiteRenderer->urlVariables['idProduct'];
-
-      // save datetime of render
-      //$this->adminPanel
-     //   ->getModel("Widgets/Customers/Models/CustomerProduktPrezerany")
-     //   ->logActivityByCustomerUID($customerUID, $idProduct)
-     // ;
-
       $twigParams = $pluginSettings;
 
       $twigParams["services"] = $this->getServices();

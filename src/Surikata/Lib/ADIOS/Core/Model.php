@@ -168,7 +168,15 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
     }
 
-    if (!$this->hasSqlTable()) {
+    if ($this->hasAvailableUpgrades()) {
+      $this->adios->userNotifications->addHtml("
+        Model <b>{$this->name}</b> has new upgrades available.
+        <a
+          href='javascript:void(0)'
+          onclick='desktop_update(\"Desktop/InstallUpgrades\");'
+        >Install upgrades</a>
+      ");
+    } else if (!$this->hasSqlTable()) {
       $this->adios->userNotifications->addHtml("
         Model <b>{$this->name}</b> has no SQL table.
         <a
@@ -183,14 +191,6 @@ class Model extends \Illuminate\Database\Eloquent\Model {
           href='javascript:void(0)'
           onclick='desktop_update(\"Desktop/InstallUpgrades\");'
         >Install model</a>
-      ");
-    } else if ($this->hasAvailableUpgrades()) {
-      $this->adios->userNotifications->addHtml("
-        Model <b>{$this->name}</b> has new upgrades available.
-        <a
-          href='javascript:void(0)'
-          onclick='desktop_update(\"Desktop/InstallUpgrades\");'
-        >Install upgrades</a>
       ");
     }
 

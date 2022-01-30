@@ -153,10 +153,16 @@ class General extends \Surikata\Core\Web\Controller {
     $this->websiteRenderer->visualContentEditorIframeToken = ($this->websiteRenderer->urlVariables["_vcetkn"] ?? "");
     $this->websiteRenderer->currentPage = $this->websiteRenderer->pages[$this->websiteRenderer->idWebPage] ?? NULL;
 
-    if ($this->websiteRenderer->currentPage === NULL) {
-      header("Location: {$this->websiteRenderer->rewriteBase}");
-      exit();
-    }
+    // Dusan 30.1.2022: Toto sposobovalo problemy pri URLkach vytvaranych cez event
+    // onAfterSiteMap, pretoze tieto sa nenachadzaju v databaze => funkcia loadPublishedPages()
+    // pouzivana na nacitanie $this->websiteRenderer->pages takuto URLku neevidovala.
+    // Paradoxne, zakomentovanie tohoto kodu sfunkcnilo 404 not found stranku.
+
+    // if ($this->websiteRenderer->currentPage === NULL) {
+    //   header("HTTP/1.1 302 Moved Temporarily");
+    //   header("Location: {$this->websiteRenderer->rewriteBase}");
+    //   exit();
+    // }
 
     $this->websiteRenderer->onGeneralControllerAfterRouting() ;
 
@@ -168,7 +174,10 @@ class General extends \Surikata\Core\Web\Controller {
       "customerUID" => $this->websiteRenderer->getCustomerUID(),
       "currentYear" => date("Y"),
       "today" => date("Y-m-d"),
-      "settings" => $this->adminPanel->webSettings,
+      "settings" => [
+        "web" => $this->adminPanel->webSettings,
+        "plugins" => $this->adminPanel->config["settings"]["plugins"],
+      ],
       "domain" => $this->websiteRenderer->config['domainToRender'],
       "languageIndex" => $this->websiteRenderer->domain['languageIndex'],
       "urlVariables" => $this->websiteRenderer->urlVariables,

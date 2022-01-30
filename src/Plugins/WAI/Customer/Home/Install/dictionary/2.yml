@@ -29,3 +29,10 @@ Edit your account information: Upraviť informácie o účte
 Change your password: Zmeniť heslo
 Modify your address book entries: Spravovať adresy
 Delete: Zmazať
+Current password is incorrect: Súčasné heslo je nesprávne
+New password is the same as the current password: Nové heslo je rovnaké ako súčasné heslo
+New password cannot be empty: Nové heslo nemôže byť prázdne
+Password must be at least 8 characters long: Heslo musí obsahovať aspoň 8 znakov
+Passwords does not match: Hesla sa nezhodujú
+Unknown error: Neznáma chyba
+Unknown error. Try refreshing the page.: Neznáma chyba. Skúste stránku obnoviť.

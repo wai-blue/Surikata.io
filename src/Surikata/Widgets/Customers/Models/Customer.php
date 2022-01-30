@@ -607,26 +607,23 @@ class Customer extends \ADIOS\Core\Widget\Model {
   }
 
   public function changePassword($userLoggedInfo, $currentPassword, $password1, $password2) {
-    // REVIEW: premysliet, co s argumentami v thrown exceptions
-
     if (empty($userLoggedInfo)) {
-      throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error! Try refreshing the page.");
+      throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error. Try refreshing the page.");
     }
 
     if ($currentPassword !== FALSE) {
       if (!password_verify($currentPassword, $userLoggedInfo['password'])) { 
-        throw new \ADIOS\Widgets\Customers\Exceptions\InvalidPassword("Current password is incorrect!");
+        throw new \ADIOS\Widgets\Customers\Exceptions\InvalidPassword("Current password is incorrect");
       }
 
       // Check if current pass is not same as new one
       if ($currentPassword == $password1) {
-        throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("New password is the same as the current password!");
+        throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("New password is the same as the current password");
       }
-
     }
 
     if (empty($password1)) {
-      throw new \ADIOS\Widgets\Customers\Exceptions\NewPasswordIsEmpty("New password cannot be empty!");
+      throw new \ADIOS\Widgets\Customers\Exceptions\NewPasswordIsEmpty("New password cannot be empty");
     }
 
     if (strlen($password1) < 8) {
@@ -634,7 +631,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
     } 
 
     if ($password1 != $password2) {
-      throw new \ADIOS\Widgets\Customers\Exceptions\NewPasswordsDoNotMatch("Passwords does not match!");
+      throw new \ADIOS\Widgets\Customers\Exceptions\NewPasswordsDoNotMatch("Passwords does not match");
     }
 
     $customer = $this
@@ -644,13 +641,13 @@ class Customer extends \ADIOS\Core\Widget\Model {
     if (!$customer->update(
       ["password" => password_hash($password1, PASSWORD_DEFAULT)]
     )) {
-      throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error!");
+      throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error");
     }
 
     return TRUE;
   }
 
-  public function changeName($userLoggedInfo, $given_name, $family_name) {
+  public function updateCustomerProfile(array $userLoggedInfo = [], array $params = []) {
     if (empty($userLoggedInfo)) {
       throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error! Try refreshing the page.");
     }
@@ -659,55 +656,23 @@ class Customer extends \ADIOS\Core\Widget\Model {
       ->where('id', '=', (int) $userLoggedInfo['id'])
     ;
 
-    $update = $customer->update(["given_name" => $given_name, "family_name" => $family_name]);
-
-    return TRUE;
-  }
-
-  public function changeCompanyInfo($userLoggedInfo, $company_name, $company_id, $company_tax_id, $company_vat_id) {
-    if (empty($userLoggedInfo)) {
-      throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error! Try refreshing the page.");
-    }
-
-    // REVIEW: Vesmirny kod?
-    // Vid review nizsie, rovnaka situacia.
-
-    $customer = $this
-      ->where('id', '=', (int) $userLoggedInfo['id'])
-    ;
-
-    $update = $customer->update(
-      [
-        "company_name" => $company_name,
-        "company_id" => $company_id,
-        "company_tax_id" => $company_tax_id,
-        "company_vat_id" => $company_vat_id,
-      ]
-    );
-
-    return TRUE;
-  }
-
-  public function changeBillingInfo($userLoggedInfo, $address) {
-    if (empty($userLoggedInfo)) {
-      throw new \ADIOS\Widgets\Customers\Exceptions\UnknownError("Unknown error! Try refreshing the page.");
-    }
-
-    // REVIEW: Vesmirny kod?
-    // Tento robi to iste:
-    // $this
-    //   ->where('id', '=', (int) $userLoggedInfo['id'])
-    //   ->update($address);
-    // ;
-
-    $customer = $this
-      ->where('id', '=', (int) $userLoggedInfo['id'])
-    ;
-
-    $update = $customer->update($address);
-
-    // REVIEW: Chyba tu osetrenie chyboveho stavu
-    return TRUE;
+    $customer->update([
+      "given_name" => $params['given_name'] ?? "", 
+      "family_name" => $params['family_name'] ?? "",
+      "company_name" => $params['company_name'] ?? "",
+      "company_id" => $params['company_id'] ?? "",
+      "company_tax_id" => $params['company_tax_id'] ?? "",
+      "company_vat_id" => $params['company_vat_id'] ?? "",
+      "inv_given_name" => $params["inv_given_name"] ?? "",
+      "inv_family_name" => $params["inv_family_name"] ?? "",
+      "inv_company_name" => $params["inv_company_name"] ?? "",
+      "inv_street_1" => $params["inv_street_1"] ?? "",
+      "inv_street_2" => $params["inv_street_2"] ?? "",
+      "inv_zip" => $params["inv_zip"] ?? "",
+      "inv_city" => $params["inv_city"] ?? "",
+      "inv_region" => $params["inv_city"] ?? "",
+      "inv_country" => $params["inv_zip"] ?? ""
+    ]);
   }
 
   public function changeForgotPassword($userLoggedInfo, $password) {
@@ -729,8 +694,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
       ->toArray()
     );
 
-    // REVIEW: $customer je podla mna pole, nie integer. Tento if je teda nefunkcny.
-    if ($customer > 0) {
+    if (!empty($customer)) {
       if ($customer["is_validated"]) {
         $this->sendNotificationForForgotPassword($customer);
       } else {

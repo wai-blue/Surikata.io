@@ -65,6 +65,13 @@ class Desktop extends \ADIOS\Core\Action {
       ",
     ];
 
+    $settingsLogoutItems = [
+      "fa_icon" => "fas fa-sign-out-alt",
+      "text" => $this->translate("Log out"),
+      "consent" => $this->translate("Are you sure to log out?"),
+      "not_logout" => $this->translate("Do not logout"),
+    ];
+
     // if (
     //   is_array($this->adios->config['available_languages'])
     //     && count($this->adios->config['available_languages']) > 1
@@ -103,6 +110,7 @@ class Desktop extends \ADIOS\Core\Action {
     $params = [
       "console" => $this->adios->console->getLogs(),
       "settingsMenuItems" => $settingsMenuItems,
+      "settingsLogoutItems" => $settingsLogoutItems,
       "searchQuery" => $_GET['search'],
       "develMenuItems" => $develMenuItems,
       "desktopContentAction" => $this->adios->desktopContentAction == "Desktop" ? "" : $this->adios->desktopContentAction,

@@ -15,7 +15,7 @@ panels:
     plugin: WAI/Customer/Login
     settings:
       showPrivacyTerms: true
-      privacyTermsUrl: privacy-terms
+      privacyTermsUrl: translate("privacy-terms")
   footer:
     plugin: WAI/Common/Footer
     settings:

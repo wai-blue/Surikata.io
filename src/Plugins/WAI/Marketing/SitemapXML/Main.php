@@ -17,28 +17,6 @@ namespace ADIOS\Plugins\WAI\Marketing {
       ];
     }
 
-    public function onGeneralControllerPreRender($event) {
-      $settings = [];
-      $domainName = $this->adios->websiteRenderer->domain['name'];
-      foreach ($this->adios->config["settings"]["plugins"]["WAI"]["Marketing"]["SitemapXML"] as $key => $value) {
-        if (strpos($key, "{$domainName}_") === 0) {
-          $settings[str_replace("{$domainName}_", "", $key)] = $value;
-        }
-      }
-
-      $this->adios->websiteRenderer->setTwigParams([
-        "plugins" => [
-          "WAI" => [
-            "Marketing" => [
-              "SitemapXML" => $settings
-            ],
-          ],
-        ],
-      ]);
-
-      return $event;
-    }
-
     public function onAfterSiteMap($event) {
       $siteMap = $event['siteMap'];
 

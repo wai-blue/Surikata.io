@@ -1,10 +1,10 @@
 <?php
 
-namespace ADIOS\Actions\Plugins\WAI\Common\MarketingTools;
+namespace ADIOS\Actions\Plugins\WAI\Marketing\Google;
 
 class Settings extends \ADIOS\Core\Plugin\Action {
   public function render() {
-    $settings = $this->adios->getPluginSettings("WAI/Common/MarketingTools");
+    $settings = $this->adios->getPluginSettings("WAI/Marketing/Google");
 
     $tabs = [];
     foreach ($this->adios->getAvailableDomains() as $domain) {
@@ -36,21 +36,13 @@ class Settings extends \ADIOS\Core\Plugin\Action {
               "value" => $settings["{$domain['name']}_googleTagManagerCode"],
             ]),
           ],
-          [
-            "title" => $this->translate("Facebook Pixel Code"),
-            "input" => $this->adios->ui->Input([
-              "type" => "text",
-              "uid" => "{$this->uid}_{$domain['name']}_facebookPixelCode",
-              "value" => $settings["{$domain['name']}_facebookPixelCode"],
-            ]),
-          ],
         ],
       ];
     }
 
     return $this->adios->renderAction("UI/SettingsPanel", [
-      "settings_group" => "plugins/WAI/Common/MarketingTools",
-      "title" => $this->translate("Marketing tools settings"),
+      "settings_group" => "plugins/WAI/Marketing/Google",
+      "title" => $this->translate("Google tools settings"),
       "template" => [
         "tabs" => $tabs,
       ],

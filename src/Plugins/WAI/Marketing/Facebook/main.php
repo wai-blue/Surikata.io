@@ -1,18 +1,18 @@
 <?php
 
-namespace Surikata\Plugins\WAI\Common {
-  class MarketingTools extends \Surikata\Core\Web\Plugin {
+namespace Surikata\Plugins\WAI\Marketing {
+  class Facebook extends \Surikata\Core\Web\Plugin {
   }
 }
 
-namespace ADIOS\Plugins\WAI\Common {
+namespace ADIOS\Plugins\WAI\Marketing {
 
-  class MarketingTools extends \Surikata\Core\AdminPanel\Plugin {
+  class Facebook extends \Surikata\Core\AdminPanel\Plugin {
 
     public function manifest() {
       return [
-        "title" => "Marketing Tools",
-        // "logo" => "heureka-logo.jpg",
+        "title" => "Facebook Marketing Tools",
+        "logo" => "facebook-logo.png",
         "description" => "Standard marketing tools like sitemap.xml or DataLayer.",
       ];
     }
@@ -20,14 +20,14 @@ namespace ADIOS\Plugins\WAI\Common {
     public function onGeneralControllerPreRender($event) {
       $settings = [];
       $domainName = $this->adios->websiteRenderer->domain['name'];
-      foreach ($this->adios->config["settings"]["plugins"]["WAI"]["Common"]["MarketingTools"] as $key => $value) {
+      foreach ($this->adios->config["settings"]["plugins"]["WAI"]["Marketing"]["Facebook"] as $key => $value) {
         if (strpos($key, "{$domainName}_") === 0) {
           $settings[str_replace("{$domainName}_", "", $key)] = $value;
         }
       }
 
       $this->adios->websiteRenderer->setTwigParams([
-        "marketingTools" => $settings,
+        "facebookMarketingTools" => $settings
       ]);
 
       return $event;
@@ -38,7 +38,7 @@ namespace ADIOS\Plugins\WAI\Common {
 
       $siteMap["sitemap.xml"] = [
         "controllers" => [
-          new \Surikata\Plugins\WAI\Common\MarketingTools\Controllers\SitemapXMLGenerator($this->adios->websiteRenderer),
+          new \Surikata\Plugins\WAI\Marketing\Facebook\Controllers\SitemapXMLGenerator($this->adios->websiteRenderer),
         ],
         "template" => "Layouts/WithLeftSidebar",
       ];

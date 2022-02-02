@@ -12,28 +12,19 @@ class Settings extends \ADIOS\Core\Plugin\Action {
         "title" => $domain['description'],
         "items" => [
           [
-            "title" => $this->translate("Enable sitemap.xml"),
-            "input" => $this->adios->ui->Input([
-              "type" => "boolean",
-              "uid" => "{$this->uid}_{$domain['name']}_enableSitemapXML",
-              "value" => $settings["{$domain['name']}_enableSitemapXML"],
-            ]),
-            "description" => $this->translate("If checked, the sitemap.xml URL will be published.")
-          ],
-          [
             "title" => $this->translate("Google Analytics Code"),
             "input" => $this->adios->ui->Input([
               "type" => "text",
-              "uid" => "{$this->uid}_{$domain['name']}_googleAnalyticsCode",
-              "value" => $settings["{$domain['name']}_googleAnalyticsCode"],
+              "uid" => "{$this->uid}_{$domain['name']}_googleAnalytics",
+              "value" => $settings["{$domain['name']}_googleAnalytics"],
             ]),
           ],
           [
             "title" => $this->translate("Google Tag Manager Code"),
             "input" => $this->adios->ui->Input([
               "type" => "text",
-              "uid" => "{$this->uid}_{$domain['name']}_googleTagManagerCode",
-              "value" => $settings["{$domain['name']}_googleTagManagerCode"],
+              "uid" => "{$this->uid}_{$domain['name']}_googleTagManager",
+              "value" => $settings["{$domain['name']}_googleTagManager"],
             ]),
           ],
         ],

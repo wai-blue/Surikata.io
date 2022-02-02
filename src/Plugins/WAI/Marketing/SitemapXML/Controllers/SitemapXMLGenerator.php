@@ -1,6 +1,6 @@
 <?php
 
-namespace Surikata\Plugins\WAI\Marketing\Facebook\Controllers;
+namespace Surikata\Plugins\WAI\Marketing\SitemapXML\Controllers;
 
 class SitemapXMLGenerator extends \Surikata\Core\Web\Controller {
   public function render() {

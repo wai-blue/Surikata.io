@@ -27,25 +27,17 @@ namespace ADIOS\Plugins\WAI\Marketing {
       }
 
       $this->adios->websiteRenderer->setTwigParams([
-        "facebookMarketingTools" => $settings
+        "plugins" => [
+          "WAI" => [
+            "Marketing" => [
+              "Facebook" => $settings
+            ],
+          ],
+        ],
       ]);
 
       return $event;
     }
 
-    public function onAfterSiteMap($event) {
-      $siteMap = $event['siteMap'];
-
-      $siteMap["sitemap.xml"] = [
-        "controllers" => [
-          new \Surikata\Plugins\WAI\Marketing\Facebook\Controllers\SitemapXMLGenerator($this->adios->websiteRenderer),
-        ],
-        "template" => "Layouts/WithLeftSidebar",
-      ];
-
-      $event['siteMap'] = $siteMap;
-
-      return $event; // forward event unchanged
-    }
   }
 }

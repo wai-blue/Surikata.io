@@ -27,25 +27,17 @@ namespace ADIOS\Plugins\WAI\Marketing {
       }
       
       $this->adios->websiteRenderer->setTwigParams([
-        "googleMarketingTools" => $settings
+        "plugins" => [
+          "WAI" => [
+            "Marketing" => [
+              "Google" => $settings
+            ],
+          ],
+        ],
       ]);
 
       return $event;
     }
 
-    public function onAfterSiteMap($event) {
-      $siteMap = $event['siteMap'];
-
-      $siteMap["sitemap.xml"] = [
-        "controllers" => [
-          new \Surikata\Plugins\WAI\Marketing\Google\Controllers\SitemapXMLGenerator($this->adios->websiteRenderer),
-        ],
-        "template" => "Layouts/WithLeftSidebar",
-      ];
-
-      $event['siteMap'] = $siteMap;
-
-      return $event; // forward event unchanged
-    }
   }
 }

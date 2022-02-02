@@ -5,6 +5,7 @@ namespace Surikata\Plugins\WAI\Product {
   use ADIOS\Widgets\Products\Models\ProductFeature;
   use ADIOS\Widgets\Products\Models\ProductStockState;
   use ADIOS\Widgets\Products\Models\Service;
+  
   class Detail extends \Surikata\Core\Web\Plugin {
     public static $productInfo = NULL;
     var $deleteCurrentPageBreadCrumb = true;

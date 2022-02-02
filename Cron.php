@@ -12,7 +12,15 @@
 
 try {
 
-  require("../Init.php");
+  if (php_sapi_name() != 'cli') {
+    throw new Exception('This application must be run on the command line.');
+  }
+
+  if (empty($argv[1])) {
+    throw new Exception('Usage: php.exe Cron.php <CRON_ACTION>');
+  }
+
+  require(__DIR__."/Init.php");
 
   $web = new \MyEcommerceProject\Web($websiteRendererConfig);
   

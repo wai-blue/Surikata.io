@@ -626,7 +626,7 @@ class Loader extends \Cascada\Loader {
 
   public function getGlobalTwigParams() {
     $globalTwigParams['filesUrl'] = $this->adminPanel->config['files_url'];
-    $globalTwigParams['domain']['slug'] = $this->adminPanel->websiteRenderer->domain["slug"];
+    $globalTwigParams['domain'] = $this->adminPanel->websiteRenderer->domain;
     $globalTwigParams['rootUrl'] = rtrim($this->rewriteBase, "/");
 
     foreach ($this->adminPanel->plugins as $pluginName) {

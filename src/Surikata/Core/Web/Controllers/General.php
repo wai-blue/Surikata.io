@@ -178,7 +178,6 @@ class General extends \Surikata\Core\Web\Controller {
         "web" => $this->adminPanel->webSettings,
         "plugins" => $this->adminPanel->config["settings"]["plugins"],
       ],
-      "domain" => $this->websiteRenderer->config['domainToRender'],
       "languageIndex" => $this->websiteRenderer->domain['languageIndex'],
       "urlVariables" => $this->websiteRenderer->urlVariables,
       "uploadedFileUrl" => $this->adminPanel->config['files_url'],

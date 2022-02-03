@@ -20,14 +20,19 @@ namespace ADIOS\Plugins\WAI\Marketing {
     public function onAfterSiteMap($event) {
       $siteMap = $event['siteMap'];
 
-      $siteMap["sitemap.xml"] = [
-        "controllers" => [
-          new \Surikata\Plugins\WAI\Marketing\SitemapXML\Controllers\SitemapXMLGenerator($this->adios->websiteRenderer),
-        ],
-        "template" => "Layouts/WithLeftSidebar",
-      ];
+      $settings = $this->adios->getPluginSettings("WAI/Marketing/SitemapXML");
+      $domain = $this->adios->websiteRenderer->domain;
 
-      $event['siteMap'] = $siteMap;
+      if ((bool)$settings[$domain['name']."_enableSitemapXML"]) {
+        $siteMap["sitemap.xml"] = [
+          "controllers" => [
+            new \Surikata\Plugins\WAI\Marketing\SitemapXML\Controllers\SitemapXMLGenerator($this->adios->websiteRenderer),
+          ],
+          "template" => "Layouts/WithLeftSidebar",
+        ];
+
+        $event['siteMap'] = $siteMap;
+      }
 
       return $event; // forward event unchanged
     }

@@ -861,6 +861,11 @@ class Order extends \ADIOS\Core\Widget\Model {
       ])
     ;
 
+    $this->adios->dispatchEventToPlugins("onOrderAfterPaid", [
+      "order" => $this->getById($idOrder),
+      "isPaid" => $isPaid,
+    ]);
+
     return $update;
   }
 

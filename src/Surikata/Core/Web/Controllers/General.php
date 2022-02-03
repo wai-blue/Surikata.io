@@ -17,7 +17,6 @@ class General extends \Surikata\Core\Web\Controller {
       $pluginSettings ?? [],
       $plugin->getTwigParams($pluginSettings ?? []),
       $this->websiteRenderer->twigParams,
-      $this->websiteRenderer->getGlobalTwigParams()
     );
     $this->websiteRenderer->logTimestamp("renderPlugin {$pluginName} #1");
 
@@ -170,24 +169,9 @@ class General extends \Surikata\Core\Web\Controller {
       "controller" => $this,
     ]);
 
-    $this->websiteRenderer->setTwigParams([
-      "customerUID" => $this->websiteRenderer->getCustomerUID(),
-      "currentYear" => date("Y"),
-      "today" => date("Y-m-d"),
-      "settings" => [
-        "web" => $this->adminPanel->webSettings,
-        "plugins" => $this->adminPanel->config["settings"]["plugins"],
-      ],
-      "languageIndex" => $this->websiteRenderer->domain['languageIndex'],
-      "urlVariables" => $this->websiteRenderer->urlVariables,
-      "uploadedFileUrl" => $this->adminPanel->config['files_url'],
-      "header" => [
-        "metaKeywords" => $this->websiteRenderer->currentPage["seo_keywords"] ?? "",
-        "metaDescription" => $this->websiteRenderer->currentPage["seo_description"] ?? "",
-        "pageTitle" => $this->websiteRenderer->currentPage["seo_title"] ?? "",
-      ],
-      "locale" => $this->adminPanel->locale->getAll(),
-    ]);
+    $this->websiteRenderer->setTwigParams(
+      $this->websiteRenderer->getGlobalTwigParams()
+    );
 
     $adminPanelConfig = $this->websiteRenderer->adminPanel->config;
     $maintenanceSettings = $adminPanelConfig["settings"]["web"]["maintenance"] ?? [];

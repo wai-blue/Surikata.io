@@ -626,8 +626,25 @@ class Loader extends \Cascada\Loader {
 
   public function getGlobalTwigParams() {
     $globalTwigParams['filesUrl'] = $this->adminPanel->config['files_url'];
-    $globalTwigParams['domain'] = $this->adminPanel->websiteRenderer->domain;
+    $globalTwigParams['domain'] = $this->domain;
     $globalTwigParams['rootUrl'] = rtrim($this->rewriteBase, "/");
+
+    $globalTwigParams["customerUID"] = $this->getCustomerUID();
+    $globalTwigParams["currentYear"] = date("Y");
+    $globalTwigParams["today"] = date("Y-m-d");
+    $globalTwigParams["settings"] = [
+        "web" => $this->adminPanel->webSettings,
+        "plugins" => $this->adminPanel->config["settings"]["plugins"]
+      ];
+    $globalTwigParams["languageIndex"] = $this->domain['languageIndex'];
+    $globalTwigParams[ "urlVariables"] = $this->urlVariables;
+    $globalTwigParams["uploadedFileUrl"] = $this->adminPanel->config['files_url'];
+    $globalTwigParams["header"] = [
+      "metaKeywords" => $this->currentPage["seo_keywords"] ?? "",
+      "metaDescription" => $this->currentPage["seo_description"] ?? "",
+      "pageTitle" => $this->currentPage["seo_title"] ?? "",
+    ];
+    $globalTwigParams["locale"] = $this->adminPanel->locale->getAll();
 
     foreach ($this->adminPanel->plugins as $pluginName) {
       if (!in_array($pluginName, [".", ".."])) {

@@ -132,20 +132,20 @@ function _ajax_check_json_format(res){
   if (first_bracket > 0){
     before_json = res.substring(0,first_bracket);
     res = res.substring(first_bracket);
-    _adios_console_log('AJAX_LOAD JSON ERROR (before json)', before_json);
+    console.log('AJAX_LOAD JSON ERROR (before json)', before_json);
   }
   var last_bracket = res.lastIndexOf('}');
   if ((last_bracket + 1) < res.length){
     after_json = res.substring(last_bracket + 1);
     res = res.substring(0, last_bracket + 1);
-    _adios_console_log('AJAX_LOAD JSON ERROR (after json)', after_json);
+    console.log('AJAX_LOAD JSON ERROR (after json)', after_json);
   }
 
   try {
     res = JSON.parse(res);
   } catch ( err ) {
     if (_DEVEL_MODE){
-      if (before_json == "" && after_json == "") _adios_console_log("AJAX JSON PARSE ERROR", res);
+      if (before_json == "" && after_json == "") console.log("AJAX JSON PARSE ERROR", res);
     }
     res = {};
     res.result = '';
@@ -198,9 +198,9 @@ function _ajax_read(action, params, onsuccess, onreadystatechange) {
         }
       }
 
-      if (action != 'Desktop/Ajax/GetConsoleAndNotificationsContent') {
-        desktop_console_update();
-      }
+      // if (action != 'Desktop/Ajax/GetConsoleAndNotificationsContent') {
+      //   desktop_console_update();
+      // }
     },
     'xhr': function() {
       var newxhr = $.ajaxSettings.xhr();
@@ -216,11 +216,11 @@ function _ajax_read(action, params, onsuccess, onreadystatechange) {
         onresult(null);
       }
 
-      if (action != 'Desktop/Ajax/GetConsoleAndNotificationsContent'){
-        if (e.status == 0) _alert('Failed to connect to server.');
-        else _alert('Server error: ' + e.status);
-        desktop_console_update();
-      };
+      // if (action != 'Desktop/Ajax/GetConsoleAndNotificationsContent'){
+      //   if (e.status == 0) _alert('Failed to connect to server.');
+      //   else _alert('Server error: ' + e.status);
+      //   desktop_console_update();
+      // };
     }
   });
 };
@@ -344,7 +344,7 @@ function _ajax_supdate(action, params, selector, options) {
                 var tmp = $.parseHTML(data);
   //              $('#adios_console_content').append(tmp);
                 if (typeof tmp[0] == 'object'){
-                  adios_console_log('AJAX WINDOW', $('<div></div>').append(tmp).html());
+                  console.log('AJAX WINDOW', $('<div></div>').append(tmp).html());
                 };
               }else{
                 $(selector).append($.parseHTML(data));

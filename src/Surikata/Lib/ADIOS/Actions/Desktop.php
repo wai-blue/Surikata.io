@@ -95,11 +95,11 @@ class Desktop extends \ADIOS\Core\Action {
     $develMenuItems = [];
 
     if ($this->adios->config['devel_mode']) {
-      $develMenuItems[] = [
-        "text" => $this->translate("Show console"),
-        "fa_icon" => "fas fa-terminal",
-        "onclick" => "desktop_show_console();",
-      ];
+      // $develMenuItems[] = [
+      //   "text" => $this->translate("Show console"),
+      //   "fa_icon" => "fas fa-terminal",
+      //   "onclick" => "desktop_show_console();",
+      // ];
       $develMenuItems[] = [
         "text" => $this->translate("Examples of UI"),
         "fa_icon" => "fas fa-hammer",

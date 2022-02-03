@@ -254,92 +254,92 @@
   //   window_render('desktop/simple_profile');
   // };
 
-  function desktop_show_console(){
-    $('#adios_console_content').show();
-    $('#adios_console').fadeIn();
-    $('#adios_console').css('margin-right', 'auto');
-    $('#adios_console').removeClass('minimized');
-  };
+  // function desktop_show_console(){
+  //   $('#adios_console_content').show();
+  //   $('#adios_console').fadeIn();
+  //   $('#adios_console').css('margin-right', 'auto');
+  //   $('#adios_console').removeClass('minimized');
+  // };
 
-  function desktop_toggle_console(){
-    if ($('#adios_console_content').is(':visible') && $('.adios_notifications').position().left > 0){
-      $('#adios_console').addClass('minimized');
-      $('#adios_console').css('margin-right', ($('body').width()-$('.adios_notifications').position().left));
-      Cookies.set('adios_console_state', 'min', 1);
-    }else{
-      $('#adios_console').css('margin-right', 'auto');
-      $('#adios_console').removeClass('minimized');
-      Cookies.set('adios_console_state', 'max', 1);
-    };
-    $('#adios_console_content').toggle();
-  };
+  // function desktop_toggle_console(){
+  //   if ($('#adios_console_content').is(':visible') && $('.adios_notifications').position().left > 0){
+  //     $('#adios_console').addClass('minimized');
+  //     $('#adios_console').css('margin-right', ($('body').width()-$('.adios_notifications').position().left));
+  //     Cookies.set('adios_console_state', 'min', 1);
+  //   }else{
+  //     $('#adios_console').css('margin-right', 'auto');
+  //     $('#adios_console').removeClass('minimized');
+  //     Cookies.set('adios_console_state', 'max', 1);
+  //   };
+  //   $('#adios_console_content').toggle();
+  // };
 
-  function desktop_hide_console(onafterhide){
-    $('#adios_console').fadeOut(function() {
-      if (typeof onafterhide == 'function') {
-        onafterhide();
-      }
-    });
-  };
+  // function desktop_hide_console(onafterhide){
+  //   $('#adios_console').fadeOut(function() {
+  //     if (typeof onafterhide == 'function') {
+  //       onafterhide();
+  //     }
+  //   });
+  // };
 
-  function desktop_clear_console(){
-    desktop_hide_console(function() {
-      $('#adios_console_content .adios_console_item').remove();
-      _ajax_read('Desktop/Ajax/ClearConsole', '');
-    });
-  };
+  // function desktop_clear_console(){
+  //   desktop_hide_console(function() {
+  //     $('#adios_console_content .adios_console_item').remove();
+  //     _ajax_read('Desktop/Ajax/ClearConsole', '');
+  //   });
+  // };
 
-  function adios_console_log(header, message){
-    _adios_console_log(header, message);
-  };
+  // function adios_console_log(header, message){
+  //   _adios_console_log(header, message);
+  // };
 
-  function _adios_console_log(header, message){
-    if (!($('#adios_console').is(':visible'))){
-      $('#adios_console').fadeIn();
-      $('#adios_console_content').slideDown();
-      // if (Cookies.get('adios_console_state') == 'min') desktop_toggle_console();
-    };
-    $('#adios_console_content').prepend("<div class='adios_console_item'><b>"+header+"</b><br/>"+message+"</div>");
-    document.desktop_console_counter++;
-    $('#adios_console').addClass('highlight');
-    setTimeout(function(){$('#adios_console').removeClass('highlight');}, 1000);
+  // function _adios_console_log(header, message){
+  //   if (!($('#adios_console').is(':visible'))){
+  //     $('#adios_console').fadeIn();
+  //     $('#adios_console_content').slideDown();
+  //     // if (Cookies.get('adios_console_state') == 'min') desktop_toggle_console();
+  //   };
+  //   $('#adios_console_content').prepend("<div class='adios_console_item'><b>"+header+"</b><br/>"+message+"</div>");
+  //   document.desktop_console_counter++;
+  //   $('#adios_console').addClass('highlight');
+  //   setTimeout(function(){$('#adios_console').removeClass('highlight');}, 1000);
 
-  };
+  // };
 
-  function desktop_console_update() {
-    if (_DEVEL_MODE) {
-      _ajax_read('Desktop/Ajax/GetConsoleAndNotificationsContent', {}, function(res) {
-        if (res['console']) {
-          for (var i in res['console']) {
-            var tmp_header = res['console'][i].header;
-            var tmp_message = res['console'][i].message;
-            _adios_console_log(tmp_header, tmp_message);
-          }
-        }
+  // function desktop_console_update() {
+  //   if (_DEVEL_MODE) {
+  //     _ajax_read('Desktop/Ajax/GetConsoleAndNotificationsContent', {}, function(res) {
+  //       if (res['console']) {
+  //         for (var i in res['console']) {
+  //           var tmp_header = res['console'][i].header;
+  //           var tmp_message = res['console'][i].message;
+  //           _adios_console_log(tmp_header, tmp_message);
+  //         }
+  //       }
 
-        if (res['notifications']) {
-          for (var i in res['notifications']) {
-            tmp['notifications'][i]['from_session'] = 1;
-            desktop_notification(res['notifications'][i]);
-          }
-        }
-      });
-    }
-  };
+  //       if (res['notifications']) {
+  //         for (var i in res['notifications']) {
+  //           tmp['notifications'][i]['from_session'] = 1;
+  //           desktop_notification(res['notifications'][i]);
+  //         }
+  //       }
+  //     });
+  //   }
+  // };
 
-  function desktop_get_read_notifications() {
-    _ajax_read('Desktop/Ajax/get_read_notifications', {}, function(res) {
-      try {
-        var notifications = JSON.parse(res);
+  // function desktop_get_read_notifications() {
+  //   _ajax_read('Desktop/Ajax/get_read_notifications', {}, function(res) {
+  //     try {
+  //       var notifications = JSON.parse(res);
 
-        for (var i in notifications) {
-          notifications[i]['from_session'] = 1;
-          desktop_notification(notifications[i]);
-        };
+  //       for (var i in notifications) {
+  //         notifications[i]['from_session'] = 1;
+  //         desktop_notification(notifications[i]);
+  //       };
 
-      } catch(ex) { window.console.log('adios notifications write error: '+res); };
-    });
-  };
+  //     } catch(ex) { window.console.log('adios notifications write error: '+res); };
+  //   });
+  // };
 
   // function desktop_update_scale(scale){
   //   $('.adios_zoom_image').hide();
@@ -467,193 +467,193 @@
 
 
   
-  function desktop_notification(data){
-    //parametre: type, header, text, onclick, icon, seconds, audio, id, mandatory
-    $('.adios_notifications #notifications_count').fadeIn();
+  // function desktop_notification(data){
+  //   //parametre: type, header, text, onclick, icon, seconds, audio, id, mandatory
+  //   $('.adios_notifications #notifications_count').fadeIn();
 
-    var clickable = 'clickable';
-    var seconds = 5;
-    var image = '';
-    var el_id = '';
-    var read = '';
-    var mandatory = '';
-
-
-    if (typeof data.onclick == 'undefined') data.onclick = '';
-    if (typeof data.header == 'undefined') data.header = 'Header';
-    if (typeof data.text == 'undefined') data.text = 'Text';
-    if (typeof data.type == 'undefined') data.type = 'info';
-    var d = new Date();
-    if (typeof data.time == 'undefined') data.time = (d.getHours() < 10 ? '0'+d.getHours() : d.getHours())+':'+(d.getMinutes() < 10 ? '0'+d.getMinutes() : d.getMinutes());
-    if (typeof data.audio == 'undefined') data.audio = $('.adios_notifications').attr('data-audio');;
-    if (typeof data.from_session == 'undefined') data.from_session = false;
-    if (typeof data.uid == 'undefined') data.uid = '';
-    if (typeof data.read == 'undefined') data.read = '';
-    if (typeof data.mandatory == 'undefined') data.mandatory = false;
-
-    if (data.onclick != ''){
-      clickable = 'clickable';
-    };
-
-    if (data.type == 'info'){
-      image = $('.adios_notifications').attr('data-image-info');
-      seconds = 3;
-    }else if (data.type == 'warning'){
-      seconds = 5;
-      image = $('.adios_notifications').attr('data-image-warning');
-    }else if (data.type == 'error'){
-      seconds = 10;
-      image = $('.adios_notifications').attr('data-image-error');
-    }else{
-      seconds = 2;
-      image = $('.adios_notifications').attr('data-image-log');
-    };
-
-    if (typeof data.seconds == 'undefined')  data.seconds = seconds;
-    if (typeof data.image == 'undefined')  data.image = image;
-
-    if (data.read){
-      read = 'read';
-    };
-
-    if (data.mandatory){
-      mandatory = 'mandatory';
-    };
+  //   var clickable = 'clickable';
+  //   var seconds = 5;
+  //   var image = '';
+  //   var el_id = '';
+  //   var read = '';
+  //   var mandatory = '';
 
 
-    if (!data.from_session){
-      _ajax_read('Desktop/Ajax/save_notification', data, function(res){
-      });
-    };
+  //   if (typeof data.onclick == 'undefined') data.onclick = '';
+  //   if (typeof data.header == 'undefined') data.header = 'Header';
+  //   if (typeof data.text == 'undefined') data.text = 'Text';
+  //   if (typeof data.type == 'undefined') data.type = 'info';
+  //   var d = new Date();
+  //   if (typeof data.time == 'undefined') data.time = (d.getHours() < 10 ? '0'+d.getHours() : d.getHours())+':'+(d.getMinutes() < 10 ? '0'+d.getMinutes() : d.getMinutes());
+  //   if (typeof data.audio == 'undefined') data.audio = $('.adios_notifications').attr('data-audio');;
+  //   if (typeof data.from_session == 'undefined') data.from_session = false;
+  //   if (typeof data.uid == 'undefined') data.uid = '';
+  //   if (typeof data.read == 'undefined') data.read = '';
+  //   if (typeof data.mandatory == 'undefined') data.mandatory = false;
 
-    if (data.uid != ''){
-      el_id = 'adios_notification_id_'+data.uid;
-      $('.'+el_id).remove();
-    };
+  //   if (data.onclick != ''){
+  //     clickable = 'clickable';
+  //   };
 
-    var html = "<div class='notification_item "+data.type+" "+read+" "+mandatory+" "+clickable+" "+el_id+"' data-n-type=\""+data.type+"\" onclick=\""+data.onclick+" desktop_deactivate_notification(this); \" >"+
-                 "<div class='n_header'>"+data.header+"</div>"+
-                 "<div class='n_body'>"+data.text+"</div>"+
-                 "<div class='n_time'>"+data.time+" "+(data.mandatory ? "<img src='"+$('.adios_notifications').attr('data-image-mandatory')+"' title='"+$('.adios_notifications').attr('data-image-mandatory-title')+"' />" : "")+"</div>"+
-                 "<div class='n_icon'>"+
-                  "<img src='"+data.image+"' class='menu_icon'>"+
-                "</div>"+
-              "</div>";
+  //   if (data.type == 'info'){
+  //     image = $('.adios_notifications').attr('data-image-info');
+  //     seconds = 3;
+  //   }else if (data.type == 'warning'){
+  //     seconds = 5;
+  //     image = $('.adios_notifications').attr('data-image-warning');
+  //   }else if (data.type == 'error'){
+  //     seconds = 10;
+  //     image = $('.adios_notifications').attr('data-image-error');
+  //   }else{
+  //     seconds = 2;
+  //     image = $('.adios_notifications').attr('data-image-log');
+  //   };
 
+  //   if (typeof data.seconds == 'undefined')  data.seconds = seconds;
+  //   if (typeof data.image == 'undefined')  data.image = image;
 
+  //   if (data.read){
+  //     read = 'read';
+  //   };
 
-    if (!data.read){
-      $('.adios_notifications #notifications_content').prepend(html);
-      $('.adios_notifications #notifications_preview').prepend(html);
-      $('.adios_notifications #notifications_preview .notification_item:first-child').hide();
-      $('.adios_notifications #notifications_preview .notification_item:first-child').slideDown('fast', function(){ $(this).delay(data.seconds*1000).slideUp('slow', function(){ $(this).remove();}); });
-    }else{
-      $('.adios_notifications #notifications_content .end_identifier').before(html);
-    };
-
-    desktop_notifications_check_priority();
-
-    if (!document.notification_sound_played && data.audio != ''){
-      var audio = new Audio(data.audio) ;
-      audio.play();
-      document.notification_sound_played = 1;
-      setTimeout(function(){ document.notification_sound_played = 0; }, 2000);
-    };
-
-    $('#notifications_count .count').html($('.adios_notifications #notifications_content .notification_item:not(.read)').length);
+  //   if (data.mandatory){
+  //     mandatory = 'mandatory';
+  //   };
 
 
-  }
+  //   if (!data.from_session){
+  //     _ajax_read('Desktop/Ajax/save_notification', data, function(res){
+  //     });
+  //   };
+
+  //   if (data.uid != ''){
+  //     el_id = 'adios_notification_id_'+data.uid;
+  //     $('.'+el_id).remove();
+  //   };
+
+  //   var html = "<div class='notification_item "+data.type+" "+read+" "+mandatory+" "+clickable+" "+el_id+"' data-n-type=\""+data.type+"\" onclick=\""+data.onclick+" desktop_deactivate_notification(this); \" >"+
+  //                "<div class='n_header'>"+data.header+"</div>"+
+  //                "<div class='n_body'>"+data.text+"</div>"+
+  //                "<div class='n_time'>"+data.time+" "+(data.mandatory ? "<img src='"+$('.adios_notifications').attr('data-image-mandatory')+"' title='"+$('.adios_notifications').attr('data-image-mandatory-title')+"' />" : "")+"</div>"+
+  //                "<div class='n_icon'>"+
+  //                 "<img src='"+data.image+"' class='menu_icon'>"+
+  //               "</div>"+
+  //             "</div>";
+
+
+
+  //   if (!data.read){
+  //     $('.adios_notifications #notifications_content').prepend(html);
+  //     $('.adios_notifications #notifications_preview').prepend(html);
+  //     $('.adios_notifications #notifications_preview .notification_item:first-child').hide();
+  //     $('.adios_notifications #notifications_preview .notification_item:first-child').slideDown('fast', function(){ $(this).delay(data.seconds*1000).slideUp('slow', function(){ $(this).remove();}); });
+  //   }else{
+  //     $('.adios_notifications #notifications_content .end_identifier').before(html);
+  //   };
+
+  //   desktop_notifications_check_priority();
+
+  //   if (!document.notification_sound_played && data.audio != ''){
+  //     var audio = new Audio(data.audio) ;
+  //     audio.play();
+  //     document.notification_sound_played = 1;
+  //     setTimeout(function(){ document.notification_sound_played = 0; }, 2000);
+  //   };
+
+  //   $('#notifications_count .count').html($('.adios_notifications #notifications_content .notification_item:not(.read)').length);
+
+
+  // }
 
   // function _desktop_notification(data){
   //   desktop_notification(data);
   // };
 
-  function desktop_deactivate_notification(obj){
+  // function desktop_deactivate_notification(obj){
 
-    $(obj).addClass('read');
-    desktop_notifications_check_priority();
-    $('#notifications_count .count').html($('.adios_notifications #notifications_content .notification_item:not(.read)').length);
-    //$('#notifications_content').fadeOut();
-  };
+  //   $(obj).addClass('read');
+  //   desktop_notifications_check_priority();
+  //   $('#notifications_count .count').html($('.adios_notifications #notifications_content .notification_item:not(.read)').length);
+  //   //$('#notifications_content').fadeOut();
+  // };
 
-  function desktop_deactivate_notifications(){
-    if(!document.notification_deactivate_blocked && $('#notifications_content').is(':visible')){
-      desktop_notifications_check_priority();
-      $('.adios_notifications .notification_item:not(.mandatory)').addClass('read');
-      $('.adios_notifications .notification_item.mandatory:not(.read)').find('.n_time img').animate(
-        {opacity: 1}, 200, function(){
-          $(this).animate({opacity:0.3}, 200, function(){
-            $(this).animate({opacity: 1}, 200, function(){
-              $(this).animate({opacity:0.4}, 200);
-            });
-          });
-        });
+  // function desktop_deactivate_notifications(){
+  //   if(!document.notification_deactivate_blocked && $('#notifications_content').is(':visible')){
+  //     desktop_notifications_check_priority();
+  //     $('.adios_notifications .notification_item:not(.mandatory)').addClass('read');
+  //     $('.adios_notifications .notification_item.mandatory:not(.read)').find('.n_time img').animate(
+  //       {opacity: 1}, 200, function(){
+  //         $(this).animate({opacity:0.3}, 200, function(){
+  //           $(this).animate({opacity: 1}, 200, function(){
+  //             $(this).animate({opacity:0.4}, 200);
+  //           });
+  //         });
+  //       });
 
-      $('.adios_notifications #notifications_preview .notification_item').hide();
-      $('#notifications_count .count').html($('.adios_notifications #notifications_content .notification_item:not(.read)').length);
-    };
-  }
+  //     $('.adios_notifications #notifications_preview .notification_item').hide();
+  //     $('#notifications_count .count').html($('.adios_notifications #notifications_content .notification_item:not(.read)').length);
+  //   };
+  // }
 
-  function desktop_show_notifications(){
-    document.notification_deactivate_blocked = 1;
+  // function desktop_show_notifications(){
+  //   document.notification_deactivate_blocked = 1;
 
-    clearTimeout(document.show_notifications_timeout);
-    $('#notifications_content').stop(true, true);
-    $('#notifications_content').fadeIn();
-    $('.adios_notifications .notifications_show_all').hide();
-    // cely tento timeout je spraveny len kvoli mobilnym zariadeniam - aby sa pri kliknuti a prvom zobrazeni hned nedeaktivovali vsetky
-    setTimeout(function(){ document.notification_deactivate_blocked = 0; }, 200);
-    if ($('.adios_notifications #notifications_content .notification_item').length > 3){
-      $('.adios_notifications #notifications_content .notification_item.read').hide();
-      $('.adios_notifications #notifications_content .notification_item.read:nth-child(1)').show();
-      $('.adios_notifications #notifications_content .notification_item.read:nth-child(2)').show();
-      $('.adios_notifications #notifications_content .notification_item.read:nth-child(3)').show();
-      if ($('.adios_notifications #notifications_content .notification_item:hidden').length > 0){
-        $('.adios_notifications .notifications_show_all').show();
-      };
-    };
+  //   clearTimeout(document.show_notifications_timeout);
+  //   $('#notifications_content').stop(true, true);
+  //   $('#notifications_content').fadeIn();
+  //   $('.adios_notifications .notifications_show_all').hide();
+  //   // cely tento timeout je spraveny len kvoli mobilnym zariadeniam - aby sa pri kliknuti a prvom zobrazeni hned nedeaktivovali vsetky
+  //   setTimeout(function(){ document.notification_deactivate_blocked = 0; }, 200);
+  //   if ($('.adios_notifications #notifications_content .notification_item').length > 3){
+  //     $('.adios_notifications #notifications_content .notification_item.read').hide();
+  //     $('.adios_notifications #notifications_content .notification_item.read:nth-child(1)').show();
+  //     $('.adios_notifications #notifications_content .notification_item.read:nth-child(2)').show();
+  //     $('.adios_notifications #notifications_content .notification_item.read:nth-child(3)').show();
+  //     if ($('.adios_notifications #notifications_content .notification_item:hidden').length > 0){
+  //       $('.adios_notifications .notifications_show_all').show();
+  //     };
+  //   };
 
-  }
+  // }
 
-  function desktop_hide_notifications(){
-    $('.adios_notifications #notifications_preview .notification_item').hide();
-    document.show_notifications_timeout = setTimeout(function(){ $('#notifications_content').stop(true, true); $('#notifications_content').fadeOut(); }, 200);
-  };
+  // function desktop_hide_notifications(){
+  //   $('.adios_notifications #notifications_preview .notification_item').hide();
+  //   document.show_notifications_timeout = setTimeout(function(){ $('#notifications_content').stop(true, true); $('#notifications_content').fadeOut(); }, 200);
+  // };
 
-  function desktop_show_all_notifications(){
-    $('.adios_notifications #notifications_content .notification_item').show();
-    $('.adios_notifications .notifications_show_all').hide();
-  };
+  // function desktop_show_all_notifications(){
+  //   $('.adios_notifications #notifications_content .notification_item').show();
+  //   $('.adios_notifications .notifications_show_all').hide();
+  // };
 
-  function desktop_notifications_check_priority(){
-    var not_class = 'log';
-    $('.adios_notifications #notifications_content .notification_item').each(function(){
-      if (!$(this).hasClass('read')){
-        var type = $(this).attr('data-n-type');
-        if (not_class == 'log'){
-          not_class = type;
-        }else if (not_class == 'info'){
-          if (type != 'log') not_class = type;
-        }else if (not_class == 'warning'){
-          if (type == 'error') not_class = type;
-        }else{
-          if (type == 'error' || type == 'warning') not_class = type;
-        };
-      };
-    });
-      $('#notifications_count').removeClass();
-      $('#notifications_count').addClass(not_class);
+  // function desktop_notifications_check_priority(){
+  //   var not_class = 'log';
+  //   $('.adios_notifications #notifications_content .notification_item').each(function(){
+  //     if (!$(this).hasClass('read')){
+  //       var type = $(this).attr('data-n-type');
+  //       if (not_class == 'log'){
+  //         not_class = type;
+  //       }else if (not_class == 'info'){
+  //         if (type != 'log') not_class = type;
+  //       }else if (not_class == 'warning'){
+  //         if (type == 'error') not_class = type;
+  //       }else{
+  //         if (type == 'error' || type == 'warning') not_class = type;
+  //       };
+  //     };
+  //   });
+  //     $('#notifications_count').removeClass();
+  //     $('#notifications_count').addClass(not_class);
 
-  };
+  // };
 
-  function desktop_delete_notification_history(){
-    $('.adios_notifications #notifications_content .notification_item').remove();
-    desktop_notifications_check_priority();
-    $('#notifications_count .count').html($('.adios_notifications #notifications_content .notification_item:not(.read)').length);
-    $('.adios_notifications #notifications_count').fadeOut();
-    _ajax_read('Desktop/Ajax/clear_notifications', {});
-  }
+  // function desktop_delete_notification_history(){
+  //   $('.adios_notifications #notifications_content .notification_item').remove();
+  //   desktop_notifications_check_priority();
+  //   $('#notifications_count .count').html($('.adios_notifications #notifications_content .notification_item:not(.read)').length);
+  //   $('.adios_notifications #notifications_count').fadeOut();
+  //   _ajax_read('Desktop/Ajax/clear_notifications', {});
+  // }
 
 
   // $(document).ready(function(){
@@ -661,8 +661,8 @@
   // });
 
 
-  document.desktop_console_counter = 0;
-  document.notification_deactivate_blocked = 0;
+  // document.desktop_console_counter = 0;
+  // document.notification_deactivate_blocked = 0;
 
   // desktop_register_shortcut('F10', 'Settings', function() { desktop_show_settings(); });
 

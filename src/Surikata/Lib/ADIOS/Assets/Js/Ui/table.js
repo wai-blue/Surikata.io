@@ -53,12 +53,16 @@
       // params.table = $('#' + uid).attr('data-table');
 
       $('.' + uid + '_column_filter').each(function () {
-        params['column_filter_' + $(this).attr('data-col-name')] = $(this).val();
+        if ($(this).val() != '') {
+          params['column_filter_' + $(this).attr('data-col-name')] = $(this).val();
+        }
       });
 
       $('.' + uid + '_table_custom_filter_select').each(function () {
-        var tmp = 'set_custom_filter_' + $(this).attr('data-filter-name');
-        params[tmp] = $(this).val();
+        if ($(this).val() != '') {
+          var tmp = 'set_custom_filter_' + $(this).attr('data-filter-name');
+          params[tmp] = $(this).val();
+        }
       });
 
       params.refresh = 1;

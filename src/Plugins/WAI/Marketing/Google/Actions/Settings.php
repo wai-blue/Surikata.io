@@ -15,16 +15,16 @@ class Settings extends \ADIOS\Core\Plugin\Action {
             "title" => $this->translate("Google Analytics Code"),
             "input" => $this->adios->ui->Input([
               "type" => "text",
-              "uid" => "{$this->uid}_{$domain['name']}_googleAnalytics",
-              "value" => $settings["{$domain['name']}_googleAnalytics"],
+              "uid" => "{$this->uid}_{$domain['name']}_analytics",
+              "value" => $settings["{$domain['name']}_analytics"],
             ]),
           ],
           [
             "title" => $this->translate("Google Tag Manager Code"),
             "input" => $this->adios->ui->Input([
               "type" => "text",
-              "uid" => "{$this->uid}_{$domain['name']}_googleTagManager",
-              "value" => $settings["{$domain['name']}_googleTagManager"],
+              "uid" => "{$this->uid}_{$domain['name']}_tagManager",
+              "value" => $settings["{$domain['name']}_tagManager"],
             ]),
           ],
         ],

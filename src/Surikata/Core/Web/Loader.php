@@ -633,9 +633,9 @@ class Loader extends \Cascada\Loader {
     $globalTwigParams["currentYear"] = date("Y");
     $globalTwigParams["today"] = date("Y-m-d");
     $globalTwigParams["settings"] = [
-        "web" => $this->adminPanel->webSettings,
-        "plugins" => $this->adminPanel->config["settings"]["plugins"]
-      ];
+      "web" => $this->adminPanel->webSettings,
+      "plugins" => $this->adminPanel->config["settings"]["plugins"]
+    ];
     $globalTwigParams["languageIndex"] = $this->domain['languageIndex'];
     $globalTwigParams[ "urlVariables"] = $this->urlVariables;
     $globalTwigParams["uploadedFileUrl"] = $this->adminPanel->config['files_url'];

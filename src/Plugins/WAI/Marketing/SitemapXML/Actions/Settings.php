@@ -25,7 +25,7 @@ class Settings extends \ADIOS\Core\Plugin\Action {
     }
 
     return $this->adios->renderAction("UI/SettingsPanel", [
-      "settings_group" => "plugins/WAI/Marketing/Google",
+      "settings_group" => "plugins/WAI/Marketing/SitemapXML",
       "title" => $this->translate("SitemapXML"),
       "template" => [
         "tabs" => $tabs,

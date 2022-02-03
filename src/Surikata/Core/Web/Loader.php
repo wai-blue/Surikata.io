@@ -401,7 +401,7 @@ class Loader extends \Cascada\Loader {
       }
 
       $snippetRenderParams = array_merge(
-        $this->currentRenderedPlugin->twigRenderParams,
+        (array)$this->currentRenderedPlugin->twigRenderParams,
         $renderParams,
         $pluginTwigParams
       );

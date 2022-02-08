@@ -15,17 +15,17 @@ namespace Surikata\Plugins\WAI\Misc {
     ];
 
     public function getWebPageUrlFormatted($urlVariables, $pluginSettings = [], $domain = "") {
-
       $languageIndex = (int) $this->websiteRenderer->domain["languageIndex"];
       $url = $pluginSettings["urlPattern"] ?? $this->defaultWebsiteSearchdUrl[$languageIndex];
-      return $url;
 
+      return $url;
     }
 
     public function getSearchableFields($model = null) {
       if (is_null($model)) {
         return $this->searchableFields;
       }
+
       return $this->searchableFields[$model];
     }
 
@@ -35,6 +35,7 @@ namespace Surikata\Plugins\WAI\Misc {
         "ProductCategory" => "searchInProductCategories",
         "Blog" => "searchInBlogs",
       ];
+
       $this->searchableFields = array();
       foreach ($models as $model => $key) {
         $fields = explode(",",$params[$key]);
@@ -46,11 +47,11 @@ namespace Surikata\Plugins\WAI\Misc {
       foreach ($this->getSearchableFields($model) as $key => $searchableField) {
         if ($key === 0) {
           $query->where($searchableField.$fieldSuffix, 'like', '%' . $searchValue . '%');
-        }
-        else {
+        } else {
           $query->orWhere($searchableField.$fieldSuffix, 'like', '%' . $searchValue . '%');
         }
       }
+
       return $query;
     }
 
@@ -98,7 +99,7 @@ namespace Surikata\Plugins\WAI\Misc {
     public function searchResults(?string $query = "") {
       // Fulltext search across website
       $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
-      $returnArray = array();
+      $returnArray = [];
 
       if (strlen($query) > 1) {
 
@@ -119,13 +120,15 @@ namespace Surikata\Plugins\WAI\Misc {
         // Search in products
         $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adminPanel);
         $productCategoryModel = $this->adminPanel
-          ->getModel("Widgets/Products/Models/ProductCategory");
+          ->getModel("Widgets/Products/Models/ProductCategory")
+        ;
 
         $productsQuery = $productModel->getQuery();
         $productsQuery->select("*");
         $productsQuery = $this->setWhereOrClausule($productsQuery, "Product", "_".$languageIndex, $query);
         $productsQuery->skip(0)->take(40);
         $products = $productModel->fetchRows($productsQuery); // TODO: UPPERCASE LOOKUP
+        
         if (count($products) > 0) {
           $returnArray[] = [
             "model" => "Divider",
@@ -133,12 +136,15 @@ namespace Surikata\Plugins\WAI\Misc {
             "count" => count($products),
           ];
         }
+
         foreach ($products as $product) {
           $product["url"] = $currentRootUrl . $productDetailPlugin->getWebPageUrl($product); // TODO: UPPERCASE LOOKUP
+          
           $product['PRICE'] = $this->adminPanel
             ->getModel("Widgets/Products/Models/Product")
             ->getPriceInfoForSingleProduct($product["id"])
           ;
+
           $product = $productModel->translateSingleProductForWeb($product, $languageIndex);
           $product["category"] = "Products"; //$cachedCategories[$product["id_category"]]["name_lang_" . $languageIndex];
           $returnArray[] = [
@@ -151,7 +157,10 @@ namespace Surikata\Plugins\WAI\Misc {
         $productCategoriesQuery = $productCategoryModel->getQuery();
         $productCategoriesQuery->select("*");
 
-        $productCategoriesQuery = $this->setWhereOrClausule($productCategoriesQuery, "ProductCategory", "_".$languageIndex, $query);
+        $productCategoriesQuery = 
+          $this->setWhereOrClausule($productCategoriesQuery, "ProductCategory", "_".$languageIndex, $query)
+        ;
+
         $productCategoriesQuery->skip(0)->take(20);
 
         $categories = $productCategoryModel->fetchRows($productCategoriesQuery); // TODO: UPPERCASE LOOKUP
@@ -164,6 +173,7 @@ namespace Surikata\Plugins\WAI\Misc {
             "count" => count($categories),
           ];
         }
+
         foreach ($categories as $category) {
           $urlVariables = $productCatalogPlugin->extractUrlVariablesFromCategory($category);
           $category["additional_info"] = $productCatalogPlugin->getCatalogInfo($category["id"]);
@@ -191,6 +201,7 @@ namespace Surikata\Plugins\WAI\Misc {
             "count" => count($blogs),
           ];
         }
+
         foreach ($blogs as $blog) {
           $blog["url"] = $currentRootUrl . $blogDetailPlugin->getWebPageUrlFormatted($blog);
           $blog["category"] = "Blog";
@@ -217,13 +228,15 @@ namespace Surikata\Plugins\WAI\Misc {
             case "recommended":
               $productQuery = $productModel
                 ->where("is_recommended", TRUE)
-                ->skip(0)->take($take);
-              break;
+                ->skip(0)->take($take)
+              ;
+            break;
             case "on_sale":
               $productQuery = $productModel
                 ->where("is_on_sale", TRUE)
-                ->skip(0)->take($take);
-              break;
+                ->skip(0)->take($take)
+              ;
+            break;
           }
 
           $products = $productModel->fetchRows($productQuery);

@@ -15,9 +15,9 @@
     var _APP_URL = '{{ config.url }}';
     var _DEVEL_MODE = {% if config.devel_mode %} true {% else %} false {% endif %};
 
-    if (_DEVEL_MODE) {
+    {# if (_DEVEL_MODE) {
       setTimeout(desktop_console_update, 300);
-    }
+    } #}
 
     var _LANG = '{{ config.language }}';
     var _TRANSLATIONS = adios_language_translations[_LANG];
@@ -29,7 +29,7 @@
   <div id='adios_loader_line'></div>
   <div id='adios_window_wrapper'></div>
 
-  <div id='adios_console'>
+  <!-- <div id='adios_console'>
     <div id='adios_console_close' onclick='desktop_hide_console();'>
       <i class="fas fa-times" title="Close console"></i>
     </div>
@@ -42,7 +42,7 @@
     </div>
     <div id='adios_console_content'>
     </div>
-  </div>
+  </div> -->
 
   {% if userNotifications|length > 0 %}
     <div id='adios_user_notifications'>
@@ -243,8 +243,8 @@
                   {% endfor %}
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#logoutModal">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Log out
+                    <i class="{{ settingsLogoutItems.fa_icon }} fa-sm fa-fw mr-2 text-gray-400"></i>
+                    {{ settingsLogoutItems.text }}
                   </a>
                 </div>
               </li>
@@ -290,7 +290,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Are you sure to log out?</h5>
+          <h5 class="modal-title" id="exampleModalLabel">{{ settingsLogoutItems.consent }}</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
@@ -298,11 +298,11 @@
         <div class="modal-footer">
           <button class="btn btn-secondary btn-icon-split" type="button" data-dismiss="modal">
             <span class="icon"><i class="fas fa-long-arrow-alt-left"></i></span>
-            <span class="text">Do not logout</span>
+            <span class="text">{{ settingsLogoutItems.not_logout }}</span>
           </button>
           <a class="btn btn-primary btn-icon-split" href="{{ config.url }}/Logout">
             <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
-            <span class="text">Log out</span>
+            <span class="text">{{ settingsLogoutItems.text }}</span>
           </a>
         </div>
       </div>

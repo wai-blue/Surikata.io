@@ -339,6 +339,21 @@ namespace ADIOS\Plugins\WAI\Product {
       return $siteMap;
     }
 
+    public function getSitemapXMLData() {
+      $data = [];
+      
+      $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adios);
+      $products = $productModel->getAll();
+
+      foreach ($products as $product) {
+        $data[] = [
+          'url' => $this->adios->websiteRenderer->getPlugin("WAI/Product/Detail")->getWebpageUrl($product),
+        ];
+      }
+
+      return $data;
+    }
+
     public function getSettingsForWebsite() {
       return [
         "urlForProductsInCategory" => [

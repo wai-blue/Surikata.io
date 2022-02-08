@@ -23,12 +23,7 @@ class InstallUpgrades extends \ADIOS\Core\Action {
     foreach ($this->adios->models as $modelName) {
       $model = $this->adios->getModel($modelName);
 
-      if (!$model->hasSqlTable()) {
-        $model->install();
-        $foreignKeysToInstall[] = $modelName;
-        $model->saveConfig('installed-version', max(array_keys($model->upgrades())));
-        $contentHtml .= "{$model->name}: <span style='color:green'>SQL table created</span><br/>";
-      } else if ($model->hasAvailableUpgrades()) {
+      if ($model->hasAvailableUpgrades()) {
         $contentHtml .= "{$model->name}: ";
         try {
           $model->installUpgrades();
@@ -36,6 +31,11 @@ class InstallUpgrades extends \ADIOS\Core\Action {
         } catch (\ADIOS\Core\Exceptions\DBException $e) {
           $contentHtml .= "<span style='color:red'>".$e->getMessage()."</span><br/>";
         }
+      } else if (!$model->hasSqlTable()) {
+        $model->install();
+        $foreignKeysToInstall[] = $modelName;
+        $model->saveConfig('installed-version', max(array_keys($model->upgrades())));
+        $contentHtml .= "{$model->name}: <span style='color:green'>SQL table created</span><br/>";
       } else if (!$model->isInstalled()) {
         $contentHtml .= "<span style='color:orange'>{$model->name}: Information about installed version was missing. Set to 0.</span><br/>";
         $model->saveConfig('installed-version', 0);

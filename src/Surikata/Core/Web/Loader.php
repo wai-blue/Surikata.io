@@ -84,7 +84,7 @@ class Loader extends \Cascada\Loader {
 
       $this->domain = $this->getDomainInfo($this->config["domainToRender"]);
 
-      $this->adminPanel->webSettings = $this->loadSurikataSettings("web/{$this->domain['name']}");
+      $this->adminPanel->webSettings = $this->adminPanel->config["settings"]["web"][$this->domain['name']];
 
       $this->themeName = $this->adminPanel->webSettings["design"]["theme"];
 
@@ -370,9 +370,8 @@ class Loader extends \Cascada\Loader {
     $siteMap = array_merge($siteMap, $siteMapDomain);
 
     $siteMap = $this->adminPanel->dispatchEventToPlugins("onAfterSiteMap", [
-      "site_map" => $siteMap,
-      "website_renderer" => $this,
-    ])["site_map"];
+      "siteMap" => $siteMap,
+    ])["siteMap"];
 
     if (!is_array($siteMap)) $siteMap = [];
 
@@ -402,7 +401,7 @@ class Loader extends \Cascada\Loader {
       }
 
       $snippetRenderParams = array_merge(
-        $this->currentRenderedPlugin->twigRenderParams,
+        (array)$this->currentRenderedPlugin->twigRenderParams,
         $renderParams,
         $pluginTwigParams
       );
@@ -429,36 +428,6 @@ class Loader extends \Cascada\Loader {
 
   public function onGeneralControllerAfterRouting() {
     // to be overriden
-  }
-
-  /**
-   * Loads settings of the website configured by the user in the administration panel.
-   * 
-   * @param string group Name of the settings group.
-   * 
-   * @return array Website settings configured in the administration panel.
-   * */
-  public function loadSurikataSettings($group) {
-    $path = "settings/{$group}/";
-
-    $tmp = (new \ADIOS\Core\Models\Config($this->adminPanel))
-      ->where('path', 'like', "{$path}%")
-      ->get()
-      ->toArray()
-    ;
-
-    $settings = [];
-    foreach ($tmp as $value) {
-      $tmp_path = str_replace($path, "", $value['path']);
-      list($tmp_level_1, $tmp_level_2) = explode("/", $tmp_path);
-      if (empty($tmp_level_2)) {
-        $settings[$tmp_level_1] = $value['value'];
-      } else {
-        $settings[$tmp_level_1][$tmp_level_2] = $value['value'];
-      }
-    }
-    
-    return $settings;
   }
 
   /**
@@ -657,8 +626,25 @@ class Loader extends \Cascada\Loader {
 
   public function getGlobalTwigParams() {
     $globalTwigParams['filesUrl'] = $this->adminPanel->config['files_url'];
-    $globalTwigParams['domain']['slug'] = $this->adminPanel->websiteRenderer->domain["slug"];
+    $globalTwigParams['domain'] = $this->domain;
     $globalTwigParams['rootUrl'] = rtrim($this->rewriteBase, "/");
+
+    $globalTwigParams["customerUID"] = $this->getCustomerUID();
+    $globalTwigParams["currentYear"] = date("Y");
+    $globalTwigParams["today"] = date("Y-m-d");
+    $globalTwigParams["settings"] = [
+      "web" => $this->adminPanel->webSettings,
+      "plugins" => $this->adminPanel->config["settings"]["plugins"]
+    ];
+    $globalTwigParams["languageIndex"] = $this->domain['languageIndex'];
+    $globalTwigParams[ "urlVariables"] = $this->urlVariables;
+    $globalTwigParams["uploadedFileUrl"] = $this->adminPanel->config['files_url'];
+    $globalTwigParams["header"] = [
+      "metaKeywords" => $this->currentPage["seo_keywords"] ?? "",
+      "metaDescription" => $this->currentPage["seo_description"] ?? "",
+      "pageTitle" => $this->currentPage["seo_title"] ?? "",
+    ];
+    $globalTwigParams["locale"] = $this->adminPanel->locale->getAll();
 
     foreach ($this->adminPanel->plugins as $pluginName) {
       if (!in_array($pluginName, [".", ".."])) {

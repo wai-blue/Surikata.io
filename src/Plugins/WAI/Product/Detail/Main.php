@@ -5,6 +5,7 @@ namespace Surikata\Plugins\WAI\Product {
   use ADIOS\Widgets\Products\Models\ProductFeature;
   use ADIOS\Widgets\Products\Models\ProductStockState;
   use ADIOS\Widgets\Products\Models\Service;
+  
   class Detail extends \Surikata\Core\Web\Plugin {
     public static $productInfo = NULL;
     var $deleteCurrentPageBreadCrumb = true;
@@ -157,15 +158,6 @@ namespace Surikata\Plugins\WAI\Product {
     }
 
     public function getTwigParams($pluginSettings) {
-
-      $customerUID = $this->websiteRenderer->getCustomerUID();
-      $idProduct = (int) $this->websiteRenderer->urlVariables['idProduct'];
-
-      // save datetime of render
-      //$this->adminPanel
-     //   ->getModel("Widgets/Customers/Models/CustomerProduktPrezerany")
-     //   ->logActivityByCustomerUID($customerUID, $idProduct)
-     // ;
 
       $twigParams = $pluginSettings;
 

@@ -17,7 +17,6 @@ class General extends \Surikata\Core\Web\Controller {
       $pluginSettings ?? [],
       $plugin->getTwigParams($pluginSettings ?? []),
       $this->websiteRenderer->twigParams,
-      $this->websiteRenderer->getGlobalTwigParams()
     );
     $this->websiteRenderer->logTimestamp("renderPlugin {$pluginName} #1");
 
@@ -153,10 +152,16 @@ class General extends \Surikata\Core\Web\Controller {
     $this->websiteRenderer->visualContentEditorIframeToken = ($this->websiteRenderer->urlVariables["_vcetkn"] ?? "");
     $this->websiteRenderer->currentPage = $this->websiteRenderer->pages[$this->websiteRenderer->idWebPage] ?? NULL;
 
-    if ($this->websiteRenderer->currentPage === NULL) {
-      header("Location: {$this->websiteRenderer->rewriteBase}");
-      exit();
-    }
+    // Dusan 30.1.2022: Toto sposobovalo problemy pri URLkach vytvaranych cez event
+    // onAfterSiteMap, pretoze tieto sa nenachadzaju v databaze => funkcia loadPublishedPages()
+    // pouzivana na nacitanie $this->websiteRenderer->pages takuto URLku neevidovala.
+    // Paradoxne, zakomentovanie tohoto kodu sfunkcnilo 404 not found stranku.
+
+    // if ($this->websiteRenderer->currentPage === NULL) {
+    //   header("HTTP/1.1 302 Moved Temporarily");
+    //   header("Location: {$this->websiteRenderer->rewriteBase}");
+    //   exit();
+    // }
 
     $this->websiteRenderer->onGeneralControllerAfterRouting() ;
 
@@ -164,22 +169,9 @@ class General extends \Surikata\Core\Web\Controller {
       "controller" => $this,
     ]);
 
-    $this->websiteRenderer->setTwigParams([
-      "customerUID" => $this->websiteRenderer->getCustomerUID(),
-      "currentYear" => date("Y"),
-      "today" => date("Y-m-d"),
-      "settings" => $this->adminPanel->webSettings,
-      "domain" => $this->websiteRenderer->config['domainToRender'],
-      "languageIndex" => $this->websiteRenderer->domain['languageIndex'],
-      "urlVariables" => $this->websiteRenderer->urlVariables,
-      "uploadedFileUrl" => $this->adminPanel->config['files_url'],
-      "header" => [
-        "metaKeywords" => $this->websiteRenderer->currentPage["seo_keywords"] ?? "",
-        "metaDescription" => $this->websiteRenderer->currentPage["seo_description"] ?? "",
-        "pageTitle" => $this->websiteRenderer->currentPage["seo_title"] ?? "",
-      ],
-      "locale" => $this->adminPanel->locale->getAll(),
-    ]);
+    $this->websiteRenderer->setTwigParams(
+      $this->websiteRenderer->getGlobalTwigParams()
+    );
 
     $adminPanelConfig = $this->websiteRenderer->adminPanel->config;
     $maintenanceSettings = $adminPanelConfig["settings"]["web"]["maintenance"] ?? [];

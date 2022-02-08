@@ -20,6 +20,7 @@ $dictionary = [
   "Meta Description" => "Meta popis",
   "Used in <meta description> tag." => "Používa se v <meta description>.",
   "Visibility and publishing" => "Viditelnost a publikování",
+  "Miscelaneous" => "Různé",
   "Pages" => "Stránky",
   "Website" => "Webstránka",
   "New Page" => "Nová stránka",

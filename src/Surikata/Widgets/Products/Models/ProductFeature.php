@@ -153,7 +153,7 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
 
     $i = 1;
     foreach ($domainLanguages as $languageIndex => $languageName) {
-      if ($i > 1) {
+      if ($i != $this->adios->translatedColumnIndex) {
         $tabTranslations[] = ["html" => "<b>".hsc($languageName)."</b>"];
         $tabTranslations[] = "name_lang_{$languageIndex}";
         $tabTranslations[] = "description_lang_{$languageIndex}";

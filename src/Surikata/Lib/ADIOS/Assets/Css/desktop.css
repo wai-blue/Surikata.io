@@ -60,7 +60,7 @@ h3 { padding-bottom: 0.5em; }
 }
 
 #adios_loader_line {position:fixed;z-index:10000;background: var(--cl-green); height:4px; width: 0vw;top:0px;left:0px;transition: 0.1s;}
-#adios_console {
+/* #adios_console {
   position:fixed;
   bottom:0px;
   right:0px;
@@ -89,7 +89,7 @@ h3 { padding-bottom: 0.5em; }
 #adios_console.minimized #adios_console_title {display:none;}
 #adios_console.minimized #adios_console_header {min-width:auto;width:30px;text-align:center;}
 #adios_console.minimized #adios_console_close {display:none;}
-#adios_console.minimized #adios_console_clear {display:none;}
+#adios_console.minimized #adios_console_clear {display:none;} */
 
 #adios_window_loader {display:none;}
 

@@ -52,16 +52,16 @@ function _d_echo($logger_class, $logger_name, $msg) {
   global $___ADIOSObject;
 
   if ($___ADIOSObject->config['debug_enabled']) {
-    if ($___ADIOSObject->config['disable_adios_console']) {
-      echo "
-        <div style='background:#CCFFFF'>
-          <span style='color:red;font-size:10px;'>[$d_echo_id] $logger_name:</span>
-          <xmp style='font-size:10px'>$msg</xmp>
-        </div>
-      ";
-    } else {
+    // if ($___ADIOSObject->config['disable_adios_console']) {
+    //   echo "
+    //     <div style='background:#CCFFFF'>
+    //       <span style='color:red;font-size:10px;'>[$d_echo_id] $logger_name:</span>
+    //       <xmp style='font-size:10px'>$msg</xmp>
+    //     </div>
+    //   ";
+    // } else {
       $___ADIOSObject->console->info($msg);
-    }
+    // }
   }
 }
 

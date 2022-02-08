@@ -448,10 +448,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
       ];
     }
 
-    return $this->adios->dispatchEventToPlugins("onModelAfterFormParams", [
-      "model" => $this,
-      "params" => $params,
-    ])["params"];
+    return parent::formParams($data, $params);
   }
   
   /**

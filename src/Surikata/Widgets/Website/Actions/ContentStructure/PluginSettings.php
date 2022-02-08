@@ -41,10 +41,10 @@ class PluginSettings extends \ADIOS\Core\Widget\Action {
                 -- No plugin for this panel --
               </div>
     ";
-    foreach ($this->adios->getPlugins() as $pluginName => $plugin) {
+    foreach ($this->adios->getPlugins() as $pluginName => $pluginObject) {
       $pluginUID = \ADIOS\Core\HelperFunctions::str2uid($pluginName);
 
-      $manifest = $plugin->manifest();
+      $manifest = $pluginObject->manifest();
 
       $pluginSelectHtml .= "
         <div
@@ -103,10 +103,10 @@ class PluginSettings extends \ADIOS\Core\Widget\Action {
 
     $pluginsSettingsHtml = "";
 
-    foreach ($this->adios->getPlugins() as $pluginName => $plugin) {
+    foreach ($this->adios->getPlugins() as $pluginName => $pluginObject) {
       $pluginUID = \ADIOS\Core\HelperFunctions::str2uid($pluginName);
 
-      $manifest = $plugin->manifest();
+      $manifest = $pluginObject->manifest();
 
       $pluginsSettingsHtml .= "
         <div
@@ -118,12 +118,11 @@ class PluginSettings extends \ADIOS\Core\Widget\Action {
         <h3>".hsc($manifest['title'])."</h3>
       ";
 
-      $tmpPlugin = $this->adios->getPlugin($pluginName);
       $tmpInputUIDPrefix = "{$this->uid}_{$pluginUID}";
 
-      if (is_object($tmpPlugin)) {
-        if (method_exists($tmpPlugin, "getSettingsForWebsite")) {
-          $availableSettings = $tmpPlugin->getSettingsForWebsite($tmpInputUIDPrefix, $pluginSettings);
+      if (is_object($pluginObject)) {
+        if (method_exists($pluginObject, "getSettingsForWebsite")) {
+          $availableSettings = $pluginObject->getSettingsForWebsite($tmpInputUIDPrefix, $pluginSettings);
         } else {
           $availableSettings = [];
         }

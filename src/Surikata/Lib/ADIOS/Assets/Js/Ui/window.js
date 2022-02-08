@@ -10,7 +10,7 @@
     if (typeof window[name] == 'function') {
       window[name]();
     } else {
-      _adios_console_log('ajax window', 'refresh function not allowed: '+name);
+      console.log('ajax window', 'refresh function not allowed: '+name);
     }
   };
 

@@ -20,7 +20,7 @@ class VisualEditor extends \ADIOS\Core\Widget\Action {
         id='{$this->uid}_loading_div'
         style='background:#F8F8F8;padding:1em'
       >
-        Loading editor. Please wait..
+        ".$this->translate('Loading editor. Please wait..')."
       </div>
 
       <iframe

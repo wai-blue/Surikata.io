@@ -29,8 +29,8 @@ class ContentStructure extends \ADIOS\Core\Input {
     }
 
     $pluginManifestsJs = "var {$this->uid}_pluginManifests = {}";
-    foreach ($this->adios->getPlugins() as $pluginName => $plugin) {
-      $manifest = $plugin->manifest();
+    foreach ($this->adios->getPlugins() as $pluginName => $pluginObject) {
+      $manifest = $pluginObject->manifest();
       $pluginManifestsJs .= "
         {$this->uid}_pluginManifests['{$pluginName}'] = JSON.parse(Base64.decode('".base64_encode(json_encode($manifest))."'));
       ";

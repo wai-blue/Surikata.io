@@ -203,7 +203,7 @@ namespace Surikata\Plugins\WAI\Misc {
       }
 
 
-      if (count($returnArray) === 0 && false) {
+      if (count($returnArray) === 0) {
         $languageIndex = (int) ($this->websiteRenderer->domain["languageIndex"] ?? 1);
 
         $productModel = new \ADIOS\Widgets\Products\Models\Product($this->adminPanel);

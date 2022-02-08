@@ -4,14 +4,14 @@ namespace ADIOS\Actions\Plugins;
 
 class Overview extends \ADIOS\Core\Widget\Action {
   
-  public function onAfterDesktopPreRender($params) {
-    $params["searchButton"] = [
-      "display" => TRUE,
-      "placeholder" => $this->translate("Search plugins..."),
-    ];
+  // public function onAfterDesktopPreRender($params) {
+  //   $params["searchButton"] = [
+  //     "display" => TRUE,
+  //     "placeholder" => $this->translate("Search plugins..."),
+  //   ];
 
-    return $params;
-  }
+  //   return $params;
+  // }
 
   public function render() {
     $search = $this->params["search"] ?: "";
@@ -68,8 +68,8 @@ class Overview extends \ADIOS\Core\Widget\Action {
                 <div style='display:flex;align-items: center;'>
                   <div style='flex-basis:120px;height:2em;margin-right:2em;'>{$logoHtml}</div>
                   <div style='flex:1;color:var(--cl-main);'>
-                    <b>".hsc($this->translate($pluginTitle))."</b>
-                    <div class='small' style='color:#AAAAAA'>".hsc($pluginName)."</div>
+                    <b class='plugin-title'>".hsc($this->translate($pluginTitle))."</b>
+                    <div class='plugin-name small' style='color:#AAAAAA'>".hsc($pluginName)."</div>
                   </div>
                   <div style='text-align:right'>
                     ".($mainActionExists ? "
@@ -108,8 +108,52 @@ class Overview extends \ADIOS\Core\Widget\Action {
     } else {
       $html .= "
         <div class='row'>
+          <div class='col-xl-6 col-12 mb-4'>
+            <div class='input-group'>
+              <input
+                type='text'
+                id='{$this->uid}_search'
+                class='form-control'
+                value=''
+                placeholder='".$this->translate("Search plugins...")."'
+                onkeyup='{$this->uid}_searchPlugins();'
+              />
+              <div class='input-group-append'>
+                <button class='btn btn-primary' type='button' onclick='{$this->uid}_searchPlugins();'>
+                  <i class='fas fa-search fa-sm'></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id='{$this->uid}_plugins' class='row'>
           {$cardsHtml}
         </div>
+
+        <script>
+          function {$this->uid}_searchPlugins() {
+            let q = $('#{$this->uid}_search').val();
+            let plugins = $('#{$this->uid}_plugins .card');
+
+            if (q == '') {
+              plugins.show();
+            } else {
+              plugins.hide();
+
+              plugins.each(function() {
+                let pluginTitle = $(this).find('.plugin-title').get(0).innerText;
+                let pluginName = $(this).find('.plugin-name').get(0).innerText;
+
+                if (
+                  pluginTitle.toLowerCase().indexOf(q.toLowerCase()) !== -1
+                  || pluginName.toLowerCase().indexOf(q.toLowerCase()) !== -1
+                ) {
+                  $(this).show();
+                }
+              });
+            }
+          }
+        </script>
       ";
     }
 

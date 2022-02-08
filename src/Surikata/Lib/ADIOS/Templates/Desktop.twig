@@ -15,9 +15,9 @@
     var _APP_URL = '{{ config.url }}';
     var _DEVEL_MODE = {% if config.devel_mode %} true {% else %} false {% endif %};
 
-    if (_DEVEL_MODE) {
+    {# if (_DEVEL_MODE) {
       setTimeout(desktop_console_update, 300);
-    }
+    } #}
 
     var _LANG = '{{ config.language }}';
     var _TRANSLATIONS = adios_language_translations[_LANG];

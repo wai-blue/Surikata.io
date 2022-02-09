@@ -38,6 +38,7 @@ class PluginWAIMarketingShareAPIClass {
     $('meta[property=\'og:title\']').attr('content', params['title']);
     $('meta[property=\'og:description\']').attr('content', params['description']);
     $('meta[property=\'og:image\']').attr('content', params['image']);
+    $('meta[property=\'og:url\']').attr('content', params['shareUrl']);
   }
 
   setTwitterMetaTags(params) {

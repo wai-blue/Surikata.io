@@ -3,11 +3,21 @@
 namespace Surikata\Plugins\WAI\Marketing {
   class Share extends \Surikata\Core\Web\Plugin {
 
+    public function serializeParams(array $params = []) {
+      $params['shareUrl'] = 
+        $this->websiteRenderer->rootUrl . '/' . 
+        ($params['shareUrl'] ?? $this->websiteRenderer->pageUrl)
+      ;
+
+      return $params;
+    }
+
     public function facebookMetaTags() {
       return "
         <meta property='og:title' content='' />
         <meta property='og:description' content='' />
         <meta property='og:image' content='' />
+        <meta property='og:url' content='' />
       ";
     }
 
@@ -20,7 +30,7 @@ namespace Surikata\Plugins\WAI\Marketing {
     }
 
     public function facebookShareButton(array $params = []) {
-      $shareUrl = $params['shareUrl'] ?? "";
+      $params = $this->serializeParams($params);
 
       return "
         <script>
@@ -32,8 +42,7 @@ namespace Surikata\Plugins\WAI\Marketing {
         <div id='fb-root'></div>
         <div 
           class='fb-share-button' 
-          data-href='{$shareUrl}' 
-          data-layout='button' 
+          data-layout='button'
           data-size='small'
         >
           <a 
@@ -45,6 +54,8 @@ namespace Surikata\Plugins\WAI\Marketing {
     }
 
     public function twitterShareButton(array $params = []) {
+      $params = $this->serializeParams($params);
+
       return "
         <script>
           setTimeout(() => {

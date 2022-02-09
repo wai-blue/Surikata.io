@@ -3,17 +3,33 @@
 namespace Surikata\Plugins\WAI\Marketing {
   class Share extends \Surikata\Core\Web\Plugin {
 
+    public function facebookMetaTags() {
+      return "
+        <meta property='og:title' content='' />
+        <meta property='og:description' content='' />
+        <meta property='og:image' content='' />
+      ";
+    }
+
+    public function twitterMetaTags() {
+      return "
+        <meta name='twitter:title' content=''/>
+        <meta name='twitter:description' content=''/>
+        <meta name='twitter:image' content=''/>
+      ";
+    }
+
     public function facebookShareButton(array $params = []) {
       $shareUrl = $params['shareUrl'] ?? "";
-      $shareTitle = $params['title'] ?? "";
-      $shareImage = $params['image'] ?? "";
-      $shareDescription = $params['description'] ?? "";
 
       return "
+        <script>
+          setTimeout(() => {
+            ThemeAbeloMarketingShare.setFacebookMetaTags(".json_encode($params).");
+          }, 2000)
+        </script>
+  
         <div id='fb-root'></div>
-        <script async defer crossorigin='anonymous' 
-          src='https://connect.facebook.net/sk_SK/sdk.js#xfbml=1&version=v12.0' nonce='oCXllsPr'
-        ></script>
         <div 
           class='fb-share-button' 
           data-href='{$shareUrl}' 
@@ -22,19 +38,27 @@ namespace Surikata\Plugins\WAI\Marketing {
         >
           <a 
             target='_blank' 
-            class='fb-xfbml-parse-ignore'>Zdieľať
+            class='fb-xfbml-parse-ignore'>
           </a>
         </div>
       ";
     }
 
-    public function facebookMetaTags() {
+    public function twitterShareButton(array $params = []) {
       return "
-        <meta property='og:title'         content='' />
-        <meta property='og:description'   content='' />
-        <meta property='og:image'         content='' />
+        <script>
+          setTimeout(() => {
+            ThemeAbeloMarketingShare.setTwitterMetaTags(".json_encode($params).");
+          }, 2000)
+        </script>
+        
+        <a 
+          class='twitter-share-button'
+          href='https://twitter.com/intent/tweet'
+        >Tweet</a>
       ";
     }
+
   }
 }
 

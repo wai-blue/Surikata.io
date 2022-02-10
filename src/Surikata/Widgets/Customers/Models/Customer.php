@@ -522,6 +522,8 @@ class Customer extends \ADIOS\Core\Widget\Model {
     $requiredFieldsRegistration = [
       "email",
     ];
+
+    // REVIEW: Password by malo byt vzdy pozadovane.
     if (!$createFromOrder) {
       $requiredFieldsRegistration[] = "password";
     }
@@ -545,6 +547,11 @@ class Customer extends \ADIOS\Core\Widget\Model {
     $tmpCustomer = $this->where('email', '=', $email)->get()->toArray();
     $idCustomer = 0;
     if (count($tmpCustomer) > 0) {
+      // REVIEW:
+      // Otazka 1: if $createFromOrder === TRUE a account uz existuje,
+      // vytvori ho znovu?
+      // Odpoved: nie, ale aktualizuje email, password, is_validated a is_blocked.
+      // Otazka 2: naco to je dobre?
       if (!$createFromOrder) {
         throw new \ADIOS\Widgets\Customers\Exceptions\AccountAlreadyExists();
       }

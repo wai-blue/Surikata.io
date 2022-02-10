@@ -596,7 +596,13 @@ class Order extends \ADIOS\Core\Widget\Model {
             "company_name" => $orderData["inv_company_name"]
           ]
         );
-        $idCustomer = $customerModel->createAccount($customerUID, $orderData["email"], $createCustomerData, true, true);
+        $idCustomer = $customerModel->createAccount(
+          $customerUID,
+          $orderData["email"],
+          $createCustomerData,
+          TRUE, // saveAddress
+          TRUE // createFromOrder
+        );
       }
     }
 

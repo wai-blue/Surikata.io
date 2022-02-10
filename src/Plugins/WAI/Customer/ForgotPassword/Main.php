@@ -96,7 +96,7 @@ namespace ADIOS\Plugins\WAI\Customer {
     public function manifest() {
       return [
         "faIcon" => "fas fa-box-open",
-        "title" => $this->translate("Reset password form"),
+        "title" => $this->translate("Reset password"),
       ];
     }
 

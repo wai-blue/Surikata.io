@@ -34,5 +34,11 @@ namespace Surikata\Plugins\WAI\Product {
 
 namespace ADIOS\Plugins\WAI\Product {
   class Categories extends \Surikata\Core\AdminPanel\Plugin {
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => "Products - Categories",
+      ];
+    }
   }
 }

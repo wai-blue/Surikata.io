@@ -80,6 +80,13 @@ namespace ADIOS\Plugins\WAI\Blog {
 
     var $defaultBlogDetailUrl = "blog/{% idBlog %}/{% blogName %}";
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-blog",
+        "title" => "Blogs - Detail",
+      ];
+    }
+
     public function getSiteMap($pluginSettings = [], $webPageUrl = "") {
 
       $urlPattern = $pluginSettings["urlPattern"] ?? "";

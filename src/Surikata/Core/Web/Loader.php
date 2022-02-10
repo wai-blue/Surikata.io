@@ -491,6 +491,7 @@ class Loader extends \Cascada\Loader {
    */
   public function getPlugin($pluginName) {
     if (empty($pluginName)) return NULL;
+    if (!$this->adminPanel->isPluginEnabled($pluginName)) return NULL;
     
     if (empty($this->pluginObjects[$pluginName])) {
       $pluginClassName = "\\Surikata\\Plugins\\".str_replace("/", "\\", $pluginName);

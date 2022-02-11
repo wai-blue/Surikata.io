@@ -51,7 +51,9 @@ try {
     $web
   );
 
-  if (isset($arguments["l"]) || isset($arguments["list"])) {
+  if (
+    (isset($arguments["l"]) && !empty($arguments["l"]))
+    || (isset($arguments["list"]) && !empty($arguments["list"]))) {
     var_dump($adminPanel->actions);
     exit;
   }

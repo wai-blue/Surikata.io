@@ -54,6 +54,13 @@ namespace Surikata\Plugins\WAI\Product {
 namespace ADIOS\Plugins\WAI\Product {
   class FilteredList extends \Surikata\Core\AdminPanel\Plugin {
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => "Products - Filtered list",
+      ];
+    }
+
     public function getSettingsForWebsite() {
       return [
         "heading" => [

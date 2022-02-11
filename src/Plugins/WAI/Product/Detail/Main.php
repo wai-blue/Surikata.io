@@ -184,6 +184,12 @@ namespace Surikata\Plugins\WAI\Product {
 namespace ADIOS\Plugins\WAI\Product {
   class Detail extends \Surikata\Core\AdminPanel\Plugin {
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => "Products - Detail",
+      ];
+    }
     public function getSiteMap($pluginSettings = [], $webPageUrl = "") {
       return [
         $webPageUrl . '(.+).pid.(\d+)' => [

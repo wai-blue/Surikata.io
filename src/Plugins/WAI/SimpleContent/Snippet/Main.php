@@ -10,7 +10,7 @@ namespace ADIOS\Plugins\WAI\SimpleContent {
 
     public function manifest() {
       return [
-        "faIcon" => "fas fa-box-open",
+        "faIcon" => "fas fa-font",
         "title" => $this->translate("Custom HTML snippet"),
       ];
     }

@@ -1248,7 +1248,7 @@ class DB {
                 on `{$lookupTableAlias}`.`id` = `{$table_name}`.`{$col_name}`
             ";
 
-            foreach (array_keys($lookupModel->columns()) as $lookupColumnName => $lookupColumn) {
+            foreach ($lookupModel->columns() as $lookupColumnName => $lookupColumn) {
               if (!$lookupColumn['virtual']) {
                 $lookupColumns[] = "`{$lookupTableAlias}`.`{$lookupColumnName}` as LOOKUP___{$col_name}___{$lookupColumnName}";
               }

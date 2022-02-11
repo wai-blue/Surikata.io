@@ -8,6 +8,13 @@ namespace Surikata\Plugins\WAI\SimpleContent {
 namespace ADIOS\Plugins\WAI\SimpleContent {
   class LegalDisclaimer extends \Surikata\Core\AdminPanel\Plugin {
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-font",
+        "title" => $this->translate("Simple content - Legal disclaimer"),
+      ];
+    }
+
     public function getSettingsForWebsite() {
       return [
         "displayedDisclaimer" => [

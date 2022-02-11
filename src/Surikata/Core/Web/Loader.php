@@ -43,6 +43,9 @@ class Loader extends \Cascada\Loader {
   var $visualContentEditorEnabled = FALSE;
   var $visualContentEditorIframeToken = "";
 
+  /** Stores objects of rendered plugins on current page */
+  public array $currentPagePlugins = [];
+
   /**
    * Class constructor.
    * 
@@ -520,6 +523,22 @@ class Loader extends \Cascada\Loader {
     return $pluginSettings;
   }
 
+  public function getCurrentPagePlugins() {
+    if (empty($this->currentPagePlugins)) {
+      $contentStructure = @json_decode(($this->currentPage['content_structure'] ?? ""), TRUE);
+
+      if (is_array($contentStructure)) {
+        foreach ($contentStructure['panels'] as $panelName => $panelValues) {
+          if ($panelValues['plugin'] != "") {
+            $this->currentPagePlugins[$panelName] = $this->getPlugin($panelValues['plugin']);
+          }
+        }
+      }
+    }
+
+    return $this->currentPagePlugins;
+  }
+
   /**
    * Returns unique identifier of the customer / visitor of the website.
    * 
@@ -637,7 +656,7 @@ class Loader extends \Cascada\Loader {
       "plugins" => $this->adminPanel->config["settings"]["plugins"]
     ];
     $globalTwigParams["languageIndex"] = $this->domain['languageIndex'];
-    $globalTwigParams[ "urlVariables"] = $this->urlVariables;
+    $globalTwigParams["urlVariables"] = $this->urlVariables;
     $globalTwigParams["uploadedFileUrl"] = $this->adminPanel->config['files_url'];
     $globalTwigParams["header"] = [
       "metaKeywords" => $this->currentPage["seo_keywords"] ?? "",

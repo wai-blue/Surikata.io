@@ -29,7 +29,7 @@ namespace Surikata\Plugins\WAI\Marketing {
     }
 
     public function getPluginMetaTags() {
-      $plugins = $this->adminPanel->getPlugins();
+      $plugins = $this->adminPanel->websiteRenderer->getCurrentPagePlugins();
       $metaTags = [];
 
       foreach ($plugins as $pluginObject) {
@@ -62,7 +62,7 @@ namespace ADIOS\Plugins\WAI\Marketing {
     public function manifest() {
       return [
         "title" => "Social media share",
-        "logo" => "",
+        "logo" => "social-media.jpeg",
         "description" => "",
       ];
     }

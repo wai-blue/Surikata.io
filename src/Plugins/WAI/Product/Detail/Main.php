@@ -12,6 +12,18 @@ namespace Surikata\Plugins\WAI\Product {
 
     public static $breadcrumbsCache = NULL;
 
+    public function getPluginMetaTags() {
+      $productDetail = $this->getProductInfo();
+
+      $languageIndex = $this->adios->websiteRenderer->domain["languageIndex"] ?? 1;
+
+      return [
+        "title" =>  $productDetail["name_lang_{$languageIndex}"],
+        "description" =>  $productDetail["brief_lang_{$languageIndex}"],
+        "image" =>  $productDetail["image"]
+      ];
+    }
+
     public function getBreadcrumbs($urlVariables = []) {
       if (self::$breadcrumbsCache === NULL) {
         $productInfo = $this->getProductInfo();
@@ -216,17 +228,5 @@ namespace ADIOS\Plugins\WAI\Product {
       return $event;
     }
 
-    /*public function getPluginMetaTags() {
-      $productDetail = new \Surikata\Plugins\WAI\Product\Detail($this->adios->websiteRenderer);
-      $product = $productDetail->getProductInfo();
-
-      $languageIndex = $this->adios->websiteRenderer->domain["languageIndex"] ?? 1;
-
-      return [
-        "title" => $product["name_lang_{$languageIndex}"],
-        "description" => $product["brief_lang_{$languageIndex}"],
-        "image" => $product["image"]
-      ];
-    }*/
   }
 }

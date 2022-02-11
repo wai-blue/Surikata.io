@@ -9,6 +9,16 @@ namespace Surikata\Plugins\WAI\Blog {
 
     public static array $currentBlog = [];
 
+    public function getPluginMetaTags() {
+      $blogDetail = $this->getCurrentBlog();
+
+      return [
+        "title" => $blogDetail["name"],
+        "description" => $blogDetail["perex"],
+        "image" => $blogDetail["image"]
+      ];
+    }
+
     public function getBreadcrumbs($urlVariables = []) {
       $currentBlog = $this->getCurrentBlog();
 
@@ -101,17 +111,6 @@ namespace ADIOS\Plugins\WAI\Blog {
       );
       
       return $siteMap;
-    }
-
-    public function getPluginMetaTags() {
-      $blogDetail = new \Surikata\Plugins\WAI\Blog\Detail($this->adios->websiteRenderer);
-      $blog = $blogDetail->getCurrentBlog();
-
-      return [
-        "title" => $blog["name"],
-        "description" => $blog["perex"],
-        "image" => $blog["image"]
-      ];
     }
 
     public function getSettingsForWebsite() {

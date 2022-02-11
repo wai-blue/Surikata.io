@@ -68,7 +68,7 @@ namespace Surikata\Plugins\WAI\Product {
         self::$productInfo = $productModel
           ->getById((int) $this->websiteRenderer->urlVariables['idProduct'])
         ;
-
+        
         self::$productInfo = $productModel->translateSingleProductForWeb(self::$productInfo, $languageIndex);
 
         $allCategories = (new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel))->getAll();
@@ -215,5 +215,18 @@ namespace ADIOS\Plugins\WAI\Product {
 
       return $event;
     }
+
+    /*public function getPluginMetaTags() {
+      $productDetail = new \Surikata\Plugins\WAI\Product\Detail($this->adios->websiteRenderer);
+      $product = $productDetail->getProductInfo();
+
+      $languageIndex = $this->adios->websiteRenderer->domain["languageIndex"] ?? 1;
+
+      return [
+        "title" => $product["name_lang_{$languageIndex}"],
+        "description" => $product["brief_lang_{$languageIndex}"],
+        "image" => $product["image"]
+      ];
+    }*/
   }
 }

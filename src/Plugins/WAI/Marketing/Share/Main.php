@@ -3,42 +3,8 @@
 namespace Surikata\Plugins\WAI\Marketing {
   class Share extends \Surikata\Core\Web\Plugin {
 
-    public function serializeParams(array $params = []) {
-      $params['shareUrl'] = 
-        $this->websiteRenderer->rootUrl . '/' . 
-        ($params['shareUrl'] ?? $this->websiteRenderer->pageUrl)
-      ;
-
-      return $params;
-    }
-
-    public function facebookMetaTags() {
+    public function facebookShareButton() {
       return "
-        <meta property='og:title' content='' />
-        <meta property='og:description' content='' />
-        <meta property='og:image' content='' />
-        <meta property='og:url' content='' />
-      ";
-    }
-
-    public function twitterMetaTags() {
-      return "
-        <meta name='twitter:title' content=''/>
-        <meta name='twitter:description' content=''/>
-        <meta name='twitter:image' content=''/>
-      ";
-    }
-
-    public function facebookShareButton(array $params = []) {
-      $params = $this->serializeParams($params);
-
-      return "
-        <script>
-          setTimeout(() => {
-            ThemeAbeloMarketingShare.setFacebookMetaTags(".json_encode($params).");
-          }, 2000)
-        </script>
-  
         <div id='fb-root'></div>
         <div 
           class='fb-share-button' 
@@ -53,21 +19,37 @@ namespace Surikata\Plugins\WAI\Marketing {
       ";
     }
 
-    public function twitterShareButton(array $params = []) {
-      $params = $this->serializeParams($params);
-
+    public function twitterShareButton() {
       return "
-        <script>
-          setTimeout(() => {
-            ThemeAbeloMarketingShare.setTwitterMetaTags(".json_encode($params).");
-          }, 2000)
-        </script>
-        
         <a 
           class='twitter-share-button'
           href='https://twitter.com/intent/tweet'
         >Tweet</a>
       ";
+    }
+
+    public function getPluginMetaTags() {
+      $plugins = $this->adminPanel->getPlugins();
+      $metaTags = [];
+
+      foreach ($plugins as $pluginObject) {
+        if (method_exists($pluginObject, "getPluginMetaTags")) {
+          $metaTags = $pluginObject->getPluginMetaTags();
+          if (!empty($metaTags["image"])) {
+            $metaTags["image"] = "{$this->adminPanel->config['files_url']}/{$metaTags['image']}";
+          }
+        }
+      }
+
+      return $metaTags;
+    }
+
+    public function getTwigParams($pluginSettings) {
+      $twigParams = $pluginSettings;
+
+      $twigParams["metaTags"] = $this->getPluginMetaTags();
+
+      return $twigParams;
     }
 
   }

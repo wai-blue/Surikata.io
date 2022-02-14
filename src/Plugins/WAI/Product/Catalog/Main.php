@@ -310,7 +310,7 @@ namespace ADIOS\Plugins\WAI\Product {
     public function manifest() {
       return [
         "faIcon" => "fas fa-box-open",
-        "title" => $this->translate("Product Catalog"),
+        "title" => $this->translate("Products - Catalog"),
       ];
     }
 

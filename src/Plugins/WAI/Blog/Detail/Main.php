@@ -7,6 +7,18 @@ namespace Surikata\Plugins\WAI\Blog {
     var $defaultBlogDetailUrl = "blog/{% idBlog %}/{% blogName %}";
     var $deleteCurrentPageBreadCrumb = true;
 
+    public static array $currentBlog = [];
+
+    public function getPluginMetaTags() {
+      $blogDetail = $this->getCurrentBlog();
+
+      return [
+        "title" => $blogDetail["name"],
+        "description" => $blogDetail["perex"],
+        "image" => $blogDetail["image"]
+      ];
+    }
+
     public function getBreadcrumbs($urlVariables = []) {
       $currentBlog = $this->getCurrentBlog();
 
@@ -46,20 +58,22 @@ namespace Surikata\Plugins\WAI\Blog {
     }
 
     public function getCurrentBlog() {
-      $userModel = new \ADIOS\Core\Models\User($this->adminPanel);
-      $sidebar = new \Surikata\Plugins\WAI\Blog\Sidebar($this->websiteRenderer);
+      if (empty(self::$currentBlog)) {
+        $userModel = new \ADIOS\Core\Models\User($this->adminPanel);
+        $sidebar = new \Surikata\Plugins\WAI\Blog\Sidebar($this->websiteRenderer);
 
-      $blog = (new \ADIOS\Plugins\WAI\Blog\Catalog\Models\Blog($this->adminPanel))
-        ->getById((int) $this->websiteRenderer->urlVariables['idBlog']);
-      ;
+        self::$currentBlog = (new \ADIOS\Plugins\WAI\Blog\Catalog\Models\Blog($this->adminPanel))
+          ->getById((int) $this->websiteRenderer->urlVariables['idBlog']);
+        ;
 
-      $blog['blogCatalogUrl'] = (new \Surikata\Plugins\WAI\Blog\Catalog($this->websiteRenderer))
-        ->getWebPageUrl()
-      ;
-      $blog["user"] = $userModel->getById($blog["id_user"]);
-      $sidebar->addTagUrl($blog["blog_tags"]);
+        self::$currentBlog['blogCatalogUrl'] = (new \Surikata\Plugins\WAI\Blog\Catalog($this->websiteRenderer))
+          ->getWebPageUrl()
+        ;
+        self::$currentBlog["user"] = $userModel->getById(self::$currentBlog["id_user"]);
+        $sidebar->addTagUrl(self::$currentBlog["blog_tags"]);
+      }
 
-      return $blog;
+      return self::$currentBlog;
     }
 
     public function getTwigParams($pluginSettings) {
@@ -79,6 +93,13 @@ namespace ADIOS\Plugins\WAI\Blog {
   class Detail extends \Surikata\Core\AdminPanel\Plugin {
 
     var $defaultBlogDetailUrl = "blog/{% idBlog %}/{% blogName %}";
+
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-blog",
+        "title" => "Blogs - Detail",
+      ];
+    }
 
     public function getSiteMap($pluginSettings = [], $webPageUrl = "") {
 

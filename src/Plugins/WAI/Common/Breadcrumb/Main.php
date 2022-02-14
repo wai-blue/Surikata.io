@@ -59,35 +59,15 @@ namespace Surikata\Plugins\WAI\Common {
         self::$breadcrumbs = $this->getMenuBreadcrumbs($currentPage['url']);
         self::$breadcrumbs[$currentPage['url']] = $currentPage['name'];
 
-        // GET Plugin Breadcrumbs if exists
-        $contentStructure = 
-          json_decode(
-            $this->websiteRenderer->currentPage["content_structure"]
-          )
-        ;
+        $plugins = $this->adminPanel->websiteRenderer->getCurrentPagePlugins();
 
-        foreach ($contentStructure->panels as $panelName => $panelValues) {
-          if (
-            $panelName != "navigation" 
-            && $panelName != "header" 
-            && $panelName != "footer"
-          ) {
-            if ($panelValues->plugin != "") {
-              $plugin = 
-                "\\Surikata\\Plugins\\" . 
-                str_replace("/", "\\", $panelValues->plugin)
-              ;
+        foreach ($plugins as $pluginObject) {
+          if (method_exists($pluginObject, 'getBreadcrumbs')) {
+            if ($pluginObject->deleteCurrentPageBreadCrumb) array_shift(self::$breadcrumbs);
+            $pluginBreadcrumbs = $pluginObject->getBreadcrumbs($urlVariables);
 
-              $getPlugin = new $plugin($this->websiteRenderer);
-
-              if (method_exists($getPlugin, 'getBreadcrumbs')) {
-                if ($getPlugin->deleteCurrentPageBreadCrumb) array_shift(self::$breadcrumbs);
-                $pluginBreadcrumbs = $getPlugin->getBreadcrumbs($urlVariables);
-
-                foreach ($pluginBreadcrumbs as $url => $item) {
-                  self::$breadcrumbs[$url] = $item;
-                }
-              }
+            foreach ($pluginBreadcrumbs as $url => $item) {
+              self::$breadcrumbs[$url] = $item;
             }
           }
         }

@@ -12,6 +12,13 @@ namespace Surikata\Plugins\WAI\Product {
 
 namespace ADIOS\Plugins\WAI\Product {
   class Selection extends \Surikata\Core\AdminPanel\Plugin {
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => "Products - Selection",
+      ];
+    }
+
     public function getSettingsForWebsite() {
       return [
         "layout" => [

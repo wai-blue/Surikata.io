@@ -90,7 +90,7 @@ namespace ADIOS\Plugins\WAI\Blog {
     public function manifest() {
       return [
         "faIcon" => "fas fa-blog",
-        "title" => "Blogs",
+        "title" => "Blogs - Catalog",
       ];
     }
 

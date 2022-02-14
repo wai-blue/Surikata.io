@@ -54,6 +54,35 @@ class Loader extends \ADIOS\Core\Loader {
   public function onAfterConfigLoaded() {
     $this->translatedColumnIndex = $this->getTranslatedColumnIndexByLanguage();
   }
+
+
+  public function isPluginEnabled($pluginName) {
+    return !($this->config["plugins"][str_replace("/", "-", $pluginName)]["disabled"] ?? FALSE);
+  }
+
+  public function enablePlugin($pluginName) {
+    if (empty($pluginName)) return;
+
+    $this->saveConfig([
+      "plugins" => [
+        str_replace("/", "-", $pluginName) => [
+          "disabled" => FALSE,
+        ],
+      ]
+    ]);
+  }
+
+  public function disablePlugin($pluginName) {
+    if (empty($pluginName)) return;
+
+    $this->saveConfig([
+      "plugins" => [
+        str_replace("/", "-", $pluginName) => [
+          "disabled" => TRUE,
+        ],
+      ]
+    ]);
+  }
   
   public function onBeforePluginsLoaded() {
     parent::onBeforePluginsLoaded();

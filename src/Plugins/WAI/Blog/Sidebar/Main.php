@@ -76,6 +76,13 @@ namespace ADIOS\Plugins\WAI\Blog {
 
   class Sidebar extends \Surikata\Core\AdminPanel\Plugin {
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-blog",
+        "title" => "Blogs - Sidebar",
+      ];
+    }
+
     public function getSettingsForWebsite() {
       return [
         "showRecent" => [

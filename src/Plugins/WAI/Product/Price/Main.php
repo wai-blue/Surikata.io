@@ -7,6 +7,13 @@ namespace Surikata\Plugins\WAI\Product {
 
 namespace ADIOS\Plugins\WAI\Product {
   class Price extends \Surikata\Core\AdminPanel\Plugin {
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => "Products - Price",
+      ];
+    }
+
     public function onProductGetPriceInfoForSingleProduct($event) {
       $idProduct = (int) $event['idProduct'];
       $event["priceInfo"]["salePriceExclVAT"] = $idProduct;

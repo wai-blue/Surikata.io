@@ -2,6 +2,8 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
+use ADIOS\Core\HelperFunctions;
+
 class Customer extends \ADIOS\Core\Widget\Model {
   var $sqlName = "customers";
   var $urlBase = "Customers";
@@ -523,9 +525,12 @@ class Customer extends \ADIOS\Core\Widget\Model {
       "email",
     ];
 
-    // REVIEW: Password by malo byt vzdy pozadovane.
     if (!$createFromOrder) {
       $requiredFieldsRegistration[] = "password";
+    } else {
+      $data["password"] = HelperFunctions::randomPassword();
+      $data["password_1"] = $data["password"];
+      $data["password_2"] = $data["password"];
     }
 
     foreach ($requiredFieldsRegistration as $fieldName) {
@@ -547,12 +552,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
     $tmpCustomer = $this->where('email', '=', $email)->get()->toArray();
     $idCustomer = 0;
     if (count($tmpCustomer) > 0) {
-      // REVIEW:
-      // Otazka 1: if $createFromOrder === TRUE a account uz existuje,
-      // vytvori ho znovu?
-      // Odpoved: nie, ale aktualizuje email, password, is_validated a is_blocked.
-      // Otazka 2: naco to je dobre?
-      if (!$createFromOrder) {
+      if (!$createFromOrder && $tmpCustomer[0]["is_validated"] == TRUE) {
         throw new \ADIOS\Widgets\Customers\Exceptions\AccountAlreadyExists();
       }
       $idCustomer = $tmpCustomer[0]["id"];
@@ -575,8 +575,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
 
     if (count($tmpCustomer) == 0) {
       $idCustomer = $this->insertRow($data);
-    }
-    else {
+    } else {
       $this->where('email', '=', $data['email'])
         ->update([
           "password" => password_hash($data["password"],PASSWORD_DEFAULT),
@@ -607,6 +606,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
     if (!$createFromOrder) {
       $this->sendNotificationForCreateAccount($createdAccountInfo);
     }
+
     return $idCustomer;
   }
 

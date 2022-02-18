@@ -124,13 +124,18 @@ class Form extends \ADIOS\Core\UI\View
     if ($this->params['id'] <= 0) {
       $this->params['show_delete_button'] = false;
       $this->params['show_copy_button'] = false;
+
     }
 
     if ($this->params['show_save_button']) {
       $this->params['save_button_params']['type'] = ($this->params['id'] <= 0 ? 'add' : 'save');
 
-      if (!empty($this->model->formAddButtonText)) {
+      if ($this->params['id'] <= 0 && !empty($this->model->formAddButtonText)) {
         $this->params['save_button_params']['text'] = $this->model->formAddButtonText;
+      }
+
+      if ($this->params['id'] > 0 && !empty($this->model->formSaveButtonText)) {
+        $this->params['save_button_params']['text'] = $this->model->formSaveButtonText;
       }
 
       if (empty($this->params['save_button_params']['onclick'])) {

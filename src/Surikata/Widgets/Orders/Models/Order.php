@@ -603,6 +603,9 @@ class Order extends \ADIOS\Core\Widget\Model {
           TRUE, // saveAddress
           TRUE // hiddenAccount
         );
+      } else {
+        $customer = $customerModel->getByEmail($orderData["email"]);
+        $idCustomer = $customer["id"];
       }
     }
 

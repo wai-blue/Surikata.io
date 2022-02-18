@@ -538,9 +538,9 @@ class Customer extends \ADIOS\Core\Widget\Model {
     ];
 
     if ($hiddenAccount) {
-      $data["password"] = HelperFunctions::randomPassword();
-      $data["password_1"] = $data["password"];
-      $data["password_2"] = $data["password"];
+      $accountInfo["password"] = HelperFunctions::randomPassword();
+      $accountInfo["password_1"] = $accountInfo["password"];
+      $accountInfo["password_2"] = $accountInfo["password"];
     }
 
     foreach ($requiredFieldsRegistration as $fieldName) {
@@ -567,7 +567,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
       }
       $idCustomer = $tmpCustomer[0]["id"];
     }
-  
+
     $password = $accountInfo["password"];
 
     foreach ($this->columnNames() as $colName) {

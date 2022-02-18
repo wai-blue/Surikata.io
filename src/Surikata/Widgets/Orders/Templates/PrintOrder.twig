@@ -52,11 +52,7 @@
       <table>
         <tr>
           <td>
-            {% if language == "sk" %}
-              Objednávka č. {{ order.number }} - daňový doklad
-            {% elseif language == "en" %}
-              Order no. {{ order.number }}
-            {% endif %}
+            {{ translate("Order no.") }} {{ order.number }} - {{ translate("invoice") }}
           </td>
         </tr>
       </table>
@@ -68,11 +64,7 @@
         <div class='content'>
           <div class='dodod_info'>
             <span>
-              {% if language == "sk" %}
-                Dodávateľ
-              {% elseif language == "en" %}
-                Supplier
-              {% endif %}
+              {{ translate("Supplier") }}
             </span>
             <div></div>
           </div>
@@ -96,47 +88,27 @@
 
             <tr class=''>
               <td style='width:20%;'>
-                {% if language == "sk" %}
-                  IČO:
-                {% elseif language == "en" %}
-                  Company ID
-                {% endif %}
+                {{ translate("Company ID") }}
               </td>
               <td style='width:30%;'>{{ order.supplier_company_id }}</td>
               <td style='width:20%;'>
-                {% if language == "sk" %}
-                  Telefón:
-                {% elseif language == "en" %}
-                  Phone:
-                {% endif %}
+                {{ translate("Phone") }}:
               </td>
               <td style='width:30%;'>{{ order.supplier_phone }}</td>
             </tr>
             <tr class=''>
               <td style='width:20%;'>
-                {% if language == "sk" %}
-                  DIČ:
-                {% elseif language == "en" %}
-                  TAX ID:
-                {% endif %}
+                {{ translate("TAX ID") }}:
               </td>
               <td style='width:30%;'>{{ order.supplier_company_tax_id }}</td>
               <td style='width:20%;'>
-                {% if language == "sk" %}
-                  Email:
-                {% elseif language == "en" %}
-                  Email:
-                {% endif %}
+                  {{ translate("Email") }}:
               </td>
               <td style='width:30%;'>{{ order.supplier_email }}</td>
             </tr>
             <tr class=''>
-              <td style='width:20%;'>
-                {% if language == "sk" %}
-                  IČDPH:
-                {% elseif language == "en" %}
-                  VAT ID:
-                {% endif %}
+              <td style='width:20%;'> 
+                {{ translate("VAT ID") }}:
               </td>
               <td style='width:30%;'>{{ order.supplier_company_vat_id }}</td>
               <td style='width:20%;'>Web:</td>
@@ -156,11 +128,7 @@
         <div class='content odberatel'>
           <div class='dodod_info'>
             <span>
-              {% if language == "sk" %}
-                Odberateľ:
-              {% elseif language == "en" %}
-                Customer:
-              {% endif %}
+              {{ translate("Customer") }}:
             </span>
             <div></div>
           </div>
@@ -186,51 +154,31 @@
 
             <tr class=''>
               <td style='width:20%;'>
-                {% if language == "sk" %}
-                  IČO:
-                {% elseif language == "en" %}
-                  Company ID
-                {% endif %}
+                  {{ translate("Company ID") }}
               </td>
               <td style='width:30%;'>{{ order.customer_company_id }}</td>
               <td style='width:20%;'>
-                {% if language == "sk" %}
-                  Telefón:
-                {% elseif language == "en" %}
-                  Phone:
-                {% endif %}
+                {{ translate("Phone") }}:
               </td>
-              <td style='width:30%;'>{{ order.customer_phone }}</td>
+              <td style='width:30%;'>{{ order.phone_number }}</td>
             </tr>
             <tr class=''>
               <td style='width:20%;'>
-                {% if language == "sk" %}
-                  DIČ:
-                {% elseif language == "en" %}
-                  TAX ID:
-                {% endif %}
+                {{ translate("TAX ID") }}:
               </td>
-              <td style='width:30%;'>{{ order.customer_company_tax_id }}</td>
+              <td style='width:30%;'>{{ order.company_tax_id }}</td>
               <td style='width:20%;'>
-                {% if language == "sk" %}
-                  Email:
-                {% elseif language == "en" %}
-                  Email:
-                {% endif %}
+                {{ translate("Email") }}:
               </td>
-              <td style='width:30%;'>{{ order.customer_email }}</td>
+              <td style='width:30%;'>{{ order.email }}</td>
             </tr>
             <tr class=''>
               <td style='width:20%;'>
-                {% if language == "sk" %}
-                  IČDPH:
-                {% elseif language == "en" %}
-                  VAT ID:
-                {% endif %}
+                {{ translate("VAT ID") }}:
               </td>
-              <td style='width:30%;'>{{ order.customer_company_vat_id }}</td>
+              <td style='width:30%;'>{{ order.company_vat_id }}</td>
               <td style='width:20%;'>Web:</td>
-              <td style='width:30%;'>{{ order.customer_www }}</td>
+              <td style='width:30%;'>{{ order.www }}</td>
             </tr>
           </table>
 
@@ -240,87 +188,34 @@
           <table class='w_swi_orders_udaje' id='w_swi_orders_udaje_ostatne'>
             <tr>
               <td style='width:50%;'>
-                {% if language == "sk" %}
-                  Variabilný symbol:
-                {% elseif language == "en" %}
-                  Variable symbol:
-                {% endif %}
-              </td>
-              <td style='width:50%;'><b>{{ order.variable_symbol }}</b></td>
-            </tr>
-            <tr>
-              <td style='width:50%;'>
-                {% if language == "sk" %}
-                  Špecifický symbol:
-                {% elseif language == "en" %}
-                  Specific symbol:
-                {% endif %}
-              </td>
-              <td style='width:50%;'>{{ order.specific_symbol }}</td>
-            </tr>
-            <tr>
-              <td style='width:50%;'>
-                {% if language == "sk" %}
-                  Konštantný symbol:
-                {% elseif language == "en" %}
-                  Constant symbol:
-                {% endif %}
-              </td>
-              <td style='width:50%;'>{{ order.constant_symbol }}</td>
-            </tr>
-
-            <tr class='sep'><td colspan=2><div></div></td></tr>
-
-            <tr>
-              <td style='width:50%;'>
-                {% if language == "sk" %}
-                  Forma úhrady:
-                {% elseif language == "en" %}
-                  Payment:
-                {% endif %}
+                {{ translate("Payment") }}:
               </td>
               <td style='width:50%;'>{{ order.payment_method_value }}</td>
             </tr>
             <tr>
               <td style='width:50%;'>
-                {% if language == "sk" %}
-                  Číslo objednávky:
-                {% elseif language == "en" %}
-                  Order number:
-                {% endif %}
+                {{ translate("Order number") }}:
               </td>
-              <td style='width:50%;'>{{ order.order_number }}</td>
+              <td style='width:50%;'>{{ order.number }}</td>
             </tr>
 
             <tr class='sep'><td colspan=2><div></div></td></tr>
 
             <tr>
               <td style='width:50%;'>
-                {% if language == "sk" %}
-                  Dátum dodania:
-                {% elseif language == "en" %}
-                  Date of issue:
-                {% endif %}
+                {{ translate("Date of issue") }}:
               </td>
               <td style='width:50%;'>{{ order.delivery_time|date(locale.dateFormat) }}</td>
             </tr>
             <tr>
               <td style='width:50%;'>
-                {% if language == "sk" %}
-                  Dátum vystavenia:
-                {% elseif language == "en" %}
-                  Date of delivery:
-                {% endif %}
+                {{ translate("Date of delivery") }}:
               </td>
               <td style='width:50%;'>{{ order.issue_time|date(locale.dateFormat) }}</td>
             </tr>
             <tr>
               <td style='width:50%;'>
-                {% if language == "sk" %}
-                  Dátum splatnosti:
-                {% elseif language == "en" %}
-                  Due date:
-                {% endif %}
+                {{ translate("Due date") }}:
               </td>
               <td style='width:50%;'><b>{{ order.payment_due_time|date(locale.dateFormat) }}</b></td>
             </tr>
@@ -337,81 +232,41 @@
           <thead>
             <tr class='header'>
               <td style='width:26%;' class=''>
-                {% if language == "sk" %}
-                  Názov
-                {% elseif language == "en" %}
-                  Name
-                {% endif %}
+                {{ translate("Name") }}
               </td>
               <td style='width:9%;' class='_num'>
                 {% if template == 1 %}
-                  {% if language == "sk" %}
-                    J.cena<br/>bez DPH
-                  {% elseif language == "en" %}
-                    Price<br/>excl. template
-                  {% endif %}
+                  {{ translate("Price") }}<br/>{{ translate("excl. template") }}
                 {% else %}
-                  {% if language == "sk" %}
-                    J.cena<br/>
-                  {% elseif language == "en" %}
-                    Price<br/>
-                  {% endif %}
+                  {{ translate("Price") }}<br/>
                 {% endif %}
               </td>
               {% if template == 1 %}
                 <td style='width:9%;' class='_num'>
-                  {% if language == "sk" %}
-                    DPH
-                  {% elseif language == "en" %}
-                    VAT
-                  {% endif %}
+                  {{ translate("VAT") }}
                 </td>
               {% endif %}
               {% if template == 1 %}
                 <td style='width:9%;' class='_num'>
-                  {% if language == "sk" %}
-                    J.cena<br/>s DPH
-                  {% elseif language == "en" %}
-                    Price<br/>incl. template
-                  {% endif %}
+                  {{ translate("Price") }}<br/>{{ translate("incl. template") }}
                 </td>
               {% endif %}
               <td style='width:7%;' class='_num'>
-                {% if language == "sk" %}
-                  Množstvo
-                {% elseif language == "en" %}
-                  Amount
-                {% endif %}
+                {{ translate("Amount") }}
               </td>
               <td style='width:5%; text-align:center;' class=''>
-                {% if language == "sk" %}
-                  MJ
-                {% elseif language == "en" %}
-                  Unit
-                {% endif %}
+                  {{ translate("Unit") }}
               </td>
               <td style='width:11%;' class='_num'>
                 {% if template == 1 %}
-                  {% if language == "sk" %}
-                    Spolu<br/>bez DPH
-                  {% elseif language == "en" %}
-                    Subtotal<br/>excl. VAT
-                  {% endif %}
+                  {{ translate("Subtotal") }}<br/>{{ translate("excl. VAT") }}
                 {% else %}
-                  {% if language == "sk" %}
-                    Spolu
-                  {% elseif language == "en" %}
-                    Subtotal
-                  {% endif %}
+                  {{ translate("Subtotal") }}
                 {% endif %}
               </td>
               {% if template == 1 %}
                 <td style='width:11%;' class='_num'>
-                  {% if language == "sk" %}
-                    Spolu<br/>s DPH
-                  {% elseif language == "en" %}
-                    Subtotal<br/>incl. VAT
-                  {% endif %}
+                  {{ translate("Subtotal") }}<br/> {{ translate("incl. VAT") }}
                 </td>
               {% endif %}
             </tr>
@@ -422,9 +277,9 @@
             {% for item in order.ITEMS %}
               <tr>
                 <td style='width:26%;' class=''>
-                  {{ item.item }}
+                  {{ item.product_name }}
                 </td>
-                <td style='white-space:nowrap;width:9%;' class='_num'>{{ item.PRICES_FOR_Order.unitPriceExclVAT|formatPrice }} €</td>
+                <td style='white-space:nowrap;width:9%;' class='_num'>{{ item.unit_price|formatPrice }} €</td>
                 {% if template == 1 %}
                   <td style='white-space:nowrap;width:6%;' class='_num'>{{ item.vat_percent }} %</td>
                 {% endif %}
@@ -455,11 +310,7 @@
               {% for sadzba in order.SADZBY_DPH %}
                 <tr>
                   <td>
-                    {% if language == "sk" %}
-                      Základ DPH
-                    {% elseif language == "en" %}
-                      VAT
-                    {% endif %}
+                    {{ translate("VAT") }}
                     {{ sadzba.sadzba }} %
                   </td>
                   <td class='_num'>
@@ -472,12 +323,7 @@
             <tr>
               <td class='fbigger'>
                 {% if template == 2 or template == 3 %} <b> {% endif %}
-                  {% if language == "sk" %}
-                    Spolu
-                  {% elseif language == "en" %}
-                    Total
-                  {% endif %}
-                {% if template == 2 or template == 3 %} </b> {% endif %}
+                  {{ translate("Total") }}
               </td>
               <td class='_num fbigger'>
                 {% if template == 2 or template == 3 %} <b> {% endif %}
@@ -492,11 +338,7 @@
               {% for sadzba in order.SADZBY_DPH %}
                 <tr>
                   <td>
-                    {% if language == "sk" %}
-                      DPH
-                    {% elseif language == "en" %}
-                      VAT
-                    {% endif %}
+                    {{ translate("VAT") }}
                     {{ sadzba.sadzba }} %
                   </td>
                   <td class='_num'>
@@ -508,11 +350,7 @@
             {% if template == 1 %}
               <tr>
                 <td>
-                  {% if language == "sk" %}
-                    Spolu DPH
-                  {% elseif language == "en" %}
-                    VAT Total
-                  {% endif %}
+                  {{ translate("VAT Total") }}
                 </td>
                 <td class='_num'>
                   {{ order.SUMMARY.vat_total|number_format(2, ',', ' ') }} €
@@ -526,11 +364,7 @@
               <tr class='suma'>
                 <td class='fbigger'>
                   <b>
-                    {% if language == "sk" %}
-                      Spolu s DPH
-                    {% elseif language == "en" %}
-                      Total incl. VAT
-                    {% endif %}
+                    {{ translate("Total incl. VAT") }}
                   </b>
                 </td>
                 <td class='_num fbigger'>
@@ -553,11 +387,7 @@
             <tr>
               <td style='width:50%;'>
                 <span class='podpis_info'>
-                  {% if language == "sk" %}
-                    Pečiatka a podpis
-                  {% elseif language == "en" %}
-                    Stamp and signature
-                  {% endif %}
+                  {{ translate("Stamp and signature") }}
                 </span>
               </td>
               <td style='width:50%;'>

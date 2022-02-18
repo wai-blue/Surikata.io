@@ -518,16 +518,26 @@ class Customer extends \ADIOS\Core\Widget\Model {
 
     return $customerUID;
   }
-
-  public function createAccount($customerUID, $email, $accountInfo, $saveAddress, $createFromOrder = false) {
+    
+  /**
+   * createAccount
+   * REVIEW: Podrobne popisat logiku hiddenAcount.
+   *
+   * @param  string $customerUID
+   * @param  string $email
+   * @param  array $accountInfo
+   * @param  bool $saveAddress
+   * @param  bool $hiddenAccount
+   * @return int
+   */
+  public function createAccount(string $customerUID, string $email, array $accountInfo, bool $saveAddress, bool $hiddenAccount = false) : int {
     $requiredFieldsEmpty = [];
     $requiredFieldsRegistration = [
       "email",
+      "password",
     ];
 
-    if (!$createFromOrder) {
-      $requiredFieldsRegistration[] = "password";
-    } else {
+    if ($hiddenAccount) {
       $data["password"] = HelperFunctions::randomPassword();
       $data["password_1"] = $data["password"];
       $data["password_2"] = $data["password"];
@@ -552,7 +562,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
     $tmpCustomer = $this->where('email', '=', $email)->get()->toArray();
     $idCustomer = 0;
     if (count($tmpCustomer) > 0) {
-      if (!$createFromOrder && $tmpCustomer[0]["is_validated"] == TRUE) {
+      if (!$hiddenAccount && $tmpCustomer[0]["is_validated"] == TRUE) {
         throw new \ADIOS\Widgets\Customers\Exceptions\AccountAlreadyExists();
       }
       $idCustomer = $tmpCustomer[0]["id"];
@@ -603,7 +613,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
 
     $this->lastCreatedAccountPassword = $password;
 
-    if (!$createFromOrder) {
+    if (!$hiddenAccount) {
       $this->sendNotificationForCreateAccount($createdAccountInfo);
     }
 

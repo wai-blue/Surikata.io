@@ -85,7 +85,7 @@ namespace Surikata\Plugins\WAI\Customer {
               $newAccountInfo['email'],
               $newAccountInfo,
               TRUE, // saveAddress
-              FALSE // createFromOrder
+              FALSE // hiddenAccount
             )
           ;
         } catch (\ADIOS\Widgets\Customers\Exceptions\AccountAlreadyExists $e) {

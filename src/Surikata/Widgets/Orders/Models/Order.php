@@ -476,7 +476,7 @@ class Order extends \ADIOS\Core\Widget\Model {
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownPaymentService
    * @throws \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Exceptions\VoucherIsNotValid;
    */
-  public function placeOrder($orderData, $customerUID = NULL, $cartContents = NULL, $checkRequiredFields = TRUE) {
+  public function placeOrder($orderData, $customerUID = "", $cartContents = NULL, $checkRequiredFields = TRUE) {
     $idCustomer = 0;
     $idAddress = (int) $orderData['id_address'];
     $cartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($this->adios);
@@ -601,7 +601,7 @@ class Order extends \ADIOS\Core\Widget\Model {
           $orderData["email"],
           $createCustomerData,
           TRUE, // saveAddress
-          TRUE // createFromOrder
+          TRUE // hiddenAccount
         );
       }
     }

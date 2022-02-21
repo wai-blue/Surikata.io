@@ -72,16 +72,16 @@
 
           <table class='w_swi_orders_udaje' id='w_swi_orders_udaje_odberatel'>
             <tr>
-              <td colspan=4 style='width:100%;' class='fbigger'><b>{{ order.supplier_name }}</b></td>
+              <td colspan=4 style='width:100%;' class='fbigger'><b>{{ order.SUPPLIER.name }}</b></td>
             </tr>
             <tr>
-              <td colspan=4 style='width:100%;'>{{ order.supplier_street_1 }}</td>
+              <td colspan=4 style='width:100%;'>{{ order.SUPPLIER.street_1 }}</td>
             </tr>
             <tr>
-              <td colspan=4 style='width:100%;'>{{ order.supplier_zip }} {{ order.supplier_city }}</td>
+              <td colspan=4 style='width:100%;'>{{ order.SUPPLIER.zip }} {{ order.SUPPLIER.city }}</td>
             </tr>
             <tr>
-              <td colspan=4 style='width:100%;'>{{ order.supplier_country }}</td>
+              <td colspan=4 style='width:100%;'>{{ order.SUPPLIER.country }}</td>
             </tr>
 
             <tr class='sep'><td colspan=4><div></div></td></tr>
@@ -90,29 +90,29 @@
               <td style='width:20%;'>
                 {{ translate("Company ID") }}
               </td>
-              <td style='width:30%;'>{{ order.supplier_company_id }}</td>
+              <td style='width:30%;'>{{ order.SUPPLIER.company_id }}</td>
               <td style='width:20%;'>
                 {{ translate("Phone") }}:
               </td>
-              <td style='width:30%;'>{{ order.supplier_phone }}</td>
+              <td style='width:30%;'>{{ order.SUPPLIER.phone_number }}</td>
             </tr>
             <tr class=''>
               <td style='width:20%;'>
                 {{ translate("TAX ID") }}:
               </td>
-              <td style='width:30%;'>{{ order.supplier_company_tax_id }}</td>
+              <td style='width:30%;'>{{ order.SUPPLIER.company_tax_id }}</td>
               <td style='width:20%;'>
                   {{ translate("Email") }}:
               </td>
-              <td style='width:30%;'>{{ order.supplier_email }}</td>
+              <td style='width:30%;'>{{ order.SUPPLIER.email }}</td>
             </tr>
             <tr class=''>
               <td style='width:20%;'> 
                 {{ translate("VAT ID") }}:
               </td>
-              <td style='width:30%;'>{{ order.supplier_company_vat_id }}</td>
+              <td style='width:30%;'>{{ order.SUPPLIER.company_vat_id }}</td>
               <td style='width:20%;'>Web:</td>
-              <td style='width:30%;'>{{ order.supplier_www }}</td>
+              <td style='width:30%;'>{{ order.SUPPLIER.www }}</td>
             </tr>
           </table>
 
@@ -135,50 +135,48 @@
 
           <table class='w_swi_orders_udaje' id='w_swi_orders_udaje_odberatel'>
             <tr>
-              <td colspan=4 style='width:100%;' class='fbigger'><b>{{ order.customer_name }}</b></td>
+              <td colspan=4 style='width:100%;' class='fbigger'><b>{{ order.CUSTOMER.given_name }} {{ order.CUSTOMER.family_name }}</b></td>
             </tr>
             <tr>
-              <td colspan=4 style='width:100%;'>{{ order.customer_street_1 }}</td>
+              <td colspan=4 style='width:100%;'>{{ order.CUSTOMER.street_1 }}</td>
             </tr>
             <tr>
-              <td colspan=4 style='width:100%;'>{{ order.customer_street_2 }}</td>
+              <td colspan=4 style='width:100%;'>{{ order.CUSTOMER.street_2 }}</td>
             </tr>
             <tr>
-              <td colspan=4 style='width:100%;'>{{ order.customer_zip }} {{ order.customer_city }}</td>
+              <td colspan=4 style='width:100%;'>{{ order.CUSTOMER.zip }} {{ order.CUSTOMER.city }}</td>
             </tr>
             <tr>
-              <td colspan=4 style='width:100%;'>{{ order.customer_country }}</td>
+              <td colspan=4 style='width:100%;'>{{ order.CUSTOMER.country }}</td>
             </tr>
 
             <tr class='sep'><td colspan=4><div></div></td></tr>
 
             <tr class=''>
               <td style='width:20%;'>
-                  {{ translate("Company ID") }}
+                  {{ translate("Company ID") }}:
               </td>
-              <td style='width:30%;'>{{ order.customer_company_id }}</td>
+              <td style='width:30%;'>{{ order.CUSTOMER.company_id }}</td>
               <td style='width:20%;'>
                 {{ translate("Phone") }}:
               </td>
-              <td style='width:30%;'>{{ order.phone_number }}</td>
+              <td style='width:30%;'>{{ order.CUSTOMER.phone_number }}</td>
             </tr>
             <tr class=''>
               <td style='width:20%;'>
                 {{ translate("TAX ID") }}:
               </td>
-              <td style='width:30%;'>{{ order.company_tax_id }}</td>
+              <td style='width:30%;'>{{ order.CUSTOMER.company_tax_id }}</td>
               <td style='width:20%;'>
                 {{ translate("Email") }}:
               </td>
-              <td style='width:30%;'>{{ order.email }}</td>
+              <td style='width:30%;'>{{ order.CUSTOMER.email }}</td>
             </tr>
             <tr class=''>
               <td style='width:20%;'>
                 {{ translate("VAT ID") }}:
               </td>
-              <td style='width:30%;'>{{ order.company_vat_id }}</td>
-              <td style='width:20%;'>Web:</td>
-              <td style='width:30%;'>{{ order.www }}</td>
+              <td style='width:30%;'>{{ order.CUSTOMER.company_vat_id }}</td>
             </tr>
           </table>
 
@@ -190,13 +188,13 @@
               <td style='width:50%;'>
                 {{ translate("Payment") }}:
               </td>
-              <td style='width:50%;'>{{ order.payment_method_value }}</td>
+              <td style='width:50%;'>{{ order.HEADER.payment_method_value }}</td>
             </tr>
             <tr>
               <td style='width:50%;'>
                 {{ translate("Order number") }}:
               </td>
-              <td style='width:50%;'>{{ order.number }}</td>
+              <td style='width:50%;'>{{ order.HEADER.order_number }}</td>
             </tr>
 
             <tr class='sep'><td colspan=2><div></div></td></tr>
@@ -277,20 +275,20 @@
             {% for item in order.ITEMS %}
               <tr>
                 <td style='width:26%;' class=''>
-                  {{ item.product_name }}
+                  {{ item.item }}
                 </td>
                 <td style='white-space:nowrap;width:9%;' class='_num'>{{ item.unit_price|formatPrice }} €</td>
                 {% if template == 1 %}
                   <td style='white-space:nowrap;width:6%;' class='_num'>{{ item.vat_percent }} %</td>
                 {% endif %}
                 {% if template == 1 %}
-                  <td style='white-space:nowrap;width:9%;' class='_num'>{{ item.PRICES_FOR_Order.unitPriceInclVAT|formatPrice }} €</td>
+                  <td style='white-space:nowrap;width:9%;' class='_num'>{{ item.PRICES_FOR_INVOICE.unitPriceInclVAT|formatPrice }} €</td>
                 {% endif %}
                 <td style='white-space:nowrap;width:7%;' class='_num'><b>{{ item.quantity }}</b></td>
                 <td style='white-space:nowrap;width:5%; text-align:center;' class=''>{{ item.DELIVERY_UNIT.unit }}</td>
-                <td style='white-space:nowrap;width:11%;' class='_num'>{{ item.PRICES_FOR_Order.totalPriceExclVAT|formatPrice }} €</td>
+                <td style='white-space:nowrap;width:11%;' class='_num'>{{ item.PRICES_FOR_INVOICE.totalPriceExclVAT|formatPrice }} €</td>
                 {% if template == 1 %}
-                  <td style='white-space:nowrap;width:11%;' class='_num'>{{ item.PRICES_FOR_Order.totalPriceInclVAT|formatPrice }} €</td>
+                  <td style='white-space:nowrap;width:11%;' class='_num'>{{ item.PRICES_FOR_INVOICE.totalPriceInclVAT|formatPrice }} €</td>
                 {% endif %}
               </tr>
             {% endfor %}

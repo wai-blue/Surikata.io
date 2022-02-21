@@ -1402,6 +1402,7 @@ class Order extends \ADIOS\Core\Widget\Model {
     $summary = [
       'price_total_excl_vat' => 0,
       'price_total_incl_vat' => 0,
+      'vat_total' => 0,
       'weight_total' => 0,
     ];
 
@@ -1412,6 +1413,7 @@ class Order extends \ADIOS\Core\Widget\Model {
     ;
 
     foreach ($order['ITEMS'] as $item) {
+      $summary['vat_total'] += $item['PRICES_FOR_INVOICE']['totalVAT'];
       $summary['price_total_excl_vat'] += $item['PRICES_FOR_INVOICE']['totalPriceExclVAT'];
       $summary['price_total_incl_vat'] += $item['PRICES_FOR_INVOICE']['totalPriceInclVAT'];
       $summary['weight_total'] += $item['quantity'] * $item['product_weight'];
@@ -1516,6 +1518,8 @@ class Order extends \ADIOS\Core\Widget\Model {
         "country" => $order["inv_country"],
         "email" => $order["email"],
         "phone_number" => $order["phone_number"],
+        "given_name" => $order["inv_given_name"],
+        "family_name" => $order["inv_family_name"],
       ],
       "SUPPLIER" => [
         "name" => "MyCompany ltd.",

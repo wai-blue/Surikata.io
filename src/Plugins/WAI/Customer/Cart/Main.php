@@ -70,17 +70,26 @@ namespace Surikata\Plugins\WAI\Customer {
     public function placeOrder($orderData) {
       $customerUID = $this->websiteRenderer->getCustomerUID();
 
-      if ($orderData["createAccount"] == "1") {
-        $orderData['id_customer'] = (new \ADIOS\Widgets\Customers\Models\Customer($this->adminPanel))
-          ->createAccount(
-            $customerUID,
-            $orderData['email'],
-            $orderData,
-            TRUE // saveAddress
-          )
-        ;
-      } else if (!empty($this->websiteRenderer->userLogged['id'])) {
+      if (!empty($this->websiteRenderer->userLogged['id'])) {
         $orderData['id_customer'] = $this->websiteRenderer->userLogged['id'];
+      } else if ($orderData["createAccount"] == "1") {
+        $newAccountInfo = $orderData;
+
+        // REVIEW: do $newAccountInfo vygenerovat random password - pri vytvarani uctu
+        // nech sa vytvori aj heslo a aj nech sa odosle klientovi mail s notifikaciou.
+
+        try {
+          $orderData['id_customer'] = (new \ADIOS\Widgets\Customers\Models\Customer($this->adminPanel))
+            ->createAccount(
+              $customerUID,
+              $newAccountInfo['email'],
+              $newAccountInfo,
+              TRUE, // saveAddress
+              FALSE // hiddenAccount
+            )
+          ;
+        } catch (\ADIOS\Widgets\Customers\Exceptions\AccountAlreadyExists $e) {
+        }
       } else {
         $orderData['id_customer'] = 0;
       }

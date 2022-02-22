@@ -52,7 +52,7 @@
       <table>
         <tr>
           <td>
-            {{ translate("Order no.") }} {{ order.number }} - {{ translate("invoice") }}
+            {{ translate("Order no.") }} {{ order.HEADER.order_number }} - {{ translate("invoice") }}
           </td>
         </tr>
       </table>
@@ -188,7 +188,7 @@
               <td style='width:50%;'>
                 {{ translate("Payment") }}:
               </td>
-              <td style='width:50%;'>{{ order.HEADER.payment_method_value }}</td>
+              <td style='width:50%;'>{{ translate(order.HEADER.payment_method_value) }}</td>
             </tr>
             <tr>
               <td style='width:50%;'>
@@ -234,7 +234,7 @@
               </td>
               <td style='width:9%;' class='_num'>
                 {% if template == 1 %}
-                  {{ translate("Price") }}<br/>{{ translate("excl. template") }}
+                  {{ translate("Price") }}<br/>{{ translate("excl. VAT") }}
                 {% else %}
                   {{ translate("Price") }}<br/>
                 {% endif %}
@@ -246,7 +246,7 @@
               {% endif %}
               {% if template == 1 %}
                 <td style='width:9%;' class='_num'>
-                  {{ translate("Price") }}<br/>{{ translate("incl. template") }}
+                  {{ translate("Price") }}<br/>{{ translate("incl. VAT") }}
                 </td>
               {% endif %}
               <td style='width:7%;' class='_num'>
@@ -275,7 +275,7 @@
             {% for item in order.ITEMS %}
               <tr>
                 <td style='width:26%;' class=''>
-                  {{ item.item }}
+                  {{ translate(item.item) }}
                 </td>
                 <td style='white-space:nowrap;width:9%;' class='_num'>{{ item.unit_price|formatPrice }} €</td>
                 {% if template == 1 %}

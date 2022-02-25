@@ -49,6 +49,8 @@ class Loader {
 
   public $dictionaryFilename = "Core-Loader";
 
+  public $factories = [];
+
   public function __construct($config = NULL, $mode = NULL) {
 
     global $___ADIOSObject;
@@ -127,7 +129,8 @@ class Loader {
     try {
 
       // inicializacia debug konzoly
-      $this->console = new \ADIOS\Core\Console($this);
+      $consoleFactoryClass = $this->factories['console'] ?? \ADIOS\Core\Console::class;
+      $this->console = new $consoleFactoryClass($this);
       $this->console->clearLog("timestamps", "info");
 
       $this->console->logTimestamp("__construct() start");
@@ -221,18 +224,21 @@ class Loader {
       }
 
       // inicializacia locale objektu
-      $this->locale = new \ADIOS\Core\Locale($this);
+      $localeFactoryClass = $this->factories['locale'] ?? \ADIOS\Core\Locale::class;
+      $this->locale = new $localeFactoryClass($this);
 
       // inicializacia objektu notifikacii
-      $this->userNotifications = new \ADIOS\Core\UserNotifications($this);
+      $userNotificationsFactoryClass = $this->factories['userNotifications'] ?? \ADIOS\Core\UserNotifications::class;
+      $this->userNotifications = new $userNotificationsFactoryClass($this);
 
       // inicializacia mailera
-      // 2021-07-05 deprecated
-      // $this->email = new \ADIOS\Core\Email($this);
+      $emailFactoryClass = $this->factories['userNotifications'] ?? \ADIOS\Core\Email::class;
+      $this->email = new $emailFactoryClass($this);
 
       // inicializacia DB - aj pre FULL aj pre LITE mod
 
-      $this->db = new DB($this, [
+      $dbFactoryClass = $this->factories['db'] ?? DB::class;
+      $this->db = new $dbFactoryClass($this, [
         'db_host' => $this->getConfig('db_host', ''),
         'db_port' => $this->getConfig('db_port', ''),
         'db_login' => $this->getConfig('db_login', ''),
@@ -318,7 +324,8 @@ class Loader {
 
         // inicializacia twigu
 
-        $twigLoader = new \ADIOS\Core\Lib\TwigLoader($this);
+        $twigLoaderFactoryClass = $this->factories['twigLoader'] ?? \ADIOS\Core\Lib\TwigLoader::class;
+        $twigLoader = new $twigLoaderFactoryClass($this);
         $this->twig = new \Twig\Environment($twigLoader, array(
           'cache' => FALSE,
           'debug' => TRUE,
@@ -342,8 +349,8 @@ class Loader {
         }));
 
         // inicializacia UI wrappera
-
-        $this->ui = new \ADIOS\Core\UI($this, []);
+        $uiFactoryClass = $this->factories['uid'] ?? \ADIOS\Core\UI::class;
+        $this->ui = new $uiFactoryClass($this, []);
       }
 
       $this->dispatchEventToPlugins("onADIOSAfterInit", ["adios" => $this]);
@@ -936,7 +943,8 @@ class Loader {
         $tmpTemplateName = str_replace("\\", "/", $tmpTemplateName);
         $tmpTemplateName = str_replace("/Actions/", "/Templates/", $tmpTemplateName);
 
-        $tmp = new \ADIOS\Core\Action($this);
+        $actionFactoryClass = $this->factories['action'] ?? \ADIOS\Core\Action::class;
+        $tmp = new $actionFactoryClass($this);
         $tmp->twigTemplate = $tmpTemplateName;
         $actionHtml = $tmp->render($params);
       }

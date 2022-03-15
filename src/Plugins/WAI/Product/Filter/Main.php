@@ -93,6 +93,7 @@ namespace Surikata\Plugins\WAI\Product {
           "allFeatures" => $allFeatures,
           "idCategory" => $idCategory,
           "filteredBrands" => $filteredBrands,
+          "allFeaturesAssignments" => $allFeaturesAssignments
         ];
 
 

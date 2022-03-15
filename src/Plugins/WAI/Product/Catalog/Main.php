@@ -243,6 +243,12 @@ namespace Surikata\Plugins\WAI\Product {
         // Load IDs of matching products. This will be used for further processing - extending the information about products.
         $productIds = $productsQuery->pluck('id')->toArray();
 
+        // Get productIds from extendedFilter
+        $productIds = $this->adminPanel->dispatchEventToPlugins("onProductCatalogFilter", [
+          "productIds" => $productIds,
+          "filter" => $filter
+        ]);
+
         // Add "standardized" detailed information about loaded products. This does not include price calculations.
         self::$catalogInfo["products"] = $productModel->getDetailedInfoForListOfProducts(
           $productIds,

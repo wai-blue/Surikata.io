@@ -8,6 +8,12 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
 
   public static $allItemsCache = NULL;
 
+  const ENTRY_METHOD_SLIDER   = 1;
+  const ENTRY_METHOD_SELECT   = 2;
+  const ENTRY_METHOD_RADIO    = 3;
+  const ENTRY_METHOD_CHECKBOX = 4;
+  const ENTRY_METHOD_TEXT     = 5;
+
   public function init() {
     $this->formTitleForInserting = $this->translate("New product feature");
     $this->formTitleForEditing = $this->translate("Product feature");
@@ -20,13 +26,12 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
       3 => $this->translate("Yes/No"),
     ];
 
-    // TODO: cisla zamenit za konstanty
     $this->enumValuesEntryMethod = [
-      1 => "Slider",
-      2 => "Select",
-      3 => "Radio",
-      4 => "Checkbox",
-      5 => "Text",
+      self::ENTRY_METHOD_SLIDER   => "Slider",
+      self::ENTRY_METHOD_SELECT   => "Select",
+      self::ENTRY_METHOD_RADIO    => "Radio",
+      self::ENTRY_METHOD_CHECKBOX => "Checkbox",
+      self::ENTRY_METHOD_TEXT     => "Text",
     ];
   }
 

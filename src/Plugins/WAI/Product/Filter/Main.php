@@ -83,6 +83,8 @@ namespace Surikata\Plugins\WAI\Product {
           }
         }
 
+        // TODO: dispatchEventToPlugins...
+
         self::$filterInfo = [
           "allBrands" => $allBrands,
           "allCategories" => self::$allCategories,

@@ -105,6 +105,43 @@ class Plugin {
   }
 
   /**
+   * Returns the ID of the website where the plugin is used. Uses Widgets/Website/Models/WebPage model.
+   * 
+   * @param string $domain Name of the domain for which the URL is to be generated. Used when calling this method from the administration panel, e.g. when generating URL for a specific order.
+   * @param array $pluginSettings OPTIONAL. If provided, settings of the plugin must match this argument.
+   * 
+   * @return string ID of the website
+   */
+  public function getWebPageId($domain = "", $pluginSettings = []) {
+    $idWebPage = NULL;
+
+    $publishedPages = $this->websiteRenderer->loadPublishedPages($domain);
+
+    foreach ($publishedPages as $webPage) {
+      $contentStructure = @json_decode($webPage['content_structure'], TRUE);
+
+      if ($idWebPage === NULL) {
+        foreach ($contentStructure['panels'] as $panelName => $panelSettings) {
+          if (($panelSettings["plugin"] ?? "") == $this->name) {
+            $match = TRUE;
+
+            // TODO: preverit aj voci $domain
+
+            // TODO: ak $pluginSettings je neprazdne, tak preverit, ci
+            // $pluginSettings nie je v protiklade s $panelSettings["settings"]
+
+            if ($match) {
+              $idWebPage = $webPage['id'];
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    return $idWebPage;
+  }
+  /**
    * Returns the key - value associative array of variables and
    * their values used in TWIG template.
    * 

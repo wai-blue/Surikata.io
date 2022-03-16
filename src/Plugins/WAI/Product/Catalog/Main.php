@@ -244,7 +244,7 @@ namespace Surikata\Plugins\WAI\Product {
         $productIds = $productsQuery->pluck('id')->toArray();
 
         // Get productIds from extendedFilter
-        $productIds = $this->adminPanel->dispatchEventToPlugins("onProductCatalogFilter", [
+        $productIds = $this->adminPanel->dispatchEventToPlugins("onProductCatalogFilterProductIds", [
           "productIds" => $productIds,
           "filter" => $filter
         ]);

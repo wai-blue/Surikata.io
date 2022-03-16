@@ -8,6 +8,10 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
 
   public static $allItemsCache = NULL;
 
+  const FEATURE_DATA_TYPE_NUMBER  = 1;
+  const FEATURE_DATA_TYPE_TEXT    = 2;
+  const FEATURE_DATA_TYPE_BOOLEAN = 3;
+
   const ENTRY_METHOD_SLIDER   = 1;
   const ENTRY_METHOD_SELECT   = 2;
   const ENTRY_METHOD_RADIO    = 3;
@@ -19,11 +23,10 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
     $this->formTitleForEditing = $this->translate("Product feature");
     $this->tableTitle = $this->translate("Product features");
 
-    // TODO: cisla zamenit za konstanty
     $this->enumValuesValueType = [
-      1 => $this->translate("Number"),
-      2 => $this->translate("Text"),
-      3 => $this->translate("Yes/No"),
+      self::FEATURE_DATA_TYPE_NUMBER => $this->translate("Number"),
+      self::FEATURE_DATA_TYPE_TEXT => $this->translate("Text"),
+      self::FEATURE_DATA_TYPE_BOOLEAN => $this->translate("Yes/No"),
     ];
 
     $this->enumValuesEntryMethod = [

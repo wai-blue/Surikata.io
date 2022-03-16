@@ -57,7 +57,7 @@ class RandomProductsGenerator {
         at nibh. Praesent commodo felis luctus iaculis sodales. Ut ac blandit quam, a convallis risus.
       ";
       $price = rand(500, 5000)/100;
-      $features = [rand(1000,1200), rand(1200,1250), rand(250,300), rand(1,3), rand(75,120)*10, rand(50,100)*10, "155 R13"];
+      $features = [rand(1,1000), rand(1,1000), rand(1,1000), null, "155 R13"];
       $number = "RND.".$i;
       $ean = self::generateEAN($number);
       $image = "products/{$productImgNum}.jpg";

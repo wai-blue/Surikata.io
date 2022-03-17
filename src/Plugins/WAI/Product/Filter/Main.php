@@ -83,7 +83,7 @@ namespace Surikata\Plugins\WAI\Product {
           }
         }
 
-        // TODO: dispatchEventToPlugins...
+        //var_dump($this->adminPanel->dispatchEventToPlugins("onProductCatalogGetFilterInfo", []));
 
         self::$filterInfo = [
           "allBrands" => $allBrands,

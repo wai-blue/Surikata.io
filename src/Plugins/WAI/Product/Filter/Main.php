@@ -83,8 +83,6 @@ namespace Surikata\Plugins\WAI\Product {
           }
         }
 
-        //var_dump($this->adminPanel->dispatchEventToPlugins("onProductCatalogGetFilterInfo", []));
-
         self::$filterInfo = [
           "allBrands" => $allBrands,
           "allCategories" => self::$allCategories,
@@ -98,6 +96,9 @@ namespace Surikata\Plugins\WAI\Product {
           "allFeaturesAssignments" => $allFeaturesAssignments
         ];
 
+        $this->adminPanel->dispatchEventToPlugins("onProductCatalogGetFilterInfo", [
+          "filter" => self::$filterInfo,
+        ]);
 
       }
 

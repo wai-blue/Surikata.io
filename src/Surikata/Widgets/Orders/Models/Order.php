@@ -1168,11 +1168,6 @@ class Order extends \ADIOS\Core\Widget\Model {
             </div>
           </div>
         </div>
-        <div class='card shadow mb-2'>
-          <div class='card-header py-3'>
-            ".$this->translate('Tags')."
-          </div>
-        </div>
       ";
 
       $sidebarHtml .= $this->adios->dispatchEventToPlugins("onOrderDetailAfterSidebarButtons", [

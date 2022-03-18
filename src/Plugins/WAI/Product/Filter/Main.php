@@ -83,22 +83,20 @@ namespace Surikata\Plugins\WAI\Product {
           }
         }
 
-        self::$filterInfo = [
-          "allBrands" => $allBrands,
-          "allCategories" => self::$allCategories,
-          "allCategoriesAndSubCategories" => $allCategoriesAndSubCategories,
-          "parentCategories" => $parentCategories,
-          "allSubCategories" => $allSubCategories,
-          "directSubCategories" => $directSubCategories,
-          "allFeatures" => $allFeatures,
-          "idCategory" => $idCategory,
-          "filteredBrands" => $filteredBrands,
-          "allFeaturesAssignments" => $allFeaturesAssignments
-        ];
-
-        $this->adminPanel->dispatchEventToPlugins("onProductCatalogGetFilterInfo", [
-          "filter" => self::$filterInfo,
-        ]);
+        self::$filterInfo = $this->adminPanel->dispatchEventToPlugins("onProductCatalogGetFilterInfo", [
+          "filter" => [
+            "allBrands" => $allBrands,
+            "allCategories" => self::$allCategories,
+            "allCategoriesAndSubCategories" => $allCategoriesAndSubCategories,
+            "parentCategories" => $parentCategories,
+            "allSubCategories" => $allSubCategories,
+            "directSubCategories" => $directSubCategories,
+            "allFeatures" => $allFeatures,
+            "idCategory" => $idCategory,
+            "filteredBrands" => $filteredBrands,
+            "allFeaturesAssignments" => $allFeaturesAssignments
+          ],
+        ])["filter"];
 
       }
 

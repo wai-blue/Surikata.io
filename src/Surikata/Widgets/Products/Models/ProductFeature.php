@@ -89,6 +89,9 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
           "show_column" => TRUE,
         ],
 
+        // Pridat ProductFeatureOption a ProductFeatureOptionAssignment (id_feature, id_option)
+        // Hint: (new \ADIOS\Core\UI\Input\Tags(
+
         "min" => [
           "type" => "int",
           "title" => $this->translate("Minimum value"),
@@ -206,8 +209,8 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
       }
     ";
 
-    $params['columns']['min']['disabled'] = true;
-    $params['columns']['max']['disabled'] = true;
+    // $params['columns']['min']['disabled'] = true;
+    // $params['columns']['max']['disabled'] = true;
 
     $params['columns']['value_type']['onchange'] = "
       if ($(this).val() == 1) {

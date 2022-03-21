@@ -9,6 +9,7 @@ class PluginWAIProductCatalogAPIClass {
     if (window.location.href.indexOf(varName)> -1) {
       let url = new URL(window.location.href);
       let urlParams = url.searchParams.get(varName).split(" ");
+      urlParams = url.searchParams.get(varName).split(",");
       this.filter[varName] = urlParams;
     }
   }

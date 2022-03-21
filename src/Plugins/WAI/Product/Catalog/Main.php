@@ -247,7 +247,7 @@ namespace Surikata\Plugins\WAI\Product {
         $productIds = $this->adminPanel->dispatchEventToPlugins("onProductCatalogFilterProductIds", [
           "productIds" => $productIds,
           "filter" => $filter
-        ]);
+        ])["productIds"];
 
         // Add "standardized" detailed information about loaded products. This does not include price calculations.
         self::$catalogInfo["products"] = $productModel->getDetailedInfoForListOfProducts(

@@ -66,6 +66,7 @@ class PluginWAIProductCatalogAPIClass {
         newVar.push(this.filter[varName][i]);
       }
     }
+
     this.filter[varName] = newVar;
     return this;
   }
@@ -87,6 +88,13 @@ class PluginWAIProductCatalogAPIClass {
     for (let varName in this.filter) {
       //if (varName == 'page' && this.filter[varName] == 1) continue;
       if (varName == 'idCategory') continue;
+
+      // If the filter does not contain a parameter delete it
+      urlObject.searchParams.forEach((index, filterParam) => {
+        if (!Object.keys(this.filter).includes(filterParam)) {
+          urlObject.searchParams.delete(filterParam);
+        }
+      })
 
       if (varName == 'brands') {
         urlObject.searchParams.set('brands', this.filter['brands'].join(' '));

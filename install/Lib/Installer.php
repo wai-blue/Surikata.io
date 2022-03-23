@@ -33,7 +33,11 @@ class Installer {
     // Initialization
 
     $websiteRenderer = new \MyEcommerceProject\Web($websiteRendererConfig);
-    $adminPanel = new \MyEcommerceProject\AdminPanel($adminPanelConfig, ADIOS_MODE_FULL, $websiteRenderer);
+    $adminPanel = new \MyEcommerceProject\AdminPanel(
+      $adminPanelConfig,
+      \ADIOS\Core\Loader::ADIOS_MODE_FULL,
+      $websiteRenderer
+    );
     $adminPanel->console->cliEchoEnabled = TRUE;
 
     $adminPanel->console->info("Installation started.");

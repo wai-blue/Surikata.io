@@ -57,7 +57,11 @@ $sql = file_get_contents("{$tmpPackageFolder}/package.sql");
 $installationConfig = json_decode(file_get_contents("{$tmpPackageFolder}/installation-config.json"), TRUE);
 
 $websiteRenderer = new \MyEcommerceProject\Web($websiteRendererConfig);
-$adminPanel = new \MyEcommerceProject\AdminPanel($adminPanelConfig, ADIOS_MODE_FULL, $websiteRenderer);
+$adminPanel = new \MyEcommerceProject\AdminPanel(
+  $adminPanelConfig,
+  \ADIOS\Core\Loader::ADIOS_MODE_FULL,
+  $websiteRenderer
+);
 
 $adminPanel->createMissingFolders();
 

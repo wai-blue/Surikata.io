@@ -10,6 +10,18 @@
         "erusev/parsedown": "^1.7",
         "voku/html-compress-twig": "^4.0",
         "monolog/monolog": "^2.3",
-        "symfony/yaml": "^5.4"
-    }
+        "symfony/yaml": "^5.4",
+        "wai-blue/cascada": "@dev",
+        "wai-blue/adios": "@dev"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../CASCADA"
+        },
+        {
+            "type": "path",
+            "url": "../ADIOS"
+        }
+    ]
 }

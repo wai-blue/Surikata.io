@@ -1,5 +1,0 @@
-.adios.ui.rows {display:flex;flex:1;flex-direction:column;}
-.adios.ui.rows.wrap {flex-wrap:wrap;}
-.adios.ui.rows .row {box-sizing:border-box;display:flex;}
-.adios.ui.rows .row.border {border-bottom:solid 1px #cccccc;}
-.adios.ui.rows .row.border:last-child {border-bottom:none;}

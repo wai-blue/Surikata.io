@@ -47,7 +47,7 @@ try {
   $web = new \MyEcommerceProject\Web($websiteRendererConfig);
   $adminPanel = new \MyEcommerceProject\AdminPanel(
     $adminPanelConfig + ['default_action' => $actionToRun],
-    ADIOS_MODE_FULL,
+    \ADIOS\Core\Loader::ADIOS_MODE_FULL,
     $web
   );
 

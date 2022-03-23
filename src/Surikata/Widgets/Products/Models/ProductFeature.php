@@ -88,7 +88,7 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
           "enum_values" => $this->enumValuesEntryMethod,
           "show_column" => TRUE,
         ],
-
+        
         // Pridat ProductFeatureOption a ProductFeatureOptionAssignment (id_feature, id_option)
         // Hint: (new \ADIOS\Core\UI\Input\Tags(
 
@@ -176,6 +176,22 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
       $tabTranslations[] = ["html" => $this->translate("No translations available.")];
     }
 
+    // ProductFeature options
+    $productFeatureOption = 
+      new \ADIOS\Widgets\Products\Models\ProductFeatureOption(
+        $this->adios
+      )
+    ;
+
+    $options = (new \ADIOS\Widgets\Products\Models\ProductFeatureOptionAssignment(
+      $this->adios
+    ))->getOptionsIdsForFeature($data['id']);
+
+    $selectedOptions = $productFeatureOption->getSelectedOptions($options);
+    $initialOptions = json_encode(
+      $productFeatureOption->getOptionNamesFromArray($selectedOptions)
+    );
+
     $params["template"] = [
       "columns" => [
         [
@@ -188,6 +204,17 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
               "value_type",
               "id_measurement_unit",
               "entry_method",
+              [
+                "title" => $this->translate("Options"),
+                "input" => (new \ADIOS\Core\UI\Input\Tags(
+                  $this->adios,
+                  "{$params['uid']}_options",
+                  [
+                    "model" => "Widgets/Products/Models/ProductFeatureOption",
+                    "initialTags" => $initialOptions,
+                  ]
+                ))->render(),
+              ],
               "min",
               "max",
               "order_index",

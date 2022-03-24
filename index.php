@@ -28,7 +28,7 @@ try {
 
   $adminPanel = new \MyEcommerceProject\AdminPanel(
     $adminPanelConfig,
-    ADIOS_MODE_LITE
+    \ADIOS\Core\Loader::ADIOS_MODE_LITE,
   );
   
   echo

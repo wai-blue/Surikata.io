@@ -77,6 +77,8 @@ class Installer {
     $productRelatedModel = new \ADIOS\Widgets\Products\Models\ProductRelated($adminPanel);
     $productAccessoryModel = new \ADIOS\Widgets\Products\Models\ProductAccessory($adminPanel);
     $productFeatureModel = new \ADIOS\Widgets\Products\Models\ProductFeature($adminPanel);
+    $productFeatureOptionModel = new \ADIOS\Widgets\Products\Models\ProductFeatureOption($adminPanel);
+    $productFeatureOptionAssignmentModel = new \ADIOS\Widgets\Products\Models\ProductFeatureOptionAssignment($adminPanel);
     $productFeatureAssignmentModel = new \ADIOS\Widgets\Products\Models\ProductFeatureAssignment($adminPanel);
     $productPriceModel = new \ADIOS\Widgets\Products\Models\ProductPrice($adminPanel);
     $productStockStateModel = new \ADIOS\Widgets\Products\Models\ProductStockState($adminPanel);
@@ -327,9 +329,39 @@ class Installer {
       // produkty - vlastnosti produktov, ciselnik
       $productFeatureModel->insertRow(["id" => 1, "order_index" => 1, "value_type" => 1, "entry_method" => 1, "min" => 1, "max" => 1000, "name_lang_1" => "Length", "name_lang_2" => "Dĺžka", "id_measurement_unit" => 2]);
       $productFeatureModel->insertRow(["id" => 2, "order_index" => 2, "value_type" => 1, "entry_method" => 1, "min" => 1, "max" => 1000, "name_lang_1" => "Width", "name_lang_2" => "Šírka", "id_measurement_unit" => 2]);
-      $productFeatureModel->insertRow(["id" => 3, "order_index" => 3, "value_type" => 1, "entry_method" => 1, "min" => 1, "max" => 1000, "name_lang_1" => "Height", "name_lang_2" => "Výška", "id_measurement_unit" => 9]);
+      $productFeatureModel->insertRow(["id" => 3, "order_index" => 3, "value_type" => 1, "entry_method" => 1, "min" => 1, "max" => 1000, "name_lang_1" => "Weight", "name_lang_2" => "Váha", "id_measurement_unit" => 9]);
       $productFeatureModel->insertRow(["id" => 4, "order_index" => 4, "value_type" => 3, "entry_method" => 4, "min" => null, "max" => null, "name_lang_1" => "Gaming", "name_lang_2" => "Herné", "id_measurement_unit" => 1]);
       $productFeatureModel->insertRow(["id" => 5, "order_index" => 5, "value_type" => 2, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Search", "name_lang_2" => "Hľadať", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 6, "order_index" => 6, "value_type" => 1, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "Colors", "name_lang_2" => "Farby", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 7, "order_index" => 7, "value_type" => 1, "entry_method" => 2, "min" => null, "min" => null, "name_lang_1" => "Show only", "name_lang_2" => "Zobraziť iba", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 8, "order_index" => 8, "value_type" => 1, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "RAM", "name_lang_2" => "RAM", "id_measurement_unit" => 1]);
+
+      $productFeatureOptionModel->insertRow(["name_lang_1" => "Green", "name_lang_2" => "Zelená", "name_lang_3" => "Zelený"]);
+      $productFeatureOptionModel->insertRow(["name_lang_1" => "Purple", "name_lang_2" => "Fialová", "name_lang_3" => "Purpurový"]);
+      $productFeatureOptionModel->insertRow(["name_lang_1" => "Yellow", "name_lang_2" => "Žltá", "name_lang_3" => "Žlutá"]);
+
+      $productFeatureOptionModel->insertRow(["name_lang_1" => "2GB", "name_lang_2" => "2GB", "name_lang_3" => "2GB"]);
+      $productFeatureOptionModel->insertRow(["name_lang_1" => "4GB", "name_lang_2" => "4GB", "name_lang_3" => "4GB"]);
+      $productFeatureOptionModel->insertRow(["name_lang_1" => "6GB", "name_lang_2" => "6GB", "name_lang_3" => "6GB"]);
+      $productFeatureOptionModel->insertRow(["name_lang_1" => "8GB", "name_lang_2" => "8GB", "name_lang_3" => "8GB"]);
+
+      $productFeatureOptionModel->insertRow(["name_lang_1" => "New", "name_lang_2" => "Nové", "name_lang_3" => "Nové"]);
+      $productFeatureOptionModel->insertRow(["name_lang_1" => "Used", "name_lang_2" => "Použité", "name_lang_3" => "Použité"]);
+      $productFeatureOptionModel->insertRow(["name_lang_1" => "Unwarranted", "name_lang_2" => "Bez záruky", "name_lang_3" => "Bez záruky"]);
+
+      
+      $productFeatureOptionAssignmentModel->insertRow(["id_feature" => 6, "id_feature_option" => 1]);
+      $productFeatureOptionAssignmentModel->insertRow(["id_feature" => 6, "id_feature_option" => 2]);
+      $productFeatureOptionAssignmentModel->insertRow(["id_feature" => 6, "id_feature_option" => 3]);
+
+      $productFeatureOptionAssignmentModel->insertRow(["id_feature" => 8, "id_feature_option" => 4]);
+      $productFeatureOptionAssignmentModel->insertRow(["id_feature" => 8, "id_feature_option" => 5]);
+      $productFeatureOptionAssignmentModel->insertRow(["id_feature" => 8, "id_feature_option" => 6]);
+      $productFeatureOptionAssignmentModel->insertRow(["id_feature" => 8, "id_feature_option" => 7]);
+
+      $productFeatureOptionAssignmentModel->insertRow(["id_feature" => 7, "id_feature_option" => 8]);
+      $productFeatureOptionAssignmentModel->insertRow(["id_feature" => 7, "id_feature_option" => 9]);
+      $productFeatureOptionAssignmentModel->insertRow(["id_feature" => 7, "id_feature_option" => 10]);
 
       $productFeaturesCount = $productFeatureModel->get()->count();
 

@@ -26,6 +26,10 @@ class ProductFeatureOptionAssignment extends \ADIOS\Core\Widget\Model {
     ]);
   }
 
+  public function featureOption() {
+    return $this->hasOne(\ADIOS\Widgets\Products\Models\ProductFeatureOption::class, 'id', 'id_feature_option');
+  }
+
   public function getOptionsIdsForFeature($idFeature) {
     return 
       self::where('id_feature', '=', $idFeature)
@@ -53,5 +57,15 @@ class ProductFeatureOptionAssignment extends \ADIOS\Core\Widget\Model {
       $this->adios->db->query($insertQuery);
     }
   }*/
+
+  public function getByIdFeature(int $idFeature) {
+    return
+      $this
+      ->with("featureOption")
+      ->where("id_feature", "=", $idFeature)
+      ->get()
+      ->toArray()
+    ;
+  }
 
 }

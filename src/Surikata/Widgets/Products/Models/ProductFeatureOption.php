@@ -13,16 +13,21 @@ class ProductFeatureOption extends \ADIOS\Core\Widget\Model {
   }
 
   public function columns(array $columns = []) {
+    $translatedColumns = [];
+    $domainLanguages = $this->adios->config['widgets']['Website']['domainLanguages'];
 
-    $columns = parent::columns(
-      [
-        "name" => [
-         "type" => "varchar",
-         "title" => $this->translate("Name"),
-         "show_column" => TRUE,
-        ]
-      ]
-    );
+    foreach ($domainLanguages as $languageIndex => $languageName) {
+      $translatedColumns["name_lang_{$languageIndex}"] = [
+        "type" => "varchar",
+        "title" => $this->translate("Name")." ({$languageName})",
+        "show_column" => ($languageIndex == $this->adios->translatedColumnIndex),
+        "is_searchable" => ($languageIndex == $this->adios->translatedColumnIndex),
+      ];
+    }
+
+    $columns = parent::columns(array_merge(
+      $translatedColumns, []
+    ));
 
     return $columns;
   }

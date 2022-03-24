@@ -92,6 +92,7 @@ namespace Surikata\Plugins\WAI\Product {
             "allSubCategories" => $allSubCategories,
             "directSubCategories" => $directSubCategories,
             "allFeatures" => $allFeatures,
+            "allFeaturesInCategory" => $allFeatures, // TODO: $allFeaturesInCategory
             "idCategory" => $idCategory,
             "filteredBrands" => $filteredBrands,
             "allFeaturesAssignments" => $allFeaturesAssignments

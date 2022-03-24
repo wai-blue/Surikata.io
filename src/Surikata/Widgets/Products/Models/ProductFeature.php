@@ -116,6 +116,27 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
     return $columns;
   }
 
+  public function getExtendedData($item) {
+
+    // $item = $this->unifyProductInformationForSingleProduct($item);
+    // $item = reset($this->addPriceInfoForListOfProducts([$item]));
+
+    // // $item['PRICE'] = $this->getPriceInfoForSingleProduct($item);
+
+    // // $item['PRICES_FOR_INVOICE'] = reset(
+    // //   \ADIOS\Widgets\Finances::calculatePricesForInvoice([
+    // //     [
+    // //       'unit_price' => $item['sale_price_excl_vat_cached'],
+    // //       'quantity' => 1,
+    // //       'vat_percent' => $item['vat_percent']
+    // //     ]
+    // //   ])
+    // // )['PRICES_FOR_INVOICE'];
+
+    return $item;
+
+  }
+
   public function lookupSqlValue($tableAlias = NULL) {
     $unitModel = $this->adios->getModel("Widgets/Settings/Models/Unit");
 

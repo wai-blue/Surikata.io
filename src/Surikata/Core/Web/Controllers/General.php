@@ -9,27 +9,27 @@ class General extends \Surikata\Core\Web\Controller {
 
     $this->websiteRenderer->logTimestamp("renderPlugin {$pluginName} start");
 
-    $renderParams = array_merge(
-      [
-        "panel" => $panelName,
-        "pluginName" => $pluginName,
-      ],
-      $pluginSettings ?? [],
-      $plugin->getTwigParams($pluginSettings ?? []),
-      $this->websiteRenderer->twigParams,
-    );
-    $this->websiteRenderer->logTimestamp("renderPlugin {$pluginName} #1");
-
-    $renderParams = $this->adminPanel->dispatchEventToPlugins("onGeneralControllerAfterRenderPlugin", [
-      "controller" => $this,
-      "pluginName" => $pluginName,
-      "pluginSettings" => $pluginSettings,
-      "panelName" => $panelName,
-      "renderParams" => $renderParams,
-    ])["renderParams"];
-    $this->websiteRenderer->logTimestamp("renderPlugin {$pluginName} #2");
-
     if (is_object($plugin)) {
+      $renderParams = array_merge(
+        [
+          "panel" => $panelName,
+          "pluginName" => $pluginName,
+        ],
+        $pluginSettings ?? [],
+        $plugin->getTwigParams($pluginSettings ?? []),
+        $this->websiteRenderer->twigParams,
+      );
+      $this->websiteRenderer->logTimestamp("renderPlugin {$pluginName} #1");
+
+      $renderParams = $this->adminPanel->dispatchEventToPlugins("onGeneralControllerAfterRenderPlugin", [
+        "controller" => $this,
+        "pluginName" => $pluginName,
+        "pluginSettings" => $pluginSettings,
+        "panelName" => $panelName,
+        "renderParams" => $renderParams,
+      ])["renderParams"];
+      $this->websiteRenderer->logTimestamp("renderPlugin {$pluginName} #2");
+
       $this->websiteRenderer->currentRenderedPlugin = $plugin;
 
       if (($this->websiteRenderer->urlVariables["__output"] ?? "") == "json") {
@@ -56,6 +56,8 @@ class General extends \Surikata\Core\Web\Controller {
       }
 
       $this->websiteRenderer->currentRenderedPlugin = NULL;
+    } else {
+      $html = "";
     }
 
     $this->websiteRenderer->logTimestamp("renderPlugin {$pluginName} end");

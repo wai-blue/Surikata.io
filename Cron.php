@@ -47,11 +47,13 @@ try {
   $web = new \MyEcommerceProject\Web($websiteRendererConfig);
   $adminPanel = new \MyEcommerceProject\AdminPanel(
     $adminPanelConfig + ['default_action' => $actionToRun],
-    ADIOS_MODE_FULL,
+    \ADIOS\Core\Loader::ADIOS_MODE_FULL,
     $web
   );
 
-  if (isset($arguments["l"]) || isset($arguments["list"])) {
+  if (
+    (isset($arguments["l"]) && !empty($arguments["l"]))
+    || (isset($arguments["list"]) && !empty($arguments["list"]))) {
     var_dump($adminPanel->actions);
     exit;
   }

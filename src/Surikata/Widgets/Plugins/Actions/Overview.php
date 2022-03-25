@@ -17,7 +17,9 @@ class Overview extends \ADIOS\Core\Widget\Action {
     $search = $this->params["search"] ?: "";
     $pluginsFound = 0;
 
-    $plugins = [];
+    // zistim si info o pluginoch
+    $pluginsWithIcon = [];
+    $pluginsWithoutIcon = [];
     foreach ($this->adios->plugins as $pluginName) {
       $pluginObject = $this->adios->getPlugin($pluginName);
 
@@ -27,11 +29,19 @@ class Overview extends \ADIOS\Core\Widget\Action {
         continue;
       }
 
-      $plugins[$pluginName] = $manifest['title'];
+      if (empty($manifest['faIcon']) && empty($manifest['logo'])) {
+        $pluginsWithoutIcon[$pluginName] = $manifest['title'];
+      } else {
+        $pluginsWithIcon[$pluginName] = $manifest['title'];
+      }
     }
 
-    asort($plugins);
+    // zotriedim ich tak, aby tie s ikonkou alebo obrazkom boli prve
+    asort($pluginsWithIcon);
+    asort($pluginsWithoutIcon);
+    $plugins = $pluginsWithIcon + $pluginsWithoutIcon;
 
+    // zobrazim ich
     $cardsHtml = "";
     foreach ($plugins as $pluginName => $pluginTitle) {
       $pluginsFound++;
@@ -39,60 +49,93 @@ class Overview extends \ADIOS\Core\Widget\Action {
       $mainActionExists = $this->adios->actionExists("Plugins/{$pluginName}/Main");
       $settingsActionExists = $this->adios->actionExists("Plugins/{$pluginName}/Settings");
 
-      if ($mainActionExists || $settingsActionExists) {
-        $pluginObject = $this->adios->getPlugin($pluginName);
-        $manifest = $pluginObject->manifest();
+      $pluginObject = $this->adios->getPlugin($pluginName);
+      $manifest = $pluginObject->manifest();
 
-        if (empty($manifest['logo'])) {
-          $logoHtml = "
-            <i
-              class='{$manifest['faIcon']}'
-              style='color:var(--cl-main);font-size:2em;cursor:pointer;'
-              onclick='desktop_render(\"Plugins/{$pluginName}/Main\");'
-            ></i>
-          ";
-        } else {
-          $logoHtml = "
-            <img
-              src='{$this->adios->config['url']}/adios/assets/plugins/{$pluginName}/~/{$manifest['logo']}'
-              style='max-width:100%;max-height:100%;cursor:pointer'
-              onclick='desktop_render(\"Plugins/{$pluginName}/Main\");'
-            />
-          ";
-        }
+      if (!empty($manifest['faIcon'])) {
+        $logoHtml = "
+          <i
+            class='{$manifest['faIcon']}'
+            style='color:var(--cl-main);font-size:2em;cursor:pointer;'
+            onclick='desktop_render(\"Plugins/{$pluginName}/Main\");'
+          ></i>
+        ";
+      } else if (!empty($manifest['logo'])) {
+        $logoHtml = "
+          <img
+            src='{$this->adios->config['url']}/adios/assets/plugins/{$pluginName}/~/{$manifest['logo']}'
+            style='max-width:100%;max-height:100%;cursor:pointer'
+            onclick='desktop_render(\"Plugins/{$pluginName}/Main\");'
+          />
+        ";
+      } else {
+        $logoHtml = "";
+      }
 
-        $cardsHtml .= "
-          <div class='col-12'>
-            <div class='card shadow mb-2'>
-              <div class='card-body'>
-                <div style='display:flex;align-items: center;'>
+      $cardsHtml .= "
+        <div class='col-12'>
+          <div class='card shadow mb-2 ".($this->adios->isPluginEnabled($pluginName) ? "" : "bg-secondary")."'>
+            <div class='card-body'>
+              <div style='display:flex;align-items: center;'>
+                ".(empty($logoHtml) ? "" : "
                   <div style='flex-basis:120px;height:2em;margin-right:2em;'>{$logoHtml}</div>
-                  <div style='flex:1;color:var(--cl-main);'>
-                    <b class='plugin-title'>".hsc($this->translate($pluginTitle))."</b>
-                    <div class='plugin-name small' style='color:#AAAAAA'>".hsc($pluginName)."</div>
-                  </div>
-                  <div style='text-align:right'>
-                    ".($mainActionExists ? "
-                      <a
-                        href='javascript:void(0)'
-                        class='btn btn-light'
-                        onclick='desktop_render(\"Plugins/{$pluginName}/Main\");'
-                      >".$this->translate("Manage")."</a>
-                    " : "")."
-                    ".($settingsActionExists ? "
-                      <a
-                        href='javascript:void(0)'
-                        class='btn btn-light'
-                        onclick='window_render(\"Plugins/{$pluginName}/Settings\");'
-                      >".$this->translate("Settings")."</a>
-                    " : "")."
-                  </div>
+                ")."
+                <div style='flex:1;color:var(--cl-main);'>
+                  <b class='plugin-title'>".hsc($this->translate($pluginTitle))."</b>
+                  <div class='plugin-name small' style='color:#AAAAAA'>".hsc($pluginName)."</div>
+                </div>
+                <div style='text-align:right'>
+                  ".($mainActionExists ? "
+                    <a
+                      href='javascript:void(0)'
+                      class='btn btn-primary'
+                      onclick='desktop_render(\"Plugins/{$pluginName}/Main\");'
+                    >".$this->translate("Manage")."</a>
+                  " : "")."
+                  ".($settingsActionExists ? "
+                    <a
+                      href='javascript:void(0)'
+                      class='btn btn-primary'
+                      onclick='window_render(\"Plugins/{$pluginName}/Settings\");'
+                    >".$this->translate("Settings")."</a>
+                  " : "")."
+                  ".($this->adios->isPluginEnabled($pluginName) ? "
+                    <a
+                      href='javascript:void(0)'
+                      class='btn btn-danger'
+                      onclick='
+                        if (confirm(\"".$this->translate("Are you sure to disable this plugin?")."\")) {
+                          _ajax_read(
+                            \"Plugins/Disable\",
+                            {\"plugin\": \"".ads($pluginName)."\"},
+                            function(res) {
+                              desktop_render(\"Plugins/Overview\");
+                            }
+                          );
+                        }
+                      '
+                    >".$this->translate("Disable")."</a>
+                  " : "
+                    <a
+                      href='javascript:void(0)'
+                      class='btn btn-success'
+                      onclick='
+                        _ajax_read(
+                          \"Plugins/Enable\",
+                          {\"plugin\": \"".ads($pluginName)."\"},
+                          function(res) {
+                            desktop_render(\"Plugins/Overview\");
+                          }
+                        );
+                      '
+                    >".$this->translate("Enable")."</a>
+                  ")."
                 </div>
               </div>
             </div>
           </div>
-        ";
-      }
+        </div>
+      ";
     }
 
     $html = $this->adios->ui->Title([

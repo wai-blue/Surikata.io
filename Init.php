@@ -46,8 +46,8 @@ if ($configEnv["cacheAssets"] ?? FALSE) {
 // include autoloaders
 require_once("vendor/autoload.php");
 require_once(SURIKATA_ROOT_DIR."/src/Surikata/Autoload.php");
-require_once(CASCADA_CORE_DIR."/Autoload.php");
-require_once(ADIOS_CORE_DIR."/Autoload.php");
+// require_once(CASCADA_CORE_DIR."/Autoload.php");
+// require_once(ADIOS_CORE_DIR."/Autoload.php");
 
 // initialize your project
 require_once(__DIR__."/prop/Init.php");

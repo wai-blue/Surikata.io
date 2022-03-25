@@ -12,6 +12,18 @@ namespace Surikata\Plugins\WAI\Product {
 
     public static $breadcrumbsCache = NULL;
 
+    public function getPluginMetaTags() {
+      $productDetail = $this->getProductInfo();
+
+      $languageIndex = $this->adios->websiteRenderer->domain["languageIndex"] ?? 1;
+
+      return [
+        "title" =>  $productDetail["name_lang_{$languageIndex}"],
+        "description" =>  $productDetail["brief_lang_{$languageIndex}"],
+        "image" =>  $productDetail["image"]
+      ];
+    }
+
     public function getBreadcrumbs($urlVariables = []) {
       if (self::$breadcrumbsCache === NULL) {
         $productInfo = $this->getProductInfo();
@@ -68,7 +80,7 @@ namespace Surikata\Plugins\WAI\Product {
         self::$productInfo = $productModel
           ->getById((int) $this->websiteRenderer->urlVariables['idProduct'])
         ;
-
+        
         self::$productInfo = $productModel->translateSingleProductForWeb(self::$productInfo, $languageIndex);
 
         $allCategories = (new \ADIOS\Widgets\Products\Models\ProductCategory($this->adminPanel))->getAll();
@@ -172,6 +184,12 @@ namespace Surikata\Plugins\WAI\Product {
 namespace ADIOS\Plugins\WAI\Product {
   class Detail extends \Surikata\Core\AdminPanel\Plugin {
 
+    public function manifest() {
+      return [
+        "faIcon" => "fas fa-box-open",
+        "title" => "Products - Detail",
+      ];
+    }
     public function getSiteMap($pluginSettings = [], $webPageUrl = "") {
       return [
         $webPageUrl . '(.+).pid.(\d+)' => [
@@ -215,5 +233,6 @@ namespace ADIOS\Plugins\WAI\Product {
 
       return $event;
     }
+
   }
 }

@@ -2,6 +2,8 @@
 
 namespace ADIOS\Widgets\Customers\Models;
 
+use ADIOS\Core\HelperFunctions;
+
 class Customer extends \ADIOS\Core\Widget\Model {
   var $sqlName = "customers";
   var $urlBase = "Customers";
@@ -516,14 +518,29 @@ class Customer extends \ADIOS\Core\Widget\Model {
 
     return $customerUID;
   }
-
-  public function createAccount($customerUID, $email, $accountInfo, $saveAddress, $createFromOrder = false) {
+    
+  /**
+   * createAccount
+   * REVIEW: Podrobne popisat logiku hiddenAcount.
+   *
+   * @param  string $customerUID
+   * @param  string $email
+   * @param  array $accountInfo
+   * @param  bool $saveAddress
+   * @param  bool $hiddenAccount
+   * @return int
+   */
+  public function createAccount(string $customerUID, string $email, array $accountInfo, bool $saveAddress, bool $hiddenAccount = false) : int {
     $requiredFieldsEmpty = [];
     $requiredFieldsRegistration = [
       "email",
+      "password",
     ];
-    if (!$createFromOrder) {
-      $requiredFieldsRegistration[] = "password";
+
+    if ($hiddenAccount) {
+      $accountInfo["password"] = HelperFunctions::randomPassword();
+      $accountInfo["password_1"] = $accountInfo["password"];
+      $accountInfo["password_2"] = $accountInfo["password"];
     }
 
     foreach ($requiredFieldsRegistration as $fieldName) {
@@ -545,12 +562,12 @@ class Customer extends \ADIOS\Core\Widget\Model {
     $tmpCustomer = $this->where('email', '=', $email)->get()->toArray();
     $idCustomer = 0;
     if (count($tmpCustomer) > 0) {
-      if (!$createFromOrder) {
+      if (!$hiddenAccount && $tmpCustomer[0]["is_validated"] == TRUE) {
         throw new \ADIOS\Widgets\Customers\Exceptions\AccountAlreadyExists();
       }
       $idCustomer = $tmpCustomer[0]["id"];
     }
-  
+
     $password = $accountInfo["password"];
 
     foreach ($this->columnNames() as $colName) {
@@ -568,8 +585,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
 
     if (count($tmpCustomer) == 0) {
       $idCustomer = $this->insertRow($data);
-    }
-    else {
+    } else {
       $this->where('email', '=', $data['email'])
         ->update([
           "password" => password_hash($data["password"],PASSWORD_DEFAULT),
@@ -597,9 +613,10 @@ class Customer extends \ADIOS\Core\Widget\Model {
 
     $this->lastCreatedAccountPassword = $password;
 
-    if (!$createFromOrder) {
+    if (!$hiddenAccount) {
       $this->sendNotificationForCreateAccount($createdAccountInfo);
     }
+
     return $idCustomer;
   }
 

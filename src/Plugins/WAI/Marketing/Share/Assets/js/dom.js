@@ -1,0 +1,2 @@
+class PluginWAIMarketingShareDOMClass extends PluginWAIMarketingShareAPIClass {
+}

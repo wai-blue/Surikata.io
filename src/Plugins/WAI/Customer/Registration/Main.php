@@ -18,7 +18,8 @@ namespace Surikata\Plugins\WAI\Customer {
               $customerUID,
               $email,
               $this->websiteRenderer->urlVariables,
-              FALSE // saveAddress
+              FALSE, // saveAddress
+              FALSE // hiddenAccount
             )
           ;
 

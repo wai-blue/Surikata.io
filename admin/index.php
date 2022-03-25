@@ -19,7 +19,7 @@ try {
   echo (
     new \MyEcommerceProject\AdminPanel(
       $adminPanelConfig,
-      ADIOS_MODE_FULL,
+      \ADIOS\Core\Loader::ADIOS_MODE_FULL,
       $web
     )
   )->render();

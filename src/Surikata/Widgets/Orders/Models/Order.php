@@ -476,7 +476,7 @@ class Order extends \ADIOS\Core\Widget\Model {
    * @throws \ADIOS\Widgets\Orders\Exceptions\UnknownPaymentService
    * @throws \ADIOS\Plugins\WAI\Proprietary\Checkout\Vouchers\Exceptions\VoucherIsNotValid;
    */
-  public function placeOrder($orderData, $customerUID = NULL, $cartContents = NULL, $checkRequiredFields = TRUE) {
+  public function placeOrder($orderData, $customerUID = "", $cartContents = NULL, $checkRequiredFields = TRUE) {
     $idCustomer = 0;
     $idAddress = (int) $orderData['id_address'];
     $cartModel = new \ADIOS\Widgets\Customers\Models\ShoppingCart($this->adios);
@@ -596,7 +596,16 @@ class Order extends \ADIOS\Core\Widget\Model {
             "company_name" => $orderData["inv_company_name"]
           ]
         );
-        $idCustomer = $customerModel->createAccount($customerUID, $orderData["email"], $createCustomerData, true, true);
+        $idCustomer = $customerModel->createAccount(
+          $customerUID,
+          $orderData["email"],
+          $createCustomerData,
+          TRUE, // saveAddress
+          TRUE // hiddenAccount
+        );
+      } else {
+        $customer = $customerModel->getByEmail($orderData["email"]);
+        $idCustomer = $customer["id"];
       }
     }
 
@@ -1402,6 +1411,7 @@ class Order extends \ADIOS\Core\Widget\Model {
     $summary = [
       'price_total_excl_vat' => 0,
       'price_total_incl_vat' => 0,
+      'vat_total' => 0,
       'weight_total' => 0,
     ];
 
@@ -1412,6 +1422,7 @@ class Order extends \ADIOS\Core\Widget\Model {
     ;
 
     foreach ($order['ITEMS'] as $item) {
+      $summary['vat_total'] += $item['PRICES_FOR_INVOICE']['totalVAT'];
       $summary['price_total_excl_vat'] += $item['PRICES_FOR_INVOICE']['totalPriceExclVAT'];
       $summary['price_total_incl_vat'] += $item['PRICES_FOR_INVOICE']['totalPriceInclVAT'];
       $summary['weight_total'] += $item['quantity'] * $item['product_weight'];
@@ -1516,6 +1527,8 @@ class Order extends \ADIOS\Core\Widget\Model {
         "country" => $order["inv_country"],
         "email" => $order["email"],
         "phone_number" => $order["phone_number"],
+        "given_name" => $order["inv_given_name"],
+        "family_name" => $order["inv_family_name"],
       ],
       "SUPPLIER" => [
         "name" => "MyCompany ltd.",

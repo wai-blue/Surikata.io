@@ -156,4 +156,16 @@ class ProductFeatureAssignment extends \ADIOS\Core\Widget\Model {
     return $params;
   }
 
+  public function feature() {
+    return $this->belongsTo(\ADIOS\Widgets\Products\Models\ProductFeature::class, "id_feature");
+  }
+
+  public function getAll(string $keyBy = "id", $withLookups = FALSE, $processLookups = FALSE) {
+    return self::
+      with("feature")
+      ->get()
+      ->toArray()
+    ;
+  }
+
 }

@@ -88,9 +88,6 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
           "enum_values" => $this->enumValuesEntryMethod,
           "show_column" => TRUE,
         ],
-        
-        // Pridat ProductFeatureOption a ProductFeatureOptionAssignment (id_feature, id_option)
-        // Hint: (new \ADIOS\Core\UI\Input\Tags(
 
         "min" => [
           "type" => "int",
@@ -116,25 +113,53 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
     return $columns;
   }
 
-  public function getExtendedData($item) {
+  public function getExtendedData($feature) {
+    if ($feature["id"] > 0) {
+      $languageIndex = $this->adios->websiteRenderer->domain["languageIndex"];
 
-    // $item = $this->unifyProductInformationForSingleProduct($item);
-    // $item = reset($this->addPriceInfoForListOfProducts([$item]));
+      $feature["UNIT"] = (new \ADIOS\Widgets\Settings\Models\Unit($this->adios))
+        ->getById($feature["id_measurement_unit"])
+      ;
 
-    // // $item['PRICE'] = $this->getPriceInfoForSingleProduct($item);
+      // Review: preklad cez translateForWeb(), resp. urlku cez getWebPageUrlFormatted (?)
+      $feature["url"] = 
+        strtolower($feature["name_lang_{$languageIndex}"]) // TODO: preg_match atd pre diakritiku
+      ;
 
-    // // $item['PRICES_FOR_INVOICE'] = reset(
-    // //   \ADIOS\Widgets\Finances::calculatePricesForInvoice([
-    // //     [
-    // //       'unit_price' => $item['sale_price_excl_vat_cached'],
-    // //       'quantity' => 1,
-    // //       'vat_percent' => $item['vat_percent']
-    // //     ]
-    // //   ])
-    // // )['PRICES_FOR_INVOICE'];
+     /* if (
+        $feature["entry_method"] == $productFeatureModel::ENTRY_METHOD_RADIO
+        || $feature["entry_method"] == $productFeatureModel::ENTRY_METHOD_SELECT
+      ) {
+        $productFeatureOptionAssignmentModel = 
+          new \ADIOS\Widgets\Products\Models\ProductFeatureOptionAssignment(
+            $this->adminPanel
+          )
+        ;*/
 
-    return $item;
+        
+        switch ($feature['value_type']) {
+          case "number": $dataColumn = "value_number"; break;
+          case "boolean": $dataColumn = "value_boolean"; break;
+          case "text": default: $dataColumn = "value_text"; break;
+        }
+        
+        $q = $this->adios->db->get_all_rows_query("
+          select
+            distinct {$dataColumn} as options
+          from {$this->table}_assignment
+          where id_product in (1,2,3)
+          and id_feature = {$feature['id']}
+        ");
 
+        //_print_r($q);
+        /*$productFeatureOptions = $productFeatureOptionAssignmentModel->getByIdFeature($feature["id"]);
+        foreach ($productFeatureOptions as $productFeature) {
+          $features[$feature["id"]]["OPTIONS"][] = $productFeature["feature_option"];
+        }
+      }*/
+    }
+    
+    return $feature;
   }
 
   public function lookupSqlValue($tableAlias = NULL) {
@@ -197,22 +222,6 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
       $tabTranslations[] = ["html" => $this->translate("No translations available.")];
     }
 
-    // ProductFeature options
-    $productFeatureOption = 
-      new \ADIOS\Widgets\Products\Models\ProductFeatureOption(
-        $this->adios
-      )
-    ;
-
-    $options = (new \ADIOS\Widgets\Products\Models\ProductFeatureOptionAssignment(
-      $this->adios
-    ))->getOptionsIdsForFeature($data['id']);
-
-    $selectedOptions = $productFeatureOption->getSelectedOptions($options);
-    $initialOptions = json_encode(
-      $productFeatureOption->getOptionNamesFromArray($selectedOptions)
-    );
-
     $params["template"] = [
       "columns" => [
         [
@@ -225,17 +234,6 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
               "value_type",
               "id_measurement_unit",
               "entry_method",
-              [
-                "title" => $this->translate("Options"),
-                "input" => (new \ADIOS\Core\UI\Input\Tags(
-                  $this->adios,
-                  "{$params['uid']}_options",
-                  [
-                    "model" => "Widgets/Products/Models/ProductFeatureOption",
-                    "initialTags" => $initialOptions,
-                  ]
-                ))->render(),
-              ],
               "min",
               "max",
               "order_index",

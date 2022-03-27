@@ -48,17 +48,8 @@ namespace Surikata\Plugins\WAI\Product {
           $parentCategories = $productCategoryModel->extractParentCategories($idCategory, self::$allCategories);
           $allSubCategories = $productCategoryModel->extractAllSubCategories($idCategory, self::$allCategories);
           $directSubCategories = $productCategoryModel->extractDirectSubCategories($idCategory, self::$allCategories);
-        }
-
-        foreach ($allFeaturesAssignments as $value) {
-          $allFeatures[$value['id_feature']]['minValue'] = min(
-            $allFeatures[$value['id_feature']]['minValue'] ?? 0,
-            (int) $value['value_number']
-          );
-          $allFeatures[$value['id_feature']]['maxValue'] = max(
-            $allFeatures[$value['id_feature']]['maxValue'] ?? 0,
-            (int) $value['value_number']
-          );
+          // Nacitam momentalnu kategoriu a jej sub kategorie
+          $currentAndAllSubCategories = $productCategoryModel->extractCurrentAndAllSubCategories($idCategory, self::$allCategories);
         }
 
         $filteredBrands = [];
@@ -92,7 +83,7 @@ namespace Surikata\Plugins\WAI\Product {
             "allSubCategories" => $allSubCategories,
             "directSubCategories" => $directSubCategories,
             "allFeatures" => $allFeatures,
-            "allFeaturesInCategory" => $allFeatures, // TODO: $allFeaturesInCategory
+            "currentAndAllSubCategories" => $currentAndAllSubCategories,
             "idCategory" => $idCategory,
             "filteredBrands" => $filteredBrands,
             "allFeaturesAssignments" => $allFeaturesAssignments

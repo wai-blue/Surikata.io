@@ -235,6 +235,9 @@ namespace Surikata\Plugins\WAI\Product {
               break;
           }
         }
+        
+        // PH: Vsetky id produktov kvoli zobrazeniu id_feature pre kazdy jeden nie iba pre aktivnu page
+        self::$catalogInfo["allProductsIds"]= $productsQuery->pluck('id')->toArray();
 
         // Apply paging
         $productsQuery->skip(($page - 1) * $itemsPerPage);

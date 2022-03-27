@@ -276,6 +276,13 @@ class ProductCategory extends \ADIOS\Core\Widget\Model {
     return $allSubCategories;
   }
 
+  public function extractCurrentAndAllSubCategories($idCategory, $allCategories) {
+    $currentAndAllSubCategories = $this->extractAllSubCategories($idCategory, $allCategories);
+    $currentAndAllSubCategories[] = $allCategories[$idCategory];
+    
+    return $currentAndAllSubCategories;
+  }
+
   public function extractParentCategories($idCategory, $allCategories) {
     $parentCategories = [];
 

@@ -121,9 +121,8 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
         ->getById($feature["id_measurement_unit"])
       ;
 
-      // Review: preklad cez translateForWeb(), resp. urlku cez getWebPageUrlFormatted (?)
       $feature["url"] = 
-        strtolower($feature["name_lang_{$languageIndex}"]) // TODO: preg_match atd pre diakritiku
+        \ADIOS\Core\HelperFunctions::str2url($feature["name_lang_{$languageIndex}"])
       ;
 
     }

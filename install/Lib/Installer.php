@@ -328,11 +328,13 @@ class Installer {
       $productFeatureModel->insertRow(["id" => 1, "order_index" => 1, "value_type" => 1, "entry_method" => 1, "min" => 1, "max" => 1000, "name_lang_1" => "Length", "name_lang_2" => "Dĺžka", "id_measurement_unit" => 2]);
       $productFeatureModel->insertRow(["id" => 2, "order_index" => 2, "value_type" => 1, "entry_method" => 1, "min" => 1, "max" => 1000, "name_lang_1" => "Width", "name_lang_2" => "Šírka", "id_measurement_unit" => 2]);
       $productFeatureModel->insertRow(["id" => 3, "order_index" => 3, "value_type" => 1, "entry_method" => 1, "min" => 1, "max" => 1000, "name_lang_1" => "Weight", "name_lang_2" => "Váha", "id_measurement_unit" => 9]);
-      $productFeatureModel->insertRow(["id" => 4, "order_index" => 4, "value_type" => 3, "entry_method" => 4, "min" => null, "max" => null, "name_lang_1" => "Gaming", "name_lang_2" => "Herné", "id_measurement_unit" => 1]);
-      $productFeatureModel->insertRow(["id" => 5, "order_index" => 5, "value_type" => 2, "entry_method" => 5, "min" => 2, "min" => 10000, "name_lang_1" => "Search", "name_lang_2" => "Hľadať", "id_measurement_unit" => 1]);
-      $productFeatureModel->insertRow(["id" => 6, "order_index" => 6, "value_type" => 2, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "Color", "name_lang_2" => "Farby", "id_measurement_unit" => 1]);
-      $productFeatureModel->insertRow(["id" => 7, "order_index" => 7, "value_type" => 2, "entry_method" => 2, "min" => null, "min" => null, "name_lang_1" => "Show only", "name_lang_2" => "Zobraziť iba", "id_measurement_unit" => 1]);
-      $productFeatureModel->insertRow(["id" => 8, "order_index" => 8, "value_type" => 2, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "RAM", "name_lang_2" => "RAM", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 4, "order_index" => 4, "value_type" => 2, "entry_method" => 5, "min" => null, "min" => null, "name_lang_1" => "Search", "name_lang_2" => "Hľadať", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 5, "order_index" => 5, "value_type" => 3, "entry_method" => 4, "min" => null, "max" => null, "name_lang_1" => "Electronics", "name_lang_2" => "Elektronika", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 6, "order_index" => 6, "value_type" => 3, "entry_method" => 4, "min" => null, "max" => null, "name_lang_1" => "Furniture", "name_lang_2" => "Nábytok", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 7, "order_index" => 7, "value_type" => 3, "entry_method" => 4, "min" => null, "max" => null, "name_lang_1" => "Garden", "name_lang_2" => "Záhrada", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 8, "order_index" => 8, "value_type" => 2, "entry_method" => 2, "min" => null, "min" => null, "name_lang_1" => "Show only", "name_lang_2" => "Zobraziť iba", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 9, "order_index" => 9, "value_type" => 2, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "Color", "name_lang_2" => "Farby", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 10, "order_index" => 10, "value_type" => 2, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "RAM", "name_lang_2" => "RAM", "id_measurement_unit" => 1]);
 
       $productFeaturesCount = $productFeatureModel->get()->count();
 

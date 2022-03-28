@@ -43,6 +43,10 @@ class RandomProductsGenerator {
     ];
 
     $productsData = [];
+    $colors = ["White", "Green", "Blue", "Yellow", "Red"];
+    $ram = ["2GB", "4GB", "6GB", "8GB"];
+    $showOnly = ["Unpacked", "New", "Unwarranted"];
+
     for ($i = 0; $i < $numOfProducts; $i++) {
       $productImgNum = rand(1, 7);
       $idCategory = rand(1, 7);
@@ -57,7 +61,18 @@ class RandomProductsGenerator {
         at nibh. Praesent commodo felis luctus iaculis sodales. Ut ac blandit quam, a convallis risus.
       ";
       $price = rand(500, 5000)/100;
-      $features = [rand(1,1000), rand(1,1000), rand(1,1000), null, "155 R13"];
+      $features = [
+        rand(1,1000), 
+        rand(1,1000), 
+        rand(1,1000), 
+        "155 R13", 
+        rand(0, 1), 
+        rand(0, 1), 
+        rand(0, 1),
+        $showOnly[rand(0, 2)],
+        $colors[rand(0, 4)],
+        $ram[rand(0, 3)],
+      ];
       $number = "RND.".$i;
       $ean = self::generateEAN($number);
       $image = "products/{$productImgNum}.jpg";
@@ -135,6 +150,7 @@ class RandomProductsGenerator {
           "id_feature" => $tmpFeatureId,
           "value_text" => $tmpFeatureValue,
           "value_number" => $tmpFeatureValue,
+          "value_boolean" => $tmpFeatureValue,
         ]);
         $tmpFeatureId++;
       }

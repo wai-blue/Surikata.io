@@ -126,37 +126,6 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
         strtolower($feature["name_lang_{$languageIndex}"]) // TODO: preg_match atd pre diakritiku
       ;
 
-     /* if (
-        $feature["entry_method"] == $productFeatureModel::ENTRY_METHOD_RADIO
-        || $feature["entry_method"] == $productFeatureModel::ENTRY_METHOD_SELECT
-      ) {
-        $productFeatureOptionAssignmentModel = 
-          new \ADIOS\Widgets\Products\Models\ProductFeatureOptionAssignment(
-            $this->adminPanel
-          )
-        ;*/
-
-        
-        switch ($feature['value_type']) {
-          case "number": $dataColumn = "value_number"; break;
-          case "boolean": $dataColumn = "value_boolean"; break;
-          case "text": default: $dataColumn = "value_text"; break;
-        }
-        
-        $q = $this->adios->db->get_all_rows_query("
-          select
-            distinct {$dataColumn} as options
-          from {$this->table}_assignment
-          where id_product in (1,2,3)
-          and id_feature = {$feature['id']}
-        ");
-
-        //_print_r($q);
-        /*$productFeatureOptions = $productFeatureOptionAssignmentModel->getByIdFeature($feature["id"]);
-        foreach ($productFeatureOptions as $productFeature) {
-          $features[$feature["id"]]["OPTIONS"][] = $productFeature["feature_option"];
-        }
-      }*/
     }
     
     return $feature;

@@ -45,7 +45,9 @@ class RandomProductsGenerator {
     $productsData = [];
     $colors = ["White", "Green", "Blue", "Yellow", "Red"];
     $ram = ["2GB", "4GB", "6GB", "8GB"];
-    $showOnly = ["Unpacked", "New", "Unwarranted"];
+    $showOnly = ["Classic","Premium", "Exclusive"];
+    $condition = ["New", "Used", "Unpacked"];
+    $type = ["Gaming", "Office"];
 
     for ($i = 0; $i < $numOfProducts; $i++) {
       $productImgNum = rand(1, 7);
@@ -66,12 +68,11 @@ class RandomProductsGenerator {
         rand(1,1000), 
         rand(1,1000), 
         rand(100000,999999), 
-        rand(0, 1), 
-        rand(0, 1), 
-        rand(0, 1),
-        $showOnly[rand(0, 2)],
         $colors[rand(0, 4)],
-        $ram[rand(0, 3)],
+        $ram[rand(0, 3)], 
+        $showOnly[rand(0, 2)],
+        $condition[rand(0, 2)],
+        $type[rand(0, 1)],
       ];
       $number = "RND.".$i;
       $ean = self::generateEAN($number);

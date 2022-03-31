@@ -65,7 +65,7 @@ class RandomProductsGenerator {
         rand(1,1000), 
         rand(1,1000), 
         rand(1,1000), 
-        "155 R13", 
+        rand(100000,999999), 
         rand(0, 1), 
         rand(0, 1), 
         rand(0, 1),

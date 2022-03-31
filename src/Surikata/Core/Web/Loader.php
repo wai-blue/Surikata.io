@@ -230,7 +230,7 @@ class Loader extends \Cascada\Loader {
       $this->twig->addFunction(new \Twig\TwigFunction(
         'translate',
         function ($original, $context = NULL, $domain = NULL) {
-          $this->translate($original, $context, $domain);
+          return $this->translate($original, $context, $domain);
         }
       ));
 

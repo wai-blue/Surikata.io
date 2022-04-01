@@ -229,38 +229,8 @@ class Loader extends \Cascada\Loader {
 
       $this->twig->addFunction(new \Twig\TwigFunction(
         'translate',
-        function ($original, $context = NULL) {
-          $domainToRender = $this->config['domainToRender'];
-
-          $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($this->adminPanel);
-
-          if (
-            $context === NULL
-            && $this->currentRenderedPlugin !== NULL
-          ) {
-            $context = $this->currentRenderedPlugin->name;
-          }
-
-          $context = (string) $context;
-
-          if ($this->translationCache === NULL) {
-            $this->translationCache = $translationModel->loadCache();
-          }
-
-          if (!isset($this->translationCache[$domainToRender][$context][$original])) {
-            $translationModel->insertRow([
-              "domain" => $domainToRender,
-              "context" => $context,
-              "original" => $original,
-              "translated" => "",
-            ]);
-
-             $this->translationCache[$domainToRender][$context][$original] = $original;
-          } else {
-            $translatedText = $this->translationCache[$domainToRender][$context][$original];
-          }
-
-          return empty($translatedText) ? $original : $translatedText;
+        function ($original, $context = NULL, $domain = NULL) {
+          return $this->translate($original, $context, $domain);
         }
       ));
 
@@ -683,6 +653,42 @@ class Loader extends \Cascada\Loader {
 
   public function logTimestamp($message) {
     $this->adminPanel->console->logTimestamp("{$this->currentRunHash}, {$_SERVER['REQUEST_URI']}, {$message}", "web");
+  }
+
+  public function translate($original, $context = NULL, $domain = NULL) {
+    if ($domain === NULL) {
+      $domain = $this->config['domainToRender'];
+    }
+
+    $translationModel = new \ADIOS\Widgets\Website\Models\WebTranslation($this->adminPanel);
+
+    if (
+      $context === NULL
+      && $this->currentRenderedPlugin !== NULL
+    ) {
+      $context = $this->currentRenderedPlugin->name;
+    }
+
+    $context = (string) $context;
+
+    if ($this->translationCache === NULL) {
+      $this->translationCache = $translationModel->loadCache();
+    }
+
+    if (!isset($this->translationCache[$domain][$context][$original])) {
+      $translationModel->insertRow([
+        "domain" => $domain,
+        "context" => $context,
+        "original" => $original,
+        "translated" => "",
+      ]);
+
+        $this->translationCache[$domain][$context][$original] = $original;
+    } else {
+      $translatedText = $this->translationCache[$domain][$context][$original];
+    }
+
+    return empty($translatedText) ? $original : $translatedText;
   }
 
 }

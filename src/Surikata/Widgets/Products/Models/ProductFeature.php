@@ -163,7 +163,8 @@ class ProductFeature extends \ADIOS\Core\Widget\Model {
 
   public function formParams($data, $params) {
     $params['default_values'] = [
-      'id_parent' => $params['id_parent']
+      'id_parent' => $params['id_parent'],
+      'id_measurement_unit' => 1
     ];
 
     if ($data['id'] > 0) {

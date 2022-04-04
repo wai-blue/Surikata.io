@@ -214,7 +214,7 @@ namespace Surikata\Plugins\WAI\Product {
         }
 
         // Count number of available products before making the query more robust.
-        self::$catalogInfo["productCount"] = $productModel->countRowsInQuery($productsQuery);
+        //self::$catalogInfo["productCount"] = $productModel->countRowsInQuery($productsQuery);
 
         // Apply sorting based on visitor's preference.
         if (array_key_exists("sort", $filter)) {
@@ -236,8 +236,8 @@ namespace Surikata\Plugins\WAI\Product {
           }
         }
         
-        // PH: Vsetky id produktov kvoli zobrazeniu id_feature pre kazdy jeden nie iba pre aktivnu page
-        self::$catalogInfo["allProductsIds"]= $productsQuery->pluck('id')->toArray();
+        // Get all products ids
+        self::$catalogInfo["allProductsIds"] = $productsQuery->pluck('id')->toArray();
 
         // Apply paging
         $productsQuery->skip(($page - 1) * $itemsPerPage);
@@ -247,10 +247,16 @@ namespace Surikata\Plugins\WAI\Product {
         $productIds = $productsQuery->pluck('id')->toArray();
 
         // Get productIds from extendedFilter
-        $productIds = $this->adminPanel->dispatchEventToPlugins("onProductCatalogFilterProductIds", [
+        $onProductCatalogFilterProductsIdsEvent = $this->adminPanel->dispatchEventToPlugins("onProductCatalogFilterProductsIds", [
           "productIds" => $productIds,
-          "filter" => $filter
-        ])["productIds"];
+          "allProductsIds" =>  self::$catalogInfo["allProductsIds"],
+          "filter" => $filter,
+          "page" => $page,
+          "itemsPerPage" => $itemsPerPage
+        ]);
+
+        $productIds = $onProductCatalogFilterProductsIdsEvent["productIds"];
+        self::$catalogInfo["productCount"] = count($onProductCatalogFilterProductsIdsEvent["allProductsIds"]);
 
         // Add "standardized" detailed information about loaded products. This does not include price calculations.
         self::$catalogInfo["products"] = $productModel->getDetailedInfoForListOfProducts(

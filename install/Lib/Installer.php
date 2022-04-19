@@ -267,73 +267,172 @@ class Installer {
       // products - categories
 
       $productCategoryModel->insertRow([
-        "id" => 1,
         "id_parent" => 0,
-        "code" => "CatA",
-        "name_lang_1" => "Category_A (lng-1)",
-        "name_lang_2" => "Category_A (lng-2)",
-        "name_lang_3" => "Category_A (lng-3)"
+        "code" => "Computers",
+        "name_lang_1" => "Computers and notebooks",
+        "name_lang_2" => "Počítače a notebooky",
+        "name_lang_3" => "Počítače a notebooky"
       ]);
       $productCategoryModel->insertRow([
-        "id" => 2,
         "id_parent" => 0,
-        "code" => "CatB",
-        "name_lang_1" => "Category_B (lng-1)",
-        "name_lang_2" => "Category_B (lng-2)",
-        "name_lang_3" => "Category_B (lng-3)"
+        "code" => "TV",
+        "name_lang_1" => "TV, foto",
+        "name_lang_2" => "TV, foto",
+        "name_lang_3" => "TV, foto"
       ]);
       $productCategoryModel->insertRow([
-        "id" => 3,
         "id_parent" => 0,
-        "code" => "CatC",
-        "name_lang_1" => "Category_C (lng-1)",
-        "name_lang_2" => "Category_C (lng-2)",
-        "name_lang_3" => "Category_C (lng-3)"
+        "code" => "Appliances",
+        "name_lang_1" => "Household Appliances",
+        "name_lang_2" => "Domáce spotrebiče",
+        "name_lang_3" => "Domáce spotrebiče"
       ]);
-
       $productCategoryModel->insertRow([
-        "id" => 4,
+        "id_parent" => 0,
+        "code" => "Toys",
+        "name_lang_1" => "Toys for kids",
+        "name_lang_2" => "Hračky pre deti",
+        "name_lang_3" => "Hračky pre deti"
+      ]);
+      $productCategoryModel->insertRow([
+        "id_parent" => 0,
+        "code" => "Games",
+        "name_lang_1" => "Games and entertainment",
+        "name_lang_2" => "Hry a zábava",
+        "name_lang_3" => "Hry a zábava"
+      ]);
+      $productCategoryModel->insertRow([
+        "id_parent" => 0,
+        "code" => "Clothes",
+        "name_lang_1" => "Clothes and footwear",
+        "name_lang_2" => "Oblečenie a obuv",
+        "name_lang_3" => "Oblečenie a obuv"
+      ]);
+      $productCategoryModel->insertRow([
         "id_parent" => 1,
-        "code" => "CatAA",
-        "name_lang_1" => "Category_A_A (lng-1)",
-        "name_lang_2" => "Category_A_A (lng-2)",
-        "name_lang_3" => "Category_A_A (lng-3)"
+        "code" => "DesktopComputers",
+        "name_lang_1" => "Desktop computers",
+        "name_lang_2" => "Stolné počítače",
+        "name_lang_3" => "Stolné počítače"
       ]);
       $productCategoryModel->insertRow([
-        "id" => 5,
         "id_parent" => 1,
-        "code" => "CatAB",
-        "name_lang_1" => "Category_A_B (lng-1)",
-        "name_lang_2" => "Category_A_B (lng-2)",
-        "name_lang_3" => "Category_A_B (lng-3)"
+        "code" => "Notebooks",
+        "name_lang_1" => "Notebooks",
+        "name_lang_2" => "Notebooky",
+        "name_lang_3" => "Notebooky"
       ]);
       $productCategoryModel->insertRow([
-        "id" => 6,
         "id_parent" => 1,
-        "code" => "CatAC",
-        "name_lang_1" => "Category_A_C (lng-1)",
-        "name_lang_2" => "Category_A_C (lng-2)",
-        "name_lang_3" => "Category_A_C (lng-3)"
+        "code" => "Monitors",
+        "name_lang_1" => "Monitors",
+        "name_lang_2" => "Monitory",
+        "name_lang_3" => "Monitory"
       ]);
       $productCategoryModel->insertRow([
-        "id" => 7,
+        "id_parent" => 1,
+        "code" => "Keyboards",
+        "name_lang_1" => "Keyboards",
+        "name_lang_2" => "Klávesnice",
+        "name_lang_3" => "Klávesnice"
+      ]);
+      $productCategoryModel->insertRow([
         "id_parent" => 2,
-        "code" => "CatBA",
-        "name_lang_1" => "Category_B_A (lng-1)",
-        "name_lang_2" => "Category_B_A (lng-2)",
-        "name_lang_3" => "Category_B_A (lng-3)"
+        "code" => "Televisions",
+        "name_lang_1" => "Televisions",
+        "name_lang_2" => "Televízory",
+        "name_lang_3" => "Televízory"
+      ]);
+      $productCategoryModel->insertRow([
+        "id_parent" => 2,
+        "code" => "PhotoCameras",
+        "name_lang_1" => "Photo cameras",
+        "name_lang_2" => "Fotoaparáty",
+        "name_lang_3" => "Fotoaparáty"
+      ]);
+      $productCategoryModel->insertRow([
+        "id_parent" => 3,
+        "code" => "Buckles",
+        "name_lang_1" => "Washers and dryers",
+        "name_lang_2" => "Pračky a sušičky",
+        "name_lang_3" => "Pračky a sušičky"
+      ]);
+      $productCategoryModel->insertRow([
+        "id_parent" => 3,
+        "code" => "Freezers",
+        "name_lang_1" => "Freezers",
+        "name_lang_2" => "Mrazničky",
+        "name_lang_3" => "Mrazničky"
+      ]);
+      $productCategoryModel->insertRow([
+        "id_parent" => 3,
+        "code" => "VacuumCleaners",
+        "name_lang_1" => "Vacuum cleaners and housework",
+        "name_lang_2" => "Vysávače a domáce práce",
+        "name_lang_3" => "Vysávače a domáce práce"
+      ]);
+      $productCategoryModel->insertRow([
+        "id_parent" => 4,
+        "code" => "StuffedAnimals",
+        "name_lang_1" => "Stuffed animals",
+        "name_lang_2" => "Plyšové hračky",
+        "name_lang_3" => "Plyšové hračky"
+      ]);
+      $productCategoryModel->insertRow([
+        "id_parent" => 5,
+        "code" => "Playstation",
+        "name_lang_1" => "Playstation",
+        "name_lang_2" => "Playstation",
+        "name_lang_3" => "Playstation"
+      ]);
+      $productCategoryModel->insertRow([
+        "id_parent" => 5,
+        "code" => "Xboxs",
+        "name_lang_1" => "Xboxs",
+        "name_lang_2" => "Xboxs",
+        "name_lang_3" => "Xboxs"
+      ]);
+      $productCategoryModel->insertRow([
+        "id_parent" => 5,
+        "code" => "PCgames",
+        "name_lang_1" => "PC games",
+        "name_lang_2" => "Počitačové hry",
+        "name_lang_3" => "Počitačové hry"
+      ]);
+      $productCategoryModel->insertRow([
+        "id_parent" => 6,
+        "code" => "Shoes",
+        "name_lang_1" => "Shoes",
+        "name_lang_2" => "Obuv",
+        "name_lang_3" => "Obuv"
+      ]);
+      $productCategoryModel->insertRow([
+        "id_parent" => 6,
+        "code" => "T-shirts",
+        "name_lang_1" => "T-shirts",
+        "name_lang_2" => "Tričká",
+        "name_lang_3" => "Tričká"
       ]);
       
       // produkty - vlastnosti produktov, ciselnik
       $productFeatureModel->insertRow(["id" => 1, "order_index" => 1, "value_type" => 1, "entry_method" => 1, "min" => 1, "max" => 1000, "name_lang_1" => "Length", "name_lang_2" => "Dĺžka", "id_measurement_unit" => 2]);
       $productFeatureModel->insertRow(["id" => 2, "order_index" => 2, "value_type" => 1, "entry_method" => 1, "min" => 1, "max" => 1000, "name_lang_1" => "Width", "name_lang_2" => "Šírka", "id_measurement_unit" => 2]);
       $productFeatureModel->insertRow(["id" => 3, "order_index" => 3, "value_type" => 1, "entry_method" => 1, "min" => 1, "max" => 1000, "name_lang_1" => "Weight", "name_lang_2" => "Váha", "id_measurement_unit" => 9]);
-      $productFeatureModel->insertRow(["id" => 4, "order_index" => 4, "value_type" => 2, "entry_method" => 5, "min" => null, "min" => null, "name_lang_1" => "Search by code", "name_lang_2" => "Hľadať", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 4, "order_index" => 4, "value_type" => 2, "entry_method" => 5, "min" => null, "min" => null, "name_lang_1" => "EAN", "name_lang_2" => "EAN", "id_measurement_unit" => 1]);
       $productFeatureModel->insertRow(["id" => 5, "order_index" => 5, "value_type" => 2, "entry_method" => 4, "min" => null, "max" => null, "name_lang_1" => "Color", "name_lang_2" => "Farba", "id_measurement_unit" => 1]);
       $productFeatureModel->insertRow(["id" => 6, "order_index" => 6, "value_type" => 2, "entry_method" => 4, "min" => null, "max" => null, "name_lang_1" => "RAM", "name_lang_2" => "Pamäť RAM", "id_measurement_unit" => 1]);
       $productFeatureModel->insertRow(["id" => 7, "order_index" => 7, "value_type" => 2, "entry_method" => 2, "min" => null, "min" => null, "name_lang_1" => "Show only", "name_lang_2" => "Zobraziť iba", "id_measurement_unit" => 1]);
       $productFeatureModel->insertRow(["id" => 8, "order_index" => 8, "value_type" => 2, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "Condition", "name_lang_2" => "Stav", "id_measurement_unit" => 1]);
       $productFeatureModel->insertRow(["id" => 9, "order_index" => 9, "value_type" => 2, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "Type", "name_lang_2" => "Typ", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 10, "order_index" => 10, "value_type" => 2, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "Bearing type", "name_lang_2" => "Typ úložiska", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 11, "order_index" => 11, "value_type" => 2, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "Equipment", "name_lang_2" => "Výbava", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 12, "order_index" => 12, "value_type" => 2, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "Max resolutions", "name_lang_2" => "Maximálne rozlíšenie", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 13, "order_index" => 13, "value_type" => 2, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "Model year", "name_lang_2" => "Modelový rok", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 14, "order_index" => 14, "value_type" => 2, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "Monitor frequency", "name_lang_2" => "Frekvecia monitoru", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 15, "order_index" => 15, "value_type" => 2, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "Keyboard type", "name_lang_2" => "Typ klávesnice", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 16, "order_index" => 16, "value_type" => 2, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "Energy class", "name_lang_2" => " Energetická trieda", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 17, "order_index" => 17, "value_type" => 2, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "Playstation version", "name_lang_2" => "Verzia Playstation", "id_measurement_unit" => 1]);
+      $productFeatureModel->insertRow(["id" => 18, "order_index" => 18, "value_type" => 2, "entry_method" => 3, "min" => null, "min" => null, "name_lang_1" => "Size", "name_lang_2" => "Veľkosť trička", "id_measurement_unit" => 1]);
 
       $productFeaturesCount = $productFeatureModel->get()->count();
 
@@ -348,7 +447,9 @@ class Installer {
       \Surikata\Installer\RandomProductsGenerator::generateRandomProducts(
         $randomProductsCount,
         $productModel,
-        $productFeatureAssignmentModel
+        $productFeatureAssignmentModel,
+        $productCategoryModel,
+        $productFeatureModel
       );
 
       $adminPanel->db->commit();

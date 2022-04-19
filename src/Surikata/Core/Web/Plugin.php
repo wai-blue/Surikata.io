@@ -139,7 +139,7 @@ class Plugin {
       }
     }
 
-    return $idWebPage;
+    return (int) $idWebPage;
   }
   /**
    * Returns the key - value associative array of variables and

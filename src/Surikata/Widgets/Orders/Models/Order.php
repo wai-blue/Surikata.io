@@ -1503,6 +1503,12 @@ class Order extends \ADIOS\Core\Widget\Model {
       }
     }
 
+    if ($order["CUSTOMER"]["company_name"] != "") {
+      $customerName = $order["CUSTOMER"]["company_name"];
+    } else {
+      $customerName = $order["CUSTOMER"]["given_name"]." ".$order["CUSTOMER"]["family_name"];
+    }
+
     $invoiceData = [
       "HEADER" => [
         "id_order" => $idOrder,
@@ -1515,6 +1521,7 @@ class Order extends \ADIOS\Core\Widget\Model {
         "company_id" => $order["CUSTOMER"]["company_id"],
         "company_tax_id" => $order["CUSTOMER"]["company_tax_id"],
         "company_vat_id" => $order["CUSTOMER"]["company_vat_id"],
+        "name" => $customerName,
         "street_1" => $order["inv_street_1"],
         "street_2" => $order["inv_street_2"],
         "city" => $order["inv_city"],

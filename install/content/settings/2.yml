@@ -43,6 +43,22 @@ emails:
       <li>Telefón: {% phoneNumber %}</li>
       <li>Email: {% email %}</li>
     </ul>
+    <h3>Zoznam objednaných produktov</h3>
+    <table>
+      <tr>
+        <th style='text-align:center;'>Názov produktu</th>
+        <th style='text-align:right;'>Jednotkové cena</th>
+        <th style='text-align:right;'>Množstvo</th>
+        <th style='text-align:right;'>Cena</th>
+      </tr>
+      {% productListRows %}
+    </table>
+    <style>
+      table, th, td {
+        border: 1px solid;
+        border-collapse: collapse;
+      }
+    </style>
 
   # after_registration
 

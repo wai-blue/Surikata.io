@@ -250,7 +250,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
       from `{$this->table}` c
       where `id` = {$id}
     "));
-  
+
     return $this->getExtendedData($customer);
   }
 

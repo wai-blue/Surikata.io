@@ -32,42 +32,42 @@ class Customer extends \ADIOS\Core\Widget\Model {
         "show_column" => TRUE,
       ],
 
-      "given_name" => [
-        "type" => "varchar",
-        "title" => $this->translate("Given name"),
-        "show_column" => TRUE,
-      ],
+      // "given_name" => [
+      //   "type" => "varchar",
+      //   "title" => $this->translate("Given name"),
+      //   "show_column" => TRUE,
+      // ],
 
-      "family_name" => [
-        "type" => "varchar",
-        "title" => $this->translate("Family name"),
-        "show_column" => TRUE,
-      ],
+      // "family_name" => [
+      //   "type" => "varchar",
+      //   "title" => $this->translate("Family name"),
+      //   "show_column" => TRUE,
+      // ],
 
-      "company_name" => [
-        "type" => "varchar",
-        "title" => $this->translate("Company name"),
-        "show_column" => TRUE,
-      ],
+      // "company_name" => [
+      //   "type" => "varchar",
+      //   "title" => $this->translate("Company name"),
+      //   "show_column" => TRUE,
+      // ],
 
-      "company_id" => [
-        "type" => "varchar",
-        "title" => $this->translate("Company ID"),
-        "show_column" => TRUE,
-      ],
+      // "company_id" => [
+      //   "type" => "varchar",
+      //   "title" => $this->translate("Company ID"),
+      //   "show_column" => TRUE,
+      // ],
 
-      "company_tax_id" => [
-        "type" => "varchar",
-        "title" => $this->translate("Company Tax ID"),
-        "pattern" => '\d{10}',
-        "show_column" => FALSE,
-      ],
+      // "company_tax_id" => [
+      //   "type" => "varchar",
+      //   "title" => $this->translate("Company Tax ID"),
+      //   "pattern" => '\d{10}',
+      //   "show_column" => FALSE,
+      // ],
 
-      "company_vat_id" => [
-        "type" => "varchar",
-        "title" => $this->translate("Company VAT ID"),
-        "show_column" => FALSE,
-      ],
+      // "company_vat_id" => [
+      //   "type" => "varchar",
+      //   "title" => $this->translate("Company VAT ID"),
+      //   "show_column" => FALSE,
+      // ],
 
 
 
@@ -87,6 +87,25 @@ class Customer extends \ADIOS\Core\Widget\Model {
         "type" => "varchar",
         "title" => $this->translate("Billing: ") . $this->translate("Company name"),
         "show_column" => TRUE,
+      ],
+
+      "inv_company_id" => [
+        "type" => "varchar",
+        "title" => $this->translate("Billing: ") . $this->translate("Company ID"),
+        "show_column" => TRUE,
+      ],
+
+      "inv_company_tax_id" => [
+        "type" => "varchar",
+        "title" => $this->translate("Billing: ") . $this->translate("Company Tax ID"),
+        "pattern" => '\d{10}',
+        "show_column" => FALSE,
+      ],
+
+      "inv_company_vat_id" => [
+        "type" => "varchar",
+        "title" => $this->translate("Billing: ") . $this->translate("Company VAT ID"),
+        "show_column" => FALSE,
       ],
 
       "inv_street_1" => [
@@ -314,10 +333,10 @@ class Customer extends \ADIOS\Core\Widget\Model {
 
     $params["columns_order"] = [
       "email",
-      "given_name",
-      "family_name",
-      "company_name",
-      "company_id",
+      "inv_given_name",
+      "inv_family_name",
+      "inv_company_name",
+      "inv_company_id",
       // "code",
       "category",
     ];
@@ -350,10 +369,10 @@ class Customer extends \ADIOS\Core\Widget\Model {
             "rows" => [
               // "code",
               "email",
-              "given_name",
-              "family_name",
-              "company_name",
-              "company_id",
+              "inv_given_name",
+              "inv_family_name",
+              "inv_company_name",
+              "inv_company_id",
             ],
           ],
         ],
@@ -377,12 +396,12 @@ class Customer extends \ADIOS\Core\Widget\Model {
                 // ["html" => '<i class="fas fa-tachometer-alt" style="color:#2d4a8a;font-size:5em"></i>'],
                 // "code",
                 "email",
-                "given_name",
-                "family_name",
-                "company_name",
-                "company_id",
-                "company_tax_id",
-                "company_vat_id",
+                // "given_name",
+                // "family_name",
+                // "company_name",
+                // "company_id",
+                // "company_tax_id",
+                // "company_vat_id",
                 "is_wholesale",
                 "id_category",
               ],
@@ -390,6 +409,9 @@ class Customer extends \ADIOS\Core\Widget\Model {
                 "inv_given_name",
                 "inv_family_name",
                 "inv_company_name",
+                "inv_company_id",
+                "inv_company_tax_id",
+                "inv_company_vat_id",
                 "inv_street_1",
                 "inv_street_2",
                 "inv_city",
@@ -672,14 +694,22 @@ class Customer extends \ADIOS\Core\Widget\Model {
 
     $customer->update([
       "given_name" => $params['given_name'] ?? "", 
-      "family_name" => $params['family_name'] ?? "",
-      "company_name" => $params['company_name'] ?? "",
-      "company_id" => $params['company_id'] ?? "",
-      "company_tax_id" => $params['company_tax_id'] ?? "",
-      "company_vat_id" => $params['company_vat_id'] ?? "",
+
+      // zber tohoto je uz zbytocny, inputy zmazat
+      // "family_name" => $params['family_name'] ?? "",
+      // "company_name" => $params['company_name'] ?? "",
+
+      // zber tohoto sa zmenil, input ids premenovat
+      // "company_id" => $params['company_id'] ?? "",
+      // "company_tax_id" => $params['company_tax_id'] ?? "",
+      // "company_vat_id" => $params['company_vat_id'] ?? "",
+
       "inv_given_name" => $params["inv_given_name"] ?? "",
       "inv_family_name" => $params["inv_family_name"] ?? "",
       "inv_company_name" => $params["inv_company_name"] ?? "",
+      "inv_company_id" => $params['inv_company_id'] ?? "",
+      "inv_company_tax_id" => $params['inv_company_tax_id'] ?? "",
+      "inv_company_vat_id" => $params['inv_company_vat_id'] ?? "",
       "inv_street_1" => $params["inv_street_1"] ?? "",
       "inv_street_2" => $params["inv_street_2"] ?? "",
       "inv_zip" => $params["inv_zip"] ?? "",

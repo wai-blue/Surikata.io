@@ -349,7 +349,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
   }
 
   public function tableCellCSSFormatter($data) {
-    if ($data['column'] == "given_name") {
+    if ($data['column'] == "inv_given_name") {
       return "font-weight:bold;";
     }
 
@@ -378,7 +378,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
         ],
       ];
     } else {
-      $params['title'] = "{$data['email']} {$data['given_name']} {$data['family_name']} {$data['company_name']}";
+      $params['title'] = "{$data['email']} {$data['inv_given_name']} {$data['inv_family_name']} {$data['inv_company_name']}";
       $params['subtitle'] = $this->translate("Customer");
 
       $sidebarHtml = $this->adios->dispatchEventToPlugins("onCustomerDetailSidebarButtons", [
@@ -693,9 +693,8 @@ class Customer extends \ADIOS\Core\Widget\Model {
     ;
 
     $customer->update([
-      "given_name" => $params['given_name'] ?? "", 
-
       // zber tohoto je uz zbytocny, inputy zmazat
+      //"given_name" => $params['given_name'] ?? "",
       // "family_name" => $params['family_name'] ?? "",
       // "company_name" => $params['company_name'] ?? "",
 
@@ -762,8 +761,8 @@ class Customer extends \ADIOS\Core\Widget\Model {
       ->getWebPageUrl(["email" => $accountInfo['email']])
     ;
 
-    $body = str_replace("{% givenName %}", $accountInfo["given_name"], $body);
-    $body = str_replace("{% familyName %}", $accountInfo["family_name"], $body);
+    $body = str_replace("{% givenName %}", $accountInfo["inv_given_name"], $body);
+    $body = str_replace("{% familyName %}", $accountInfo["inv_family_name"], $body);
     $body = str_replace("{% password %}", $this->lastCreatedAccountPassword, $body);
     $body = str_replace(
       "{% validationUrl %}",
@@ -794,8 +793,8 @@ class Customer extends \ADIOS\Core\Widget\Model {
       ->getWebPageUrl(["email" => $accountInfo['email']])
     ;
 
-    $body = str_replace("{% givenName %}", $accountInfo["given_name"], $body);
-    $body = str_replace("{% familyName %}", $accountInfo["family_name"], $body);
+    $body = str_replace("{% givenName %}", $accountInfo["inv_given_name"], $body);
+    $body = str_replace("{% familyName %}", $accountInfo["inv_family_name"], $body);
     $body = str_replace(
       "{% passwordRecoveryUrl %}",
       "{$this->adios->websiteRenderer->domain['rootUrl']}/{$passwordRecoveryUrl}",

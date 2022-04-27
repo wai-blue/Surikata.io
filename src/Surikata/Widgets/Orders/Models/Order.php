@@ -528,8 +528,8 @@ class Order extends \ADIOS\Core\Widget\Model {
       ];
       $requiredFieldsCompany = [
         "inv_company_name",
-        "company_id",
-        "company_tax_id",
+        "inv_company_id",
+        "inv_company_tax_id",
       ];
 
       foreach ($requiredFieldsBilling as $fieldName) {
@@ -661,9 +661,9 @@ class Order extends \ADIOS\Core\Widget\Model {
 
       "phone_number"           => $orderData['phone_number'],
       "email"                  => $orderData['email'],
-      "company_id"             => $orderData['company_id'],
-      "company_tax_id"         => $orderData['company_tax_id'],
-      "company_vat_id"         => $orderData['company_vat_id'],
+      "company_id"             => $orderData['inv_company_id'],
+      "company_tax_id"         => $orderData['inv_company_tax_id'],
+      "company_vat_id"         => $orderData['inv_company_vat_id'],
       "confirmation_time"      => $confirmationTime,
       "id_destination_country" => $orderData['id_destination_country'],
       "id_delivery_service"    => $orderData['id_delivery_service'],
@@ -1503,10 +1503,10 @@ class Order extends \ADIOS\Core\Widget\Model {
       }
     }
 
-    if ($order["CUSTOMER"]["company_name"] != "") {
-      $customerName = $order["CUSTOMER"]["company_name"];
+    if ($order["CUSTOMER"]["inv_company_name"] != "") {
+      $customerName = $order["CUSTOMER"]["inv_company_name"];
     } else {
-      $customerName = $order["CUSTOMER"]["given_name"]." ".$order["CUSTOMER"]["family_name"];
+      $customerName = $order["CUSTOMER"]["inv_given_name"]." ".$order["CUSTOMER"]["inv_family_name"];
     }
 
     $invoiceData = [
@@ -1518,9 +1518,9 @@ class Order extends \ADIOS\Core\Widget\Model {
       ],
       "CUSTOMER" => [
         "id" => $order["id_customer"],
-        "company_id" => $order["CUSTOMER"]["company_id"],
-        "company_tax_id" => $order["CUSTOMER"]["company_tax_id"],
-        "company_vat_id" => $order["CUSTOMER"]["company_vat_id"],
+        "company_id" => $order["CUSTOMER"]["inv_company_id"],
+        "company_tax_id" => $order["CUSTOMER"]["inv_company_tax_id"],
+        "company_vat_id" => $order["CUSTOMER"]["inv_company_vat_id"],
         "name" => $customerName,
         "street_1" => $order["inv_street_1"],
         "street_2" => $order["inv_street_2"],

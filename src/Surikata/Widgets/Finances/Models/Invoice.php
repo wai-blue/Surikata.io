@@ -560,7 +560,7 @@ class Invoice extends \ADIOS\Core\Widget\Model {
       if ($data["id_customer"] > 0) {
         $customer = (new Customer($this->adios))->getById($data["id_customer"]);
         $data["customer_email"] = $customer["email"];
-        if (strlen($customer["company_name"]) > 0) {
+        if (strlen($customer["inv_company_name"]) > 0) {
           $data["customer_name"] = $customer["inv_company_name"];
         } else {
           $data["customer_name"] = $customer["inv_given_name"]." ".$customer["inv_given_name"];
@@ -571,9 +571,9 @@ class Invoice extends \ADIOS\Core\Widget\Model {
         $data["customer_zip"] = $customer["inv_zip"];
         $data["customer_country"] = $customer["inv_country"];
 
-        $data["customer_company_id"] = $customer["company_id"];
-        $data["customer_company_tax_id"] = $customer["company_tax_id"];
-        $data["customer_vat_id"] = $customer["company_vat_id"];
+        $data["customer_company_id"] = $customer["inv_company_id"];
+        $data["customer_company_tax_id"] = $customer["inv_company_tax_id"];
+        $data["customer_vat_id"] = $customer["inv_company_vat_id"];
 
         // $data["customer_phone"] = $customer["phone_number"];
         // $data["customer_www"] = $customer["www"];

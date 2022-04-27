@@ -35,7 +35,7 @@
                 <h4>List of your adresses</h4>
                 {% for address in userLogged.ADDRESSES %}
                   <input
-                    type="radio" name="id_adresa" id="id_adresa_{{ address.id }}"
+                    type="radio" name="id_adress" id="id_adress_{{ address.id }}"
                     value="{{ address.id }}"
                     onclick="
                       $('#savedAddressValues_{{ address.id }} span').each(function() {
@@ -45,7 +45,7 @@
                       });
                     "
                   >
-                  <label class="form-check-label" for="id_adresa_{{ address.id }}">
+                  <label class="form-check-label" for="id_adress_{{ address.id }}">
                     {{ address.inv_given_name }} {{ address.inv_family_name }},
                     {{ address.inv_street_1 }}, {{ address.inv_city }},
                     {{ address.phone_number }}
@@ -92,7 +92,7 @@
                           class="billing-address-name form-control"
                           type="text"
                           name="inv_given_name"
-                          value="{{ user.profile.given_name }}"
+                          value="{{ user.profile.inv_given_name }}"
                           placeholder="{{ translate("First name") }}"
                         />
                       </div>
@@ -105,7 +105,7 @@
                           class="billing-address-name form-control"
                           type="text"
                           name="inv_family_name"
-                          value="{{ user.profile.last_name }}"
+                          value="{{ user.profile.inv_last_name }}"
                           placeholder="{{ translate("Last name") }}"
                         />
                       </div>
@@ -204,8 +204,8 @@
                         <input
                           class="billing-address-name form-control"
                           type="text"
-                          name="company_name"
-                          value="{{ user.profile.company_name }}"
+                          name="inv_company_name"
+                          value="{{ user.profile.inv_company_name }}"
                           placeholder="{{ translate("Company name") }}"
                         />
                       </div>
@@ -216,8 +216,8 @@
                           <input
                             class="billing-address-name form-control"
                             type="text"
-                            name="company_tax_id"
-                            value="{{ user.profile.company_tax_id }}"
+                            name="inv_company_tax_id"
+                            value="{{ user.profile.inv_company_tax_id }}"
                             placeholder="{{ translate("Tax ID") }}"
                           />
                         </div>
@@ -226,8 +226,8 @@
                           <input
                             class="billing-address-name form-control"
                             type="text"
-                            name="company_vat_id"
-                            value="{{ user.profile.company_vat_id }}"
+                            name="inv_company_vat_id"
+                            value="{{ user.profile.inv_company_vat_id }}"
                             placeholder="{{ translate("VAT reg.") }}"
                           />
                         </div>

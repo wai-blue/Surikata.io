@@ -557,11 +557,9 @@ class Installer {
           $idCustomer = $customerModel->insertRow([
             "id_category" => $customer[0],
             "email" => strtolower("{$customer[1]}.{$customer[2]}.{$cnt}@example.com"),
-            "given_name" => $customer[1],
-            "family_name" => $cnt." ".$customer[2],
 
             "inv_given_name" => $customer[1],
-            "inv_family_name" => $customer[2],
+            "inv_family_name" => $cnt." ".$customer[2],
             "inv_street_1" => $customer[3],
             "inv_city" => $customer[4],
             "inv_zip" => $customer[5],

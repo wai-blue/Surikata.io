@@ -52,13 +52,13 @@ class PluginWAICommonCustomerCartDOMClass extends PluginWAICustomerCartAPIClass 
           element.addClass('required-empty');
         }
         break;
-      case "company_id":
+      case "inv_company_id":
         isnum = /^\d+$/.test(element.val());
         if (element.val().length !== 8 || !isnum) {
           element.addClass('required-empty');
         }
         break;
-      case "company_tax_id":
+      case "inv_company_tax_id":
         isnum = /^\d+$/.test(element.val());
         if (element.val().length > 0) {
           if (element.val().length !== 10 || !isnum) {
@@ -66,7 +66,7 @@ class PluginWAICommonCustomerCartDOMClass extends PluginWAICustomerCartAPIClass 
           }
         }
         break;
-      case "company_vat_id":
+      case "inv_company_vat_id":
         if (element.val().length > 0 && element.val().length !== 12) {
           element.addClass('required-empty');
         }

@@ -22,7 +22,7 @@ class PorovnavaneProdukty extends \ADIOS\Core\Widget\Action {
       "uid" => "{$this->uid}_window",
       "title" => 
         $this->translate("Klient").
-        " [{$customer['code']}] {$customer['given_name']} {$customer['family_name']} {$customer['company_name']} &raquo; ".
+        " [{$customer['code']}] {$customer['inv_given_name']} {$customer['inv_family_name']} {$customer['inv_company_name']} &raquo; ".
         $this->translate("Porovnávané produkty")
       ,
       "content" => 

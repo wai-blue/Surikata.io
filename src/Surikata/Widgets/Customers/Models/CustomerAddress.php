@@ -93,13 +93,13 @@ class CustomerAddress extends \ADIOS\Core\Widget\Model {
 
 
 
-      "phone_number" => [
+      "del_phone_number" => [
         "type" => "varchar",
         "title" => $this->translate("Contact: ").$this->translate("Phone number"),
         "show_column" => TRUE,
       ],
 
-      "email" => [
+      "del_email" => [
         "type" => "varchar",
         "title" => $this->translate("Contact: ").$this->translate("Email"),
         "show_column" => TRUE,
@@ -125,8 +125,6 @@ class CustomerAddress extends \ADIOS\Core\Widget\Model {
           "tabs" => [
             $this->translate("Customer") => [
               "id_customer",
-              "phone_number",
-              "email",
             ],
             $this->translate("Delivery address") => [
               "del_given_name",
@@ -138,6 +136,8 @@ class CustomerAddress extends \ADIOS\Core\Widget\Model {
               "del_zip",
               "del_region",
               "del_country",
+              "del_phone_number",
+              "del_email",
             ],
           ],
         ],
@@ -170,7 +170,7 @@ class CustomerAddress extends \ADIOS\Core\Widget\Model {
 
     foreach ($this->columnNames() as $colName) {
       if ($colName == "id_customer") continue;
-      
+
       if (empty($data[$colName])) {
         $addressData[$colName] = "";
       } else {

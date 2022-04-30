@@ -683,7 +683,7 @@ class Loader extends \Cascada\Loader {
         "translated" => "",
       ]);
 
-        $this->translationCache[$domain][$context][$original] = $original;
+      $this->translationCache[$domain][$context][$original] = $original;
     } else {
       $translatedText = $this->translationCache[$domain][$context][$original];
     }

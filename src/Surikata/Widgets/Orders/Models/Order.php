@@ -138,6 +138,15 @@ class Order extends \ADIOS\Core\Widget\Model {
         "title" => $this->translate("Delivery: ").$this->translate("Country"),
       ],
 
+      "del_phone_number" => [
+        "type" => "varchar",
+        "title" => $this->translate("Delivery: ").$this->translate("Phone number"),
+      ],
+
+      "del_email" => [
+        "type" => "varchar",
+        "title" => $this->translate("Delivery: ").$this->translate("Email"),
+      ],
 
 
       "inv_given_name" => [
@@ -537,8 +546,14 @@ class Order extends \ADIOS\Core\Widget\Model {
           $requiredFieldsEmpty[] = $fieldName;
         }
         if ($orderData["differentDeliveryAddress"] != "1") {
-          $replaceInvForDel = str_replace('inv', 'del', $fieldName);
-          $orderData[$replaceInvForDel] = $orderData[$fieldName];
+          if ($fieldName == "email") {
+            $orderData['del_email'] = $orderData['email'];
+          } elseif ($fieldName == "phone_number") {
+            $orderData['del_phone_number'] = $orderData['phone_number'];
+          } else {
+            $replaceInvForDel = str_replace('inv', 'del', $fieldName);
+            $orderData[$replaceInvForDel] = $orderData[$fieldName];
+          }
         }
       }
 
@@ -648,6 +663,8 @@ class Order extends \ADIOS\Core\Widget\Model {
       "del_zip"                => $orderData['del_zip'],
       "del_region"             => $orderData['del_region"'],
       "del_country"            => $orderData['del_country'],
+      "del_email"              => $orderData['del_email'],
+      "del_phone_number"       => $orderData['del_phone_number'],
 
       "inv_given_name"         => $orderData['inv_given_name'],
       "inv_family_name"        => $orderData['inv_family_name'],
@@ -751,6 +768,25 @@ class Order extends \ADIOS\Core\Widget\Model {
 
     $domain = $this->adios->websiteRenderer->currentPage['domain'];
 
+    // to do review: what to do, when order is created in administration and domain is null
+    if (is_null($domain)) {
+      if ($orderData['id_customer'] > 0) {
+        $customerOrdersWithDomain = 
+          $this
+            ->where("id_customer", $orderData['id_customer'])
+            ->whereNotNull("domain")
+            ->where("domain", "!=", "")
+            ->get()->toArray();
+        if(count($customerOrdersWithDomain) > 0) {
+          $domain = reset($customerOrdersWithDomain)['domain'];
+        } else {
+          $domain = $this->adios->getAvailableDomains()[0]['name'];
+        }
+      } else {
+        $domain = $this->adios->getAvailableDomains()[0]['name'];
+      }
+    }
+
     $subject = $this->adios->config["settings"]["web"][$domain]["emails"]['after_order_confirmation_SUBJECT'];
     $body = $this->adios->config["settings"]["web"][$domain]["emails"]['after_order_confirmation_BODY'];
     $signature = $this->adios->config["settings"]["web"][$domain]["emails"]['signature'];
@@ -797,6 +833,9 @@ class Order extends \ADIOS\Core\Widget\Model {
     $customerModel = new \ADIOS\Widgets\Customers\Models\Customer($this->adios);
     $customer = $customerModel->getById($orderData["id_customer"]);
 
+    $orderData["email"] = $customer["email"];
+    $orderData["phone_number"] = $customer["phone_number"];
+
     $orderData["inv_given_name"] = $customer["inv_given_name"];
     $orderData["inv_family_name"] = $customer["inv_family_name"];
     $orderData["inv_company_name"] = $customer["inv_company_name"];
@@ -807,35 +846,54 @@ class Order extends \ADIOS\Core\Widget\Model {
     $orderData["inv_region"] = $customer["inv_region"];
     $orderData["inv_country"] = $customer["inv_country"];
 
+    $addressFields = [
+      "del_phone_number",
+      "del_email",
+      "del_given_name",
+      "del_family_name",
+      "del_company_name",
+      "del_street_1",
+      "del_street_2",
+      "del_floor",
+      "del_city",
+      "del_zip",
+      "del_region",
+      "del_country",
+    ];
 
     if (count($customer["ADDRESSES"]) > 0) {
-      $orderData["id_address"] = $customer["ADDRESSES"][0]["id"];
-      $addressFields = [
-        "phone_number",
-        "email",
-        "del_given_name",
-        "del_family_name",
-        "del_company_name",
-        "del_street_1",
-        "del_street_2",
-        "del_floor",
-        "del_city",
-        "del_zip",
-        "del_region",
-        "del_country",
-      ];
+      // If customer has delivery adress
+      $cutomerAdress = reset($customer["ADDRESSES"]);
+      $orderData["id_address"] = $cutomerAdress["id"];
       foreach ($addressFields as $field) {
-        $orderData[$field] = $customer["ADDRESSES"][0][$field];
+        $orderData[$field] = $cutomerAdress[$field];
         // if delivery address is empty - use inv address
         if (strpos($field, "del_") !== false) {
           $invField = str_ireplace("del_", "inv_", $field);
+          $generalField = str_ireplace("del_", "", $field);
           if (
-            strlen($customer["ADDRESSES"][0][$field]) == 0
-            && strlen($customer["ADDRESSES"][0][$invField]) > 0
+            strlen($cutomerAdress[$field]) == 0
+            && strlen($cutomerAdress[$invField]) > 0
           ) {
-            $orderData[$field] = $customer["ADDRESSES"][0][$invField];
+            $orderData[$field] = $cutomerAdress[$invField];
+          } elseif (
+            strlen($cutomerAdress[$field]) == 0
+            && strlen($cutomerAdress[$generalField]) > 0
+          ) {
+            $orderData[$field] = $cutomerAdress[$generalField];
           }
         }
+      }
+    } else {
+      // If the customer`s adress list is empty, del. adress is inv adress
+      foreach ($addressFields as $field) {
+          $invField = str_ireplace("del_", "inv_", $field);
+          $generalField = str_ireplace("del_", "", $field);
+          if (strlen($customer[$invField]) > 0) {
+            $orderData[$field] = $customer[$invField];
+          } elseif (strlen($customer[$generalField]) > 0) {
+            $orderData[$field] = $customer[$generalField];
+          }
       }
     }
 
@@ -1244,6 +1302,8 @@ class Order extends \ADIOS\Core\Widget\Model {
                 "del_zip",
                 "del_region",
                 "del_country",
+                "del_phone_number",
+                "del_email",
               ],
               $this->translate("Items") => [
                 "action" => "UI/Table",

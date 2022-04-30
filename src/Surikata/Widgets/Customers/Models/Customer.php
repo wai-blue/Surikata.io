@@ -32,6 +32,12 @@ class Customer extends \ADIOS\Core\Widget\Model {
         "show_column" => TRUE,
       ],
 
+      "phone_number" => [
+        "type" => "varchar",
+        "title" => $this->translate("Phone number"),
+        "show_column" => TRUE,
+      ],
+
       // "given_name" => [
       //   "type" => "varchar",
       //   "title" => $this->translate("Given name"),
@@ -333,6 +339,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
 
     $params["columns_order"] = [
       "email",
+      "phone_mumber",
       "inv_given_name",
       "inv_family_name",
       "inv_company_name",
@@ -369,6 +376,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
             "rows" => [
               // "code",
               "email",
+              "phone_number",
               "inv_given_name",
               "inv_family_name",
               "inv_company_name",
@@ -396,6 +404,8 @@ class Customer extends \ADIOS\Core\Widget\Model {
                 // ["html" => '<i class="fas fa-tachometer-alt" style="color:#2d4a8a;font-size:5em"></i>'],
                 // "code",
                 "email",
+                "phone_number",
+
                 // "given_name",
                 // "family_name",
                 // "company_name",
@@ -693,15 +703,7 @@ class Customer extends \ADIOS\Core\Widget\Model {
     ;
 
     $customer->update([
-      // zber tohoto je uz zbytocny, inputy zmazat
-      //"given_name" => $params['given_name'] ?? "",
-      // "family_name" => $params['family_name'] ?? "",
-      // "company_name" => $params['company_name'] ?? "",
-
-      // zber tohoto sa zmenil, input ids premenovat
-      // "company_id" => $params['company_id'] ?? "",
-      // "company_tax_id" => $params['company_tax_id'] ?? "",
-      // "company_vat_id" => $params['company_vat_id'] ?? "",
+      "phone_number" => $params["phone_number"] ?? "",
 
       "inv_given_name" => $params["inv_given_name"] ?? "",
       "inv_family_name" => $params["inv_family_name"] ?? "",

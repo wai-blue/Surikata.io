@@ -48,17 +48,10 @@
                   <label class="form-check-label" for="id_adress_{{ address.id }}">
                     {{ address.inv_given_name }} {{ address.inv_family_name }},
                     {{ address.inv_street_1 }}, {{ address.inv_city }},
-                    {{ address.phone_number }}
+                    {{ address.del_phone_number }}, {{ address.del_email }}
                   </label>
                   <br/>
                   <div style='display:none' id="savedAddressValues_{{ address.id }}">
-                    <span data-variable="inv_given_name">{{ address.inv_given_name }}</span>
-                    <span data-variable="inv_family_name">{{ address.inv_family_name }}</span>
-                    <span data-variable="inv_company_name">{{ address.inv_company_name }}</span>
-                    <span data-variable="inv_street_1">{{ address.inv_street_1 }}</span>
-                    <span data-variable="inv_street_2">{{ address.inv_street_2 }}</span>
-                    <span data-variable="inv_zip">{{ address.inv_zip }}</span>
-                    <span data-variable="inv_city">{{ address.inv_city }}</span>
                     <span data-variable="del_given_name">{{ address.del_given_name }}</span>
                     <span data-variable="del_family_name">{{ address.del_family_name }}</span>
                     <span data-variable="del_company_name">{{ address.del_company_name }}</span>
@@ -66,8 +59,8 @@
                     <span data-variable="del_street_2">{{ address.del_street_2 }}</span>
                     <span data-variable="del_zip">{{ address.del_zip }}</span>
                     <span data-variable="del_city">{{ address.del_city }}</span>
-                    <span data-variable="phone_number">{{ address.phone_number }}</span>
-                    <span data-variable="email">{{ address.email }}</span>
+                    <span data-variable="del_phone_number">{{ address.del_phone_number }}</span>
+                    <span data-variable="del_email">{{ address.del_email }}</span>
                   </div>
                 {% endfor %}
               </div>

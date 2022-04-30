@@ -557,6 +557,7 @@ class Installer {
           $idCustomer = $customerModel->insertRow([
             "id_category" => $customer[0],
             "email" => strtolower("{$customer[1]}.{$customer[2]}.{$cnt}@example.com"),
+            "phone_number" => "+1 123 456 789",
 
             "inv_given_name" => $customer[1],
             "inv_family_name" => $cnt." ".$customer[2],
@@ -580,9 +581,9 @@ class Installer {
             "del_city" => $customer[4],
             "del_zip" => $customer[5],
             "del_country" => $customer[6],
-            // "email" => strtolower("{$customer[1]}.{$customer[2]}@example.com"),
-            "email" => "example@email.com",
-            "phone_number" => "+1 123 456 789",
+            // "del_email" => strtolower("{$customer[1]}.{$customer[2]}@example.com"),
+            "del_email" => "example@email.com",
+            "del_phone_number" => "+1 123 456 789",
           ]);
 
           // wishlist
@@ -638,6 +639,8 @@ class Installer {
         $idOrder = $orderModel->placeOrder(
           [
             "id_customer"       => $idCustomer,
+            "phone_number"      => $customer['phone_number'],
+            "email"             => $customer['email'],
 
             "inv_given_name"               => $customer['inv_given_name'],
             "inv_family_name"              => $customer['inv_family_name'],
@@ -660,9 +663,8 @@ class Installer {
             "del_zip"                      => $address['del_zip'],
             "del_region"                   => $address['del_region"'],
             "del_country"                  => $address['del_country'],
-
-            "phone_number"                 => $address['phone_number'],
-            "email"                        => $address['email'],
+            "del_phone_number"             => $address['del_phone_number'],
+            "del_email"                    => $address['del_email'],
 
             "id_destination_country"       => $destinationCountriesIds[rand(0, count($destinationCountriesIds) - 1)],
             "id_delivery_service"          => $deliveryServicesIds[rand(0, count($deliveryServicesIds) - 1)],

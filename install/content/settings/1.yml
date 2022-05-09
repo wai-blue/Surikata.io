@@ -43,6 +43,22 @@ emails:
       <li>Phone: {% phoneNumber %}</li>
       <li>Email: {% email %}</li>
     </ul>
+    <h3>List of ordered products</h3>
+    <table>
+      <tr>
+        <th style='text-align:center;'>Product name</th>
+        <th style='text-align:right;'>Unit price</th>
+        <th style='text-align:rigth;'>Quantity</th>
+        <th style='text-align:right;'>Price</th>
+      </tr>
+      {% productListRows %}
+    </table>
+    <style>
+      table, th, td {
+        border: 1px solid;
+        border-collapse: collapse;
+      }
+    </style>
 
   # after_registration
 

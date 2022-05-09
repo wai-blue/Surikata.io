@@ -764,6 +764,9 @@ class Order extends \ADIOS\Core\Widget\Model {
 
   public function sendNotificationForPlacedOrder($orderData) {
 
+    $priceDecimals = $this->adios->locale->priceDecimals();
+    $currencySymbol = $this->adios->locale->currencySymbol();
+
     if ($this->disableNotifications) return;
 
     $domain = $this->adios->websiteRenderer->currentPage['domain'];
@@ -798,6 +801,19 @@ class Order extends \ADIOS\Core\Widget\Model {
         $body = str_replace("{% $camelCaseKey %}", $col, $body);
       }
     }
+
+    $productListRows = '';
+    foreach ($orderData['ITEMS'] as $key => $item) {
+      $productListRows .= "
+        <tr>
+          <td style='text-align:center;'>".$item['product_name']."</td>
+          <td style='text-align:right;'>".round($item['unit_price'], $priceDecimals).$currencySymbol."</td>
+          <td style='text-align:right;'>".$item['quantity']."</td>
+          <td style='text-align:right;'>".round($item['unit_price'], $priceDecimals) * $item['quantity'].$currencySymbol."</td>
+        </tr>
+      ";
+    }
+    $body = str_replace("{% productListRows %}", $productListRows, $body);
 
     $this->adios->sendEmail([
       "to" => $orderData["email"],

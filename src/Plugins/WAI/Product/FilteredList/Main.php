@@ -90,6 +90,10 @@ namespace ADIOS\Plugins\WAI\Product {
           "title" => "Number of products",
           "type" => "int",
         ],
+        "productCountPerSlide" => [
+          "title" => "Number of products per one slide",
+          "type" => "int",
+        ],
         "productCardCssClass" => [
           "title" => "Custom CSS class for product card",
           "type" => "varchar",

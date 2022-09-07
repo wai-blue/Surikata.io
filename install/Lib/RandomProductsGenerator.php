@@ -26,7 +26,7 @@ class RandomProductsGenerator {
     \ADIOS\Widgets\Products\Models\Product $productModel,
     \ADIOS\Widgets\Products\Models\ProductFeatureAssignment $productFeatureAssignmentModel,
     \ADIOS\Widgets\Products\Models\ProductCategory $productCategoryModel,
-    \ADIOS\Widgets\Products\Models\ProductFeature $productFeatureModel,
+    \ADIOS\Widgets\Products\Models\ProductFeature $productFeatureModel
   ) {
     $allCategories = $productCategoryModel->getAllCached();
     $allFeatures = $productFeatureModel->getAllCached();

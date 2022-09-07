@@ -219,7 +219,7 @@ class Loader extends \ADIOS\Core\Loader {
       "password" => "administrator",
       "password_1" => "administrator",
       "password_2" => "administrator",
-      "active" => 1,
+      "is_active" => 1,
       "surname" => "Default",
       "id_role" => self::USER_ROLE_ADMINISTRATOR,
     ]);
@@ -229,7 +229,7 @@ class Loader extends \ADIOS\Core\Loader {
       "password" => "product.manager",
       "password_1" => "product.manager",
       "password_2" => "product.manager",
-      "active" => 1,
+      "is_active" => 1,
       "surname" => "Default",
       "id_role" => self::USER_ROLE_PRODUCT_MANAGER,
     ]);
@@ -239,7 +239,7 @@ class Loader extends \ADIOS\Core\Loader {
       "password" => "sales",
       "password_1" => "sales",
       "password_2" => "sales",
-      "active" => 1,
+      "is_active" => 1,
       "surname" => "Default",
       "id_role" => self::USER_ROLE_SALES,
     ]);
@@ -249,7 +249,7 @@ class Loader extends \ADIOS\Core\Loader {
       "password" => "online.marketing",
       "password_1" => "online.marketing",
       "password_2" => "online.marketing",
-      "active" => 1,
+      "is_active" => 1,
       "surname" => "Default",
       "id_role" => self::USER_ROLE_ONLINE_MARKETING,
     ]);
